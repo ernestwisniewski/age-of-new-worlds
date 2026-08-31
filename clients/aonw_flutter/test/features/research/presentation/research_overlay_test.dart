@@ -18,7 +18,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _app(
-        ResearchOverlay(
+        _ResearchHarness(
           state: ResearchState(requestedRevision: 0, options: _options()),
           selectionRequired: false,
           onSelect: (technology) => selected = technology,
@@ -56,7 +56,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _app(
-        ResearchOverlay(
+        _ResearchHarness(
           state: ResearchState(
             requestedRevision: 0,
             options: testResearchOptionsView(),
@@ -165,3 +165,36 @@ Widget _app(Widget child) => LocalizedTestApp(
     ),
   ),
 );
+
+final class _ResearchHarness extends StatefulWidget {
+  const _ResearchHarness({
+    required this.state,
+    required this.selectionRequired,
+    required this.onSelect,
+    required this.onRetry,
+  });
+
+  final ResearchState state;
+  final bool selectionRequired;
+  final ValueChanged<TechnologyIdView> onSelect;
+  final VoidCallback onRetry;
+
+  @override
+  State<_ResearchHarness> createState() => _ResearchHarnessState();
+}
+
+final class _ResearchHarnessState extends State<_ResearchHarness> {
+  var _open = false;
+
+  @override
+  Widget build(BuildContext context) => ResearchOverlay(
+    state: widget.state,
+    selectionRequired: widget.selectionRequired,
+    open: _open || widget.selectionRequired,
+    onOpenChanged: widget.selectionRequired
+        ? null
+        : (value) => setState(() => _open = value),
+    onSelect: widget.onSelect,
+    onRetry: widget.onRetry,
+  );
+}

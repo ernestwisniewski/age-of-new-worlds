@@ -11,11 +11,13 @@ import 'diplomacy_copy.dart';
 
 part 'diplomacy_cards.dart';
 
-final class DiplomacyOverlay extends StatefulWidget {
+final class DiplomacyOverlay extends StatelessWidget {
   const DiplomacyOverlay({
     required this.actorPlayerId,
     required this.view,
     required this.state,
+    required this.open,
+    required this.onOpenChanged,
     required this.onAction,
     super.key,
   });
@@ -23,14 +25,9 @@ final class DiplomacyOverlay extends StatefulWidget {
   final String actorPlayerId;
   final DiplomacyView view;
   final DiplomacyState state;
+  final bool open;
+  final ValueChanged<bool>? onOpenChanged;
   final ValueChanged<DiplomacyActionView> onAction;
-
-  @override
-  State<DiplomacyOverlay> createState() => _DiplomacyOverlayState();
-}
-
-final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
-  var _open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +35,7 @@ final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
     return Stack(
       children: [
         _trigger(context, copy),
-        if (_open)
+        if (open)
           Positioned(
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
@@ -64,17 +61,17 @@ final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
                           IconButton(
                             key: const ValueKey('close-diplomacy'),
                             tooltip: copy.close,
-                            onPressed: () => setState(() => _open = false),
+                            onPressed: () => onOpenChanged?.call(false),
                             icon: const Icon(Icons.close),
                           ),
                         ],
                       ),
                       Expanded(
                         child: DiplomacyPanel(
-                          actorPlayerId: widget.actorPlayerId,
-                          view: widget.view,
-                          state: widget.state,
-                          onAction: widget.onAction,
+                          actorPlayerId: actorPlayerId,
+                          view: view,
+                          state: state,
+                          onAction: onAction,
                         ),
                       ),
                     ],
@@ -93,8 +90,8 @@ final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
     child: AonwHudIconButton(
       key: const ValueKey('open-diplomacy'),
       tooltip: copy.open,
-      onPressed: _open ? null : () => setState(() => _open = true),
-      active: _open,
+      onPressed: onOpenChanged == null ? null : () => onOpenChanged!(!open),
+      active: open,
       icon: const Icon(Icons.handshake),
     ),
   );

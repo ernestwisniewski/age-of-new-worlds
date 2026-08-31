@@ -14,7 +14,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _app(
-        ObjectiveOverlay(
+        _ObjectiveHarness(
           objectives: const [
             MapObjectiveView(
               id: 'holy-site-1',
@@ -52,7 +52,7 @@ void main() {
     final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       _app(
-        ObjectiveOverlay(
+        _ObjectiveHarness(
           objectives: const [],
           outcome: GameOutcomeView(
             condition: GameOutcomeConditionView.score,
@@ -94,3 +94,25 @@ Widget _app(Widget child, {Locale locale = const Locale('en')}) =>
       locale: locale,
       home: Scaffold(body: child),
     );
+
+final class _ObjectiveHarness extends StatefulWidget {
+  const _ObjectiveHarness({required this.objectives, required this.outcome});
+
+  final List<MapObjectiveView> objectives;
+  final GameOutcomeView outcome;
+
+  @override
+  State<_ObjectiveHarness> createState() => _ObjectiveHarnessState();
+}
+
+final class _ObjectiveHarnessState extends State<_ObjectiveHarness> {
+  var _open = false;
+
+  @override
+  Widget build(BuildContext context) => ObjectiveOverlay(
+    objectives: widget.objectives,
+    outcome: widget.outcome,
+    open: _open,
+    onOpenChanged: (value) => setState(() => _open = value),
+  );
+}

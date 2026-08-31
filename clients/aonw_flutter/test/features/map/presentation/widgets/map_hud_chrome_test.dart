@@ -72,4 +72,40 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('keeps the left-side gameplay panels mutually exclusive', (
+    tester,
+  ) async {
+    final session = FakeGameSession.success(testMapScene(cols: 7, rows: 7));
+    final controller = MapPresentationController(
+      capabilities: testGameSessionCapabilities(session),
+    );
+    addTearDown(controller.dispose);
+    await tester.binding.setSurfaceSize(const Size(1000, 760));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      LocalizedTestApp(home: MapScreen(controller: controller)),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('open-objectives')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-objectives')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('open-research')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-objectives')), findsNothing);
+    expect(find.byKey(const ValueKey('close-research')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('open-diplomacy')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-research')), findsNothing);
+    expect(find.byKey(const ValueKey('close-diplomacy')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('open-diplomacy')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-diplomacy')), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

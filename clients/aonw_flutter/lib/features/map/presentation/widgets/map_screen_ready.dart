@@ -118,26 +118,11 @@ final class _ReadyMap extends StatelessWidget {
 
   List<Widget> _featureOverlays() => [
     Positioned.fill(
-      child: ResearchOverlay(
-        state: research,
-        selectionRequired:
-            scene.player.pendingAction is PendingResearchSelectionView,
-        onSelect: controller.selectTechnology,
-        onRetry: controller.refreshResearch,
-      ),
-    ),
-    Positioned.fill(
-      child: DiplomacyOverlay(
-        actorPlayerId: scene.player.actorPlayerId,
-        view: scene.player.diplomacy,
-        state: diplomacy,
-        onAction: controller.executeDiplomacyAction,
-      ),
-    ),
-    Positioned.fill(
-      child: ObjectiveOverlay(
-        objectives: scene.map.objectives,
-        outcome: scene.player.turnView.outcome,
+      child: MapHudPanels(
+        scene: scene,
+        research: research,
+        diplomacy: diplomacy,
+        controller: controller,
       ),
     ),
     Positioned.fill(

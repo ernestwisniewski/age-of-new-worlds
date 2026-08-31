@@ -8,10 +8,12 @@ import '../application/research_state.dart';
 import '../read_model/research_view.dart';
 import 'research_copy.dart';
 
-final class ResearchOverlay extends StatefulWidget {
+final class ResearchOverlay extends StatelessWidget {
   const ResearchOverlay({
     required this.state,
     required this.selectionRequired,
+    required this.open,
+    required this.onOpenChanged,
     required this.onSelect,
     required this.onRetry,
     super.key,
@@ -19,20 +21,14 @@ final class ResearchOverlay extends StatefulWidget {
 
   final ResearchState state;
   final bool selectionRequired;
+  final bool open;
+  final ValueChanged<bool>? onOpenChanged;
   final ValueChanged<TechnologyIdView> onSelect;
   final VoidCallback onRetry;
 
   @override
-  State<ResearchOverlay> createState() => _ResearchOverlayState();
-}
-
-final class _ResearchOverlayState extends State<ResearchOverlay> {
-  var _open = false;
-
-  @override
   Widget build(BuildContext context) {
     final copy = ResearchCopy.of(context);
-    final open = _open || widget.selectionRequired;
     return Stack(
       children: [
         _trigger(context, copy, open),
@@ -44,7 +40,7 @@ final class _ResearchOverlayState extends State<ResearchOverlay> {
             child: SafeArea(
               child: AonwPanel(
                 semanticLabel: copy.text(ResearchText.title),
-                liveRegion: widget.selectionRequired,
+                liveRegion: selectionRequired,
                 maxWidth: 680,
                 padding: const EdgeInsets.all(AonwSpacing.md),
                 child: SizedBox(
@@ -60,25 +56,25 @@ final class _ResearchOverlayState extends State<ResearchOverlay> {
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
-                          if (!widget.selectionRequired)
+                          if (!selectionRequired)
                             IconButton(
                               key: const ValueKey('close-research'),
                               tooltip: copy.text(ResearchText.close),
-                              onPressed: () => setState(() => _open = false),
+                              onPressed: () => onOpenChanged?.call(false),
                               icon: const Icon(Icons.close),
                             ),
                         ],
                       ),
-                      if (widget.selectionRequired)
+                      if (selectionRequired)
                         Text(
                           copy.text(ResearchText.selectionRequired),
                           key: const ValueKey('research-selection-required'),
                         ),
                       Expanded(
                         child: ResearchPanel(
-                          state: widget.state,
-                          onSelect: widget.onSelect,
-                          onRetry: widget.onRetry,
+                          state: state,
+                          onSelect: onSelect,
+                          onRetry: onRetry,
                         ),
                       ),
                     ],
@@ -98,7 +94,9 @@ final class _ResearchOverlayState extends State<ResearchOverlay> {
         child: AonwHudIconButton(
           key: const ValueKey('open-research'),
           tooltip: copy.text(ResearchText.open),
-          onPressed: open ? null : () => setState(() => _open = true),
+          onPressed: selectionRequired || onOpenChanged == null
+              ? null
+              : () => onOpenChanged!(!open),
           active: open,
           icon: const Icon(Icons.science),
         ),

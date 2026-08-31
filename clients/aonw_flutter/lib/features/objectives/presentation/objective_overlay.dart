@@ -7,54 +7,53 @@ import '../../../l10n/l10n.dart';
 import '../../map/read_model/map_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 
-final class ObjectiveOverlay extends StatefulWidget {
+final class ObjectiveOverlay extends StatelessWidget {
   const ObjectiveOverlay({
     required this.objectives,
     required this.outcome,
+    required this.open,
+    required this.onOpenChanged,
     super.key,
   });
 
   final List<MapObjectiveView> objectives;
   final GameOutcomeView outcome;
-
-  @override
-  State<ObjectiveOverlay> createState() => _ObjectiveOverlayState();
-}
-
-final class _ObjectiveOverlayState extends State<ObjectiveOverlay> {
-  var _open = false;
+  final bool open;
+  final ValueChanged<bool>? onOpenChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
     return Stack(
       children: [
-        if (!widget.outcome.isTerminal)
+        if (!outcome.isTerminal)
           Positioned(
             top: AonwHudSideMenuLayout.actionTop(context, 0),
             left: AonwHudSideMenuLayout.left(context),
             child: AonwHudIconButton(
               key: const ValueKey('open-objectives'),
               tooltip: l10n.openObjectives,
-              onPressed: _open ? null : () => setState(() => _open = true),
-              active: _open,
+              onPressed: onOpenChanged == null
+                  ? null
+                  : () => onOpenChanged!(!open),
+              active: open,
               icon: const Icon(Icons.flag),
             ),
           ),
-        if (_open && !widget.outcome.isTerminal)
+        if (open && !outcome.isTerminal)
           Positioned(
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
             child: SafeArea(
               child: _ObjectivePanel(
-                objectives: widget.objectives,
-                onClose: () => setState(() => _open = false),
+                objectives: objectives,
+                onClose: () => onOpenChanged?.call(false),
               ),
             ),
           ),
-        if (widget.outcome.isTerminal)
-          Positioned.fill(child: _TerminalOutcome(outcome: widget.outcome)),
+        if (outcome.isTerminal)
+          Positioned.fill(child: _TerminalOutcome(outcome: outcome)),
       ],
     );
   }
