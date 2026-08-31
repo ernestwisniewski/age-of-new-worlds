@@ -19,8 +19,8 @@ void main(List<String> arguments) {
       case _Command.check:
         final result = gate.check();
         stdout.writeln(
-          'Architecture budgets pass: ${result.fileDebt} legacy files, '
-          '${result.declarationDebt} legacy declarations, '
+          'Architecture budgets pass: ${result.fileDebt} oversized files, '
+          '${result.declarationDebt} oversized declarations, '
           '${result.callableLineDebt} long callables, '
           '${result.nestingDebt} deeply nested callables, '
           '${result.cyclomaticDebt} cyclomatic-complexity debts, and '

@@ -1,15 +1,11 @@
 import 'dart:io';
 
 import 'failure.dart';
-import 'migration.dart';
 import 'strict_json.dart';
-
-export 'migration.dart';
 
 final class ArchitecturePolicy {
   ArchitecturePolicy._({
     required this.enforcedSince,
-    required this.migration,
     required this.generatedSuffixes,
     required this.buildRunnerScopes,
     required this.roles,
@@ -29,7 +25,6 @@ final class ArchitecturePolicy {
     expectKeys(root, const {
       'schema',
       'enforcedSince',
-      'migration',
       'generatedSuffixes',
       'buildRunnerScopes',
       'roles',
@@ -44,10 +39,6 @@ final class ArchitecturePolicy {
         '$description.enforcedSince must be a full lowercase Git SHA.',
       );
     }
-    final migration = ArchitectureMigration.parse(
-      root['migration'],
-      '$description.migration',
-    );
     final generatedSuffixes = readStringList(
       root,
       'generatedSuffixes',
@@ -121,19 +112,17 @@ final class ArchitecturePolicy {
     }
     final policy = ArchitecturePolicy._(
       enforcedSince: enforcedSince,
-      migration: migration,
       generatedSuffixes: generatedSuffixes,
       buildRunnerScopes: buildRunnerScopes,
       roles: Map.unmodifiable(sortedMap(roles)),
       scopes: Map.unmodifiable(sortedMap(scopes)),
     );
     _validateDisjointScopeRoots(policy.scopes, description);
-    _validateMigrationTargets(policy, description);
     requireCanonicalJson(contents, policy.toJson(), description);
     return policy;
   }
 
-  static const schema = 2;
+  static const schema = 3;
   static const canonicalRoleNames = {
     'production',
     'test',
@@ -142,7 +131,6 @@ final class ArchitecturePolicy {
   };
 
   final String enforcedSince;
-  final ArchitectureMigration migration;
   final List<String> generatedSuffixes;
   final List<String> buildRunnerScopes;
   final Map<String, ArchitectureRole> roles;
@@ -151,7 +139,6 @@ final class ArchitecturePolicy {
   Map<String, Object?> toJson() => {
     'schema': schema,
     'enforcedSince': enforcedSince,
-    'migration': migration.toJson(),
     'generatedSuffixes': generatedSuffixes,
     'buildRunnerScopes': buildRunnerScopes,
     'roles': {
@@ -166,8 +153,6 @@ final class ArchitecturePolicy {
 
   bool isMonotonicExtensionOf(ArchitecturePolicy historical) {
     if (enforcedSince != historical.enforcedSince ||
-        canonicalJson(migration.toJson()) !=
-            canonicalJson(historical.migration.toJson()) ||
         !_sameSet(
           generatedSuffixes.toSet(),
           historical.generatedSuffixes.toSet(),
@@ -438,31 +423,6 @@ void _validateDisjointScopeRoots(
           '${first.value.sourceRoot} / ${second.value.sourceRoot}',
         );
       }
-    }
-  }
-}
-
-void _validateMigrationTargets(ArchitecturePolicy policy, String description) {
-  for (final entry in policy.migration.legacyFileTargets.entries) {
-    final matchingScopes = policy.scopes.values
-        .where(
-          (scope) =>
-              entry.key.startsWith('${scope.sourceRoot}/') &&
-              entry.key.endsWith('.dart'),
-        )
-        .toList();
-    if (matchingScopes.length != 1) {
-      throw ArchitectureFailure(
-        '$description migration target is outside one source scope: '
-        '${entry.key}',
-      );
-    }
-    final roleTarget = matchingScopes.single.roleFor(entry.key).fileLines;
-    if (entry.value >= roleTarget) {
-      throw ArchitectureFailure(
-        '$description migration target must be stricter than the current '
-        '$roleTarget line target: ${entry.key}=${entry.value}',
-      );
     }
   }
 }

@@ -1,9 +1,8 @@
 {
-  "schema": 2,
+  "schema": 3,
   "scopes": {
     "asset_ui_tool": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -12,7 +11,6 @@
     },
     "engine_client_hook": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -21,7 +19,6 @@
     },
     "engine_client_lib": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -32,7 +29,6 @@
     },
     "engine_client_test": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -41,7 +37,6 @@
     },
     "flutter_client_integration_test": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -50,7 +45,6 @@
     },
     "flutter_client_lib": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 417,
         "clients/aonw_flutter/lib/features/multiplayer/application/multiplayer_coordinator.dart::class:MultiplayerCoordinator": 402,
@@ -140,7 +134,6 @@
         "clients/aonw_flutter/test/game/gameplay_map_layers_test.dart": 580,
         "clients/aonw_flutter/test/support/map_test_fixture.dart": 827
       },
-      "legacyFiles": {},
       "declarations": {
         "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 495
       },
@@ -153,7 +146,6 @@
     },
     "flutter_client_test_live": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -162,10 +154,9 @@
     },
     "root_tool": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {
-        "tool/architecture/policy.dart::class:ArchitecturePolicy/constructor:parse": 108,
+        "tool/architecture/policy.dart::class:ArchitecturePolicy/constructor:parse": 101,
         "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 107
       },
       "nesting": {
@@ -177,14 +168,13 @@
         "tool/architecture/source_census.dart::class:SourceCensus/method:_validateGeneratedSource": 17
       },
       "cognitiveComplexity": {
-        "tool/architecture/dart_metrics.dart::class:ArchitectureMeasurer/method:_measureScope": 25,
+        "tool/architecture/dart_metrics.dart::class:ArchitectureMeasurer/method:_measureScope": 22,
         "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 32,
         "tool/architecture/source_census.dart::class:SourceCensus/method:_validateGeneratedSource": 21
       }
     },
     "server_bin": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -193,7 +183,6 @@
     },
     "server_client_lib": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -202,7 +191,6 @@
     },
     "server_client_test": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -211,7 +199,6 @@
     },
     "server_client_tool": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {
         "packages/aonw_server_client/tool/critical_e2e.dart::class:_CriticalE2e/method:run": 173
@@ -222,7 +209,6 @@
     },
     "server_lib": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {
         "server/lib/src/auth/steam_auth_service.dart::class:SteamAuthService/method:handleCallback": 116,
@@ -239,7 +225,6 @@
     },
     "server_native_hook": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -248,7 +233,6 @@
     },
     "server_native_lib": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -257,7 +241,6 @@
     },
     "server_native_test": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {},
       "nesting": {},
@@ -266,7 +249,6 @@
     },
     "server_test": {
       "files": {},
-      "legacyFiles": {},
       "declarations": {},
       "callableLines": {
         "server/test/architecture/server_operability_config_test.dart::function:main/closure:group[Server_operability_configuration]#1/closure:test[Compose_profiles_select_immutable_Serverpod_run_modes]#1": 140

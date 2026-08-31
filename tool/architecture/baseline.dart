@@ -15,29 +15,19 @@ final class ArchitectureBaseline {
         },
       );
 
-  factory ArchitectureBaseline.load(
-    String path,
-    ArchitecturePolicy policy, {
-    Map<String, int>? legacyFileTargets,
-  }) {
+  factory ArchitectureBaseline.load(String path, ArchitecturePolicy policy) {
     final file = File(path);
     if (!file.existsSync()) {
       throw ArchitectureFailure('Architecture baseline does not exist: $path');
     }
-    return ArchitectureBaseline.parse(
-      file.readAsStringSync(),
-      policy,
-      path,
-      legacyFileTargets: legacyFileTargets,
-    );
+    return ArchitectureBaseline.parse(file.readAsStringSync(), policy, path);
   }
 
   factory ArchitectureBaseline.parse(
     String contents,
     ArchitecturePolicy policy,
-    String description, {
-    Map<String, int>? legacyFileTargets,
-  }) {
+    String description,
+  ) {
     final root = decodeObject(contents, description);
     expectKeys(root, const {'schema', 'scopes'}, description);
     if (readInt(root, 'schema', description) != ArchitecturePolicy.schema) {
@@ -46,13 +36,10 @@ final class ArchitectureBaseline {
     final rawScopes = readObject(root, 'scopes', description);
     expectKeys(rawScopes, policy.scopes.keys.toSet(), '$description.scopes');
     final scopes = <String, ScopeBaseline>{};
-    final effectiveLegacyTargets =
-        legacyFileTargets ?? policy.migration.legacyFileTargets;
     for (final entry in rawScopes.entries) {
       scopes[entry.key] = ScopeBaseline.parse(
         entry.value,
         policy.scopes[entry.key]!,
-        effectiveLegacyTargets,
         '$description.scopes.${entry.key}',
       );
     }
@@ -118,14 +105,12 @@ final class ArchitectureBaseline {
 
   Set<String> get _uniqueFileDebt => {
     for (final scope in scopes.values) ...scope.files.keys,
-    for (final scope in scopes.values) ...scope.legacyFiles.keys,
   };
 }
 
 final class ScopeBaseline {
   const ScopeBaseline({
     required this.files,
-    required this.legacyFiles,
     required this.declarations,
     required this.callableLines,
     required this.nesting,
@@ -135,7 +120,6 @@ final class ScopeBaseline {
 
   static const empty = ScopeBaseline(
     files: {},
-    legacyFiles: {},
     declarations: {},
     callableLines: {},
     nesting: {},
@@ -146,13 +130,11 @@ final class ScopeBaseline {
   factory ScopeBaseline.parse(
     Object? value,
     ScopePolicy policy,
-    Map<String, int> legacyFileTargets,
     String description,
   ) {
     final object = asObject(value, description);
     expectKeys(object, const {
       'files',
-      'legacyFiles',
       'declarations',
       'callableLines',
       'nesting',
@@ -167,12 +149,6 @@ final class ScopeBaseline {
         policy,
         isFileKey: true,
         target: (role) => role.fileLines,
-      ),
-      legacyFiles: _readLegacyFileMap(
-        object,
-        description,
-        policy,
-        legacyFileTargets,
       ),
       declarations: _readMetricMap(
         object,
@@ -213,7 +189,6 @@ final class ScopeBaseline {
   }
 
   final Map<String, int> files;
-  final Map<String, int> legacyFiles;
   final Map<String, int> declarations;
   final Map<String, int> callableLines;
   final Map<String, int> nesting;
@@ -222,7 +197,6 @@ final class ScopeBaseline {
 
   Map<String, Object?> toJson() => {
     'files': sortedMap(files),
-    'legacyFiles': sortedMap(legacyFiles),
     'declarations': sortedMap(declarations),
     'callableLines': sortedMap(callableLines),
     'nesting': sortedMap(nesting),
@@ -232,11 +206,6 @@ final class ScopeBaseline {
 
   List<String> exactDifferences(ScopeBaseline expected, String scopeName) => [
     ..._exactMapDifferences(files, expected.files, '$scopeName file'),
-    ..._exactMapDifferences(
-      legacyFiles,
-      expected.legacyFiles,
-      '$scopeName migrated file',
-    ),
     ..._exactMapDifferences(
       declarations,
       expected.declarations,
@@ -264,11 +233,6 @@ final class ScopeBaseline {
       [
         ..._ratchetMapDifferences(files, historical.files, '$scopeName file'),
         ..._ratchetMapDifferences(
-          legacyFiles,
-          historical.legacyFiles,
-          '$scopeName migrated file',
-        ),
-        ..._ratchetMapDifferences(
           declarations,
           historical.declarations,
           '$scopeName declaration',
@@ -294,47 +258,6 @@ final class ScopeBaseline {
           '$scopeName cognitive complexity',
         ),
       ];
-}
-
-Map<String, int> _readLegacyFileMap(
-  Map<String, Object?> object,
-  String description,
-  ScopePolicy policy,
-  Map<String, int> legacyFileTargets,
-) {
-  final raw = readObject(object, 'legacyFiles', description);
-  final result = <String, int>{};
-  for (final entry in raw.entries) {
-    validateRepositoryPath(entry.key, '$description.legacyFiles key');
-    if (!entry.key.startsWith('${policy.sourceRoot}/') ||
-        !entry.key.endsWith('.dart')) {
-      throw ArchitectureFailure(
-        '$description.legacyFiles entry is outside ${policy.sourceRoot}: '
-        '${entry.key}',
-      );
-    }
-    final value = entry.value;
-    if (value is! int || value < 1) {
-      throw ArchitectureFailure(
-        '$description.legacyFiles.${entry.key} must be a positive integer.',
-      );
-    }
-    final target = legacyFileTargets[entry.key];
-    if (target == null) {
-      throw ArchitectureFailure(
-        '$description.legacyFiles has no immutable migration target: '
-        '${entry.key}',
-      );
-    }
-    if (value <= target) {
-      throw ArchitectureFailure(
-        '$description.legacyFiles debt is not above its $target target: '
-        '${entry.key}=$value',
-      );
-    }
-    result[entry.key] = value;
-  }
-  return Map.unmodifiable(sortedMap(result));
 }
 
 Map<String, int> _readMetricMap(

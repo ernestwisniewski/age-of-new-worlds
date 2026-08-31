@@ -25,28 +25,17 @@ final class ArchitectureMeasurer {
   final ArchitecturePolicy policy;
   final SourceCensus census;
 
-  ArchitectureBaseline measure({Map<String, int>? legacyFileTargets}) {
-    final effectiveLegacyTargets =
-        legacyFileTargets ?? policy.migration.legacyFileTargets;
+  ArchitectureBaseline measure() {
     census.validateRepositoryCoverage();
     final scopes = <String, ScopeBaseline>{};
     for (final entry in policy.scopes.entries) {
-      scopes[entry.key] = _measureScope(
-        entry.key,
-        entry.value,
-        effectiveLegacyTargets,
-      );
+      scopes[entry.key] = _measureScope(entry.key, entry.value);
     }
     return ArchitectureBaseline(scopes: scopes);
   }
 
-  ScopeBaseline _measureScope(
-    String scopeName,
-    ScopePolicy scope,
-    Map<String, int> legacyFileTargets,
-  ) {
+  ScopeBaseline _measureScope(String scopeName, ScopePolicy scope) {
     final files = <String, int>{};
-    final legacyFiles = <String, int>{};
     final declarations = <String, int>{};
     final callableLines = <String, int>{};
     final nesting = <String, int>{};
@@ -58,10 +47,6 @@ final class ArchitectureMeasurer {
       final role = scope.roleFor(path);
       if (sourceMetrics.fileLines > role.fileLines) {
         files[path] = sourceMetrics.fileLines;
-      }
-      final legacyTarget = legacyFileTargets[path];
-      if (legacyTarget != null && sourceMetrics.fileLines > legacyTarget) {
-        legacyFiles[path] = sourceMetrics.fileLines;
       }
       for (final declaration in sourceMetrics.declarations) {
         if (declaration.lines > role.declarationLines) {
@@ -95,7 +80,6 @@ final class ArchitectureMeasurer {
     }
     return ScopeBaseline(
       files: Map.unmodifiable(sortedMap(files)),
-      legacyFiles: Map.unmodifiable(sortedMap(legacyFiles)),
       declarations: Map.unmodifiable(sortedMap(declarations)),
       callableLines: Map.unmodifiable(sortedMap(callableLines)),
       nesting: Map.unmodifiable(sortedMap(nesting)),

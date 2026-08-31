@@ -26,17 +26,11 @@ final class ArchitectureGate {
   late final SourceCensus census;
   late final ArchitectureMeasurer measurer;
 
-  ArchitectureBaseline snapshot() =>
-      measurer.measure(legacyFileTargets: _currentLegacyFileTargets());
+  ArchitectureBaseline snapshot() => measurer.measure();
 
   ArchitectureCheckResult check() {
-    final legacyFileTargets = _currentLegacyFileTargets();
-    final expected = ArchitectureBaseline.load(
-      baselinePath,
-      policy,
-      legacyFileTargets: legacyFileTargets,
-    );
-    final actual = measurer.measure(legacyFileTargets: legacyFileTargets);
+    final expected = ArchitectureBaseline.load(baselinePath, policy);
+    final actual = measurer.measure();
     final failures = actual.exactDifferences(expected);
     if (failures.isNotEmpty) {
       throw ArchitectureFailure(failures.join('\n'));
@@ -50,9 +44,6 @@ final class ArchitectureGate {
       cognitiveDebt: actual.cognitiveDebtCount,
     );
   }
-
-  Map<String, int> _currentLegacyFileTargets() =>
-      policy.migration.legacyFileTargets;
 }
 
 final class ArchitectureCheckResult {
