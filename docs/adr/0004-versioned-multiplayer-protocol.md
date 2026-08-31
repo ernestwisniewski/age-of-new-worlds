@@ -35,7 +35,9 @@ flowchart TB
   Readers --> Client["Require the new client revision only after rollout is safe"]
 ```
 
-Current values are defined by the active protocol contract and mirrored by the legacy compatibility source during coexistence. At the time of this decision update they are functional revision 9, transient schema 4, and durable write schema 7, with bounded readers for durable schemas 3 through 7.
+Current values are defined by the generated Serverpod protocol and shared
+engine contracts. Each independently deployed consumer advertises the exact
+versions it supports.
 
 The binding rules are:
 
@@ -45,7 +47,9 @@ The binding rules are:
 - supporting an older schema requires an explicit bounded reader/upcaster and, when needed, peer-specific encoder;
 - functional compatibility never weakens fog, audience filtering, offset order, or command idempotency;
 - save schema and multiplayer schemas remain independent;
-- shared DTOs and compatibility constants are owned by the active protocol contract boundary and must remain mirrored consistently across Rust and legacy Dart compatibility packages;
+- shared DTOs and compatibility constants are owned by the active protocol
+  boundary and must remain consistent across the engine, server, and generated
+  client;
 - generated Serverpod output changes in the same commit as its source model or endpoint.
 
 ## Rollout
@@ -57,17 +61,19 @@ For every multiplayer change:
 3. bump only the incompatible envelope family;
 4. add status, codec, retry, reconnect, projection, and rollout fixtures;
 5. deploy the status-aware server before requiring the new client;
-6. retain stored matches only when their schema and semantics remain readable or have an explicit migration plan.
+6. retain stored matches only when their schema and semantics remain readable or have an explicit conversion plan.
 
 Readers precede writers. A durable writer is enabled only with a backup and a rollback/forward-fix plan for older servers.
 
 ## Consequences
 
-Compatible releases can roll out without making wire and storage migration implicit. The cost is explicit review of compatibility on every online change.
+Compatible releases can roll out without making wire and storage conversion implicit. The cost is explicit review of compatibility on every online change.
 
-## Migration And Verification
+## Verification
 
-Contract tests cover current, removed, undeclared legacy, and future functional revisions; strict wire readers; command retry; recipient projection; reconnect; and generated-code drift.
+Contract tests cover current, removed, undeclared, and future functional
+revisions; strict wire readers; command retry; recipient projection; reconnect;
+and generated-code drift.
 
 See [multiplayer-protocol.md](../multiplayer-protocol.md) for the active runtime contract.
 
@@ -76,7 +82,7 @@ See [multiplayer-protocol.md](../multiplayer-protocol.md) for the active runtime
 - [Multiplayer protocol](../multiplayer-protocol.md)
 - [Multiplayer scale-out](../multiplayer-scale-out.md)
 - [ADR 0003: Command boundaries](0003-command-boundaries.md)
-- [ADR 0008: Rust engine ownership and strangler migration](0008-rust-engine-ownership-and-strangler-migration.md)
+- [ADR 0008: Engine ownership](0008-engine-ownership.md)
 
 ## Rejected alternatives:
 

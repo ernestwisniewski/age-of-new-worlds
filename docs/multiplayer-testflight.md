@@ -17,7 +17,7 @@ flutter build ipa --release \
 - the initial schema applied before the application starts;
 - strong service, JWT, refresh-token, email-hash, database, and Redis secrets;
 - reverse proxy forwarding the Serverpod HTTP API;
-- the same Rust, protocol, map, and ruleset artifacts on every API instance.
+- the same engine, protocol, map, and ruleset artifacts on every API instance.
 
 Keep all Serverpod ports private. The reverse proxy must replace untrusted
 client-IP headers with one validated address before forwarding them to
@@ -27,7 +27,7 @@ authentication rate limiting.
 
 ```sh
 cp .env.example .env
-tool/run_postgres_smoke.sh
+make server-integration-test
 make local-start
 ```
 

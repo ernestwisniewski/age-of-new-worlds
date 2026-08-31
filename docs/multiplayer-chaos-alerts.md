@@ -1,18 +1,17 @@
 # Multiplayer release smoke and failure drills
 
 Use these checks for changes to game networking, persistence, authentication,
-or Rust command execution.
+or engine command execution.
 
 ## Automated gate
 
 ```sh
-tool/run_postgres_smoke.sh
+make server-integration-test
 ```
 
-The script creates an isolated PostgreSQL project, applies the initial schema,
-runs server integration tests, and executes the public HTTP journey from
-[critical-e2e.md](critical-e2e.md). It removes its containers and volume on
-exit.
+The integration profile applies the initial schema to its test database and
+runs the PostgreSQL-backed server smoke tests serially. Run the public HTTP
+journey from [critical-e2e.md](critical-e2e.md) against the local Compose stack.
 
 ## Manual two-account checks
 

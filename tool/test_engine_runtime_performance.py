@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Negative fixtures for the pinned engine transition-performance gate."""
+"""Negative fixtures for the pinned engine runtime-performance gate."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from typing import Any, Callable
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CHECKER = REPO_ROOT / "tool/check_engine_transition_performance.py"
+CHECKER = REPO_ROOT / "tool/check_engine_runtime_performance.py"
 HEADER = [
     "workload",
     "tiles",
@@ -32,7 +32,7 @@ HEADER = [
 
 class Fixture:
     def __init__(self) -> None:
-        self.root = Path(tempfile.mkdtemp(prefix="aonw-engine-transition-performance-"))
+        self.root = Path(tempfile.mkdtemp(prefix="aonw-engine-runtime-performance-"))
         self.policy_path = self.root / "policy.json"
         self.environment_path = self.root / "environment.json"
         self.csv_path = self.root / "benchmark.csv"
@@ -57,7 +57,7 @@ class Fixture:
         }
         self.policy = {
             "schemaVersion": 1,
-            "owner": "engine",
+            "owner": "engine-runtime",
             "reviewedDate": "2099-01-01",
             "environment": environment,
             "measurement": {
@@ -134,8 +134,8 @@ def expect_rejection(
     fixture.write()
     result = fixture.run()
     if result.returncode == 0:
-        raise RuntimeError(f"transition performance checker accepted {label}")
-    print(f"Transition performance checker rejected {label}.")
+        raise RuntimeError(f"runtime performance checker accepted {label}")
+    print(f"Runtime performance checker rejected {label}.")
 
 
 def main() -> None:
@@ -193,7 +193,7 @@ def main() -> None:
         )
     finally:
         fixture.close()
-    print("Engine transition performance negative tests passed.")
+    print("Engine runtime performance negative tests passed.")
 
 
 if __name__ == "__main__":

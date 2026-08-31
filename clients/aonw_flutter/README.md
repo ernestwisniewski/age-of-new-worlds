@@ -51,12 +51,12 @@ make flutter-client-coverage-report
 make flutter-client-device-test
 make flutter-client-performance-check
 make flutter-client-release-check
-make map-stage-1-check
+make flutter-client-map-contract-test
 ```
 
-The starter map assets are generated from `content/maps/` for both presentation
-clients. `make map-stage-1-check` verifies shared semantics without rewriting
-Flutter visual goldens.
+Map assets are generated from `content/maps/` for both presentation clients.
+The contract gate verifies every packaged map without rewriting Flutter visual
+goldens.
 
 ## Documentation
 

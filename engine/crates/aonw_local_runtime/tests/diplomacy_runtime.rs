@@ -1,4 +1,4 @@
-//! Current-only diplomacy proposal protocol, replay, and disclosure coverage.
+//! Diplomacy proposal protocol, replay, and disclosure coverage.
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_contracts::client::{

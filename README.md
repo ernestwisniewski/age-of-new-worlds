@@ -42,7 +42,7 @@ Use the Flutter version pinned in [`.fvmrc`](.fvmrc). FVM is optional; Make uses
 
 ```sh
 make bootstrap
-make rust-engine-quality-check
+make engine-quality-check
 make flutter-client-check
 make godot-check
 make server-test
@@ -54,10 +54,9 @@ The complete release qualification is `make release-check`. Useful focused
 checks include:
 
 ```sh
-make rust-engine-check
-make rust-coverage-check
+make engine-check
 make engine-performance-check
-make engine-transition-performance-check
+make engine-runtime-performance-check
 make flutter-client-performance-check
 make server-integration-test
 ```
@@ -100,17 +99,15 @@ make local-down
 ```sh
 make rust-check
 make godot-check
-make map-stage-1-check
-make godot-editor
-make godot-run
 ```
-
-`make map-stage-1-check` compares normalized Flutter and Godot map semantics;
-client-owned visual goldens remain separate and are never rewritten by this gate.
 
 ## Documentation
 
-Start with [docs/README.md](docs/README.md). It explains which implementation is authoritative, where each subsystem lives, and which checks apply to a change, including [static analysis](docs/static-analysis.md), [critical journeys](docs/critical-e2e.md), [mutation testing](docs/mutation-testing.md), and [architecture budgets](docs/architecture-budgets.md).
+Start with [docs/README.md](docs/README.md). It explains which implementation
+is authoritative, where each subsystem lives, and which checks apply to a
+change, including [engine quality](docs/engine-quality.md),
+[critical journeys](docs/critical-e2e.md), and
+[architecture budgets](docs/architecture-budgets.md).
 
 Contribution setup and pull-request expectations are in [CONTRIBUTING.md](CONTRIBUTING.md). Architecture decisions are indexed in [docs/adr/README.md](docs/adr/README.md).
 

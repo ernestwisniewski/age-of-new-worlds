@@ -1,4 +1,4 @@
-//! Current-only production-turn protocol, save, and replay coverage.
+//! Production-turn protocol, save, and replay coverage.
 
 use std::collections::BTreeMap;
 

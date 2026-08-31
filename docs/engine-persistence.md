@@ -1,9 +1,8 @@
-# Rust engine persistence
+# Engine persistence
 
 The Rust engine supports one current canonical save contract and one current
-bounded replay contract. These contracts are shared by the new native clients;
-they do not wrap a Dart save, carry an internal format version, or include a
-legacy reader, adapter, alias, fallback, or upcaster.
+bounded replay contract. These contracts are shared by the native clients;
+they do not carry speculative aliases, fallback readers, or upcasters.
 
 `SaveGameDto` owns the complete canonical state, content identities, actor,
 event offset, and state digest. `ReplayLogDto` owns a bounded chain of canonical
@@ -29,11 +28,9 @@ mutating the open session. If it fails, the backup must pass the same current
 contract before it is opened and promoted to repair the primary. If both fail,
 the caller's session remains unchanged.
 
-Backup is another copy of the current format, not compatibility infrastructure.
-Development saves made before production cutover have no support guarantee.
-Compatibility support starts only when the first production Rust writer is
-enabled after the Engine Completion Gate. A reader/upcaster may be introduced
-only if a second real supported durable format is intentionally created.
+Backup is another copy of the current format, not an alternate schema. A
+reader/upcaster may be introduced only if a second real supported durable
+format is intentionally created.
 
 ## Evidence
 
@@ -46,7 +43,7 @@ backup promotion, repair, and rejection without session replacement.
 Run the focused gate from the repository root:
 
 ```sh
-make rust-persistence-check
+make engine-quality-check
 ```
 
 The machine-readable contracts live in

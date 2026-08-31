@@ -1,6 +1,11 @@
 SHELL := /bin/sh
 .DEFAULT_GOAL := help
 
+LOCAL_FLUTTER_BIN := $(CURDIR)/.fvm/flutter_sdk/bin
+ifneq ($(wildcard $(LOCAL_FLUTTER_BIN)/flutter),)
+export PATH := $(LOCAL_FLUTTER_BIN):$(PATH)
+endif
+
 CARGO ?= cargo
 DART ?= dart
 FLUTTER ?= flutter
@@ -8,13 +13,16 @@ SERVERPOD_CLI ?= $(DART) pub global run serverpod_cli:serverpod_cli
 COMPOSE ?= docker compose
 RUST_WORKSPACE ?= engine
 FLUTTER_CLIENT ?= clients/aonw_flutter
+GODOT_PROJECT ?= clients/aonw_godot
+GODOT_PINNED_VERSION := $(strip $(shell cat .godot-version 2>/dev/null))
+GODOT_BIN ?= $(if $(wildcard /Applications/Godot.app/Contents/MacOS/Godot),/Applications/Godot.app/Contents/MacOS/Godot,godot)
 FLUTTER_CLIENT_DEVICE ?= macos
 LOCAL_API_BASE_URL ?= http://127.0.0.1:8080
 SERVER_ENV_FILE ?= $(CURDIR)/.env
 PROFILE ?= dev
 HEALTH_URL ?= https://api.aonw.net/readyz
 ARCHITECTURE_SNAPSHOT_PATH ?= /tmp/aonw-architecture-baseline.json
-ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH ?= /tmp/aonw-engine-transition-performance.json
+ENGINE_RUNTIME_PERFORMANCE_REPORT_PATH ?= /tmp/aonw-engine-runtime-performance.json
 ENGINE_PERFORMANCE_REPORT_PATH ?= /tmp/aonw-engine-performance.json
 ENGINE_PERFORMANCE_SNAPSHOT_PATH ?= /tmp/aonw-engine-performance-baseline.json
 COMPOSE_BASE_FILES = -f compose.yml
@@ -36,9 +44,9 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	server-native-dependencies server-dependencies \
 	rust-format-check rust-clippy rust-test rust-test-release rust-doc \
 	rust-release-compile-smoke rust-check engine-architecture-policy-check \
-	engine-architecture-policy-test engine-architecture-check rust-engine-check \
-	rust-engine-quality-check engine-client-test engine-transition-performance-report \
-	engine-transition-performance-policy-test engine-transition-performance-check \
+	engine-architecture-policy-test engine-architecture-check engine-check \
+	engine-quality-check engine-client-test engine-runtime-performance-report \
+	engine-runtime-performance-policy-test engine-runtime-performance-check \
 	engine-performance-report engine-performance-policy-test engine-performance-check \
 	engine-performance-snapshot engine-benchmark godot-check \
 	server-client-analyze server-client-test server-native-analyze \
@@ -53,9 +61,9 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 help:
 	@echo "AoNW development targets"
 	@echo "  make bootstrap                 Install locked dependencies and Serverpod CLI"
-	@echo "  make rust-engine-quality-check Run the Rust engine quality gate"
+	@echo "  make engine-quality-check      Run the engine quality gate"
 	@echo "  make engine-performance-check  Verify portable engine work budgets"
-	@echo "  make engine-transition-performance-check Verify pinned transition budgets"
+	@echo "  make engine-runtime-performance-check Verify pinned runtime budgets"
 	@echo "  make flutter-client-check      Format, analyze, and test the Flutter client"
 	@echo "  make architecture-check        Verify Dart, client, and engine architecture budgets"
 	@echo "  make server-test               Analyze and test the Serverpod host"
@@ -70,6 +78,11 @@ toolchain-check:
 	@command -v rustc >/dev/null || { echo "rustc is required."; exit 1; }
 	@command -v $(DART) >/dev/null || { echo "dart is required."; exit 1; }
 	@command -v $(FLUTTER) >/dev/null || { echo "flutter is required."; exit 1; }
+	@required_flutter=$$(sed -n 's/.*"flutter"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' .fvmrc); \
+		actual_flutter=$$($(FLUTTER) --version | awk 'NR == 1 { print $$2 }'); \
+		test -n "$$required_flutter" && test "$$actual_flutter" = "$$required_flutter" || { \
+			echo "Flutter $$required_flutter is required; found $${actual_flutter:-unknown}."; exit 1; \
+		}
 	@required_rust=$$(awk -F '"' '/^channel = / { print $$2; exit }' $(RUST_WORKSPACE)/rust-toolchain.toml); \
 		actual_rust=$$(rustc --version | awk '{ print $$2 }'); \
 		test "$$actual_rust" = "$$required_rust" || { \
@@ -170,16 +183,16 @@ engine-architecture-policy-test:
 
 engine-architecture-check: engine-architecture-policy-check engine-architecture-policy-test
 
-rust-engine-check: rust-check engine-architecture-check
+engine-check: rust-check engine-architecture-check
 
-engine-transition-performance-policy-test:
-	@tool/test_engine_transition_performance.py
+engine-runtime-performance-policy-test:
+	@tool/test_engine_runtime_performance.py
 
-engine-transition-performance-report:
-	@tool/check_engine_transition_performance.py report --report "$(ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH)"
+engine-runtime-performance-report:
+	@tool/check_engine_runtime_performance.py report --report "$(ENGINE_RUNTIME_PERFORMANCE_REPORT_PATH)"
 
-engine-transition-performance-check: engine-transition-performance-policy-test
-	@tool/check_engine_transition_performance.py check --report "$(ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH)"
+engine-runtime-performance-check: engine-runtime-performance-policy-test
+	@tool/check_engine_runtime_performance.py check --report "$(ENGINE_RUNTIME_PERFORMANCE_REPORT_PATH)"
 
 engine-performance-policy-test:
 	@tool/test_engine_performance.py
@@ -198,15 +211,22 @@ engine-benchmark:
 	@cd $(RUST_WORKSPACE) && $(CARGO) bench --locked -p aonw_local_runtime --bench runtime
 	@cd $(RUST_WORKSPACE) && $(CARGO) bench --locked -p aonw_ai --bench planner
 
-rust-engine-quality-check: rust-engine-check engine-client-test engine-performance-check
+engine-quality-check: engine-check engine-client-test engine-performance-check
 
 engine-client-test: engine-client-dependencies flutter-client-dependencies
 	@cd packages/aonw_engine_client && $(DART) test
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/features/map/infrastructure/native_large_map_smoke_test.dart
 
 godot-check:
+	@command -v "$(GODOT_BIN)" >/dev/null || { echo "Godot is required."; exit 1; }
+	@actual=$$("$(GODOT_BIN)" --version | head -n 1); \
+		test "$$actual" = "$(GODOT_PINNED_VERSION)" || { \
+			echo "Godot $(GODOT_PINNED_VERSION) is required; found $${actual:-unknown}."; exit 1; \
+		}
 	@cd $(RUST_WORKSPACE) && $(CARGO) test --locked -p aonw_godot
 	@tool/check_godot_runtime_assets.py
+	@"$(GODOT_BIN)" --headless --path $(GODOT_PROJECT) --script res://tests/test_map_pipeline.gd
+	@"$(GODOT_BIN)" --headless --path $(GODOT_PROJECT) --script res://tests/test_runtime.gd
 
 server-client-analyze: server-client-dependencies
 	@cd packages/aonw_server_client && $(DART) analyze --fatal-infos --fatal-warnings
@@ -248,9 +268,9 @@ analyze: rust-clippy flutter-client-analyze server-client-analyze server-native-
 
 check: rust-test flutter-client-test server-client-test server-native-test server-test
 
-ci: format-check rust-engine-quality-check generated-code-check flutter-client-check server-client-test server-native-test server-test compose-check
+ci: format-check engine-quality-check generated-code-check flutter-client-check server-client-test server-native-test server-test compose-check
 
-release-check: ci rust-test-release engine-transition-performance-check flutter-client-release-check serverpod-ops-check
+release-check: ci rust-test-release engine-runtime-performance-check flutter-client-release-check serverpod-ops-check
 
 serverpod-version:
 	@version=$$(awk '/^dependencies:[[:space:]]*$$/ { found = 1; next } found && /^[^[:space:]#]/ { exit } found && $$1 == "serverpod:" && NF == 2 { print $$2; exit }' server/pubspec.yaml); \

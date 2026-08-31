@@ -1,4 +1,4 @@
-//! Current-only actor handoff for local hot-seat and multi-AI orchestration.
+//! Actor handoff for local hot-seat and multi-AI orchestration.
 
 use std::collections::BTreeMap;
 

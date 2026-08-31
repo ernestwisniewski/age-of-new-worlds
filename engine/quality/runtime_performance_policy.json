@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "owner": "engine",
+  "owner": "engine-runtime",
   "reviewedDate": "2026-08-31",
   "environment": {
     "operatingSystem": "macOS",

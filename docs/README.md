@@ -10,8 +10,8 @@ This directory documents contracts that are easy to misuse or expensive to redis
 | Understand the repository | This page |
 | Change gameplay rules | [`adr/README.md`](adr/README.md) and [`game-design/README.md`](game-design/README.md) |
 | Change multiplayer | [`multiplayer-protocol.md`](multiplayer-protocol.md) |
-| Work on the engine or a client | [`../engine/README.md`](../engine/README.md), [`../clients/README.md`](../clients/README.md), and [`rust-engine-persistence.md`](rust-engine-persistence.md) |
-| Change tests or quality gates | [`static-analysis.md`](static-analysis.md), [`test-coverage.md`](test-coverage.md), [`architecture-budgets.md`](architecture-budgets.md), [`mutation-testing.md`](mutation-testing.md), [`critical-e2e.md`](critical-e2e.md), [`multiplayer-protocol.md`](multiplayer-protocol.md) |
+| Work on the engine or a client | [`../engine/README.md`](../engine/README.md), [`../clients/README.md`](../clients/README.md), [`engine-quality.md`](engine-quality.md), and [`engine-persistence.md`](engine-persistence.md) |
+| Change tests or quality gates | [`static-analysis.md`](static-analysis.md), [`architecture-budgets.md`](architecture-budgets.md), [`performance-benchmarks.md`](performance-benchmarks.md), [`critical-e2e.md`](critical-e2e.md), and [`multiplayer-protocol.md`](multiplayer-protocol.md) |
 | Release or operate the backend | [`build-and-deploy.md`](build-and-deploy.md) |
 
 ## Current architecture
@@ -61,7 +61,7 @@ A presentation widget may calculate layout and animation. It must not decide whe
 | Purpose | Command |
 | --- | --- |
 | Install the pinned workspace | `make bootstrap` |
-| Rust engine quality gate | `make rust-engine-quality-check` |
+| Engine quality gate | `make engine-quality-check` |
 | Flutter client gate | `make flutter-client-check` |
 | Architecture budgets and boundaries | `make architecture-check` |
 | Godot client and native adapter gate | `make godot-check` |
@@ -69,18 +69,17 @@ A presentation widget may calculate layout and animation. It must not decide whe
 | Start local API and seed accounts | `make local-start` |
 | Start API plus the Flutter client | `make local` |
 | Local multiplayer smoke | `make local-multiplayer-smoke` |
-| PostgreSQL-backed server smoke | `tool/run_postgres_smoke.sh` |
+| PostgreSQL-backed server smoke | `make server-integration-test` |
 | Complete release qualification | `make release-check` |
 
 ## Architecture decisions
 
 ADRs record constraints that should survive refactors. Read the index before
-changing state ownership, command boundaries, multiplayer protocol,
-deployment identity, roads, strategic resources, or a native trust boundary.
+changing state ownership, command boundaries, multiplayer protocol, roads,
+strategic resources, or a native trust boundary.
 
 - [`adr/0003-command-boundaries.md`](adr/0003-command-boundaries.md): UI intent, player commands, trusted system commands, and events are different types.
 - [`adr/0004-versioned-multiplayer-protocol.md`](adr/0004-versioned-multiplayer-protocol.md): functional compatibility, transient wire schemas, and durable schemas are versioned separately.
-- [`adr/0005-immutable-deployment.md`](adr/0005-immutable-deployment.md): immutable deployment promotion and promotion workflow transition controls.
 - [`adr/0006-transport-infrastructure.md`](adr/0006-transport-infrastructure.md): transport and traversal ownership for the online stack.
 - [`adr/0007-strategic-resource-stockpiles.md`](adr/0007-strategic-resource-stockpiles.md): strategic resources are production-gated and tracked for compatibility.
 - [`../engine/README.md`](../engine/README.md): current engine ownership, workspace boundaries, and release qualification.
@@ -90,24 +89,22 @@ deployment identity, roads, strategic resources, or a native trust boundary.
 ### Development quality
 
 - [`static-analysis.md`](static-analysis.md): shared analyzer configuration and generated-code boundaries.
-- [`test-coverage.md`](test-coverage.md): measured scopes, changed-line gate, and baseline updates.
 - [`architecture-budgets.md`](architecture-budgets.md): source census and complexity ratchets.
-- [`mutation-testing.md`](mutation-testing.md): focused mutation targets and survivor policy.
+- [`engine-quality.md`](engine-quality.md): Rust ownership and current engine gates.
 - [`performance-benchmarks.md`](performance-benchmarks.md): deterministic workload gates and device-only frame checks.
 - [`critical-e2e.md`](critical-e2e.md): local persistence and public multiplayer journeys.
 
 ### Multiplayer and operations
 
 - [`multiplayer-protocol.md`](multiplayer-protocol.md): current online contract and rollout checklist.
-- [`rust-engine-persistence.md`](rust-engine-persistence.md): current-only save, replay, atomic write, backup, and restore contract.
-- [`multiplayer-scale-out.md`](multiplayer-scale-out.md): current single-active-instance limitation.
+- [`engine-persistence.md`](engine-persistence.md): save, replay, atomic write, backup, and restore contract.
+- [`multiplayer-scale-out.md`](multiplayer-scale-out.md): scale-out, locking, and rolling deployment contract.
 - [`multiplayer-chaos-alerts.md`](multiplayer-chaos-alerts.md): release smoke and manual failure drills.
 - [`multiplayer-testflight.md`](multiplayer-testflight.md): staging and two-device acceptance.
 - [`build-and-deploy.md`](build-and-deploy.md): release and deployment commands.
 - [`postgres-backup.md`](postgres-backup.md): backup and restore procedure.
 - [`data-retention.md`](data-retention.md): automatic retention currently implemented.
 - [`serverpod-social-auth-setup.md`](serverpod-social-auth-setup.md): Google, Apple, and Steam provider setup.
-- [`linux-steam-runtime.md`](linux-steam-runtime.md): Linux/Steam runtime and packaging contract.
 
 ### Product and content
 

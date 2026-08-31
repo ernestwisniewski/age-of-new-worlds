@@ -596,17 +596,17 @@ func _test_persistence_port(artifact: AonwTerrainCompiledArtifact) -> void:
 		)
 		previous_height = session.height_at(sample)
 		var next_artifact := _artifact_for_logical_revision(scaled_artifact)
-		var migration := session.migrate_logical_map_artifact(next_artifact)
+		var refresh := session.refresh_logical_map_artifact(next_artifact)
 		_check(
-			migration["ok"]
-			and migration["manual_final_preserved"]
+			refresh["ok"]
+			and refresh["manual_final_preserved"]
 			and session.artifact() == next_artifact,
-			"logical map revision migration accepts only a matching Terrain3D raster",
+			"logical map refresh accepts only a matching Terrain3D raster",
 		)
 		_check_approx(
 			session.height_at(sample),
 			previous_height,
-			"logical map revision migration preserves manual Terrain3D heights",
+			"logical map refresh preserves manual Terrain3D heights",
 		)
 	terrain.queue_free()
 	await Engine.get_main_loop().process_frame

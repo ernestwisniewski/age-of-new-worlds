@@ -24,7 +24,6 @@ Findings use stable codes such as late first technology/contact/combat, a long d
 
 ## Generate a report
 
-Report generation is handled by the current migration pipeline, not the legacy
-report command path. Use the active reporting command from the current runtime
-workspace and cite the generated artifact path and timestamp in balance reviews.
-Generated evidence is operational only and is not a permanent product contract.
+Generate reports from the current engine/runtime tooling and cite the artifact
+path and timestamp in balance reviews. Generated evidence is operational only
+and is not a permanent product contract.

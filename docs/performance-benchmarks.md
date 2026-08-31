@@ -19,35 +19,35 @@ The reviewed baseline is `engine/quality/performance_baseline.json`. Generate a
 candidate with `make engine-performance-snapshot`; never install it without
 reviewing why each changed signature or ceiling differs.
 
-## Complete transition gate
+## Complete runtime gate
 
-The hard latency gate measures accepted transitions through the retained local
+The hard latency gate measures accepted operations through the local
 runtime on the pinned macOS arm64 reference device. The workloads cover:
 
-- engine transition, aggregate validation, digest, recipient projection, and diff;
-- the same movement transition through JSON decode and response encoding;
+- engine execution, aggregate validation, digest, recipient projection, and diff;
+- the same movement operation through JSON decode and response encoding;
 - the three independent large-map selection queries used by a controlled worker;
-- a representative combat transition through JSON;
+- a representative combat operation through JSON;
 - late-turn timeout finalization with 512 units.
 
 The reviewed policy is
-`engine/quality/transition_performance_policy.json`. It pins the hardware, OS,
+`engine/quality/runtime_performance_policy.json`. It pins the hardware, OS,
 Rust toolchain, benchmark profile, warm-up, sample count, output signatures,
 allocation ceilings, allocated-byte ceilings, payload ceilings, and absolute p95
 latency. A different environment fails closed instead of pretending its timings
 are comparable.
 
 ```sh
-make engine-transition-performance-check
+make engine-runtime-performance-check
 ```
 
 To collect a report without accepting it as a gate result:
 
 ```sh
-make engine-transition-performance-report
+make engine-runtime-performance-report
 ```
 
-Reports default to `/tmp/aonw-engine-transition-performance.json` and are not
+Reports default to `/tmp/aonw-engine-runtime-performance.json` and are not
 committed. Rebaseline only after reviewing the benchmark workload and the cause
 of every signature, work, allocation, payload, or timing change.
 
@@ -83,5 +83,5 @@ make flutter-client-performance-check
 
 The committed records under `clients/aonw_flutter/performance/` state their
 device, workload, build mode, warm-up, percentiles, and resource budgets. Engine
-transition latency must not be inferred from a frame golden, and renderer timing
+runtime latency must not be inferred from a frame golden, and renderer timing
 must not be inferred from a headless Rust benchmark.

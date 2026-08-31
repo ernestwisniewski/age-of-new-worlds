@@ -55,7 +55,7 @@ Oil and aluminium become real production constraints and trade targets. UI read 
 
 Continuous army upkeep, shortage penalties, luxury duplicate effects, and stockpiling the remaining strategic resources are outside this decision.
 
-## Migration And Verification
+## Verification
 
 Tests cover extraction ownership and visibility, turn order, save/projection round trips, allocation/refund, alternative costs, spawn blocking, rush, atomic trade, diplomacy blocking, stale rejection, UI pending state, AI, MCTS, and deterministic resource placement.
 
@@ -66,7 +66,7 @@ Any future stockpiled resource or consumption rule must update the catalog, cano
 ## Related Decisions And Documentation
 
 - [Strategic resource economy](../game-design/strategic-resource-economy.md)
-- [ADR 0002: Deterministic game engine](0002-deterministic-game-engine.md)
+- [ADR 0008: Engine ownership](0008-engine-ownership.md)
 - [ADR 0003: Command boundaries](0003-command-boundaries.md)
 - [ADR 0004: Versioned multiplayer protocol](0004-versioned-multiplayer-protocol.md)
 

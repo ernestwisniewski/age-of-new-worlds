@@ -55,6 +55,7 @@ server/config/passwords.yaml
 *.sql.gz
 *.dump
 *.backup
+!server/migrations/**/*.sql
 
 # Rust
 **/target/

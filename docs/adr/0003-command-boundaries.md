@@ -40,11 +40,11 @@ AI emits normal `DomainCommand` values through the public engine contract.
 
 ## Consequences
 
-Replay and multiplayer contain portable authoritative intent, while presentation can change without a wire migration. Trusted server transitions remain auditable instead of masquerading as player input.
+Replay and multiplayer contain portable authoritative intent, while presentation can change without a wire-format change. Trusted server transitions remain auditable instead of masquerading as player input.
 
 Controllers may translate one intent into local state and later into a complete domain command. That two-step interaction is deliberate.
 
-## Migration And Verification
+## Verification
 
 - the umbrella `GameCommand` type remains removed;
 - transport, replay, AI, and server player APIs accept `DomainCommand` only;
@@ -54,9 +54,8 @@ Controllers may translate one intent into local state and later into a complete 
 
 ## Related Decisions And Documentation
 
-- [ADR 0002: Deterministic game engine](0002-deterministic-game-engine.md)
 - [ADR 0004: Versioned multiplayer protocol](0004-versioned-multiplayer-protocol.md)
-- [ADR 0008: Rust engine ownership and strangler migration](0008-rust-engine-ownership-and-strangler-migration.md)
+- [ADR 0008: Engine ownership](0008-engine-ownership.md)
 
 ## Rejected alternatives:
 

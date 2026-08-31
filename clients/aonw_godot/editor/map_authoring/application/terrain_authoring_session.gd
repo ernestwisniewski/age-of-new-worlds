@@ -179,7 +179,7 @@ func rescale_generated_artifact(next_artifact: AonwTerrainCompiledArtifact) -> D
 		"rescaled_pixels": changed,
 	}
 
-func migrate_logical_map_artifact(next_artifact: AonwTerrainCompiledArtifact) -> Dictionary:
+func refresh_logical_map_artifact(next_artifact: AonwTerrainCompiledArtifact) -> Dictionary:
 	if next_artifact.map_id != _artifact.map_id:
 		return _failure("generated terrain belongs to a different map")
 	if not _has_same_raster(next_artifact):

@@ -18,6 +18,17 @@ MAP_HASHES = {
 }
 MAP_MANIFEST = "map_texture_manifest.json"
 TERRAIN_MANIFEST = "terrain_compile.json"
+TERRAIN3D_INSTALL = {
+    "version": "1.0.2",
+    "archive": "Terrain3D_v1.0.2-stable.zip",
+    "sha256": "a071850250ec5e596aa54da61c01d75768774eb379ee997584d426a45f4884a2",
+    "source": (
+        "https://github.com/TokisanGames/Terrain3D/releases/download/"
+        "v1.0.2-stable/Terrain3D_v1.0.2-stable.zip"
+    ),
+    "license": "MIT",
+    "patch": "terrain3d-1.0.2-headless-display-scale",
+}
 
 
 class ContractError(RuntimeError):
@@ -53,6 +64,28 @@ def bundle_files(root: Path) -> set[str]:
         and not path.name.startswith(".")
         and path.suffix != ".import"
     }
+
+
+def check_terrain3d_addon(workspace: Path) -> None:
+    root = workspace / "clients" / "aonw_godot" / "addons" / "terrain_3d"
+    marker: dict[str, str] = {}
+    try:
+        install = root.joinpath(".aonw-install").read_text(encoding="utf-8")
+        for line in install.splitlines():
+            key, separator, value = line.partition("=")
+            if not separator or not key or key in marker:
+                raise ContractError("Terrain3D install marker is malformed")
+            marker[key] = value
+    except OSError as error:
+        raise ContractError(f"cannot read Terrain3D install marker: {error}") from error
+    if marker != TERRAIN3D_INSTALL:
+        raise ContractError("Terrain3D install identity differs")
+    plugin = root.joinpath("plugin.cfg").read_text(encoding="utf-8")
+    if 'version="1.0.2"' not in plugin:
+        raise ContractError("Terrain3D plugin version differs")
+    for required in ("LICENSE.txt", "terrain.gdextension"):
+        if not root.joinpath(required).is_file():
+            raise ContractError(f"Terrain3D addon is missing {required}")
 
 
 def check_map_bundle(workspace: Path, map_id: str) -> dict:
@@ -168,6 +201,7 @@ def check_scenario(workspace: Path, map_id: str, map_document: dict) -> None:
 def main() -> int:
     workspace = Path(__file__).resolve().parent.parent
     try:
+        check_terrain3d_addon(workspace)
         for map_id in MAP_HASHES:
             map_document = check_map_bundle(workspace, map_id)
             check_terrain_bundle(workspace, map_id, map_document)

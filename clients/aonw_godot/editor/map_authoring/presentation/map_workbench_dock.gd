@@ -161,9 +161,9 @@ func _logical_edit_persisted(
 	if surface == null or surface.source_map_id != source.map_id:
 		_show_error("logical map changed without its Terrain3D authoring scene open")
 		return
-	var migration := surface.migrate_logical_map_artifact()
-	if not migration["ok"]:
-		_show_error(migration["message"])
+	var refresh := surface.refresh_logical_map_artifact()
+	if not refresh["ok"]:
+		_show_error(refresh["message"])
 		return
 	surface.clear_generated_decorations()
 	surface.invalidate_reference_texture()

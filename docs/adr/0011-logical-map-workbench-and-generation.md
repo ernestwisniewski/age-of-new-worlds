@@ -92,9 +92,9 @@ left untouched.
 
 A seed participates in generation provenance even when `blankV1` produces the
 same empty logical map for different seeds. Procedural generator versions may
-use it while retaining deterministic replayability and explicit migrations.
+use it while retaining deterministic replayability and explicit version updates.
 
-## Migration And Verification
+## Verification
 
 - Two executions of the same spec are byte-for-byte identical.
 - Generated map and terrain documents pass their authoritative Rust decoders.
@@ -104,16 +104,16 @@ use it while retaining deterministic replayability and explicit migrations.
   compiles Terrain3D, and opens the resulting authoring scene.
 - Tile edits change the map hash, refresh the terrain profile hash and reject
   invalid coordinates, values, duplicates and unknown wire fields.
-- A logical revision migration preserves manual Terrain3D samples when raster
+- A logical revision refresh preserves manual Terrain3D samples when raster
   geometry is unchanged.
 - Dependency checks reject canonical map-field writers in GDScript authoring.
 - Godot scene tests require distinct generated and manual world containers.
 
 ## Related Decisions And Documentation
 
-- [ADR 0008: Rust engine ownership and strangler migration](0008-rust-engine-ownership-and-strangler-migration.md)
+- [ADR 0008: Engine ownership](0008-engine-ownership.md)
 - [ADR 0010: Terrain backend for Godot authoring](0010-terrain-backend-for-godot-authoring.md)
-- [Rust engine migration](../rust-engine-migration.md)
+- [Engine quality](../engine-quality.md)
 - [Godot Map Workbench](../../clients/aonw_godot/README.md)
 
 ## Rejected Alternatives

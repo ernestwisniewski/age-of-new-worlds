@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pinned-device latency and allocation gate for complete engine transitions."""
+"""Pinned-device latency and allocation gate for the engine runtime."""
 
 from __future__ import annotations
 
@@ -75,12 +75,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--policy",
         type=Path,
-        default=Path("engine/quality/transition_performance_policy.json"),
+        default=Path("engine/quality/runtime_performance_policy.json"),
     )
     parser.add_argument(
         "--report",
         type=Path,
-        default=Path("/tmp/aonw-engine-transition-performance.json"),
+        default=Path("/tmp/aonw-engine-runtime-performance.json"),
     )
     parser.add_argument("--benchmark-csv", type=Path)
     parser.add_argument("--environment-json", type=Path)
@@ -133,7 +133,7 @@ def benchmark_csv(repo_root: Path, fixture: Path | None) -> str:
             "--bench",
             "runtime",
         ],
-        "engine transition benchmark",
+        "engine runtime benchmark",
         repo_root / "engine",
     )
 
@@ -214,7 +214,7 @@ def load_environment(path: Path | None, repo_root: Path) -> dict[str, Any]:
 
 def load_policy(path: Path) -> dict[str, Any]:
     policy = strict_object(read_json(path, "performance policy"), "policy", POLICY_KEYS)
-    if policy["schemaVersion"] != 1 or policy["owner"] != "engine":
+    if policy["schemaVersion"] != 1 or policy["owner"] != "engine-runtime":
         raise PerformanceFailure("performance policy identity differs")
     if re.fullmatch(r"\d{4}-\d{2}-\d{2}", policy["reviewedDate"]) is None:
         raise PerformanceFailure("performance policy reviewedDate differs")
@@ -316,16 +316,16 @@ def main() -> None:
     if args.mode == "check":
         validate(policy, environment, measurements)
         print(
-            "Engine transition performance check passed: "
+            "Engine runtime performance check passed: "
             f"{len(selected)} workloads on {environment['hardwareModel']}."
         )
     else:
-        print(f"Wrote engine transition performance report to {report_path}.")
+        print(f"Wrote engine runtime performance report to {report_path}.")
 
 
 if __name__ == "__main__":
     try:
         main()
     except PerformanceFailure as error:
-        print(f"Engine transition performance check failed: {error}", file=sys.stderr)
+        print(f"Engine runtime performance check failed: {error}", file=sys.stderr)
         raise SystemExit(1) from error

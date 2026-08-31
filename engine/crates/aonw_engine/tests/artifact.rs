@@ -1,4 +1,4 @@
-//! Current-only artifact command and turn-processing acceptance tests.
+//! Artifact command and turn-processing acceptance tests.
 
 use aonw_content::RulesetDefinition;
 use aonw_domain::{HexCoord, MovementUnits, StateRevision, WorldArtifactLocation};

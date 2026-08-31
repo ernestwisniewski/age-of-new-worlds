@@ -97,5 +97,5 @@ Run:
 ```sh
 make generated-code-check
 make serverpod-ops-check
-tool/run_postgres_smoke.sh
+make server-integration-test
 ```

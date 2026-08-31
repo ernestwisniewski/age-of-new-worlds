@@ -41,21 +41,20 @@ Run from the repository root:
 ```sh
 make bootstrap
 make godot-check
-make godot-run
 ```
 
-Open the map workbench with:
+Open or run the project with Godot 4.7:
 
 ```sh
-make godot-editor
+/Applications/Godot.app/Contents/MacOS/Godot --editor --path clients/aonw_godot
+/Applications/Godot.app/Contents/MacOS/Godot --path clients/aonw_godot
 ```
 
-Useful focused gates:
+The map and runtime headless suites can be run directly:
 
 ```sh
-make godot-map-sync
-make godot-map-bundle-check
-make map-stage-1-check
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path clients/aonw_godot --script res://tests/test_map_pipeline.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path clients/aonw_godot --script res://tests/test_runtime.gd
 ```
 
 The workbench creates and edits canonical logical maps through the Rust

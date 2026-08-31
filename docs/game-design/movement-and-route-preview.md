@@ -1,8 +1,7 @@
 # Movement and route preview
 
-During migration, movement plans and costs come from the legacy Dart boundary and
-from the Rust engine after cutover. Flutter/Flame renders a `UnitMovementPlan`; it
-does not recalculate reachability.
+Movement plans and costs come from the engine. Flutter/Flame renders a
+`UnitMovementPlan`; it does not recalculate reachability.
 
 ```mermaid
 flowchart LR

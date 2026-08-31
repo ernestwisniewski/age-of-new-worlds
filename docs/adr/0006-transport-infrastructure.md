@@ -50,7 +50,7 @@ The model can add rails, pillage, repair, diplomacy-based transit, and technolog
 
 The first slice supports roads and one segment per hex. City connection bonuses, rails, pillage, and repair need their own rules before implementation.
 
-## Migration And Verification
+## Verification
 
 Tests cover command legality, construction completion, deterministic serialization, schema upcast, land/air/blocked traversal, all movement call sites, recipient projection, HUD localization, and rendering.
 
@@ -58,7 +58,7 @@ The road state, worker job representation, durable codec, functional multiplayer
 
 ## Related Decisions And Documentation
 
-- [ADR 0002: Deterministic game engine](0002-deterministic-game-engine.md)
+- [ADR 0008: Engine ownership](0008-engine-ownership.md)
 - [ADR 0003: Command boundaries](0003-command-boundaries.md)
 - [ADR 0004: Versioned multiplayer protocol](0004-versioned-multiplayer-protocol.md)
 

@@ -286,7 +286,7 @@ func rescale_generated_artifact() -> Dictionary:
 	_refresh_generated_world()
 	return result
 
-func migrate_logical_map_artifact() -> Dictionary:
+func refresh_logical_map_artifact() -> Dictionary:
 	if _session == null:
 		return _failure("terrain authoring session is not open")
 	var artifact_result := _artifact_reader.load_artifact(
@@ -295,7 +295,7 @@ func migrate_logical_map_artifact() -> Dictionary:
 	)
 	if not artifact_result["ok"]:
 		return artifact_result
-	var result := _session.migrate_logical_map_artifact(artifact_result["artifact"])
+	var result := _session.refresh_logical_map_artifact(artifact_result["artifact"])
 	if not result["ok"]:
 		return result
 	_artifact = artifact_result["artifact"]

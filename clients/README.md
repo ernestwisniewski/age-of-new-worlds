@@ -29,18 +29,17 @@ Run focused client checks from the repository root:
 ```sh
 make flutter-client-check
 make godot-check
-make map-stage-1-check
 ```
 
 Run the clients with:
 
 ```sh
 make flutter-client-run
-make godot-run
 ```
 
-`make map-stage-1-check` compares normalized Rust-backed map semantics between
-the clients. Client-owned visual goldens remain separate.
+Shared map semantics are covered by `make flutter-client-map-contract-test`
+and the Godot map pipeline within `make godot-check`. Client-owned visual
+goldens remain separate.
 
 ## Documentation
 

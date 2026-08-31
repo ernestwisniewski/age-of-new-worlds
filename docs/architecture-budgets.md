@@ -32,7 +32,7 @@ non-growing ceilings.
 make architecture-check
 ```
 
-To inspect an intentional debt reduction or policy migration:
+To inspect an intentional debt reduction or policy revision:
 
 ```sh
 make dart-architecture-snapshot
@@ -53,5 +53,5 @@ the affected debt cannot yet be removed.
 - `clients/aonw_flutter/test/architecture/` — Dart metric-contract tests.
 - `tool/test_client_boundaries.sh` and `tool/test_engine_architecture.py` — negative fixtures.
 
-Changing roles, source roots, or metric semantics is a policy migration, not a
+Changing roles, source roots, or metric semantics is a policy revision, not a
 routine baseline refresh.

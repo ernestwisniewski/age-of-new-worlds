@@ -1,4 +1,4 @@
-//! Current-only research protocol, runtime, and replay coverage.
+//! Research protocol, runtime, and replay coverage.
 
 use std::collections::BTreeMap;
 
