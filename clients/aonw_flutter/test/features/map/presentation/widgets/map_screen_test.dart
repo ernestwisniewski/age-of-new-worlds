@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
-import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
+import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_input.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
@@ -185,10 +185,15 @@ void main() {
   });
 
   testWidgets(
-    'initial camera fits authored zoom once and isolates static grid',
+    'initial camera uses authored zoom and focuses the active unit once',
     (tester) async {
       final session = FakeGameSession.success(
-        testMapScene(cols: 7, rows: 7, defaultZoom: 1.2),
+        testMapScene(
+          cols: 7,
+          rows: 7,
+          defaultZoom: 1.2,
+          units: [testVisibleUnit()],
+        ),
       );
       final controller = MapPresentationController(
         capabilities: testGameSessionCapabilities(session),
@@ -208,12 +213,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      const geometry = AonwOddQFlatTopGeometry(cols: 7, rows: 7, radius: 60);
-      final fit = 800 / geometry.bounds.height;
-      expect(
-        flameGame.mapCamera.debugTransform!.zoom,
-        closeTo(fit * 1.2, 1e-6),
-      );
+      expect(flameGame.mapCamera.debugTransform!.zoom, closeTo(1.2, 1e-6));
+      final focusedUnit = flameGame.debugScreenForHex((col: 0, row: 0))!;
+      final viewport = flameGame.mapCamera.debugTransform!.viewport;
+      expect(focusedUnit.x, closeTo(viewport.width / 2, 1e-6));
+      expect(focusedUnit.y, closeTo(viewport.height / 2, 1e-6));
       final initialTransform = flameGame.mapCamera.debugTransform;
       final staticGrid = flameGame.world.gridLayer;
       final staticGridUpdates = staticGrid.debugCacheUpdateCount;
@@ -330,7 +334,7 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('keyboard and gamepad share the map cursor workflow', (
+  testWidgets('keyboard and the original gamepad controls drive the map', (
     tester,
   ) async {
     final input = TestMapInputSource();
@@ -338,24 +342,50 @@ void main() {
     final controller = MapPresentationController(
       capabilities: testGameSessionCapabilities(session),
     );
+    final flameGame = AonwFlameGame();
     addTearDown(input.close);
     addTearDown(controller.dispose);
 
     await tester.pumpWidget(
       LocalizedTestApp(
-        home: MapScreen(controller: controller, inputSource: input),
+        home: MapScreen(
+          controller: controller,
+          inputSource: input,
+          flameGameFactory: () => flameGame,
+        ),
       ),
     );
     await tester.pumpAndSettle();
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    final cameraBefore = flameGame.mapCamera.debugTransform!.worldCenter;
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowLeft);
+    expect(flameGame.keyboardPanDelta(1).x, lessThan(0));
+    flameGame.update(0.1);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.arrowLeft);
     await tester.pump();
-    expect(controller.cursor.value, (col: 0, row: 1));
+    expect(controller.cursor.value, isNull);
+    expect(
+      flameGame.mapCamera.debugTransform!.worldCenter,
+      isNot(cameraBefore),
+    );
+
+    final beforeGamepad = flameGame.mapCamera.debugTransform!.worldCenter;
+    input.addContinuous(const MapGamepadInput(cameraX: 1, dpadUp: true));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    input.addContinuous(MapGamepadInput.idle);
+    await tester.pump();
+    expect(
+      flameGame.mapCamera.debugTransform!.worldCenter.x,
+      lessThan(beforeGamepad.x),
+    );
+    expect(controller.cursor.value, (col: 1, row: 0));
+
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
     expect((controller.state as GameSessionReady).interaction.selected, (
-      col: 0,
-      row: 1,
+      col: 1,
+      row: 0,
     ));
 
     input.add(MapInputCommand.cancel);

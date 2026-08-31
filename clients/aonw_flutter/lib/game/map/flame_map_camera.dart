@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../features/map/presentation/camera/map_camera_transform.dart';
@@ -16,6 +15,7 @@ final class FlameMapCameraController {
   MapStaticRenderCache? _cache;
   MapCameraTransform? _transform;
   Vector2 _viewport = Vector2.zero();
+  AonwPoint? _pendingWorldCenter;
   double _authoredZoom = 1;
   var _transformUpdateCount = 0;
 
@@ -25,23 +25,32 @@ final class FlameMapCameraController {
   @visibleForTesting
   int get debugTransformUpdateCount => _transformUpdateCount;
 
-  void replaceMap({
+  double get zoom => _transform?.zoom ?? 1;
+
+  AonwPoint? get viewportCenter {
+    final transform = _transform;
+    if (transform == null) return null;
+    return (x: transform.viewport.width / 2, y: transform.viewport.height / 2);
+  }
+
+  bool replaceMap({
     required MapStaticRenderCache cache,
     required double authoredZoom,
   }) {
-    if (_cache?.identity == cache.identity) return;
+    if (_cache?.identity == cache.identity) return false;
     _cache = cache;
     _authoredZoom = authoredZoom;
     _transform = null;
-    _camera.setBounds(
-      Rectangle.fromLTWH(0, 0, cache.size.width, cache.size.height),
-    );
+    _pendingWorldCenter = null;
+    _camera.setBounds(null);
     _initializeIfReady();
+    return true;
   }
 
   void clear() {
     _cache = null;
     _transform = null;
+    _pendingWorldCenter = null;
     _camera.setBounds(null);
   }
 
@@ -74,6 +83,19 @@ final class FlameMapCameraController {
     return transform.worldToScreen(world);
   }
 
+  void centerOnHex(MapHexCoordinate coordinate) {
+    final cache = _cache;
+    if (cache == null) return;
+    final world = MapViewportProjection(cache.geometry).hexCenter(coordinate);
+    final transform = _transform;
+    if (transform == null) {
+      _pendingWorldCenter = world;
+      return;
+    }
+    _pendingWorldCenter = null;
+    _apply(transform.centeredAt(world));
+  }
+
   bool applyIntent(MapViewportIntent intent) {
     final transform = _transform;
     if (transform == null) return false;
@@ -95,7 +117,7 @@ final class FlameMapCameraController {
           zoomFocalPoint: zoomFocalPoint,
           zoomFactor: zoomFactor,
         );
-      case MapHoverIntent() || MapSelectIntent():
+      case MapHoverIntent() || MapHoverExitIntent() || MapSelectIntent():
         return false;
     }
   }
@@ -122,12 +144,14 @@ final class FlameMapCameraController {
     final cache = _cache;
     if (cache == null || _viewport.x <= 0 || _viewport.y <= 0) return;
     _apply(
-      MapCameraTransform.fitted(
+      MapCameraTransform.initial(
         viewport: (width: _viewport.x, height: _viewport.y),
         content: (width: cache.size.width, height: cache.size.height),
         authoredZoom: _authoredZoom,
+        worldCenter: _pendingWorldCenter,
       ),
     );
+    _pendingWorldCenter = null;
   }
 
   void _apply(MapCameraTransform transform) {

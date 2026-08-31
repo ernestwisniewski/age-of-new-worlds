@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
+import '../features/map/presentation/input/map_gamepad_input.dart';
 import '../features/map/presentation/input/map_viewport_intent.dart';
 import '../features/map/presentation/map_render_snapshot.dart';
 import '../features/map/read_model/map_view.dart';
@@ -184,6 +185,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _continuousRendering = false;
   var _effectsActive = false;
   var _inputFrameScheduled = false;
+  var _keyboardPanX = 0.0;
+  var _keyboardPanY = 0.0;
+
+  static const _keyboardPanSpeed = 200.0;
+  static const _gamepadPanSpeed = 520.0;
+  static const _gamepadZoomSpeed = 1.35;
 
   FlameSceneSink get sceneSink => this;
 
@@ -215,10 +222,14 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     world.replaceScene(snapshot);
     final cache = world._staticRenderCacheForGame;
     if (cache != null) {
-      mapCamera.replaceMap(
+      final mapChanged = mapCamera.replaceMap(
         cache: cache,
         authoredZoom: snapshot.map.defaultZoom,
       );
+      if (mapChanged) {
+        final focus = _initialFocus(snapshot);
+        if (focus != null) mapCamera.centerOnHex(focus);
+      }
     }
     _requestInputFrame();
   }
@@ -242,6 +253,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (_disposed || active == _viewportActive) return;
     _viewportActive = active;
     inputSurface.setEnabled(active);
+    if (!active) {
+      _keyboardPanX = 0;
+      _keyboardPanY = 0;
+    }
     _synchronizeGameLoop();
   }
 
@@ -261,8 +276,86 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     inputSurface.setCameraSensitivity(sensitivity);
   }
 
+  void setKeyboardPanDirection({required double x, required double y}) {
+    if (_disposed || !x.isFinite || !y.isFinite) return;
+    final nextX = x.clamp(-1, 1).toDouble();
+    final nextY = y.clamp(-1, 1).toDouble();
+    if (_keyboardPanX == nextX && _keyboardPanY == nextY) return;
+    _keyboardPanX = nextX;
+    _keyboardPanY = nextY;
+    _synchronizeGameLoop();
+  }
+
+  @visibleForTesting
+  AonwPoint keyboardPanDelta(double dt) {
+    final zoom = mapCamera.zoom;
+    final speed = _keyboardPanSpeed * dt / zoom;
+    return (x: _keyboardPanX * speed, y: _keyboardPanY * speed);
+  }
+
+  void applyGamepadCameraFrame(MapGamepadFrame frame, double dt) {
+    if (_disposed || !_viewportActive || !dt.isFinite || dt < 0) return;
+    final focalPoint = mapCamera.viewportCenter;
+    final zoomFactor = focalPoint == null || frame.zoom == 0
+        ? 1.0
+        : 1 + frame.zoom * _gamepadZoomSpeed * dt;
+    mapCamera.applyIntent(
+      MapViewportFrameIntent(
+        screenPanDelta: (
+          x: frame.cameraX * _gamepadPanSpeed * dt,
+          y: -frame.cameraY * _gamepadPanSpeed * dt,
+        ),
+        zoomFocalPoint: focalPoint,
+        zoomFactor: zoomFactor,
+        hoverScreenPosition: null,
+      ),
+    );
+  }
+
+  void handleViewportPointerDown(int pointerId, Vector2 position) =>
+      inputSurface.handlePointerDown(pointerId, position);
+
+  void handleViewportPointerMove(int pointerId, Vector2 position) =>
+      inputSurface.handlePointerMove(pointerId, position);
+
+  void handleViewportPointerUp(int pointerId) =>
+      inputSurface.handlePointerUp(pointerId);
+
+  void handleViewportPointerCancel(int pointerId) =>
+      inputSurface.handlePointerCancel(pointerId);
+
+  void handleViewportHover(Vector2 position) =>
+      inputSurface.submitHover(position);
+
+  void handleViewportExit() => inputSurface.submitHoverExit();
+
+  void handleViewportTap(Vector2 position) =>
+      inputSurface.submitSelect(position);
+
+  void handleViewportPanZoomStart(Vector2 focalPoint) =>
+      inputSurface.handlePanZoomStart(focalPoint);
+
+  void handleViewportPanZoomUpdate({
+    required Vector2 panDelta,
+    required double scale,
+    required Vector2 focalPoint,
+  }) => inputSurface.handlePanZoomUpdate(
+    panDelta: panDelta,
+    scale: scale,
+    focalPoint: focalPoint,
+  );
+
+  void handleViewportPanZoomEnd() => inputSurface.handlePanZoomEnd();
+
+  void handleViewportScroll({
+    required Vector2 focalPoint,
+    required double deltaY,
+  }) => inputSurface.handleScroll(focalPoint: focalPoint, deltaY: deltaY);
+
   void _synchronizeGameLoop() {
-    if (_viewportActive && (_continuousRendering || _effectsActive)) {
+    final keyboardActive = _keyboardPanX != 0 || _keyboardPanY != 0;
+    if (_viewportActive &&
+        (_continuousRendering || _effectsActive || keyboardActive)) {
       resumeEngine();
     } else {
       pauseEngine();
@@ -294,6 +387,14 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   Future<void> onLoad() async {
     await super.onLoad();
     camera.viewfinder.anchor = Anchor.center;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!_viewportActive || (_keyboardPanX == 0 && _keyboardPanY == 0)) return;
+    final delta = keyboardPanDelta(dt);
+    mapCamera.applyIntent(MapPanIntent(delta));
   }
 
   @override
@@ -344,6 +445,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     switch (intent) {
       case MapHoverIntent(:final screenPosition):
         _emitHover(mapCamera.hexAtScreen(screenPosition));
+      case MapHoverExitIntent():
+        _emitHover(null);
       case MapSelectIntent(:final screenPosition):
         _hexIntentSink?.call(
           MapHexSelectIntent(mapCamera.hexAtScreen(screenPosition)),
@@ -371,5 +474,16 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       _inputFrameScheduled = false;
       if (!_disposed && isAttached && paused) stepEngine(stepTime: 0);
     });
+  }
+
+  MapHexCoordinate? _initialFocus(MapRenderSnapshot snapshot) {
+    final actorPlayerId = snapshot.player.actorPlayerId;
+    for (final unit in snapshot.player.units) {
+      if (unit.ownerPlayerId == actorPlayerId) return unit.coordinate;
+    }
+    for (final city in snapshot.player.cities) {
+      if (city.ownerPlayerId == actorPlayerId) return city.center;
+    }
+    return null;
   }
 }

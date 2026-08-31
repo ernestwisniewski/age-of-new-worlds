@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_viewport_intent.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/flame_map_viewport.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:flame/components.dart';
@@ -17,7 +18,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'uses one camera for fit picking pan zoom and resize',
+    'uses one camera for authored zoom picking pan and resize',
     () => AonwFlameGame(),
     (game) async {
       final scene = testMapScene(cols: 7, rows: 7, defaultZoom: 1.2);
@@ -148,10 +149,13 @@ void main() {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
-        child: GameWidget<AonwFlameGame>(
+        child: MapViewportGestureLayer(
           game: game,
-          autofocus: false,
-          behavior: HitTestBehavior.opaque,
+          child: GameWidget<AonwFlameGame>(
+            game: game,
+            autofocus: false,
+            behavior: HitTestBehavior.opaque,
+          ),
         ),
       ),
     );

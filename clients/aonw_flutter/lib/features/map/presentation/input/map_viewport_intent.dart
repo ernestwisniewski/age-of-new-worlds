@@ -11,6 +11,10 @@ final class MapHoverIntent extends MapViewportIntent {
   final AonwPoint screenPosition;
 }
 
+final class MapHoverExitIntent extends MapViewportIntent {
+  const MapHoverExitIntent();
+}
+
 final class MapSelectIntent extends MapViewportIntent {
   const MapSelectIntent(this.screenPosition);
 

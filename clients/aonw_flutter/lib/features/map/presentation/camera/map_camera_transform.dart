@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import '../geometry/odd_q_flat_top_geometry.dart';
 
 typedef MapViewportSize = ({double width, double height});
@@ -10,6 +8,9 @@ typedef MapViewportSize = ({double width, double height});
 /// starts at `(0, 0)`. Screen coordinates are logical pixels relative to the
 /// viewport, so device pixel ratio never enters picking math.
 final class MapCameraTransform {
+  static const minSupportedZoom = 0.2;
+  static const maxSupportedZoom = 5.0;
+
   const MapCameraTransform._({
     required this.viewport,
     required this.content,
@@ -19,20 +20,20 @@ final class MapCameraTransform {
     required this.maxZoom,
   });
 
-  factory MapCameraTransform.fitted({
+  factory MapCameraTransform.initial({
     required MapViewportSize viewport,
     required MapViewportSize content,
     required double authoredZoom,
+    AonwPoint? worldCenter,
   }) {
-    final fittedZoom = _fitZoom(viewport, content) * authoredZoom;
     return MapCameraTransform._(
       viewport: viewport,
       content: content,
-      worldCenter: (x: content.width / 2, y: content.height / 2),
-      zoom: fittedZoom,
-      minZoom: math.min(0.25, fittedZoom),
-      maxZoom: math.max(4, fittedZoom * 4),
-    )._clamped();
+      worldCenter: worldCenter ?? (x: content.width / 2, y: content.height / 2),
+      zoom: authoredZoom.clamp(minSupportedZoom, maxSupportedZoom).toDouble(),
+      minZoom: minSupportedZoom,
+      maxZoom: maxSupportedZoom,
+    );
   }
 
   final MapViewportSize viewport;
@@ -57,7 +58,7 @@ final class MapCameraTransform {
       x: worldCenter.x - delta.x / zoom,
       y: worldCenter.y - delta.y / zoom,
     ),
-  )._clamped();
+  );
 
   MapCameraTransform zoomAtScreen({
     required AonwPoint focalPoint,
@@ -70,8 +71,11 @@ final class MapCameraTransform {
       x: worldBefore.x - (focalPoint.x - viewport.width / 2) / nextZoom,
       y: worldBefore.y - (focalPoint.y - viewport.height / 2) / nextZoom,
     );
-    return _copyWith(worldCenter: nextCenter, zoom: nextZoom)._clamped();
+    return _copyWith(worldCenter: nextCenter, zoom: nextZoom);
   }
+
+  MapCameraTransform centeredAt(AonwPoint point) =>
+      _copyWith(worldCenter: point);
 
   MapCameraTransform resized(MapViewportSize nextViewport) =>
       MapCameraTransform._(
@@ -81,18 +85,7 @@ final class MapCameraTransform {
         zoom: zoom,
         minZoom: minZoom,
         maxZoom: maxZoom,
-      )._clamped();
-
-  MapCameraTransform _clamped() {
-    final visibleHalfWidth = viewport.width / (2 * zoom);
-    final visibleHalfHeight = viewport.height / (2 * zoom);
-    return _copyWith(
-      worldCenter: (
-        x: _clampAxis(worldCenter.x, content.width, visibleHalfWidth),
-        y: _clampAxis(worldCenter.y, content.height, visibleHalfHeight),
-      ),
-    );
-  }
+      );
 
   MapCameraTransform _copyWith({AonwPoint? worldCenter, double? zoom}) =>
       MapCameraTransform._(
@@ -102,16 +95,5 @@ final class MapCameraTransform {
         zoom: zoom ?? this.zoom,
         minZoom: minZoom,
         maxZoom: maxZoom,
-      );
-
-  static double _clampAxis(double value, double extent, double visibleHalf) {
-    if (extent <= visibleHalf * 2) return extent / 2;
-    return value.clamp(visibleHalf, extent - visibleHalf).toDouble();
-  }
-
-  static double _fitZoom(MapViewportSize viewport, MapViewportSize content) =>
-      math.min(
-        viewport.width / content.width,
-        viewport.height / content.height,
       );
 }

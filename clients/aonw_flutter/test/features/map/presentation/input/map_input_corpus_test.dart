@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/infrastructure/gamepad_map_input_source.dart';
-import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
@@ -18,7 +17,7 @@ import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('pointer keyboard and gamepad converge on the input corpus', (
+  testWidgets('pointer keyboard and gamepad honor the original input corpus', (
     tester,
   ) async {
     final oracle =
@@ -29,7 +28,12 @@ void main() {
 
     for (final value in oracle['inputCases'] as List<dynamic>) {
       final inputCase = value as Map<String, dynamic>;
-      final input = _CorpusInputSource();
+      final gamepadEvents = StreamController<NormalizedGamepadEvent>(
+        sync: true,
+      );
+      final input = GamepadMapInputSource(events: gamepadEvents.stream);
+      addTearDown(input.close);
+      addTearDown(gamepadEvents.close);
       final session = FakeGameSession.success(
         testMapScene(cols: cols, rows: rows),
       );
@@ -66,14 +70,17 @@ void main() {
         case 'gamepad':
           for (final event in inputCase['events'] as List<dynamic>) {
             final button = GamepadButton.values.byName(event as String);
-            input.add(MapGamepadMapper.commandFor(button, 1)!);
+            gamepadEvents.add(_button(button, 1));
+            await tester.pump();
+            gamepadEvents.add(_button(button, 0));
+            await tester.pump();
           }
         default:
           throw StateError(
             'Unknown input corpus source: ${inputCase['source']}',
           );
       }
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       final expected = _coordinate(inputCase['expectedSelectedHex']);
       final ready = controller.state as GameSessionReady;
@@ -84,8 +91,8 @@ void main() {
       );
 
       await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
       controller.dispose();
-      await input.close();
     }
   });
 }
@@ -109,14 +116,17 @@ File _oracleFile() {
   throw StateError('Flutter viewport oracle fixture not found.');
 }
 
-final class _CorpusInputSource implements MapInputSource {
-  final _commands = StreamController<MapInputCommand>.broadcast(sync: true);
-
-  @override
-  Stream<MapInputCommand> get commands => _commands.stream;
-
-  void add(MapInputCommand command) => _commands.add(command);
-
-  @override
-  Future<void> close() => _commands.close();
-}
+NormalizedGamepadEvent _button(GamepadButton button, double value) =>
+    NormalizedGamepadEvent(
+      gamepadId: 'corpus-pad',
+      timestamp: 1,
+      button: button,
+      value: value,
+      rawEvent: GamepadEvent(
+        gamepadId: 'corpus-pad',
+        timestamp: 1,
+        type: KeyType.button,
+        key: button.name,
+        value: value,
+      ),
+    );

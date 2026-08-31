@@ -4,19 +4,19 @@ import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_g
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('matches the centered Canvas fit in logical pixels', () {
-    final camera = MapCameraTransform.fitted(
+  test('starts at the authored zoom around the map center', () {
+    final camera = MapCameraTransform.initial(
       viewport: (width: 900, height: 800),
       content: (width: 750, height: 600),
       authoredZoom: 1.25,
     );
 
-    expect(camera.zoom, closeTo(1.5, 1e-9));
+    expect(camera.zoom, closeTo(1.25, 1e-9));
     expect(camera.worldCenter.x, closeTo(375, 1e-9));
     expect(camera.worldCenter.y, closeTo(300, 1e-9));
     final origin = camera.worldToScreen((x: 0, y: 0));
-    expect(origin.x, closeTo(-112.5, 1e-9));
-    expect(origin.y, closeTo(-50, 1e-9));
+    expect(origin.x, closeTo(-18.75, 1e-9));
+    expect(origin.y, closeTo(25, 1e-9));
   });
 
   test('round-trips centers edges corners and outside across DPR values', () {
@@ -26,7 +26,7 @@ void main() {
 
     for (final dpr in [1.0, 1.5, 2.0, 3.0]) {
       final logicalViewport = (width: 1200 / dpr, height: 900 / dpr);
-      final camera = MapCameraTransform.fitted(
+      final camera = MapCameraTransform.initial(
         viewport: logicalViewport,
         content: (width: bounds.width, height: bounds.height),
         authoredZoom: 1,
@@ -54,8 +54,8 @@ void main() {
     }
   });
 
-  test('keeps the focal world point stable and clamps pan after resize', () {
-    var camera = MapCameraTransform.fitted(
+  test('keeps focal world point stable and leaves panning unbounded', () {
+    var camera = MapCameraTransform.initial(
       viewport: (width: 500, height: 400),
       content: (width: 1200, height: 900),
       authoredZoom: 1,
@@ -74,9 +74,17 @@ void main() {
     expect(camera.worldCenter.y, closeTo(beforeResizeCenter.y, 1e-9));
 
     camera = camera.panByScreen((x: 100000, y: 100000));
-    expect(camera.worldCenter.x, greaterThanOrEqualTo(0));
-    expect(camera.worldCenter.y, greaterThanOrEqualTo(0));
-    expect(camera.worldCenter.x, lessThanOrEqualTo(camera.content.width));
-    expect(camera.worldCenter.y, lessThanOrEqualTo(camera.content.height));
+    expect(camera.worldCenter.x, lessThan(0));
+    expect(camera.worldCenter.y, lessThan(0));
+    expect(camera.minZoom, 0.2);
+    expect(camera.maxZoom, 5);
+    expect(
+      camera.zoomAtScreen(focalPoint: focal, factor: 100).zoom,
+      camera.maxZoom,
+    );
+    expect(
+      camera.zoomAtScreen(focalPoint: focal, factor: 0.0001).zoom,
+      camera.minZoom,
+    );
   });
 }

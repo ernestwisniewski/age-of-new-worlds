@@ -13,7 +13,7 @@
     {
       "source": "keyboard",
       "events": ["arrowLeft", "enter"],
-      "expectedSelectedHex": [0, 1]
+      "expectedSelectedHex": [1, 1]
     },
     {
       "source": "gamepad",

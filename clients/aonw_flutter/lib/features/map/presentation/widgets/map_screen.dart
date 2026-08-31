@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../../../design_system/aonw_tokens.dart';
 import '../../../../design_system/widgets/aonw_hud_surface.dart';
@@ -25,6 +26,7 @@ import '../../application/game_session_state.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/pending_action_view.dart';
+import '../input/map_gamepad_input.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
 import '../map_presentation_controller.dart';
@@ -58,14 +60,19 @@ final class MapScreen extends StatefulWidget {
 }
 
 final class _MapScreenState extends State<MapScreen>
-    with WidgetsBindingObserver, RouteAware {
+    with WidgetsBindingObserver, RouteAware, SingleTickerProviderStateMixin {
   late AonwFlameGame _flameGame;
   late FocusNode _flameFocusNode;
   late AppLifecycleState _lifecycleState;
+  late Ticker _gamepadTicker;
   ModalRoute<void>? _subscribedRoute;
   var _routeVisible = true;
   var _flameGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
+  StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
+  MapGamepadInput _gamepadInput = MapGamepadInput.idle;
+  MapGamepadFrameController _gamepadFrames = MapGamepadFrameController();
+  Duration? _lastGamepadElapsed;
 
   @override
   void initState() {
@@ -73,6 +80,7 @@ final class _MapScreenState extends State<MapScreen>
     WidgetsBinding.instance.addObserver(this);
     _lifecycleState =
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
+    _gamepadTicker = createTicker(_tickGamepad);
     _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
@@ -127,6 +135,8 @@ final class _MapScreenState extends State<MapScreen>
     widget.controller.removeListener(_synchronizeFlameScene);
     widget.controller.cursor.removeListener(_synchronizeFlameCursor);
     unawaited(_inputSubscription?.cancel());
+    unawaited(_continuousInputSubscription?.cancel());
+    _gamepadTicker.dispose();
     _flameGame.setHexIntentSink(null);
     _flameFocusNode.dispose();
     super.dispose();
@@ -161,6 +171,7 @@ final class _MapScreenState extends State<MapScreen>
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
+    _synchronizeGamepadSettings(settings.cameraSensitivity);
     return switch (state) {
       GameSessionLoading() => const LoadingMap(),
       GameSessionFailure(:final code) => MapFailure(
@@ -201,7 +212,16 @@ final class _MapScreenState extends State<MapScreen>
 
   void _listenToInput(MapInputSource? source) {
     unawaited(_inputSubscription?.cancel());
+    unawaited(_continuousInputSubscription?.cancel());
     _inputSubscription = source?.commands.listen(_handleInput);
+    _gamepadInput = MapGamepadInput.idle;
+    _gamepadFrames.prime(_gamepadInput);
+    _continuousInputSubscription = switch (source) {
+      ContinuousMapInputSource(:final continuousInputs) =>
+        continuousInputs.listen(_handleContinuousInput),
+      _ => null,
+    };
+    _synchronizeGamepadTicker();
   }
 
   void _subscribeToRoute() {
@@ -222,6 +242,51 @@ final class _MapScreenState extends State<MapScreen>
     _flameGame.setViewportActive(
       _routeVisible && _lifecycleState == AppLifecycleState.resumed,
     );
+    _synchronizeGamepadTicker();
+  }
+
+  void _synchronizeGamepadSettings(double cameraSensitivity) {
+    if (_gamepadFrames.cameraSensitivity == cameraSensitivity) return;
+    _gamepadFrames = MapGamepadFrameController(
+      cameraSensitivity: cameraSensitivity,
+    )..prime(_gamepadInput);
+    _synchronizeGamepadTicker();
+  }
+
+  void _handleContinuousInput(MapGamepadInput input) {
+    _gamepadInput = input;
+    _synchronizeGamepadTicker();
+  }
+
+  void _synchronizeGamepadTicker() {
+    final available =
+        _routeVisible && _lifecycleState == AppLifecycleState.resumed;
+    if (!available || (_gamepadInput.isIdle && _gamepadFrames.isIdle)) {
+      _lastGamepadElapsed = null;
+      _gamepadTicker.stop();
+      return;
+    }
+    if (!_gamepadTicker.isActive) _gamepadTicker.start();
+  }
+
+  void _tickGamepad(Duration elapsed) {
+    final previous = _lastGamepadElapsed;
+    _lastGamepadElapsed = elapsed;
+    final dt = previous == null
+        ? 0.0
+        : (elapsed - previous).inMicroseconds / Duration.microsecondsPerSecond;
+    final frame = _gamepadFrames.advance(input: _gamepadInput, dt: dt);
+    if (!frame.isIdle) {
+      _flameGame.applyGamepadCameraFrame(frame, dt);
+      final cursorStep = frame.cursorStep;
+      if (cursorStep != null) _handleInput(cursorStep);
+      if (frame.activatePressed) _handleInput(MapInputCommand.activate);
+      if (frame.cancelPressed) _handleInput(MapInputCommand.cancel);
+      if (frame.toggleReferencePressed) {
+        _handleInput(MapInputCommand.toggleReference);
+      }
+    }
+    _synchronizeGamepadTicker();
   }
 
   void _synchronizeFlameScene() {
