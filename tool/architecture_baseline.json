@@ -49,9 +49,7 @@
       "cognitiveComplexity": {}
     },
     "flutter_client_lib": {
-      "files": {
-        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart": 569
-      },
+      "files": {},
       "legacyFiles": {},
       "declarations": {
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 417,
@@ -63,7 +61,6 @@
         "clients/aonw_flutter/lib/features/combat/application/combat_workflow.dart::class:CombatWorkflow/method:_attack": 65,
         "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::class:DiplomacyWorkflow/method:_execute": 61,
         "clients/aonw_flutter/lib/features/diplomacy/infrastructure/engine_diplomacy_gateway.dart::function:_request": 71,
-        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyOverlayState/method:build": 61,
         "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
@@ -81,7 +78,6 @@
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
         "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 70,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
-        "clients/aonw_flutter/lib/features/research/presentation/research_overlay.dart::class:_ResearchOverlayState/method:build": 68,
         "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77
       },
       "nesting": {

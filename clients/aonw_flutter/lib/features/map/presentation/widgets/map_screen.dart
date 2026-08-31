@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../../design_system/aonw_tokens.dart';
+import '../../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../../design_system/widgets/aonw_panel.dart';
 import '../../../../game/aonw_flame_game.dart';
 import '../../../../l10n/l10n.dart';
@@ -325,7 +326,7 @@ final class _SaveAction extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton.filledTonal(
+        AonwHudIconButton(
           key: const ValueKey('save-game'),
           tooltip: localSave.inFlight
               ? context.aonwL10n.savingGame

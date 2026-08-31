@@ -1,11 +1,60 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/design_system/aonw_tokens.dart';
+import 'package:aonw_flutter/design_system/widgets/aonw_hud_surface.dart';
 import 'package:aonw_flutter/design_system/widgets/aonw_panel.dart';
 import 'package:aonw_flutter/design_system/widgets/aonw_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('HUD tokens preserve the flame_4x visual contract', () {
+    expect(AonwColorTokens.background, const Color(0xFF0A0A0E));
+    expect(AonwColorTokens.surface, const Color(0xFF101620));
+    expect(AonwColorTokens.brand, const Color(0xFFD2A856));
+    expect(AonwColorTokens.brandLight, const Color(0xFFF0DCAE));
+    expect(AonwTypography.headingFamily, 'Cinzel');
+    expect(AonwTypography.bodyFamily, 'Lato');
+    expect(AonwRadii.frame, 2);
+    expect(AonwRadii.panel, 10);
+    expect(AonwRadii.button, 12);
+    expect(AonwRadii.pill, 999);
+    expect(AonwMotion.snap, const Duration(milliseconds: 120));
+    expect(AonwMotion.fade, const Duration(milliseconds: 200));
+    expect(AonwMotion.slide, const Duration(milliseconds: 240));
+    expect(AonwMotion.scene, const Duration(milliseconds: 350));
+  });
+
+  testWidgets('flat HUD surfaces retain exact fill border and shadow', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Center(
+          child: AonwHudSurface(
+            elevation: AonwHudElevation.flat,
+            child: Text('HUD'),
+          ),
+        ),
+      ),
+    );
+
+    final decorated = tester.widget<DecoratedBox>(
+      find.descendant(
+        of: find.byType(AonwHudSurface),
+        matching: find.byType(DecoratedBox),
+      ),
+    );
+    final decoration = decorated.decoration as BoxDecoration;
+    final border = decoration.border! as Border;
+    final shadow = decoration.boxShadow!.single;
+    expect(decoration.color, AonwColorTokens.surface.withAlpha(210));
+    expect(border.top.color, AonwColorTokens.brand.withAlpha(60));
+    expect(decoration.borderRadius, BorderRadius.circular(AonwRadii.panel));
+    expect(shadow.color, Colors.black.withAlpha(80));
+    expect(shadow.blurRadius, 12);
+    expect(shadow.offset, const Offset(0, 4));
+  });
+
   testWidgets('base actions keep an accessible interactive size', (
     tester,
   ) async {

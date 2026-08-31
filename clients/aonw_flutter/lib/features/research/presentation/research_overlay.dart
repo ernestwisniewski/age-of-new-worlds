@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../application/research_state.dart';
@@ -34,20 +35,11 @@ final class _ResearchOverlayState extends State<ResearchOverlay> {
     final open = _open || widget.selectionRequired;
     return Stack(
       children: [
-        Positioned(
-          top: 72,
-          left: AonwSpacing.md,
-          child: IconButton.filledTonal(
-            key: const ValueKey('open-research'),
-            tooltip: copy.text(ResearchText.open),
-            onPressed: open ? null : () => setState(() => _open = true),
-            icon: const Icon(Icons.science),
-          ),
-        ),
+        _trigger(context, copy, open),
         if (open)
           Positioned(
-            top: 72,
-            left: 72,
+            top: AonwHudSideMenuLayout.top(context),
+            left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
             child: SafeArea(
               child: AonwPanel(
@@ -98,6 +90,19 @@ final class _ResearchOverlayState extends State<ResearchOverlay> {
       ],
     );
   }
+
+  Widget _trigger(BuildContext context, ResearchCopy copy, bool open) =>
+      Positioned(
+        top: AonwHudSideMenuLayout.actionTop(context, 1),
+        left: AonwHudSideMenuLayout.left(context),
+        child: AonwHudIconButton(
+          key: const ValueKey('open-research'),
+          tooltip: copy.text(ResearchText.open),
+          onPressed: open ? null : () => setState(() => _open = true),
+          active: open,
+          icon: const Icon(Icons.science),
+        ),
+      );
 }
 
 final class ResearchPanel extends StatelessWidget {

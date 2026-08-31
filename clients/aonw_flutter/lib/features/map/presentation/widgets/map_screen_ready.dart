@@ -51,6 +51,8 @@ final class _ReadyMap extends StatelessWidget {
           onRetry: onRetryFlame,
         ),
       ),
+      const Positioned.fill(child: AonwHudMapVignette()),
+      const Positioned.fill(child: AonwHudTopFade()),
       TurnBanner(
         presentation: turnPresentations.active,
         onFinished: controller.completeTurnPresentation,
@@ -77,9 +79,9 @@ final class _ReadyMap extends StatelessWidget {
   List<Widget> _mapActions(BuildContext context) => [
     if (onOpenSettings case final openSettings?)
       Positioned(
-        top: AonwSpacing.md,
-        left: AonwSpacing.md,
-        child: IconButton.filledTonal(
+        top: AonwHudSideMenuLayout.top(context),
+        left: AonwHudSideMenuLayout.left(context),
+        child: AonwHudIconButton(
           key: const ValueKey('open-settings'),
           tooltip: context.aonwL10n.openSettings,
           onPressed: openSettings,
@@ -87,8 +89,16 @@ final class _ReadyMap extends StatelessWidget {
         ),
       ),
     Positioned(
-      top: 240,
-      left: AonwSpacing.md,
+      top:
+          AonwHudSideMenuLayout.top(context) +
+          AonwHudSideMenuLayout.extent +
+          AonwHudSideMenuLayout.itemGap,
+      left: AonwHudSideMenuLayout.left(context),
+      child: const AonwHudSideMenuSeparator(),
+    ),
+    Positioned(
+      top: AonwHudSideMenuLayout.actionTop(context, 3),
+      left: AonwHudSideMenuLayout.left(context),
       child: _SaveAction(
         localSave: localSave,
         localAiTurn: localAiTurn,
@@ -97,8 +107,8 @@ final class _ReadyMap extends StatelessWidget {
       ),
     ),
     Positioned(
-      top: AonwSpacing.md,
-      right: AonwSpacing.md,
+      top: AonwHudSideMenuLayout.actionTop(context, 4),
+      left: AonwHudSideMenuLayout.left(context),
       child: MapReferenceToggle(
         visible: interaction.referenceVisible,
         onPressed: controller.toggleReference,

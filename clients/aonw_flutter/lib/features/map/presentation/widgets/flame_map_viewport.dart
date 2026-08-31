@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../../design_system/widgets/aonw_panel.dart';
 import '../../../../game/aonw_flame_game.dart';
 import '../../../../l10n/l10n.dart';
@@ -128,10 +129,11 @@ final class MapReferenceToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
-    return IconButton.filledTonal(
+    return AonwHudIconButton(
       key: const ValueKey('reference-toggle'),
       tooltip: visible ? l10n.hideReferenceLayer : l10n.showReferenceLayer,
       onPressed: onPressed,
+      active: visible,
       icon: Icon(visible ? Icons.layers : Icons.layers_clear),
     );
   }

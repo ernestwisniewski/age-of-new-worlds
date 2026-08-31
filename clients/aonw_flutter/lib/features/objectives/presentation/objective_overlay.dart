@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/read_model/map_view.dart';
@@ -30,19 +31,20 @@ final class _ObjectiveOverlayState extends State<ObjectiveOverlay> {
       children: [
         if (!widget.outcome.isTerminal)
           Positioned(
-            top: 184,
-            left: AonwSpacing.md,
-            child: IconButton.filledTonal(
+            top: AonwHudSideMenuLayout.actionTop(context, 0),
+            left: AonwHudSideMenuLayout.left(context),
+            child: AonwHudIconButton(
               key: const ValueKey('open-objectives'),
               tooltip: l10n.openObjectives,
               onPressed: _open ? null : () => setState(() => _open = true),
+              active: _open,
               icon: const Icon(Icons.flag),
             ),
           ),
         if (_open && !widget.outcome.isTerminal)
           Positioned(
-            top: 184,
-            left: 72,
+            top: AonwHudSideMenuLayout.top(context),
+            left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
             child: SafeArea(
               child: _ObjectivePanel(

@@ -1,5 +1,6 @@
 import 'package:aonw_flutter/app/navigation/aonw_app.dart';
 import 'package:aonw_flutter/app/navigation/aonw_router.dart';
+import 'package:aonw_flutter/design_system/widgets/aonw_hud_surface.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
@@ -124,7 +125,7 @@ void main() {
       LocalAiDifficultyView.normal,
     );
 
-    final saveButton = tester.widget<IconButton>(
+    final saveButton = tester.widget<AonwHudIconButton>(
       find.byKey(const ValueKey('save-game')),
     );
     expect(saveButton.onPressed, isNotNull);

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../map/read_model/map_view.dart';
 import '../application/diplomacy_state.dart';
 import '../read_model/diplomacy_view.dart';
 import 'diplomacy_copy.dart';
+
+part 'diplomacy_cards.dart';
 
 final class DiplomacyOverlay extends StatefulWidget {
   const DiplomacyOverlay({
@@ -34,20 +37,11 @@ final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
     final copy = DiplomacyCopy.of(context);
     return Stack(
       children: [
-        Positioned(
-          top: 128,
-          left: AonwSpacing.md,
-          child: IconButton.filledTonal(
-            key: const ValueKey('open-diplomacy'),
-            tooltip: copy.open,
-            onPressed: _open ? null : () => setState(() => _open = true),
-            icon: const Icon(Icons.handshake),
-          ),
-        ),
+        _trigger(context, copy),
         if (_open)
           Positioned(
-            top: 72,
-            left: 72,
+            top: AonwHudSideMenuLayout.top(context),
+            left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
             child: SafeArea(
               child: AonwPanel(
@@ -92,6 +86,18 @@ final class _DiplomacyOverlayState extends State<DiplomacyOverlay> {
       ],
     );
   }
+
+  Widget _trigger(BuildContext context, DiplomacyCopy copy) => Positioned(
+    top: AonwHudSideMenuLayout.actionTop(context, 2),
+    left: AonwHudSideMenuLayout.left(context),
+    child: AonwHudIconButton(
+      key: const ValueKey('open-diplomacy'),
+      tooltip: copy.open,
+      onPressed: _open ? null : () => setState(() => _open = true),
+      active: _open,
+      icon: const Icon(Icons.handshake),
+    ),
+  );
 }
 
 final class DiplomacyPanel extends StatelessWidget {
@@ -392,178 +398,5 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
     }
     setState(() => _invalid = false);
     widget.onAction(action);
-  }
-}
-
-final class _RelationCard extends StatelessWidget {
-  const _RelationCard({required this.relation});
-
-  final DiplomaticRelationView relation;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = DiplomacyCopy.of(context);
-    return Card.outlined(
-      key: ValueKey(('diplomatic-relation', relation.counterpartPlayerId)),
-      child: ListTile(
-        title: Text(relation.counterpartPlayerId),
-        subtitle: Text(
-          '${copy.name(relation.status)} · ${relation.relationScore}'
-          '${relation.statusExpiresOnTurn == null ? '' : ' · ${relation.statusExpiresOnTurn}'}',
-        ),
-      ),
-    );
-  }
-}
-
-final class _ProposalCard extends StatelessWidget {
-  const _ProposalCard({
-    required this.actorPlayerId,
-    required this.proposal,
-    required this.enabled,
-    required this.onAction,
-  });
-
-  final String actorPlayerId;
-  final DiplomaticProposalView proposal;
-  final bool enabled;
-  final ValueChanged<DiplomacyActionView> onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = DiplomacyCopy.of(context);
-    final incoming = proposal.toPlayerId == actorPlayerId;
-    return Card.outlined(
-      key: ValueKey(('diplomatic-proposal', proposal.id)),
-      child: Padding(
-        padding: const EdgeInsets.all(AonwSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${copy.name(proposal.kind)} · ${proposal.id}'),
-            Text('${proposal.fromPlayerId} → ${proposal.toPlayerId}'),
-            Text(
-              '${proposal.createdTurn}–${proposal.expiresOnTurn} · ${proposal.goldPayment}',
-            ),
-            if (incoming)
-              Wrap(
-                spacing: AonwSpacing.sm,
-                children: [
-                  FilledButton(
-                    key: ValueKey(('accept-proposal', proposal.id)),
-                    onPressed: enabled
-                        ? () => onAction(
-                            RespondDiplomaticProposalActionView(
-                              proposalId: proposal.id,
-                              accepted: true,
-                            ),
-                          )
-                        : null,
-                    child: Text(copy.accept),
-                  ),
-                  OutlinedButton(
-                    key: ValueKey(('reject-proposal', proposal.id)),
-                    onPressed: enabled
-                        ? () => onAction(
-                            RespondDiplomaticProposalActionView(
-                              proposalId: proposal.id,
-                              accepted: false,
-                            ),
-                          )
-                        : null,
-                    child: Text(copy.reject),
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-final class _MessageCard extends StatelessWidget {
-  const _MessageCard({
-    required this.actorPlayerId,
-    required this.message,
-    required this.enabled,
-    required this.onAction,
-  });
-
-  final String actorPlayerId;
-  final DiplomaticMessageView message;
-  final bool enabled;
-  final ValueChanged<DiplomacyActionView> onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = DiplomacyCopy.of(context);
-    final incoming =
-        message.toPlayerId == actorPlayerId && message.response == null;
-    return Card.outlined(
-      key: ValueKey(('diplomatic-message', message.id)),
-      child: Padding(
-        padding: const EdgeInsets.all(AonwSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${copy.name(message.topic)} · ${copy.name(message.category)}',
-            ),
-            Text('${message.fromPlayerId} → ${message.toPlayerId}'),
-            Text(
-              '${message.createdTurn}–${message.expiresOnTurn} · '
-              '${message.response == null ? '-' : copy.name(message.response!)} · '
-              '${message.relationScoreDelta}',
-            ),
-            if (incoming)
-              Wrap(
-                spacing: AonwSpacing.xs,
-                children: [
-                  for (final response in DiplomaticMessageResponseView.values)
-                    OutlinedButton(
-                      key: ValueKey((
-                        'respond-message',
-                        message.id,
-                        response.name,
-                      )),
-                      onPressed: enabled
-                          ? () => onAction(
-                              RespondDiplomaticMessageActionView(
-                                messageId: message.id,
-                                response: response,
-                              ),
-                            )
-                          : null,
-                      child: Text(copy.name(response)),
-                    ),
-                ],
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-final class _AgreementCard extends StatelessWidget {
-  const _AgreementCard({required this.agreement});
-
-  final ResourceTradeAgreementView agreement;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = DiplomacyCopy.of(context);
-    return Card.outlined(
-      key: ValueKey(('resource-trade-agreement', agreement.id)),
-      child: ListTile(
-        title: Text('${copy.name(agreement.resource)} · ${agreement.id}'),
-        subtitle: Text(
-          '${agreement.exporterPlayerId} → ${agreement.importerPlayerId} · '
-          '${agreement.amountPerTurn} · ${agreement.goldPerTurn} · '
-          '${agreement.remainingTurns}',
-        ),
-      ),
-    );
   }
 }

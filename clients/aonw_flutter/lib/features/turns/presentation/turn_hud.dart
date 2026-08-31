@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../design_system/aonw_tokens.dart';
-import '../../../design_system/widgets/aonw_panel.dart';
+import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../l10n/l10n.dart';
 import '../../local_game/application/local_ai_turn_state.dart';
 import '../application/turn_action_state.dart';
 import '../application/turn_presentation_queue.dart';
 import '../read_model/recipient_turn_view.dart';
 import '../read_model/turn_activity_view.dart';
+
+part 'turn_end_action.dart';
 
 final class TurnPresentationOverlays extends StatelessWidget {
   const TurnPresentationOverlays({
@@ -28,29 +33,157 @@ final class TurnPresentationOverlays extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
     children: [
-      Positioned(
-        top: AonwSpacing.md,
-        left: 72,
-        right: 72,
-        child: _TurnHud(
+      Positioned.fill(child: _TopTurnStrip(turn: turn)),
+      Positioned.fill(
+        child: _TurnCommandDeck(
           turn: turn,
           action: action,
           localAiTurn: localAiTurn,
           onEndTurn: onEndTurn,
         ),
       ),
-      Positioned(
-        right: AonwSpacing.md,
-        bottom: AonwSpacing.md,
-        child: _ActivityPanel(activities: presentations.activities),
-      ),
       _TurnNotification(activity: presentations.latestActivity),
     ],
   );
 }
 
-final class _TurnHud extends StatelessWidget {
-  const _TurnHud({
+final class _TopTurnStrip extends StatelessWidget {
+  const _TopTurnStrip({required this.turn});
+
+  final RecipientTurnView turn;
+
+  @override
+  Widget build(BuildContext context) {
+    final compact = MediaQuery.sizeOf(context).width < 520;
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(64, 10, 12, 0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            physics: const BouncingScrollPhysics(),
+            clipBehavior: Clip.none,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (turn.requiredSubmissionCount > 1) ...[
+                  _TurnResourcePill(
+                    key: const ValueKey('turn-progress'),
+                    compact: compact,
+                    icon: Icons.groups_outlined,
+                    label: context.aonwL10n.turnSummary(
+                      'progress',
+                      turn.number,
+                      turn.submittedCount,
+                      turn.requiredSubmissionCount,
+                    ),
+                    tooltip: _turnStatus(context.aonwL10n, turn),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                _TurnResourcePill(
+                  key: const ValueKey('turn-number'),
+                  compact: compact,
+                  label: context.aonwL10n.turnSummary(
+                    'label',
+                    turn.number,
+                    0,
+                    0,
+                  ),
+                  tooltip: _turnStatus(context.aonwL10n, turn),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _TurnResourcePill extends StatelessWidget {
+  const _TurnResourcePill({
+    required this.compact,
+    required this.label,
+    required this.tooltip,
+    this.icon,
+    super.key,
+  });
+
+  final bool compact;
+  final String label;
+  final String tooltip;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: tooltip,
+    triggerMode: TooltipTriggerMode.manual,
+    child: Semantics(
+      label: tooltip,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPress: () => _showTurnInfo(context),
+        child: AonwHudSurface(
+          elevation: AonwHudElevation.floating,
+          padding: EdgeInsets.symmetric(horizontal: compact ? 7 : 9),
+          borderRadius: BorderRadius.circular(AonwRadii.pill),
+          child: SizedBox(
+            height: 34,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon case final icon?) ...[
+                  Icon(
+                    icon,
+                    size: compact ? 12 : 14,
+                    color: AonwColorTokens.brand,
+                  ),
+                  SizedBox(width: compact ? 4 : 5),
+                ],
+                Text(
+                  label,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: TextStyle(
+                    color: AonwColorTokens.brandLight,
+                    fontFamily: AonwTypography.bodyFamily,
+                    fontSize: compact ? 10.5 : 11,
+                    fontWeight: FontWeight.w700,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                    shadows: const [Shadow(color: Colors.black, blurRadius: 2)],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  Future<void> _showTurnInfo(BuildContext context) =>
+      showModalBottomSheet<void>(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: AonwHudSurface(
+              elevation: AonwHudElevation.raised,
+              maxWidth: 520,
+              padding: const EdgeInsets.all(AonwSpacing.lg),
+              child: Text(tooltip, textAlign: TextAlign.center),
+            ),
+          ),
+        ),
+      );
+}
+
+final class _TurnCommandDeck extends StatelessWidget {
+  const _TurnCommandDeck({
     required this.turn,
     required this.action,
     required this.onEndTurn,
@@ -68,105 +201,57 @@ final class _TurnHud extends StatelessWidget {
     final aiFailure = localAiTurn.failure == null
         ? null
         : context.aonwL10n.aiTurnFailure(localAiTurn.failure!.name);
-    return SafeArea(
-      child: Center(
-        child: AonwPanel(
-          maxWidth: 720,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AonwSpacing.md,
-            vertical: AonwSpacing.sm,
-          ),
-          child: FocusTraversalGroup(
-            policy: OrderedTraversalPolicy(),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: AonwSpacing.md,
-              runSpacing: AonwSpacing.xs,
-              children: [
-                _TurnSummary(turn: turn),
-                _EndTurnAction(
-                  turn: turn,
-                  action: action,
-                  aiTurn: localAiTurn,
-                  onPressed: onEndTurn,
-                ),
-                if (localAiTurn.inFlight)
-                  Semantics(
-                    liveRegion: true,
-                    child: Text(context.aonwL10n.aiTurnRunning),
+    final size = MediaQuery.sizeOf(context);
+    final compactLandscape = size.height < 520 && size.width > size.height;
+    return Stack(
+      children: [
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              compactLandscape
+                  ? 64
+                  : size.width >= 900
+                  ? 16
+                  : 10,
+              0,
+              compactLandscape
+                  ? 8
+                  : size.width >= 900
+                  ? 16
+                  : 10,
+              compactLandscape ? 6 : 10,
+            ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                key: const ValueKey('turn-hud'),
+                height: 48,
+                child: FocusTraversalGroup(
+                  policy: OrderedTraversalPolicy(),
+                  child: _EndTurnAction(
+                    turn: turn,
+                    action: action,
+                    aiTurn: localAiTurn,
+                    onPressed: onEndTurn,
                   ),
-                if (failure != null) _TurnFailure(message: failure),
-                if (aiFailure != null) _TurnFailure(message: aiFailure),
-              ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        if (failure != null || aiFailure != null)
+          Align(
+            alignment: const Alignment(0, 0.78),
+            child: AonwHudSurface(
+              elevation: AonwHudElevation.flat,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              child: _TurnFailure(message: failure ?? aiFailure!),
+            ),
+          ),
+      ],
     );
   }
-}
-
-final class _TurnSummary extends StatelessWidget {
-  const _TurnSummary({required this.turn});
-
-  final RecipientTurnView turn;
-
-  @override
-  Widget build(BuildContext context) => Wrap(
-    alignment: WrapAlignment.center,
-    crossAxisAlignment: WrapCrossAlignment.center,
-    spacing: AonwSpacing.md,
-    runSpacing: AonwSpacing.xs,
-    children: [
-      Text(
-        context.aonwL10n.turnSummary('label', turn.number, 0, 0),
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      Text(_turnStatus(context.aonwL10n, turn)),
-      Text(
-        context.aonwL10n.turnSummary(
-          'progress',
-          turn.number,
-          turn.submittedCount,
-          turn.requiredSubmissionCount,
-        ),
-      ),
-    ],
-  );
-}
-
-final class _EndTurnAction extends StatelessWidget {
-  const _EndTurnAction({
-    required this.turn,
-    required this.action,
-    required this.onPressed,
-    required this.aiTurn,
-  });
-
-  final RecipientTurnView turn;
-  final TurnActionState action;
-  final VoidCallback onPressed;
-  final LocalAiTurnState aiTurn;
-
-  @override
-  Widget build(BuildContext context) => FocusTraversalOrder(
-    order: const NumericFocusOrder(3),
-    child: FilledButton.icon(
-      key: const ValueKey('end-turn'),
-      onPressed: turn.canEndTurn && !action.inFlight && !aiTurn.blocksGameplay
-          ? onPressed
-          : null,
-      icon: action.inFlight || aiTurn.inFlight
-          ? const Icon(Icons.hourglass_top)
-          : const Icon(Icons.skip_next),
-      label: Text(
-        action.inFlight || aiTurn.inFlight
-            ? context.aonwL10n.turnText('actionEnding')
-            : context.aonwL10n.turnText('actionEnd'),
-      ),
-    ),
-  );
 }
 
 final class _TurnFailure extends StatelessWidget {
@@ -182,38 +267,6 @@ final class _TurnFailure extends StatelessWidget {
       style: TextStyle(color: Theme.of(context).colorScheme.error),
     ),
   );
-}
-
-final class _ActivityPanel extends StatelessWidget {
-  const _ActivityPanel({required this.activities});
-
-  final List<TurnActivityView> activities;
-
-  @override
-  Widget build(BuildContext context) {
-    if (activities.isEmpty) return const SizedBox.shrink();
-    final start = activities.length > 4 ? activities.length - 4 : 0;
-    return SafeArea(
-      child: AonwPanel(
-        maxWidth: 320,
-        semanticLabel: context.aonwL10n.turnText('activityTitle'),
-        padding: const EdgeInsets.all(AonwSpacing.sm),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.aonwL10n.turnText('activityTitle'),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: AonwSpacing.xs),
-            for (final activity in activities.skip(start))
-              Text('• ${_activityLabel(context, activity.kind)}'),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 final class _TurnNotification extends StatelessWidget {
@@ -237,7 +290,8 @@ final class _TurnNotification extends StatelessWidget {
                 : Semantics(
                     key: ValueKey(current.identity),
                     liveRegion: true,
-                    child: AonwPanel(
+                    child: AonwHudSurface(
+                      elevation: AonwHudElevation.floating,
                       padding: const EdgeInsets.symmetric(
                         horizontal: AonwSpacing.md,
                         vertical: AonwSpacing.xs,

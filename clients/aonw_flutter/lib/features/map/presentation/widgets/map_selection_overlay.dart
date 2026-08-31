@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../design_system/aonw_tokens.dart';
-import '../../../../design_system/widgets/aonw_panel.dart';
+import '../../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../artifacts/presentation/artifact_panel.dart';
@@ -43,35 +43,40 @@ final class MapSelectionOverlay extends StatelessWidget {
     final selected = interaction.selected;
     if (selected == null) return const SizedBox.shrink();
     final selectedUnitId = interaction.selectedUnitId;
-    return Positioned(
-      left: AonwSpacing.md,
-      bottom: AonwSpacing.md,
-      child: _MapSelectionPanel(
-        coordinate: selected,
-        interaction: interaction,
-        unit: selectedUnitId == null
-            ? null
-            : scene.player.controlledUnitById(selectedUnitId),
-        city: interaction.city?.cityId == null
-            ? scene.player.cityAt(selected)
-            : scene.player.cityById(interaction.city!.cityId!),
-        player: scene.player,
-        pendingWorkerAction:
-            scene.player.pendingAction is PendingWorkerActionSelectionView
-            ? scene.player.pendingAction! as PendingWorkerActionSelectionView
-            : null,
-        onConfirmMove: controller.confirmMove,
-        onUnitAction: controller.executeUnitAction,
-        onUnitLogistics: controller.executeUnitLogistics,
-        onWorkerAction: controller.executeWorkerAction,
-        onConfirmCombat: controller.confirmCombat,
-        onCityConquestAction: controller.setCityConquestAction,
-        onOpenCityFounding: controller.openCityFounding,
-        onToggleCityFoundingHex: controller.toggleCityFoundingHex,
-        onConfirmCityFounding: controller.confirmCityFounding,
-        onCityAction: controller.executeCityAction,
-        onProductionAction: controller.executeProductionAction,
-        onArtifactAction: controller.executeArtifactAction,
+    return Positioned.fill(
+      child: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(10, 0, 10, 66),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: _MapSelectionPanel(
+            coordinate: selected,
+            interaction: interaction,
+            unit: selectedUnitId == null
+                ? null
+                : scene.player.controlledUnitById(selectedUnitId),
+            city: interaction.city?.cityId == null
+                ? scene.player.cityAt(selected)
+                : scene.player.cityById(interaction.city!.cityId!),
+            player: scene.player,
+            pendingWorkerAction:
+                scene.player.pendingAction is PendingWorkerActionSelectionView
+                ? scene.player.pendingAction!
+                      as PendingWorkerActionSelectionView
+                : null,
+            onConfirmMove: controller.confirmMove,
+            onUnitAction: controller.executeUnitAction,
+            onUnitLogistics: controller.executeUnitLogistics,
+            onWorkerAction: controller.executeWorkerAction,
+            onConfirmCombat: controller.confirmCombat,
+            onCityConquestAction: controller.setCityConquestAction,
+            onOpenCityFounding: controller.openCityFounding,
+            onToggleCityFoundingHex: controller.toggleCityFoundingHex,
+            onConfirmCityFounding: controller.confirmCityFounding,
+            onCityAction: controller.executeCityAction,
+            onProductionAction: controller.executeProductionAction,
+            onArtifactAction: controller.executeArtifactAction,
+          ),
+        ),
       ),
     );
   }
@@ -121,16 +126,16 @@ final class _MapSelectionPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
-    return AonwPanel(
+    return AonwHudSurface(
+      key: const ValueKey('map-selection-panel'),
       liveRegion: true,
-      maxWidth: 320,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AonwSpacing.md,
-        vertical: AonwSpacing.sm,
-      ),
+      elevation: AonwHudElevation.flat,
+      maxWidth: 840,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      borderRadius: BorderRadius.circular(AonwRadii.button),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).height - AonwSpacing.xl,
+          maxHeight: MediaQuery.sizeOf(context).height * 0.52,
         ),
         child: SingleChildScrollView(
           child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../aonw_tokens.dart';
+import 'aonw_hud_surface.dart';
 
 final class AonwPanel extends StatelessWidget {
   const AonwPanel({
@@ -19,21 +20,13 @@ final class AonwPanel extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   @override
-  Widget build(BuildContext context) {
-    Widget content = Padding(padding: padding, child: child);
-    if (maxWidth case final width?) {
-      content = ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: width),
-        child: content,
-      );
-    }
-    return Semantics(
-      container: true,
-      label: semanticLabel,
-      liveRegion: liveRegion,
-      child: Card(child: content),
-    );
-  }
+  Widget build(BuildContext context) => AonwHudSurface(
+    semanticLabel: semanticLabel,
+    liveRegion: liveRegion,
+    maxWidth: maxWidth,
+    padding: padding,
+    child: child,
+  );
 }
 
 final class AonwMessagePanel extends StatelessWidget {
