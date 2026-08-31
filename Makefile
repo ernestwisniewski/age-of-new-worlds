@@ -132,7 +132,7 @@ flutter-client-device-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub integration_test/inspect_map_native_test.dart
 
 flutter-client-performance-check: flutter-client-dependencies
-	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/fm4_flame_gameplay_pilot_test.dart
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/flame_gameplay_performance_test.dart
 
 flutter-client-run: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) run --no-pub -d $(FLUTTER_CLIENT_DEVICE) --dart-define=AONW_API_BASE_URL=$(LOCAL_API_BASE_URL)

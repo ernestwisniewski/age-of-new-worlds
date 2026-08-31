@@ -19,7 +19,7 @@ import 'package:integration_test/integration_test.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('keeps the FM5 production Flame workload within its budget', (
+  testWidgets('keeps the production Flame workload within its budget', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(1280, 720));
@@ -44,10 +44,10 @@ void main() {
     expect(game.world.unitLayer.debugUnitCount, 120);
     expect(game.world.unitLayer.debugSharedPaintCount, 3);
     expect(game.world.cityLayer.debugCityCount, 40);
-    expect(game.world.cityLayer.debugSharedPaintCount, 3);
+    expect(game.world.cityLayer.debugSharedPaintCount, 5);
     expect(game.world.workerInfrastructureLayer.debugImprovementCount, 120);
     expect(game.world.workerInfrastructureLayer.debugRoadCount, 120);
-    expect(game.world.workerInfrastructureLayer.debugSharedPaintCount, 4);
+    expect(game.world.workerInfrastructureLayer.debugSharedPaintCount, 6);
     expect(game.world.children, hasLength(12));
     expect(game.paused, isTrue, reason: 'the turn-based world starts idle');
     final idleUpdates = game.world.effectHost.debugActiveUpdateCount;
@@ -64,12 +64,12 @@ void main() {
       for (var frame = 0; frame < 60; frame++) {
         await tester.pump(const Duration(microseconds: 16667));
       }
-    }, reportKey: 'fm5FrameTimes');
+    }, reportKey: 'flameGameplayFrameTimes');
     game.setContinuousRendering(false);
     expect(game.paused, isTrue);
 
     final frameTimes =
-        binding.reportData!['fm5FrameTimes']! as Map<String, dynamic>;
+        binding.reportData!['flameGameplayFrameTimes']! as Map<String, dynamic>;
     final buildP99 =
         frameTimes['99th_percentile_frame_build_time_millis']! as num;
     final rasterP99 =
@@ -94,7 +94,7 @@ void main() {
         'flame': '1.38.0',
       },
       'workload': {
-        'mapId': 'fm5-cutover-40x30',
+        'mapId': 'flame-performance-40x30',
         'dimensions': {'cols': 40, 'rows': 30},
         'visibleUnits': 120,
         'visibleCities': 40,
@@ -104,6 +104,7 @@ void main() {
         'timedFrames': 60,
         'worldComponents': game.world.children.length,
         'sharedUnitPaints': game.world.unitLayer.debugSharedPaintCount,
+        'sharedCityPaints': game.world.cityLayer.debugSharedPaintCount,
         'sharedInfrastructurePaints':
             game.world.workerInfrastructureLayer.debugSharedPaintCount,
       },
@@ -115,7 +116,7 @@ void main() {
         'frameTimes': frameTimes,
       },
       'policy': {
-        'classification': 'hard-fm5-cutover',
+        'classification': 'hard-flame-gameplay',
         'owner': 'Flutter client',
         'buildP99MillisMax': 16.667,
         'rasterP99MillisMax': 16.667,
@@ -123,9 +124,9 @@ void main() {
         'residentMemoryDeltaBytesMax': 192 * 1024 * 1024,
       },
     };
-    // Stable marker copied into the reviewed FM5 performance record.
+    // Stable marker copied into the reviewed Flame performance record.
     // ignore: avoid_print
-    print('AONW_FM5_BASELINE ${jsonEncode(record)}');
+    print('AONW_FLAME_GAMEPLAY_BASELINE ${jsonEncode(record)}');
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -154,10 +155,10 @@ MapRenderSnapshot _largeSnapshot() {
   final units = <VisibleUnitView>[
     for (var index = 0; index < 120; index++)
       VisibleUnitView(
-        id: 'pilot-unit-$index',
-        ownerPlayerId: index.isEven ? 'pilot-player' : 'foreign-player',
+        id: 'performance-unit-$index',
+        ownerPlayerId: index.isEven ? 'performance-player' : 'foreign-player',
         kind: VisibleUnitKind.commander,
-        name: 'Pilot unit $index',
+        name: 'Performance unit $index',
         coordinate: (col: index % cols, row: index ~/ cols),
         movementUnits: 12,
         posture: VisibleUnitPosture.active,
@@ -166,9 +167,9 @@ MapRenderSnapshot _largeSnapshot() {
   final cities = <CityView>[
     for (var index = 0; index < 40; index++)
       CityView(
-        id: 'pilot-city-$index',
-        ownerPlayerId: index.isEven ? 'pilot-player' : 'foreign-player',
-        name: 'Pilot city $index',
+        id: 'performance-city-$index',
+        ownerPlayerId: index.isEven ? 'performance-player' : 'foreign-player',
+        name: 'Performance city $index',
         center: (col: index % cols, row: 5 + index ~/ cols),
         visibleControlledHexes: [(col: index % cols, row: 5 + index ~/ cols)],
         hitPoints: 10,
@@ -199,7 +200,7 @@ MapRenderSnapshot _largeSnapshot() {
   );
   final bounds = geometry.bounds;
   final map = MapView(
-    mapId: 'fm5-cutover-40x30',
+    mapId: 'flame-performance-40x30',
     contentHash: contentHash,
     gridLayout: MapGridLayout.oddQFlatTop,
     cols: cols,
@@ -219,7 +220,7 @@ MapRenderSnapshot _largeSnapshot() {
       pages: const [],
     ),
     player: PlayerMapView.preview(
-      actorPlayerId: 'pilot-player',
+      actorPlayerId: 'performance-player',
       stamp: const SessionStampView(
         revision: 0,
         stateDigest:
