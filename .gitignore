@@ -31,6 +31,10 @@ dist/
 *.bak
 *.orig
 
+# Python tooling caches
+**/__pycache__/
+*.py[cod]
+
 # Local environment and secrets
 .envrc
 .env

@@ -1,58 +1,87 @@
 # Performance benchmarks
 
-The performance gate protects deterministic work, not shared-runner timing. CI compares operation counts and output fingerprints; wall-clock samples are diagnostic because host load and VM warm-up are not portable.
+Engine benchmarks separate portable structural evidence from host-local timing.
+Every measured operation publishes a deterministic result signature, allocation
+counts, allocated bytes, payload bytes, and—where applicable—domain work counters.
+Wall-clock samples are diagnostic unless a policy pins the complete environment.
 
-## Workloads
+## Portable structural gate
 
-The harness covers the paths most likely to scale badly:
-
-- indexed world-map lookup and movement planning;
-- authoritative movement and combat commands;
-- fog reveal and auto-explore;
-- turn finalization;
-- event and snapshot persistence;
-- replay;
-- MCTS with exact iteration budgets;
-- headless Flame rendering.
-
-Fixtures are generated deterministically. Their construction and warm-up are outside the measured section where possible.
-
-## Commands
+Every regular engine quality run ratchets the exact workload census and result
+signatures together with iteration, allocation, allocated-byte, payload, and
+domain work-counter ceilings:
 
 ```sh
-make performance
+make engine-performance-check
 ```
 
-Equivalent focused commands:
+The reviewed baseline is `engine/quality/performance_baseline.json`. Generate a
+candidate with `make engine-performance-snapshot`; never install it without
+reviewing why each changed signature or ceiling differs.
+
+## Complete transition gate
+
+The hard latency gate measures accepted transitions through the retained local
+runtime on the pinned macOS arm64 reference device. The workloads cover:
+
+- engine transition, aggregate validation, digest, recipient projection, and diff;
+- the same movement transition through JSON decode and response encoding;
+- the three independent large-map selection queries used by a controlled worker;
+- a representative combat transition through JSON;
+- late-turn timeout finalization with 512 units.
+
+The reviewed policy is
+`engine/quality/transition_performance_policy.json`. It pins the hardware, OS,
+Rust toolchain, benchmark profile, warm-up, sample count, output signatures,
+allocation ceilings, allocated-byte ceilings, payload ceilings, and absolute p95
+latency. A different environment fails closed instead of pretending its timings
+are comparable.
 
 ```sh
-make performance-report
-make performance-check
-make performance-snapshot
-make rust-benchmark
+make engine-transition-performance-check
 ```
 
-Reports default to `/tmp/aonw-performance-report.json`. Generated reports are local artifacts; only the reviewed policy and stable baseline belong in Git.
-
-A stable-value change needs an explanation. It may be an optimization, a regression in work complexity, or an intentional workload change.
-
-## Frame budget
-
-Real frame timing is a separate manual gate. It must come from a Flutter profile build on the pinned reference device, using bundled assets and at least 600 measured frames for the controlled `renderer.frame.1000` scenario.
+To collect a report without accepting it as a gate result:
 
 ```sh
-make performance-frame-check \
-  PERFORMANCE_FRAME_REPORT_PATH=/absolute/path/to/report.json \
-  PERFORMANCE_FRAME_DEVICE_ID=<pinned-device-id>
+make engine-transition-performance-report
 ```
 
-The current 60 FPS budgets are defined in `tool/check_frame_budget.dart`. Do not apply them to headless runs or shared CI workers.
+Reports default to `/tmp/aonw-engine-transition-performance.json` and are not
+committed. Rebaseline only after reviewing the benchmark workload and the cause
+of every signature, work, allocation, payload, or timing change.
 
-## Updating the baseline
+The selection measurements deliberately keep `reachable`, logistics, and worker
+options separate. The client publishes reachable feedback first and loads the
+independent panels afterward. A combined `SelectionContext` request would add
+cross-feature coupling without removing the measured engine work, so it is not
+introduced. Reconsider batching only if a pinned client/device trace shows that
+the serialized native crossings—not one of the queries—exceed the interaction
+budget.
+
+## Exploratory engine benchmarks
+
+The complete deterministic workload suite remains available for profiling:
 
 ```sh
-make performance-snapshot
-diff -u tool/performance_baseline.json /tmp/aonw-performance-baseline.json
+make engine-benchmark
 ```
 
-Review workload code, policy, and the candidate baseline together. Never replace the baseline solely because timings changed.
+It covers map lookup, movement, logistics, combat, cities, workers, turn
+finalization, persistence/replay, and AI planners. Shared-runner timings from this
+command remain diagnostic; the stable structural baseline is
+`engine/quality/performance_baseline.json`.
+
+## Flutter frame budget
+
+Flutter frame timing is a separate device gate because it includes build/raster,
+Flame patch application, assets, and platform scheduling:
+
+```sh
+make flutter-client-performance-check
+```
+
+The committed records under `clients/aonw_flutter/performance/` state their
+device, workload, build mode, warm-up, percentiles, and resource budgets. Engine
+transition latency must not be inferred from a frame golden, and renderer timing
+must not be inferred from a headless Rust benchmark.

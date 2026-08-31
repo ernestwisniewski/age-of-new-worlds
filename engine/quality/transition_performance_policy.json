@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "owner": "engine",
+  "reviewedDate": "2026-08-31",
+  "environment": {
+    "operatingSystem": "macOS",
+    "operatingSystemVersion": "15.7.7",
+    "architecture": "arm64",
+    "hardwareModel": "MacBookPro18,2",
+    "processor": "Apple M1 Max",
+    "memoryBytes": 34359738368,
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)"
+  },
+  "measurement": {
+    "benchmark": "aonw_local_runtime/runtime",
+    "profile": "bench",
+    "threads": 1,
+    "warmupIterations": 3,
+    "sampleIterations": 20,
+    "setup": "outside"
+  },
+  "budgets": {
+    "client_json_combat_attack/1200/512": {
+      "signature": "3e227fc01dc9cf58",
+      "maxP95Ns": 2000000,
+      "maxAllocations": 6000,
+      "maxAllocatedBytes": 800000,
+      "maxPayloadBytes": 4096
+    },
+    "client_json_dispatch_accepted/1200/512": {
+      "signature": "d08af9d189a5433d",
+      "maxP95Ns": 2000000,
+      "maxAllocations": 4400,
+      "maxAllocatedBytes": 1500000,
+      "maxPayloadBytes": 2048
+    },
+    "client_json_reachable/1200/512": {
+      "signature": "2f7fed63fe07fc40",
+      "maxP95Ns": 500000,
+      "maxAllocations": 50,
+      "maxAllocatedBytes": 20000,
+      "maxPayloadBytes": 1024
+    },
+    "client_json_unit_logistics_options/1200/512": {
+      "signature": "20ff9a8fe5816ffa",
+      "maxP95Ns": 500000,
+      "maxAllocations": 50,
+      "maxAllocatedBytes": 10000,
+      "maxPayloadBytes": 1024
+    },
+    "client_json_worker_options/1200/512": {
+      "signature": "8c12a652ef97e0fa",
+      "maxP95Ns": 500000,
+      "maxAllocations": 50,
+      "maxAllocatedBytes": 10000,
+      "maxPayloadBytes": 1024
+    },
+    "runtime_dispatch_accepted/1200/1": {
+      "signature": "00009a00000105ae",
+      "maxP95Ns": 500000,
+      "maxAllocations": 100,
+      "maxAllocatedBytes": 1000000,
+      "maxPayloadBytes": 0
+    },
+    "runtime_dispatch_accepted/1200/64": {
+      "signature": "0000bb0000013dc1",
+      "maxP95Ns": 500000,
+      "maxAllocations": 650,
+      "maxAllocatedBytes": 1000000,
+      "maxPayloadBytes": 0
+    },
+    "runtime_dispatch_accepted/1200/512": {
+      "signature": "0000da000001726e",
+      "maxP95Ns": 1500000,
+      "maxAllocations": 4300,
+      "maxAllocatedBytes": 1500000,
+      "maxPayloadBytes": 0
+    },
+    "runtime_turn_timeout_finalization/1200/512": {
+      "signature": "000a38000008b3ad",
+      "maxP95Ns": 5000000,
+      "maxAllocations": 14000,
+      "maxAllocatedBytes": 1200000,
+      "maxPayloadBytes": 0
+    }
+  }
+}

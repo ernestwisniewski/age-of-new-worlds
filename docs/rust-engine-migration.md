@@ -258,7 +258,7 @@ just the visible destination or a projected subset of fields.
 Run Rust performance diagnostics separately:
 
 ```sh
-make rust-benchmark
+make engine-benchmark
 ```
 
 Wall-clock numbers are host-local observations. Stable signatures and work counters are the regression evidence.

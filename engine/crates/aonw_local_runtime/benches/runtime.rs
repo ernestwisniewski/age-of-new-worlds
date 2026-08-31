@@ -12,9 +12,7 @@ use aonw_contracts::CoordinateDto;
 use aonw_contracts::client::{
     CLIENT_API_VERSION, ClientCommandDto, ClientRequestBodyDto, ClientRequestDto,
 };
-use aonw_domain::{
-    FogOfWar, GameState, HexCoord, PlayerFog, PlayerId, StateRevision, Unit, UnitId, UnitKind,
-};
+use aonw_domain::{HexCoord, PlayerId, UnitId, UnitKind};
 use aonw_local_runtime::{
     ClientProtocol, FinalizeTimedOutTurnRequest, KickParticipantRequest, LocalRuntime,
     MoveUnitRequest, OpenSession, TurnCommandRequest,
@@ -27,6 +25,10 @@ static GLOBAL: &StatsAlloc<System> = &INSTRUMENTED_SYSTEM;
 
 #[path = "runtime/combat_support.rs"]
 mod combat_support;
+#[path = "runtime/hidden_support.rs"]
+mod hidden_support;
+#[path = "runtime/selection_support.rs"]
+mod selection_support;
 #[path = "runtime/turn_support.rs"]
 mod turn_support;
 
@@ -161,6 +163,7 @@ fn benchmark_runtime(unit_count: usize) {
 
     let base = opened(open);
     benchmark_snapshot(&base, unit_count);
+    selection_support::benchmark(&base, map.clone(), ruleset.clone(), unit_count);
     let accepted = MoveUnitRequest {
         expected_revision: 0,
         unit_id: UnitId::new("unit-0").expect("unit id"),
@@ -190,7 +193,7 @@ fn benchmark_runtime(unit_count: usize) {
     );
 
     if unit_count == 1 {
-        let hidden_base = opened(hidden_open(map.clone(), ruleset.clone(), actor));
+        let hidden_base = opened(hidden_support::open(map.clone(), ruleset.clone(), actor));
         report_with_setup(
             "runtime_dispatch_hidden_noop",
             2,
@@ -382,43 +385,6 @@ fn scenario_json(unit_count: usize) -> String {
         "initialUnits": units,
     })
     .to_string()
-}
-
-fn hidden_open(map: MapDefinition, ruleset: RulesetDefinition, actor: PlayerId) -> OpenSession {
-    let definition = ruleset
-        .unit(UnitKind::Commander)
-        .expect("commander definition");
-    let unit = |id: &str, owner: PlayerId, position: HexCoord| {
-        Unit::builder(
-            UnitId::new(id).expect("unit id"),
-            owner,
-            UnitKind::Commander,
-            "Commander",
-            position,
-            definition.maximum_movement(false),
-        )
-        .build()
-        .expect("unit")
-    };
-    let fog = FogOfWar::try_new([PlayerFog::new(actor.clone(), [], [])]).expect("fog");
-    let state = GameState::builder(
-        StateRevision::INITIAL,
-        0,
-        map.bounds(),
-        ruleset.occupancy_policy(),
-        [
-            unit("unit-0", actor.clone(), HexCoord::new(0, 0)),
-            unit(
-                "hidden-blocker",
-                PlayerId::new("player-2").expect("owner"),
-                HexCoord::new(1, 0),
-            ),
-        ],
-    )
-    .with_fog_of_war(fog)
-    .try_build()
-    .expect("state");
-    OpenSession::from_state(map, ruleset, state, actor)
 }
 
 fn opened(request: OpenSession) -> LocalRuntime {

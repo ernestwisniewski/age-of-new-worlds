@@ -131,20 +131,22 @@ policy or baseline.
 
 ### Performance Benchmarks
 
-Run the portable performance gate with:
+Run the portable engine performance gate with:
 
 ```sh
-make performance
+make engine-performance-check
 ```
 
-The harness covers map lookup, event/snapshot persistence, replay, exact-budget
-MCTS, and headless renderer-tree work. CI compares deterministic work metrics
-and output digests; median and p95 timings are observations, not shared-runner
-thresholds. Use `make performance-report` for the full report and
-`make performance-snapshot` only to create a candidate for review. Validate a
-real pinned-device profile report with `make performance-frame-check`. Read
-[Performance Benchmarks](docs/performance-benchmarks.md) before changing a
-workload, policy, baseline, or frame budget.
+The harness covers movement, authoritative transitions, projection, wire,
+persistence/replay, turn finalization and exact-budget AI. CI compares
+deterministic work metrics and result signatures; shared-runner timings remain
+diagnostic. Use `make engine-performance-report` for the full report and
+`make engine-performance-snapshot` only to create a candidate for review.
+Release qualification additionally runs `make
+engine-transition-performance-check` on the pinned reference Mac and
+`make flutter-client-performance-check` for the renderer. Read [Performance
+Benchmarks](docs/performance-benchmarks.md) before changing a workload, policy,
+baseline, or device budget.
 
 ### Mutation Testing
 

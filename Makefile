@@ -14,6 +14,9 @@ SERVER_ENV_FILE ?= $(CURDIR)/.env
 PROFILE ?= dev
 HEALTH_URL ?= https://api.aonw.net/readyz
 ARCHITECTURE_SNAPSHOT_PATH ?= /tmp/aonw-architecture-baseline.json
+ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH ?= /tmp/aonw-engine-transition-performance.json
+ENGINE_PERFORMANCE_REPORT_PATH ?= /tmp/aonw-engine-performance.json
+ENGINE_PERFORMANCE_SNAPSHOT_PATH ?= /tmp/aonw-engine-performance-baseline.json
 COMPOSE_BASE_FILES = -f compose.yml
 COMPOSE_STAGING_FILES = $(COMPOSE_BASE_FILES) -f compose.staging.yml
 COMPOSE_PROD_FILES = $(COMPOSE_BASE_FILES) -f compose.prod.yml
@@ -34,7 +37,10 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	rust-format-check rust-clippy rust-test rust-test-release rust-doc \
 	rust-release-compile-smoke rust-check engine-architecture-policy-check \
 	engine-architecture-policy-test engine-architecture-check rust-engine-check \
-	rust-engine-quality-check engine-client-test godot-check \
+	rust-engine-quality-check engine-client-test engine-transition-performance-report \
+	engine-transition-performance-policy-test engine-transition-performance-check \
+	engine-performance-report engine-performance-policy-test engine-performance-check \
+	engine-performance-snapshot engine-benchmark godot-check \
 	server-client-analyze server-client-test server-native-analyze \
 	server-native-test server-analyze server-test server-integration-test \
 	dart-format-check format-check analyze check ci release-check \
@@ -48,6 +54,8 @@ help:
 	@echo "AoNW development targets"
 	@echo "  make bootstrap                 Install locked dependencies and Serverpod CLI"
 	@echo "  make rust-engine-quality-check Run the Rust engine quality gate"
+	@echo "  make engine-performance-check  Verify portable engine work budgets"
+	@echo "  make engine-transition-performance-check Verify pinned transition budgets"
 	@echo "  make flutter-client-check      Format, analyze, and test the Flutter client"
 	@echo "  make architecture-check        Verify Dart, client, and engine architecture budgets"
 	@echo "  make server-test               Analyze and test the Serverpod host"
@@ -164,7 +172,33 @@ engine-architecture-check: engine-architecture-policy-check engine-architecture-
 
 rust-engine-check: rust-check engine-architecture-check
 
-rust-engine-quality-check: rust-engine-check engine-client-test
+engine-transition-performance-policy-test:
+	@tool/test_engine_transition_performance.py
+
+engine-transition-performance-report:
+	@tool/check_engine_transition_performance.py report --report "$(ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH)"
+
+engine-transition-performance-check: engine-transition-performance-policy-test
+	@tool/check_engine_transition_performance.py check --report "$(ENGINE_TRANSITION_PERFORMANCE_REPORT_PATH)"
+
+engine-performance-policy-test:
+	@tool/test_engine_performance.py
+
+engine-performance-report:
+	@tool/check_engine_performance.py report --report "$(ENGINE_PERFORMANCE_REPORT_PATH)"
+
+engine-performance-check: engine-performance-policy-test
+	@tool/check_engine_performance.py check --report "$(ENGINE_PERFORMANCE_REPORT_PATH)"
+
+engine-performance-snapshot:
+	@tool/check_engine_performance.py snapshot --report "$(ENGINE_PERFORMANCE_REPORT_PATH)" --snapshot "$(ENGINE_PERFORMANCE_SNAPSHOT_PATH)"
+
+engine-benchmark:
+	@cd $(RUST_WORKSPACE) && $(CARGO) bench --locked -p aonw_engine --bench movement
+	@cd $(RUST_WORKSPACE) && $(CARGO) bench --locked -p aonw_local_runtime --bench runtime
+	@cd $(RUST_WORKSPACE) && $(CARGO) bench --locked -p aonw_ai --bench planner
+
+rust-engine-quality-check: rust-engine-check engine-client-test engine-performance-check
 
 engine-client-test: engine-client-dependencies flutter-client-dependencies
 	@cd packages/aonw_engine_client && $(DART) test
@@ -215,7 +249,7 @@ check: rust-test flutter-client-test server-client-test server-native-test serve
 
 ci: format-check rust-engine-quality-check generated-code-check flutter-client-check server-client-test server-native-test server-test compose-check
 
-release-check: ci rust-test-release flutter-client-release-check serverpod-ops-check
+release-check: ci rust-test-release engine-transition-performance-check flutter-client-release-check serverpod-ops-check
 
 serverpod-version:
 	@version=$$(awk '/^dependencies:[[:space:]]*$$/ { found = 1; next } found && /^[^[:space:]#]/ { exit } found && $$1 == "serverpod:" && NF == 2 { print $$2; exit }' server/pubspec.yaml); \

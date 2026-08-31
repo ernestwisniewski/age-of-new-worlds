@@ -99,7 +99,8 @@ values are diagnostic only.
 
 ```sh
 make rust-coverage-check
-make rust-performance-check
+make engine-performance-check
+make engine-transition-performance-check
 make engine-architecture-check
 make rust-dependency-check
 make rust-determinism-check

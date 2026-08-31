@@ -56,7 +56,8 @@ checks include:
 ```sh
 make rust-engine-check
 make rust-coverage-check
-make rust-performance-check
+make engine-performance-check
+make engine-transition-performance-check
 make flutter-client-performance-check
 make server-integration-test
 ```
