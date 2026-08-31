@@ -50,7 +50,6 @@ make rust-persistence-check
 ```
 
 The machine-readable contracts live in
-`engine/fixtures/persistence/manifest.json`, `restore-matrix.json`, and
-`dart-replacement-surface.json`. The replacement checker fails when any public
-barrel export in the legacy Dart surface is new, stale, duplicated, or lacks
-exactly one disposition.
+`engine/fixtures/persistence/manifest.json` and `restore-matrix.json`. They
+describe the supported save, replay, restore, and corruption cases directly;
+the runtime does not carry a second implementation inventory.
