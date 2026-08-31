@@ -247,9 +247,7 @@ server-test: server-analyze
 	@cd server && $(DART) test --exclude-tags integration
 
 server-integration-test: server-dependencies
-	@cd server && tests=$$(find test/integration -type f -name '*_smoke.dart' | sort); \
-		test -n "$$tests" || { echo "No Serverpod integration smoke tests found."; exit 1; }; \
-		$(DART) test $$tests -P integration --chain-stack-traces --concurrency=1
+	@DART="$(DART)" COMPOSE="$(COMPOSE)" tool/run_server_integration.sh
 
 dart-format-check:
 	@files=$$(git ls-files --cached --others --exclude-standard -- '*.dart' \

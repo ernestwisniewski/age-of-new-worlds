@@ -9,9 +9,11 @@ or engine command execution.
 make server-integration-test
 ```
 
-The integration profile applies the initial schema to its test database and
-runs the PostgreSQL-backed server smoke tests serially. Run the public HTTP
-journey from [critical-e2e.md](critical-e2e.md) against the local Compose stack.
+The command creates an isolated PostgreSQL Compose project on a random loopback
+port, creates a fresh test database, applies the initial schema, runs the
+server smoke tests serially, and removes its container and volume. Run the
+public HTTP journey from [critical-e2e.md](critical-e2e.md) against the local
+Compose stack.
 
 ## Manual two-account checks
 
