@@ -199,6 +199,10 @@ void main() {
     expect(participant.colorValue, 0xff000000);
     expect(participant.country, AonwPlayerCountry.poland);
     expect(participant.kind, AonwPlayerKind.human);
+    expect(snapshot.fog.enabled, isTrue);
+    expect(snapshot.fog.discoveredHexes, hasLength(2));
+    expect(snapshot.fog.visibleHexes.single.col, 2);
+    expect(snapshot.fog.visibleHexes.single.row, 1);
 
     final leakedParticipant = <String, Object?>{
       ...(_snapshot['participants']! as List).single as Map<String, Object?>,
@@ -393,6 +397,16 @@ const _snapshot = {
       'kind': 'human',
     },
   ],
+  'fog': {
+    'enabled': true,
+    'discoveredHexes': [
+      {'col': 1, 'row': 1},
+      {'col': 2, 'row': 1},
+    ],
+    'visibleHexes': [
+      {'col': 2, 'row': 1},
+    ],
+  },
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
@@ -434,6 +448,7 @@ Map<String, Object?> _commandResult(Map<String, Object?> outcome) => {
     'toRevision': 7,
     'turn': 7,
     'turnMode': 'sequential',
+    'fog': null,
     'turnLifecycle': null,
     'outcome': null,
     'upsertedUnits': <Object?>[],

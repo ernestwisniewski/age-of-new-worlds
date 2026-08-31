@@ -22,6 +22,7 @@
           "toRevision": 7,
           "turn": 7,
           "turnMode": "sequential",
+          "fog": null,
           "turnLifecycle": null,
           "outcome": null,
           "upsertedUnits": [],

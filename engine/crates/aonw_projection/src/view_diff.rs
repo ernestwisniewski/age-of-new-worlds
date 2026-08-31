@@ -7,10 +7,10 @@ use aonw_domain::{
 
 use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
-    PlayerDiplomacyView, PlayerFieldImprovementView, PlayerParticipantView, PlayerRoadView,
-    PlayerTurnLifecycleView, PlayerUnitView, PlayerViewSnapshot, SessionStamp, city_founding_draft,
-    diplomacy_view, pending_action, visible_artifacts, visible_cities, visible_infrastructure,
-    visible_units,
+    PlayerDiplomacyView, PlayerFieldImprovementView, PlayerFogView, PlayerParticipantView,
+    PlayerRoadView, PlayerTurnLifecycleView, PlayerUnitView, PlayerViewSnapshot, SessionStamp,
+    city_founding_draft, diplomacy_view, pending_action, visible_artifacts, visible_cities,
+    visible_infrastructure, visible_units,
 };
 
 /// Recipient-safe view delta produced by one dispatch.
@@ -24,6 +24,8 @@ pub struct PlayerViewPatch {
     pub turn: u32,
     /// Authoritative participant turn resolution model.
     pub turn_mode: TurnMode,
+    /// Replacement recipient fog state when visibility changed.
+    pub fog: Option<PlayerFogView>,
     /// Replacement turn projection when lifecycle state changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleView>,
     /// Replacement authoritative match result when it changed.
@@ -63,6 +65,7 @@ pub struct ProjectedView {
     turn_number: u32,
     turn_mode: TurnMode,
     participants: Arc<[PlayerParticipantView]>,
+    fog: Arc<PlayerFogView>,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -92,6 +95,11 @@ impl ProjectedView {
             turn_number: 0,
             turn_mode: TurnMode::Sequential,
             participants: Arc::new([]),
+            fog: Arc::new(PlayerFogView {
+                enabled: false,
+                discovered_hexes: Arc::from([]),
+                visible_hexes: Arc::from([]),
+            }),
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -111,6 +119,16 @@ impl ProjectedView {
         self
     }
 
+    #[cfg(test)]
+    fn with_fog(mut self, discovered_hexes: &[HexCoord], visible_hexes: &[HexCoord]) -> Self {
+        self.fog = Arc::new(PlayerFogView {
+            enabled: true,
+            discovered_hexes: Arc::from(discovered_hexes),
+            visible_hexes: Arc::from(visible_hexes),
+        });
+        self
+    }
+
     /// Builds a complete recipient-safe projection from canonical state.
     #[must_use]
     pub fn for_recipient(state: &GameState, actor: Arc<PlayerId>) -> Self {
@@ -123,6 +141,7 @@ impl ProjectedView {
         let artifacts = visible_artifacts(state, recipient).into();
         let pending_action = pending_action(state, recipient).map(Arc::new);
         let city_founding_draft = city_founding_draft(state, recipient).map(Arc::new);
+        let fog = Arc::new(PlayerFogView::for_recipient(state, recipient));
         let participants = state
             .match_lifecycle()
             .identity()
@@ -136,6 +155,7 @@ impl ProjectedView {
             turn_number: state.turn(),
             turn_mode: state.match_lifecycle().identity().turn_mode(),
             participants,
+            fog,
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -158,6 +178,7 @@ impl ProjectedView {
             self.turn_number,
             self.turn_mode,
             self.participants.clone(),
+            self.fog.clone(),
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),
@@ -206,6 +227,7 @@ pub fn diff_view(
     );
     let outcome = (before.outcome != after.outcome).then(|| after.outcome.as_ref().clone());
     let diplomacy = (before.diplomacy != after.diplomacy).then(|| after.diplomacy.as_ref().clone());
+    let fog = (before.fog != after.fog).then(|| after.fog.as_ref().clone());
     let mut before_units = before.units.iter().peekable();
     let mut after_units = after.units.iter().peekable();
     let mut upserted_units = Vec::new();
@@ -244,6 +266,7 @@ pub fn diff_view(
         to_revision,
         turn: after.turn_number,
         turn_mode: after.turn_mode,
+        fog,
         turn_lifecycle: (before.turn != after.turn).then_some(after.turn),
         outcome,
         upserted_units: upserted_units.into_boxed_slice(),
@@ -270,6 +293,7 @@ pub fn unchanged_view(revision: u64, view: &ProjectedView) -> PlayerViewPatch {
         to_revision: revision,
         turn: view.turn_number,
         turn_mode: view.turn_mode,
+        fog: None,
         turn_lifecycle: None,
         outcome: None,
         upserted_units: Box::new([]),
@@ -427,13 +451,24 @@ mod tests {
             Vec::new(),
             (Vec::new(), Vec::new()),
         )
-        .with_turn_mode(TurnMode::Simultaneous);
+        .with_turn_mode(TurnMode::Simultaneous)
+        .with_fog(
+            &[HexCoord::new(1, 0), HexCoord::new(2, 0)],
+            &[HexCoord::new(2, 0)],
+        );
         let patch = diff_view(4, 5, &before, &after);
 
         assert_eq!(patch.from_revision, 4);
         assert_eq!(patch.to_revision, 5);
         assert_eq!(patch.turn, 0);
         assert_eq!(patch.turn_mode, TurnMode::Simultaneous);
+        let fog = patch.fog.expect("changed fog");
+        assert!(fog.enabled());
+        assert_eq!(
+            fog.discovered_hexes(),
+            [HexCoord::new(1, 0), HexCoord::new(2, 0)]
+        );
+        assert_eq!(fog.visible_hexes(), [HexCoord::new(2, 0)]);
         assert_eq!(
             patch
                 .upserted_units

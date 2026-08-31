@@ -130,6 +130,53 @@ impl PlayerParticipantView {
     }
 }
 
+/// Recipient-safe fog state for rendering the map without canonical access.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PlayerFogView {
+    enabled: bool,
+    discovered_hexes: Arc<[HexCoord]>,
+    visible_hexes: Arc<[HexCoord]>,
+}
+
+impl PlayerFogView {
+    fn for_recipient(state: &GameState, actor: &PlayerId) -> Self {
+        let fog = state.fog_of_war();
+        let enabled = !fog.players().is_empty();
+        let (discovered_hexes, visible_hexes) = fog.player(actor).map_or_else(
+            || (Arc::from([]), Arc::from([])),
+            |player| {
+                (
+                    Arc::from(player.discovered_hexes()),
+                    Arc::from(player.visible_hexes()),
+                )
+            },
+        );
+        Self {
+            enabled,
+            discovered_hexes,
+            visible_hexes,
+        }
+    }
+
+    /// Returns whether fog rules are enabled for this match.
+    #[must_use]
+    pub const fn enabled(&self) -> bool {
+        self.enabled
+    }
+
+    /// Returns every coordinate ever discovered by the recipient.
+    #[must_use]
+    pub fn discovered_hexes(&self) -> &[HexCoord] {
+        &self.discovered_hexes
+    }
+
+    /// Returns coordinates currently visible to the recipient.
+    #[must_use]
+    pub fn visible_hexes(&self) -> &[HexCoord] {
+        &self.visible_hexes
+    }
+}
+
 /// Complete recipient-safe presentation snapshot.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PlayerViewSnapshot {
@@ -138,6 +185,7 @@ pub struct PlayerViewSnapshot {
     turn: u32,
     turn_mode: TurnMode,
     participants: Arc<[PlayerParticipantView]>,
+    fog: Arc<PlayerFogView>,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -158,6 +206,7 @@ impl PlayerViewSnapshot {
         turn: u32,
         turn_mode: TurnMode,
         participants: Arc<[PlayerParticipantView]>,
+        fog: Arc<PlayerFogView>,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -175,6 +224,7 @@ impl PlayerViewSnapshot {
             turn,
             turn_mode,
             participants,
+            fog,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -213,6 +263,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub fn participants(&self) -> &[PlayerParticipantView] {
         &self.participants
+    }
+    /// Returns the recipient's complete map visibility state.
+    #[must_use]
+    pub fn fog(&self) -> &PlayerFogView {
+        &self.fog
     }
     /// Returns the persisted authoritative match result.
     #[must_use]

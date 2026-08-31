@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
 
+part 'recipient_projection_cache_fixture.dart';
+
 void main() {
   test('applies current values, replacements and clears atomically', () {
     final initial = _snapshot(
@@ -88,6 +90,42 @@ void main() {
     expect(after.outcome, same(initial.outcome));
     expect(after.diplomacy, same(initial.diplomacy));
     expect(after.units.single.coordinate.col, 0);
+  });
+
+  test('replaces fog atomically and rejects invalid visibility', () {
+    final initial = _snapshot();
+    final cache = _cache(initial);
+    const fog = AonwPlayerFogView(
+      enabled: true,
+      discoveredHexes: [
+        AonwCoordinate(col: 0, row: 0),
+        AonwCoordinate(col: 1, row: 0),
+      ],
+      visibleHexes: [AonwCoordinate(col: 1, row: 0)],
+    );
+
+    final after = cache.apply(
+      _command(
+        stamp: _stamp(revision: 1, stateDigest: 'd' * 64),
+        patch: _patch(fromRevision: 0, toRevision: 1, turn: 1, fog: fog),
+      ),
+    );
+
+    expect(after.fog, same(fog));
+    expect(
+      () => cache.replaceAfterResync(
+        _snapshot(
+          revision: 2,
+          fog: const AonwPlayerFogView(
+            enabled: true,
+            discoveredHexes: [AonwCoordinate(col: 0, row: 0)],
+            visibleHexes: [AonwCoordinate(col: 1, row: 0)],
+          ),
+        ),
+      ),
+      throwsFormatException,
+    );
+    expect(cache.snapshot, same(after));
   });
 
   test('rejects every conditional-field mutation on a rejected command', () {
@@ -344,137 +382,3 @@ void main() {
     expect(cache.snapshot, same(initial));
   });
 }
-
-RecipientProjectionCache _cache(AonwPlayerViewSnapshot snapshot) =>
-    RecipientProjectionCache.open(snapshot: snapshot, map: testMapScene().map);
-
-AonwPlayerViewSnapshot _snapshot({
-  int revision = 0,
-  String? rulesetHash,
-  AonwTurnMode turnMode = AonwTurnMode.sequential,
-  List<AonwPlayerParticipantView> participants = const [
-    AonwPlayerParticipantView(
-      id: 'player-1',
-      name: 'Player One',
-      colorValue: 0xff000000,
-      country: AonwPlayerCountry.poland,
-      kind: AonwPlayerKind.human,
-    ),
-  ],
-  AonwPendingActionView? pendingAction,
-  AonwCityFoundingDraft? cityFoundingDraft,
-}) => AonwPlayerViewSnapshot(
-  stamp: _stamp(
-    revision: revision,
-    stateDigest: revision == 0 ? 'b' * 64 : 'd' * 64,
-    rulesetHash: rulesetHash,
-  ),
-  turn: 1,
-  turnMode: turnMode,
-  participants: participants,
-  outcome: AonwGameOutcome(
-    condition: AonwGameOutcomeCondition.ongoing,
-    winnerPlayerId: null,
-    scoreByPlayerId: const {'player-1': 0},
-  ),
-  turnLifecycle: const AonwPlayerTurnLifecycle(
-    ownState: AonwPlayerTurnState.active,
-    ownSubmitted: false,
-    requiredSubmissionCount: 1,
-    submittedCount: 0,
-  ),
-  pendingAction: pendingAction,
-  cityFoundingDraft: cityFoundingDraft,
-  diplomacy: _diplomacy(),
-  units: [_unit()],
-  cities: const [],
-  artifacts: const [],
-  fieldImprovements: const [],
-  roads: const [],
-);
-
-AonwSessionStamp _stamp({
-  required int revision,
-  required String stateDigest,
-  String? rulesetHash,
-}) => AonwSessionStamp(
-  revision: revision,
-  stateDigest: stateDigest,
-  mapHash: 'a' * 64,
-  rulesetHash: rulesetHash ?? 'c' * 64,
-);
-
-AonwPlayerUnitView _unit({int col = 0, int row = 0}) => AonwPlayerUnitView(
-  id: 'unit-1',
-  ownerPlayerId: 'player-1',
-  kind: AonwUnitKind.commander,
-  name: 'Commander',
-  coordinate: AonwCoordinate(col: col, row: row),
-  movementUnits: 8,
-  posture: AonwUnitPosture.active,
-  workerBuildCharges: 0,
-  workerJob: null,
-  workerAssignment: null,
-);
-
-AonwPlayerDiplomacyView _diplomacy() => const AonwPlayerDiplomacyView(
-  relations: [],
-  proposals: [],
-  messages: [],
-  resourceTradeAgreements: [],
-);
-
-AonwCommandResult _command({
-  required AonwSessionStamp stamp,
-  required AonwPlayerViewPatch patch,
-  bool accepted = true,
-}) => AonwCommandResult(
-  stamp: stamp,
-  outcome: accepted
-      ? const AonwCommandAccepted()
-      : const AonwCommandRejected(AonwCommandRejectionCode.staleRevision),
-  events: const [],
-  evidence: null,
-  viewPatch: patch,
-);
-
-AonwPlayerViewPatch _patch({
-  required int fromRevision,
-  required int toRevision,
-  required int turn,
-  AonwTurnMode turnMode = AonwTurnMode.sequential,
-  AonwPlayerTurnLifecycle? turnLifecycle,
-  AonwGameOutcome? outcome,
-  AonwPlayerDiplomacyView? diplomacy,
-  AonwPendingActionView? pendingAction,
-  AonwCityFoundingDraft? cityFoundingDraft,
-  List<AonwPlayerUnitView> upsertedUnits = const [],
-  List<String> removedUnitIds = const [],
-}) => AonwPlayerViewPatch(
-  fromRevision: fromRevision,
-  toRevision: toRevision,
-  turn: turn,
-  turnMode: turnMode,
-  turnLifecycle: turnLifecycle,
-  outcome: outcome,
-  upsertedUnits: upsertedUnits,
-  removedUnitIds: removedUnitIds,
-  upsertedCities: const [],
-  removedCityIds: const [],
-  upsertedArtifacts: const [],
-  removedArtifactIds: const [],
-  upsertedFieldImprovements: const [],
-  removedFieldImprovementCoordinates: const [],
-  upsertedRoads: const [],
-  removedRoadCoordinates: const [],
-  pendingAction: pendingAction,
-  cityFoundingDraft: cityFoundingDraft,
-  diplomacy: diplomacy,
-);
-
-AonwCityFoundingDraft _draft({String founderUnitId = 'unit-1'}) =>
-    AonwCityFoundingDraft(
-      founderUnitId: founderUnitId,
-      center: const AonwCoordinate(col: 1, row: 1),
-      controlledHexes: const [AonwCoordinate(col: 1, row: 1)],
-    );

@@ -13,6 +13,7 @@ final class RecipientProjectionValidator {
       throw const FormatException('Recipient snapshot identity is invalid.');
     }
     final participantIds = _validateParticipants(snapshot.participants);
+    _validateFog(snapshot.fog);
     validateOrderedIds(snapshot.units, (unit) => unit.id, 'unit');
     validateOrderedIds(snapshot.cities, (city) => city.id, 'city');
     validateOrderedIds(
@@ -64,6 +65,21 @@ final class RecipientProjectionValidator {
       throw const FormatException('Recipient participant roster is empty.');
     }
     return ids;
+  }
+
+  void _validateFog(AonwPlayerFogView fog) {
+    validateOrderedCoordinateValues(fog.discoveredHexes, 'discovered fog');
+    validateOrderedCoordinateValues(fog.visibleHexes, 'visible fog');
+    if (!fog.enabled &&
+        (fog.discoveredHexes.isNotEmpty || fog.visibleHexes.isNotEmpty)) {
+      throw const FormatException('Disabled recipient fog is not empty.');
+    }
+    final discovered = fog.discoveredHexes.map(coordinateKey).toSet();
+    if (fog.visibleHexes.any(
+      (coordinate) => !discovered.contains(coordinateKey(coordinate)),
+    )) {
+      throw const FormatException('Visible recipient fog is not discovered.');
+    }
   }
 
   void _validateUnits(

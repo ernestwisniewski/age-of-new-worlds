@@ -1,12 +1,12 @@
 use aonw_contracts::client::{
-    ClientSessionStampDto, PlayerParticipantViewDto, PlayerViewSnapshotDto,
+    ClientSessionStampDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerViewSnapshotDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
 
 use super::{
-    artifact, city, diplomacy, encode_pending_action, encode_turn_lifecycle, field_improvement,
-    founding_draft, road, unit,
+    artifact, city, coordinate, diplomacy, encode_pending_action, encode_turn_lifecycle,
+    field_improvement, founding_draft, road, unit,
 };
 
 /// Maps a recipient-safe session identity stamp to its strict current DTO.
@@ -28,6 +28,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
         turn: value.turn(),
         turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode()),
         participants: value.participants().iter().map(participant).collect(),
+        fog: fog(value.fog()),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
@@ -43,6 +44,24 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
             .map(field_improvement)
             .collect(),
         roads: value.roads().iter().copied().map(road).collect(),
+    }
+}
+
+pub(super) fn fog(value: &aonw_projection::PlayerFogView) -> PlayerFogViewDto {
+    PlayerFogViewDto {
+        enabled: value.enabled(),
+        discovered_hexes: value
+            .discovered_hexes()
+            .iter()
+            .copied()
+            .map(coordinate)
+            .collect(),
+        visible_hexes: value
+            .visible_hexes()
+            .iter()
+            .copied()
+            .map(coordinate)
+            .collect(),
     }
 }
 

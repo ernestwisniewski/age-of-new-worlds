@@ -9,8 +9,8 @@ use aonw_contracts::client::{
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
-    PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto,
-    PlayerViewSnapshotDto, ReachableTileViewDto,
+    PlayerFogViewDto, PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerUnitViewDto,
+    PlayerViewPatchDto, PlayerViewSnapshotDto, ReachableTileViewDto,
 };
 use aonw_contracts::{
     CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto,
@@ -74,6 +74,11 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
             country: PlayerCountryDto::Poland,
             kind: PlayerKindDto::Human,
         }],
+        fog: PlayerFogViewDto {
+            enabled: true,
+            discovered_hexes: vec![coordinate(2, 4), coordinate(3, 4)],
+            visible_hexes: vec![coordinate(3, 4)],
+        },
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,
@@ -122,6 +127,11 @@ fn command_result() -> ClientCommandResultDto {
             to_revision: 8,
             turn: 7,
             turn_mode: TurnModeDto::Simultaneous,
+            fog: Some(PlayerFogViewDto {
+                enabled: true,
+                discovered_hexes: vec![coordinate(2, 4), coordinate(3, 4)],
+                visible_hexes: vec![coordinate(3, 4)],
+            }),
             turn_lifecycle: None,
             outcome: None,
             upserted_units: vec![unit()],

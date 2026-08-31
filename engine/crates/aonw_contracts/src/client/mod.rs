@@ -26,14 +26,15 @@ pub use response::{
     OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto,
     PlayerArtifactLocationViewDto, PlayerArtifactViewDto, PlayerCityViewDto,
     PlayerDiplomacyViewDto, PlayerDiplomaticMessageViewDto, PlayerDiplomaticProposalViewDto,
-    PlayerDiplomaticRelationViewDto, PlayerParticipantViewDto, PlayerResourceTradeAgreementViewDto,
-    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
-    ProductionOptionDto, ReachableTileViewDto, ResearchOptionDto, RoadViewDto,
-    ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
-    StrategicResourceAmountDto, StrategicResourceSourceDto, TechnologyAvailabilityDto,
-    TechnologyUnlockDto, UnitMovementExecutionDto, UnitProductionOptionDto,
-    WorkerAutomationActionDto, WorkerAutomationMetricsDto, WorkerAutomationOptionDto,
-    WorkerImprovementOptionDto, WorkerJobCompletionDto, WorkerJobViewDto, YieldValueDto,
+    PlayerDiplomaticRelationViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
+    PlayerResourceTradeAgreementViewDto, PlayerTurnLifecycleViewDto, PlayerUnitViewDto,
+    PlayerViewPatchDto, PlayerViewSnapshotDto, ProductionOptionDto, ReachableTileViewDto,
+    ResearchOptionDto, RoadViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
+    TechnologyAvailabilityDto, TechnologyUnlockDto, UnitMovementExecutionDto,
+    UnitProductionOptionDto, WorkerAutomationActionDto, WorkerAutomationMetricsDto,
+    WorkerAutomationOptionDto, WorkerImprovementOptionDto, WorkerJobCompletionDto,
+    WorkerJobViewDto, YieldValueDto,
 };
 
 /// The only client protocol version accepted by this build.

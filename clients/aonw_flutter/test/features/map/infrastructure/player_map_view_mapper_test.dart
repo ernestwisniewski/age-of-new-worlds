@@ -10,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
 
+part 'player_map_view_mapper_fixture.dart';
+
 void main() {
   const mapper = PlayerMapViewMapper();
 
@@ -39,6 +41,19 @@ void main() {
       MatchParticipantCountryView.poland,
     );
     expect(player.participants.last.kind, MatchParticipantKindView.ai);
+    expect(player.fog.enabled, isTrue);
+    expect(
+      player.fog.visibilityAt((col: 0, row: 0)),
+      MapFogVisibilityView.discovered,
+    );
+    expect(
+      player.fog.visibilityAt((col: 1, row: 0)),
+      MapFogVisibilityView.visible,
+    );
+    expect(
+      player.fog.visibilityAt((col: 2, row: 0)),
+      MapFogVisibilityView.hidden,
+    );
     expect(player.turnView.ownState, RecipientTurnStateView.active);
     expect(player.turnView.ownSubmitted, isFalse);
     expect(player.turnView.requiredSubmissionCount, 1);
@@ -126,6 +141,7 @@ void main() {
       turn: 0,
       turnMode: snapshot.turnMode,
       participants: snapshot.participants,
+      fog: snapshot.fog,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,
@@ -366,128 +382,3 @@ void main() {
     },
   );
 }
-
-AonwPlayerViewSnapshot _snapshot(
-  List<AonwPlayerUnitView> units, {
-  String? mapHash,
-  AonwPendingActionView? pendingAction,
-  List<AonwPlayerCityView> cities = const [],
-  List<AonwPlayerArtifactView> artifacts = const [],
-  AonwPlayerDiplomacyView? diplomacy,
-  List<AonwFieldImprovementView> fieldImprovements = const [],
-  List<AonwRoadView> roads = const [],
-}) => AonwPlayerViewSnapshot(
-  stamp: AonwSessionStamp(
-    revision: 7,
-    stateDigest: 'b' * 64,
-    mapHash: mapHash ?? 'a' * 64,
-    rulesetHash: 'c' * 64,
-  ),
-  turn: 7,
-  turnMode: AonwTurnMode.sequential,
-  participants: const [
-    AonwPlayerParticipantView(
-      id: 'player-1',
-      name: 'Player One',
-      colorValue: 0xff000000,
-      country: AonwPlayerCountry.poland,
-      kind: AonwPlayerKind.human,
-    ),
-    AonwPlayerParticipantView(
-      id: 'player-2',
-      name: 'Player Two',
-      colorValue: 0xffffffff,
-      country: AonwPlayerCountry.germany,
-      kind: AonwPlayerKind.ai,
-    ),
-  ],
-  outcome: AonwGameOutcome(
-    condition: AonwGameOutcomeCondition.ongoing,
-    winnerPlayerId: null,
-    scoreByPlayerId: const {},
-  ),
-  turnLifecycle: const AonwPlayerTurnLifecycle(
-    ownState: AonwPlayerTurnState.active,
-    ownSubmitted: false,
-    requiredSubmissionCount: 1,
-    submittedCount: 0,
-  ),
-  pendingAction: pendingAction,
-  cityFoundingDraft: null,
-  diplomacy: diplomacy ?? _diplomacy(),
-  units: units,
-  cities: cities,
-  artifacts: artifacts,
-  fieldImprovements: fieldImprovements,
-  roads: roads,
-);
-
-AonwPlayerCityView _city() => AonwPlayerCityView(
-  id: 'city-a',
-  ownerPlayerId: 'player-1',
-  name: 'Capital',
-  center: const AonwCoordinate(col: 1, row: 1),
-  visibleControlledHexes: const [AonwCoordinate(col: 1, row: 1)],
-  hitPoints: 10,
-  ownedDetails: AonwOwnedCityDetails(
-    population: 3,
-    storedFood: 2,
-    maxHexes: 6,
-    territoryRadius: 2,
-    workedHexes: const [AonwCoordinate(col: 1, row: 1)],
-    buildings: const [AonwCityBuildingType.workshop],
-    wonders: const [AonwWonderType.greatLibrary],
-    productionQueue: AonwCityProductionQueue(
-      target: AonwCityProductionTarget.fromJson(const {
-        'kind': 'unit',
-        'unitType': 'tank',
-      }),
-      investedProduction: 7,
-      resourceAllocation: const {AonwResourceType.oil: 2},
-    ),
-    productionOverflow: 3,
-    specialization: AonwCitySpecialization.industry,
-    preferredExpansionHex: const AonwCoordinate(col: 2, row: 1),
-  ),
-);
-
-AonwPlayerUnitView _unit(
-  String id, {
-  int col = 0,
-  int row = 0,
-  String ownerPlayerId = 'player-1',
-  AonwOwnedUnitDetails? ownedDetails,
-  AonwUnitKind kind = AonwUnitKind.commander,
-  String? carriedArtifactId,
-}) => AonwPlayerUnitView(
-  id: id,
-  ownerPlayerId: ownerPlayerId,
-  kind: kind,
-  name: 'Commander',
-  coordinate: AonwCoordinate(col: col, row: row),
-  movementUnits: 12,
-  posture: AonwUnitPosture.active,
-  workerBuildCharges: ownedDetails?.workerBuildCharges ?? 0,
-  workerJob: ownedDetails?.workerJob,
-  workerAssignment: ownedDetails?.workerAssignment,
-  carriedArtifactId: carriedArtifactId,
-  ownedDetails: ownedDetails,
-);
-
-AonwPlayerDiplomacyView _diplomacy([List<String> counterpartIds = const []]) =>
-    AonwPlayerDiplomacyView(
-      relations: [
-        for (final id in counterpartIds)
-          AonwPlayerDiplomaticRelationView(
-            counterpartPlayerId: id,
-            status: AonwDiplomaticRelationStatus.neutral,
-            relationScore: 0,
-            statusExpiresOnTurn: null,
-            lastChangedTurn: null,
-            lastChangeReason: null,
-          ),
-      ],
-      proposals: const [],
-      messages: const [],
-      resourceTradeAgreements: const [],
-    );

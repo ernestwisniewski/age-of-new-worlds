@@ -59,7 +59,6 @@
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
-        "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:fromWire": 65,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_projection_decoder.dart::class:ServerProjectionDecoder/method:command": 63,

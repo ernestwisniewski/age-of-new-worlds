@@ -122,12 +122,45 @@ final class AonwPlayerParticipantView {
   final AonwPlayerKind kind;
 }
 
+final class AonwPlayerFogView {
+  const AonwPlayerFogView({
+    required this.enabled,
+    required this.discoveredHexes,
+    required this.visibleHexes,
+  });
+
+  factory AonwPlayerFogView.fromJson(Object? source) {
+    final value = readObject(source, 'player fog view');
+    requireKeys(value, const {
+      'enabled',
+      'discoveredHexes',
+      'visibleHexes',
+    }, 'player fog view');
+    return AonwPlayerFogView(
+      enabled: readBool(value['enabled'], 'fog enabled state'),
+      discoveredHexes: _coordinates(
+        value['discoveredHexes'],
+        'discovered fog coordinates',
+      ),
+      visibleHexes: _coordinates(
+        value['visibleHexes'],
+        'visible fog coordinates',
+      ),
+    );
+  }
+
+  final bool enabled;
+  final List<AonwCoordinate> discoveredHexes;
+  final List<AonwCoordinate> visibleHexes;
+}
+
 final class AonwPlayerViewSnapshot {
   const AonwPlayerViewSnapshot({
     required this.stamp,
     required this.turn,
     required this.turnMode,
     required this.participants,
+    required this.fog,
     required this.outcome,
     required this.turnLifecycle,
     required this.pendingAction,
@@ -142,22 +175,7 @@ final class AonwPlayerViewSnapshot {
 
   factory AonwPlayerViewSnapshot.fromJson(Object? source) {
     final value = readObject(source, 'player snapshot');
-    requireKeys(value, const {
-      'stamp',
-      'turn',
-      'turnMode',
-      'participants',
-      'outcome',
-      'turnLifecycle',
-      'pendingAction',
-      'cityFoundingDraft',
-      'diplomacy',
-      'units',
-      'cities',
-      'artifacts',
-      'fieldImprovements',
-      'roads',
-    }, 'player snapshot');
+    _requirePlayerViewSnapshotKeys(value);
     return AonwPlayerViewSnapshot(
       stamp: AonwSessionStamp.fromJson(value['stamp']),
       turn: readUnsigned(value['turn'], 'snapshot turn'),
@@ -167,6 +185,7 @@ final class AonwPlayerViewSnapshot {
         'snapshot participants',
         AonwPlayerParticipantView.fromJson,
       ),
+      fog: AonwPlayerFogView.fromJson(value['fog']),
       outcome: AonwGameOutcome.fromJson(value['outcome']),
       turnLifecycle: AonwPlayerTurnLifecycle.fromJson(value['turnLifecycle']),
       pendingAction: value['pendingAction'] == null
@@ -204,6 +223,7 @@ final class AonwPlayerViewSnapshot {
   final int turn;
   final AonwTurnMode turnMode;
   final List<AonwPlayerParticipantView> participants;
+  final AonwPlayerFogView fog;
   final AonwGameOutcome outcome;
   final AonwPlayerTurnLifecycle turnLifecycle;
   final AonwPendingActionView? pendingAction;
@@ -216,12 +236,33 @@ final class AonwPlayerViewSnapshot {
   final List<AonwRoadView> roads;
 }
 
+void _requirePlayerViewSnapshotKeys(Map<String, Object?> value) {
+  requireKeys(value, const {
+    'stamp',
+    'turn',
+    'turnMode',
+    'participants',
+    'fog',
+    'outcome',
+    'turnLifecycle',
+    'pendingAction',
+    'cityFoundingDraft',
+    'diplomacy',
+    'units',
+    'cities',
+    'artifacts',
+    'fieldImprovements',
+    'roads',
+  }, 'player snapshot');
+}
+
 final class AonwPlayerViewPatch {
   const AonwPlayerViewPatch({
     required this.fromRevision,
     required this.toRevision,
     required this.turn,
     required this.turnMode,
+    this.fog,
     required this.turnLifecycle,
     required this.outcome,
     required this.upsertedUnits,
@@ -249,6 +290,7 @@ final class AonwPlayerViewPatch {
       toRevision: readUnsigned(value['toRevision'], 'patch target revision'),
       turn: readUnsigned(value['turn'], 'patch turn'),
       turnMode: AonwTurnMode.fromJson(value['turnMode']),
+      fog: _optional(value['fog'], AonwPlayerFogView.fromJson),
       turnLifecycle: _optional(
         value['turnLifecycle'],
         AonwPlayerTurnLifecycle.fromJson,
@@ -284,6 +326,7 @@ final class AonwPlayerViewPatch {
   final int toRevision;
   final int turn;
   final AonwTurnMode turnMode;
+  final AonwPlayerFogView? fog;
   final AonwPlayerTurnLifecycle? turnLifecycle;
   final AonwGameOutcome? outcome;
   final List<AonwPlayerUnitView> upsertedUnits;
@@ -363,6 +406,7 @@ void _requirePlayerViewPatchKeys(Map<String, Object?> value) {
     'toRevision',
     'turn',
     'turnMode',
+    'fog',
     'turnLifecycle',
     'outcome',
     'upsertedUnits',

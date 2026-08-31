@@ -1,0 +1,143 @@
+part of 'recipient_projection_cache_test.dart';
+
+RecipientProjectionCache _cache(AonwPlayerViewSnapshot snapshot) =>
+    RecipientProjectionCache.open(snapshot: snapshot, map: testMapScene().map);
+
+AonwPlayerViewSnapshot _snapshot({
+  int revision = 0,
+  String? rulesetHash,
+  AonwTurnMode turnMode = AonwTurnMode.sequential,
+  List<AonwPlayerParticipantView> participants = const [
+    AonwPlayerParticipantView(
+      id: 'player-1',
+      name: 'Player One',
+      colorValue: 0xff000000,
+      country: AonwPlayerCountry.poland,
+      kind: AonwPlayerKind.human,
+    ),
+  ],
+  AonwPlayerFogView fog = const AonwPlayerFogView(
+    enabled: false,
+    discoveredHexes: [],
+    visibleHexes: [],
+  ),
+  AonwPendingActionView? pendingAction,
+  AonwCityFoundingDraft? cityFoundingDraft,
+}) => AonwPlayerViewSnapshot(
+  stamp: _stamp(
+    revision: revision,
+    stateDigest: revision == 0 ? 'b' * 64 : 'd' * 64,
+    rulesetHash: rulesetHash,
+  ),
+  turn: 1,
+  turnMode: turnMode,
+  participants: participants,
+  fog: fog,
+  outcome: AonwGameOutcome(
+    condition: AonwGameOutcomeCondition.ongoing,
+    winnerPlayerId: null,
+    scoreByPlayerId: const {'player-1': 0},
+  ),
+  turnLifecycle: const AonwPlayerTurnLifecycle(
+    ownState: AonwPlayerTurnState.active,
+    ownSubmitted: false,
+    requiredSubmissionCount: 1,
+    submittedCount: 0,
+  ),
+  pendingAction: pendingAction,
+  cityFoundingDraft: cityFoundingDraft,
+  diplomacy: _diplomacy(),
+  units: [_unit()],
+  cities: const [],
+  artifacts: const [],
+  fieldImprovements: const [],
+  roads: const [],
+);
+
+AonwSessionStamp _stamp({
+  required int revision,
+  required String stateDigest,
+  String? rulesetHash,
+}) => AonwSessionStamp(
+  revision: revision,
+  stateDigest: stateDigest,
+  mapHash: 'a' * 64,
+  rulesetHash: rulesetHash ?? 'c' * 64,
+);
+
+AonwPlayerUnitView _unit({int col = 0, int row = 0}) => AonwPlayerUnitView(
+  id: 'unit-1',
+  ownerPlayerId: 'player-1',
+  kind: AonwUnitKind.commander,
+  name: 'Commander',
+  coordinate: AonwCoordinate(col: col, row: row),
+  movementUnits: 8,
+  posture: AonwUnitPosture.active,
+  workerBuildCharges: 0,
+  workerJob: null,
+  workerAssignment: null,
+);
+
+AonwPlayerDiplomacyView _diplomacy() => const AonwPlayerDiplomacyView(
+  relations: [],
+  proposals: [],
+  messages: [],
+  resourceTradeAgreements: [],
+);
+
+AonwCommandResult _command({
+  required AonwSessionStamp stamp,
+  required AonwPlayerViewPatch patch,
+  bool accepted = true,
+}) => AonwCommandResult(
+  stamp: stamp,
+  outcome: accepted
+      ? const AonwCommandAccepted()
+      : const AonwCommandRejected(AonwCommandRejectionCode.staleRevision),
+  events: const [],
+  evidence: null,
+  viewPatch: patch,
+);
+
+AonwPlayerViewPatch _patch({
+  required int fromRevision,
+  required int toRevision,
+  required int turn,
+  AonwTurnMode turnMode = AonwTurnMode.sequential,
+  AonwPlayerTurnLifecycle? turnLifecycle,
+  AonwGameOutcome? outcome,
+  AonwPlayerFogView? fog,
+  AonwPlayerDiplomacyView? diplomacy,
+  AonwPendingActionView? pendingAction,
+  AonwCityFoundingDraft? cityFoundingDraft,
+  List<AonwPlayerUnitView> upsertedUnits = const [],
+  List<String> removedUnitIds = const [],
+}) => AonwPlayerViewPatch(
+  fromRevision: fromRevision,
+  toRevision: toRevision,
+  turn: turn,
+  turnMode: turnMode,
+  fog: fog,
+  turnLifecycle: turnLifecycle,
+  outcome: outcome,
+  upsertedUnits: upsertedUnits,
+  removedUnitIds: removedUnitIds,
+  upsertedCities: const [],
+  removedCityIds: const [],
+  upsertedArtifacts: const [],
+  removedArtifactIds: const [],
+  upsertedFieldImprovements: const [],
+  removedFieldImprovementCoordinates: const [],
+  upsertedRoads: const [],
+  removedRoadCoordinates: const [],
+  pendingAction: pendingAction,
+  cityFoundingDraft: cityFoundingDraft,
+  diplomacy: diplomacy,
+);
+
+AonwCityFoundingDraft _draft({String founderUnitId = 'unit-1'}) =>
+    AonwCityFoundingDraft(
+      founderUnitId: founderUnitId,
+      center: const AonwCoordinate(col: 1, row: 1),
+      controlledHexes: const [AonwCoordinate(col: 1, row: 1)],
+    );

@@ -6,6 +6,7 @@ import '../../diplomacy/infrastructure/diplomacy_view_mapper.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/infrastructure/worker_view_mapper.dart';
 import '../read_model/map_view.dart';
+import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'pending_action_view_mapper.dart';
 import 'recipient_projection_validator.dart';
@@ -53,25 +54,8 @@ final class PlayerMapViewMapper {
       stamp: _mapStamp(wire.stamp),
       turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
       participants: _mapParticipants(wire.participants),
-      turnView: RecipientTurnView(
-        number: wire.turn,
-        ownState: switch (wire.turnLifecycle.ownState) {
-          AonwPlayerTurnState.active => RecipientTurnStateView.active,
-          AonwPlayerTurnState.finished => RecipientTurnStateView.finished,
-          null => null,
-        },
-        ownSubmitted: wire.turnLifecycle.ownSubmitted,
-        requiredSubmissionCount: wire.turnLifecycle.requiredSubmissionCount,
-        submittedCount: wire.turnLifecycle.submittedCount,
-        pendingAction: pendingAction,
-        outcome: GameOutcomeView(
-          condition: GameOutcomeConditionView.values.byName(
-            wire.outcome.condition.name,
-          ),
-          winnerPlayerId: wire.outcome.winnerPlayerId,
-          scoreByPlayerId: wire.outcome.scoreByPlayerId,
-        ),
-      ),
+      fog: _mapFog(wire.fog),
+      turnView: _mapTurnView(wire, pendingAction),
       diplomacy: _diplomacyMapper.fromWire(
         wire.diplomacy,
         actorPlayerId: actorPlayerId,
@@ -370,3 +354,38 @@ List<MatchParticipantView> _mapParticipants(
       kind: MatchParticipantKindView.values.byName(participant.kind.name),
     ),
 ];
+
+MapFogView _mapFog(AonwPlayerFogView fog) => MapFogView(
+  enabled: fog.enabled,
+  discoveredHexes: [
+    for (final coordinate in fog.discoveredHexes)
+      (col: coordinate.col, row: coordinate.row),
+  ],
+  visibleHexes: [
+    for (final coordinate in fog.visibleHexes)
+      (col: coordinate.col, row: coordinate.row),
+  ],
+);
+
+RecipientTurnView _mapTurnView(
+  AonwPlayerViewSnapshot wire,
+  PendingActionView? pendingAction,
+) => RecipientTurnView(
+  number: wire.turn,
+  ownState: switch (wire.turnLifecycle.ownState) {
+    AonwPlayerTurnState.active => RecipientTurnStateView.active,
+    AonwPlayerTurnState.finished => RecipientTurnStateView.finished,
+    null => null,
+  },
+  ownSubmitted: wire.turnLifecycle.ownSubmitted,
+  requiredSubmissionCount: wire.turnLifecycle.requiredSubmissionCount,
+  submittedCount: wire.turnLifecycle.submittedCount,
+  pendingAction: pendingAction,
+  outcome: GameOutcomeView(
+    condition: GameOutcomeConditionView.values.byName(
+      wire.outcome.condition.name,
+    ),
+    winnerPlayerId: wire.outcome.winnerPlayerId,
+    scoreByPlayerId: wire.outcome.scoreByPlayerId,
+  ),
+);

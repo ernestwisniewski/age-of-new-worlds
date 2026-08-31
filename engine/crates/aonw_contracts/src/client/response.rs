@@ -264,6 +264,18 @@ pub struct PlayerParticipantViewDto {
     pub kind: PlayerKindDto,
 }
 
+/// Recipient-safe fog state for map rendering.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerFogViewDto {
+    /// Whether fog rules are enabled for this match.
+    pub enabled: bool,
+    /// Coordinates ever discovered by the recipient in canonical order.
+    pub discovered_hexes: Vec<CoordinateDto>,
+    /// Coordinates currently visible to the recipient in canonical order.
+    pub visible_hexes: Vec<CoordinateDto>,
+}
+
 /// Complete recipient-safe player snapshot.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -276,6 +288,8 @@ pub struct PlayerViewSnapshotDto {
     pub turn_mode: TurnModeDto,
     /// Immutable public participant identities in canonical turn order.
     pub participants: Vec<PlayerParticipantViewDto>,
+    /// Complete recipient map visibility state.
+    pub fog: PlayerFogViewDto,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.
@@ -388,6 +402,8 @@ pub struct PlayerViewPatchDto {
     pub turn: u32,
     /// Authoritative participant turn resolution model.
     pub turn_mode: TurnModeDto,
+    /// Replacement recipient fog state when visibility changed.
+    pub fog: Option<PlayerFogViewDto>,
     /// Replacement lifecycle projection when turn/readiness changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleViewDto>,
     /// Replacement match result when it changed.

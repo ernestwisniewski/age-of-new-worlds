@@ -102,6 +102,11 @@ AonwPlayerViewSnapshot _snapshot() => AonwPlayerViewSnapshot(
       kind: AonwPlayerKind.human,
     ),
   ],
+  fog: const AonwPlayerFogView(
+    enabled: false,
+    discoveredHexes: [],
+    visibleHexes: [],
+  ),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

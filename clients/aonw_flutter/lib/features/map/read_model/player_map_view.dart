@@ -30,6 +30,40 @@ enum VisibleUnitPosture { active, fortified, autoExploring, autoWorking }
 
 enum MatchTurnModeView { sequential, simultaneous }
 
+enum MapFogVisibilityView { hidden, discovered, visible }
+
+final class MapFogView {
+  MapFogView({
+    required this.enabled,
+    required List<MapHexCoordinate> discoveredHexes,
+    required List<MapHexCoordinate> visibleHexes,
+  }) : discoveredHexes = List.unmodifiable(discoveredHexes),
+       visibleHexes = List.unmodifiable(visibleHexes),
+       _discoveredHexes = Set.unmodifiable(discoveredHexes),
+       _visibleHexes = Set.unmodifiable(visibleHexes);
+
+  factory MapFogView.disabled() => MapFogView(
+    enabled: false,
+    discoveredHexes: const [],
+    visibleHexes: const [],
+  );
+
+  final bool enabled;
+  final List<MapHexCoordinate> discoveredHexes;
+  final List<MapHexCoordinate> visibleHexes;
+  final Set<MapHexCoordinate> _discoveredHexes;
+  final Set<MapHexCoordinate> _visibleHexes;
+
+  MapFogVisibilityView visibilityAt(MapHexCoordinate coordinate) {
+    if (!enabled || _visibleHexes.contains(coordinate)) {
+      return MapFogVisibilityView.visible;
+    }
+    return _discoveredHexes.contains(coordinate)
+        ? MapFogVisibilityView.discovered
+        : MapFogVisibilityView.hidden;
+  }
+}
+
 enum MatchParticipantKindView { human, ai }
 
 enum MatchParticipantCountryView {
@@ -138,6 +172,7 @@ final class PlayerMapView {
     required this.stamp,
     required this.turnMode,
     required List<MatchParticipantView> participants,
+    required this.fog,
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
@@ -216,6 +251,7 @@ final class PlayerMapView {
         kind: MatchParticipantKindView.human,
       ),
     ],
+    fog: MapFogView.disabled(),
     turnView: RecipientTurnView(
       number: turn,
       ownState: RecipientTurnStateView.active,
@@ -244,6 +280,7 @@ final class PlayerMapView {
   final SessionStampView stamp;
   final MatchTurnModeView turnMode;
   final List<MatchParticipantView> participants;
+  final MapFogView fog;
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;

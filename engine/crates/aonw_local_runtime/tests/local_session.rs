@@ -79,6 +79,9 @@ fn local_session_supports_snapshot_queries_and_dispatch() {
     assert_eq!(snapshot.participants()[0].color_value(), 0xff_42_85_f4);
     assert_eq!(snapshot.participants()[0].country(), PlayerCountry::Poland);
     assert_eq!(snapshot.participants()[0].kind(), PlayerKind::Human);
+    assert!(!snapshot.fog().enabled());
+    assert!(snapshot.fog().discovered_hexes().is_empty());
+    assert!(snapshot.fog().visible_hexes().is_empty());
     assert_eq!(snapshot.pending_action(), None);
     assert_eq!(snapshot.units().len(), 1);
     assert_eq!(snapshot.units()[0].id().as_str(), "unit-1");
@@ -470,6 +473,6 @@ fn deterministic_replay_signature_is_stable() {
     assert!(!replay_json.contains("initialRngState"));
     assert_eq!(
         format!("{:x}", Sha256::digest(replay_json.as_bytes())),
-        "f774b704496a876ad3b01a64ac754365e62816083e9f810f4b9a7d4f4cfed584"
+        "af13174cf296da8af808b31bed3f11a507b55f216c3b0ff182f84ade35e23b7c"
     );
 }

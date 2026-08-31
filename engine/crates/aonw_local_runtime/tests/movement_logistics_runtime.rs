@@ -67,13 +67,21 @@ fn save_reopen_turn_replay_is_exact_and_foreign_snapshot_stays_fog_safe() {
     foreign_runtime
         .open_save_json(map.clone(), rules.clone(), &foreign_save)
         .expect("open foreign recipient");
+    let foreign_snapshot = foreign_runtime.snapshot().expect("foreign snapshot");
     assert!(
-        foreign_runtime
-            .snapshot()
-            .expect("foreign snapshot")
+        foreign_snapshot
             .units()
             .iter()
             .all(|unit| unit.id().as_str() != "army-1_archer_1")
+    );
+    assert!(foreign_snapshot.fog().enabled());
+    assert_eq!(
+        foreign_snapshot.fog().discovered_hexes(),
+        [HexCoord::new(5, 2)]
+    );
+    assert_eq!(
+        foreign_snapshot.fog().visible_hexes(),
+        [HexCoord::new(5, 2)]
     );
 
     let advanced = foreign_runtime

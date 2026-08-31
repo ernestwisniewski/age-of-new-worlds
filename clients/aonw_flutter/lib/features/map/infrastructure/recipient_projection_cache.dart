@@ -65,11 +65,36 @@ final class RecipientProjectionCache {
       label: 'road',
     );
 
-    final after = AonwPlayerViewSnapshot(
+    final after = _snapshotAfterPatch(
+      command: command,
+      before: before,
+      units: units,
+      cities: cities,
+      artifacts: artifacts,
+      fieldImprovements: fieldImprovements,
+      roads: roads,
+    );
+    _validator.validateSnapshot(after);
+    _snapshot = after;
+    return after;
+  }
+
+  static AonwPlayerViewSnapshot _snapshotAfterPatch({
+    required AonwCommandResult command,
+    required AonwPlayerViewSnapshot before,
+    required List<AonwPlayerUnitView> units,
+    required List<AonwPlayerCityView> cities,
+    required List<AonwPlayerArtifactView> artifacts,
+    required List<AonwFieldImprovementView> fieldImprovements,
+    required List<AonwRoadView> roads,
+  }) {
+    final patch = command.viewPatch;
+    return AonwPlayerViewSnapshot(
       stamp: command.stamp,
       turn: patch.turn,
       turnMode: patch.turnMode,
       participants: before.participants,
+      fog: patch.fog ?? before.fog,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -81,9 +106,6 @@ final class RecipientProjectionCache {
       fieldImprovements: fieldImprovements,
       roads: roads,
     );
-    _validator.validateSnapshot(after);
-    _snapshot = after;
-    return after;
   }
 
   void replaceAfterResync(AonwPlayerViewSnapshot snapshot) {
@@ -179,6 +201,7 @@ final class RecipientProjectionCache {
       patch.turn != before.turn ||
       patch.turnLifecycle != null ||
       patch.outcome != null ||
+      patch.fog != null ||
       patch.diplomacy != null ||
       !_samePendingAction(patch.pendingAction, before.pendingAction) ||
       !_sameFoundingDraft(patch.cityFoundingDraft, before.cityFoundingDraft) ||

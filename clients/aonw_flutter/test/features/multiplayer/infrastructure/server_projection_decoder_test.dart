@@ -85,6 +85,7 @@ Map<String, Object?> _outcome() => {
       'toRevision': 8,
       'turn': 1,
       'turnMode': 'simultaneous',
+      'fog': null,
       'turnLifecycle': {
         'ownState': 'active',
         'ownSubmitted': true,
@@ -131,6 +132,16 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
       'kind': 'human',
     },
   ],
+  'fog': {
+    'enabled': true,
+    'discoveredHexes': [
+      {'col': 1, 'row': 1},
+      {'col': 2, 'row': 1},
+    ],
+    'visibleHexes': [
+      {'col': 2, 'row': 1},
+    ],
+  },
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
