@@ -69,7 +69,6 @@
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyOverlayState/method:build": 61,
         "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
         "clients/aonw_flutter/lib/features/local_game/presentation/new_game_screen.dart::class:_NewGameScreenState/method:build": 75,
-        "clients/aonw_flutter/lib/features/main_menu/presentation/main_menu_screen.dart::class:_MainMenuScreenState/method:build": 87,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 72,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,

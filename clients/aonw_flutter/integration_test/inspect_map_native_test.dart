@@ -36,7 +36,7 @@ void main() {
     await tester.pumpWidget(AppComposition.production().root);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey('new-game')), findsOneWidget);
+    expect(find.byKey(const ValueKey('single-player')), findsOneWidget);
     expect(find.byKey(const ValueKey('multiplayer')), findsOneWidget);
   });
 

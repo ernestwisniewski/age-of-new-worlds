@@ -96,9 +96,9 @@ void main() {
 
     await tester.pumpWidget(AonwApp(mapController: controller));
     await tester.pumpAndSettle();
-    expect(find.text('New game'), findsOneWidget);
+    expect(find.text('Single player'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('new-game')));
+    await tester.tap(find.byKey(const ValueKey('single-player')));
     await tester.pumpAndSettle();
     expect(find.text('Create local game'), findsOneWidget);
     expect(find.text('Starter duel'), findsOneWidget);
@@ -142,6 +142,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.byKey(const ValueKey('menu-help')));
     await tester.tap(find.byKey(const ValueKey('menu-help')));
     await tester.pumpAndSettle();
     expect(find.text('Jak grać'), findsOneWidget);
@@ -191,6 +192,9 @@ void main() {
 
     await tester.pumpWidget(AonwApp(mapController: controller));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('load-game')));
+    await tester.tap(find.byKey(const ValueKey('load-game')));
+    await tester.pumpAndSettle();
     final continueButton = tester.widget<FilledButton>(
       find.byKey(const ValueKey('continue-game')),
     );
@@ -201,6 +205,57 @@ void main() {
 
     expect(persistence.openedDocuments, ['engine-save']);
     expect(find.byKey(const ValueKey('map-viewport')), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
+
+  testWidgets('opens credits and feedback through injected platform actions', (
+    tester,
+  ) async {
+    final opened = <Uri>[];
+    var exitCalls = 0;
+    final controller = MapPresentationController(
+      capabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+      ),
+    );
+    await tester.pumpWidget(
+      AonwApp(
+        mapController: controller,
+        onExit: () async => exitCalls += 1,
+        openExternalUri: (uri) async {
+          opened.add(uri);
+          return true;
+        },
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.byKey(const ValueKey('menu-credits')));
+    await tester.tap(find.byKey(const ValueKey('menu-credits')));
+    await tester.pumpAndSettle();
+    expect(find.text('Created by Ernest'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('open-devlog')));
+    await tester.pump();
+    expect(opened.single.host, 'ernest.dev');
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('menu-feedback')));
+    await tester.tap(find.byKey(const ValueKey('menu-feedback')));
+    await tester.pumpAndSettle();
+    expect(find.text('Feedback'), findsWidgets);
+    await tester.tap(find.byKey(const ValueKey('open-feedback-link')));
+    await tester.pump();
+    expect(opened.last.host, 'www.reddit.com');
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('exit-game')));
+    await tester.tap(find.byKey(const ValueKey('exit-game')));
+    await tester.pump();
+    expect(exitCalls, 1);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -225,6 +280,9 @@ void main() {
     await tester.pumpWidget(
       AonwApp(mapController: mapController, replayController: replayController),
     );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('load-game')));
+    await tester.tap(find.byKey(const ValueKey('load-game')));
     await tester.pumpAndSettle();
     final replayButton = tester.widget<OutlinedButton>(
       find.byKey(const ValueKey('open-replay')),

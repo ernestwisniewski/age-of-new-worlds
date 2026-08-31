@@ -15,6 +15,70 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get mainMenuTitle => 'Menu główne';
 
   @override
+  String get mainMenuWelcome =>
+      'Witaj w Erze Nowych Światów. Buduj miasta, prowadź dowódców, odkrywaj nowe krainy i zapisuj historię swojej cywilizacji.';
+
+  @override
+  String get singlePlayer => 'Gra jednoosobowa';
+
+  @override
+  String get singlePlayerSublabel => 'Rozgrywka przeciw komputerowi';
+
+  @override
+  String get multiplayerSublabel => 'Rozgrywka online';
+
+  @override
+  String get hotseat => 'Hotseat';
+
+  @override
+  String get hotseatSublabel => 'Gracze przy jednym urządzeniu';
+
+  @override
+  String get hotseatUnavailable =>
+      'Konfiguracja hotseat nie jest jeszcze dostępna.';
+
+  @override
+  String get loadGame => 'Wczytaj grę';
+
+  @override
+  String get loadGameSublabel => 'Zapisy i powtórki';
+
+  @override
+  String get exitGame => 'Wyjdź';
+
+  @override
+  String get instructions => 'Instrukcja';
+
+  @override
+  String get creditsTitle => 'Autorzy';
+
+  @override
+  String creditsCreatedBy(String name) {
+    return 'Autor: $name';
+  }
+
+  @override
+  String get devlogLinkLabel => 'Dziennik twórcy: ernest.dev';
+
+  @override
+  String get feedbackTitle => 'Opinie';
+
+  @override
+  String get feedbackDescription =>
+      'Podziel się pomysłami, zgłoś problem i obserwuj rozwój Age of New Worlds razem ze społecznością.';
+
+  @override
+  String get openFeedback => 'Otwórz r/aonw';
+
+  @override
+  String get externalLinkUnavailable =>
+      'Odnośniki zewnętrzne są niedostępne na tej platformie.';
+
+  @override
+  String get serverUpdateSoon =>
+      'Nowsza wersja gry jest już gotowa i pojawi się na tej platformie wkrótce. Sprawdź sklep albo launcher za chwilę.';
+
+  @override
   String get continueGame => 'Kontynuuj';
 
   @override
@@ -346,6 +410,27 @@ class AonwLocalizationsPl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get loadGameTitle => 'Wczytaj grę';
+
+  @override
+  String get loadGameEmpty => 'Nie znaleziono zapisanych gier.';
+
+  @override
+  String loadGameSingleLabel(String scenario) {
+    return 'Gra jednoosobowa · $scenario';
+  }
+
+  @override
+  String get importSave => 'Importuj zapis';
+
+  @override
+  String get exportSave => 'Eksportuj';
+
+  @override
+  String get saveTransferUnavailable =>
+      'Import i eksport zapisów są niedostępne na tej platformie.';
 
   @override
   String get replayTitle => 'Powtórka';

@@ -110,6 +110,120 @@ abstract class AonwLocalizations {
   /// **'Main menu'**
   String get mainMenuTitle;
 
+  /// No description provided for @mainMenuWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the Age of New Worlds. Build cities, lead commanders, discover new lands, and write the history of your civilization.'**
+  String get mainMenuWelcome;
+
+  /// No description provided for @singlePlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Single player'**
+  String get singlePlayer;
+
+  /// No description provided for @singlePlayerSublabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play against the computer'**
+  String get singlePlayerSublabel;
+
+  /// No description provided for @multiplayerSublabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play online'**
+  String get multiplayerSublabel;
+
+  /// No description provided for @hotseat.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotseat'**
+  String get hotseat;
+
+  /// No description provided for @hotseatSublabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Players sharing one device'**
+  String get hotseatSublabel;
+
+  /// No description provided for @hotseatUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotseat setup is not available yet.'**
+  String get hotseatUnavailable;
+
+  /// No description provided for @loadGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Load game'**
+  String get loadGame;
+
+  /// No description provided for @loadGameSublabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved games and replays'**
+  String get loadGameSublabel;
+
+  /// No description provided for @exitGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exitGame;
+
+  /// No description provided for @instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get instructions;
+
+  /// No description provided for @creditsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get creditsTitle;
+
+  /// No description provided for @creditsCreatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created by {name}'**
+  String creditsCreatedBy(String name);
+
+  /// No description provided for @devlogLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Development journal: ernest.dev'**
+  String get devlogLinkLabel;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Share ideas, report problems and follow development with the Age of New Worlds community.'**
+  String get feedbackDescription;
+
+  /// No description provided for @openFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Open r/aonw'**
+  String get openFeedback;
+
+  /// No description provided for @externalLinkUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'External links are unavailable on this platform.'**
+  String get externalLinkUnavailable;
+
+  /// No description provided for @serverUpdateSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version is ready and will appear on this platform soon. Check your store or launcher again shortly.'**
+  String get serverUpdateSoon;
+
   /// No description provided for @continueGame.
   ///
   /// In en, this message translates to:
@@ -613,6 +727,42 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{value, select, unavailable{Saved games are unavailable on this platform.} missing{No saved game was found.} unreadable{The saved game could not be read.} incompatible{The saved game is invalid or incompatible with the current game.} other{The saved game could not be resumed.}}'**
   String resumeFailure(String value);
+
+  /// No description provided for @loadGameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Load game'**
+  String get loadGameTitle;
+
+  /// No description provided for @loadGameEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved games were found.'**
+  String get loadGameEmpty;
+
+  /// No description provided for @loadGameSingleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Single player · {scenario}'**
+  String loadGameSingleLabel(String scenario);
+
+  /// No description provided for @importSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Import save'**
+  String get importSave;
+
+  /// No description provided for @exportSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportSave;
+
+  /// No description provided for @saveTransferUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Save import and export are unavailable on this platform.'**
+  String get saveTransferUnavailable;
 
   /// No description provided for @replayTitle.
   ///

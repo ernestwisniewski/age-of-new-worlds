@@ -15,6 +15,69 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get mainMenuTitle => 'Main menu';
 
   @override
+  String get mainMenuWelcome =>
+      'Welcome to the Age of New Worlds. Build cities, lead commanders, discover new lands, and write the history of your civilization.';
+
+  @override
+  String get singlePlayer => 'Single player';
+
+  @override
+  String get singlePlayerSublabel => 'Play against the computer';
+
+  @override
+  String get multiplayerSublabel => 'Play online';
+
+  @override
+  String get hotseat => 'Hotseat';
+
+  @override
+  String get hotseatSublabel => 'Players sharing one device';
+
+  @override
+  String get hotseatUnavailable => 'Hotseat setup is not available yet.';
+
+  @override
+  String get loadGame => 'Load game';
+
+  @override
+  String get loadGameSublabel => 'Saved games and replays';
+
+  @override
+  String get exitGame => 'Exit';
+
+  @override
+  String get instructions => 'Manual';
+
+  @override
+  String get creditsTitle => 'Credits';
+
+  @override
+  String creditsCreatedBy(String name) {
+    return 'Created by $name';
+  }
+
+  @override
+  String get devlogLinkLabel => 'Development journal: ernest.dev';
+
+  @override
+  String get feedbackTitle => 'Feedback';
+
+  @override
+  String get feedbackDescription =>
+      'Share ideas, report problems and follow development with the Age of New Worlds community.';
+
+  @override
+  String get openFeedback => 'Open r/aonw';
+
+  @override
+  String get externalLinkUnavailable =>
+      'External links are unavailable on this platform.';
+
+  @override
+  String get serverUpdateSoon =>
+      'A newer version is ready and will appear on this platform soon. Check your store or launcher again shortly.';
+
+  @override
   String get continueGame => 'Continue';
 
   @override
@@ -345,6 +408,27 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get loadGameTitle => 'Load game';
+
+  @override
+  String get loadGameEmpty => 'No saved games were found.';
+
+  @override
+  String loadGameSingleLabel(String scenario) {
+    return 'Single player · $scenario';
+  }
+
+  @override
+  String get importSave => 'Import save';
+
+  @override
+  String get exportSave => 'Export';
+
+  @override
+  String get saveTransferUnavailable =>
+      'Save import and export are unavailable on this platform.';
 
   @override
   String get replayTitle => 'Replay';

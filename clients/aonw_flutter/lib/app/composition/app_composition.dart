@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../features/map/application/game_session_capabilities.dart';
 import '../../features/map/infrastructure/engine_game_session_gateway.dart';
@@ -21,6 +22,7 @@ import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../game/aonw_flame_game.dart';
 import '../navigation/aonw_app.dart';
 import '../navigation/aonw_router.dart';
+import '../platform/app_platform_actions.dart';
 import '../telemetry/client_telemetry.dart';
 
 final class AppComposition {
@@ -33,6 +35,8 @@ final class AppComposition {
     AonwFlameGameFactory flameGameFactory = AonwFlameGame.new,
     ClientTelemetry telemetry = const NoOpClientTelemetry(),
     MultiplayerController? multiplayerController,
+    AppExitRequest? onExit,
+    ExternalUriOpen? openExternalUri,
     AonwRoute initialRoute = AonwRoute.menu,
   }) : root = AonwApp(
          mapController: MapPresentationController(
@@ -44,6 +48,8 @@ final class AppComposition {
          flameGameFactory: flameGameFactory,
          telemetry: telemetry,
          multiplayerController: multiplayerController,
+         onExit: onExit,
+         openExternalUri: openExternalUri,
          replayController: replayController,
          initialRoute: initialRoute,
          settingsController: settingsStore == null
@@ -75,9 +81,14 @@ final class AppComposition {
       mapInputSource: GamepadMapInputSource(),
       settingsStore: SharedPreferencesClientSettingsStore(),
       multiplayerController: multiplayerController,
+      onExit: SystemNavigator.pop,
+      openExternalUri: _openExternalUri,
       telemetry: telemetry,
     );
   }
 
   final AonwApp root;
 }
+
+Future<bool> _openExternalUri(Uri uri) =>
+    launchUrl(uri, mode: LaunchMode.externalApplication);

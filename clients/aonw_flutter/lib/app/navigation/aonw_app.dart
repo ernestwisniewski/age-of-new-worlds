@@ -11,6 +11,7 @@ import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
 import '../../game/aonw_flame_game.dart';
 import '../../l10n/l10n.dart';
+import '../platform/app_platform_actions.dart';
 import '../telemetry/client_telemetry.dart';
 import 'aonw_router.dart';
 
@@ -22,6 +23,8 @@ final class AonwApp extends StatefulWidget {
     this.settingsController,
     this.replayController,
     this.multiplayerController,
+    this.onExit,
+    this.openExternalUri,
     this.telemetry = const NoOpClientTelemetry(),
     this.locale,
     this.initialRoute = AonwRoute.menu,
@@ -34,6 +37,8 @@ final class AonwApp extends StatefulWidget {
   final ClientSettingsController? settingsController;
   final ReplayPresentationController? replayController;
   final MultiplayerController? multiplayerController;
+  final AppExitRequest? onExit;
+  final ExternalUriOpen? openExternalUri;
   final ClientTelemetry telemetry;
   final Locale? locale;
   final AonwRoute initialRoute;
@@ -118,6 +123,8 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       settingsController: _settingsController,
       replayController: widget.replayController,
       multiplayerController: widget.multiplayerController,
+      onExit: widget.onExit,
+      openExternalUri: widget.openExternalUri,
       autoLoadMap: widget.initialRoute == AonwRoute.map,
     );
     return ClientSettingsScope(

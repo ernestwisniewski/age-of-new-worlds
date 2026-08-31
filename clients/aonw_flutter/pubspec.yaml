@@ -22,6 +22,7 @@ dependencies:
   path_provider: 2.1.6
   serverpod_auth_core_client: 3.4.11
   shared_preferences: 2.5.5
+  url_launcher: 6.3.2
 
 dev_dependencies:
   analyzer: 12.1.0
@@ -42,8 +43,21 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
+    - assets/main_menu/background.jpg
+    - assets/runtime/ui/logo.webp
     - assets/maps/aonw2_starter/
     - assets/scenarios/
+  fonts:
+    - family: Cinzel
+      fonts:
+        - asset: assets/fonts/Cinzel-VariableFont_wght.ttf
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
 
 hooks:
   user_defines:
