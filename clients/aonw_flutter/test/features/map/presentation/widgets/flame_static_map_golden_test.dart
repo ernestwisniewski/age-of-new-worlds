@@ -81,6 +81,7 @@ void main() {
     );
 
     game.sceneSink.replaceScene(_gameplaySnapshot(map, reference));
+    game.sceneSink.replaceCursor((col: 1, row: 1));
     game.stepEngine(stepTime: 0);
     await tester.pump();
     await expectLater(
@@ -132,7 +133,6 @@ MapRenderSnapshot _gameplaySnapshot(
 ) => MapRenderSnapshot(
   map: map,
   interaction: MapInteractionState(
-    hovered: (col: 1, row: 1),
     selected: (col: 2, row: 1),
     selectedUnitId: 'preview-commander',
     reachable: testReachableView(

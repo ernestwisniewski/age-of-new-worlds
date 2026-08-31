@@ -75,6 +75,41 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
+    'updates the cursor without diffing or publishing the scene',
+    AonwFlameGame.new,
+    (game) async {
+      final units = [
+        for (var index = 0; index < 500; index += 1)
+          testVisibleUnit(id: 'unit-$index'),
+      ];
+      final scene = testMapScene(units: units);
+      game.replaceScene(_snapshot(scene, player: scene.player));
+      await game.ready();
+      final sceneWrites = game.world.debugSceneWriteCount;
+      final unitUpdates = game.world.unitLayer.debugUpdatedCount;
+      final selectionUpdates = game.world.selectionLayer.debugUpdateCount;
+      final cursorUpdates = game.world.selectionLayer.debugCursorUpdateCount;
+
+      game.replaceCursor((col: 1, row: 0));
+
+      expect(game.world.debugSceneWriteCount, sceneWrites);
+      expect(game.world.unitLayer.debugUpdatedCount, unitUpdates);
+      expect(game.world.selectionLayer.debugUpdateCount, selectionUpdates);
+      expect(
+        game.world.selectionLayer.debugCursorUpdateCount,
+        cursorUpdates + 1,
+      );
+      expect(game.world.selectionLayer.isVisible, isTrue);
+
+      game.replaceCursor((col: 1, row: 0));
+      expect(
+        game.world.selectionLayer.debugCursorUpdateCount,
+        cursorUpdates + 1,
+      );
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
     'animates an accepted authoritative endpoint without emitting input',
     () {
       final intents = <Object>[];

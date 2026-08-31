@@ -217,13 +217,21 @@ void main() {
       final initialTransform = flameGame.mapCamera.debugTransform;
       final staticGrid = flameGame.world.gridLayer;
       final staticGridUpdates = staticGrid.debugCacheUpdateCount;
+      final sceneWrites = flameGame.world.debugSceneWriteCount;
+      final cursorUpdates =
+          flameGame.world.selectionLayer.debugCursorUpdateCount;
 
       controller.hover((col: 2, row: 2));
       await tester.pump();
 
+      expect(flameGame.world.debugSceneWriteCount, sceneWrites);
       expect(flameGame.mapCamera.debugTransform, same(initialTransform));
       expect(flameGame.world.gridLayer, same(staticGrid));
       expect(staticGrid.debugCacheUpdateCount, staticGridUpdates);
+      expect(
+        flameGame.world.selectionLayer.debugCursorUpdateCount,
+        cursorUpdates + 1,
+      );
       expect(flameGame.world.selectionLayer.isVisible, isTrue);
     },
   );
@@ -342,10 +350,7 @@ void main() {
 
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
     await tester.pump();
-    expect((controller.state as GameSessionReady).interaction.hovered, (
-      col: 0,
-      row: 1,
-    ));
+    expect(controller.cursor.value, (col: 0, row: 1));
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
     expect((controller.state as GameSessionReady).interaction.selected, (
@@ -359,7 +364,7 @@ void main() {
     input.add(MapInputCommand.activate);
     await tester.pumpAndSettle();
     final interaction = (controller.state as GameSessionReady).interaction;
-    expect(interaction.hovered, (col: 1, row: 0));
+    expect(controller.cursor.value, (col: 1, row: 0));
     expect(interaction.selected, (col: 1, row: 0));
 
     input.add(MapInputCommand.toggleReference);

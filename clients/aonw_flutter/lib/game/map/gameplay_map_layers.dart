@@ -291,10 +291,16 @@ final class MapSelectionLayerComponent extends Component with HasVisibility {
   ui.Path? _selectionPath;
   String? _selectedUnitId;
   MapInteractionState? _interaction;
+  MapHexCoordinate? _cursor;
+  MapStaticRenderCache? _cursorCache;
   var _updateCount = 0;
+  var _cursorUpdateCount = 0;
 
   @visibleForTesting
   int get debugUpdateCount => _updateCount;
+
+  @visibleForTesting
+  int get debugCursorUpdateCount => _cursorUpdateCount;
 
   void applySelection(
     MapStaticRenderCache cache,
@@ -302,20 +308,34 @@ final class MapSelectionLayerComponent extends Component with HasVisibility {
   ) {
     if (identical(_interaction, interaction)) return;
     _interaction = interaction;
-    _hoverPath = _pathFor(cache, interaction.hovered);
     _selectionPath = _pathFor(cache, interaction.selected);
     _selectedUnitId = interaction.selectedUnitId;
     _updateCount += 1;
-    isVisible =
-        _hoverPath != null || _selectionPath != null || _selectedUnitId != null;
+    _refreshVisibility();
+  }
+
+  void applyCursor(MapStaticRenderCache cache, MapHexCoordinate? coordinate) {
+    if (_cursor == coordinate && identical(_cursorCache, cache)) return;
+    _cursor = coordinate;
+    _cursorCache = cache;
+    _hoverPath = _pathFor(cache, coordinate);
+    _cursorUpdateCount += 1;
+    _refreshVisibility();
   }
 
   void clearLayer() {
     _interaction = null;
+    _cursor = null;
+    _cursorCache = null;
     _hoverPath = null;
     _selectionPath = null;
     _selectedUnitId = null;
     isVisible = false;
+  }
+
+  void _refreshVisibility() {
+    isVisible =
+        _hoverPath != null || _selectionPath != null || _selectedUnitId != null;
   }
 
   @override

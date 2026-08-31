@@ -67,6 +67,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapEffectHostComponent effectHost;
   MapRenderSnapshot? _scene;
   MapStaticRenderCache? _staticCache;
+  MapHexCoordinate? _cursor;
   var _sceneWriteCount = 0;
 
   @visibleForTesting
@@ -111,7 +112,16 @@ final class AonwWorld extends World implements FlameSceneSink {
     artifactLayer.applyPatch(patch, cache);
     unitLayer.applyPatch(patch, cache);
     selectionLayer.applySelection(cache, snapshot.interaction);
+    selectionLayer.applyCursor(cache, _cursor);
     effectHost.applyPatch(patch, cache);
+  }
+
+  @override
+  void replaceCursor(MapHexCoordinate? coordinate) {
+    if (_cursor == coordinate) return;
+    _cursor = coordinate;
+    final cache = _staticCache;
+    if (cache != null) selectionLayer.applyCursor(cache, coordinate);
   }
 
   @override
@@ -119,6 +129,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     if (_scene == null) return;
     _scene = null;
     _staticCache = null;
+    _cursor = null;
     _sceneWriteCount += 1;
     terrainLayer.clearCache();
     referenceLayer.clearCache();
@@ -209,6 +220,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
         authoredZoom: snapshot.map.defaultZoom,
       );
     }
+    _requestInputFrame();
+  }
+
+  @override
+  void replaceCursor(MapHexCoordinate? coordinate) {
+    world.replaceCursor(coordinate);
     _requestInputFrame();
   }
 

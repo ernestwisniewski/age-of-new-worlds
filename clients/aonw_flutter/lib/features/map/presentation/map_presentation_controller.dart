@@ -41,13 +41,21 @@ final class MapPresentationController extends ChangeNotifier {
 
   MapPresentationController.fromCoordinator(this._coordinator) {
     _subscription = _coordinator.changes.listen((_) => notifyListeners());
+    _cursor = ValueNotifier<MapHexCoordinate?>(_coordinator.hovered);
+    _cursorSubscription = _coordinator.cursorChanges.listen((value) {
+      _cursor.value = value;
+    });
   }
 
   final MapCoordinator _coordinator;
   late final StreamSubscription<GameSessionState> _subscription;
+  late final ValueNotifier<MapHexCoordinate?> _cursor;
+  late final StreamSubscription<MapHexCoordinate?> _cursorSubscription;
   var _disposed = false;
 
   GameSessionState get state => _coordinator.state;
+
+  ValueListenable<MapHexCoordinate?> get cursor => _cursor;
 
   Future<void> load() => _coordinator.load();
 
@@ -121,6 +129,8 @@ final class MapPresentationController extends ChangeNotifier {
     if (_disposed) return;
     _disposed = true;
     unawaited(_subscription.cancel());
+    unawaited(_cursorSubscription.cancel());
+    _cursor.dispose();
     _coordinator.dispose();
     super.dispose();
   }

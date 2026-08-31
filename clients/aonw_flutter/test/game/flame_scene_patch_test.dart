@@ -138,32 +138,6 @@ void main() {
     expect(patch.cityUpserts, [same(added)]);
     expect(patch.removedCityIds, ['removed-city']);
   });
-
-  test('uses an O(1) cursor-only patch for hover changes', () {
-    final units = [
-      for (var index = 0; index < 500; index += 1)
-        testVisibleUnit(id: 'unit-$index'),
-    ];
-    final scene = testMapScene(units: units);
-    final before = _snapshot(
-      scene,
-      player: scene.player,
-      interaction: const MapInteractionState(hovered: (col: 0, row: 0)),
-    );
-    final after = _snapshot(
-      scene,
-      player: scene.player,
-      interaction: const MapInteractionState(hovered: (col: 1, row: 0)),
-    );
-
-    final patch = FlameScenePatch.between(before, after);
-
-    expect(patch.cursorOnly, isTrue);
-    expect(patch.unitUpserts, isEmpty);
-    expect(patch.removedUnitIds, isEmpty);
-    expect(patch.movements, isEmpty);
-    expect(patch.combats, isEmpty);
-  });
 }
 
 extension on CombatState {

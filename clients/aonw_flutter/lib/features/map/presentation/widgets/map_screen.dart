@@ -72,9 +72,11 @@ final class _MapScreenState extends State<MapScreen>
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
     widget.controller.addListener(_synchronizeFlameScene);
+    widget.controller.cursor.addListener(_synchronizeFlameCursor);
     _listenToInput(widget.inputSource);
     if (widget.autoLoad) widget.controller.load();
     _synchronizeFlameScene();
+    _synchronizeFlameCursor();
     _synchronizeFlameLifecycle();
   }
 
@@ -89,7 +91,9 @@ final class _MapScreenState extends State<MapScreen>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_synchronizeFlameScene);
+      oldWidget.controller.cursor.removeListener(_synchronizeFlameCursor);
       widget.controller.addListener(_synchronizeFlameScene);
+      widget.controller.cursor.addListener(_synchronizeFlameCursor);
     }
     if (oldWidget.inputSource != widget.inputSource) {
       _listenToInput(widget.inputSource);
@@ -107,6 +111,7 @@ final class _MapScreenState extends State<MapScreen>
       widget.controller.load();
     }
     _synchronizeFlameScene();
+    _synchronizeFlameCursor();
     _synchronizeFlameLifecycle();
   }
 
@@ -115,6 +120,7 @@ final class _MapScreenState extends State<MapScreen>
     WidgetsBinding.instance.removeObserver(this);
     widget.routeObserver?.unsubscribe(this);
     widget.controller.removeListener(_synchronizeFlameScene);
+    widget.controller.cursor.removeListener(_synchronizeFlameCursor);
     unawaited(_inputSubscription?.cancel());
     _flameGame.setHexIntentSink(null);
     _flameFocusNode.dispose();
@@ -227,16 +233,22 @@ final class _MapScreenState extends State<MapScreen>
     }
   }
 
+  void _synchronizeFlameCursor() {
+    _flameGame.sceneSink.replaceCursor(widget.controller.cursor.value);
+  }
+
   void _installFreshFlameGame() {
     _flameGame.setHexIntentSink(null);
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGeneration += 1;
+    _synchronizeFlameCursor();
   }
 
   void _retryFlame() {
     setState(_installFreshFlameGame);
     _synchronizeFlameScene();
+    _synchronizeFlameCursor();
     _synchronizeFlameLifecycle();
   }
 
@@ -251,7 +263,7 @@ final class _MapScreenState extends State<MapScreen>
     switch (command) {
       case MapInputCommand.activate:
         widget.controller.select(
-          state.interaction.hovered ??
+          widget.controller.cursor.value ??
               state.interaction.selected ??
               MapInputCursor.initial(state.scene.map),
         );
@@ -265,7 +277,7 @@ final class _MapScreenState extends State<MapScreen>
       case MapInputCommand.cursorLeft:
       case MapInputCommand.cursorRight:
         final current =
-            state.interaction.hovered ??
+            widget.controller.cursor.value ??
             state.interaction.selected ??
             MapInputCursor.initial(state.scene.map);
         widget.controller.hover(

@@ -27,7 +27,6 @@ final class MapMovementFailure {
 
 final class MapInteractionState {
   const MapInteractionState({
-    this.hovered,
     this.selected,
     this.selectedUnitId,
     this.reachable,
@@ -45,7 +44,6 @@ final class MapInteractionState {
     this.referenceVisible = true,
   });
 
-  final MapHexCoordinate? hovered;
   final MapHexCoordinate? selected;
   final String? selectedUnitId;
   final ReachableView? reachable;
@@ -63,8 +61,6 @@ final class MapInteractionState {
   final bool referenceVisible;
 
   MapInteractionState copyWith({
-    MapHexCoordinate? hovered,
-    bool clearHovered = false,
     MapHexCoordinate? selected,
     bool clearSelected = false,
     String? selectedUnitId,
@@ -93,7 +89,6 @@ final class MapInteractionState {
     bool clearArtifact = false,
     bool? referenceVisible,
   }) => MapInteractionState(
-    hovered: _replaceNullable(this.hovered, hovered, clearHovered),
     selected: _replaceNullable(this.selected, selected, clearSelected),
     selectedUnitId: _replaceNullable(
       this.selectedUnitId,

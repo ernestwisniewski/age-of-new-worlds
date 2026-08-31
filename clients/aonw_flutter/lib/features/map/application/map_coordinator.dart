@@ -133,7 +133,10 @@ final class MapCoordinator {
   final MapAssetPaths assets;
   final StreamController<GameSessionState> _changes =
       StreamController<GameSessionState>.broadcast(sync: true);
+  final StreamController<MapHexCoordinate?> _cursorChanges =
+      StreamController<MapHexCoordinate?>.broadcast(sync: true);
   GameSessionState _state = const GameSessionLoading();
+  MapHexCoordinate? _hovered;
   var _disposed = false;
   var _loadGeneration = 0;
   var _interactionGeneration = 0;
@@ -141,6 +144,10 @@ final class MapCoordinator {
   GameSessionState get state => _state;
 
   Stream<GameSessionState> get changes => _changes.stream;
+
+  MapHexCoordinate? get hovered => _hovered;
+
+  Stream<MapHexCoordinate?> get cursorChanges => _cursorChanges.stream;
 
   Future<void> load() async {
     await _openSession(() => _session.load(assets), localGameEntry: null);
@@ -174,6 +181,7 @@ final class MapCoordinator {
     final previous = _state;
     final generation = ++_loadGeneration;
     _interactionGeneration += 1;
+    _setCursor(null);
     _setState(const GameSessionLoading());
     final attempt = await _saveWorkflow.resumeLatest();
     if (!_isCurrent(generation)) {
@@ -245,6 +253,7 @@ final class MapCoordinator {
     if (_disposed) return false;
     final generation = ++_loadGeneration;
     _interactionGeneration += 1;
+    _setCursor(null);
     _setState(const GameSessionLoading());
     try {
       final scene = await open();
@@ -291,8 +300,10 @@ final class MapCoordinator {
   void hover(MapHexCoordinate? coordinate) {
     final current = _state;
     if (current is! GameSessionReady) return;
-    final updated = _hoverState(current, coordinate);
-    if (updated != null) _setState(updated);
+    final next = coordinate != null && current.scene.map.contains(coordinate)
+        ? coordinate
+        : null;
+    _setCursor(next);
   }
 
   void select(MapHexCoordinate? coordinate) {
@@ -347,6 +358,7 @@ final class MapCoordinator {
     _interactionGeneration += 1;
     unawaited(_session.close());
     unawaited(_changes.close());
+    unawaited(_cursorChanges.close());
   }
 
   bool _isCurrent(int generation) =>
@@ -455,6 +467,12 @@ final class MapCoordinator {
       });
     }
   }
+
+  void _setCursor(MapHexCoordinate? value) {
+    if (_disposed || value == _hovered) return;
+    _hovered = value;
+    _cursorChanges.add(value);
+  }
 }
 
 bool _shouldLoadResearch(GameSessionState previous, GameSessionState next) {
@@ -466,19 +484,6 @@ bool _shouldLoadResearch(GameSessionState previous, GameSessionState next) {
 }
 
 void _ignoreDiagnostic(String code, Object error, StackTrace stackTrace) {}
-
-GameSessionReady? _hoverState(
-  GameSessionReady current,
-  MapHexCoordinate? coordinate,
-) {
-  final next = coordinate != null && current.scene.map.contains(coordinate)
-      ? coordinate
-      : null;
-  if (next == current.interaction.hovered) return null;
-  return current.withInteraction(
-    current.interaction.copyWith(hovered: next, clearHovered: next == null),
-  );
-}
 
 GameSessionReady _toggleReferenceState(GameSessionReady current) =>
     current.withInteraction(
