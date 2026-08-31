@@ -4,13 +4,13 @@ import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 
 const _assetName = 'aonw_server_native_bindings.dart';
-const _rustCrateName = 'aonw_server_native';
+const _engineCrateName = 'aonw_server_native';
 
 void main(List<String> args) async {
   await build(args, (input, output) async {
     if (!input.config.buildCodeAssets) return;
     _requireNativeHostTarget(input.config.code);
-    await _buildRust(input, output);
+    await _buildEngine(input, output);
   });
 }
 
@@ -20,16 +20,16 @@ void _requireNativeHostTarget(CodeConfig code) {
     return;
   }
   throw UnsupportedError(
-    'Unsupported Serverpod Rust host target: '
+    'Unsupported Serverpod engine host target: '
     '${code.targetOS}/${code.targetArchitecture}. '
     'The server package has no stub or Dart fallback.',
   );
 }
 
-Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
+Future<void> _buildEngine(BuildInput input, BuildOutputBuilder output) async {
   final engineRoot = input.packageRoot.resolve('../../engine/');
   final code = input.config.code;
-  final target = _rustTarget(code);
+  final target = _engineTarget(code);
   final environment = Map<String, String>.of(Platform.environment);
   final cargoTarget = target.toUpperCase().replaceAll('-', '_');
   if (code.cCompiler case final compiler?) {
@@ -46,7 +46,7 @@ Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
       '--release',
       '--locked',
       '-p',
-      _rustCrateName,
+      _engineCrateName,
       '--target',
       target,
     ],
@@ -56,7 +56,7 @@ Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
   if (result.exitCode != 0) {
     throw BuildError(
       message:
-          'Rust Serverpod host build for $target failed. No fallback is '
+          'Engine Serverpod host build for $target failed. No fallback is '
           'available:\n${result.stderr}',
     );
   }
@@ -66,8 +66,8 @@ Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
     _ => DynamicLoadingBundled(),
   };
   final libraryName = switch (linkMode) {
-    StaticLinking() => code.targetOS.staticlibFileName(_rustCrateName),
-    _ => code.targetOS.dylibFileName(_rustCrateName),
+    StaticLinking() => code.targetOS.staticlibFileName(_engineCrateName),
+    _ => code.targetOS.dylibFileName(_engineCrateName),
   };
   final source = engineRoot.resolve('target/$target/release/$libraryName');
   final destination = input.outputDirectory.resolve(libraryName);
@@ -83,7 +83,7 @@ Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
   );
 }
 
-String _rustTarget(CodeConfig code) =>
+String _engineTarget(CodeConfig code) =>
     switch ((code.targetOS, code.targetArchitecture)) {
       (OS.macOS, Architecture.arm64) => 'aarch64-apple-darwin',
       (OS.macOS, Architecture.x64) => 'x86_64-apple-darwin',
@@ -92,7 +92,7 @@ String _rustTarget(CodeConfig code) =>
       (OS.windows, Architecture.arm64) => 'aarch64-pc-windows-msvc',
       (OS.windows, Architecture.x64) => 'x86_64-pc-windows-msvc',
       _ => throw UnsupportedError(
-        'Unsupported Serverpod Rust host target: '
+        'Unsupported Serverpod engine host target: '
         '${code.targetOS}/${code.targetArchitecture}.',
       ),
     };

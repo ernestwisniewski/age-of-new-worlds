@@ -1,4 +1,4 @@
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../application/local_game_session_port.dart';
 

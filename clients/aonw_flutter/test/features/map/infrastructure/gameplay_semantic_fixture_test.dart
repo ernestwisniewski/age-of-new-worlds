@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_server_client/aonw_server_client.dart' as server;
 
 import '../read_model/multiplayer_view.dart';

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/match_identity_test_fixture.dart';
 
 void main() {
   test('keeps native worker progress secrecy save and replay exact', () async {
-    final session = await createAonwRustSession();
-    if (session == null) fail('The native Rust session is unavailable.');
+    final session = await createAonwEngineSession();
+    if (session == null) fail('The native engine session is unavailable.');
     addTearDown(session.close);
     final mapDocument = File(
       '../../content/maps/aonw2_starter/map.json',
@@ -88,7 +88,7 @@ void main() {
 }
 
 Future<AonwPlayerViewSnapshot> _start(
-  AonwRustSession session,
+  AonwEngineSession session,
   String mapDocument,
 ) async {
   final opened = await session.send(
@@ -109,7 +109,7 @@ Future<AonwPlayerViewSnapshot> _start(
 }
 
 Future<AonwWorkerOptionsResult> _options(
-  AonwRustSession session,
+  AonwEngineSession session,
   int revision,
 ) async {
   final result = (await session.send(
@@ -120,7 +120,7 @@ Future<AonwWorkerOptionsResult> _options(
 }
 
 Future<AonwPlayerViewSnapshot> _completeRoad(
-  AonwRustSession session,
+  AonwEngineSession session,
   AonwPlayerViewSnapshot current,
   int totalTurns,
 ) async {
@@ -152,8 +152,8 @@ Future<void> _assertMidSave(
   String save,
   AonwPlayerViewSnapshot expected,
 ) async {
-  final reopened = await createAonwRustSession();
-  if (reopened == null) fail('A second native Rust session is unavailable.');
+  final reopened = await createAonwEngineSession();
+  if (reopened == null) fail('A second native engine session is unavailable.');
   try {
     await reopened.send(
       AonwClientRequest.openSave(mapDocument: mapDocument, saveDocument: save),
@@ -172,7 +172,7 @@ Future<void> _assertMidSave(
   }
 }
 
-Future<void> _assertForeignRecipient(AonwRustSession session) async {
+Future<void> _assertForeignRecipient(AonwEngineSession session) async {
   await session.send(AonwClientRequest.handoffActor(actorPlayerId: 'player-2'));
   final snapshot = await _snapshot(session);
   expect(snapshot.units.map((unit) => unit.id), ['observer']);
@@ -188,7 +188,7 @@ Future<void> _assertForeignRecipient(AonwRustSession session) async {
 }
 
 Future<void> _assertFinalPersistence(
-  AonwRustSession session, {
+  AonwEngineSession session, {
   required String mapDocument,
   required String save,
   required String replay,
@@ -208,7 +208,7 @@ Future<void> _assertFinalPersistence(
   expect(verification.finalStamp.stateDigest, finalStamp.stateDigest);
 }
 
-Future<AonwPlayerViewSnapshot> _snapshot(AonwRustSession session) async =>
+Future<AonwPlayerViewSnapshot> _snapshot(AonwEngineSession session) async =>
     (await session.send(
       AonwClientRequest.snapshot(),
     )).require<AonwSnapshotResponse>().snapshot;

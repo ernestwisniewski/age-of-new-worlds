@@ -148,7 +148,7 @@ void main() {
   );
 
   test(
-    'selects a unit, previews a Rust route, and confirms movement',
+    'selects a unit, previews a engine route, and confirms movement',
     () async {
       final unit = testVisibleUnit();
       final scene = testMapScene(units: [unit]);

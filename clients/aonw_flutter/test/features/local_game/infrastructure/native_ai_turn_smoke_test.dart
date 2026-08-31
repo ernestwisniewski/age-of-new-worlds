@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
-import 'package:aonw_flutter/features/map/infrastructure/rust_game_session_gateway.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +11,7 @@ void main() {
   test(
     'runs a complete strategic AI turn on the retained native isolate',
     () async {
-      final gateway = RustGameSessionGateway(assets: _FileAssetBundle());
+      final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(gateway.close);
       final scene = await gateway.startLocalMatch(_setup());
 
@@ -67,7 +67,7 @@ void main() {
   test(
     'completes a bounded multi-turn AI soak through the native client',
     () async {
-      final gateway = RustGameSessionGateway(assets: _FileAssetBundle());
+      final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(gateway.close);
       var player = (await gateway.startLocalMatch(_setup())).player;
       var completedTurns = 0;

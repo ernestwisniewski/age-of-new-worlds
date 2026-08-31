@@ -1,8 +1,8 @@
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/production/infrastructure/production_view_mapper.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';

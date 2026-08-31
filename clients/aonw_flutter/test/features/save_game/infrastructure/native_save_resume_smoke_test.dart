@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
-import 'package:aonw_flutter/features/map/infrastructure/rust_game_session_gateway.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
 import 'package:aonw_flutter/features/save_game/application/game_save_session_port.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +12,7 @@ void main() {
   test(
     'rejects invalid native saves without replacing the retained session',
     () async {
-      final gateway = RustGameSessionGateway(assets: _FileAssetBundle());
+      final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(gateway.close);
       final assets = LocalGameCatalog.entries.first.assets;
       final initial = await gateway.startLocalMatch(_setup());
@@ -52,7 +52,7 @@ void main() {
   test(
     'reopens an exact authoritative save after the native session closes',
     () async {
-      final first = RustGameSessionGateway(assets: _FileAssetBundle());
+      final first = EngineGameSessionGateway(assets: _FileAssetBundle());
       final initial = await first.startLocalMatch(_setup());
       final humanTurn = await first.endTurn(
         expectedRevision: initial.player.stamp.revision,
@@ -68,7 +68,7 @@ void main() {
       final expected = aiTurn.player.stamp;
       await first.close();
 
-      final reopened = RustGameSessionGateway(assets: _FileAssetBundle());
+      final reopened = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(reopened.close);
       final restored = await reopened.openSaveDocument(
         assets: LocalGameCatalog.entries.first.assets,

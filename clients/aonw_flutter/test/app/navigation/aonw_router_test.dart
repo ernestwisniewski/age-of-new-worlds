@@ -122,7 +122,7 @@ void main() {
     expect(saveButton.onPressed, isNotNull);
     await tester.tap(find.byKey(const ValueKey('save-game')));
     await tester.pumpAndSettle();
-    expect(saves.document, 'rust-save');
+    expect(saves.document, 'engine-save');
     expect(find.text('Game saved'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
@@ -182,7 +182,7 @@ void main() {
   ) async {
     final scene = testMapScene();
     final gameplay = FakeGameSession.success(scene);
-    final saves = _SingleSaveStore('rust-save');
+    final saves = _SingleSaveStore('engine-save');
     final persistence = _ResumeSession(scene);
     final controller = MapPresentationController(
       capabilities: testGameSessionCapabilities(gameplay, save: persistence),
@@ -199,7 +199,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('continue-game')));
     await tester.pumpAndSettle();
 
-    expect(persistence.openedDocuments, ['rust-save']);
+    expect(persistence.openedDocuments, ['engine-save']);
     expect(find.byKey(const ValueKey('map-viewport')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
@@ -215,7 +215,7 @@ void main() {
     final replaySession = _ReplaySession(scene);
     final replayController = ReplayPresentationController(
       session: replaySession,
-      store: _SingleReplayStore('rust-replay'),
+      store: _SingleReplayStore('engine-replay'),
       diagnosticReporter: (_, _, _) {},
     );
     final mapController = MapPresentationController(
@@ -270,7 +270,7 @@ final class _ResumeSession implements GameSaveSessionPort {
   final openedDocuments = <String>[];
 
   @override
-  Future<String> exportSaveDocument() async => 'rust-save';
+  Future<String> exportSaveDocument() async => 'engine-save';
 
   @override
   Future<MapScene> openSaveDocument({
@@ -309,7 +309,7 @@ final class _ReplaySession implements ReplaySessionPort {
   final MapScene scene;
 
   @override
-  Future<String> exportReplayDocument() async => 'rust-replay';
+  Future<String> exportReplayDocument() async => 'engine-replay';
 
   @override
   Future<ReplayFrameView> openReplayDocument({

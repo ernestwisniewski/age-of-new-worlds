@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 
 import '../../features/map/application/game_session_capabilities.dart';
+import '../../features/map/infrastructure/engine_game_session_gateway.dart';
 import '../../features/map/infrastructure/gamepad_map_input_source.dart';
-import '../../features/map/infrastructure/rust_game_session_gateway.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/multiplayer/application/multiplayer_coordinator.dart';
@@ -54,7 +54,7 @@ final class AppComposition {
   factory AppComposition.production({
     ClientTelemetry telemetry = const DebugClientTelemetry(),
   }) {
-    final gateway = RustGameSessionGateway(assets: rootBundle);
+    final gateway = EngineGameSessionGateway(assets: rootBundle);
     final replayController = ReplayPresentationController(
       session: gateway.replaySession,
       store: AtomicLocalReplayStore.production(),

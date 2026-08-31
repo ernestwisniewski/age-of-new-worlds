@@ -1,6 +1,6 @@
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/logistics/infrastructure/unit_logistics_view_mapper.dart';
 import 'package:aonw_flutter/features/logistics/read_model/unit_logistics_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';

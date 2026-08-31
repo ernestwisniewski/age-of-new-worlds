@@ -2,7 +2,7 @@ import 'package:aonw_server/src/game/service/game_match_service.dart';
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
-/// Authenticated endpoint for Rust-authoritative multiplayer.
+/// Authenticated endpoint for engine-authoritative multiplayer.
 final class GameEndpoint extends Endpoint {
   GameEndpoint({GameMatchService? service})
     : _service = service ?? GameMatchService();

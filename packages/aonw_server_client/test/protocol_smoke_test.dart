@@ -2,7 +2,7 @@ import 'package:aonw_server_client/aonw_server_client.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('generated client protocol round-trips Rust game requests', () {
+  test('generated client protocol round-trips engine game requests', () {
     final request = GameCreateMatchRequest(
       mapId: 'myranth',
       mapDocument: '{"schemaVersion":1}',

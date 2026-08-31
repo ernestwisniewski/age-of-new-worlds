@@ -246,7 +246,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get onboardingCommandBody =>
-      'Available destinations and actions come from the Rust engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.';
+      'Available destinations and actions come from the game engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.';
 
   @override
   String get onboardingDevelopTitle => 'Build a long-term advantage';

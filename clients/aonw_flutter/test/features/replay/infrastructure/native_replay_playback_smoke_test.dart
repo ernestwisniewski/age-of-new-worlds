@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
-import 'package:aonw_flutter/features/map/infrastructure/rust_game_session_gateway.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('native replay reaches the exact recorded final digest', () async {
-    final gateway = RustGameSessionGateway(assets: _FileAssetBundle());
+    final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
     addTearDown(gateway.close);
     final assets = LocalGameCatalog.entries.first.assets;
     final replay = gateway.replaySession;

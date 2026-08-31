@@ -589,9 +589,9 @@ void _validateCatalogSetup(
 }
 
 MapLoadFailureViewCode _loadFailureCode(String code) => switch (code) {
-  'rust_adapter_unavailable' ||
-  'rust_unavailable' => MapLoadFailureViewCode.adapterUnavailable,
-  'rust_capability_mismatch' ||
+  'engine_adapter_unavailable' ||
+  'engine_unavailable' => MapLoadFailureViewCode.adapterUnavailable,
+  'engine_capability_mismatch' ||
   'invalid_map_protocol' => MapLoadFailureViewCode.incompatibleClient,
   'map_load_superseded' => MapLoadFailureViewCode.loadSuperseded,
   _ => MapLoadFailureViewCode.mapUnavailable,

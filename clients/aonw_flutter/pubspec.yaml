@@ -1,5 +1,5 @@
 name: aonw_flutter
-description: AoNW Flutter client backed by the Rust protocol.
+description: AoNW Flutter client backed by the native engine protocol.
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -7,8 +7,8 @@ environment:
   sdk: ^3.11.4
 
 dependencies:
-  aonw_rust_client:
-    path: ../../packages/aonw_rust_client
+  aonw_engine_client:
+    path: ../../packages/aonw_engine_client
   aonw_server_client:
     path: ../../packages/aonw_server_client
   crypto: 3.0.7
@@ -46,5 +46,5 @@ flutter:
 
 hooks:
   user_defines:
-    aonw_rust_client:
-      rust_backend: true
+    aonw_engine_client:
+      engine_backend: true

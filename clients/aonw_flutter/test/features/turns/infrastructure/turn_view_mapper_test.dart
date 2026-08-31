@@ -1,7 +1,7 @@
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/turns/infrastructure/turn_view_mapper.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_activity_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';

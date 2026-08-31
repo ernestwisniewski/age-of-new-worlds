@@ -1,3 +1,4 @@
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/artifacts/read_model/artifact_view.dart';
 import 'package:aonw_flutter/features/map/infrastructure/player_map_view_mapper.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
@@ -5,7 +6,6 @@ import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/recipient_turn_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';

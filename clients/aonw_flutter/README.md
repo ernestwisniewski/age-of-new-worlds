@@ -1,9 +1,9 @@
 # AoNW Flutter Client
 
-This is the Flutter and Flame presentation client for the Rust engine. It
+This is the Flutter and Flame presentation client for the authoritative engine. It
 consumes the strict client protocol through
-`package:aonw_rust_client` and builds the native Rust backend for the host
-target.
+`package:aonw_engine_client` and builds the native engine backend for the host
+target. The current backend implementation is built with Cargo from Rust.
 
 ## Modules
 
@@ -11,7 +11,7 @@ target.
 | --- | --- |
 | `lib/app/` | Bootstrap, composition, routing, lifecycle, and process error handling. |
 | `lib/design_system/` | Shared visual tokens and accessible widgets. |
-| `lib/features/map/` | Local Rust session orchestration, interaction state, and map presentation. |
+| `lib/features/map/` | Local engine session orchestration, interaction state, and map presentation. |
 | `lib/features/multiplayer/` | Serverpod auth, lobby, recipient projections, reconnect, and resync. |
 | `lib/features/settings/` | Client-only preferences and persistence. |
 | `lib/features/turns/` | Presentation queue for authoritative turn updates. |
@@ -24,13 +24,13 @@ immutable read models rather than wire DTOs.
 
 ## Boundary
 
-- Rust owns movement, combat, economy, turns, AI, saves, and replays.
+- The authoritative engine owns movement, combat, economy, turns, AI, saves, and replays.
 - Flutter owns presentation, input, accessibility, camera, and local animation.
-- One gateway retains one Rust session for its complete local-game lifecycle.
+- One gateway retains one engine session for its complete local-game lifecycle.
 - Each multiplayer flow uses one Serverpod session and recipient-only state.
 - Accepted commands are followed by an authoritative snapshot or patch; Dart
   never reduces gameplay state locally.
-- The client depends only on its current Rust and Serverpod boundaries and has
+- The client depends only on its current engine and Serverpod boundaries and has
   no alternate game engine or per-command fallback.
 - Incompatible API versions and unknown closed-enum values fail closed.
 
@@ -63,5 +63,5 @@ Flutter visual goldens.
 Release qualification and privacy behavior are defined in
 [`docs/release.md`](docs/release.md) and [`docs/privacy.md`](docs/privacy.md).
 Client and engine ownership is defined in the
-[Rust engine guide](../../engine/README.md) and the
+[engine guide](../../engine/README.md) and the
 [multiplayer protocol](../../docs/multiplayer-protocol.md).

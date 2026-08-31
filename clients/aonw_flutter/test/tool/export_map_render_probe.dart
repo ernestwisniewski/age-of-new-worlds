@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/map/infrastructure/map_view_mapper.dart';
 import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 
 Future<void> main(List<String> arguments) async {
   if (arguments.length != 3) {
@@ -18,9 +18,9 @@ Future<void> main(List<String> arguments) async {
 
   final scenario = _readObject(File(arguments[0]));
   final repositoryRoot = _repositoryRoot();
-  final session = await createAonwRustSession();
+  final session = await createAonwEngineSession();
   if (session == null) {
-    throw StateError('The Rust map adapter is unavailable.');
+    throw StateError('The engine map adapter is unavailable.');
   }
 
   final probes = <Map<String, Object?>>[];
@@ -55,7 +55,7 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<MapView> _loadMap(
-  AonwRustSession session,
+  AonwEngineSession session,
   Directory repositoryRoot,
   Map<String, dynamic> scenario,
 ) async {

@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  test('loads Rust logistics options and correlates one command', () async {
+  test('loads engine logistics options and correlates one command', () async {
     final unit = testVisibleUnit();
     final updatedPlayer = PlayerMapView.preview(
       actorPlayerId: 'preview-player',

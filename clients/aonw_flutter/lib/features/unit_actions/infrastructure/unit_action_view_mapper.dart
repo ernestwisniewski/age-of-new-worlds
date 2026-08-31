@@ -1,4 +1,4 @@
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../../map/read_model/map_view.dart';
 import '../read_model/unit_action_view.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/match_identity_test_fixture.dart';
@@ -14,8 +14,8 @@ void main() {
 }
 
 Future<void> _runSmoke() async {
-  final session = await createAonwRustSession();
-  if (session == null) fail('The native Rust session is unavailable.');
+  final session = await createAonwEngineSession();
+  if (session == null) fail('The native engine session is unavailable.');
   addTearDown(session.close);
   final mapDocument = File(
     '../../content/maps/aonw2_starter/map.json',
@@ -39,7 +39,7 @@ Future<void> _runSmoke() async {
 }
 
 Future<AonwPlayerViewSnapshot> _start(
-  AonwRustSession session,
+  AonwEngineSession session,
   String mapDocument,
 ) async {
   final opened = await session.send(
@@ -62,7 +62,7 @@ Future<AonwPlayerViewSnapshot> _start(
 }
 
 Future<AonwCommandResult> _foundCity(
-  AonwRustSession session,
+  AonwEngineSession session,
   int revision,
 ) async {
   final options =
@@ -106,7 +106,7 @@ Future<AonwCommandResult> _foundCity(
 }
 
 Future<({String cityId, AonwSessionStamp stamp})> _completeFounding(
-  AonwRustSession session,
+  AonwEngineSession session,
   int revision,
 ) async {
   final submitted = (await session.send(
@@ -146,7 +146,7 @@ Future<({String cityId, AonwSessionStamp stamp})> _completeFounding(
 }
 
 Future<AonwSessionStamp> _inspectAndConfigure(
-  AonwRustSession session,
+  AonwEngineSession session,
   String cityId,
   int revision,
 ) async {
@@ -195,7 +195,7 @@ Future<AonwSessionStamp> _inspectAndConfigure(
 }
 
 Future<AonwSessionStamp> _configureProduction(
-  AonwRustSession session,
+  AonwEngineSession session,
   String cityId,
   int revision,
 ) async {
@@ -244,7 +244,7 @@ Future<AonwSessionStamp> _configureProduction(
 }
 
 Future<T> _query<T extends AonwQueryResult>(
-  AonwRustSession session,
+  AonwEngineSession session,
   AonwClientRequest request,
 ) async {
   final result = (await session.send(
@@ -255,7 +255,7 @@ Future<T> _query<T extends AonwQueryResult>(
 }
 
 Future<void> _assertForeignRecipient(
-  AonwRustSession session,
+  AonwEngineSession session,
   String cityId,
 ) async {
   await session.send(AonwClientRequest.handoffActor(actorPlayerId: 'player-2'));
@@ -283,7 +283,7 @@ Future<void> _assertForeignRecipient(
 }
 
 Future<void> _assertPersistence(
-  AonwRustSession session,
+  AonwEngineSession session,
   String mapDocument,
   String save,
   String replay,

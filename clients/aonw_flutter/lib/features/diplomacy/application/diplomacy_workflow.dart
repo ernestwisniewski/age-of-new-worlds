@@ -184,8 +184,8 @@ GameSessionReady _sessionFailure(
 DiplomacyFailureCode _failureCode(String code) => switch (code) {
   'invalid_session_protocol' ||
   'recipient_resynchronized' => DiplomacyFailureCode.responseIncompatible,
-  'rust_adapter_unavailable' ||
-  'rust_unavailable' ||
+  'engine_adapter_unavailable' ||
+  'engine_unavailable' ||
   'session_closed' => DiplomacyFailureCode.sessionUnavailable,
   _ => DiplomacyFailureCode.requestFailed,
 };

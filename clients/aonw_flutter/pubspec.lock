@@ -17,10 +17,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "12.1.0"
-  aonw_rust_client:
+  aonw_engine_client:
     dependency: "direct main"
     description:
-      path: "../../packages/aonw_rust_client"
+      path: "../../packages/aonw_engine_client"
       relative: true
     source: path
     version: "0.1.0"

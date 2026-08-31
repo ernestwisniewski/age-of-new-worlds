@@ -71,7 +71,7 @@
   "onboardingExploreTitle": "Read the map",
   "onboardingExploreBody": "The map shows only information visible to your player. Select hexes to inspect terrain, cities and units, then pan or zoom to plan your next action.",
   "onboardingCommandTitle": "Give precise commands",
-  "onboardingCommandBody": "Available destinations and actions come from the Rust engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.",
+  "onboardingCommandBody": "Available destinations and actions come from the game engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.",
   "onboardingDevelopTitle": "Build a long-term advantage",
   "onboardingDevelopBody": "Cities, production, research, workers, logistics, artifacts and diplomacy shape your strategy. Their panels expose only actions currently allowed by the engine.",
   "onboardingContinueTitle": "Continue with confidence",

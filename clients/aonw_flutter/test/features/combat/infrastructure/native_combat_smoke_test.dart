@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/match_identity_test_fixture.dart';
@@ -11,8 +11,8 @@ void main() {
 }
 
 Future<void> _runSmoke() async {
-  final session = await createAonwRustSession();
-  if (session == null) fail('The native Rust session is unavailable.');
+  final session = await createAonwEngineSession();
+  if (session == null) fail('The native engine session is unavailable.');
   addTearDown(session.close);
   final mapDocument = File(
     '../../content/maps/aonw2_starter/map.json',
@@ -25,7 +25,7 @@ Future<void> _runSmoke() async {
 }
 
 Future<AonwPlayerViewSnapshot> _openFixture(
-  AonwRustSession session,
+  AonwEngineSession session,
   String mapDocument,
 ) async {
   final opened = await session.send(
@@ -49,7 +49,7 @@ Future<AonwPlayerViewSnapshot> _openFixture(
 }
 
 Future<AonwCommandResult> _executeCombat(
-  AonwRustSession session,
+  AonwEngineSession session,
   int revision,
 ) async {
   final preview = await _preview(session, revision);
@@ -68,7 +68,7 @@ Future<AonwCommandResult> _executeCombat(
 }
 
 Future<AonwCombatPreview> _preview(
-  AonwRustSession session,
+  AonwEngineSession session,
   int revision,
 ) async {
   final result =
@@ -101,7 +101,7 @@ void _assertExactEvidence(
 }
 
 Future<({String save, String replay})> _exportDocuments(
-  AonwRustSession session,
+  AonwEngineSession session,
 ) async => (
   save: (await session.send(
     AonwClientRequest.exportSave(),
@@ -111,7 +111,7 @@ Future<({String save, String replay})> _exportDocuments(
   )).require<AonwReplayExportedResponse>().document,
 );
 
-Future<void> _assertForeignView(AonwRustSession session, int revision) async {
+Future<void> _assertForeignView(AonwEngineSession session, int revision) async {
   await session.send(AonwClientRequest.handoffActor(actorPlayerId: 'player-2'));
   final response = await session.send(
     AonwClientRequest.combatPreview(
@@ -129,7 +129,7 @@ Future<void> _assertForeignView(AonwRustSession session, int revision) async {
 }
 
 Future<void> _assertPersistence(
-  AonwRustSession session,
+  AonwEngineSession session,
   String mapDocument,
   ({String save, String replay}) documents,
   AonwSessionStamp stamp,

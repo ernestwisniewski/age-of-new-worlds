@@ -20,10 +20,6 @@ Rust owns all gameplay rules and authoritative state. Local clients and the
 Serverpod host consume the same current contracts through dedicated native
 boundaries.
 
-Legacy Flutter root remains a releasable compatibility track during migration and is
-explicitly not the target architecture. It is not the source of ownership for
-post-cutover client routing or new contract design.
-
 Boundaries are:
 
 ```mermaid
@@ -52,7 +48,7 @@ layers may reimplement game rules or canonical state transitions.
 | `clients/aonw_flutter/lib/` | Flutter application, infrastructure, presentation, Flame viewport, auth, and multiplayer flow. |
 | `clients/aonw_godot/game/` | Godot application, infrastructure, and presentation. |
 | `clients/aonw_godot/editor/` | Map Workbench application and editor integration. |
-| `packages/aonw_rust_client/` | Dart API for the local Rust runtime. |
+| `packages/aonw_engine_client/` | Dart API for the local Rust runtime. |
 | `packages/aonw_server_native/` | Dart API for the Serverpod Rust host boundary. |
 | `packages/aonw_server_client/` | Generated current auth and game protocol client. |
 | `server/lib/src/` | Authentication, game transactions, recipient persistence and delivery, maintenance, and observability. |

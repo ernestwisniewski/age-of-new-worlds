@@ -1,6 +1,6 @@
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/artifacts/infrastructure/artifact_view_mapper.dart';
 import 'package:aonw_flutter/features/artifacts/read_model/artifact_view.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';

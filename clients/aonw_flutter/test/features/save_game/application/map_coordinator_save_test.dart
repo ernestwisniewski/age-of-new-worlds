@@ -14,10 +14,10 @@ import '../../../support/map_test_fixture.dart';
 
 void main() {
   test(
-    'stores the authoritative Rust document and publishes success',
+    'stores the authoritative engine document and publishes success',
     () async {
       final gameplay = FakeGameSession.success(testMapScene());
-      final saveSession = _FakeSaveSession(exported: '{"rust":"save"}');
+      final saveSession = _FakeSaveSession(exported: '{"engine":"save"}');
       final store = _MemorySaveStore();
       final replay = _ReplayCapture();
       final coordinator = _coordinator(gameplay, saveSession, store, replay);
@@ -30,7 +30,7 @@ void main() {
 
       final ready = coordinator.state as GameSessionReady;
       expect(saveSession.exportCalls, 1);
-      expect(store.primary, '{"rust":"save"}');
+      expect(store.primary, '{"engine":"save"}');
       expect(replay.entries, [_entry]);
       expect(ready.localSave.phase, LocalSavePhase.saved);
     },

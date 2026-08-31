@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/artifacts/presentation/artifact_copy.dart';
 import 'package:aonw_flutter/features/artifacts/read_model/artifact_view.dart';
 import 'package:aonw_flutter/features/cities/presentation/city_copy.dart';
@@ -19,7 +20,6 @@ import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations_en.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations_pl.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

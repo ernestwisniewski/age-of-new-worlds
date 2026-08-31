@@ -78,7 +78,7 @@ make rust-persistence-check
 Build or test the native adapters with:
 
 ```sh
-make rust-flutter-test
+make engine-client-test
 make rust-godot-build
 make godot-check
 ```

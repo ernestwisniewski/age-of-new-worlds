@@ -247,7 +247,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get onboardingCommandBody =>
-      'Dostępne cele i akcje pochodzą z silnika Rust. Wybierz akcję, sprawdź podgląd i ją potwierdź; odrzucone lub nieaktualne polecenia nigdy nie zmieniają rozgrywki.';
+      'Dostępne cele i akcje pochodzą z silnika gry. Wybierz akcję, sprawdź podgląd i ją potwierdź; odrzucone lub nieaktualne polecenia nigdy nie zmieniają rozgrywki.';
 
   @override
   String get onboardingDevelopTitle => 'Buduj długoterminową przewagę';

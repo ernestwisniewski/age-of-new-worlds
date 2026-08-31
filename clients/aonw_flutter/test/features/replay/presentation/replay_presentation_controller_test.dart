@@ -23,7 +23,7 @@ void main() {
     addTearDown(controller.dispose);
 
     await controller.captureReplay(LocalGameCatalog.entries.first);
-    expect(store.document, 'rust-replay');
+    expect(store.document, 'engine-replay');
     expect(await controller.hasReplay(), isTrue);
     expect((await controller.openLatest()).started, isTrue);
     expect((controller.state as ReplayReady).frame.position, 0);
@@ -69,7 +69,7 @@ final class _ReplaySession implements ReplaySessionPort {
   final openedDocuments = <String>[];
 
   @override
-  Future<String> exportReplayDocument() async => 'rust-replay';
+  Future<String> exportReplayDocument() async => 'engine-replay';
 
   @override
   Future<ReplayFrameView> openReplayDocument({

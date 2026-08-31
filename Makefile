@@ -26,11 +26,11 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	flutter-client-check flutter-client-coverage-report \
 	flutter-client-device-test flutter-client-performance-check \
 	flutter-client-run flutter-client-release-build flutter-client-release-check \
-	rust-client-dependencies server-client-dependencies \
+	engine-client-dependencies server-client-dependencies \
 	server-native-dependencies server-dependencies \
 	rust-format-check rust-clippy rust-test rust-test-release rust-doc \
 	rust-release-compile-smoke rust-check rust-engine-check \
-	rust-engine-quality-check rust-flutter-test godot-check \
+	rust-engine-quality-check engine-client-test godot-check \
 	server-client-analyze server-client-test server-native-analyze \
 	server-native-test server-analyze server-test server-integration-test \
 	dart-format-check format-check analyze check ci release-check \
@@ -66,13 +66,13 @@ toolchain-check:
 bootstrap: toolchain-check dependencies serverpod-cli-ensure
 	@cd $(RUST_WORKSPACE) && $(CARGO) fetch --locked
 
-dependencies: flutter-client-dependencies rust-client-dependencies server-client-dependencies server-native-dependencies server-dependencies
+dependencies: flutter-client-dependencies engine-client-dependencies server-client-dependencies server-native-dependencies server-dependencies
 
 flutter-client-dependencies:
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) pub get --enforce-lockfile
 
-rust-client-dependencies:
-	@cd packages/aonw_rust_client && $(DART) pub get --enforce-lockfile
+engine-client-dependencies:
+	@cd packages/aonw_engine_client && $(DART) pub get --enforce-lockfile
 
 server-client-dependencies:
 	@cd packages/aonw_server_client && $(DART) pub get --enforce-lockfile
@@ -138,10 +138,10 @@ rust-check: rust-format-check rust-clippy rust-test rust-doc rust-release-compil
 
 rust-engine-check: rust-check
 
-rust-engine-quality-check: rust-engine-check rust-flutter-test
+rust-engine-quality-check: rust-engine-check engine-client-test
 
-rust-flutter-test: rust-client-dependencies flutter-client-dependencies
-	@cd packages/aonw_rust_client && $(DART) test
+engine-client-test: engine-client-dependencies flutter-client-dependencies
+	@cd packages/aonw_engine_client && $(DART) test
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/features/map/infrastructure/native_large_map_smoke_test.dart
 
 godot-check:

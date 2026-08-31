@@ -96,7 +96,7 @@ final class _CriticalE2e {
         created.mapId == mapId &&
             created.revision >= 0 &&
             created.eventOffset == 0,
-        'Rust match creation must return the current content identity at offset 0.',
+        'Engine match creation must return the current content identity at offset 0.',
       );
 
       final ownerInitial = await _request(
@@ -138,7 +138,7 @@ final class _CriticalE2e {
             duplicate.initialEventOffset == accepted.initialEventOffset &&
             duplicate.finalEventOffset == accepted.finalEventOffset &&
             duplicate.outcomeJson == accepted.outcomeJson,
-        'A retried clientCommandId must reuse one persisted Rust outcome.',
+        'A retried clientCommandId must reuse one persisted engine outcome.',
       );
       final ownerRevision = _expectRecipientOutcome(
         accepted.outcomeJson,

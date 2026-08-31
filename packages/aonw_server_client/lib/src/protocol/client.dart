@@ -300,7 +300,7 @@ class EndpointSteamAuth extends _i1.EndpointRef {
       );
 }
 
-/// Authenticated endpoint for Rust-authoritative multiplayer.
+/// Authenticated endpoint for engine-authoritative multiplayer.
 /// {@category Endpoint}
 class EndpointGame extends _i1.EndpointRef {
   EndpointGame(_i1.EndpointCaller caller) : super(caller);

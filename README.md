@@ -29,7 +29,7 @@ same Rust rules and recipient projections used by local sessions.
 | `engine/` | Deterministic Rust engine, contracts, runtimes, projections, native adapters, and map tooling. |
 | `clients/aonw_flutter/` | Flutter and Flame client for local and online play. |
 | `clients/aonw_godot/` | Godot presentation client and Terrain3D map workbench. |
-| `packages/aonw_rust_client/` | Dart binding to the Rust local runtime. |
+| `packages/aonw_engine_client/` | Dart binding to the Rust local runtime. |
 | `packages/aonw_server_native/` | Native Rust boundary used by the Serverpod host. |
 | `packages/aonw_server_client/` | Generated Serverpod auth and game client. |
 | `server/` | Serverpod authentication, game transactions, recipient delivery, persistence, and public status. |

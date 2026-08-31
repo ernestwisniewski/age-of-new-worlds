@@ -193,13 +193,13 @@ _NativeResponseHandle _invoke(
   try {
     final handle = operation(input, bytes.length);
     if (handle == ffi.nullptr) {
-      throw StateError('Rust server host returned no response handle.');
+      throw StateError('Engine server host returned no response handle.');
     }
     try {
       final length = bindings.aonwServerNativeResponseLen(handle);
       final data = bindings.aonwServerNativeResponseData(handle);
       if (length != 0 && data == ffi.nullptr) {
-        throw StateError('Rust server host returned invalid response bytes.');
+        throw StateError('Engine server host returned invalid response bytes.');
       }
       final json = utf8.decode(data.asTypedList(length));
       final decoded = jsonDecode(json);

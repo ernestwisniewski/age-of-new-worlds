@@ -1,4 +1,4 @@
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 AonwMatchIdentity testMatchIdentity({
   int playerCount = 2,

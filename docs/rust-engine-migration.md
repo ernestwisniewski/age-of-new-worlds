@@ -122,7 +122,7 @@ Required checks:
 
 ```sh
 make rust-check
-make rust-flutter-test
+make engine-client-test
 make godot-check
 ```
 

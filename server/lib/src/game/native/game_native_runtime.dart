@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:aonw_server_native/aonw_server_native.dart';
 
-/// Process-local owner of the verified stateless Rust server host.
+/// Process-local owner of the verified stateless engine server host.
 ///
 /// Only immutable prepared content is cached. Canonical match state always
 /// crosses the native boundary from the transaction that locked its row.

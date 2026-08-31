@@ -62,7 +62,7 @@
   "onboardingExploreTitle": "Czytaj mapę",
   "onboardingExploreBody": "Mapa pokazuje tylko informacje widoczne dla twojego gracza. Wybieraj heksy, aby sprawdzać teren, miasta i jednostki, a potem przesuwaj lub przybliżaj widok, planując kolejną akcję.",
   "onboardingCommandTitle": "Wydawaj precyzyjne polecenia",
-  "onboardingCommandBody": "Dostępne cele i akcje pochodzą z silnika Rust. Wybierz akcję, sprawdź podgląd i ją potwierdź; odrzucone lub nieaktualne polecenia nigdy nie zmieniają rozgrywki.",
+  "onboardingCommandBody": "Dostępne cele i akcje pochodzą z silnika gry. Wybierz akcję, sprawdź podgląd i ją potwierdź; odrzucone lub nieaktualne polecenia nigdy nie zmieniają rozgrywki.",
   "onboardingDevelopTitle": "Buduj długoterminową przewagę",
   "onboardingDevelopBody": "Miasta, produkcja, badania, robotnicy, logistyka, artefakty i dyplomacja kształtują strategię. Ich panele pokazują wyłącznie akcje aktualnie dozwolone przez silnik.",
   "onboardingContinueTitle": "Wracaj do gry bez obaw",

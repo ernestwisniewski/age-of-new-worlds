@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/match_identity_test_fixture.dart';
@@ -10,8 +10,8 @@ void main() {
   test(
     'keeps native logistics recipient-safe across save and replay',
     () async {
-      final session = await createAonwRustSession();
-      if (session == null) fail('The native Rust session is unavailable.');
+      final session = await createAonwEngineSession();
+      if (session == null) fail('The native engine session is unavailable.');
       addTearDown(session.close);
       final mapDocument = File(
         '../../content/maps/aonw2_starter/map.json',

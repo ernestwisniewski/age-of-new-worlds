@@ -8,7 +8,7 @@ gameplay rules, authoritative state transitions, saves, and replays in Rust.
 
 | Client | Purpose |
 | --- | --- |
-| [`aonw_flutter/`](aonw_flutter/) | Flutter and Flame desktop/mobile client backed by `package:aonw_rust_client`. |
+| [`aonw_flutter/`](aonw_flutter/) | Flutter and Flame desktop/mobile client backed by `package:aonw_engine_client`. |
 | [`aonw_godot/`](aonw_godot/) | Godot 4.7 desktop client and Terrain3D map workbench backed by the Rust GDExtension. |
 
 ## Contract

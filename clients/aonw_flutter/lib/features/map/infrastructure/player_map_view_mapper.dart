@@ -1,4 +1,4 @@
-import 'package:aonw_rust_client/aonw_rust_client.dart';
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../../artifacts/read_model/artifact_view.dart';
 import '../../cities/read_model/city_view.dart';

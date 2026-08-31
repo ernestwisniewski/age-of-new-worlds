@@ -76,7 +76,7 @@ void main() {
     expect(dispatches, 0);
   });
 
-  testWidgets('renders only Rust-provided logistics options at large text', (
+  testWidgets('renders only engine-provided logistics options at large text', (
     tester,
   ) async {
     UnitLogisticsActionView? dispatched;

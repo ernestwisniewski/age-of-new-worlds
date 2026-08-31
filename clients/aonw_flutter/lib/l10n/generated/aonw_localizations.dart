@@ -467,7 +467,7 @@ abstract class AonwLocalizations {
   /// No description provided for @onboardingCommandBody.
   ///
   /// In en, this message translates to:
-  /// **'Available destinations and actions come from the Rust engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.'**
+  /// **'Available destinations and actions come from the game engine. Choose one, review the preview and confirm; rejected or stale commands never change the match.'**
   String get onboardingCommandBody;
 
   /// No description provided for @onboardingDevelopTitle.

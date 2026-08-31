@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'runs the packaged multiplayer journey through Serverpod and Rust',
+    'runs the packaged multiplayer journey through Serverpod and engine',
     () async {
       const host = String.fromEnvironment('AONW_MULTIPLAYER_TEST_HOST');
       expect(host, isNotEmpty, reason: 'Pass AONW_MULTIPLAYER_TEST_HOST.');

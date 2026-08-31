@@ -14,7 +14,7 @@ const _maximumIdentifierLength = 128;
 const _maximumContentDocumentBytes = 16 * 1024 * 1024;
 const _maximumIdentityDocumentBytes = 2 * 1024 * 1024;
 
-/// Transactional application service for Rust-authoritative matches.
+/// Transactional application service for engine-authoritative matches.
 final class GameMatchService {
   GameMatchService({GameNativeRuntime? nativeRuntime})
     : _native = nativeRuntime ?? aonwGameNativeRuntime;

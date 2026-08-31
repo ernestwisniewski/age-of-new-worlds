@@ -276,7 +276,7 @@ void main() {
 
   testWidgets('shows typed failure and retry action', (tester) async {
     final session = FakeGameSession.failure(
-      const MapLoadException(code: 'rust_unavailable', message: 'No Rust'),
+      const MapLoadException(code: 'engine_unavailable', message: 'No engine'),
     );
     final controller = MapPresentationController(
       capabilities: testGameSessionCapabilities(session),
@@ -293,7 +293,7 @@ void main() {
       find.text('The native game adapter is unavailable on this platform.'),
       findsOneWidget,
     );
-    expect(find.text('rust_unavailable'), findsNothing);
+    expect(find.text('engine_unavailable'), findsNothing);
     expect(find.text('Retry'), findsOneWidget);
   });
 

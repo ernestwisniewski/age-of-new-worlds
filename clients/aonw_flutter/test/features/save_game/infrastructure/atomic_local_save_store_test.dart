@@ -19,7 +19,7 @@ void main() {
   });
 
   test(
-    'installs raw Rust documents atomically and retains one backup',
+    'installs raw engine documents atomically and retains one backup',
     () async {
       const first = '{"state":"first"}';
       const second = '{"state":"second"}';

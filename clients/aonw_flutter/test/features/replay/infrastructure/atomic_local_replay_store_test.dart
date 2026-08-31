@@ -18,7 +18,7 @@ void main() {
     if (await root.exists()) await root.delete(recursive: true);
   });
 
-  test('stores raw Rust replay and retains one current backup', () async {
+  test('stores raw engine replay and retains one current backup', () async {
     const first = '{"segments":["first"]}';
     const second = '{"segments":["second"]}';
 

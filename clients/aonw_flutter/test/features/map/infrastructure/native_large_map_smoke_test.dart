@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/application/movement_session_port.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
 import 'package:aonw_flutter/features/map/infrastructure/map_view_mapper.dart';
-import 'package:aonw_flutter/features/map/infrastructure/rust_game_session_gateway.dart';
 import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
@@ -15,7 +17,6 @@ import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_activity_view.dart';
 import 'package:aonw_flutter/features/unit_actions/read_model/unit_action_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
-import 'package:aonw_rust_client/aonw_rust_client.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,14 +47,14 @@ void main() {
 
   test('runs the recipient-safe starter movement session', () async {
     var backendCreations = 0;
-    late _TrackingRustSession backend;
-    final gateway = RustGameSessionGateway(
+    late _TrackingEngineSession backend;
+    final gateway = EngineGameSessionGateway(
       assets: _FileAssetBundle(),
       sessionFactory: () async {
         backendCreations += 1;
-        final native = await createAonwRustSession();
+        final native = await createAonwEngineSession();
         if (native == null) return null;
-        backend = _TrackingRustSession(native);
+        backend = _TrackingEngineSession(native);
         return backend;
       },
     );
@@ -156,13 +157,13 @@ void main() {
   });
 
   test('executes the current unit action family through one session', () async {
-    late _TrackingRustSession backend;
-    final gateway = RustGameSessionGateway(
+    late _TrackingEngineSession backend;
+    final gateway = EngineGameSessionGateway(
       assets: _FileAssetBundle(),
       sessionFactory: () async {
-        final native = await createAonwRustSession();
+        final native = await createAonwEngineSession();
         if (native == null) return null;
-        backend = _TrackingRustSession(native);
+        backend = _TrackingEngineSession(native);
         return backend;
       },
     );
@@ -212,41 +213,95 @@ void main() {
     expect(backend.closeCalls, 1);
   });
 
-  test('advances multiple complete local turns through Rust patches', () async {
-    late _TrackingRustSession backend;
-    final gateway = RustGameSessionGateway(
+  test('invalidates an in-flight request before closing its session', () async {
+    late _TrackingEngineSession backend;
+    final gateway = EngineGameSessionGateway(
       assets: _FileAssetBundle(),
       sessionFactory: () async {
-        final native = await createAonwRustSession();
+        final native = await createAonwEngineSession();
         if (native == null) return null;
-        backend = _TrackingRustSession(native);
+        backend = _TrackingEngineSession(native);
         return backend;
       },
     );
     addTearDown(gateway.close);
 
-    var player = (await gateway.load(MapAssetPaths.starter)).player;
-    final identities = <TurnActivityIdentityView>{};
-    for (var step = 0; step < 3; step++) {
-      final result = await gateway.endTurn(
-        expectedRevision: player.stamp.revision,
-      );
-      expect(result.accepted, isTrue);
-      expect(result.evidence, isNotNull);
-      expect(result.activities, isNotEmpty);
-      expect(
-        result.activities.every((item) => identities.add(item.identity)),
-        isTrue,
-      );
-      player = result.player!;
-      expect(player.stamp.revision, step + 1);
-      expect(player.turn, step + 2);
-    }
-    expect(identities, isNotEmpty);
-    expect(backend.maximumInFlightRequests, 1);
+    final scene = await gateway.load(MapAssetPaths.starter);
+    backend.blockNextDispatch();
+    final movement = gateway.moveUnit(
+      expectedRevision: scene.player.stamp.revision,
+      unitId: 'preview-commander',
+      target: (col: 2, row: 2),
+    );
+    await backend.blockedDispatch;
+
+    final closing = gateway.close();
+    backend.releaseBlockedDispatch();
+
+    await expectLater(
+      movement,
+      throwsA(
+        isA<MovementSessionException>().having(
+          (error) => error.code,
+          'code',
+          'session_superseded',
+        ),
+      ),
+    );
+    await closing;
+    await expectLater(
+      gateway.reachable(expectedRevision: 1, unitId: 'preview-commander'),
+      throwsA(
+        isA<MovementSessionException>().having(
+          (error) => error.code,
+          'code',
+          'session_not_open',
+        ),
+      ),
+    );
+    expect(backend.closeCalls, 1);
   });
 
-  testWidgets('renders the Rust-backed 40 by 30 Dravonia map', (tester) async {
+  test(
+    'advances multiple complete local turns through engine patches',
+    () async {
+      late _TrackingEngineSession backend;
+      final gateway = EngineGameSessionGateway(
+        assets: _FileAssetBundle(),
+        sessionFactory: () async {
+          final native = await createAonwEngineSession();
+          if (native == null) return null;
+          backend = _TrackingEngineSession(native);
+          return backend;
+        },
+      );
+      addTearDown(gateway.close);
+
+      var player = (await gateway.load(MapAssetPaths.starter)).player;
+      final identities = <TurnActivityIdentityView>{};
+      for (var step = 0; step < 3; step++) {
+        final result = await gateway.endTurn(
+          expectedRevision: player.stamp.revision,
+        );
+        expect(result.accepted, isTrue);
+        expect(result.evidence, isNotNull);
+        expect(result.activities, isNotEmpty);
+        expect(
+          result.activities.every((item) => identities.add(item.identity)),
+          isTrue,
+        );
+        player = result.player!;
+        expect(player.stamp.revision, step + 1);
+        expect(player.turn, step + 2);
+      }
+      expect(identities, isNotEmpty);
+      expect(backend.maximumInFlightRequests, 1);
+    },
+  );
+
+  testWidgets('renders the engine-backed 40 by 30 Dravonia map', (
+    tester,
+  ) async {
     final loadedMap = await tester.runAsync(_loadDravonia);
     expect(loadedMap, isNotNull);
     final map = loadedMap!;
@@ -308,7 +363,7 @@ Future<MapView?> _loadDravonia() async {
 }
 
 Future<MapView?> _loadMap(String path) async {
-  final session = await createAonwRustSession();
+  final session = await createAonwEngineSession();
   if (session == null) return null;
   try {
     final document = File(path).readAsStringSync();
@@ -344,15 +399,26 @@ final class _FileAssetBundle extends CachingAssetBundle {
   }
 }
 
-final class _TrackingRustSession implements AonwRustSession {
-  _TrackingRustSession(this._delegate);
+final class _TrackingEngineSession implements AonwEngineSession {
+  _TrackingEngineSession(this._delegate);
 
-  final AonwRustSession _delegate;
+  final AonwEngineSession _delegate;
   final requestTypes = <String>[];
   var closeCalls = 0;
   var _inFlightRequests = 0;
   var maximumInFlightRequests = 0;
   var corruptNextAcceptedPatch = false;
+  Completer<void>? _blockedDispatch;
+  Completer<void>? _releaseDispatch;
+
+  Future<void> get blockedDispatch => _blockedDispatch!.future;
+
+  void blockNextDispatch() {
+    _blockedDispatch = Completer<void>();
+    _releaseDispatch = Completer<void>();
+  }
+
+  void releaseBlockedDispatch() => _releaseDispatch!.complete();
 
   @override
   Future<String> requestJson(String request) async {
@@ -365,6 +431,13 @@ final class _TrackingRustSession implements AonwRustSession {
     }
     try {
       final response = await _delegate.requestJson(request);
+      final ready = _blockedDispatch;
+      if (body['type'] == 'dispatch' && ready != null) {
+        ready.complete();
+        await _releaseDispatch!.future;
+        _blockedDispatch = null;
+        _releaseDispatch = null;
+      }
       if (!corruptNextAcceptedPatch || body['type'] != 'dispatch') {
         return response;
       }
