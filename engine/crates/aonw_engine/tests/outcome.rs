@@ -20,6 +20,8 @@ use aonw_engine::{calculate_empire_scores, resolve_game_outcome};
 
 #[path = "outcome/terminal_conditions.rs"]
 mod terminal_conditions;
+#[path = "outcome/victory_progress.rs"]
+mod victory_progress;
 
 #[test]
 fn empire_score_uses_every_weight_and_owned_reference() {

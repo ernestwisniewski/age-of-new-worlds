@@ -82,7 +82,11 @@ pub use movement::{
     UnitLogisticsOptionsQuery, UnitMovedEvent, UnitMovementExecution, maximum_movement_units,
     terrain_entry_cost,
 };
-pub use outcome::{OutcomeResolutionError, calculate_empire_scores, resolve_game_outcome};
+pub use outcome::{
+    CulturalVictoryProgress, DominationVictoryProgress, MapObjectiveProgress,
+    OutcomeResolutionError, VictoryProgress, calculate_empire_scores, calculate_victory_progress,
+    resolve_game_outcome,
+};
 pub use production::{
     CitySpecializationOption, ProductionError, ProductionOption, ProductionOptions,
     ProductionOptionsQuery, RushProductionCommand, SetCitySpecializationCommand,

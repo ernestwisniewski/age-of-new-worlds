@@ -1,4 +1,5 @@
 mod scoring;
+mod victory_progress;
 
 use std::collections::BTreeMap;
 
@@ -11,6 +12,10 @@ use aonw_domain::{
 use crate::{MovementCost, terrain_entry_cost};
 
 pub use scoring::calculate_empire_scores;
+pub use victory_progress::{
+    CulturalVictoryProgress, DominationVictoryProgress, MapObjectiveProgress, VictoryProgress,
+    calculate_victory_progress,
+};
 
 /// Deterministic outcome-resolution failure caused by invalid content or overflow.
 #[derive(Clone, Debug, Eq, PartialEq)]

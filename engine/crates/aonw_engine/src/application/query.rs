@@ -90,6 +90,8 @@ pub enum CanonicalQueryError {
     Production(crate::ProductionError),
     /// Research query was rejected or found corrupt state/content.
     Research(crate::ResearchError),
+    /// Victory and score projection found corrupt state/content.
+    Outcome(crate::OutcomeResolutionError),
 }
 
 impl CanonicalQueryError {
@@ -101,6 +103,7 @@ impl CanonicalQueryError {
             Self::Economy(error) => error.code(),
             Self::Production(error) => error.code(),
             Self::Research(error) => error.code(),
+            Self::Outcome(_) => "outcome_projection_invalid",
             Self::City(rejection) | Self::Combat(rejection) | Self::Worker(rejection) => {
                 rejection.as_str()
             }
@@ -117,6 +120,7 @@ impl core::fmt::Display for CanonicalQueryError {
             Self::Economy(source) => source.fmt(formatter),
             Self::Production(source) => source.fmt(formatter),
             Self::Research(source) => source.fmt(formatter),
+            Self::Outcome(source) => source.fmt(formatter),
             Self::City(source) | Self::Combat(source) | Self::Worker(source) => {
                 source.fmt(formatter)
             }
