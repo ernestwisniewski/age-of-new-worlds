@@ -28,6 +28,53 @@ enum VisibleUnitKind {
 
 enum VisibleUnitPosture { active, fortified, autoExploring, autoWorking }
 
+enum MatchTurnModeView { sequential, simultaneous }
+
+enum MatchParticipantKindView { human, ai }
+
+enum MatchParticipantCountryView {
+  poland,
+  ukraine,
+  germany,
+  france,
+  unitedKingdom,
+  italy,
+  spain,
+  netherlands,
+  sweden,
+  russia,
+  unitedStates,
+  canada,
+  china,
+  korea,
+  japan,
+  portugal,
+  india,
+  brazil,
+  indonesia,
+  mexico,
+  turkey,
+  saudiArabia,
+  egypt,
+  greece,
+}
+
+final class MatchParticipantView {
+  const MatchParticipantView({
+    required this.id,
+    required this.name,
+    required this.colorValue,
+    required this.country,
+    required this.kind,
+  });
+
+  final String id;
+  final String name;
+  final int colorValue;
+  final MatchParticipantCountryView country;
+  final MatchParticipantKindView kind;
+}
+
 final class SessionStampView {
   const SessionStampView({
     required this.revision,
@@ -89,6 +136,8 @@ final class PlayerMapView {
   PlayerMapView({
     required this.actorPlayerId,
     required this.stamp,
+    required this.turnMode,
+    required List<MatchParticipantView> participants,
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
@@ -97,7 +146,8 @@ final class PlayerMapView {
     List<FieldImprovementView> fieldImprovements = const [],
     List<RoadView> roads = const [],
     this.cityFoundingDraft,
-  }) : units = List.unmodifiable(units),
+  }) : participants = List.unmodifiable(participants),
+       units = List.unmodifiable(units),
        cities = List.unmodifiable(cities),
        artifacts = List.unmodifiable(artifacts),
        fieldImprovements = List.unmodifiable(fieldImprovements),
@@ -126,23 +176,11 @@ final class PlayerMapView {
     _artifactsById = Map.unmodifiable({
       for (final artifact in artifacts) artifact.id: artifact,
     });
-    final artifactsByCoordinate = <MapHexCoordinate, List<WorldArtifactView>>{};
-    for (final artifact in artifacts) {
-      final coordinate = switch (artifact.location) {
-        MapArtifactLocationView(:final coordinate) => coordinate,
-        ExcavationArtifactLocationView(:final coordinate) => coordinate,
-        CarriedArtifactLocationView(:final unitId) =>
-          unitsById[unitId]?.coordinate,
-        StoredArtifactLocationView(:final cityId) => citiesById[cityId]?.center,
-      };
-      if (coordinate != null) {
-        (artifactsByCoordinate[coordinate] ??= []).add(artifact);
-      }
-    }
-    _artifactsByCoordinate = Map.unmodifiable({
-      for (final entry in artifactsByCoordinate.entries)
-        entry.key: List<WorldArtifactView>.unmodifiable(entry.value),
-    });
+    _artifactsByCoordinate = _indexArtifactsByCoordinate(
+      artifacts,
+      unitsById,
+      citiesById,
+    );
     _fieldImprovementsByCoordinate = Map.unmodifiable({
       for (final improvement in fieldImprovements)
         improvement.coordinate: improvement,
@@ -168,6 +206,16 @@ final class PlayerMapView {
   }) => PlayerMapView(
     actorPlayerId: actorPlayerId,
     stamp: stamp,
+    turnMode: MatchTurnModeView.sequential,
+    participants: [
+      MatchParticipantView(
+        id: actorPlayerId,
+        name: actorPlayerId,
+        colorValue: 0xff000000,
+        country: MatchParticipantCountryView.poland,
+        kind: MatchParticipantKindView.human,
+      ),
+    ],
     turnView: RecipientTurnView(
       number: turn,
       ownState: RecipientTurnStateView.active,
@@ -194,6 +242,8 @@ final class PlayerMapView {
 
   final String actorPlayerId;
   final SessionStampView stamp;
+  final MatchTurnModeView turnMode;
+  final List<MatchParticipantView> participants;
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;
@@ -253,4 +303,28 @@ final class PlayerMapView {
 
   RoadView? roadAt(MapHexCoordinate coordinate) =>
       _roadsByCoordinate[coordinate];
+}
+
+Map<MapHexCoordinate, List<WorldArtifactView>> _indexArtifactsByCoordinate(
+  List<WorldArtifactView> artifacts,
+  Map<String, VisibleUnitView> unitsById,
+  Map<String, CityView> citiesById,
+) {
+  final byCoordinate = <MapHexCoordinate, List<WorldArtifactView>>{};
+  for (final artifact in artifacts) {
+    final coordinate = switch (artifact.location) {
+      MapArtifactLocationView(:final coordinate) => coordinate,
+      ExcavationArtifactLocationView(:final coordinate) => coordinate,
+      CarriedArtifactLocationView(:final unitId) =>
+        unitsById[unitId]?.coordinate,
+      StoredArtifactLocationView(:final cityId) => citiesById[cityId]?.center,
+    };
+    if (coordinate != null) {
+      (byCoordinate[coordinate] ??= []).add(artifact);
+    }
+  }
+  return Map.unmodifiable({
+    for (final entry in byCoordinate.entries)
+      entry.key: List<WorldArtifactView>.unmodifiable(entry.value),
+  });
 }

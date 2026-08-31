@@ -29,10 +29,8 @@ final class PlayerMapViewMapper {
     required MapView map,
     required String actorPlayerId,
   }) {
-    if (actorPlayerId.isEmpty) {
-      throw const FormatException('Session actor player id is empty.');
-    }
     RecipientProjectionValidator(map).validateSnapshot(wire);
+    _validateActor(wire.participants, actorPlayerId);
     final units = _mapUnits(wire.units, map);
     final cities = [for (final city in wire.cities) _mapCity(city)];
     final artifacts = [
@@ -53,6 +51,8 @@ final class PlayerMapViewMapper {
     return PlayerMapView(
       actorPlayerId: actorPlayerId,
       stamp: _mapStamp(wire.stamp),
+      turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
+      participants: _mapParticipants(wire.participants),
       turnView: RecipientTurnView(
         number: wire.turn,
         ownState: switch (wire.turnLifecycle.ownState) {
@@ -343,3 +343,30 @@ final class PlayerMapViewMapper {
   static VisibleUnitPosture _posture(AonwUnitPosture value) =>
       VisibleUnitPosture.values.byName(value.name);
 }
+
+void _validateActor(
+  List<AonwPlayerParticipantView> participants,
+  String actorPlayerId,
+) {
+  if (actorPlayerId.isEmpty) {
+    throw const FormatException('Session actor player id is empty.');
+  }
+  if (!participants.any((participant) => participant.id == actorPlayerId)) {
+    throw const FormatException('Session actor is not a match participant.');
+  }
+}
+
+List<MatchParticipantView> _mapParticipants(
+  List<AonwPlayerParticipantView> participants,
+) => [
+  for (final participant in participants)
+    MatchParticipantView(
+      id: participant.id,
+      name: participant.name,
+      colorValue: participant.colorValue,
+      country: MatchParticipantCountryView.values.byName(
+        participant.country.name,
+      ),
+      kind: MatchParticipantKindView.values.byName(participant.kind.name),
+    ),
+];

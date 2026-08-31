@@ -12,6 +12,7 @@ final class RecipientProjectionValidator {
     if (snapshot.stamp.mapHash != map.contentHash || snapshot.turn < 1) {
       throw const FormatException('Recipient snapshot identity is invalid.');
     }
+    final participantIds = _validateParticipants(snapshot.participants);
     validateOrderedIds(snapshot.units, (unit) => unit.id, 'unit');
     validateOrderedIds(snapshot.cities, (city) => city.id, 'city');
     validateOrderedIds(
@@ -29,18 +30,8 @@ final class RecipientProjectionValidator {
       (road) => road.coordinate,
       'road',
     );
-    for (final unit in snapshot.units) {
-      requireCoordinate(unit.coordinate, 'unit');
-      final assignment = unit.workerAssignment;
-      if (assignment != null) {
-        requireCoordinate(assignment, 'worker assignment');
-      }
-      final job = unit.workerJob;
-      if (job != null) requireCoordinate(job.target, 'worker job');
-    }
-    for (final city in snapshot.cities) {
-      _validateCity(city);
-    }
+    _validateUnits(snapshot.units, participantIds);
+    _validateCities(snapshot.cities, participantIds);
     for (final artifact in snapshot.artifacts) {
       _validateArtifact(artifact);
     }
@@ -56,6 +47,53 @@ final class RecipientProjectionValidator {
       );
     }
     _validatePendingAction(snapshot.pendingAction);
+  }
+
+  Set<String> _validateParticipants(
+    List<AonwPlayerParticipantView> participants,
+  ) {
+    final ids = <String>{};
+    for (final participant in participants) {
+      if (participant.id.isEmpty ||
+          participant.name.isEmpty ||
+          !ids.add(participant.id)) {
+        throw const FormatException('Recipient participant roster is invalid.');
+      }
+    }
+    if (ids.isEmpty) {
+      throw const FormatException('Recipient participant roster is empty.');
+    }
+    return ids;
+  }
+
+  void _validateUnits(
+    List<AonwPlayerUnitView> units,
+    Set<String> participantIds,
+  ) {
+    for (final unit in units) {
+      if (!participantIds.contains(unit.ownerPlayerId)) {
+        throw const FormatException('Recipient unit owner is unknown.');
+      }
+      requireCoordinate(unit.coordinate, 'unit');
+      final assignment = unit.workerAssignment;
+      if (assignment != null) {
+        requireCoordinate(assignment, 'worker assignment');
+      }
+      final job = unit.workerJob;
+      if (job != null) requireCoordinate(job.target, 'worker job');
+    }
+  }
+
+  void _validateCities(
+    List<AonwPlayerCityView> cities,
+    Set<String> participantIds,
+  ) {
+    for (final city in cities) {
+      if (!participantIds.contains(city.ownerPlayerId)) {
+        throw const FormatException('Recipient city owner is unknown.');
+      }
+      _validateCity(city);
+    }
   }
 
   void validateStamp(AonwSessionStamp stamp) {

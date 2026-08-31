@@ -43,6 +43,15 @@ void main() {
         'stamp': _stamp,
         'turn': 7,
         'turnMode': 'sequential',
+        'participants': [
+          {
+            'id': 'player-1',
+            'name': 'Player One',
+            'colorValue': 0xff000000,
+            'country': 'poland',
+            'kind': 'human',
+          },
+        ],
         'turnLifecycle': {
           'ownState': 'active',
           'ownSubmitted': false,
@@ -179,6 +188,29 @@ void main() {
     expect(response.participants[1].name, 'Grace');
     expect(response.participants[1].kind, AonwPlayerKind.human);
     expect(response.participants[2].kind, AonwPlayerKind.ai);
+  });
+
+  test('recipient snapshot exposes only the public participant roster', () {
+    final snapshot = AonwPlayerViewSnapshot.fromJson(_snapshot);
+    final participant = snapshot.participants.single;
+
+    expect(participant.id, 'player-1');
+    expect(participant.name, 'Player One');
+    expect(participant.colorValue, 0xff000000);
+    expect(participant.country, AonwPlayerCountry.poland);
+    expect(participant.kind, AonwPlayerKind.human);
+
+    final leakedParticipant = <String, Object?>{
+      ...(_snapshot['participants']! as List).single as Map<String, Object?>,
+      'ai': const {'difficulty': 'hard'},
+    };
+    expect(
+      () => AonwPlayerViewSnapshot.fromJson({
+        ..._snapshot,
+        'participants': [leakedParticipant],
+      }),
+      throwsFormatException,
+    );
   });
 
   test('typed parser covers both movement query results', () {
@@ -352,6 +384,15 @@ const _snapshot = {
   'stamp': _stamp,
   'turn': 1,
   'turnMode': 'sequential',
+  'participants': [
+    {
+      'id': 'player-1',
+      'name': 'Player One',
+      'colorValue': 0xff000000,
+      'country': 'poland',
+      'kind': 'human',
+    },
+  ],
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,

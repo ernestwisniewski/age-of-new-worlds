@@ -69,6 +69,7 @@ final class RecipientProjectionCache {
       stamp: command.stamp,
       turn: patch.turn,
       turnMode: patch.turnMode,
+      participants: before.participants,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -95,6 +96,11 @@ final class RecipientProjectionCache {
     if (snapshot.turnMode != _snapshot.turnMode) {
       throw const FormatException(
         'Recipient resync changed the immutable turn mode.',
+      );
+    }
+    if (!_sameParticipants(snapshot.participants, _snapshot.participants)) {
+      throw const FormatException(
+        'Recipient resync changed the immutable participant roster.',
       );
     }
     if (snapshot.stamp.revision < _snapshot.stamp.revision) {
@@ -190,6 +196,25 @@ final class RecipientProjectionCache {
     patch.upsertedRoads.isNotEmpty,
     patch.removedRoadCoordinates.isNotEmpty,
   ].contains(true);
+}
+
+bool _sameParticipants(
+  List<AonwPlayerParticipantView> left,
+  List<AonwPlayerParticipantView> right,
+) {
+  if (left.length != right.length) return false;
+  for (var index = 0; index < left.length; index++) {
+    final value = left[index];
+    final other = right[index];
+    if (value.id != other.id ||
+        value.name != other.name ||
+        value.colorValue != other.colorValue ||
+        value.country != other.country ||
+        value.kind != other.kind) {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool _samePendingAction(

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    ArmyTroopDto, CoordinateDto, GameOutcomeDto, MerchantTradeRouteDto, PlayerKindDto,
-    PlayerTurnStateDto, QueuedMovePathDto, TurnModeDto, UnitKindDto, UnitPostureDto,
+    ArmyTroopDto, CoordinateDto, GameOutcomeDto, MerchantTradeRouteDto, PlayerCountryDto,
+    PlayerKindDto, PlayerTurnStateDto, QueuedMovePathDto, TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
 use super::MapViewDto;
@@ -248,6 +248,22 @@ pub struct ClientSessionStampDto {
     pub ruleset_hash: String,
 }
 
+/// Public immutable participant identity available to every match recipient.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerParticipantViewDto {
+    /// Stable participant identifier.
+    pub id: String,
+    /// Persisted display name.
+    pub name: String,
+    /// Persisted ARGB display color.
+    pub color_value: u32,
+    /// Persisted country identity.
+    pub country: PlayerCountryDto,
+    /// Human or engine-controlled participant kind.
+    pub kind: PlayerKindDto,
+}
+
 /// Complete recipient-safe player snapshot.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -258,6 +274,8 @@ pub struct PlayerViewSnapshotDto {
     pub turn: u32,
     /// Authoritative participant turn resolution model.
     pub turn_mode: TurnModeDto,
+    /// Immutable public participant identities in canonical turn order.
+    pub participants: Vec<PlayerParticipantViewDto>,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.

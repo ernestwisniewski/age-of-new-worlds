@@ -9,12 +9,12 @@ use aonw_contracts::client::{
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
-    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
-    ReachableTileViewDto,
+    PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto,
+    PlayerViewSnapshotDto, ReachableTileViewDto,
 };
 use aonw_contracts::{
-    CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto, PlayerKindDto,
-    PlayerTurnStateDto, TurnModeDto, UnitKindDto, UnitPostureDto,
+    CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto,
+    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
 #[path = "client_contract/artifact.rs"]
@@ -67,6 +67,13 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
         stamp: stamp(),
         turn: 7,
         turn_mode: TurnModeDto::Simultaneous,
+        participants: vec![PlayerParticipantViewDto {
+            id: "player-1".to_owned(),
+            name: "Player One".to_owned(),
+            color_value: 0xff00_0000,
+            country: PlayerCountryDto::Poland,
+            kind: PlayerKindDto::Human,
+        }],
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,

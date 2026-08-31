@@ -93,6 +93,15 @@ AonwPlayerViewSnapshot _snapshot() => AonwPlayerViewSnapshot(
   ),
   turn: 1,
   turnMode: AonwTurnMode.sequential,
+  participants: const [
+    AonwPlayerParticipantView(
+      id: 'player-1',
+      name: 'Player One',
+      colorValue: 0xff000000,
+      country: AonwPlayerCountry.poland,
+      kind: AonwPlayerKind.human,
+    ),
+  ],
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

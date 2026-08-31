@@ -3,8 +3,8 @@
 #![forbid(unsafe_code)]
 
 use aonw_domain::{
-    CityId, FieldImprovementKind, GameState, HexCoord, PendingInteraction, PlayerId,
-    PlayerTurnState, TurnMode, UnitId,
+    CityId, FieldImprovementKind, GameState, HexCoord, Participant, PendingInteraction,
+    PlayerCountry, PlayerId, PlayerKind, PlayerTurnState, TurnMode, UnitId,
 };
 use std::sync::Arc;
 
@@ -82,6 +82,54 @@ pub enum PendingActionView {
     },
 }
 
+/// Public immutable participant identity available to every match recipient.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PlayerParticipantView {
+    id: PlayerId,
+    name: Box<str>,
+    color_value: u32,
+    country: PlayerCountry,
+    kind: PlayerKind,
+}
+
+impl PlayerParticipantView {
+    fn from_participant(value: &Participant) -> Self {
+        Self {
+            id: value.id().clone(),
+            name: value.name().into(),
+            color_value: value.color_value(),
+            country: value.country(),
+            kind: value.kind(),
+        }
+    }
+
+    /// Returns the stable participant identifier.
+    #[must_use]
+    pub const fn id(&self) -> &PlayerId {
+        &self.id
+    }
+    /// Returns the persisted participant display name.
+    #[must_use]
+    pub const fn name(&self) -> &str {
+        &self.name
+    }
+    /// Returns the persisted participant ARGB color.
+    #[must_use]
+    pub const fn color_value(&self) -> u32 {
+        self.color_value
+    }
+    /// Returns the participant country identity.
+    #[must_use]
+    pub const fn country(&self) -> PlayerCountry {
+        self.country
+    }
+    /// Returns whether the participant is human- or engine-controlled.
+    #[must_use]
+    pub const fn kind(&self) -> PlayerKind {
+        self.kind
+    }
+}
+
 /// Complete recipient-safe presentation snapshot.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PlayerViewSnapshot {
@@ -89,6 +137,7 @@ pub struct PlayerViewSnapshot {
     stamp: SessionStamp,
     turn: u32,
     turn_mode: TurnMode,
+    participants: Arc<[PlayerParticipantView]>,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -108,6 +157,7 @@ impl PlayerViewSnapshot {
         stamp: SessionStamp,
         turn: u32,
         turn_mode: TurnMode,
+        participants: Arc<[PlayerParticipantView]>,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -124,6 +174,7 @@ impl PlayerViewSnapshot {
             stamp,
             turn,
             turn_mode,
+            participants,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -157,6 +208,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub const fn turn_mode(&self) -> TurnMode {
         self.turn_mode
+    }
+    /// Returns immutable participant identities in canonical turn order.
+    #[must_use]
+    pub fn participants(&self) -> &[PlayerParticipantView] {
+        &self.participants
     }
     /// Returns the persisted authoritative match result.
     #[must_use]

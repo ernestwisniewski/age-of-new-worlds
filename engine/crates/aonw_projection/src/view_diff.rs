@@ -7,9 +7,10 @@ use aonw_domain::{
 
 use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
-    PlayerDiplomacyView, PlayerFieldImprovementView, PlayerRoadView, PlayerTurnLifecycleView,
-    PlayerUnitView, PlayerViewSnapshot, SessionStamp, city_founding_draft, diplomacy_view,
-    pending_action, visible_artifacts, visible_cities, visible_infrastructure, visible_units,
+    PlayerDiplomacyView, PlayerFieldImprovementView, PlayerParticipantView, PlayerRoadView,
+    PlayerTurnLifecycleView, PlayerUnitView, PlayerViewSnapshot, SessionStamp, city_founding_draft,
+    diplomacy_view, pending_action, visible_artifacts, visible_cities, visible_infrastructure,
+    visible_units,
 };
 
 /// Recipient-safe view delta produced by one dispatch.
@@ -61,6 +62,7 @@ pub struct ProjectedView {
     recipient_player_id: Arc<PlayerId>,
     turn_number: u32,
     turn_mode: TurnMode,
+    participants: Arc<[PlayerParticipantView]>,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -89,6 +91,7 @@ impl ProjectedView {
             recipient_player_id: Arc::new(PlayerId::new("test-player").expect("player id")),
             turn_number: 0,
             turn_mode: TurnMode::Sequential,
+            participants: Arc::new([]),
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -120,10 +123,19 @@ impl ProjectedView {
         let artifacts = visible_artifacts(state, recipient).into();
         let pending_action = pending_action(state, recipient).map(Arc::new);
         let city_founding_draft = city_founding_draft(state, recipient).map(Arc::new);
+        let participants = state
+            .match_lifecycle()
+            .identity()
+            .participants()
+            .iter()
+            .map(PlayerParticipantView::from_participant)
+            .collect::<Vec<_>>()
+            .into();
         Self {
             recipient_player_id: actor,
             turn_number: state.turn(),
             turn_mode: state.match_lifecycle().identity().turn_mode(),
+            participants,
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -145,6 +157,7 @@ impl ProjectedView {
             stamp,
             self.turn_number,
             self.turn_mode,
+            self.participants.clone(),
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),

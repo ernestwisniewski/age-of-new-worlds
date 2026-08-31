@@ -6,7 +6,9 @@ use aonw_content::{
 };
 use aonw_contract_mapping::decode_game_state;
 use aonw_contracts::{ReplayLogDto, SaveGameDto};
-use aonw_domain::{HexCoord, PlayerId, StateRevision, TurnMode, UnitId, UnitKind};
+use aonw_domain::{
+    HexCoord, PlayerCountry, PlayerId, PlayerKind, StateRevision, TurnMode, UnitId, UnitKind,
+};
 use aonw_local_runtime::{
     LocalRuntime, MoveUnitRequest, OpenSession, OpenSessionError, PendingActionView,
     PersistenceError, ReachableRequest, ReplayVerification, RoutePlanRequest, RuntimeError,
@@ -71,6 +73,12 @@ fn local_session_supports_snapshot_queries_and_dispatch() {
     let snapshot = runtime.snapshot().expect("snapshot");
     assert_eq!(snapshot.turn(), 1);
     assert_eq!(snapshot.turn_mode(), TurnMode::Sequential);
+    assert_eq!(snapshot.participants().len(), 1);
+    assert_eq!(snapshot.participants()[0].id().as_str(), "player-1");
+    assert_eq!(snapshot.participants()[0].name(), "player-1");
+    assert_eq!(snapshot.participants()[0].color_value(), 0xff_42_85_f4);
+    assert_eq!(snapshot.participants()[0].country(), PlayerCountry::Poland);
+    assert_eq!(snapshot.participants()[0].kind(), PlayerKind::Human);
     assert_eq!(snapshot.pending_action(), None);
     assert_eq!(snapshot.units().len(), 1);
     assert_eq!(snapshot.units()[0].id().as_str(), "unit-1");

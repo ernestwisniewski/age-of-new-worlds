@@ -299,6 +299,50 @@ void main() {
     );
     expect(cache.snapshot, same(initial));
   });
+
+  test('rejects invalid or changing participant rosters', () {
+    expect(
+      () => _cache(_snapshot(participants: const [])),
+      throwsFormatException,
+    );
+    expect(
+      () => _cache(
+        _snapshot(
+          participants: const [
+            AonwPlayerParticipantView(
+              id: 'player-2',
+              name: 'Player Two',
+              colorValue: 0xff000000,
+              country: AonwPlayerCountry.germany,
+              kind: AonwPlayerKind.human,
+            ),
+          ],
+        ),
+      ),
+      throwsFormatException,
+    );
+
+    final initial = _snapshot();
+    final cache = _cache(initial);
+    expect(
+      () => cache.replaceAfterResync(
+        _snapshot(
+          revision: 1,
+          participants: const [
+            AonwPlayerParticipantView(
+              id: 'player-1',
+              name: 'Renamed Player',
+              colorValue: 0xff000000,
+              country: AonwPlayerCountry.poland,
+              kind: AonwPlayerKind.human,
+            ),
+          ],
+        ),
+      ),
+      throwsFormatException,
+    );
+    expect(cache.snapshot, same(initial));
+  });
 }
 
 RecipientProjectionCache _cache(AonwPlayerViewSnapshot snapshot) =>
@@ -308,6 +352,15 @@ AonwPlayerViewSnapshot _snapshot({
   int revision = 0,
   String? rulesetHash,
   AonwTurnMode turnMode = AonwTurnMode.sequential,
+  List<AonwPlayerParticipantView> participants = const [
+    AonwPlayerParticipantView(
+      id: 'player-1',
+      name: 'Player One',
+      colorValue: 0xff000000,
+      country: AonwPlayerCountry.poland,
+      kind: AonwPlayerKind.human,
+    ),
+  ],
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
 }) => AonwPlayerViewSnapshot(
@@ -318,6 +371,7 @@ AonwPlayerViewSnapshot _snapshot({
   ),
   turn: 1,
   turnMode: turnMode,
+  participants: participants,
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

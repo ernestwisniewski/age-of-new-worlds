@@ -15,7 +15,18 @@ enum AonwTurnMode {
   }
 }
 
-enum AonwPlayerKind { human, ai }
+enum AonwPlayerKind {
+  human,
+  ai;
+
+  factory AonwPlayerKind.fromJson(Object? source) {
+    final name = readString(source, 'player kind');
+    return values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => throw FormatException('Unknown AoNW player kind $name.'),
+    );
+  }
+}
 
 enum AonwPlayerCountry {
   poland,
@@ -41,7 +52,15 @@ enum AonwPlayerCountry {
   turkey,
   saudiArabia,
   egypt,
-  greece,
+  greece;
+
+  factory AonwPlayerCountry.fromJson(Object? source) {
+    final name = readString(source, 'player country');
+    return values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => throw FormatException('Unknown AoNW player country $name.'),
+    );
+  }
 }
 
 enum AonwAiStrategyId { random, basic, scripted, utility, mcts }

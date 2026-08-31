@@ -81,11 +81,53 @@ final class AonwPlayerUnitView {
   final AonwOwnedUnitDetails? ownedDetails;
 }
 
+final class AonwPlayerParticipantView {
+  const AonwPlayerParticipantView({
+    required this.id,
+    required this.name,
+    required this.colorValue,
+    required this.country,
+    required this.kind,
+  });
+
+  factory AonwPlayerParticipantView.fromJson(Object? source) {
+    final value = readObject(source, 'player participant view');
+    requireKeys(value, const {
+      'id',
+      'name',
+      'colorValue',
+      'country',
+      'kind',
+    }, 'player participant view');
+    final colorValue = readUnsigned(
+      value['colorValue'],
+      'participant color value',
+    );
+    if (colorValue > 0xffffffff) {
+      throw const FormatException('Invalid AoNW participant color value.');
+    }
+    return AonwPlayerParticipantView(
+      id: readString(value['id'], 'participant id'),
+      name: readString(value['name'], 'participant name'),
+      colorValue: colorValue,
+      country: AonwPlayerCountry.fromJson(value['country']),
+      kind: AonwPlayerKind.fromJson(value['kind']),
+    );
+  }
+
+  final String id;
+  final String name;
+  final int colorValue;
+  final AonwPlayerCountry country;
+  final AonwPlayerKind kind;
+}
+
 final class AonwPlayerViewSnapshot {
   const AonwPlayerViewSnapshot({
     required this.stamp,
     required this.turn,
     required this.turnMode,
+    required this.participants,
     required this.outcome,
     required this.turnLifecycle,
     required this.pendingAction,
@@ -104,6 +146,7 @@ final class AonwPlayerViewSnapshot {
       'stamp',
       'turn',
       'turnMode',
+      'participants',
       'outcome',
       'turnLifecycle',
       'pendingAction',
@@ -119,6 +162,11 @@ final class AonwPlayerViewSnapshot {
       stamp: AonwSessionStamp.fromJson(value['stamp']),
       turn: readUnsigned(value['turn'], 'snapshot turn'),
       turnMode: AonwTurnMode.fromJson(value['turnMode']),
+      participants: _views(
+        value['participants'],
+        'snapshot participants',
+        AonwPlayerParticipantView.fromJson,
+      ),
       outcome: AonwGameOutcome.fromJson(value['outcome']),
       turnLifecycle: AonwPlayerTurnLifecycle.fromJson(value['turnLifecycle']),
       pendingAction: value['pendingAction'] == null
@@ -155,6 +203,7 @@ final class AonwPlayerViewSnapshot {
   final AonwSessionStamp stamp;
   final int turn;
   final AonwTurnMode turnMode;
+  final List<AonwPlayerParticipantView> participants;
   final AonwGameOutcome outcome;
   final AonwPlayerTurnLifecycle turnLifecycle;
   final AonwPendingActionView? pendingAction;

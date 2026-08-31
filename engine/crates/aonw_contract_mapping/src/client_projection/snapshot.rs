@@ -1,4 +1,6 @@
-use aonw_contracts::client::{ClientSessionStampDto, PlayerViewSnapshotDto};
+use aonw_contracts::client::{
+    ClientSessionStampDto, PlayerParticipantViewDto, PlayerViewSnapshotDto,
+};
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
 
@@ -25,6 +27,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
         stamp: encode_client_stamp(*value.stamp()),
         turn: value.turn(),
         turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode()),
+        participants: value.participants().iter().map(participant).collect(),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
@@ -40,5 +43,15 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
             .map(field_improvement)
             .collect(),
         roads: value.roads().iter().copied().map(road).collect(),
+    }
+}
+
+fn participant(value: &aonw_projection::PlayerParticipantView) -> PlayerParticipantViewDto {
+    PlayerParticipantViewDto {
+        id: value.id().as_str().to_owned(),
+        name: value.name().to_owned(),
+        color_value: value.color_value(),
+        country: crate::game_state_mapping::encode_country(value.country()),
+        kind: crate::game_state_mapping::encode_player_kind(value.kind()),
     }
 }

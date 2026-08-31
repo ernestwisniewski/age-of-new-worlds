@@ -26,7 +26,7 @@ pub use response::{
     OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto,
     PlayerArtifactLocationViewDto, PlayerArtifactViewDto, PlayerCityViewDto,
     PlayerDiplomacyViewDto, PlayerDiplomaticMessageViewDto, PlayerDiplomaticProposalViewDto,
-    PlayerDiplomaticRelationViewDto, PlayerResourceTradeAgreementViewDto,
+    PlayerDiplomaticRelationViewDto, PlayerParticipantViewDto, PlayerResourceTradeAgreementViewDto,
     PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
     ProductionOptionDto, ReachableTileViewDto, ResearchOptionDto, RoadViewDto,
     ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,

@@ -27,6 +27,18 @@ void main() {
     expect(player.stamp.mapHash, map.contentHash);
     expect(player.stamp.revision, 7);
     expect(player.turn, 7);
+    expect(player.turnMode, MatchTurnModeView.sequential);
+    expect(player.participants.map((participant) => participant.id), [
+      'player-1',
+      'player-2',
+    ]);
+    expect(player.participants.first.name, 'Player One');
+    expect(player.participants.first.colorValue, 0xff000000);
+    expect(
+      player.participants.first.country,
+      MatchParticipantCountryView.poland,
+    );
+    expect(player.participants.last.kind, MatchParticipantKindView.ai);
     expect(player.turnView.ownState, RecipientTurnStateView.active);
     expect(player.turnView.ownSubmitted, isFalse);
     expect(player.turnView.requiredSubmissionCount, 1);
@@ -37,6 +49,17 @@ void main() {
     expect(player.units.first.kind, VisibleUnitKind.commander);
     expect(player.units.first.posture, VisibleUnitPosture.active);
     expect(player.units.first.movementUnits, 12);
+  });
+
+  test('requires the active actor to belong to the public roster', () {
+    expect(
+      () => mapper.fromWire(
+        _snapshot(const []),
+        map: testMapScene().map,
+        actorPlayerId: 'missing-player',
+      ),
+      throwsFormatException,
+    );
   });
 
   test(
@@ -102,6 +125,7 @@ void main() {
       stamp: snapshot.stamp,
       turn: 0,
       turnMode: snapshot.turnMode,
+      participants: snapshot.participants,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,
@@ -361,6 +385,22 @@ AonwPlayerViewSnapshot _snapshot(
   ),
   turn: 7,
   turnMode: AonwTurnMode.sequential,
+  participants: const [
+    AonwPlayerParticipantView(
+      id: 'player-1',
+      name: 'Player One',
+      colorValue: 0xff000000,
+      country: AonwPlayerCountry.poland,
+      kind: AonwPlayerKind.human,
+    ),
+    AonwPlayerParticipantView(
+      id: 'player-2',
+      name: 'Player Two',
+      colorValue: 0xffffffff,
+      country: AonwPlayerCountry.germany,
+      kind: AonwPlayerKind.ai,
+    ),
+  ],
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

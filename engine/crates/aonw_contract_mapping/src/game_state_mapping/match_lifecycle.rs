@@ -381,7 +381,7 @@ pub(crate) fn encode_turn_mode(value: TurnMode) -> TurnModeDto {
 fn decode_player_kind(value: PlayerKindDto) -> PlayerKind {
     map_enum!(value, PlayerKindDto::Human => PlayerKind::Human, PlayerKindDto::Ai => PlayerKind::Ai)
 }
-fn encode_player_kind(value: PlayerKind) -> PlayerKindDto {
+pub(crate) fn encode_player_kind(value: PlayerKind) -> PlayerKindDto {
     map_enum!(value, PlayerKind::Human => PlayerKindDto::Human, PlayerKind::Ai => PlayerKindDto::Ai)
 }
 fn decode_turn_state(value: PlayerTurnStateDto) -> PlayerTurnState {
@@ -465,7 +465,7 @@ fn decode_country(value: PlayerCountryDto) -> PlayerCountry {
         PlayerCountryDto::Greece => PlayerCountry::Greece)
 }
 
-fn encode_country(value: PlayerCountry) -> PlayerCountryDto {
+pub(crate) fn encode_country(value: PlayerCountry) -> PlayerCountryDto {
     map_enum!(value,
         PlayerCountry::Poland => PlayerCountryDto::Poland,
         PlayerCountry::Ukraine => PlayerCountryDto::Ukraine,

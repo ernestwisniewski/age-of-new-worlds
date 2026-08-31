@@ -115,6 +115,22 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
   'stamp': _stamp(revision),
   'turn': 1,
   'turnMode': 'simultaneous',
+  'participants': [
+    {
+      'id': 'player-1',
+      'name': 'Player One',
+      'colorValue': 0xff000000,
+      'country': 'poland',
+      'kind': 'human',
+    },
+    {
+      'id': 'player-2',
+      'name': 'Player Two',
+      'colorValue': 0xffffffff,
+      'country': 'germany',
+      'kind': 'human',
+    },
+  ],
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
