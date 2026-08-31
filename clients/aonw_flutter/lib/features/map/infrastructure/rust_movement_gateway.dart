@@ -38,8 +38,8 @@ final class RustMovementGateway {
         expectedUnitId: unitId,
         expectedRevision: expectedRevision,
       );
-    } on MovementSessionException {
-      rethrow;
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _invalidResponse(error, stackTrace);
     }
@@ -74,8 +74,8 @@ final class RustMovementGateway {
         expectedTarget: target,
         expectedRevision: expectedRevision,
       );
-    } on MovementSessionException {
-      rethrow;
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _invalidResponse(error, stackTrace);
     }
@@ -115,8 +115,8 @@ final class RustMovementGateway {
         );
       }
       return MoveUnitResultView.accepted(player: player, execution: execution);
-    } on MovementSessionException {
-      rethrow;
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _invalidResponse(error, stackTrace);
     }
@@ -131,4 +131,14 @@ MovementSessionException _invalidResponse(
   message: 'The movement response is incompatible with this client.',
   diagnosticCause: error,
   diagnosticStackTrace: stackTrace,
+);
+
+MovementSessionException _transportFailure(
+  RustSessionTransportException error,
+) => MovementSessionException(
+  code: error.code,
+  message: 'The movement request could not be completed.',
+  diagnosticCause: error.diagnosticCause,
+  diagnosticStackTrace: error.diagnosticStackTrace,
+  resyncedPlayer: error.resyncedPlayer,
 );

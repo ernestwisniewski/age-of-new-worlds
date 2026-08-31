@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/unit_logistics_session_port.dart';
@@ -41,8 +40,8 @@ final class RustUnitLogisticsGateway {
       );
     } on UnitLogisticsSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -79,8 +78,8 @@ final class RustUnitLogisticsGateway {
           : UnitLogisticsCommandResultView.rejected(rejectionCode: rejection);
     } on UnitLogisticsSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -115,8 +114,8 @@ final class RustUnitLogisticsGateway {
   };
 }
 
-UnitLogisticsSessionException _movementFailure(
-  MovementSessionException error,
+UnitLogisticsSessionException _transportFailure(
+  RustSessionTransportException error,
 ) => UnitLogisticsSessionException(
   code: error.code,
   message: 'The unit logistics request could not be completed.',

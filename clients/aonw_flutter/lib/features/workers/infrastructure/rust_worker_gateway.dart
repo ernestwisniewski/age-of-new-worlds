@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/worker_session_port.dart';
@@ -43,8 +42,8 @@ final class RustWorkerGateway {
       );
     } on WorkerSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -82,8 +81,8 @@ final class RustWorkerGateway {
           : WorkerCommandResultView.rejected(rejectionCode: mapped.rejection!);
     } on WorkerSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -128,7 +127,7 @@ AonwClientRequest _request(WorkerActionView action, int expectedRevision) =>
       ),
     };
 
-WorkerSessionException _movementFailure(MovementSessionException error) =>
+WorkerSessionException _transportFailure(RustSessionTransportException error) =>
     WorkerSessionException(
       code: error.code,
       message: 'The worker request could not be completed.',

@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/city_session_port.dart';
@@ -43,8 +42,8 @@ final class RustCityGateway {
       );
     } on CitySessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -95,8 +94,8 @@ final class RustCityGateway {
       );
     } on CitySessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -127,8 +126,8 @@ final class RustCityGateway {
           : CityCommandResultView.rejected(rejectionCode: mapped.rejection!);
     } on CitySessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -173,7 +172,7 @@ AonwClientRequest _request(CityActionView action, int expectedRevision) =>
         ),
     };
 
-CitySessionException _movementFailure(MovementSessionException error) =>
+CitySessionException _transportFailure(RustSessionTransportException error) =>
     CitySessionException(
       code: error.code,
       message: 'The city request could not be completed.',

@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/diplomacy_session_port.dart';
@@ -40,8 +39,8 @@ final class RustDiplomacyGateway {
           : DiplomacyCommandResultView.rejected(rejectionCode: rejection);
     } on DiplomacySessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -120,14 +119,15 @@ AonwClientRequest _request(int revision, DiplomacyActionView action) =>
         ),
     };
 
-DiplomacySessionException _movementFailure(MovementSessionException error) =>
-    DiplomacySessionException(
-      code: error.code,
-      message: 'The diplomacy request could not be completed.',
-      diagnosticCause: error.diagnosticCause,
-      diagnosticStackTrace: error.diagnosticStackTrace,
-      resyncedPlayer: error.resyncedPlayer,
-    );
+DiplomacySessionException _transportFailure(
+  RustSessionTransportException error,
+) => DiplomacySessionException(
+  code: error.code,
+  message: 'The diplomacy request could not be completed.',
+  diagnosticCause: error.diagnosticCause,
+  diagnosticStackTrace: error.diagnosticStackTrace,
+  resyncedPlayer: error.resyncedPlayer,
+);
 
 DiplomacySessionException _protocolFailure(
   FormatException error,

@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../../map/read_model/map_view.dart';
@@ -45,8 +44,8 @@ final class RustCombatGateway {
       );
     } on CombatSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -92,15 +91,15 @@ final class RustCombatGateway {
           : CombatCommandResultView.rejected(rejectionCode: rejection);
     } on CombatSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
   }
 }
 
-CombatSessionException _movementFailure(MovementSessionException error) =>
+CombatSessionException _transportFailure(RustSessionTransportException error) =>
     CombatSessionException(
       code: error.code,
       message: 'The combat request could not be completed.',

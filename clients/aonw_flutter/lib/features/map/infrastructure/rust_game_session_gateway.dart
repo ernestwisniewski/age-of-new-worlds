@@ -49,6 +49,7 @@ import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';
 import 'rust_game_session_context.dart';
 import 'rust_game_session_loader.dart';
+import 'rust_game_session_operations.dart';
 import 'rust_movement_gateway.dart';
 
 part 'rust_game_artifact_session.dart';
@@ -443,7 +444,7 @@ final class RustGameSessionGateway
         action: action,
         retainPlayer: _retainPlayer,
       );
-    } on MovementSessionException catch (error) {
+    } on RustSessionTransportException catch (error) {
       throw UnitActionSessionException(
         code: error.code,
         message: 'The unit action request could not be completed.',
@@ -555,7 +556,7 @@ final class RustGameSessionGateway
         player == null ||
         cache == null ||
         actorPlayerId == null) {
-      throw const MovementSessionException(
+      throw const RustSessionTransportException(
         code: 'session_not_open',
         message: 'The local game session is not open.',
       );
@@ -573,12 +574,24 @@ final class RustGameSessionGateway
     AonwRustSession session,
     AonwClientRequest request,
   ) async {
-    final response = await session.send(request);
+    final AonwClientResponse response;
+    try {
+      response = await session.send(request);
+    } on FormatException {
+      rethrow;
+    } on Object catch (error, stackTrace) {
+      throw RustSessionTransportException(
+        code: 'rust_session_request_failed',
+        message: 'The Rust session request could not be completed.',
+        diagnosticCause: error,
+        diagnosticStackTrace: stackTrace,
+      );
+    }
     if (!response.isSuccess) {
       final error = response.error!;
-      throw MovementSessionException(
+      throw RustSessionTransportException(
         code: error.code,
-        message: 'The movement request could not be completed.',
+        message: 'The Rust session request could not be completed.',
         diagnosticCause: error,
         diagnosticStackTrace: StackTrace.current,
       );
@@ -601,7 +614,7 @@ final class RustGameSessionGateway
       return player;
     } on FormatException catch (error, stackTrace) {
       final resyncedPlayer = await _resync(context);
-      throw MovementSessionException(
+      throw RustSessionTransportException(
         code: 'recipient_resynchronized',
         message:
             'The recipient view was resynchronized after an invalid patch.',

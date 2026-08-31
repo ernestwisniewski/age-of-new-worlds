@@ -13,3 +13,24 @@ typedef RustPatchApplier =
       RustGameSessionContext context,
       AonwCommandResult command,
     );
+
+/// Failure raised by the shared Rust session boundary before a feature maps it
+/// to its application-facing exception.
+final class RustSessionTransportException implements Exception {
+  const RustSessionTransportException({
+    required this.code,
+    required this.message,
+    this.diagnosticCause,
+    this.diagnosticStackTrace,
+    this.resyncedPlayer,
+  });
+
+  final String code;
+  final String message;
+  final Object? diagnosticCause;
+  final StackTrace? diagnosticStackTrace;
+  final PlayerMapView? resyncedPlayer;
+
+  @override
+  String toString() => 'RustSessionTransportException($code): $message';
+}

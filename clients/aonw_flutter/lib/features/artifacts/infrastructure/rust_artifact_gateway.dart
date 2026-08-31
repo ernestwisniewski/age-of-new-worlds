@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/artifact_session_port.dart';
@@ -40,7 +39,7 @@ final class RustArtifactGateway {
           : ArtifactCommandResultView.rejected(rejectionCode: rejection);
     } on ArtifactSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
+    } on RustSessionTransportException catch (error) {
       throw ArtifactSessionException(
         code: error.code,
         message: 'The artifact request could not be completed.',

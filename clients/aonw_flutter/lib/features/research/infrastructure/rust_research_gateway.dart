@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/research_session_port.dart';
@@ -36,8 +35,8 @@ final class RustResearchGateway {
       );
     } on ResearchSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -71,22 +70,23 @@ final class RustResearchGateway {
           : ResearchCommandResultView.rejected(rejectionCode: rejection);
     } on ResearchSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
   }
 }
 
-ResearchSessionException _movementFailure(MovementSessionException error) =>
-    ResearchSessionException(
-      code: error.code,
-      message: 'The research request could not be completed.',
-      diagnosticCause: error.diagnosticCause,
-      diagnosticStackTrace: error.diagnosticStackTrace,
-      resyncedPlayer: error.resyncedPlayer,
-    );
+ResearchSessionException _transportFailure(
+  RustSessionTransportException error,
+) => ResearchSessionException(
+  code: error.code,
+  message: 'The research request could not be completed.',
+  diagnosticCause: error.diagnosticCause,
+  diagnosticStackTrace: error.diagnosticStackTrace,
+  resyncedPlayer: error.resyncedPlayer,
+);
 
 ResearchSessionException _protocolFailure(
   FormatException error,

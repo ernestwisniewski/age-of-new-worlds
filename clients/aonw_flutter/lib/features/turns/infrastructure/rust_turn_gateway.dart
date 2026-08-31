@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/turn_session_port.dart';
@@ -41,8 +40,8 @@ final class RustTurnGateway {
       );
     } on TurnSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw TurnSessionException(
         code: 'invalid_session_protocol',
@@ -68,7 +67,7 @@ final class RustTurnGateway {
   }
 }
 
-TurnSessionException _movementFailure(MovementSessionException error) =>
+TurnSessionException _transportFailure(RustSessionTransportException error) =>
     TurnSessionException(
       code: error.code,
       message: 'The turn request could not be completed.',

@@ -1,6 +1,5 @@
 import 'package:aonw_rust_client/aonw_rust_client.dart';
 
-import '../../map/application/movement_session_port.dart';
 import '../../map/infrastructure/rust_game_session_context.dart';
 import '../../map/infrastructure/rust_game_session_operations.dart';
 import '../application/production_session_port.dart';
@@ -59,8 +58,8 @@ final class RustProductionGateway {
       );
     } on ProductionSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -96,8 +95,8 @@ final class RustProductionGateway {
             );
     } on ProductionSessionException {
       rethrow;
-    } on MovementSessionException catch (error) {
-      throw _movementFailure(error);
+    } on RustSessionTransportException catch (error) {
+      throw _transportFailure(error);
     } on FormatException catch (error, stackTrace) {
       throw _protocolFailure(error, stackTrace);
     }
@@ -158,14 +157,15 @@ AonwClientRequest _request(ProductionActionView action, int expectedRevision) =>
       ),
     };
 
-ProductionSessionException _movementFailure(MovementSessionException error) =>
-    ProductionSessionException(
-      code: error.code,
-      message: 'The production request could not be completed.',
-      diagnosticCause: error.diagnosticCause,
-      diagnosticStackTrace: error.diagnosticStackTrace,
-      resyncedPlayer: error.resyncedPlayer,
-    );
+ProductionSessionException _transportFailure(
+  RustSessionTransportException error,
+) => ProductionSessionException(
+  code: error.code,
+  message: 'The production request could not be completed.',
+  diagnosticCause: error.diagnosticCause,
+  diagnosticStackTrace: error.diagnosticStackTrace,
+  resyncedPlayer: error.resyncedPlayer,
+);
 
 ProductionSessionException _protocolFailure(
   FormatException error,
