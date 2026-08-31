@@ -7,8 +7,8 @@ const LogicalMapPanel := preload(
 	"res://editor/map_authoring/presentation/logical_map_panel.gd"
 )
 const MapSource := preload("res://game/application/map/map_source.gd")
-const RustLogicalMapWorkbench := preload(
-	"res://editor/map_authoring/infrastructure/rust_logical_map_workbench.gd"
+const EngineLogicalMapWorkbench := preload(
+	"res://editor/map_authoring/infrastructure/engine_logical_map_workbench.gd"
 )
 
 class FakeTerrainCompiler:
@@ -39,14 +39,14 @@ func run(failures: Array[String]) -> void:
 		"content",
 	)
 	_compiler = FakeTerrainCompiler.new()
-	_editor = FilesystemLogicalMapEditor.new(RustLogicalMapWorkbench.new(), _compiler)
+	_editor = FilesystemLogicalMapEditor.new(EngineLogicalMapWorkbench.new(), _compiler)
 	_test_batch_is_one_canonical_transaction()
 	await _test_panel_collects_a_direct_paint_stroke()
 
 func _test_batch_is_one_canonical_transaction() -> void:
 	var before := _map_document()
 	var before_snapshot := _editor.inspect_tile(_source, Vector2i.ZERO)
-	_check(before_snapshot["ok"], "logical paint fixture can be inspected through Rust")
+	_check(before_snapshot["ok"], "logical paint fixture can be inspected through Engine")
 	if not before_snapshot["ok"]:
 		return
 	var coordinates: Array[Vector2i] = [
@@ -55,7 +55,7 @@ func _test_batch_is_one_canonical_transaction() -> void:
 		Vector2i(2, 0),
 	]
 	var result := _editor.paint_tiles_height(_source, coordinates, 5)
-	_check(result["ok"], "logical height stroke is accepted through Rust")
+	_check(result["ok"], "logical height stroke is accepted through Engine")
 	if not result["ok"]:
 		return
 	var after := _map_document()
@@ -72,7 +72,7 @@ func _test_batch_is_one_canonical_transaction() -> void:
 		result["update"]["mapContentHash"]
 		!= before_snapshot["snapshot"]["mapContentHash"]
 		and result["update"]["snapshot"]["tile"]["col"] == 2,
-		"logical paint stroke returns the final Rust snapshot and content hash",
+		"logical paint stroke returns the final Engine snapshot and content hash",
 	)
 
 func _test_panel_collects_a_direct_paint_stroke() -> void:

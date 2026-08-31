@@ -1,4 +1,4 @@
-class_name AonwRustLogicalMapWorkbench
+class_name AonwEngineLogicalMapWorkbench
 extends AonwLogicalMapWorkbench
 
 const API_VERSION := 1
@@ -46,15 +46,15 @@ func generate_map(spec_document: String) -> Dictionary:
 	})
 	var parsed: Variant = JSON.parse_string(str(_bridge.request_json(request)))
 	if parsed is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench returned invalid JSON")
+		return _failure("invalid_workbench_response", "Engine workbench returned invalid JSON")
 	var response: Dictionary = parsed
 	if response.get("apiVersion") != API_VERSION or response.get("outcome") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench response is incompatible")
+		return _failure("invalid_workbench_response", "Engine workbench response is incompatible")
 	var outcome: Dictionary = response["outcome"]
 	if outcome.get("status") == "failure":
 		var error: Variant = outcome.get("error")
 		if error is not Dictionary:
-			return _failure("invalid_workbench_response", "Rust workbench failure is malformed")
+			return _failure("invalid_workbench_response", "Engine workbench failure is malformed")
 		return {
 			"ok": false,
 			"code": str(error.get("code", "map_generation_failed")),
@@ -62,10 +62,10 @@ func generate_map(spec_document: String) -> Dictionary:
 			"path": str(error.get("path", "")),
 		}
 	if outcome.get("status") != "success" or outcome.get("response") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench outcome is malformed")
+		return _failure("invalid_workbench_response", "Engine workbench outcome is malformed")
 	var body: Dictionary = outcome["response"]
 	if body.get("type") != "mapGenerated" or body.get("package") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench result is unsupported")
+		return _failure("invalid_workbench_response", "Engine workbench result is unsupported")
 	var package: Dictionary = body["package"]
 	if not _has_exact_string_fields(package, PACKAGE_FIELDS):
 		return _failure("invalid_workbench_response", "generated map package is malformed")
@@ -129,15 +129,15 @@ func reconfigure_terrain_height(
 	})
 	var parsed: Variant = JSON.parse_string(str(_bridge.request_json(request)))
 	if parsed is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench returned invalid JSON")
+		return _failure("invalid_workbench_response", "Engine workbench returned invalid JSON")
 	var response: Dictionary = parsed
 	if response.get("apiVersion") != API_VERSION or response.get("outcome") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench response is incompatible")
+		return _failure("invalid_workbench_response", "Engine workbench response is incompatible")
 	var outcome: Dictionary = response["outcome"]
 	if outcome.get("status") == "failure":
 		var error: Variant = outcome.get("error")
 		if error is not Dictionary:
-			return _failure("invalid_workbench_response", "Rust workbench failure is malformed")
+			return _failure("invalid_workbench_response", "Engine workbench failure is malformed")
 		return {
 			"ok": false,
 			"code": str(error.get("code", "terrain_height_reconfiguration_failed")),
@@ -145,7 +145,7 @@ func reconfigure_terrain_height(
 			"path": str(error.get("path", "")),
 		}
 	if outcome.get("status") != "success" or outcome.get("response") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench outcome is malformed")
+		return _failure("invalid_workbench_response", "Engine workbench outcome is malformed")
 	var body: Dictionary = outcome["response"]
 	if body.get("type") != "terrainHeightReconfigured" or body.get("update") is not Dictionary:
 		return _failure("invalid_workbench_response", "terrain profile update is unsupported")
@@ -253,15 +253,15 @@ func _dispatch(request_body: Dictionary, expected_type: String) -> Dictionary:
 	})
 	var parsed: Variant = JSON.parse_string(str(_bridge.request_json(request)))
 	if parsed is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench returned invalid JSON")
+		return _failure("invalid_workbench_response", "Engine workbench returned invalid JSON")
 	var response: Dictionary = parsed
 	if response.get("apiVersion") != API_VERSION or response.get("outcome") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench response is incompatible")
+		return _failure("invalid_workbench_response", "Engine workbench response is incompatible")
 	var outcome: Dictionary = response["outcome"]
 	if outcome.get("status") == "failure":
 		var error: Variant = outcome.get("error")
 		if error is not Dictionary:
-			return _failure("invalid_workbench_response", "Rust workbench failure is malformed")
+			return _failure("invalid_workbench_response", "Engine workbench failure is malformed")
 		return {
 			"ok": false,
 			"code": str(error.get("code", "logical_map_edit_failed")),
@@ -269,10 +269,10 @@ func _dispatch(request_body: Dictionary, expected_type: String) -> Dictionary:
 			"path": str(error.get("path", "")),
 		}
 	if outcome.get("status") != "success" or outcome.get("response") is not Dictionary:
-		return _failure("invalid_workbench_response", "Rust workbench outcome is malformed")
+		return _failure("invalid_workbench_response", "Engine workbench outcome is malformed")
 	var body: Dictionary = outcome["response"]
 	if body.get("type") != expected_type:
-		return _failure("invalid_workbench_response", "Rust workbench result is unsupported")
+		return _failure("invalid_workbench_response", "Engine workbench result is unsupported")
 	return {"ok": true, "body": body}
 
 func _is_tile_editor_snapshot(value: Variant) -> bool:

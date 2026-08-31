@@ -38,8 +38,8 @@ const GenerateTerrainAuthoringMap := preload(
 const WorkbenchDock := preload(
 	"res://editor/map_authoring/presentation/map_workbench_dock.gd"
 )
-const RustLogicalMapWorkbench := preload(
-	"res://editor/map_authoring/infrastructure/rust_logical_map_workbench.gd"
+const EngineLogicalMapWorkbench := preload(
+	"res://editor/map_authoring/infrastructure/engine_logical_map_workbench.gd"
 )
 const FilesystemTerrainProfileEditor := preload(
 	"res://editor/map_authoring/infrastructure/terrain/terrain_profile_editor.gd"
@@ -95,7 +95,7 @@ func _init(
 		_artifact_reader,
 		_scene_writer,
 	)
-	_logical_map_workbench = RustLogicalMapWorkbench.new()
+	_logical_map_workbench = EngineLogicalMapWorkbench.new()
 	_create_logical_map = CreateLogicalMap.new(
 		_logical_map_workbench,
 		FilesystemGeneratedMapStore.new(TerrainCompiler.new()),

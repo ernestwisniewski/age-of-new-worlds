@@ -6,8 +6,8 @@ const CreateLogicalMap := preload(
 const FilesystemGeneratedMapStore := preload(
 	"res://editor/map_authoring/infrastructure/filesystem_generated_map_store.gd"
 )
-const RustLogicalMapWorkbench := preload(
-	"res://editor/map_authoring/infrastructure/rust_logical_map_workbench.gd"
+const EngineLogicalMapWorkbench := preload(
+	"res://editor/map_authoring/infrastructure/engine_logical_map_workbench.gd"
 )
 
 class FakeTerrainCompiler:
@@ -35,14 +35,14 @@ func run(failures: Array[String]) -> void:
 	_test_root = "res://.godot/new_map_creation_test/%s" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_test_root))
 	_test_successful_creation_is_complete_and_immutable()
-	_test_procedural_creation_persists_rust_output()
+	_test_procedural_creation_persists_engine_output()
 	_test_compile_failure_removes_the_new_map()
 
 func _test_successful_creation_is_complete_and_immutable() -> void:
 	var compiler := FakeTerrainCompiler.new(true)
 	var creator := _creator(compiler)
 	var result := creator.execute("new_world", 5, 6, 1.0, 10.0, 25.0, "42")
-	_check(result["ok"], "New Map persists the package returned by Rust")
+	_check(result["ok"], "New Map persists the package returned by Engine")
 	if not result["ok"]:
 		return
 	var map_root := _test_root.path_join("content/new_world")
@@ -91,7 +91,7 @@ func _test_compile_failure_removes_the_new_map() -> void:
 			has_staging = has_staging or directory_name.begins_with(".aonw-new-")
 	_check(not has_staging, "failed New Map cleans its hidden staging directory")
 
-func _test_procedural_creation_persists_rust_output() -> void:
+func _test_procedural_creation_persists_engine_output() -> void:
 	var compiler := FakeTerrainCompiler.new(true)
 	var result := _creator(compiler).execute(
 		"procedural_world",
@@ -103,7 +103,7 @@ func _test_procedural_creation_persists_rust_output() -> void:
 		"42",
 		&"continental",
 	)
-	_check(result["ok"], "New Map persists the selected Rust procedural generator")
+	_check(result["ok"], "New Map persists the selected Engine procedural generator")
 	if not result["ok"]:
 		return
 	var map_root := _test_root.path_join("content/procedural_world")
@@ -128,7 +128,7 @@ func _creator(compiler: AonwTerrainCompiler) -> AonwCreateLogicalMap:
 		_test_root.path_join("content"),
 		_test_root.path_join("visuals"),
 	)
-	return CreateLogicalMap.new(RustLogicalMapWorkbench.new(), store)
+	return CreateLogicalMap.new(EngineLogicalMapWorkbench.new(), store)
 
 func _read_text(path: String) -> String:
 	var file := FileAccess.open(path, FileAccess.READ)

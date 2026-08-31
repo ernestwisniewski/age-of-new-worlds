@@ -106,7 +106,7 @@ func end_paint_stroke() -> void:
 		return
 	_set_busy(true)
 	status_changed.emit(
-		"Applying %d logical tile edit(s) through Rust and recompiling Terrain3D…"
+		"Applying %d logical tile edit(s) through Engine and recompiling Terrain3D…"
 		% _stroke_coordinates.size()
 	)
 	_apply_stroke.call_deferred()
@@ -132,7 +132,7 @@ func _build_interface() -> void:
 	var help := Label.new()
 	help.text = (
 		"Choose a brush, then click or drag over hexes in the 3D viewport. "
-		+ "Rust remains the canonical map writer."
+		+ "Engine remains the canonical map writer."
 	)
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(help)

@@ -54,7 +54,7 @@ func _decode_engine_features(extracted: Dictionary) -> Dictionary:
 		return extracted
 	var raw_features: Variant = extracted["value"]
 	if not raw_features is Array:
-		return _failure("invalid_client_response", "Rust returned invalid capabilities")
+		return _failure("invalid_client_response", "Engine returned invalid capabilities")
 	var features: Array[StringName] = []
 	var seen := {}
 	for raw_feature in raw_features:
@@ -63,7 +63,7 @@ func _decode_engine_features(extracted: Dictionary) -> Dictionary:
 			or raw_feature not in ENGINE_FEATURE_NAMES
 			or seen.has(raw_feature)
 		):
-			return _failure("invalid_client_response", "Rust returned invalid capabilities")
+			return _failure("invalid_client_response", "Engine returned invalid capabilities")
 		seen[raw_feature] = true
 		features.append(StringName(raw_feature))
 	features.make_read_only()
@@ -188,7 +188,7 @@ func _decode_session_closed(result: Dictionary) -> Dictionary:
 	if not result["ok"]:
 		return result
 	if not _has_exact_fields(result["value"], ["type"]):
-		return _failure("invalid_client_response", "Rust returned invalid session close")
+		return _failure("invalid_client_response", "Engine returned invalid session close")
 	return {"ok": true}
 
 func snapshot() -> Dictionary:
@@ -210,7 +210,7 @@ func _decode_snapshot(extracted: Dictionary) -> Dictionary:
 		return extracted
 	var snapshot := ReadModelDecoder.decode_snapshot(extracted["value"])
 	if snapshot == null:
-		return _failure("invalid_client_response", "Rust returned an invalid snapshot")
+		return _failure("invalid_client_response", "Engine returned an invalid snapshot")
 	return {"ok": true, "value": snapshot}
 
 func reachable(expected_revision: int, unit_id: String) -> Dictionary:
@@ -256,7 +256,7 @@ func _decode_reachable(result: Dictionary) -> Dictionary:
 		return result
 	var reachable_view := ReadModelDecoder.decode_reachable(result["value"])
 	if reachable_view == null:
-		return _failure("invalid_client_response", "Rust returned invalid reachable tiles")
+		return _failure("invalid_client_response", "Engine returned invalid reachable tiles")
 	return {"ok": true, "value": reachable_view}
 
 func _decode_route_plan(result: Dictionary) -> Dictionary:
@@ -264,7 +264,7 @@ func _decode_route_plan(result: Dictionary) -> Dictionary:
 		return result
 	var route_plan := ReadModelDecoder.decode_route_plan(result["value"])
 	if route_plan == null:
-		return _failure("invalid_client_response", "Rust returned an invalid route plan")
+		return _failure("invalid_client_response", "Engine returned an invalid route plan")
 	return {"ok": true, "value": route_plan}
 
 func move_unit_async(
@@ -317,15 +317,15 @@ func verify_replay(map_document: String, replay_document: String) -> Dictionary:
 		return extracted
 	var raw: Variant = extracted["value"]
 	if not _has_exact_fields(raw, ["entryCount", "finalEventOffset", "finalStamp"]):
-		return _failure("invalid_client_response", "Rust returned invalid replay verification")
+		return _failure("invalid_client_response", "Engine returned invalid replay verification")
 	if (
 		not _is_non_negative_integer(raw["entryCount"])
 		or not _is_non_negative_integer(raw["finalEventOffset"])
 	):
-		return _failure("invalid_client_response", "Rust returned invalid replay verification")
+		return _failure("invalid_client_response", "Engine returned invalid replay verification")
 	var stamp := ReadModelDecoder.decode_stamp(raw["finalStamp"])
 	if stamp == null:
-		return _failure("invalid_client_response", "Rust returned invalid replay verification")
+		return _failure("invalid_client_response", "Engine returned invalid replay verification")
 	var verification := ReadModels.ReplayVerification.new()
 	verification.entry_count = int(raw["entryCount"])
 	verification.final_event_offset = int(raw["finalEventOffset"])
@@ -341,7 +341,7 @@ func _query(query: Dictionary, result_type: String) -> Dictionary:
 		return extracted
 	var value: Variant = extracted["value"]
 	if not value is Dictionary or value.get("type", "") != result_type:
-		return _failure("invalid_client_response", "Rust returned an unexpected query result")
+		return _failure("invalid_client_response", "Engine returned an unexpected query result")
 	return {"ok": true, "value": value}
 
 func _query_async(
@@ -362,7 +362,7 @@ func _query_async(
 		return extracted
 	var value: Variant = extracted["value"]
 	if not value is Dictionary or value.get("type", "") != result_type:
-		return _failure("invalid_client_response", "Rust returned an unexpected query result")
+		return _failure("invalid_client_response", "Engine returned an unexpected query result")
 	return {"ok": true, "value": value}
 
 func _command_async(command: Dictionary) -> Dictionary:
@@ -381,7 +381,7 @@ func _decode_command(extracted: Dictionary) -> Dictionary:
 		return extracted
 	var command_result := ReadModelDecoder.decode_command(extracted["value"])
 	if command_result == null:
-		return _failure("invalid_client_response", "Rust returned an invalid command result")
+		return _failure("invalid_client_response", "Engine returned an invalid command result")
 	return {"ok": true, "value": command_result}
 
 func _unit_action_async(
@@ -445,7 +445,7 @@ func _decode_ai_turn(result: Dictionary) -> Dictionary:
 	if not _has_exact_fields(body, [
 		"type", "stamp", "actorPlayerId", "executedCommands", "completedTurn",
 	]):
-		return _failure("invalid_client_response", "Rust returned an invalid AI turn result")
+		return _failure("invalid_client_response", "Engine returned an invalid AI turn result")
 	var stamp := ReadModelDecoder.decode_stamp(body["stamp"])
 	if (
 		stamp == null
@@ -453,7 +453,7 @@ func _decode_ai_turn(result: Dictionary) -> Dictionary:
 		or not _is_non_negative_integer(body["executedCommands"])
 		or not body["completedTurn"] is bool
 	):
-		return _failure("invalid_client_response", "Rust returned an invalid AI turn result")
+		return _failure("invalid_client_response", "Engine returned an invalid AI turn result")
 	var value := ReadModels.AiTurnResult.new()
 	value.stamp = stamp
 	value.actor_player_id = body["actorPlayerId"]
@@ -466,7 +466,7 @@ func _extract(result: Dictionary, field: String) -> Dictionary:
 		return result
 	var body: Variant = result["value"]
 	if not _has_exact_fields(body, ["type", field]):
-		return _failure("invalid_client_response", "Rust response is missing %s" % field)
+		return _failure("invalid_client_response", "Engine response is missing %s" % field)
 	return {"ok": true, "value": body[field]}
 
 func _extract_stamp(result: Dictionary, field: String) -> Dictionary:
@@ -475,7 +475,7 @@ func _extract_stamp(result: Dictionary, field: String) -> Dictionary:
 		return extracted
 	var stamp := ReadModelDecoder.decode_stamp(extracted["value"])
 	if stamp == null:
-		return _failure("invalid_client_response", "Rust returned an invalid session stamp")
+		return _failure("invalid_client_response", "Engine returned an invalid session stamp")
 	return {"ok": true, "value": stamp}
 
 func _coordinate(value: Vector2i) -> Dictionary:

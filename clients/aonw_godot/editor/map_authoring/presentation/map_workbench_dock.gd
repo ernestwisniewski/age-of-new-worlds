@@ -85,7 +85,7 @@ func _create_new_map(
 	generator_id: StringName,
 ) -> void:
 	_set_busy(true)
-	_status.text = "Creating canonical map %s through Rust…" % map_id
+	_status.text = "Creating canonical map %s through Engine…" % map_id
 	await get_tree().process_frame
 	var created := _create_logical_map.execute(
 		map_id,
@@ -176,7 +176,7 @@ func _logical_edit_persisted(
 		_show_error("logical map changed, but %s" % scene_save["message"])
 		return
 	_status.text = (
-		"%d logical tile(s) updated by Rust; Terrain3D final preserved. "
+		"%d logical tile(s) updated by Engine; Terrain3D final preserved. "
 		+ "The stale 2D reference was disabled."
 	) % coordinates.size()
 

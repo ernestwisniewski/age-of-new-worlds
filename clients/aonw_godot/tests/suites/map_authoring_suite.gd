@@ -131,7 +131,7 @@ func _test_bundled_checkout_without_asset_masters() -> void:
 			result["ok"]
 			and result["map"].map_id() == source.map_id
 			and result["map"].content_hash() == result["terrain_artifact"].map_content_hash,
-			"%s resolves a Rust MapView and matching Terrain3D artifact" % source.map_id,
+			"%s resolves an Engine MapView and matching Terrain3D artifact" % source.map_id,
 		)
 
 func _test_catalog() -> void:

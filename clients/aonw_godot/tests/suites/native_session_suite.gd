@@ -25,7 +25,7 @@ const LocalMatchGateway := preload(
 	"res://game/infrastructure/engine/local_match_gateway.gd"
 )
 const MAP_WORKBENCH_SCRIPT := (
-	"res://editor/map_authoring/infrastructure/rust_logical_map_workbench.gd"
+	"res://editor/map_authoring/infrastructure/engine_logical_map_workbench.gd"
 )
 
 var _failures: Array[String]
@@ -631,7 +631,7 @@ func _test_logical_map_workbench_boundary() -> void:
 		terrain_edit["ok"]
 		and terrain_edit["update"]["snapshot"]["tile"]["displayTerrain"] == "forest"
 		and terrain_edit["update"]["mapContentHash"] != first["package"]["mapContentHash"],
-		"Godot sends SetTileTerrain to the Rust workbench",
+		"Godot sends SetTileTerrain to the Engine workbench",
 	)
 	if terrain_edit["ok"]:
 		var resource_ids: Array[StringName] = [&"iron", &"wheat"]
@@ -646,7 +646,7 @@ func _test_logical_map_workbench_boundary() -> void:
 			resources_edit["ok"]
 			and resources_edit["update"]["snapshot"]["tile"]["resources"]
 			== ["wheat", "iron"],
-			"Godot sends SetTileResources to the Rust workbench",
+			"Godot sends SetTileResources to the Engine workbench",
 		)
 		if resources_edit["ok"]:
 			var height_edit: Dictionary = workbench.call(
@@ -659,7 +659,7 @@ func _test_logical_map_workbench_boundary() -> void:
 			_check(
 				height_edit["ok"]
 				and height_edit["update"]["snapshot"]["tile"]["height"] == 5,
-				"Godot sends SetTileHeight to the Rust workbench",
+				"Godot sends SetTileHeight to the Engine workbench",
 			)
 	var invalid: Dictionary = JSON.parse_string(spec)
 	invalid["cols"] = 4

@@ -40,7 +40,7 @@ func _build_interface() -> void:
 	if get_child_count() > 0:
 		return
 	var help := Label.new()
-	help.text = "Rust creates the canonical map, terrain profile, and generated world plan."
+	help.text = "Engine creates the canonical map, terrain profile, and generated world plan."
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(help)
 	_add_generator("Blank authoring canvas", &"blank")

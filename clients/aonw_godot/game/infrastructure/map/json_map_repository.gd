@@ -53,7 +53,7 @@ func _load_document(source: AonwMapSource) -> Dictionary:
 func _map_result(source: AonwMapSource, envelope: Dictionary) -> Dictionary:
 	var decoded := _response_decoder.decode_envelope(envelope, "mapInspected")
 	if not decoded["ok"]:
-		return _failure("Rust: %s" % decoded["message"])
+		return _failure("Engine: %s" % decoded["message"])
 	var response: Variant = decoded["value"]
 	if (
 		not response is Dictionary
@@ -61,7 +61,7 @@ func _map_result(source: AonwMapSource, envelope: Dictionary) -> Dictionary:
 		or response.get("type", "") != "mapInspected"
 		or not response.has("map")
 	):
-		return _failure("Rust returned an invalid map inspection response")
+		return _failure("Engine returned an invalid map inspection response")
 	var result := _mapper.from_wire(response["map"])
 	if not result["ok"]:
 		return result

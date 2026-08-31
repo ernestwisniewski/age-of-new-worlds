@@ -187,7 +187,7 @@ func _setup_local_session(source: AonwMapSource) -> void:
 		"preview-player",
 	)
 	if not opened["ok"]:
-		_status.text += " · Rust: %s" % opened["message"]
+		_status.text += " · Engine: %s" % opened["message"]
 		_report_export_smoke_failure(_status.text)
 		_present_empty_unit_layer()
 		_interaction.clear_focus()
@@ -297,7 +297,7 @@ func _select_unit(unit_id: String, coordinate: Vector2i) -> void:
 		if reachable.get("code", "") == "recipient_resync_required":
 			await _resync_projection()
 			return
-		_status.text = "Rust: %s" % reachable["message"]
+		_status.text = "Engine: %s" % reachable["message"]
 		return
 	var coordinates: Array[Vector2i] = []
 	var reachable_view: AonwLocalMatchViewModels.ReachableView = reachable["value"]
@@ -332,7 +332,7 @@ func _preview_selected_route(target: Vector2i) -> void:
 		if planned.get("code", "") == "recipient_resync_required":
 			await _resync_projection()
 			return
-		_status.text = "Rust: %s" % planned["message"]
+		_status.text = "Engine: %s" % planned["message"]
 		return
 	var route: AonwLocalMatchViewModels.RouteView = planned["value"]
 	if (
@@ -341,13 +341,13 @@ func _preview_selected_route(target: Vector2i) -> void:
 		or not _current_map.contains(route.destination)
 		or _unit_layer.unit_at(route.steps[0].coordinate) != _selected_unit_id
 	):
-		_status.text = "Rust returned a route for another request"
+		_status.text = "Engine returned a route for another request"
 		return
 	_route = route
 	var coordinates: Array[Vector2i] = []
 	for step in route.steps:
 		if not _current_map.contains(step.coordinate):
-			_status.text = "Rust returned an out-of-map route"
+			_status.text = "Engine returned an out-of-map route"
 			_clear_route_preview()
 			return
 		coordinates.append(step.coordinate)
@@ -379,12 +379,12 @@ func _move_selected_unit(target: Vector2i) -> void:
 		if moved.get("code", "") == "recipient_resync_required":
 			await _resync_projection()
 			return
-		_status.text = "Rust: %s" % moved["message"]
+		_status.text = "Engine: %s" % moved["message"]
 		return
 	var value: AonwLocalMatchViewModels.CommandResult = moved["value"]
 	if not value.accepted:
 		_confirm_move.disabled = false
-		_status.text = "Rust: %s" % value.rejection
+		_status.text = "Engine: %s" % value.rejection
 		return
 	_unit_layer.apply_transition(value.unit_transition)
 	_turn_hud.present(value.turn)
@@ -410,12 +410,12 @@ func _on_end_turn_pressed() -> void:
 			return
 		else:
 			_turn_hud.cancel_command()
-		_status.text = "Rust: %s" % completed["message"]
+		_status.text = "Engine: %s" % completed["message"]
 		return
 	var value: AonwLocalMatchViewModels.CommandResult = completed["value"]
 	if not value.accepted:
 		_turn_hud.present(value.turn)
-		_status.text = "Rust: %s" % value.rejection
+		_status.text = "Engine: %s" % value.rejection
 		return
 	_unit_layer.apply_transition(value.unit_transition)
 	_turn_hud.present(value.turn)

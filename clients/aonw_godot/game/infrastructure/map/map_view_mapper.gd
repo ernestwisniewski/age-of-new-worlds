@@ -23,7 +23,7 @@ func from_wire(raw: Variant) -> Dictionary:
 		"mapId", "contentHash", "gridLayout", "cols", "rows", "defaultZoom",
 		"tiles", "objectives",
 	]):
-		return _failure("Rust map view has invalid fields")
+		return _failure("Engine map view has invalid fields")
 	if (
 		not raw["mapId"] is String
 		or str(raw["mapId"]).is_empty()
@@ -38,7 +38,7 @@ func from_wire(raw: Variant) -> Dictionary:
 		or not raw["objectives"] is Array
 		or not raw["tiles"] is Array
 	):
-		return _failure("Rust map view values are invalid")
+		return _failure("Engine map view values are invalid")
 
 	var objectives: Array[AonwMapObjectiveView] = []
 	for raw_objective in raw["objectives"]:
@@ -80,7 +80,7 @@ func _objective(raw: Variant) -> Dictionary:
 	if not _has_exact_fields(raw, [
 		"id", "type", "coordinate", "requiredHoldTurns", "victoryPoints", "goldPerTurn",
 	]):
-		return _failure("Rust map objective has invalid fields")
+		return _failure("Engine map objective has invalid fields")
 	if (
 		not raw["id"] is String
 		or str(raw["id"]).is_empty()
@@ -91,7 +91,7 @@ func _objective(raw: Variant) -> Dictionary:
 		or not _is_integer(raw["victoryPoints"], true)
 		or not _is_integer(raw["goldPerTurn"], true)
 	):
-		return _failure("Rust map objective values are invalid")
+		return _failure("Engine map objective values are invalid")
 	return {
 		"ok": true,
 		"value": MapObjectiveView.new(
@@ -109,7 +109,7 @@ func _tile(raw: Variant) -> Dictionary:
 		"coordinate", "displayTerrain", "yieldTerrain", "movementTerrains",
 		"terrainTags", "resources", "height",
 	]):
-		return _failure("Rust map tile has invalid fields")
+		return _failure("Engine map tile has invalid fields")
 	if (
 		not _is_coordinate(raw["coordinate"])
 		or not raw["displayTerrain"] is String
@@ -121,13 +121,13 @@ func _tile(raw: Variant) -> Dictionary:
 		or not raw["resources"] is Array
 		or not _is_integer(raw["height"], true)
 	):
-		return _failure("Rust map tile values are invalid")
+		return _failure("Engine map tile values are invalid")
 	var movement_terrains := _names(raw["movementTerrains"], TERRAIN_NAMES)
 	var terrain_tags := _names(raw["terrainTags"], TERRAIN_NAMES)
 	var resources := _names(raw["resources"], RESOURCE_NAMES)
 	for result in [movement_terrains, terrain_tags, resources]:
 		if not result["ok"]:
-			return _failure("Rust map tile collections are invalid")
+			return _failure("Engine map tile collections are invalid")
 	return {
 		"ok": true,
 		"value": MapTileView.new(
@@ -175,23 +175,23 @@ func _coverage_error(
 	rows: int,
 ) -> String:
 	if tiles.size() != cols * rows:
-		return "Rust map tile coverage is incomplete"
+		return "Engine map tile coverage is incomplete"
 	var coordinates := {}
 	for tile in tiles:
 		var coordinate := tile.coordinate()
 		if not _within_bounds(coordinate, cols, rows):
-			return "Rust map tile is outside map bounds"
+			return "Engine map tile is outside map bounds"
 		if coordinates.has(coordinate):
-			return "Rust map tile coordinate is duplicated"
+			return "Engine map tile coordinate is duplicated"
 		if tile.height() < 0 or tile.height() > 5:
-			return "Rust map tile height is outside the supported range"
+			return "Engine map tile height is outside the supported range"
 		coordinates[coordinate] = true
 	var objective_ids := {}
 	for objective in objectives:
 		if not _within_bounds(objective.coordinate(), cols, rows):
-			return "Rust map objective is outside map bounds"
+			return "Engine map objective is outside map bounds"
 		if objective_ids.has(objective.id()):
-			return "Rust map objective id is duplicated"
+			return "Engine map objective id is duplicated"
 		objective_ids[objective.id()] = true
 	return ""
 
