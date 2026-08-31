@@ -3,7 +3,7 @@ use aonw_domain::{
     GameMode, GameState, MatchIdentity, MatchRules, Participant, PlayerCountry, PlayerId,
     PlayerKind,
 };
-use aonw_engine::{MatchStartError, start_match};
+use aonw_engine::{CanonicalQueryError, MatchStartError, start_match};
 
 /// Fully validated input used to open one local session.
 #[derive(Clone, Debug)]
@@ -116,6 +116,8 @@ pub enum OpenSessionError {
     OccupancyPolicyMismatch,
     /// Immutable content identity could not be computed.
     ContentHash(Box<str>),
+    /// Recipient economy projection could not be computed.
+    Projection(CanonicalQueryError),
 }
 
 impl core::fmt::Display for OpenSessionError {
@@ -138,6 +140,7 @@ impl core::fmt::Display for OpenSessionError {
                 formatter.write_str("state occupancy policy does not match the ruleset")
             }
             Self::ContentHash(source) => write!(formatter, "content hash failed: {source}"),
+            Self::Projection(source) => write!(formatter, "recipient projection failed: {source}"),
         }
     }
 }

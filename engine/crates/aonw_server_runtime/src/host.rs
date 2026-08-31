@@ -51,10 +51,16 @@ pub fn apply_submit_turn(
         .iter()
         .map(|participant| {
             let recipient = Arc::new(participant.id().clone());
-            let view = ProjectedView::for_recipient(&state, recipient);
-            (participant.id().clone(), view)
+            let view = ProjectedView::try_for_recipient(
+                &state,
+                recipient,
+                compiled.map(),
+                compiled.ruleset(),
+            )
+            .map_err(ServerHostError::Projection)?;
+            Ok((participant.id().clone(), view))
         })
-        .collect::<Vec<_>>();
+        .collect::<Result<Vec<_>, ServerHostError>>()?;
 
     let context =
         EngineContext::canonical(&authenticated_actor, compiled.map(), compiled.ruleset())
@@ -86,9 +92,10 @@ pub fn apply_submit_turn(
                 accepted,
                 before_revision,
                 stamp,
+                &world,
             )
         })
-        .collect::<Vec<_>>()
+        .collect::<Result<Vec<_>, ServerHostError>>()?
         .into_boxed_slice();
 
     Ok(ServerCommandOutcome {
@@ -144,13 +151,26 @@ fn recipient_outcome(
     accepted: bool,
     before_revision: u64,
     stamp: SessionStamp,
-) -> RecipientOutcome {
+    world: &crate::PreparedServerWorld,
+) -> Result<RecipientOutcome, ServerHostError> {
     let disclosure = if accepted {
         RecipientDisclosure::new(recipient.clone(), before.units(), before.cities(), evidence)
     } else {
         RecipientDisclosure::empty(recipient.clone())
     };
-    let after = accepted.then(|| ProjectedView::for_recipient(state, Arc::new(recipient.clone())));
+    let after = if accepted {
+        Some(
+            ProjectedView::try_for_recipient(
+                state,
+                Arc::new(recipient.clone()),
+                world.compiled().map(),
+                world.compiled().ruleset(),
+            )
+            .map_err(ServerHostError::Projection)?,
+        )
+    } else {
+        None
+    };
     let patch = after.as_ref().map_or_else(
         || unchanged_view(before_revision, before),
         |after| diff_view(before_revision, state.revision().get(), before, after),
@@ -161,11 +181,11 @@ fn recipient_outcome(
         .filter(|event| disclosure.allows_event(event))
         .cloned()
         .collect();
-    RecipientOutcome {
+    Ok(RecipientOutcome {
         recipient_player_id: recipient,
         snapshot,
         patch,
         events,
         disclosure,
-    }
+    })
 }

@@ -9,6 +9,7 @@ AonwPlayerViewSnapshot _snapshot(
   AonwPlayerDiplomacyView? diplomacy,
   List<AonwFieldImprovementView> fieldImprovements = const [],
   List<AonwRoadView> roads = const [],
+  AonwPlayerEconomyView? economy,
   AonwPlayerFogView fog = const AonwPlayerFogView(
     enabled: true,
     discoveredHexes: [
@@ -43,6 +44,7 @@ AonwPlayerViewSnapshot _snapshot(
     ),
   ],
   fog: fog,
+  economy: economy ?? AonwPlayerEconomyView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -133,3 +135,39 @@ AonwPlayerDiplomacyView _diplomacy([List<String> counterpartIds = const []]) =>
       messages: const [],
       resourceTradeAgreements: const [],
     );
+
+AonwPlayerEconomyView _economy({
+  int gold = 10,
+  int warWeariness = 0,
+  int stabilityNet = 0,
+  bool withOutput = false,
+}) => AonwPlayerEconomyView(
+  gold: gold,
+  warWeariness: warWeariness,
+  stabilityNet: stabilityNet,
+  strategicResourceStockpile: const [
+    AonwPlayerStrategicResourceAmount(
+      resource: AonwResourceType.oil,
+      amount: 2,
+    ),
+  ],
+  strategicResourceOutput: withOutput
+      ? const [
+          AonwPlayerStrategicResourceAmount(
+            resource: AonwResourceType.oil,
+            amount: 1,
+          ),
+        ]
+      : const [],
+  strategicResourceSources: withOutput
+      ? const [
+          AonwPlayerStrategicResourceSource(
+            cityId: 'city-a',
+            coordinate: AonwCoordinate(col: 1, row: 1),
+            resource: AonwResourceType.oil,
+            improvement: AonwFieldImprovementKind.oilWell,
+            amountPerTurn: 1,
+          ),
+        ]
+      : const [],
+);

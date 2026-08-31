@@ -55,6 +55,7 @@ final class PlayerMapViewMapper {
       turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
       participants: _mapParticipants(wire.participants),
       fog: _mapFog(wire.fog),
+      economy: _mapEconomy(wire.economy),
       turnView: _mapTurnView(wire, pendingAction),
       diplomacy: _diplomacyMapper.fromWire(
         wire.diplomacy,
@@ -366,6 +367,42 @@ MapFogView _mapFog(AonwPlayerFogView fog) => MapFogView(
       (col: coordinate.col, row: coordinate.row),
   ],
 );
+
+PlayerEconomyView _mapEconomy(AonwPlayerEconomyView economy) =>
+    PlayerEconomyView(
+      gold: economy.gold,
+      warWeariness: economy.warWeariness,
+      stabilityNet: economy.stabilityNet,
+      strategicResourceStockpile: [
+        for (final amount in economy.strategicResourceStockpile)
+          PlayerStrategicResourceAmountView(
+            resource: MapResource.values.byName(amount.resource.name),
+            amount: amount.amount,
+          ),
+      ],
+      strategicResourceOutput: [
+        for (final amount in economy.strategicResourceOutput)
+          PlayerStrategicResourceAmountView(
+            resource: MapResource.values.byName(amount.resource.name),
+            amount: amount.amount,
+          ),
+      ],
+      strategicResourceSources: [
+        for (final source in economy.strategicResourceSources)
+          PlayerStrategicResourceSourceView(
+            cityId: source.cityId,
+            coordinate: (
+              col: source.coordinate.col,
+              row: source.coordinate.row,
+            ),
+            resource: MapResource.values.byName(source.resource.name),
+            improvement: FieldImprovementKind.values.byName(
+              source.improvement.name,
+            ),
+            amountPerTurn: source.amountPerTurn,
+          ),
+      ],
+    );
 
 RecipientTurnView _mapTurnView(
   AonwPlayerViewSnapshot wire,

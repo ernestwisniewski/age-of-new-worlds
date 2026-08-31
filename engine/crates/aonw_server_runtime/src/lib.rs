@@ -18,8 +18,8 @@ use aonw_contracts::server::{
 };
 use aonw_domain::{GameMode, GameState, PlayerId, TurnMode};
 use aonw_engine::{
-    CanonicalEngineError, CommandRejectionCode, CompiledMovementMap, CompiledMovementMapError,
-    DomainEvent, ExecutionEvidence, GameEngine, start_match,
+    CanonicalEngineError, CanonicalQueryError, CommandRejectionCode, CompiledMovementMap,
+    CompiledMovementMapError, DomainEvent, ExecutionEvidence, GameEngine, start_match,
 };
 use aonw_projection::{
     PlayerViewPatch, PlayerViewSnapshot, ProjectedView, RecipientDisclosure, SessionStamp,
@@ -128,9 +128,9 @@ impl ServerBoundaryError {
                 ServerHostError::EventBudgetExceeded { .. } => {
                     ServerHostErrorCodeDto::EventBudgetExceeded
                 }
-                ServerHostError::CompiledMovementMap(_) | ServerHostError::Engine(_) => {
-                    ServerHostErrorCodeDto::EngineFailure
-                }
+                ServerHostError::CompiledMovementMap(_)
+                | ServerHostError::Projection(_)
+                | ServerHostError::Engine(_) => ServerHostErrorCodeDto::EngineFailure,
             },
         }
     }
@@ -298,14 +298,21 @@ fn project_server_state(
         .iter()
         .map(|participant| {
             let recipient = participant.id().clone();
-            let snapshot =
-                ProjectedView::for_recipient(state, Arc::new(recipient.clone())).snapshot(stamp);
-            ServerRecipientSnapshotDto {
+            let snapshot = ProjectedView::try_for_recipient(
+                state,
+                Arc::new(recipient.clone()),
+                world.compiled().map(),
+                world.compiled().ruleset(),
+            )
+            .map_err(ServerHostError::Projection)?
+            .snapshot(stamp);
+            Ok(ServerRecipientSnapshotDto {
                 recipient_player_id: recipient.as_str().to_owned(),
                 snapshot: encode_player_view_snapshot(&snapshot),
-            }
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>, ServerHostError>>()
+        .map_err(ServerBoundaryError::Host)?;
     Ok(ServerProjectionResultDto {
         stamp: encode_client_stamp(stamp),
         recipients,
@@ -430,6 +437,8 @@ pub enum ServerHostError {
     },
     /// Immutable movement content could not be prepared.
     CompiledMovementMap(CompiledMovementMapError),
+    /// Recipient economy projection could not be computed.
+    Projection(CanonicalQueryError),
     /// The engine encountered corrupt canonical state or content.
     Engine(CanonicalEngineError),
 }
@@ -456,6 +465,7 @@ impl core::fmt::Display for ServerHostError {
                 "event budget exceeded: maximum {maximum}, actual {actual}"
             ),
             Self::CompiledMovementMap(source) => source.fmt(formatter),
+            Self::Projection(source) => write!(formatter, "recipient projection failed: {source}"),
             Self::Engine(source) => source.fmt(formatter),
         }
     }

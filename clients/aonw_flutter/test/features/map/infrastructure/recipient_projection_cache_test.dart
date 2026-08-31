@@ -28,6 +28,14 @@ void main() {
       scoreByPlayerId: const {'player-1': 20},
     );
     final diplomacy = _diplomacy();
+    final economy = AonwPlayerEconomyView(
+      gold: 25,
+      warWeariness: 2,
+      stabilityNet: -1,
+      strategicResourceStockpile: const [],
+      strategicResourceOutput: const [],
+      strategicResourceSources: const [],
+    );
     final cache = _cache(initial);
 
     final after = cache.apply(
@@ -39,6 +47,7 @@ void main() {
           turn: 2,
           turnLifecycle: lifecycle,
           outcome: outcome,
+          economy: economy,
           diplomacy: diplomacy,
           upsertedUnits: [_unit(col: 1, row: 0)],
         ),
@@ -51,10 +60,40 @@ void main() {
     expect(after.turnLifecycle, same(lifecycle));
     expect(after.outcome, same(outcome));
     expect(after.diplomacy, same(diplomacy));
+    expect(after.economy, same(economy));
     expect(after.pendingAction, isNull);
     expect(after.cityFoundingDraft, isNull);
     expect(after.units.single.coordinate.col, 1);
     expect(() => after.units.add(_unit()), throwsUnsupportedError);
+  });
+
+  test('rejects an economy replacement on an unchanged command', () {
+    final initial = _snapshot();
+    final cache = _cache(initial);
+
+    expect(
+      () => cache.apply(
+        _command(
+          accepted: false,
+          stamp: initial.stamp,
+          patch: _patch(
+            fromRevision: 0,
+            toRevision: 0,
+            turn: 1,
+            economy: AonwPlayerEconomyView(
+              gold: 1,
+              warWeariness: 0,
+              stabilityNet: 0,
+              strategicResourceStockpile: const [],
+              strategicResourceOutput: const [],
+              strategicResourceSources: const [],
+            ),
+          ),
+        ),
+      ),
+      throwsFormatException,
+    );
+    expect(cache.snapshot, same(initial));
   });
 
   test('keeps conditional fields for an unchanged rejected command', () {

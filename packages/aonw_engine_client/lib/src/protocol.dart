@@ -23,6 +23,7 @@ export 'protocol_map.dart';
 export 'protocol_match.dart';
 export 'protocol_outcome.dart';
 export 'protocol_pending_action.dart';
+export 'protocol_player_economy.dart';
 export 'protocol_player_view.dart';
 export 'protocol_query.dart';
 export 'protocol_response.dart';

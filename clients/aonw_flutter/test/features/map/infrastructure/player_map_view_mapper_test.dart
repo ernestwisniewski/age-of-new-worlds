@@ -21,7 +21,7 @@ void main() {
       _snapshot([
         _unit('unit-a', col: 1, row: 0),
         _unit('unit-b', col: 2, row: 1),
-      ]),
+      ], economy: _economy(gold: 73, warWeariness: 5, stabilityNet: -4)),
       map: map,
       actorPlayerId: 'player-1',
     );
@@ -42,6 +42,11 @@ void main() {
     );
     expect(player.participants.last.kind, MatchParticipantKindView.ai);
     expect(player.fog.enabled, isTrue);
+    expect(player.economy.gold, 73);
+    expect(player.economy.warWeariness, 5);
+    expect(player.economy.stabilityNet, -4);
+    expect(player.economy.stockpiledAmountFor(MapResource.oil), 2);
+    expect(player.economy.outputPerTurnFor(MapResource.oil), 0);
     expect(
       player.fog.visibilityAt((col: 0, row: 0)),
       MapFogVisibilityView.discovered,
@@ -64,6 +69,45 @@ void main() {
     expect(player.units.first.kind, VisibleUnitKind.commander);
     expect(player.units.first.posture, VisibleUnitPosture.active);
     expect(player.units.first.movementUnits, 12);
+  });
+
+  test('maps authoritative strategic resource output and source evidence', () {
+    final player = mapper.fromWire(
+      _snapshot(
+        const [],
+        cities: [_city()],
+        economy: _economy(withOutput: true),
+      ),
+      map: testMapScene().map,
+      actorPlayerId: 'player-1',
+    );
+
+    expect(player.economy.outputPerTurnFor(MapResource.oil), 1);
+    final source = player.economy.strategicResourceSources.single;
+    expect(source.cityId, 'city-a');
+    expect(source.coordinate, (col: 1, row: 1));
+    expect(source.resource, MapResource.oil);
+    expect(source.improvement, FieldImprovementKind.oilWell);
+    expect(source.amountPerTurn, 1);
+  });
+
+  test('rejects inconsistent recipient economy data', () {
+    expect(
+      () => mapper.fromWire(
+        _snapshot(const [], economy: _economy(gold: -1)),
+        map: testMapScene().map,
+        actorPlayerId: 'player-1',
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => mapper.fromWire(
+        _snapshot(const [], economy: _economy(withOutput: true)),
+        map: testMapScene().map,
+        actorPlayerId: 'player-1',
+      ),
+      throwsFormatException,
+    );
   });
 
   test('requires the active actor to belong to the public roster', () {
@@ -142,6 +186,7 @@ void main() {
       turnMode: snapshot.turnMode,
       participants: snapshot.participants,
       fog: snapshot.fog,
+      economy: snapshot.economy,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,

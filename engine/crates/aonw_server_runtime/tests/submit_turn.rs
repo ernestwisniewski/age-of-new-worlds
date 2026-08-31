@@ -12,9 +12,10 @@ use aonw_contracts::{
     TurnModeDto,
 };
 use aonw_domain::{
-    FogOfWar, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules,
-    MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerTurnState,
-    StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
+    EconomyState, FogOfWar, GameMode, GameState, HexCoord, InitialResourceDistribution,
+    MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
+    PlayerFog, PlayerId, PlayerKind, PlayerTurnState, ResourceType, StateRevision,
+    StrategicResourceStockpile, TurnLifecycle, Unit, UnitId, UnitKind,
 };
 use aonw_engine::{CommandRejectionCode, DomainEvent, GameEngine};
 use aonw_server_runtime::{
@@ -74,6 +75,42 @@ fn final_submit_returns_exact_offsets_and_every_recipient_projection() {
                 .filter(|unit| unit.owner_player_id() != &recipient.recipient_player_id)
                 .all(|unit| unit.owned_details().is_none())
         );
+        let canonical_economy = outcome.state.economy();
+        let actor = &recipient.recipient_player_id;
+        assert_eq!(
+            recipient.snapshot.economy().gold(),
+            canonical_economy
+                .player_gold()
+                .get(actor)
+                .copied()
+                .unwrap_or(0)
+        );
+        assert_eq!(
+            recipient.snapshot.economy().war_weariness(),
+            canonical_economy
+                .player_war_weariness()
+                .get(actor)
+                .copied()
+                .unwrap_or(0)
+        );
+        assert_eq!(
+            recipient.snapshot.economy().stability_net(),
+            canonical_economy
+                .player_stability_net()
+                .get(actor)
+                .copied()
+                .unwrap_or(0)
+        );
+        let stockpile = recipient.snapshot.economy().strategic_resource_stockpile();
+        let canonical_stockpile = canonical_economy
+            .strategic_resources()
+            .get(actor)
+            .expect("actor stockpile");
+        assert_eq!(stockpile.len(), canonical_stockpile.amounts().len());
+        for (projected, (resource, amount)) in stockpile.iter().zip(canonical_stockpile.amounts()) {
+            assert_eq!(projected.resource(), *resource);
+            assert_eq!(projected.amount(), *amount);
+        }
     }
 }
 
@@ -176,6 +213,28 @@ fn strict_dto_maps_transactional_and_recipient_safe_output() {
             .filter(|unit| unit.owner_player_id != recipient.recipient_player_id)
             .all(|unit| unit.owned_details.is_none())
     }));
+    for recipient in &result.recipients {
+        let (gold, war_weariness, _, resource, amount) =
+            expected_economy(&player(&recipient.recipient_player_id));
+        assert_eq!(recipient.snapshot.economy.gold, gold);
+        assert_eq!(recipient.snapshot.economy.war_weariness, war_weariness);
+        assert_eq!(
+            recipient
+                .snapshot
+                .economy
+                .strategic_resource_stockpile
+                .len(),
+            1
+        );
+        assert_eq!(
+            recipient.snapshot.economy.strategic_resource_stockpile[0].resource,
+            aonw_contract_mapping::encode_resource(resource)
+        );
+        assert_eq!(
+            recipient.snapshot.economy.strategic_resource_stockpile[0].amount,
+            amount
+        );
+    }
 }
 
 #[test]
@@ -389,6 +448,27 @@ fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture {
         None,
     )
     .expect("lifecycle");
+    let economy = EconomyState::try_new(
+        &identity,
+        map.bounds(),
+        BTreeMap::from([(p1.clone(), 17), (p2.clone(), 91)]),
+        BTreeMap::from([(p1.clone(), 2), (p2.clone(), 8)]),
+        BTreeMap::new(),
+        BTreeMap::from([
+            (
+                p1.clone(),
+                StrategicResourceStockpile::try_new(BTreeMap::from([(ResourceType::Oil, 4)]))
+                    .expect("player one stockpile"),
+            ),
+            (
+                p2.clone(),
+                StrategicResourceStockpile::try_new(BTreeMap::from([(ResourceType::Aluminium, 9)]))
+                    .expect("player two stockpile"),
+            ),
+        ]),
+        InitialResourceDistribution::default(),
+    )
+    .expect("economy");
     let units = [unit("unit-1", &p1, 0), unit("unit-2", &p2, 1)];
     let fog = FogOfWar::try_new([
         PlayerFog::new(p1, [], [HexCoord::new(0, 0)]),
@@ -403,6 +483,7 @@ fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture {
         units,
     )
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
+    .with_economy(economy)
     .with_fog_of_war(fog)
     .try_build()
     .expect("state");
@@ -459,6 +540,14 @@ fn map(cols: u16) -> MapDefinition {
 
 fn player(id: &str) -> PlayerId {
     PlayerId::new(id).expect("player id")
+}
+
+fn expected_economy(player: &PlayerId) -> (i64, i64, i64, ResourceType, i64) {
+    if player.as_str() == "player-1" {
+        (17, 2, 0, ResourceType::Oil, 4)
+    } else {
+        (91, 8, 0, ResourceType::Aluminium, 9)
+    }
 }
 
 fn match_identity(game_mode: GameModeDto) -> MatchIdentityDto {

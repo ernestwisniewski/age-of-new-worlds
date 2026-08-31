@@ -12,10 +12,11 @@ use aonw_contracts::client::{
 };
 use aonw_contracts::{FieldImprovementKindDto, ResourceTypeDto};
 use aonw_domain::{
-    City, CityId, FieldImprovement, FieldImprovementKind, GameMode, GameState, HexCoord,
-    InfrastructureState, KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, Participant,
-    PlayerCountry, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState,
-    StateRevision, TechnologyId, TransportNetwork, TurnLifecycle, WonderRegistry,
+    City, CityId, EconomyState, FieldImprovement, FieldImprovementKind, GameMode, GameState,
+    HexCoord, InfrastructureState, InitialResourceDistribution, KnowledgeState, MatchIdentity,
+    MatchLifecycle, MatchRules, Participant, PlayerCountry, PlayerId, PlayerKind,
+    PlayerResearchState, PlayerTurnState, ResearchState, ResourceType, StateRevision,
+    StrategicResourceStockpile, TechnologyId, TransportNetwork, TurnLifecycle, WonderRegistry,
 };
 use aonw_engine::YieldValue;
 use aonw_local_runtime::{
@@ -34,6 +35,32 @@ fn runtime_and_protocol_return_the_same_city_yield() {
     runtime
         .open(OpenSession::from_state(map, ruleset, state, actor))
         .expect("open");
+
+    let ClientOutcomeDto::Success { response } = ClientProtocol::dispatch(
+        &mut runtime,
+        ClientRequestDto {
+            api_version: CLIENT_API_VERSION,
+            request: ClientRequestBodyDto::Snapshot,
+        },
+    )
+    .outcome
+    else {
+        panic!("snapshot success")
+    };
+    let ClientResponseBodyDto::Snapshot { snapshot } = *response else {
+        panic!("snapshot response")
+    };
+    assert_eq!(snapshot.economy.gold, 73);
+    assert_eq!(snapshot.economy.war_weariness, 5);
+    assert_eq!(snapshot.economy.stability_net, -4);
+    assert_eq!(snapshot.economy.strategic_resource_stockpile.len(), 1);
+    assert_eq!(
+        snapshot.economy.strategic_resource_stockpile[0].resource,
+        ResourceTypeDto::Oil
+    );
+    assert_eq!(snapshot.economy.strategic_resource_stockpile[0].amount, 2);
+    assert_eq!(snapshot.economy.strategic_resource_output.len(), 1);
+    assert_eq!(snapshot.economy.strategic_resource_sources.len(), 1);
 
     assert_city_query_cache(&mut runtime, &city_id);
 
@@ -208,6 +235,20 @@ fn state(
         PlayerResearchState::try_new([TechnologyId::Combustion], None, [], 0).expect("research"),
     )])
     .expect("research state");
+    let economy = EconomyState::try_new(
+        &identity,
+        map.bounds(),
+        BTreeMap::from([(actor.clone(), 73)]),
+        BTreeMap::from([(actor.clone(), 5)]),
+        BTreeMap::from([(actor.clone(), -4)]),
+        BTreeMap::from([(
+            actor.clone(),
+            StrategicResourceStockpile::try_new(BTreeMap::from([(ResourceType::Oil, 2)]))
+                .expect("stockpile"),
+        )]),
+        InitialResourceDistribution::default(),
+    )
+    .expect("economy");
     GameState::builder(
         StateRevision::new(9),
         4,
@@ -217,6 +258,7 @@ fn state(
     )
     .with_cities([city])
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
+    .with_economy(economy)
     .with_infrastructure(infrastructure)
     .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
     .try_build()

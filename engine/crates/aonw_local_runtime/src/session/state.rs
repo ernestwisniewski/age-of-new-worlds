@@ -85,7 +85,15 @@ impl Session {
             state_digest,
             request.event_offset,
         ));
-        let projection = Arc::new(ProjectedView::for_recipient(&request.state, actor.clone()));
+        let projection = Arc::new(
+            ProjectedView::try_for_recipient(
+                &request.state,
+                actor.clone(),
+                world.map(),
+                world.ruleset(),
+            )
+            .map_err(OpenSessionError::Projection)?,
+        );
         Ok(Self {
             world,
             state: Some(request.state),
@@ -111,15 +119,25 @@ impl Session {
         self.actor.clone()
     }
 
-    pub(crate) fn handoff_actor(&mut self, actor: PlayerId) {
+    pub(crate) fn handoff_actor(
+        &mut self,
+        actor: PlayerId,
+    ) -> Result<(), aonw_engine::CanonicalQueryError> {
         let actor = Arc::new(actor);
+        let projection = Arc::new(ProjectedView::try_for_recipient(
+            self.state(),
+            actor.clone(),
+            self.world.map(),
+            self.world.ruleset(),
+        )?);
         self.visibility = Arc::new(MovementVisibility::for_player(
             self.state(),
             self.world.map(),
             actor.as_ref(),
         ));
-        self.projection = Arc::new(ProjectedView::for_recipient(self.state(), actor.clone()));
+        self.projection = projection;
         self.actor = actor;
+        Ok(())
     }
 
     pub(crate) fn map(&self) -> &MapDefinition {

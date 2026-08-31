@@ -64,6 +64,77 @@ final class MapFogView {
   }
 }
 
+final class PlayerStrategicResourceAmountView {
+  const PlayerStrategicResourceAmountView({
+    required this.resource,
+    required this.amount,
+  });
+
+  final MapResource resource;
+  final int amount;
+}
+
+final class PlayerStrategicResourceSourceView {
+  const PlayerStrategicResourceSourceView({
+    required this.cityId,
+    required this.coordinate,
+    required this.resource,
+    required this.improvement,
+    required this.amountPerTurn,
+  });
+
+  final String cityId;
+  final MapHexCoordinate coordinate;
+  final MapResource resource;
+  final FieldImprovementKind improvement;
+  final int amountPerTurn;
+}
+
+final class PlayerEconomyView {
+  PlayerEconomyView({
+    required this.gold,
+    required this.warWeariness,
+    required this.stabilityNet,
+    required List<PlayerStrategicResourceAmountView> strategicResourceStockpile,
+    required List<PlayerStrategicResourceAmountView> strategicResourceOutput,
+    required List<PlayerStrategicResourceSourceView> strategicResourceSources,
+  }) : strategicResourceStockpile = List.unmodifiable(
+         strategicResourceStockpile,
+       ),
+       strategicResourceOutput = List.unmodifiable(strategicResourceOutput),
+       strategicResourceSources = List.unmodifiable(strategicResourceSources);
+
+  factory PlayerEconomyView.empty() => PlayerEconomyView(
+    gold: 0,
+    warWeariness: 0,
+    stabilityNet: 0,
+    strategicResourceStockpile: const [],
+    strategicResourceOutput: const [],
+    strategicResourceSources: const [],
+  );
+
+  final int gold;
+  final int warWeariness;
+  final int stabilityNet;
+  final List<PlayerStrategicResourceAmountView> strategicResourceStockpile;
+  final List<PlayerStrategicResourceAmountView> strategicResourceOutput;
+  final List<PlayerStrategicResourceSourceView> strategicResourceSources;
+
+  int stockpiledAmountFor(MapResource resource) {
+    for (final amount in strategicResourceStockpile) {
+      if (amount.resource == resource) return amount.amount;
+    }
+    return 0;
+  }
+
+  int outputPerTurnFor(MapResource resource) {
+    for (final amount in strategicResourceOutput) {
+      if (amount.resource == resource) return amount.amount;
+    }
+    return 0;
+  }
+}
+
 enum MatchParticipantKindView { human, ai }
 
 enum MatchParticipantCountryView {
@@ -173,6 +244,7 @@ final class PlayerMapView {
     required this.turnMode,
     required List<MatchParticipantView> participants,
     required this.fog,
+    required this.economy,
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
@@ -252,6 +324,7 @@ final class PlayerMapView {
       ),
     ],
     fog: MapFogView.disabled(),
+    economy: PlayerEconomyView.empty(),
     turnView: RecipientTurnView(
       number: turn,
       ownState: RecipientTurnStateView.active,
@@ -281,6 +354,7 @@ final class PlayerMapView {
   final MatchTurnModeView turnMode;
   final List<MatchParticipantView> participants;
   final MapFogView fog;
+  final PlayerEconomyView economy;
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;

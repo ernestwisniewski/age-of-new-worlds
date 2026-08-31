@@ -32,7 +32,7 @@ pub use worker::encode_worker_automation_option;
 
 use artifact::artifact;
 use diplomacy::diplomacy;
-use snapshot::fog;
+use snapshot::{economy, fog};
 
 /// Maps one recipient-safe projection delta to the strict current client DTO.
 #[must_use]
@@ -43,6 +43,7 @@ pub fn encode_player_view_patch(value: &PlayerViewPatch) -> PlayerViewPatchDto {
         turn: value.turn,
         turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode),
         fog: value.fog.as_ref().map(fog),
+        economy: value.economy.as_ref().map(economy),
         turn_lifecycle: value.turn_lifecycle.map(encode_turn_lifecycle),
         outcome: value.outcome.as_ref().map(crate::encode_game_outcome),
         upserted_units: value.upserted_units.iter().map(unit).collect(),

@@ -86,6 +86,7 @@ Map<String, Object?> _outcome() => {
       'turn': 1,
       'turnMode': 'simultaneous',
       'fog': null,
+      'economy': null,
       'turnLifecycle': {
         'ownState': 'active',
         'ownSubmitted': true,
@@ -141,6 +142,14 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
     'visibleHexes': [
       {'col': 2, 'row': 1},
     ],
+  },
+  'economy': {
+    'gold': 100,
+    'warWeariness': 0,
+    'stabilityNet': 0,
+    'strategicResourceStockpile': <Object?>[],
+    'strategicResourceOutput': <Object?>[],
+    'strategicResourceSources': <Object?>[],
   },
   'outcome': {
     'condition': 'ongoing',

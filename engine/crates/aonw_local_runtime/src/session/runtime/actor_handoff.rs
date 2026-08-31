@@ -31,7 +31,9 @@ impl LocalRuntime {
         if !identity.contains(&actor) {
             return Err(ActorHandoffError::UnknownPlayer(actor));
         }
-        session.handoff_actor(actor);
+        session
+            .handoff_actor(actor)
+            .map_err(ActorHandoffError::Projection)?;
         self.query_cache.clear();
         Ok(session.stamp())
     }

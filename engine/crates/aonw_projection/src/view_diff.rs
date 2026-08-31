@@ -1,16 +1,18 @@
 use core::cmp::Ordering;
 use std::sync::Arc;
 
+use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
     ArtifactId, CityId, GameOutcome, GameState, HexCoord, PlayerId, TurnMode, UnitId,
 };
+use aonw_engine::CanonicalQueryError;
 
 use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
-    PlayerDiplomacyView, PlayerFieldImprovementView, PlayerFogView, PlayerParticipantView,
-    PlayerRoadView, PlayerTurnLifecycleView, PlayerUnitView, PlayerViewSnapshot, SessionStamp,
-    city_founding_draft, diplomacy_view, pending_action, visible_artifacts, visible_cities,
-    visible_infrastructure, visible_units,
+    PlayerDiplomacyView, PlayerEconomyView, PlayerFieldImprovementView, PlayerFogView,
+    PlayerParticipantView, PlayerRoadView, PlayerTurnLifecycleView, PlayerUnitView,
+    PlayerViewSnapshot, SessionStamp, city_founding_draft, diplomacy_view, pending_action,
+    visible_artifacts, visible_cities, visible_infrastructure, visible_units,
 };
 
 /// Recipient-safe view delta produced by one dispatch.
@@ -26,6 +28,8 @@ pub struct PlayerViewPatch {
     pub turn_mode: TurnMode,
     /// Replacement recipient fog state when visibility changed.
     pub fog: Option<PlayerFogView>,
+    /// Replacement recipient economy state when any account or resource flow changed.
+    pub economy: Option<PlayerEconomyView>,
     /// Replacement turn projection when lifecycle state changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleView>,
     /// Replacement authoritative match result when it changed.
@@ -66,6 +70,7 @@ pub struct ProjectedView {
     turn_mode: TurnMode,
     participants: Arc<[PlayerParticipantView]>,
     fog: Arc<PlayerFogView>,
+    economy: Arc<PlayerEconomyView>,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -100,6 +105,7 @@ impl ProjectedView {
                 discovered_hexes: Arc::from([]),
                 visible_hexes: Arc::from([]),
             }),
+            economy: Arc::new(PlayerEconomyView::empty()),
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -129,9 +135,23 @@ impl ProjectedView {
         self
     }
 
-    /// Builds a complete recipient-safe projection from canonical state.
-    #[must_use]
-    pub fn for_recipient(state: &GameState, actor: Arc<PlayerId>) -> Self {
+    #[cfg(test)]
+    fn with_gold(mut self, gold: i64) -> Self {
+        self.economy = Arc::new(PlayerEconomyView::empty().with_gold(gold));
+        self
+    }
+
+    /// Builds a complete recipient-safe projection from canonical state and content.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when an authoritative economy projection cannot be computed.
+    pub fn try_for_recipient(
+        state: &GameState,
+        actor: Arc<PlayerId>,
+        map: &MapDefinition,
+        ruleset: &RulesetDefinition,
+    ) -> Result<Self, CanonicalQueryError> {
         let recipient = actor.as_ref();
         let (field_improvements, roads) = visible_infrastructure(state, recipient);
         let turn = PlayerTurnLifecycleView::new(state, recipient);
@@ -142,6 +162,9 @@ impl ProjectedView {
         let pending_action = pending_action(state, recipient).map(Arc::new);
         let city_founding_draft = city_founding_draft(state, recipient).map(Arc::new);
         let fog = Arc::new(PlayerFogView::for_recipient(state, recipient));
+        let economy = Arc::new(PlayerEconomyView::try_for_recipient(
+            state, recipient, map, ruleset,
+        )?);
         let participants = state
             .match_lifecycle()
             .identity()
@@ -150,12 +173,13 @@ impl ProjectedView {
             .map(PlayerParticipantView::from_participant)
             .collect::<Vec<_>>()
             .into();
-        Self {
+        Ok(Self {
             recipient_player_id: actor,
             turn_number: state.turn(),
             turn_mode: state.match_lifecycle().identity().turn_mode(),
             participants,
             fog,
+            economy,
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -166,7 +190,7 @@ impl ProjectedView {
             roads: roads.into(),
             pending_action,
             city_founding_draft,
-        }
+        })
     }
 
     /// Materializes a complete recipient snapshot with authoritative identity.
@@ -179,6 +203,7 @@ impl ProjectedView {
             self.turn_mode,
             self.participants.clone(),
             self.fog.clone(),
+            self.economy.clone(),
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),
@@ -228,6 +253,7 @@ pub fn diff_view(
     let outcome = (before.outcome != after.outcome).then(|| after.outcome.as_ref().clone());
     let diplomacy = (before.diplomacy != after.diplomacy).then(|| after.diplomacy.as_ref().clone());
     let fog = (before.fog != after.fog).then(|| after.fog.as_ref().clone());
+    let economy = (before.economy != after.economy).then(|| after.economy.as_ref().clone());
     let mut before_units = before.units.iter().peekable();
     let mut after_units = after.units.iter().peekable();
     let mut upserted_units = Vec::new();
@@ -267,6 +293,7 @@ pub fn diff_view(
         turn: after.turn_number,
         turn_mode: after.turn_mode,
         fog,
+        economy,
         turn_lifecycle: (before.turn != after.turn).then_some(after.turn),
         outcome,
         upserted_units: upserted_units.into_boxed_slice(),
@@ -294,6 +321,7 @@ pub fn unchanged_view(revision: u64, view: &ProjectedView) -> PlayerViewPatch {
         turn: view.turn_number,
         turn_mode: view.turn_mode,
         fog: None,
+        economy: None,
         turn_lifecycle: None,
         outcome: None,
         upserted_units: Box::new([]),
@@ -452,6 +480,7 @@ mod tests {
             (Vec::new(), Vec::new()),
         )
         .with_turn_mode(TurnMode::Simultaneous)
+        .with_gold(25)
         .with_fog(
             &[HexCoord::new(1, 0), HexCoord::new(2, 0)],
             &[HexCoord::new(2, 0)],
@@ -469,6 +498,7 @@ mod tests {
             [HexCoord::new(1, 0), HexCoord::new(2, 0)]
         );
         assert_eq!(fog.visible_hexes(), [HexCoord::new(2, 0)]);
+        assert_eq!(patch.economy.expect("changed economy").gold(), 25);
         assert_eq!(
             patch
                 .upserted_units

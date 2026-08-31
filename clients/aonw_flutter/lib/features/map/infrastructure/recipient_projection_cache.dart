@@ -95,6 +95,7 @@ final class RecipientProjectionCache {
       turnMode: patch.turnMode,
       participants: before.participants,
       fog: patch.fog ?? before.fog,
+      economy: patch.economy ?? before.economy,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -202,6 +203,7 @@ final class RecipientProjectionCache {
       patch.turnLifecycle != null ||
       patch.outcome != null ||
       patch.fog != null ||
+      patch.economy != null ||
       patch.diplomacy != null ||
       !_samePendingAction(patch.pendingAction, before.pendingAction) ||
       !_sameFoundingDraft(patch.cityFoundingDraft, before.cityFoundingDraft) ||

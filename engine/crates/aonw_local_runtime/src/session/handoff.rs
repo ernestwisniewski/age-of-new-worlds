@@ -1,4 +1,5 @@
 use aonw_domain::PlayerId;
+use aonw_engine::CanonicalQueryError;
 
 /// Rejection from changing the authenticated actor of a local hot-seat session.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -11,6 +12,8 @@ pub enum ActorHandoffError {
     NotHotSeat,
     /// The requested actor is not a participant in the current match.
     UnknownPlayer(PlayerId),
+    /// Recipient economy projection could not be rebuilt.
+    Projection(CanonicalQueryError),
 }
 
 impl core::fmt::Display for ActorHandoffError {
@@ -22,6 +25,7 @@ impl core::fmt::Display for ActorHandoffError {
             }
             Self::NotHotSeat => formatter.write_str("actor handoff requires a hot-seat match"),
             Self::UnknownPlayer(player) => write!(formatter, "unknown hot-seat actor: {player}"),
+            Self::Projection(source) => write!(formatter, "recipient projection failed: {source}"),
         }
     }
 }

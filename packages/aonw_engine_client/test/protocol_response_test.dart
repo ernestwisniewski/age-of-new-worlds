@@ -203,6 +203,16 @@ void main() {
     expect(snapshot.fog.discoveredHexes, hasLength(2));
     expect(snapshot.fog.visibleHexes.single.col, 2);
     expect(snapshot.fog.visibleHexes.single.row, 1);
+    expect(snapshot.economy.gold, 73);
+    expect(snapshot.economy.warWeariness, 5);
+    expect(snapshot.economy.stabilityNet, -4);
+    expect(
+      snapshot.economy.strategicResourceStockpile.single.resource,
+      AonwResourceType.oil,
+    );
+    expect(snapshot.economy.strategicResourceStockpile.single.amount, 2);
+    expect(snapshot.economy.strategicResourceOutput.single.amount, 1);
+    expect(snapshot.economy.strategicResourceSources.single.cityId, 'city-a');
 
     final leakedParticipant = <String, Object?>{
       ...(_snapshot['participants']! as List).single as Map<String, Object?>,
@@ -407,6 +417,26 @@ const _snapshot = {
       {'col': 2, 'row': 1},
     ],
   },
+  'economy': {
+    'gold': 73,
+    'warWeariness': 5,
+    'stabilityNet': -4,
+    'strategicResourceStockpile': [
+      {'resource': 'oil', 'amount': 2},
+    ],
+    'strategicResourceOutput': [
+      {'resource': 'oil', 'amount': 1},
+    ],
+    'strategicResourceSources': [
+      {
+        'cityId': 'city-a',
+        'coordinate': {'col': 1, 'row': 1},
+        'resource': 'oil',
+        'improvement': 'oilWell',
+        'amountPerTurn': 1,
+      },
+    ],
+  },
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
@@ -449,6 +479,7 @@ Map<String, Object?> _commandResult(Map<String, Object?> outcome) => {
     'turn': 7,
     'turnMode': 'sequential',
     'fog': null,
+    'economy': null,
     'turnLifecycle': null,
     'outcome': null,
     'upsertedUnits': <Object?>[],

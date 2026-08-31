@@ -55,3 +55,16 @@ pub struct StrategicResourceSourceDto {
     pub improvement: FieldImprovementKindDto,
     pub amount_per_turn: i64,
 }
+
+/// Complete recipient-owned economy state required by the map HUD.
+#[allow(missing_docs)]
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerEconomyViewDto {
+    pub gold: i64,
+    pub war_weariness: i64,
+    pub stability_net: i64,
+    pub strategic_resource_stockpile: Vec<StrategicResourceAmountDto>,
+    pub strategic_resource_output: Vec<StrategicResourceAmountDto>,
+    pub strategic_resource_sources: Vec<StrategicResourceSourceDto>,
+}

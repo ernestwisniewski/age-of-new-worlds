@@ -157,8 +157,19 @@ fn dispatch_system(
         )
     };
     let next_revision = parts.state.revision().get();
-    let next_projection =
-        (!rejected).then(|| ProjectedView::for_recipient(&parts.state, session.shared_actor()));
+    let next_projection = if rejected {
+        None
+    } else {
+        Some(
+            ProjectedView::try_for_recipient(
+                &parts.state,
+                session.shared_actor(),
+                session.map(),
+                session.ruleset(),
+            )
+            .map_err(RuntimeError::Query)?,
+        )
+    };
     let view_patch = next_projection.as_ref().map_or_else(
         || unchanged_view(before_revision, session.projection()),
         |after| diff_view(before_revision, next_revision, session.projection(), after),

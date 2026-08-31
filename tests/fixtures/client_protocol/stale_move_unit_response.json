@@ -23,6 +23,7 @@
           "turn": 7,
           "turnMode": "sequential",
           "fog": null,
+          "economy": null,
           "turnLifecycle": null,
           "outcome": null,
           "upsertedUnits": [],

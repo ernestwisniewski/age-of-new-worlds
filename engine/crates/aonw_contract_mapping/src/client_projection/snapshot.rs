@@ -1,5 +1,6 @@
 use aonw_contracts::client::{
-    ClientSessionStampDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerViewSnapshotDto,
+    ClientSessionStampDto, PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
+    PlayerViewSnapshotDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
@@ -29,6 +30,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
         turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode()),
         participants: value.participants().iter().map(participant).collect(),
         fog: fog(value.fog()),
+        economy: economy(value.economy()),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
@@ -44,6 +46,46 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
             .map(field_improvement)
             .collect(),
         roads: value.roads().iter().copied().map(road).collect(),
+    }
+}
+
+pub(super) fn economy(value: &aonw_projection::PlayerEconomyView) -> PlayerEconomyViewDto {
+    PlayerEconomyViewDto {
+        gold: value.gold(),
+        war_weariness: value.war_weariness(),
+        stability_net: value.stability_net(),
+        strategic_resource_stockpile: value
+            .strategic_resource_stockpile()
+            .iter()
+            .copied()
+            .map(resource_amount)
+            .collect(),
+        strategic_resource_output: value
+            .strategic_resource_output()
+            .iter()
+            .copied()
+            .map(resource_amount)
+            .collect(),
+        strategic_resource_sources: value
+            .strategic_resource_sources()
+            .iter()
+            .map(|source| StrategicResourceSourceDto {
+                city_id: source.city_id().as_str().to_owned(),
+                coordinate: coordinate(source.coordinate()),
+                resource: crate::encode_resource(source.resource()),
+                improvement: crate::encode_improvement(source.improvement()),
+                amount_per_turn: source.amount_per_turn(),
+            })
+            .collect(),
+    }
+}
+
+fn resource_amount(
+    value: aonw_projection::PlayerStrategicResourceAmountView,
+) -> StrategicResourceAmountDto {
+    StrategicResourceAmountDto {
+        resource: crate::encode_resource(value.resource()),
+        amount: value.amount(),
     }
 }
 

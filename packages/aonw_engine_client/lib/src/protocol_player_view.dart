@@ -6,6 +6,7 @@ import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_match.dart';
 import 'package:aonw_engine_client/src/protocol_outcome.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
+import 'package:aonw_engine_client/src/protocol_player_economy.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
 part 'protocol_player_details.dart';
@@ -161,6 +162,7 @@ final class AonwPlayerViewSnapshot {
     required this.turnMode,
     required this.participants,
     required this.fog,
+    required this.economy,
     required this.outcome,
     required this.turnLifecycle,
     required this.pendingAction,
@@ -186,6 +188,7 @@ final class AonwPlayerViewSnapshot {
         AonwPlayerParticipantView.fromJson,
       ),
       fog: AonwPlayerFogView.fromJson(value['fog']),
+      economy: AonwPlayerEconomyView.fromJson(value['economy']),
       outcome: AonwGameOutcome.fromJson(value['outcome']),
       turnLifecycle: AonwPlayerTurnLifecycle.fromJson(value['turnLifecycle']),
       pendingAction: value['pendingAction'] == null
@@ -224,6 +227,7 @@ final class AonwPlayerViewSnapshot {
   final AonwTurnMode turnMode;
   final List<AonwPlayerParticipantView> participants;
   final AonwPlayerFogView fog;
+  final AonwPlayerEconomyView economy;
   final AonwGameOutcome outcome;
   final AonwPlayerTurnLifecycle turnLifecycle;
   final AonwPendingActionView? pendingAction;
@@ -243,6 +247,7 @@ void _requirePlayerViewSnapshotKeys(Map<String, Object?> value) {
     'turnMode',
     'participants',
     'fog',
+    'economy',
     'outcome',
     'turnLifecycle',
     'pendingAction',
@@ -263,6 +268,7 @@ final class AonwPlayerViewPatch {
     required this.turn,
     required this.turnMode,
     this.fog,
+    this.economy,
     required this.turnLifecycle,
     required this.outcome,
     required this.upsertedUnits,
@@ -291,6 +297,7 @@ final class AonwPlayerViewPatch {
       turn: readUnsigned(value['turn'], 'patch turn'),
       turnMode: AonwTurnMode.fromJson(value['turnMode']),
       fog: _optional(value['fog'], AonwPlayerFogView.fromJson),
+      economy: _optional(value['economy'], AonwPlayerEconomyView.fromJson),
       turnLifecycle: _optional(
         value['turnLifecycle'],
         AonwPlayerTurnLifecycle.fromJson,
@@ -327,6 +334,7 @@ final class AonwPlayerViewPatch {
   final int turn;
   final AonwTurnMode turnMode;
   final AonwPlayerFogView? fog;
+  final AonwPlayerEconomyView? economy;
   final AonwPlayerTurnLifecycle? turnLifecycle;
   final AonwGameOutcome? outcome;
   final List<AonwPlayerUnitView> upsertedUnits;
@@ -407,6 +415,7 @@ void _requirePlayerViewPatchKeys(Map<String, Object?> value) {
     'turn',
     'turnMode',
     'fog',
+    'economy',
     'turnLifecycle',
     'outcome',
     'upsertedUnits',

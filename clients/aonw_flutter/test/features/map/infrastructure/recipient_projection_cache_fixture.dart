@@ -23,6 +23,7 @@ AonwPlayerViewSnapshot _snapshot({
   ),
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
+  AonwPlayerEconomyView? economy,
 }) => AonwPlayerViewSnapshot(
   stamp: _stamp(
     revision: revision,
@@ -33,6 +34,7 @@ AonwPlayerViewSnapshot _snapshot({
   turnMode: turnMode,
   participants: participants,
   fog: fog,
+  economy: economy ?? AonwPlayerEconomyView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -107,6 +109,7 @@ AonwPlayerViewPatch _patch({
   AonwPlayerTurnLifecycle? turnLifecycle,
   AonwGameOutcome? outcome,
   AonwPlayerFogView? fog,
+  AonwPlayerEconomyView? economy,
   AonwPlayerDiplomacyView? diplomacy,
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
@@ -118,6 +121,7 @@ AonwPlayerViewPatch _patch({
   turn: turn,
   turnMode: turnMode,
   fog: fog,
+  economy: economy,
   turnLifecycle: turnLifecycle,
   outcome: outcome,
   upsertedUnits: upsertedUnits,

@@ -29,8 +29,8 @@ pub use diplomacy::{
     PlayerDiplomaticRelationViewDto, PlayerResourceTradeAgreementViewDto,
 };
 pub use economy::{
-    CityYieldContributionDto, CityYieldContributionKindDto, StrategicResourceAmountDto,
-    StrategicResourceSourceDto, YieldValueDto,
+    CityYieldContributionDto, CityYieldContributionKindDto, PlayerEconomyViewDto,
+    StrategicResourceAmountDto, StrategicResourceSourceDto, YieldValueDto,
 };
 pub use event::ClientEventDto;
 pub use logistics::{
@@ -290,6 +290,8 @@ pub struct PlayerViewSnapshotDto {
     pub participants: Vec<PlayerParticipantViewDto>,
     /// Complete recipient map visibility state.
     pub fog: PlayerFogViewDto,
+    /// Recipient-owned economy accounts and strategic-resource flow.
+    pub economy: PlayerEconomyViewDto,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.
@@ -404,6 +406,8 @@ pub struct PlayerViewPatchDto {
     pub turn_mode: TurnModeDto,
     /// Replacement recipient fog state when visibility changed.
     pub fog: Option<PlayerFogViewDto>,
+    /// Replacement recipient economy state when any account or resource flow changed.
+    pub economy: Option<PlayerEconomyViewDto>,
     /// Replacement lifecycle projection when turn/readiness changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleViewDto>,
     /// Replacement match result when it changed.

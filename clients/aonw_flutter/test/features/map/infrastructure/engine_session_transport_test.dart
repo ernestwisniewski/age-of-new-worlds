@@ -107,6 +107,7 @@ AonwPlayerViewSnapshot _snapshot() => AonwPlayerViewSnapshot(
     discoveredHexes: [],
     visibleHexes: [],
   ),
+  economy: AonwPlayerEconomyView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

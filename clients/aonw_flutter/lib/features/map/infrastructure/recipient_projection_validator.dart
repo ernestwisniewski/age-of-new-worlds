@@ -1,6 +1,7 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../read_model/map_view.dart';
+import 'recipient_economy_validator.dart';
 
 final class RecipientProjectionValidator {
   const RecipientProjectionValidator(this.map);
@@ -33,6 +34,7 @@ final class RecipientProjectionValidator {
     );
     _validateUnits(snapshot.units, participantIds);
     _validateCities(snapshot.cities, participantIds);
+    RecipientEconomyValidator(map).validate(snapshot.economy, snapshot.cities);
     for (final artifact in snapshot.artifacts) {
       _validateArtifact(artifact);
     }

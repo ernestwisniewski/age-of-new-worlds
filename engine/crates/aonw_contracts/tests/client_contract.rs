@@ -9,12 +9,14 @@ use aonw_contracts::client::{
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
-    PlayerFogViewDto, PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerUnitViewDto,
-    PlayerViewPatchDto, PlayerViewSnapshotDto, ReachableTileViewDto,
+    PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerTurnLifecycleViewDto,
+    PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto, ReachableTileViewDto,
+    StrategicResourceAmountDto, StrategicResourceSourceDto,
 };
 use aonw_contracts::{
     CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto,
-    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, TurnModeDto, UnitKindDto, UnitPostureDto,
+    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, ResourceTypeDto, TurnModeDto, UnitKindDto,
+    UnitPostureDto,
 };
 
 #[path = "client_contract/artifact.rs"]
@@ -62,6 +64,29 @@ fn unit() -> PlayerUnitViewDto {
     }
 }
 
+fn economy() -> PlayerEconomyViewDto {
+    PlayerEconomyViewDto {
+        gold: 125,
+        war_weariness: 3,
+        stability_net: -2,
+        strategic_resource_stockpile: vec![StrategicResourceAmountDto {
+            resource: ResourceTypeDto::Oil,
+            amount: 4,
+        }],
+        strategic_resource_output: vec![StrategicResourceAmountDto {
+            resource: ResourceTypeDto::Oil,
+            amount: 1,
+        }],
+        strategic_resource_sources: vec![StrategicResourceSourceDto {
+            city_id: "city-1".to_owned(),
+            coordinate: coordinate(3, 4),
+            resource: ResourceTypeDto::Oil,
+            improvement: FieldImprovementKindDto::OilWell,
+            amount_per_turn: 1,
+        }],
+    }
+}
+
 fn player_snapshot() -> PlayerViewSnapshotDto {
     PlayerViewSnapshotDto {
         stamp: stamp(),
@@ -79,6 +104,7 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
             discovered_hexes: vec![coordinate(2, 4), coordinate(3, 4)],
             visible_hexes: vec![coordinate(3, 4)],
         },
+        economy: economy(),
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,
@@ -132,6 +158,7 @@ fn command_result() -> ClientCommandResultDto {
                 discovered_hexes: vec![coordinate(2, 4), coordinate(3, 4)],
                 visible_hexes: vec![coordinate(3, 4)],
             }),
+            economy: Some(economy()),
             turn_lifecycle: None,
             outcome: None,
             upserted_units: vec![unit()],

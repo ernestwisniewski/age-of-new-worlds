@@ -15,6 +15,7 @@ mod artifact;
 mod city;
 mod diplomacy;
 mod disclosure;
+mod economy;
 mod infrastructure;
 mod unit;
 mod view_diff;
@@ -29,6 +30,9 @@ pub use diplomacy::{
     PlayerDiplomaticRelationView, PlayerResourceTradeAgreementView,
 };
 pub use disclosure::RecipientDisclosure;
+pub use economy::{
+    PlayerEconomyView, PlayerStrategicResourceAmountView, PlayerStrategicResourceSourceView,
+};
 pub(crate) use infrastructure::visible_infrastructure;
 pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
 pub(crate) use unit::visible_units;
@@ -186,6 +190,7 @@ pub struct PlayerViewSnapshot {
     turn_mode: TurnMode,
     participants: Arc<[PlayerParticipantView]>,
     fog: Arc<PlayerFogView>,
+    economy: Arc<PlayerEconomyView>,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -207,6 +212,7 @@ impl PlayerViewSnapshot {
         turn_mode: TurnMode,
         participants: Arc<[PlayerParticipantView]>,
         fog: Arc<PlayerFogView>,
+        economy: Arc<PlayerEconomyView>,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -225,6 +231,7 @@ impl PlayerViewSnapshot {
             turn_mode,
             participants,
             fog,
+            economy,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -268,6 +275,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub fn fog(&self) -> &PlayerFogView {
         &self.fog
+    }
+    /// Returns the recipient's economy accounts and strategic-resource flow.
+    #[must_use]
+    pub fn economy(&self) -> &PlayerEconomyView {
+        &self.economy
     }
     /// Returns the persisted authoritative match result.
     #[must_use]
