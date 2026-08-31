@@ -1,0 +1,294 @@
+{
+  "schema": 2,
+  "scopes": {
+    "asset_ui_tool": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "engine_client_hook": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "engine_client_lib": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {
+        "packages/aonw_engine_client/lib/src/protocol_query.dart::class:AonwQueryResult/constructor:fromJson": 14
+      },
+      "cognitiveComplexity": {}
+    },
+    "engine_client_test": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "flutter_client_integration_test": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "flutter_client_lib": {
+      "files": {
+        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart": 569,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart": 598,
+        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart": 731
+      },
+      "legacyFiles": {},
+      "declarations": {
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator": 424,
+        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 671,
+        "clients/aonw_flutter/lib/features/multiplayer/application/multiplayer_coordinator.dart::class:MultiplayerCoordinator": 402,
+        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 359
+      },
+      "callableLines": {
+        "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 78,
+        "clients/aonw_flutter/lib/features/combat/application/combat_workflow.dart::class:CombatWorkflow/method:_attack": 65,
+        "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::class:DiplomacyWorkflow/method:_execute": 61,
+        "clients/aonw_flutter/lib/features/diplomacy/infrastructure/engine_diplomacy_gateway.dart::function:_request": 71,
+        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyOverlayState/method:build": 61,
+        "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
+        "clients/aonw_flutter/lib/features/local_game/presentation/new_game_screen.dart::class:_NewGameScreenState/method:build": 75,
+        "clients/aonw_flutter/lib/features/main_menu/presentation/main_menu_screen.dart::class:_MainMenuScreenState/method:build": 87,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 72,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
+        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway/method:advanceAiTurn/closure:_serialize#1": 61,
+        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
+        "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:fromWire": 65,
+        "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
+        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_screen.dart::class:_ReadyMap/method:build": 85,
+        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
+        "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 65,
+        "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_projection_decoder.dart::class:ServerProjectionDecoder/method:command": 63,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 108,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_MatchPanel/method:build": 71,
+        "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
+        "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
+        "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
+        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 70,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
+        "clients/aonw_flutter/lib/features/research/presentation/research_overlay.dart::class:_ResearchOverlayState/method:build": 68,
+        "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77
+      },
+      "nesting": {
+        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 4
+      },
+      "cyclomaticComplexity": {
+        "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::class:ArtifactWorkflow/method:_execute": 11,
+        "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::function:_executable": 18,
+        "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::function:_matchesSelection": 11,
+        "clients/aonw_flutter/lib/features/artifacts/infrastructure/artifact_view_mapper.dart::class:ArtifactViewMapper/method:command": 14,
+        "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 16,
+        "clients/aonw_flutter/lib/features/cities/application/city_workflow_guards.dart::function:_executable": 13,
+        "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::class:DiplomacyWorkflow/method:_execute": 11,
+        "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::function:_executable": 15,
+        "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::function:_interactionCommandPending": 12,
+        "clients/aonw_flutter/lib/features/diplomacy/infrastructure/diplomacy_command_mapper.dart::function:_validateEvents": 17,
+        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 28,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 17,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_openSession": 11,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_saveLocalGame": 11,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::function:_interactionBusy": 12,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_select": 11,
+        "clients/aonw_flutter/lib/features/map/application/unit_action_workflow.dart::function:_actionable": 13,
+        "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 23,
+        "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 16,
+        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 28,
+        "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 20,
+        "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 12,
+        "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
+        "clients/aonw_flutter/lib/features/production/application/production_workflow_guards.dart::function:_executableProduction": 11,
+        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 13,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 19,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 11,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::function:_interactionCommandPending": 12,
+        "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::class:ResearchViewMapper/method:options": 12,
+        "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::function:_option": 12,
+        "clients/aonw_flutter/lib/features/save_game/application/local_save_workflow.dart::class:LocalSaveWorkflow/method:resumeLatest": 12,
+        "clients/aonw_flutter/lib/features/turns/application/turn_workflow.dart::class:TurnWorkflow/method:_execute": 14,
+        "clients/aonw_flutter/lib/features/workers/application/worker_workflow_commands.dart::extension:WorkerWorkflowCommands/method:_execute": 11,
+        "clients/aonw_flutter/lib/features/workers/application/worker_workflow_guards.dart::function:_containsWorkerAction": 13,
+        "clients/aonw_flutter/lib/features/workers/infrastructure/worker_view_mapper.dart::class:WorkerViewMapper/method:command": 11,
+        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 15
+      },
+      "cognitiveComplexity": {
+        "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::function:_executable": 17,
+        "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 17,
+        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 20,
+        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 34,
+        "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 34,
+        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 37,
+        "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 20,
+        "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 17,
+        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 26,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 22,
+        "clients/aonw_flutter/lib/features/save_game/application/local_save_workflow.dart::class:LocalSaveWorkflow/method:resumeLatest": 23,
+        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 20
+      }
+    },
+    "flutter_client_test": {
+      "files": {
+        "clients/aonw_flutter/test/features/map/application/map_coordinator_test.dart": 598,
+        "clients/aonw_flutter/test/game/gameplay_map_layers_test.dart": 580,
+        "clients/aonw_flutter/test/support/map_test_fixture.dart": 830
+      },
+      "legacyFiles": {},
+      "declarations": {
+        "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 499
+      },
+      "callableLines": {
+        "clients/aonw_flutter/test/architecture/architecture_callable_metrics_test.dart::function:main/closure:test[control-flow_complexity_has_deterministic_golden_values]#1": 131
+      },
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "flutter_client_test_live": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "root_tool": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {
+        "tool/architecture/policy.dart::class:ArchitecturePolicy/constructor:parse": 108,
+        "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 107
+      },
+      "nesting": {
+        "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 5
+      },
+      "cyclomaticComplexity": {
+        "tool/architecture/dart_metrics.dart::class:_MetricsVisitor/method:_closureKey": 16,
+        "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 16,
+        "tool/architecture/source_census.dart::class:SourceCensus/method:_validateGeneratedSource": 17
+      },
+      "cognitiveComplexity": {
+        "tool/architecture/dart_metrics.dart::class:ArchitectureMeasurer/method:_measureScope": 25,
+        "tool/architecture/policy.dart::class:ScopePolicy/constructor:parse": 32,
+        "tool/architecture/source_census.dart::class:SourceCensus/method:_validateGeneratedSource": 21
+      }
+    },
+    "server_bin": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_client_lib": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_client_test": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_client_tool": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {
+        "packages/aonw_server_client/tool/critical_e2e.dart::class:_CriticalE2e/method:run": 173
+      },
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_lib": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {
+        "server/lib/src/auth/steam_auth_service.dart::class:SteamAuthService/method:handleCallback": 116,
+        "server/lib/src/scheduling/reconciled_future_call_scheduler.dart::class:ReconciledFutureCallScheduler/method:scheduleNoLaterThan/closure:transaction#1": 65
+      },
+      "nesting": {},
+      "cyclomaticComplexity": {
+        "server/lib/src/auth/auth_input_validator.dart::class:AuthInputValidator/method:_normalizeEmail": 15,
+        "server/lib/src/auth/steam_auth_service.dart::class:SteamAuthService/method:handleCallback": 19
+      },
+      "cognitiveComplexity": {
+        "server/lib/src/auth/steam_auth_service.dart::class:SteamAuthService/method:handleCallback": 17
+      }
+    },
+    "server_native_hook": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_native_lib": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_native_test": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {},
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    },
+    "server_test": {
+      "files": {},
+      "legacyFiles": {},
+      "declarations": {},
+      "callableLines": {
+        "server/test/architecture/server_operability_config_test.dart::function:main/closure:group[Server_operability_configuration]#1/closure:test[Compose_profiles_select_immutable_Serverpod_run_modes]#1": 140
+      },
+      "nesting": {},
+      "cyclomaticComplexity": {},
+      "cognitiveComplexity": {}
+    }
+  }
+}

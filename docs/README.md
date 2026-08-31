@@ -63,6 +63,7 @@ A presentation widget may calculate layout and animation. It must not decide whe
 | Install the pinned workspace | `make bootstrap` |
 | Rust engine quality gate | `make rust-engine-quality-check` |
 | Flutter client gate | `make flutter-client-check` |
+| Architecture budgets and boundaries | `make architecture-check` |
 | Godot client and native adapter gate | `make godot-check` |
 | Server gate | `make server-test` |
 | Start local API and seed accounts | `make local-start` |

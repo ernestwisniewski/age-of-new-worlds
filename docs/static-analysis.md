@@ -5,8 +5,9 @@ All handwritten Dart code uses one workspace policy. Package files add the appro
 | Package | Upstream profile |
 | --- | --- |
 | Flutter app | `flutter_lints` |
-| Legacy Dart compatibility layer | `lints/recommended` |
+| `packages/aonw_engine_client` | `lints/recommended` |
 | `packages/aonw_server_client` | `lints/recommended` |
+| `packages/aonw_server_native` | `lints/recommended` |
 | `server` | `lints/recommended` |
 
 The shared policy owns strict casts, inference, raw types, async rules, import order, and API hygiene. Do not copy these rules into package-specific files.
@@ -25,9 +26,9 @@ make analyze
 Focused targets:
 
 ```sh
-make flutter-analyze
-make core-analyze
+make flutter-client-analyze
 make server-client-analyze
+make server-native-analyze
 make server-analyze
 ```
 
@@ -36,6 +37,5 @@ Warnings and infos are fatal in the canonical targets.
 When changing analyzer policy or an exclusion:
 
 1. update the shared base or the narrow package exception;
-2. update `test/architecture/lint_configuration_guard_test.dart`;
-3. run `make analyze` and `make generated-code-check`;
-4. run `make ci` before handoff.
+2. run `make analyze`, `make architecture-check`, and `make generated-code-check`;
+3. run `make ci` before handoff.

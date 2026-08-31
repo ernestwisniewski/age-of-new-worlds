@@ -13,6 +13,7 @@ LOCAL_API_BASE_URL ?= http://127.0.0.1:8080
 SERVER_ENV_FILE ?= $(CURDIR)/.env
 PROFILE ?= dev
 HEALTH_URL ?= https://api.aonw.net/readyz
+ARCHITECTURE_SNAPSHOT_PATH ?= /tmp/aonw-architecture-baseline.json
 COMPOSE_BASE_FILES = -f compose.yml
 COMPOSE_STAGING_FILES = $(COMPOSE_BASE_FILES) -f compose.staging.yml
 COMPOSE_PROD_FILES = $(COMPOSE_BASE_FILES) -f compose.prod.yml
@@ -26,10 +27,13 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	flutter-client-check flutter-client-coverage-report \
 	flutter-client-device-test flutter-client-performance-check \
 	flutter-client-run flutter-client-release-build flutter-client-release-check \
+	client-dependency-check client-boundary-test dart-architecture-check \
+	dart-architecture-snapshot architecture-check \
 	engine-client-dependencies server-client-dependencies \
 	server-native-dependencies server-dependencies \
 	rust-format-check rust-clippy rust-test rust-test-release rust-doc \
-	rust-release-compile-smoke rust-check rust-engine-check \
+	rust-release-compile-smoke rust-check rust-architecture-policy-check \
+	rust-architecture-policy-test rust-architecture-check rust-engine-check \
 	rust-engine-quality-check engine-client-test godot-check \
 	server-client-analyze server-client-test server-native-analyze \
 	server-native-test server-analyze server-test server-integration-test \
@@ -45,6 +49,7 @@ help:
 	@echo "  make bootstrap                 Install locked dependencies and Serverpod CLI"
 	@echo "  make rust-engine-quality-check Run the Rust engine quality gate"
 	@echo "  make flutter-client-check      Format, analyze, and test the Flutter client"
+	@echo "  make architecture-check        Verify Dart, client, and Rust architecture budgets"
 	@echo "  make server-test               Analyze and test the Serverpod host"
 	@echo "  make ci                        Run the repository CI gate"
 	@echo "  make local-start               Build and start the local Serverpod stack"
@@ -97,7 +102,20 @@ flutter-client-map-contract-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/tool/map_asset_bundle_compiler_test.dart
 	@cd $(FLUTTER_CLIENT) && $(DART) --packages=.dart_tool/package_config.json ../../tool/assets/compile/starter_map_bundle.dart check
 
-flutter-client-check: flutter-client-format-check flutter-client-test flutter-client-map-contract-test
+client-dependency-check:
+	@tool/check_client_dependencies.sh
+
+client-boundary-test:
+	@tool/test_client_boundaries.sh
+
+dart-architecture-check: flutter-client-dependencies
+	@$(DART) --packages=$(FLUTTER_CLIENT)/.dart_tool/package_config.json tool/check_architecture.dart check
+
+dart-architecture-snapshot: flutter-client-dependencies
+	@$(DART) --packages=$(FLUTTER_CLIENT)/.dart_tool/package_config.json tool/check_architecture.dart snapshot > "$(ARCHITECTURE_SNAPSHOT_PATH)"
+	@echo "Wrote architecture baseline candidate to $(ARCHITECTURE_SNAPSHOT_PATH)"
+
+flutter-client-check: flutter-client-format-check flutter-client-test flutter-client-map-contract-test client-boundary-test dart-architecture-check
 
 flutter-client-coverage-report: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --coverage --no-pub
@@ -136,7 +154,15 @@ rust-release-compile-smoke:
 
 rust-check: rust-format-check rust-clippy rust-test rust-doc rust-release-compile-smoke
 
-rust-engine-check: rust-check
+rust-architecture-policy-check:
+	@tool/check_rust_architecture.py
+
+rust-architecture-policy-test:
+	@tool/test_rust_architecture.py
+
+rust-architecture-check: rust-architecture-policy-check rust-architecture-policy-test
+
+rust-engine-check: rust-check rust-architecture-check
 
 rust-engine-quality-check: rust-engine-check engine-client-test
 
@@ -171,12 +197,15 @@ server-integration-test: server-dependencies
 		$(DART) test $$tests -P integration --chain-stack-traces --concurrency=1
 
 dart-format-check:
-	@files=$$(git ls-files -- '*.dart' \
+	@files=$$(git ls-files --cached --others --exclude-standard -- '*.dart' \
 		':(exclude)server/lib/src/generated/**' \
 		':(exclude)server/test/integration/test_tools/**' \
-		':(exclude)packages/aonw_server_client/lib/src/protocol/**'); \
+		':(exclude)packages/aonw_server_client/lib/src/protocol/**' \
+		| while IFS= read -r file; do test ! -f "$$file" || printf '%s\n' "$$file"; done); \
 		test -n "$$files" || { echo "No tracked Dart files found."; exit 1; }; \
 		$(DART) format --output=none --set-exit-if-changed $$files
+
+architecture-check: client-boundary-test dart-architecture-check rust-architecture-check
 
 format-check: dart-format-check rust-format-check
 

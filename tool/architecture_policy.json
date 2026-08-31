@@ -1,0 +1,173 @@
+{
+  "schema": 2,
+  "enforcedSince": "67865bc44cf60b7a25678c5051078d3bb2708aba",
+  "migration": {
+    "fromSchema": 1,
+    "policySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "baselineSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "legacyFileTargets": {}
+  },
+  "generatedSuffixes": [
+    ".freezed.dart",
+    ".g.dart"
+  ],
+  "buildRunnerScopes": [],
+  "roles": {
+    "flame_rendering": {
+      "fileLines": 500,
+      "declarationLines": 350,
+      "callableLines": 80,
+      "nesting": 4,
+      "cyclomaticComplexity": 12,
+      "cognitiveComplexity": 18
+    },
+    "production": {
+      "fileLines": 500,
+      "declarationLines": 350,
+      "callableLines": 60,
+      "nesting": 3,
+      "cyclomaticComplexity": 10,
+      "cognitiveComplexity": 15
+    },
+    "test": {
+      "fileLines": 500,
+      "declarationLines": 350,
+      "callableLines": 120,
+      "nesting": 4,
+      "cyclomaticComplexity": 15,
+      "cognitiveComplexity": 20
+    },
+    "tool": {
+      "fileLines": 500,
+      "declarationLines": 350,
+      "callableLines": 100,
+      "nesting": 4,
+      "cyclomaticComplexity": 15,
+      "cognitiveComplexity": 20
+    }
+  },
+  "scopes": {
+    "asset_ui_tool": {
+      "sourceRoot": "assets/ui",
+      "generatedPrefixes": [],
+      "defaultRole": "tool",
+      "roleAssignments": {}
+    },
+    "engine_client_hook": {
+      "sourceRoot": "packages/aonw_engine_client/hook",
+      "generatedPrefixes": [],
+      "defaultRole": "tool",
+      "roleAssignments": {}
+    },
+    "engine_client_lib": {
+      "sourceRoot": "packages/aonw_engine_client/lib",
+      "generatedPrefixes": [],
+      "defaultRole": "production",
+      "roleAssignments": {}
+    },
+    "engine_client_test": {
+      "sourceRoot": "packages/aonw_engine_client/test",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "flutter_client_integration_test": {
+      "sourceRoot": "clients/aonw_flutter/integration_test",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "flutter_client_lib": {
+      "sourceRoot": "clients/aonw_flutter/lib",
+      "generatedPrefixes": [
+        "clients/aonw_flutter/lib/l10n/generated/"
+      ],
+      "defaultRole": "production",
+      "roleAssignments": {
+        "flame_rendering": {
+          "paths": [
+            "clients/aonw_flutter/lib/game/"
+          ]
+        }
+      }
+    },
+    "flutter_client_test": {
+      "sourceRoot": "clients/aonw_flutter/test",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "flutter_client_test_live": {
+      "sourceRoot": "clients/aonw_flutter/test_live",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "root_tool": {
+      "sourceRoot": "tool",
+      "generatedPrefixes": [],
+      "defaultRole": "tool",
+      "roleAssignments": {}
+    },
+    "server_bin": {
+      "sourceRoot": "server/bin",
+      "generatedPrefixes": [],
+      "defaultRole": "production",
+      "roleAssignments": {}
+    },
+    "server_client_lib": {
+      "sourceRoot": "packages/aonw_server_client/lib",
+      "generatedPrefixes": [
+        "packages/aonw_server_client/lib/src/protocol/"
+      ],
+      "defaultRole": "production",
+      "roleAssignments": {}
+    },
+    "server_client_test": {
+      "sourceRoot": "packages/aonw_server_client/test",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "server_client_tool": {
+      "sourceRoot": "packages/aonw_server_client/tool",
+      "generatedPrefixes": [],
+      "defaultRole": "tool",
+      "roleAssignments": {}
+    },
+    "server_lib": {
+      "sourceRoot": "server/lib",
+      "generatedPrefixes": [
+        "server/lib/src/generated/"
+      ],
+      "defaultRole": "production",
+      "roleAssignments": {}
+    },
+    "server_native_hook": {
+      "sourceRoot": "packages/aonw_server_native/hook",
+      "generatedPrefixes": [],
+      "defaultRole": "tool",
+      "roleAssignments": {}
+    },
+    "server_native_lib": {
+      "sourceRoot": "packages/aonw_server_native/lib",
+      "generatedPrefixes": [],
+      "defaultRole": "production",
+      "roleAssignments": {}
+    },
+    "server_native_test": {
+      "sourceRoot": "packages/aonw_server_native/test",
+      "generatedPrefixes": [],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    },
+    "server_test": {
+      "sourceRoot": "server/test",
+      "generatedPrefixes": [
+        "server/test/integration/test_tools/"
+      ],
+      "defaultRole": "test",
+      "roleAssignments": {}
+    }
+  }
+}

@@ -6,7 +6,8 @@ The architecture gate keeps new Dart code reviewable and prevents existing compl
 
 Every handwritten Dart file is assigned to one role: production, Flame rendering, test, or tool. Generated files are excluded only when their generator provenance is valid.
 
-Per-file overrides and inline suppressions are only allowed when a file cannot be reduced without changing behavior; all approved exceptions are recorded in the baseline and are intended to be paid down.
+Approved exceptions are recorded at their exact measured value in the baseline
+and are intended to be paid down.
 
 New code is expected to stay within these limits:
 
@@ -19,33 +20,37 @@ New code is expected to stay within these limits:
 
 The common file target is 500 lines and the type-declaration target is 350 lines. Existing exceptions are recorded at their exact measured value and may stay level or decrease; they may not gain extra headroom.
 
-The aggregate gate also measures complete Dart libraries, including handwritten `part` files. Moving code into a part therefore does not reset its budget.
-
-The aggregate baseline file (`architecture_aggregate_baseline.json`) uses schema 2 and the matching policy file (`architecture_aggregate_policy.json`) tracks the same target set.
+Rust has a separate fail-closed gate. It verifies the exact workspace crate
+graph, pure-crate dependency and source restrictions, workspace lint
+inheritance, the reviewed `unsafe` census, and a 500-line ceiling for new Rust
+sources. Existing longer Rust files have explicit non-growing ceilings.
 
 ## Commands
 
 ```sh
-make architecture
+make architecture-check
 ```
 
 To inspect an intentional debt reduction or policy migration:
 
 ```sh
-make architecture-snapshot
+make dart-architecture-snapshot
 diff -u tool/architecture_baseline.json /tmp/aonw-architecture-baseline.json
-diff -u tool/architecture_aggregate_baseline.json /tmp/aonw-architecture-aggregate-baseline.json
 ```
 
-Do not edit baseline values merely to make a regression pass. A baseline change must match the new measurement and preserve the historical ratchet against the trusted Git ref.
+Do not edit baseline values merely to make a regression pass. A reviewed
+baseline change must be generated from the current measurement and explain why
+the affected debt cannot yet be removed.
 
 ## Files to know
 
-- `tool/check_architecture.dart` — census, parsing, metrics, and ratchet checks.
+- `tool/check_architecture.dart` — Dart census, parsing, metrics, and exact baseline checks.
 - `tool/architecture_policy.json` — roots, roles, targets, and schema.
 - `tool/architecture_baseline.json` — current per-file and per-callable debt.
-- `tool/architecture_aggregate_policy.json` — library-level policy.
-- `tool/architecture_aggregate_baseline.json` — current library-level debt.
-- `test/architecture/` — policy and metric-contract tests.
+- `tool/check_client_dependencies.sh` — Flutter and Godot layer boundaries.
+- `tool/check_rust_architecture.py` — Rust workspace and source policy.
+- `clients/aonw_flutter/test/architecture/` — Dart metric-contract tests.
+- `tool/test_client_boundaries.sh` and `tool/test_rust_architecture.py` — negative fixtures.
 
-Changing roles, source roots, metric semantics, or rollout anchors is a policy migration, not a routine baseline refresh.
+Changing roles, source roots, or metric semantics is a policy migration, not a
+routine baseline refresh.
