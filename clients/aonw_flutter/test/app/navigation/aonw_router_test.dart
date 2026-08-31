@@ -97,7 +97,7 @@ void main() {
 
     await tester.pumpWidget(AonwApp(mapController: controller));
     await tester.pumpAndSettle();
-    expect(find.text('Single player'), findsOneWidget);
+    expect(find.text('SINGLE PLAYER'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('single-player')));
     await tester.pumpAndSettle();

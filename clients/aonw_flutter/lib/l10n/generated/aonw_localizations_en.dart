@@ -19,6 +19,12 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'Welcome to the Age of New Worlds. Build cities, lead commanders, discover new lands, and write the history of your civilization.';
 
   @override
+  String get mainMenuSynopsisTitle => 'Build · Research · Command';
+
+  @override
+  String get mainMenuWhatsNew => 'What\'s new';
+
+  @override
   String get singlePlayer => 'Single player';
 
   @override

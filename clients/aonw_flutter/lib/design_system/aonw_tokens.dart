@@ -33,6 +33,123 @@ abstract final class AonwColorTokens {
 abstract final class AonwTypography {
   static const headingFamily = 'Cinzel';
   static const bodyFamily = 'Lato';
+
+  static const tabularFigures = [FontFeature.tabularFigures()];
+}
+
+abstract final class AonwTextStyles {
+  static const screenTitle = TextStyle(
+    color: AonwColorTokens.brandLight,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.6,
+  );
+  static const brandTitle = TextStyle(
+    color: AonwColorTokens.brand,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 28,
+    fontWeight: FontWeight.w900,
+    letterSpacing: 1.2,
+  );
+  static const brandSubtitle = TextStyle(
+    color: AonwColorTokens.brandLight,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.8,
+  );
+  static const labelSmall = TextStyle(
+    color: AonwColorTokens.brand,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  );
+  static const toolbarLabel = TextStyle(
+    color: Color(0xB4EBD9B0),
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.4,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const chipLabel = TextStyle(
+    color: AonwColorTokens.textSecondary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const sectionHeader = TextStyle(
+    color: AonwColorTokens.brand,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.8,
+  );
+  static const bodySmall = TextStyle(
+    color: AonwColorTokens.textSecondary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const body = TextStyle(
+    color: AonwColorTokens.textSecondary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const bodyStrong = TextStyle(
+    color: AonwColorTokens.textPrimary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const cardTitle = TextStyle(
+    color: AonwColorTokens.brandLight,
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  );
+  static const cardMeta = TextStyle(
+    color: AonwColorTokens.textSecondary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const actionLabel = TextStyle(
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 11,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const menuButton = TextStyle(
+    fontFamily: AonwTypography.headingFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
+  static const inputText = TextStyle(
+    color: AonwColorTokens.textPrimary,
+    fontFamily: AonwTypography.bodyFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0,
+    fontFeatures: AonwTypography.tabularFigures,
+  );
 }
 
 abstract final class AonwSpacing {

@@ -24,6 +24,51 @@ void main() {
     expect(AonwMotion.scene, const Duration(milliseconds: 350));
   });
 
+  test('typography preserves the flame_4x font metrics', () {
+    expect(
+      AonwTextStyles.brandTitle,
+      const TextStyle(
+        color: AonwColorTokens.brand,
+        fontFamily: 'Cinzel',
+        fontSize: 28,
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.2,
+      ),
+    );
+    expect(AonwTextStyles.menuButton.fontFamily, 'Cinzel');
+    expect(AonwTextStyles.menuButton.fontSize, 12);
+    expect(AonwTextStyles.menuButton.fontWeight, FontWeight.w700);
+    expect(AonwTextStyles.menuButton.letterSpacing, 0);
+    expect(AonwTextStyles.body.fontFamily, 'Lato');
+    expect(AonwTextStyles.body.fontSize, 13);
+    expect(AonwTextStyles.body.height, isNull);
+    expect(AonwTextStyles.body.fontFeatures, const [
+      FontFeature.tabularFigures(),
+    ]);
+  });
+
+  test('global feedback surfaces preserve the flame_4x timings and shapes', () {
+    final theme = AonwTheme.dark;
+    final tooltip = theme.tooltipTheme;
+    final tooltipDecoration = tooltip.decoration! as BoxDecoration;
+    final snackBar = theme.snackBarTheme;
+    final snackBarShape = snackBar.shape! as RoundedRectangleBorder;
+
+    expect(tooltip.triggerMode, TooltipTriggerMode.longPress);
+    expect(tooltip.waitDuration, const Duration(milliseconds: 450));
+    expect(tooltip.showDuration, const Duration(seconds: 5));
+    expect(tooltip.preferBelow, isFalse);
+    expect(tooltip.verticalOffset, 16);
+    expect(tooltipDecoration.color, AonwColorTokens.background.withAlpha(242));
+    expect(snackBar.behavior, SnackBarBehavior.floating);
+    expect(
+      snackBar.backgroundColor,
+      AonwColorTokens.surfaceDeep.withAlpha(242),
+    );
+    expect(snackBar.elevation, 0);
+    expect(snackBarShape.borderRadius, BorderRadius.circular(8));
+  });
+
   testWidgets('flat HUD surfaces retain exact fill border and shadow', (
     tester,
   ) async {

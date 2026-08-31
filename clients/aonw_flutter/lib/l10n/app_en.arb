@@ -3,6 +3,8 @@
   "appTitle": "Age of New Worlds",
   "mainMenuTitle": "Main menu",
   "mainMenuWelcome": "Welcome to the Age of New Worlds. Build cities, lead commanders, discover new lands, and write the history of your civilization.",
+  "mainMenuSynopsisTitle": "Build · Research · Command",
+  "mainMenuWhatsNew": "What's new",
   "singlePlayer": "Single player",
   "singlePlayerSublabel": "Play against the computer",
   "multiplayerSublabel": "Play online",

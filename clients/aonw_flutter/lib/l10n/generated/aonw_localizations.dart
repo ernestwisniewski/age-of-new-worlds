@@ -116,6 +116,18 @@ abstract class AonwLocalizations {
   /// **'Welcome to the Age of New Worlds. Build cities, lead commanders, discover new lands, and write the history of your civilization.'**
   String get mainMenuWelcome;
 
+  /// No description provided for @mainMenuSynopsisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build · Research · Command'**
+  String get mainMenuSynopsisTitle;
+
+  /// No description provided for @mainMenuWhatsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get mainMenuWhatsNew;
+
   /// No description provided for @singlePlayer.
   ///
   /// In en, this message translates to:

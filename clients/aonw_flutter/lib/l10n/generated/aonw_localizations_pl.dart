@@ -19,6 +19,12 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'Witaj w Erze Nowych Światów. Buduj miasta, prowadź dowódców, odkrywaj nowe krainy i zapisuj historię swojej cywilizacji.';
 
   @override
+  String get mainMenuSynopsisTitle => 'Buduj · Badaj · Dowódź';
+
+  @override
+  String get mainMenuWhatsNew => 'Co nowego';
+
+  @override
   String get singlePlayer => 'Gra jednoosobowa';
 
   @override
