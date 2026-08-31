@@ -32,8 +32,8 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	engine-client-dependencies server-client-dependencies \
 	server-native-dependencies server-dependencies \
 	rust-format-check rust-clippy rust-test rust-test-release rust-doc \
-	rust-release-compile-smoke rust-check rust-architecture-policy-check \
-	rust-architecture-policy-test rust-architecture-check rust-engine-check \
+	rust-release-compile-smoke rust-check engine-architecture-policy-check \
+	engine-architecture-policy-test engine-architecture-check rust-engine-check \
 	rust-engine-quality-check engine-client-test godot-check \
 	server-client-analyze server-client-test server-native-analyze \
 	server-native-test server-analyze server-test server-integration-test \
@@ -49,7 +49,7 @@ help:
 	@echo "  make bootstrap                 Install locked dependencies and Serverpod CLI"
 	@echo "  make rust-engine-quality-check Run the Rust engine quality gate"
 	@echo "  make flutter-client-check      Format, analyze, and test the Flutter client"
-	@echo "  make architecture-check        Verify Dart, client, and Rust architecture budgets"
+	@echo "  make architecture-check        Verify Dart, client, and engine architecture budgets"
 	@echo "  make server-test               Analyze and test the Serverpod host"
 	@echo "  make ci                        Run the repository CI gate"
 	@echo "  make local-start               Build and start the local Serverpod stack"
@@ -154,15 +154,15 @@ rust-release-compile-smoke:
 
 rust-check: rust-format-check rust-clippy rust-test rust-doc rust-release-compile-smoke
 
-rust-architecture-policy-check:
-	@tool/check_rust_architecture.py
+engine-architecture-policy-check:
+	@tool/check_engine_architecture.py
 
-rust-architecture-policy-test:
-	@tool/test_rust_architecture.py
+engine-architecture-policy-test:
+	@tool/test_engine_architecture.py
 
-rust-architecture-check: rust-architecture-policy-check rust-architecture-policy-test
+engine-architecture-check: engine-architecture-policy-check engine-architecture-policy-test
 
-rust-engine-check: rust-check rust-architecture-check
+rust-engine-check: rust-check engine-architecture-check
 
 rust-engine-quality-check: rust-engine-check engine-client-test
 
@@ -205,7 +205,7 @@ dart-format-check:
 		test -n "$$files" || { echo "No tracked Dart files found."; exit 1; }; \
 		$(DART) format --output=none --set-exit-if-changed $$files
 
-architecture-check: client-boundary-test dart-architecture-check rust-architecture-check
+architecture-check: client-boundary-test dart-architecture-check engine-architecture-check
 
 format-check: dart-format-check rust-format-check
 

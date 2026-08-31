@@ -100,7 +100,7 @@ values are diagnostic only.
 ```sh
 make rust-coverage-check
 make rust-performance-check
-make rust-architecture-check
+make engine-architecture-check
 make rust-dependency-check
 make rust-determinism-check
 make rust-security-policy-check

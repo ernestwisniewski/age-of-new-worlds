@@ -20,10 +20,11 @@ New code is expected to stay within these limits:
 
 The common file target is 500 lines and the type-declaration target is 350 lines. Existing exceptions are recorded at their exact measured value and may stay level or decrease; they may not gain extra headroom.
 
-Rust has a separate fail-closed gate. It verifies the exact workspace crate
-graph, pure-crate dependency and source restrictions, workspace lint
-inheritance, the reviewed `unsafe` census, and a 500-line ceiling for new Rust
-sources. Existing longer Rust files have explicit non-growing ceilings.
+The engine has a separate fail-closed gate. For its current Rust implementation,
+it verifies the exact workspace crate graph, pure-crate dependency and source
+restrictions, workspace lint inheritance, the reviewed `unsafe` census, and a
+500-line ceiling for new Rust sources. Existing longer Rust files have explicit
+non-growing ceilings.
 
 ## Commands
 
@@ -48,9 +49,9 @@ the affected debt cannot yet be removed.
 - `tool/architecture_policy.json` — roots, roles, targets, and schema.
 - `tool/architecture_baseline.json` — current per-file and per-callable debt.
 - `tool/check_client_dependencies.sh` — Flutter and Godot layer boundaries.
-- `tool/check_rust_architecture.py` — Rust workspace and source policy.
+- `tool/check_engine_architecture.py` — engine workspace and source policy.
 - `clients/aonw_flutter/test/architecture/` — Dart metric-contract tests.
-- `tool/test_client_boundaries.sh` and `tool/test_rust_architecture.py` — negative fixtures.
+- `tool/test_client_boundaries.sh` and `tool/test_engine_architecture.py` — negative fixtures.
 
 Changing roles, source roots, or metric semantics is a policy migration, not a
 routine baseline refresh.

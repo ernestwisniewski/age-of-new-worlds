@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Negative fixtures for every Rust architecture-policy rule."""
+"""Negative fixtures for every engine architecture-policy rule."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from typing import Any, Callable
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CHECKER = REPO_ROOT / "tool/check_rust_architecture.py"
+CHECKER = REPO_ROOT / "tool/check_engine_architecture.py"
 
 
 def package(name: str, root: Path, dependencies: list[dict[str, Any]]) -> dict[str, Any]:
@@ -35,7 +35,7 @@ def dependency(name: str, root: Path, *, external: bool = False) -> dict[str, An
 
 class Fixture:
     def __init__(self) -> None:
-        self.root = Path(tempfile.mkdtemp(prefix="aonw-rust-architecture-"))
+        self.root = Path(tempfile.mkdtemp(prefix="aonw-engine-architecture-"))
         self.policy_path = self.root / "engine/quality/architecture_policy.json"
         self.metadata_path = self.root / "metadata.json"
         self.policy: dict[str, Any] = {}
@@ -186,7 +186,7 @@ def main() -> None:
         )
     finally:
         fixture.close()
-    print("Rust architecture negative tests passed.")
+    print("Engine architecture negative tests passed.")
 
 
 if __name__ == "__main__":

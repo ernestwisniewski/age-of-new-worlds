@@ -343,7 +343,7 @@ def run() -> None:
     check_pure_sources(repo_root, packages, policy)
     check_unsafe_and_lines(repo_root, policy)
     print(
-        "Rust architecture check passed: "
+        "Engine architecture check passed: "
         f"{len(packages)} crates, {len(policy['pureCrates'])} pure, "
         f"{len(policy['unsafeAllowlist'])} reviewed unsafe files."
     )
@@ -353,5 +353,5 @@ if __name__ == "__main__":
     try:
         run()
     except ArchitectureFailure as error:
-        print(f"Rust architecture check failed: {error}", file=sys.stderr)
+        print(f"Engine architecture check failed: {error}", file=sys.stderr)
         raise SystemExit(1) from error
