@@ -1,12 +1,19 @@
+import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../design_system/assets/sprite_frame_repository.dart';
+import '../../design_system/assets/sprite_frames.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_sprite_catalog.dart';
+import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
 
 final class MapWorkerInfrastructureLayerComponent extends Component
@@ -105,46 +112,97 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   }
 }
 
-final class MapFieldImprovementComponent extends PositionComponent {
+final class MapFieldImprovementComponent extends PositionComponent
+    with HasGameReference<FlameGame> {
   MapFieldImprovementComponent({
     required FieldImprovementView improvement,
     required ui.Offset center,
   }) : _improvement = improvement,
        super(
          position: Vector2(center.dx, center.dy),
-         size: Vector2.all(_size),
+         size: Vector2(_width, _height),
          anchor: Anchor.center,
        );
 
-  static const _size = 24.0;
+  static const _width = 84.0;
+  static final _height = 60 * math.sqrt(3) * 0.62 * 0.70;
   static final ui.Paint _fill = ui.Paint()..color = MapPalette.reachable;
   static final ui.Paint _outline = ui.Paint()
     ..color = MapPalette.cityOutline
     ..style = ui.PaintingStyle.stroke
     ..strokeWidth = 2;
-  static const sharedPaintCount = 2;
+  static final ui.Paint _spriteSurfacePaint = ui.Paint()
+    ..color = const ui.Color(0x2615171A);
+  static final ui.Paint _spriteRimPaint = ui.Paint()
+    ..color = const ui.Color(0xF5C8CCD2)
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 1.5;
+  static const sharedPaintCount = 4;
 
   FieldImprovementView _improvement;
+  SpriteFrame? _frame;
+  var _loadGeneration = 0;
 
   @visibleForTesting
   FieldImprovementView get debugImprovement => _improvement;
 
+  @visibleForTesting
+  SpriteFrame? get debugSpriteFrame => _frame;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    unawaited(_loadFrame());
+  }
+
   void applyImprovement(FieldImprovementView value, ui.Offset center) {
+    final typeChanged = _improvement.improvement != value.improvement;
     _improvement = value;
     position.setValues(center.dx, center.dy);
+    if (typeChanged) _reloadFrame();
   }
 
   @override
   void render(ui.Canvas canvas) {
-    const center = ui.Offset(_size / 2, _size / 2);
-    final path = ui.Path()
-      ..moveTo(center.dx, 2)
-      ..lineTo(_size - 2, center.dy)
-      ..lineTo(center.dx, _size - 2)
-      ..lineTo(2, center.dy)
-      ..close();
+    final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
+    final path = MapSpritePainter.flatTopHexPath(bounds);
+    final frame = _frame;
+    if (frame != null) {
+      canvas.drawPath(path, _spriteSurfacePaint);
+      MapSpritePainter.paint(canvas, frame, destination: bounds, clip: path);
+      canvas.drawPath(path, _spriteRimPaint);
+      return;
+    }
     canvas.drawPath(path, _fill);
     canvas.drawPath(path, _outline);
+  }
+
+  void _reloadFrame() {
+    _frame = null;
+    _loadGeneration += 1;
+    if (isLoaded) unawaited(_loadFrame());
+  }
+
+  Future<void> _loadFrame() async {
+    final generation = ++_loadGeneration;
+    final kind = _improvement.improvement;
+    final SpriteFrame frame;
+    try {
+      frame = await SpriteFrames.load(MapSpriteCatalog.improvementFrame(kind));
+    } on Object {
+      return;
+    }
+    if (generation != _loadGeneration || _improvement.improvement != kind) {
+      return;
+    }
+    _frame = frame;
+    _refreshGameWidget();
+  }
+
+  void _refreshGameWidget() {
+    if (isMounted && game.isAttached && game.paused) {
+      game.stepEngine(stepTime: 0);
+    }
   }
 }
 

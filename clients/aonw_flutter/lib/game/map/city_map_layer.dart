@@ -1,11 +1,19 @@
+import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../design_system/assets/sprite_frame_id.dart';
+import '../../design_system/assets/sprite_frame_repository.dart';
+import '../../design_system/assets/sprite_frames.dart';
 import '../../features/cities/read_model/city_view.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_sprite_catalog.dart';
+import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
 
 final class MapCityLayerComponent extends Component with HasVisibility {
@@ -83,7 +91,8 @@ final class MapCityLayerComponent extends Component with HasVisibility {
   }
 }
 
-final class MapCityComponent extends PositionComponent {
+final class MapCityComponent extends PositionComponent
+    with HasGameReference<FlameGame> {
   MapCityComponent({
     required CityView city,
     required String actorPlayerId,
@@ -92,11 +101,12 @@ final class MapCityComponent extends PositionComponent {
        _controlled = city.ownerPlayerId == actorPlayerId,
        super(
          position: Vector2(center.dx, center.dy),
-         size: Vector2.all(_diameter),
+         size: Vector2(_width, _height),
          anchor: Anchor.center,
        );
 
-  static const _diameter = 58.0;
+  static const _width = 120.0;
+  static final _height = 60 * math.sqrt(3) * 0.62;
   static final ui.Paint _controlledPaint = ui.Paint()
     ..color = MapPalette.controlledCity;
   static final ui.Paint _foreignPaint = ui.Paint()
@@ -105,34 +115,87 @@ final class MapCityComponent extends PositionComponent {
     ..color = MapPalette.cityOutline
     ..style = ui.PaintingStyle.stroke
     ..strokeWidth = 3;
-  static const sharedPaintCount = 3;
+  static final ui.Paint _spriteSurfacePaint = ui.Paint()
+    ..color = const ui.Color(0x28181713);
+  static final ui.Paint _spriteRimPaint = ui.Paint()
+    ..color = const ui.Color(0xF5D4B46A)
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 3;
+  static const sharedPaintCount = 5;
 
   CityView _city;
   bool _controlled;
+  SpriteFrame? _frame;
+  var _loadGeneration = 0;
 
   @visibleForTesting
   CityView get debugCity => _city;
+
+  @visibleForTesting
+  SpriteFrame? get debugSpriteFrame => _frame;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    unawaited(_loadFrame());
+  }
 
   void applyCity(
     CityView city, {
     required String actorPlayerId,
     required ui.Offset center,
   }) {
+    final levelChanged = _visualLevel(_city) != _visualLevel(city);
     _city = city;
     _controlled = city.ownerPlayerId == actorPlayerId;
     position.setValues(center.dx, center.dy);
+    if (levelChanged) _reloadFrame();
   }
 
   @override
   void render(ui.Canvas canvas) {
-    const center = ui.Offset(_diameter / 2, _diameter / 2);
-    final path = ui.Path()
-      ..moveTo(center.dx, 6)
-      ..lineTo(_diameter - 6, center.dy)
-      ..lineTo(center.dx, _diameter - 6)
-      ..lineTo(6, center.dy)
-      ..close();
+    final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
+    final path = MapSpritePainter.flatTopHexPath(bounds);
+    final frame = _frame;
+    if (frame != null) {
+      canvas.drawPath(path, _spriteSurfacePaint);
+      MapSpritePainter.paint(canvas, frame, destination: bounds, clip: path);
+      canvas.drawPath(path, _spriteRimPaint);
+      return;
+    }
     canvas.drawPath(path, _controlled ? _controlledPaint : _foreignPaint);
     canvas.drawPath(path, _outlinePaint);
+  }
+
+  void _reloadFrame() {
+    _frame = null;
+    _loadGeneration += 1;
+    if (isLoaded) unawaited(_loadFrame());
+  }
+
+  Future<void> _loadFrame() async {
+    final generation = ++_loadGeneration;
+    final id = MapSpriteCatalog.cityFrame(visualLevel: _visualLevel(_city));
+    final SpriteFrame frame;
+    try {
+      frame = await SpriteFrames.load(id);
+    } on Object {
+      return;
+    }
+    if (generation != _loadGeneration || id != _frameId) return;
+    _frame = frame;
+    _refreshGameWidget();
+  }
+
+  SpriteFrameId get _frameId =>
+      MapSpriteCatalog.cityFrame(visualLevel: _visualLevel(_city));
+
+  static int _visualLevel(CityView city) =>
+      MapSpriteCatalog.cityVisualLevel(city.ownedDetails?.population ?? 1);
+
+  void _refreshGameWidget() {
+    if (isMounted && game.isAttached && game.paused) {
+      game.stepEngine(stepTime: 0);
+    }
   }
 }

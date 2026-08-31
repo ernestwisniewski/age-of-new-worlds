@@ -13,6 +13,7 @@ dependencies:
     path: ../../packages/aonw_server_client
   crypto: 3.0.7
   flame: 1.38.0
+  flame_texturepacker: 5.1.2
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -45,6 +46,36 @@ flutter:
   assets:
     - assets/main_menu/background.jpg
     - assets/runtime/ui/logo.webp
+    - assets/runtime/sprites/
+    - assets/runtime/sprites/buildings_a/
+    - assets/runtime/sprites/buildings_b/
+    - assets/runtime/sprites/buildings_c/
+    - assets/runtime/sprites/cities/
+    - assets/runtime/sprites/dice/
+    - assets/runtime/sprites/icons_map/
+    - assets/runtime/sprites/improvements_1/
+    - assets/runtime/sprites/improvements_2/
+    - assets/runtime/sprites/improvements_3/
+    - assets/runtime/sprites/improvements_4/
+    - assets/runtime/sprites/technologies/
+    - assets/runtime/sprites/unit_archer/
+    - assets/runtime/sprites/unit_catapult/
+    - assets/runtime/sprites/unit_cavalry/
+    - assets/runtime/sprites/unit_commander/
+    - assets/runtime/sprites/unit_fieldCannon/
+    - assets/runtime/sprites/unit_heavyInfantry/
+    - assets/runtime/sprites/unit_merchant/
+    - assets/runtime/sprites/unit_reconPlane/
+    - assets/runtime/sprites/unit_rifleman/
+    - assets/runtime/sprites/unit_scout/
+    - assets/runtime/sprites/unit_scoutShip/
+    - assets/runtime/sprites/unit_settler/
+    - assets/runtime/sprites/unit_spearman/
+    - assets/runtime/sprites/unit_tank/
+    - assets/runtime/sprites/unit_warrior/
+    - assets/runtime/sprites/unit_warship/
+    - assets/runtime/sprites/unit_worker/
+    - assets/runtime/sprites/wonders/
     - assets/maps/aonw2_starter/
     - assets/scenarios/
   fonts:

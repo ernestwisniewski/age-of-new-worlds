@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../design_system/assets/sprite_frame_repository.dart';
+import '../../design_system/assets/sprite_frames.dart';
 import '../../features/map/application/map_interaction_state.dart';
 import '../../features/map/presentation/layers/map_canvas_paths.dart';
 import '../../features/map/presentation/map_palette.dart';
@@ -10,6 +14,8 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/movement_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_sprite_catalog.dart';
+import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
 
 final class MapReachableLayerComponent extends Component with HasVisibility {
@@ -204,7 +210,8 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   }
 }
 
-final class MapUnitComponent extends PositionComponent {
+final class MapUnitComponent extends PositionComponent
+    with HasGameReference<FlameGame> {
   MapUnitComponent({
     required VisibleUnitView unit,
     required String actorPlayerId,
@@ -219,6 +226,8 @@ final class MapUnitComponent extends PositionComponent {
 
   static const _radius = 17.0;
   static const _diameter = 46.0;
+  static const _idleFrameDuration = 0.9;
+  static const _spriteVerticalLiftFactor = 0.16;
   static final ui.Paint _controlledPaint = ui.Paint()
     ..color = MapPalette.controlledUnit;
   static final ui.Paint _foreignPaint = ui.Paint()
@@ -231,6 +240,10 @@ final class MapUnitComponent extends PositionComponent {
 
   VisibleUnitView _unit;
   bool _controlled;
+  List<SpriteFrame> _frames = const [];
+  var _frameIndex = 0;
+  var _frameElapsed = 0.0;
+  var _loadGeneration = 0;
 
   @visibleForTesting
   VisibleUnitView get debugUnit => _unit;
@@ -240,15 +253,26 @@ final class MapUnitComponent extends PositionComponent {
 
   ui.Offset get visualCenter => ui.Offset(position.x, position.y);
 
+  @visibleForTesting
+  SpriteFrame? get debugSpriteFrame => _currentFrame;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    unawaited(_loadFrames());
+  }
+
   void applyUnit(
     VisibleUnitView unit, {
     required String actorPlayerId,
     required ui.Offset center,
     required bool preserveVisualPosition,
   }) {
+    final kindChanged = _unit.kind != unit.kind;
     _unit = unit;
     _controlled = unit.ownerPlayerId == actorPlayerId;
     if (!preserveVisualPosition) setVisualCenter(center);
+    if (kindChanged) _reloadFrames();
   }
 
   void setVisualCenter(ui.Offset center) {
@@ -256,14 +280,72 @@ final class MapUnitComponent extends PositionComponent {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+    if (_frames.length < 2) return;
+    _frameElapsed += dt;
+    while (_frameElapsed >= _idleFrameDuration) {
+      _frameElapsed -= _idleFrameDuration;
+      _frameIndex = (_frameIndex + 1) % _frames.length;
+    }
+  }
+
+  @override
   void render(ui.Canvas canvas) {
     const center = ui.Offset(_diameter / 2, _diameter / 2);
+    final frame = _currentFrame;
+    if (frame != null) {
+      final metrics = MapSpriteCatalog.unitMetrics(_unit.kind);
+      final destination = ui.Rect.fromCenter(
+        center: ui.Offset(
+          center.dx,
+          center.dy - metrics.height * _spriteVerticalLiftFactor,
+        ),
+        width: metrics.width,
+        height: metrics.height,
+      );
+      MapSpritePainter.paint(canvas, frame, destination: destination);
+      return;
+    }
     canvas.drawCircle(
       center,
       _radius,
       _controlled ? _controlledPaint : _foreignPaint,
     );
     canvas.drawCircle(center, _radius, _outlinePaint);
+  }
+
+  SpriteFrame? get _currentFrame =>
+      _frames.isEmpty ? null : _frames[_frameIndex % _frames.length];
+
+  void _reloadFrames() {
+    _frames = const [];
+    _frameIndex = 0;
+    _frameElapsed = 0;
+    _loadGeneration += 1;
+    if (isLoaded) unawaited(_loadFrames());
+  }
+
+  Future<void> _loadFrames() async {
+    final generation = ++_loadGeneration;
+    final kind = _unit.kind;
+    final List<SpriteFrame> frames;
+    try {
+      frames = await Future.wait(
+        MapSpriteCatalog.idleUnitFrames(kind).map(SpriteFrames.load),
+      );
+    } on Object {
+      return;
+    }
+    if (generation != _loadGeneration || _unit.kind != kind) return;
+    _frames = List.unmodifiable(frames);
+    _refreshGameWidget();
+  }
+
+  void _refreshGameWidget() {
+    if (isMounted && game.isAttached && game.paused) {
+      game.stepEngine(stepTime: 0);
+    }
   }
 }
 

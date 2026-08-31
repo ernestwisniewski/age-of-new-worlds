@@ -401,7 +401,7 @@ void main() {
       expect(layer.debugRoadCount, 1);
       expect(layer.debugCreatedCount, 2);
       expect(layer.debugUpdatedCount, 1);
-      expect(layer.debugSharedPaintCount, 4);
+      expect(layer.debugSharedPaintCount, 6);
 
       game.replaceScene(
         _snapshot(
@@ -452,7 +452,7 @@ void main() {
       expect(game.world.cityLayer.debugCityCount, 2);
       expect(game.world.cityLayer.debugCreatedCount, 2);
       expect(game.world.cityLayer.debugUpdatedCount, 1);
-      expect(game.world.cityLayer.debugSharedPaintCount, 3);
+      expect(game.world.cityLayer.debugSharedPaintCount, 5);
     },
   );
 
