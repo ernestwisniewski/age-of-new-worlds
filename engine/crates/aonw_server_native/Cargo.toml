@@ -1,0 +1,21 @@
+[package]
+name = "aonw_server_native"
+description = "Panic-safe C ABI for the stateless AoNW Serverpod host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+aonw_contracts = { path = "../aonw_contracts" }
+aonw_server_runtime = { path = "../aonw_server_runtime" }
+serde_json.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,24 @@
+{
+  "capability": "economy-read-model-ready",
+  "commands": [],
+  "queries": [
+    "cityYield",
+    "strategicResourceProjection"
+  ],
+  "turnProcessors": [],
+  "clientApiVersion": 7,
+  "cases": [
+    "account-transition-atomicity",
+    "account-transition-overflow",
+    "canonical-initial-distribution-order",
+    "city-yield-artifact-contribution",
+    "city-yield-content-owned-scoring",
+    "city-yield-passive-improvement",
+    "city-yield-protocol-round-trip",
+    "city-yield-worker-assignment",
+    "resource-initial-distribution-merge",
+    "resource-owner-city-control",
+    "resource-technology-gate",
+    "stability-fixed-point-bands"
+  ]
+}

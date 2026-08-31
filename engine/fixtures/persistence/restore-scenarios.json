@@ -1,0 +1,88 @@
+{
+  "capability": "save-restore-complete",
+  "policy": "exact-schema",
+  "commandFamilies": [
+    {
+      "family": "artifact",
+      "workflow": "mid-excavation and completed artifact logistics",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/artifact_runtime.rs",
+      "testName": "artifact_commands_projection_save_and_replay_are_exact"
+    },
+    {
+      "family": "city",
+      "workflow": "partial founding draft and completed city",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/city_runtime.rs",
+      "testName": "founding_draft_save_reopen_completion_and_replay_are_exact"
+    },
+    {
+      "family": "combat",
+      "workflow": "resolved attack with exact combat evidence",
+      "midWorkflow": false,
+      "testFile": "engine/crates/aonw_local_runtime/tests/combat_runtime.rs",
+      "testName": "combat_preview_dispatch_save_and_replay_use_one_exact_execution"
+    },
+    {
+      "family": "diplomacy",
+      "workflow": "active resource trade and exchange agreements",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/diplomacy_runtime.rs",
+      "testName": "resource_trade_commands_are_persisted_and_replayable"
+    },
+    {
+      "family": "logistics",
+      "workflow": "active merchant route and detached troop",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/movement_logistics_runtime.rs",
+      "testName": "save_reopen_turn_replay_is_exact_and_foreign_snapshot_stays_fog_safe"
+    },
+    {
+      "family": "movement",
+      "workflow": "post-command movement state and recipient projection",
+      "midWorkflow": false,
+      "testFile": "engine/crates/aonw_local_runtime/tests/movement_logistics_runtime.rs",
+      "testName": "save_reopen_turn_replay_is_exact_and_foreign_snapshot_stays_fog_safe"
+    },
+    {
+      "family": "production",
+      "workflow": "active production queue after rush command",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/production_runtime.rs",
+      "testName": "production_protocol_query_commands_save_and_replay_are_exact"
+    },
+    {
+      "family": "research",
+      "workflow": "selected technology with accumulated progress",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/research_runtime.rs",
+      "testName": "research_protocol_is_complete_and_replayable"
+    },
+    {
+      "family": "turn",
+      "workflow": "partial simultaneous turn and trusted system transition",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/turn_kernel_runtime.rs",
+      "testName": "player_and_system_records_replay_with_exact_lifecycle_and_offsets"
+    },
+    {
+      "family": "worker",
+      "workflow": "road job after partial progress",
+      "midWorkflow": true,
+      "testFile": "engine/crates/aonw_local_runtime/tests/worker_runtime.rs",
+      "testName": "road_job_save_reopen_replay_projection_and_query_cache_are_exact"
+    }
+  ],
+  "recoveryDrills": [
+    {
+      "name": "atomic-backup-rollback",
+      "testFile": "engine/crates/aonw_local_runtime/tests/persistence_hardening.rs",
+      "testName": "atomic_host_save_preserves_backup_and_repairs_a_corrupt_primary"
+    },
+    {
+      "name": "turn-boundary-soak",
+      "testFile": "engine/crates/aonw_local_runtime/tests/turn_kernel_runtime/outcome.rs",
+      "testName": "bounded_full_game_reopens_and_replays_every_turn_boundary"
+    }
+  ]
+}

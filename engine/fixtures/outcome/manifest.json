@@ -1,0 +1,36 @@
+{
+  "capability": "outcome-ready",
+  "conditions": [
+    "conquest",
+    "cultural",
+    "domination",
+    "draw",
+    "ongoing",
+    "resignation",
+    "score"
+  ],
+  "events": [
+    "matchEnded"
+  ],
+  "rejections": [
+    "match_finished"
+  ],
+  "turnProcessors": [
+    "outcome"
+  ],
+  "clientApiVersion": 7,
+  "cases": [
+    "bounded-full-game-reopen-every-turn",
+    "bounded-terminal-soak",
+    "conquest-before-score",
+    "cultural-distinct-artifacts",
+    "domination-before-cultural",
+    "domination-tied-candidates",
+    "exact-empire-scoring",
+    "match-finished-rejection",
+    "score-draw-tie",
+    "score-unique-winner",
+    "single-participant-ongoing",
+    "terminal-save-reopen-replay"
+  ]
+}

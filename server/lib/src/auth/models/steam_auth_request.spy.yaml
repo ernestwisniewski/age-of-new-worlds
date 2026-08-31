@@ -1,0 +1,22 @@
+class: SteamAuthRequest
+serverOnly: true
+table: aonw_steam_auth_request
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  requestId: String
+  status: String
+  authUserId: UuidValue?
+  steamId: String?
+  error: String?
+  createdAt: DateTime, defaultModel=now
+  expiresAt: DateTime
+  completedAt: DateTime?
+  consumedAt: DateTime?
+indexes:
+  aonw_steam_auth_request_request_id_idx:
+    fields: requestId
+    unique: true
+  aonw_steam_auth_request_status_idx:
+    fields: status
+  aonw_steam_auth_request_expires_at_idx:
+    fields: expiresAt

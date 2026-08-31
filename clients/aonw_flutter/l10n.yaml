@@ -1,0 +1,8 @@
+# English defines the canonical key set. Generated sources stay in lib so the
+# localization boundary is explicit and available to every client feature.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: aonw_localizations.dart
+output-class: AonwLocalizations
+output-dir: lib/l10n/generated
+nullable-getter: false

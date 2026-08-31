@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07151c">
+    <meta
+      name="description"
+      content="Interactive architecture atlas for the deterministic AoNW 4X game engine in Rust."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AoNW Engine Architecture">
+    <meta
+      property="og:description"
+      content="Explore the Rust workspace, deterministic command flow, state ownership, native clients, and cutover gates."
+    >
+    <meta property="og:url" content="https://engine.aonw.net/architecture">
+    <title>AoNW Engine Architecture</title>
+    <link rel="canonical" href="https://engine.aonw.net/architecture">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Albert Sans";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url("/assets/fonts/AlbertSans-VariableFont_wght.ttf") format("truetype");
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #07151c;
+        --panel: rgba(7, 21, 28, 0.9);
+        --panel-strong: rgba(5, 16, 22, 0.96);
+        --ink: #f5ebcf;
+        --muted: #a9b9b5;
+        --quiet: #718b8e;
+        --gold: #d8b66a;
+        --gold-bright: #f0deb0;
+        --domain: #d8b66a;
+        --engine: #7ccf9c;
+        --runtime: #65b8d0;
+        --boundary: #bd9fe8;
+        --quality: #e58b96;
+        --migration: #e6a45f;
+        --neutral: #8aa1a6;
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Aonw Albert Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        overflow: hidden;
+        position: relative;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+      }
+
+      body::before {
+        background: url("/assets/main_menu/background.jpg") center / cover no-repeat;
+        filter: saturate(0.82);
+        transform: scale(1.015);
+        z-index: 0;
+      }
+
+      body::after {
+        background:
+          linear-gradient(90deg, rgba(7, 21, 28, 0.9), rgba(7, 21, 28, 0.67) 46%, rgba(6, 18, 25, 0.86)),
+          linear-gradient(0deg, rgba(6, 18, 25, 0.88), rgba(7, 21, 28, 0.58) 42%, rgba(5, 16, 22, 0.82));
+        z-index: 1;
+      }
+
+      button,
+      a { font: inherit; }
+
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 3px;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 19rem minmax(0, 1fr);
+        height: 100svh;
+        position: relative;
+        z-index: 2;
+      }
+
+      .sidebar {
+        background: linear-gradient(180deg, rgba(8, 25, 32, 0.97), rgba(4, 15, 21, 0.98));
+        border-right: 1px solid rgba(216, 182, 106, 0.16);
+        overflow-y: auto;
+        padding: 1.45rem 1.2rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      .brand {
+        align-items: center;
+        color: inherit;
+        display: flex;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        background: rgba(216, 182, 106, 0.08);
+        border: 1px solid rgba(216, 182, 106, 0.5);
+        clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0 50%);
+        color: var(--gold);
+        display: grid;
+        flex: 0 0 auto;
+        font-size: 0.78rem;
+        font-weight: 900;
+        height: 3rem;
+        letter-spacing: -0.04em;
+        place-items: center;
+        width: 3rem;
+      }
+
+      .brand h1 {
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        margin: 0;
+      }
+
+      .brand p {
+        color: var(--muted);
+        font-size: 0.72rem;
+        margin: 0.22rem 0 0;
+      }
+
+      .meta-card {
+        background: rgba(11, 35, 42, 0.55);
+        border: 1px solid rgba(216, 182, 106, 0.13);
+        border-radius: 0.9rem;
+        margin: 0.7rem 0 1.05rem;
+        padding: 0.78rem;
+      }
+
+      .meta-line {
+        color: var(--muted);
+        display: flex;
+        font-size: 0.71rem;
+        gap: 0.7rem;
+        justify-content: space-between;
+        padding: 0.27rem 0;
+      }
+
+      .meta-line strong {
+        color: var(--ink);
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .nav-label {
+        color: var(--quiet);
+        font-size: 0.6rem;
+        font-weight: 850;
+        letter-spacing: 0.16em;
+        margin: 1rem 0.45rem 0.48rem;
+        text-transform: uppercase;
+      }
+
+      .view-nav {
+        display: grid;
+        gap: 0.25rem;
+      }
+
+      .nav-button {
+        align-items: center;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.7rem;
+        color: #9fb3b2;
+        cursor: pointer;
+        display: flex;
+        gap: 0.68rem;
+        padding: 0.65rem 0.72rem;
+        text-align: left;
+        transition: 160ms ease;
+        width: 100%;
+      }
+
+      .nav-button:hover {
+        background: rgba(138, 161, 166, 0.07);
+        color: var(--ink);
+      }
+
+      .nav-button.active {
+        background: linear-gradient(90deg, rgba(216, 182, 106, 0.13), rgba(216, 182, 106, 0.02));
+        border-color: rgba(216, 182, 106, 0.3);
+        box-shadow: inset 3px 0 var(--gold);
+        color: var(--ink);
+      }
+
+      .nav-icon {
+        background: rgba(138, 161, 166, 0.09);
+        border-radius: 0.5rem;
+        display: grid;
+        flex: 0 0 auto;
+        font-size: 0.66rem;
+        font-weight: 850;
+        height: 1.75rem;
+        place-items: center;
+        width: 1.75rem;
+      }
+
+      .nav-copy strong {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 750;
+      }
+
+      .nav-copy small {
+        color: var(--quiet);
+        display: block;
+        font-size: 0.61rem;
+        margin-top: 0.12rem;
+      }
+
+      .legend {
+        display: grid;
+        gap: 0.44rem;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .legend span {
+        align-items: center;
+        color: var(--muted);
+        display: flex;
+        font-size: 0.62rem;
+        gap: 0.42rem;
+      }
+
+      .legend i {
+        background: var(--legend);
+        border-radius: 50%;
+        height: 0.48rem;
+        width: 0.48rem;
+      }
+
+      .sidebar-note {
+        background: rgba(230, 164, 95, 0.06);
+        border-left: 2px solid var(--migration);
+        color: #aebdb9;
+        font-size: 0.67rem;
+        line-height: 1.5;
+        margin-top: 1.15rem;
+        padding: 0.75rem;
+      }
+
+      .main {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        min-width: 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .toolbar {
+        align-items: center;
+        backdrop-filter: blur(1rem);
+        background: rgba(6, 20, 27, 0.85);
+        border-bottom: 1px solid rgba(216, 182, 106, 0.12);
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        min-height: 4rem;
+        padding: 0.65rem 1rem 0.65rem 1.35rem;
+      }
+
+      .toolbar-copy h2 {
+        font-size: 0.88rem;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      .toolbar-copy p {
+        color: var(--muted);
+        font-size: 0.68rem;
+        margin: 0.18rem 0 0;
+      }
+
+      .controls {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        justify-content: flex-end;
+      }
+
+      .control {
+        background: rgba(12, 35, 43, 0.76);
+        border: 1px solid rgba(138, 161, 166, 0.17);
+        border-radius: 0.58rem;
+        color: #c4d0c9;
+        cursor: pointer;
+        font-size: 0.67rem;
+        height: 2.1rem;
+        min-width: 2.1rem;
+        padding: 0 0.66rem;
+      }
+
+      .control:hover,
+      .control.active {
+        border-color: rgba(216, 182, 106, 0.42);
+        color: var(--gold-bright);
+      }
+
+      .stage {
+        background:
+          linear-gradient(rgba(138, 161, 166, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(138, 161, 166, 0.035) 1px, transparent 1px),
+          rgba(5, 17, 23, 0.4);
+        background-size: 2rem 2rem;
+        cursor: grab;
+        min-height: 0;
+        overflow: hidden;
+        position: relative;
+        touch-action: none;
+      }
+
+      .stage.dragging { cursor: grabbing; }
+
+      .diagram {
+        height: 62.5rem;
+        left: 0;
+        position: absolute;
+        top: 0;
+        transform-origin: 0 0;
+        user-select: none;
+        width: 100rem;
+      }
+
+      .scene-kicker {
+        color: var(--quiet);
+        font-size: 0.72rem;
+        font-weight: 850;
+        left: 3rem;
+        letter-spacing: 0.14em;
+        position: absolute;
+        text-transform: uppercase;
+        top: 2.15rem;
+      }
+
+      .scene-title {
+        color: var(--ink);
+        font-size: 2rem;
+        font-weight: 850;
+        left: 3rem;
+        letter-spacing: -0.02em;
+        margin: 0;
+        position: absolute;
+        top: 3.65rem;
+      }
+
+      .scene-subtitle {
+        color: var(--muted);
+        font-size: 0.88rem;
+        left: 3rem;
+        margin: 0;
+        position: absolute;
+        top: 6.25rem;
+      }
+
+      .status-flag {
+        background: rgba(216, 182, 106, 0.08);
+        border: 1px solid rgba(216, 182, 106, 0.35);
+        border-radius: 999px;
+        color: var(--gold);
+        font-size: 0.64rem;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+        padding: 0.7rem 1rem;
+        position: absolute;
+        right: 3rem;
+        text-transform: uppercase;
+        top: 3.3rem;
+      }
+
+      .diagram-section {
+        background: rgba(8, 28, 35, 0.43);
+        border: 1px solid color-mix(in srgb, var(--section-color) 30%, transparent);
+        border-radius: 1.65rem;
+        position: absolute;
+      }
+
+      .diagram-section strong {
+        color: #d8e1d7;
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 850;
+        letter-spacing: 0.07em;
+        padding: 1.25rem 1.35rem 0;
+        text-transform: uppercase;
+      }
+
+      .diagram-section small {
+        color: var(--quiet);
+        display: block;
+        font-size: 0.64rem;
+        padding: 0.18rem 1.35rem 0;
+      }
+
+      .diagram-section.domain { --section-color: var(--domain); }
+      .diagram-section.engine { --section-color: var(--engine); }
+      .diagram-section.runtime { --section-color: var(--runtime); }
+      .diagram-section.boundary { --section-color: var(--boundary); }
+      .diagram-section.quality { --section-color: var(--quality); }
+      .diagram-section.migration { --section-color: var(--migration); }
+
+      .edge {
+        background: var(--edge-color);
+        height: 2px;
+        left: var(--x);
+        opacity: 0.68;
+        position: absolute;
+        top: var(--y);
+        transform: rotate(var(--angle));
+        transform-origin: 0 50%;
+        width: var(--length);
+        z-index: 2;
+      }
+
+      .edge::after {
+        border-bottom: 0.3rem solid transparent;
+        border-left: 0.48rem solid var(--edge-color);
+        border-top: 0.3rem solid transparent;
+        content: "";
+        position: absolute;
+        right: -0.08rem;
+        top: -0.24rem;
+      }
+
+      .edge.domain { --edge-color: var(--domain); }
+      .edge.engine { --edge-color: var(--engine); }
+      .edge.runtime { --edge-color: var(--runtime); }
+      .edge.boundary { --edge-color: var(--boundary); }
+      .edge.quality { --edge-color: var(--quality); }
+      .edge.migration { --edge-color: var(--migration); }
+
+      .edge-label {
+        background: rgba(5, 16, 22, 0.94);
+        border: 1px solid rgba(138, 161, 166, 0.15);
+        border-radius: 999px;
+        color: #b8c7c2;
+        font-size: 0.57rem;
+        left: var(--label-x);
+        padding: 0.22rem 0.44rem;
+        position: absolute;
+        top: var(--label-y);
+        transform: translate(-50%, -50%);
+        z-index: 3;
+      }
+
+      .animations-on .edge {
+        background: linear-gradient(90deg, transparent, var(--edge-color), var(--edge-color), transparent);
+        background-size: 200% 100%;
+        animation: edge-flow 1.8s linear infinite;
+      }
+
+      @keyframes edge-flow {
+        to { background-position: -200% 0; }
+      }
+
+      .arch-node {
+        --node-color: var(--neutral);
+        background: linear-gradient(145deg, rgba(18, 41, 43, 0.96), rgba(6, 21, 28, 0.97));
+        border: 1px solid color-mix(in srgb, var(--node-color) 38%, transparent);
+        border-radius: 1rem;
+        box-shadow: 0 0.7rem 1.5rem rgba(0, 0, 0, 0.25);
+        color: inherit;
+        cursor: pointer;
+        left: var(--node-x);
+        min-height: var(--node-h);
+        overflow: hidden;
+        padding: 1rem 1rem 0.85rem;
+        position: absolute;
+        text-align: left;
+        top: var(--node-y);
+        transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        width: var(--node-w);
+        z-index: 4;
+      }
+
+      .arch-node::before {
+        background: var(--node-color);
+        content: "";
+        height: 0.24rem;
+        inset: 0 0 auto;
+        position: absolute;
+      }
+
+      .arch-node:hover,
+      .arch-node:focus-visible {
+        border-color: color-mix(in srgb, var(--node-color) 78%, white 8%);
+        box-shadow: 0 0.9rem 2rem rgba(0, 0, 0, 0.33), 0 0 1.2rem color-mix(in srgb, var(--node-color) 16%, transparent);
+        transform: translateY(-2px);
+      }
+
+      .arch-node.domain { --node-color: var(--domain); }
+      .arch-node.engine { --node-color: var(--engine); }
+      .arch-node.runtime { --node-color: var(--runtime); }
+      .arch-node.boundary { --node-color: var(--boundary); }
+      .arch-node.quality { --node-color: var(--quality); }
+      .arch-node.migration { --node-color: var(--migration); }
+
+      .node-eyebrow {
+        color: var(--node-color);
+        display: block;
+        font-size: 0.56rem;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .arch-node strong {
+        color: #f2edda;
+        display: block;
+        font-size: 1rem;
+        font-weight: 800;
+        line-height: 1.14;
+        margin-top: 0.52rem;
+      }
+
+      .node-summary {
+        color: #9db0ad;
+        display: block;
+        font-size: 0.67rem;
+        line-height: 1.38;
+        margin-top: 0.5rem;
+      }
+
+      .node-path {
+        background: rgba(3, 13, 18, 0.42);
+        border-radius: 999px;
+        color: #728d8f;
+        display: block;
+        font: 0.54rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        margin-top: 0.68rem;
+        overflow: hidden;
+        padding: 0.25rem 0.45rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .node-status {
+        background: color-mix(in srgb, var(--node-color) 11%, transparent);
+        border: 1px solid color-mix(in srgb, var(--node-color) 26%, transparent);
+        border-radius: 999px;
+        color: #d7dfd4;
+        font-size: 0.52rem;
+        font-weight: 800;
+        padding: 0.23rem 0.4rem;
+        position: absolute;
+        right: 0.7rem;
+        top: 0.66rem;
+      }
+
+      .scene-footer {
+        border-top: 1px solid rgba(138, 161, 166, 0.12);
+        bottom: 1rem;
+        color: var(--quiet);
+        display: flex;
+        font-size: 0.62rem;
+        justify-content: space-between;
+        left: 3rem;
+        padding-top: 0.7rem;
+        position: absolute;
+        right: 3rem;
+      }
+
+      .detail-drawer {
+        backdrop-filter: blur(1.2rem);
+        background: rgba(5, 18, 24, 0.96);
+        border: 1px solid rgba(216, 182, 106, 0.2);
+        border-radius: 1rem;
+        box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.46);
+        opacity: 0;
+        padding: 1.15rem;
+        pointer-events: none;
+        position: absolute;
+        right: 1rem;
+        top: 5rem;
+        transform: translateY(-0.5rem) scale(0.985);
+        transition: 170ms ease;
+        visibility: hidden;
+        width: min(25rem, calc(100vw - 22rem));
+        z-index: 20;
+      }
+
+      .detail-drawer.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+        visibility: visible;
+      }
+
+      .drawer-close {
+        background: rgba(138, 161, 166, 0.09);
+        border: 0;
+        border-radius: 0.5rem;
+        color: var(--muted);
+        cursor: pointer;
+        height: 1.9rem;
+        position: absolute;
+        right: 0.65rem;
+        top: 0.65rem;
+        width: 1.9rem;
+      }
+
+      .drawer-kicker {
+        color: var(--gold);
+        font-size: 0.6rem;
+        font-weight: 850;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .detail-drawer h3 {
+        font-size: 1.2rem;
+        margin: 0.5rem 2rem 0.55rem 0;
+      }
+
+      .drawer-path {
+        background: rgba(189, 159, 232, 0.08);
+        border-radius: 0.5rem;
+        color: #cdbce3;
+        display: inline-block;
+        font: 0.68rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        padding: 0.35rem 0.55rem;
+      }
+
+      .detail-drawer p {
+        color: #afc0bb;
+        font-size: 0.8rem;
+        line-height: 1.58;
+        margin: 0.85rem 0 0;
+      }
+
+      .help {
+        background: rgba(4, 15, 21, 0.78);
+        border-radius: 0.55rem;
+        bottom: 0.8rem;
+        color: var(--quiet);
+        font-size: 0.6rem;
+        left: 0.9rem;
+        padding: 0.42rem 0.62rem;
+        pointer-events: none;
+        position: absolute;
+        z-index: 9;
+      }
+
+      @media (max-width: 980px) {
+        .app { grid-template-columns: 15rem minmax(0, 1fr); }
+        .sidebar { padding: 1rem 0.8rem; }
+        .detail-drawer { width: min(23rem, calc(100vw - 18rem)); }
+      }
+
+      @media (max-width: 720px) {
+        body { overflow: auto; }
+        .app {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: auto minmax(0, 1fr);
+          height: auto;
+          min-height: 100svh;
+        }
+        .sidebar {
+          border-bottom: 1px solid rgba(216, 182, 106, 0.16);
+          border-right: 0;
+          overflow: visible;
+          padding: 0.65rem 0.75rem 0.75rem;
+        }
+        .brand { gap: 0.6rem; margin-bottom: 0.55rem; }
+        .brand-mark { height: 2.35rem; width: 2.35rem; }
+        .brand h1 { font-size: 0.86rem; }
+        .brand p { font-size: 0.62rem; }
+        .meta-card,
+        .nav-label,
+        .legend,
+        .sidebar-note { display: none; }
+        .view-nav {
+          display: flex;
+          gap: 0.4rem;
+          max-width: 100%;
+          overflow-x: auto;
+          padding-bottom: 0.2rem;
+        }
+        .nav-button {
+          flex: 0 0 auto;
+          padding: 0.45rem 0.55rem;
+          width: auto;
+        }
+        .nav-icon { height: 1.45rem; width: 1.45rem; }
+        .nav-copy strong { font-size: 0.68rem; white-space: nowrap; }
+        .nav-copy small { display: none; }
+        .main { min-height: calc(100svh - 7.2rem); }
+        .toolbar {
+          align-items: flex-start;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          padding: 0.58rem 0.65rem;
+        }
+        .toolbar-copy { flex: 1 1 13rem; }
+        .controls { flex: 1 1 auto; }
+        .control { font-size: 0.61rem; height: 1.9rem; padding-inline: 0.5rem; }
+        .stage { min-height: 70svh; }
+        .detail-drawer {
+          max-height: calc(100svh - 6rem);
+          overflow-y: auto;
+          right: 0.6rem;
+          top: 4.5rem;
+          width: calc(100vw - 1.2rem);
+        }
+        .help { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="animations-on" data-page="engine-architecture">
+    <div class="app">
+      <aside class="sidebar">
+        <a class="brand" href="/" aria-label="Back to AoNW Engine">
+          <span class="brand-mark">R24</span>
+          <span>
+            <h1>AoNW Engine Architecture</h1>
+            <p>AoNW Engine · deterministic 4X core</p>
+          </span>
+        </a>
+
+        <div class="meta-card">
+          <div class="meta-line"><span>Source</span><strong>engine/ · dev</strong></div>
+          <div class="meta-line"><span>Snapshot</span><strong>2026-08-26</strong></div>
+          <div class="meta-line"><span>Toolchain</span><strong>Rust 2024 · 1.97</strong></div>
+          <div class="meta-line"><span>Workspace</span><strong>13 crates</strong></div>
+        </div>
+
+        <div class="nav-label">Views</div>
+        <nav class="view-nav" aria-label="Architecture views">
+          <button class="nav-button active" data-view="overview">
+            <span class="nav-icon">WS</span>
+            <span class="nav-copy"><strong>Workspace overview</strong><small>crates and dependency direction</small></span>
+          </button>
+          <button class="nav-button" data-view="command">
+            <span class="nav-icon">CF</span>
+            <span class="nav-copy"><strong>Command flow</strong><small>request to deterministic result</small></span>
+          </button>
+          <button class="nav-button" data-view="session">
+            <span class="nav-icon">SS</span>
+            <span class="nav-copy"><strong>Session lifecycle</strong><small>transaction, revision, replay</small></span>
+          </button>
+          <button class="nav-button" data-view="state">
+            <span class="nav-icon">ST</span>
+            <span class="nav-copy"><strong>State ownership</strong><small>canonical and recipient-safe</small></span>
+          </button>
+          <button class="nav-button" data-view="clients">
+            <span class="nav-icon">NC</span>
+            <span class="nav-copy"><strong>Native clients</strong><small>Flutter, Godot, future hosts</small></span>
+          </button>
+          <button class="nav-button" data-view="quality">
+            <span class="nav-icon">CI</span>
+            <span class="nav-copy"><strong>Quality &amp; cutover</strong><small>evidence, shadow, rollback</small></span>
+          </button>
+        </nav>
+
+        <div class="nav-label">Legend</div>
+        <div class="legend">
+          <span style="--legend:var(--domain)"><i></i>Domain/content</span>
+          <span style="--legend:var(--engine)"><i></i>Pure engine</span>
+          <span style="--legend:var(--runtime)"><i></i>Runtime</span>
+          <span style="--legend:var(--boundary)"><i></i>Boundary/client</span>
+          <span style="--legend:var(--quality)"><i></i>Quality</span>
+          <span style="--legend:var(--migration)"><i></i>Migration</span>
+        </div>
+
+        <div class="sidebar-note">
+          <strong>Boundary rule:</strong> pure crates own game truth and never depend on UI,
+          filesystem, network, database, wall clock, Flutter, Godot, or Serverpod.
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="toolbar">
+          <div class="toolbar-copy">
+            <h2 id="view-title">Rust workspace map</h2>
+            <p id="view-description">Select a crate or boundary to inspect its responsibility and source path.</p>
+          </div>
+          <div class="controls">
+            <button class="control" id="zoom-out" aria-label="Zoom out">−</button>
+            <button class="control" id="zoom-in" aria-label="Zoom in">+</button>
+            <button class="control" id="fit">Fit</button>
+            <button class="control active" id="animate">Animation</button>
+            <button class="control" id="print">Print</button>
+            <button class="control" id="fullscreen">Full screen</button>
+          </div>
+        </header>
+
+        <section class="stage" id="stage" aria-label="Interactive Rust architecture diagram">
+          <div class="diagram" id="diagram"></div>
+          <div class="help">Scroll: zoom · drag: pan · select a module: details</div>
+        </section>
+
+        <aside class="detail-drawer" id="drawer" aria-live="polite">
+          <button class="drawer-close" id="drawer-close" aria-label="Close details">×</button>
+          <div class="drawer-kicker">Module / boundary</div>
+          <h3 id="drawer-title"></h3>
+          <code class="drawer-path" id="drawer-path"></code>
+          <p id="drawer-body"></p>
+        </aside>
+      </main>
+    </div>
+
+    <script>
+      const N = (id, type, x, y, w, h, eyebrow, title, summary, path, body, status = "") => ({
+        id, type, x, y, w, h, eyebrow, title, summary, path, body, status
+      });
+      const S = (type, x, y, w, h, title, subtitle) => ({ type, x, y, w, h, title, subtitle });
+      const E = (from, to, type, label = "") => ({ from, to, type, label });
+
+      const views = {
+        overview: {
+          title: "Rust workspace map",
+          description: "Select a crate or boundary to inspect its responsibility and source path.",
+          sceneTitle: "One dependency direction, one source of game truth",
+          sceneSubtitle: "Contracts enter through adapters; deterministic rules stay in pure crates; runtimes own lifecycle and I/O.",
+          flag: "CURRENT WORKSPACE",
+          sections: [
+            S("domain", 40, 140, 330, 770, "CONTENT & CONTRACTS", "Strict inputs, DTOs, and validated mapping"),
+            S("engine", 400, 140, 520, 770, "PURE DETERMINISTIC RUST", "Canonical state, queries, transitions, and evidence"),
+            S("runtime", 950, 140, 285, 770, "SESSION RUNTIME", "Transactional lifecycle and recipient-safe views"),
+            S("boundary", 1265, 140, 295, 770, "ADAPTERS & TOOLS", "Thin native and authoring boundaries")
+          ],
+          nodes: [
+            N("contracts", "boundary", 65, 215, 280, 145, "CURRENT DTOs", "aonw_contracts", "Client API, canonical state, saves, replay, snapshots, and patches.", "engine/crates/aonw_contracts", "Strict current boundary types. They are distinct from canonical domain types and keep independently built clients on one coarse versioned protocol."),
+            N("mapping", "domain", 65, 390, 280, 135, "VALIDATED MAPPING", "aonw_contract_mapping", "Converts boundary DTOs to canonical types without permissive fallbacks.", "engine/crates/aonw_contract_mapping", "Owns validated conversions between contract shapes and the domain model. Invalid or incomplete data fails closed."),
+            N("content", "domain", 65, 555, 280, 140, "VERSIONED CONTENT", "aonw_content", "Maps, scenarios, rulesets, catalogs, normalization, and content hashes.", "engine/crates/aonw_content", "Strict immutable game content. It validates external definitions before they enter gameplay and provides stable content hashes."),
+            N("testkit", "quality", 65, 725, 280, 135, "INDEPENDENT ORACLE", "aonw_testkit", "Bounded canonical fixtures and structural comparison.", "engine/crates/aonw_testkit", "Loads reviewed fixtures and compares full accepted or rejected results. Neither engine implementation blesses its own expected output."),
+
+            N("domain", "domain", 430, 225, 215, 155, "CANONICAL MODEL", "aonw_domain", "State, entities, identifiers, topology, invariants, and fixed-point values.", "engine/crates/aonw_domain", "Framework-independent canonical game state. Presentation, transport, persistence, and wall-clock concerns are excluded."),
+            N("engine", "engine", 675, 225, 215, 195, "RULES AUTHORITY", "aonw_engine", "Commands, queries, transitions, turn processing, events, evidence, and digests.", "engine/crates/aonw_engine", "The pure deterministic rules boundary. Explicit state plus explicit input produces an accepted or rejected result with no I/O.", "authoritative target"),
+            N("map-workbench", "domain", 430, 535, 215, 150, "LOGICAL AUTHORING", "aonw_map_workbench", "Map editing and deterministic logical generation use cases.", "engine/crates/aonw_map_workbench", "Framework-neutral logical map workflows. Terrain rendering and filesystem concerns remain outside this crate."),
+            N("map-pipeline", "domain", 675, 535, 215, 170, "TERRAIN PIPELINE", "aonw_map_*", "Authoring profiles, deterministic terrain compilation, and CLI adapter.", "engine/crates/aonw_map_authoring · aonw_map_compiler · aonw_map_compiler_cli", "Separates logical content from terrain authoring profiles. The compiler is pure; the CLI is the filesystem boundary."),
+            N("policy", "migration", 430, 745, 460, 115, "HARD BOUNDARY", "No framework dependencies", "No UI, filesystem, network, DB, wall clock, Flutter, Godot, or Serverpod.", "engine/quality/architecture_policy.json", "Architecture and dependency gates enforce the pure-core census, dependency direction, and unsafe-code policy."),
+
+            N("runtime", "runtime", 980, 340, 225, 230, "LIFECYCLE OWNER", "aonw_local_runtime", "Sessions, revisions, dispatch, replay, caches, snapshots, and view patches.", "engine/crates/aonw_local_runtime", "Owns transactional local sessions around the pure engine. Failed operations do not mutate the committed session.", "current"),
+            N("projection", "runtime", 980, 640, 225, 155, "RECIPIENT SAFE", "Player view projection", "Projects canonical state into snapshots and patches for one audience.", "engine/crates/aonw_local_runtime/src/player_view", "Rule-sensitive redaction and recipient projection stay on the trusted side of the client boundary."),
+
+            N("flutter", "boundary", 1295, 210, 235, 135, "C ABI", "aonw_flutter", "Panic-contained Native Assets adapter.", "engine/crates/aonw_flutter", "A thin C ABI that marshals the shared client protocol. Panics are contained and returned as stable boundary errors."),
+            N("godot", "boundary", 1295, 375, 235, 135, "GDEXTENSION", "aonw_godot", "Godot local sessions and map-workbench access.", "engine/crates/aonw_godot", "A thin GDExtension over the same local runtime and versioned protocol. It does not implement gameplay rules."),
+            N("future", "boundary", 1295, 540, 235, 135, "ANY HOST", "Unity · Unreal · CLI", "Future clients can bind to the same coarse protocol.", "client adapter boundary", "A new client supplies presentation and marshaling only. Rules, state ownership, and projections remain in Rust."),
+            N("rustdoc", "quality", 1295, 705, 235, 135, "PUBLIC API", "rustdoc + checks", "Generated API reference and fail-closed workspace gates.", "engine/target/doc · Makefile", "The public API is generated from the current workspace. Merge and evidence gates keep the documented boundary honest.")
+          ],
+          edges: [
+            E("contracts", "mapping", "boundary", "DTOs"),
+            E("mapping", "domain", "domain", "validated"),
+            E("content", "domain", "domain", "definitions"),
+            E("domain", "engine", "engine", "state"),
+            E("content", "engine", "domain", "ruleset"),
+            E("engine", "runtime", "runtime", "result"),
+            E("runtime", "projection", "runtime", "audience"),
+            E("runtime", "flutter", "boundary", "protocol"),
+            E("runtime", "godot", "boundary", "protocol"),
+            E("runtime", "future", "boundary", "protocol"),
+            E("map-workbench", "map-pipeline", "domain", "profile"),
+            E("map-pipeline", "godot", "boundary", "authoring"),
+            E("testkit", "engine", "quality", "fixtures")
+          ],
+          footer: "Pure crates point inward. Adapters and runtimes may depend on game truth; game truth never depends on them."
+        },
+
+        command: {
+          title: "Deterministic command flow",
+          description: "The same client request reaches the same engine boundary regardless of its host.",
+          sceneTitle: "From player intent to committed evidence",
+          sceneSubtitle: "Every nondeterministic input is captured before execution; rejection leaves committed state unchanged.",
+          flag: "FAIL CLOSED",
+          sections: [
+            S("boundary", 40, 140, 300, 770, "CLIENT BOUNDARY", "Presentation and coarse protocol"),
+            S("runtime", 370, 140, 360, 770, "LOCAL RUNTIME", "Revision, dispatch, and transaction"),
+            S("engine", 760, 140, 500, 770, "PURE ENGINE", "Validate, plan, apply, and prove"),
+            S("domain", 1290, 140, 270, 770, "RESULT", "Commit or exact rejection")
+          ],
+          nodes: [
+            N("intent", "boundary", 65, 230, 250, 140, "PRESENTATION", "Player intent", "Touch, mouse, AI, automation, or host code.", "client-specific UI", "Presentation decides what the player is asking for, but never applies rules or mutates canonical state."),
+            N("request", "boundary", 65, 445, 250, 165, "VERSIONED INPUT", "Client request", "Command or query plus session ID, actor, revision, and payload.", "aonw_contracts/src/client", "The shared client protocol carries a complete typed request. Unsupported versions or malformed payloads fail closed."),
+            N("adapter", "boundary", 65, 685, 250, 130, "THIN ADAPTER", "Native marshaling", "C ABI, GDExtension, or another host binding.", "aonw_flutter · aonw_godot", "The adapter decodes, invokes the runtime, encodes the response, and contains native failures."),
+
+            N("decode", "runtime", 400, 220, 300, 135, "BOUNDARY CHECK", "Strict decode + revision", "Validate protocol, session identity, and expected revision.", "aonw_local_runtime/src/client_protocol", "Reject invalid input before an operation can observe or mutate transactional state."),
+            N("transaction", "runtime", 400, 420, 300, 155, "TRANSACTION", "Working session copy", "Dispatch against isolated state; commit only a complete success.", "aonw_local_runtime/src/session", "The runtime keeps committed session state separate from the working transition. Rejections preserve state, revision, caches, and replay."),
+            N("dispatch", "runtime", 400, 650, 300, 145, "ROUTER", "Command / query dispatch", "Select one complete capability or return unsupported.", "aonw_local_runtime/src/command_dispatch · query_dispatch", "A command family never falls back to Dart or splits authority inside an active session."),
+
+            N("validate", "engine", 790, 210, 205, 150, "PRECONDITIONS", "Validate", "Actor, lifecycle, legality, bounds, content, and current state.", "aonw_engine/src/application", "Validation is deterministic and produces stable rejection codes without partial mutation."),
+            N("plan", "engine", 1025, 210, 205, 150, "BOUNDED WORK", "Plan", "Stable ordering, fixed-point values, explicit RNG, and work limits.", "aonw_engine/src/**", "All ordering and arithmetic choices are explicit. External time, randomness, and I/O are forbidden."),
+            N("apply", "engine", 790, 470, 205, 165, "TRANSITION", "Apply", "Produce next canonical state and ordered domain events.", "aonw_engine/src/**", "The engine performs one pure transition for the selected command family or turn processor."),
+            N("evidence", "engine", 1025, 470, 205, 165, "PROOF", "Evidence + digest", "State digest, work counters, execution evidence, and RNG position.", "aonw_engine/src/state_digest · evidence", "Evidence makes parity, replay, debugging, and structural performance measurable without presentation payloads."),
+            N("projection", "engine", 790, 725, 440, 120, "AUDIENCE POLICY", "Recipient projection", "Create only the snapshot or patch visible to this client.", "aonw_local_runtime/src/player_view", "Clients never reconstruct hidden canonical state from projected data."),
+
+            N("accepted", "domain", 1320, 285, 210, 170, "COMMIT", "Accepted result", "Next state, events, evidence, revision, replay record, and view update.", "ClientResponse::Accepted", "The runtime atomically commits the complete result and advances the session revision."),
+            N("rejected", "migration", 1320, 590, 210, 150, "NO MUTATION", "Rejected result", "Stable error with the original committed state untouched.", "ClientResponse::Rejected", "Failure is a first-class deterministic result. No partial cache, replay, revision, or state update survives.")
+          ],
+          edges: [
+            E("intent", "request", "boundary"),
+            E("request", "adapter", "boundary"),
+            E("adapter", "decode", "boundary", "JSON / bytes"),
+            E("decode", "transaction", "runtime"),
+            E("transaction", "dispatch", "runtime"),
+            E("dispatch", "validate", "engine"),
+            E("validate", "plan", "engine"),
+            E("plan", "apply", "engine"),
+            E("apply", "evidence", "engine"),
+            E("evidence", "projection", "runtime"),
+            E("projection", "accepted", "domain", "commit"),
+            E("validate", "rejected", "migration", "reject"),
+            E("decode", "rejected", "migration", "reject")
+          ],
+          footer: "Accepted and rejected outputs are both deterministic. Only a complete accepted result may replace committed session state."
+        },
+
+        session: {
+          title: "Transactional session lifecycle",
+          description: "Local runtime owns revision checks, session commit, replay, caches, and recipient updates.",
+          sceneTitle: "A session changes atomically or not at all",
+          sceneSubtitle: "The lifecycle boundary surrounds the pure engine without moving rules into runtime code.",
+          flag: "ONE REVISION",
+          sections: [
+            S("boundary", 40, 140, 290, 770, "REQUEST", "Session and expected revision"),
+            S("runtime", 360, 140, 820, 770, "TRANSACTIONAL RUNTIME", "Working state, dispatch, commit, and derived caches"),
+            S("domain", 1210, 140, 350, 770, "CLIENT RESULT", "Snapshot, patch, replay, or rejection")
+          ],
+          nodes: [
+            N("open", "boundary", 65, 230, 240, 145, "LIFECYCLE", "Open session", "Validated content plus current canonical snapshot.", "aonw_local_runtime/src/session", "A session starts only after strict content and canonical contracts decode successfully."),
+            N("operation", "boundary", 65, 470, 240, 165, "OPERATION", "Query or command", "Session ID, expected revision, recipient, and typed payload.", "aonw_contracts/src/client", "Every operation is correlated to one session revision. Stale callers cannot overwrite newer state."),
+            N("close", "boundary", 65, 730, 240, 110, "LIFECYCLE", "Close", "Release runtime-owned session resources.", "aonw_local_runtime/src/session", "Closing a session removes its runtime state without exporting hidden canonical data."),
+
+            N("guard", "runtime", 395, 210, 220, 145, "CONCURRENCY", "Revision guard", "Compare expected and committed revision.", "aonw_local_runtime/src/session", "Revision mismatch fails before dispatch and returns the current safe boundary response."),
+            N("working", "runtime", 650, 210, 220, 145, "ISOLATION", "Working copy", "Clone the operation state and derived inputs.", "aonw_local_runtime/src/session", "The committed session remains untouched while the operation executes."),
+            N("execute", "engine", 905, 210, 240, 145, "PURE CALL", "Dispatch engine/query", "Run one complete capability against explicit inputs.", "aonw_local_runtime/src/command_dispatch", "The runtime delegates rules to aonw_engine and never duplicates a transition."),
+
+            N("commit", "runtime", 395, 465, 220, 165, "ATOMIC SUCCESS", "Commit state + revision", "Replace committed state only after the full result is valid.", "aonw_local_runtime/src/session", "A successful operation updates canonical session state and increments revision exactly once."),
+            N("replay", "runtime", 650, 465, 220, 165, "DURABLE EVIDENCE", "Replay recorder", "Append command, result, digests, evidence, and version axes.", "aonw_local_runtime/src/persistence", "Replay records are exact current contracts and verify deterministic reconstruction."),
+            N("cache", "runtime", 905, 465, 240, 165, "DERIVED DATA", "Caches + view patch", "Refresh query caches and compute recipient-safe delta.", "aonw_local_runtime/src/player_view", "Derived caches and patches update only after the canonical commit is complete."),
+
+            N("rollback", "migration", 520, 735, 500, 105, "REJECTION PATH", "Discard working operation", "Keep committed state, revision, replay, caches, and views unchanged.", "aonw_local_runtime/src/session", "Any decode, revision, validation, execution, or encoding failure discards the working operation."),
+
+            N("snapshot", "domain", 1240, 235, 290, 145, "FULL RECOVERY", "Recipient snapshot", "Complete visible state for open or resynchronization.", "aonw_contracts/src/client", "A snapshot contains only what the target recipient is allowed to know."),
+            N("patch", "domain", 1240, 465, 290, 145, "INCREMENTAL", "View patch", "Revision-bound visible changes after a successful operation.", "aonw_contracts/src/client", "Patches are applied in revision order and never imply access to canonical hidden state."),
+            N("error", "migration", 1240, 695, 290, 125, "STABLE FAILURE", "Boundary error", "Typed rejection or stale-revision response.", "aonw_contracts/src/client", "The caller receives a stable error while the committed runtime remains reusable.")
+          ],
+          edges: [
+            E("open", "guard", "boundary"),
+            E("operation", "guard", "boundary"),
+            E("guard", "working", "runtime"),
+            E("working", "execute", "engine"),
+            E("execute", "commit", "engine", "accepted"),
+            E("commit", "replay", "runtime"),
+            E("replay", "cache", "runtime"),
+            E("cache", "patch", "domain"),
+            E("open", "snapshot", "domain"),
+            E("guard", "rollback", "migration", "stale"),
+            E("execute", "rollback", "migration", "rejected"),
+            E("rollback", "error", "migration")
+          ],
+          footer: "Transactional ownership is runtime work. Legality and state transitions remain pure engine work."
+        },
+
+        state: {
+          title: "Canonical and recipient state",
+          description: "Canonical game truth remains trusted; clients receive nominal snapshots and patches.",
+          sceneTitle: "Canonical state never crosses the client boundary",
+          sceneSubtitle: "Queries and transitions read trusted state; recipient projection produces a separate nominal contract.",
+          flag: "NO RECONSTRUCTION",
+          sections: [
+            S("domain", 40, 140, 380, 770, "CANONICAL OWNERSHIP", "Complete rule-relevant state and content"),
+            S("engine", 450, 140, 430, 770, "RULES & PROJECTION", "Queries, transitions, evidence, and redaction"),
+            S("runtime", 910, 140, 300, 770, "BOUNDARY STATE", "Snapshots, patches, revision, replay"),
+            S("boundary", 1240, 140, 320, 770, "CLIENT-LOCAL", "Presentation, selection, caches, and rendering")
+          ],
+          nodes: [
+            N("game-state", "domain", 70, 220, 320, 210, "SINGLE SOURCE OF TRUTH", "Canonical GameState", "Players, map, units, cities, economy, diplomacy, research, fog, lifecycle, and RNG.", "aonw_domain/src/game_state", "The complete trusted rules state. It contains no camera, panels, animations, network connection, filesystem path, or wall clock."),
+            N("content-state", "domain", 70, 505, 320, 145, "IMMUTABLE DEFINITIONS", "Content + ruleset", "Validated map, scenario, catalogs, technology, and rules.", "aonw_content/src", "Content is validated and hashed before it becomes an engine input."),
+            N("canonical-contract", "domain", 70, 720, 320, 125, "DURABLE CONTRACT", "Canonical save / replay", "Current strict persistence forms for trusted state.", "aonw_contracts/src/canonical · persistence", "Canonical persistence is distinct from recipient data and has exact current readers and writers."),
+
+            N("queries", "engine", 480, 220, 170, 150, "READ ONLY", "Queries", "Legality, reachability, previews, and derived rule facts.", "aonw_engine/src/application", "Queries read canonical state and content without mutating either."),
+            N("transitions", "engine", 680, 220, 170, 150, "WRITE PATH", "Transitions", "Commands and turn processors produce next state.", "aonw_engine/src/**", "All rule-changing behavior flows through deterministic engine transitions."),
+            N("facts", "engine", 480, 490, 370, 145, "ORDERED OUTPUT", "Events + evidence + digest", "Auditable facts describing exactly what the accepted transition did.", "aonw_engine/src/state_digest · evidence", "Full evidence supports parity and replay without exposing presentation state."),
+            N("projector", "engine", 480, 710, 370, 135, "RULE-SENSITIVE POLICY", "Recipient projector", "Redact hidden facts for one player or observer.", "aonw_local_runtime/src/player_view", "Projection is trusted engine-side policy. Any inconsistency fails closed."),
+
+            N("snapshot", "runtime", 940, 240, 240, 155, "NOMINAL TYPE", "Client snapshot", "A complete recipient-visible baseline at one revision.", "aonw_contracts/src/client", "This is not canonical GameState and cannot be passed back as engine truth."),
+            N("patch", "runtime", 940, 485, 240, 155, "REVISION DELTA", "Client patch", "Visible additions, updates, removals, and evidence.", "aonw_contracts/src/client", "A patch advances one known recipient view without leaking hidden canonical fields."),
+            N("recovery", "runtime", 940, 725, 240, 115, "RECOVERY", "Snapshot-first resync", "Install baseline before newer revision-bound patches.", "aonw_local_runtime/src/client_protocol", "Recovery never guesses missing canonical information on the client."),
+
+            N("presentation", "boundary", 1270, 220, 260, 155, "CLIENT ONLY", "Presentation state", "Selection, panels, camera, hover, targeting, and animation.", "Flutter · Godot · future clients", "Local interaction can evolve independently because it never becomes canonical state."),
+            N("render", "boundary", 1270, 475, 260, 155, "DERIVED VIEW", "Render model", "Tiles, units, cities, fog, overlays, and effects.", "client presentation layer", "Rendering consumes recipient data. It cannot create authoritative outcomes."),
+            N("cache-client", "boundary", 1270, 730, 260, 110, "EPHEMERAL", "Client caches", "Performance-only derived data, safe to discard.", "client-local cache", "A cache miss may cost work but cannot change legal moves, state, or visibility.")
+          ],
+          edges: [
+            E("content-state", "game-state", "domain"),
+            E("game-state", "queries", "engine", "read"),
+            E("game-state", "transitions", "engine", "next state"),
+            E("transitions", "facts", "engine"),
+            E("game-state", "projector", "engine"),
+            E("facts", "projector", "engine"),
+            E("projector", "snapshot", "runtime"),
+            E("projector", "patch", "runtime"),
+            E("snapshot", "presentation", "boundary"),
+            E("patch", "render", "boundary"),
+            E("snapshot", "recovery", "runtime"),
+            E("recovery", "cache-client", "boundary"),
+            E("canonical-contract", "game-state", "domain", "decode")
+          ],
+          footer: "RecipientSnapshot and canonical state are different nominal types. A remote client never reconstructs game truth."
+        },
+
+        clients: {
+          title: "Native and future clients",
+          description: "Flutter, Godot, and future clients share one coarse versioned boundary.",
+          sceneTitle: "Any client may present the same Rust-owned world",
+          sceneSubtitle: "Adapters marshal protocol data and contain native failures; they never fork gameplay rules.",
+          flag: "ONE CLIENT PROTOCOL",
+          sections: [
+            S("boundary", 40, 140, 350, 770, "CLIENT SHELLS", "Presentation, input, audio, platform services"),
+            S("boundary", 420, 140, 300, 770, "NATIVE ADAPTERS", "Panic containment and marshaling"),
+            S("runtime", 750, 140, 480, 770, "SHARED RUST BOUNDARY", "Client protocol, local runtime, and pure engine"),
+            S("domain", 1260, 140, 300, 770, "AUTHORING & HOSTS", "Map tools and future integration")
+          ],
+          nodes: [
+            N("flutter-ui", "boundary", 70, 220, 290, 160, "SHIPPING CLIENT", "Flutter", "Widgets, Flame rendering, input, audio, auth, and platform packaging.", "clients/aonw_flutter · root Flutter app", "Flutter owns presentation and platform integration. Native Assets call the Rust adapter with coarse protocol messages."),
+            N("godot-ui", "boundary", 70, 465, 290, 160, "SUCCESSOR CLIENT", "Godot", "Scenes, rendering, input, Terrain3D, and editor workflows.", "clients/aonw_godot", "Godot consumes local sessions and map-workbench capabilities through GDExtension."),
+            N("future-ui", "boundary", 70, 710, 290, 125, "EXTENSIBLE", "Unity · Unreal · CLI", "Any host can implement presentation around the same versioned contract.", "future client", "A new client requires a thin host binding, not a new 4X rules engine."),
+
+            N("flutter-ffi", "boundary", 450, 245, 240, 165, "C ABI", "aonw_flutter", "Native Assets symbols, JSON/byte marshaling, stable errors, and panic containment.", "engine/crates/aonw_flutter", "Unsafe or platform-specific work is isolated at the adapter. The pure crates forbid unsafe code."),
+            N("godot-ext", "boundary", 450, 500, 240, 165, "GDEXTENSION", "aonw_godot", "Godot classes for sessions and map workbench over shared Rust services.", "engine/crates/aonw_godot", "The extension translates Godot values and exposes no alternate rule implementation."),
+            N("binding", "migration", 450, 745, 240, 95, "FUTURE", "Host binding", "C ABI, C++, WASM, IPC, or remote protocol as qualified.", "adapter boundary", "The host mechanism may vary, but the client contract and engine semantics stay aligned."),
+
+            N("protocol", "boundary", 785, 210, 190, 160, "VERSIONED DTOs", "Client protocol", "Requests, responses, snapshots, patches, versions, and stable errors.", "aonw_contracts/src/client", "The same coarse messages are used by every local client adapter."),
+            N("runtime", "runtime", 1005, 210, 190, 160, "SESSION OWNER", "Local runtime", "Lifecycle, revision, replay, caches, dispatch, and projection.", "aonw_local_runtime", "One host-neutral runtime drives all supported local client integrations."),
+            N("engine", "engine", 785, 490, 410, 165, "GAME TRUTH", "AoNW Engine", "Canonical queries, transitions, turns, events, evidence, and recipient policy.", "aonw_engine · aonw_domain · aonw_content", "The engine produces identical results for identical explicit inputs, independent of the client framework."),
+            N("platform", "migration", 785, 735, 410, 105, "QUALIFICATION", "Platform evidence", "ABI tests, device smoke, packaging, observability, rollback, and deliberate web mode.", "Makefile · CI workflows", "A client row is supported only when its real native boundary and target platform are exercised."),
+
+            N("workbench", "domain", 1290, 220, 240, 165, "MAP AUTHORING", "Map workbench", "Logical editing, deterministic generation, and terrain profiles.", "aonw_map_workbench · aonw_map_*", "Godot and future tools use framework-neutral map services without moving world rules into editors."),
+            N("serverpod", "migration", 1290, 500, 240, 165, "ONLINE HOST", "Serverpod host", "Authentication, locking, transactions, persistence, offsets, delivery, and reconnect.", "server/ · future Rust engine host", "Serverpod remains infrastructure and authority orchestration. Gameplay rules and recipient policy execute in Rust after cutover."),
+            N("database", "runtime", 1290, 745, 240, 95, "DURABLE ONLINE", "PostgreSQL", "Canonical online snapshots, events, offsets, and match metadata.", "compose.yml · server", "Database writes occur at the host boundary after a complete accepted engine result.")
+          ],
+          edges: [
+            E("flutter-ui", "flutter-ffi", "boundary"),
+            E("godot-ui", "godot-ext", "boundary"),
+            E("future-ui", "binding", "migration"),
+            E("flutter-ffi", "protocol", "boundary"),
+            E("godot-ext", "protocol", "boundary"),
+            E("binding", "protocol", "migration"),
+            E("protocol", "runtime", "runtime"),
+            E("runtime", "engine", "engine"),
+            E("workbench", "godot-ext", "domain"),
+            E("serverpod", "engine", "migration", "future host"),
+            E("serverpod", "database", "runtime"),
+            E("engine", "platform", "quality", "evidence")
+          ],
+          footer: "Clients differ in rendering and platform integration, not in movement, combat, economy, fog, save, or replay rules."
+        },
+
+        quality: {
+          title: "Quality evidence and cutover",
+          description: "Merge, evidence, deep, platform, shadow, and rollback gates control production authority.",
+          sceneTitle: "Rust becomes authoritative only through explicit evidence",
+          sceneSubtitle: "Green tests are necessary; parity, determinism, architecture, coverage, performance, and rollback are separate contracts.",
+          flag: "ACTIVE STRANGLER MIGRATION",
+          sections: [
+            S("quality", 40, 140, 560, 770, "QUALITY LAYERS", "Fast merge, measured evidence, and scheduled depth"),
+            S("quality", 630, 140, 420, 770, "PORTABLE EVIDENCE", "Independent tools plus AoNW policy"),
+            S("migration", 1080, 140, 480, 770, "CUTOVER STATE MACHINE", "Complete engine modes, pinning, and rollback")
+          ],
+          nodes: [
+            N("merge", "quality", 70, 210, 230, 180, "FAST MERGE GATE", "successor-engine-check", "Format, Clippy, tests, docs, build, architecture, dependency, unsafe, and determinism checks.", "Makefile::successor-engine-check", "The fast gate covers the complete workspace with all features and fail-closed architecture and dependency policy."),
+            N("evidence", "quality", 330, 210, 240, 180, "MEASURED GATE", "successor-engine-evidence-check", "Capability parity corpus, LLVM coverage, LCOV, and structural performance evidence.", "Makefile::successor-engine-evidence-check", "Evidence is published separately from the merge gate so measurement cannot be replaced by a passing unit test."),
+            N("deep", "quality", 70, 480, 230, 160, "SCHEDULED PINNED LINUX", "successor-engine-deep-check", "Release-mode workspace tests on the controlled runner.", "Makefile::successor-engine-deep-check", "The deep gate catches release-only and platform-specific behavior on a pinned environment."),
+            N("platforms", "quality", 330, 480, 240, 160, "REAL TARGETS", "Native platform smokes", "Flutter ABI, Godot GDExtension, packaging, device, and host qualification.", "Makefile · CI workflows", "Unsupported platform rows are reported as unsupported, never replaced with a successful stub."),
+            N("policy", "quality", 70, 730, 500, 110, "FAIL CLOSED", "Exact census + ratchets", "New debt, missing provenance, hidden unsafe, nondeterminism, or budget growth fails.", "engine/quality · tool/rust_*", "Controlled baselines may shrink but cannot be silently reset or grow through a soft warning."),
+
+            N("coverage", "quality", 660, 210, 170, 155, "EXTERNAL MEASUREMENT", "cargo-llvm-cov", "Per-authoritative-crate ratios, uncovered ceilings, and missing-file ratchet.", "engine/quality/coverage_policy.json", "Pinned LLVM coverage produces measurement; repository policy defines what counts and which debt may only shrink."),
+            N("performance", "quality", 850, 210, 170, 155, "STRUCTURAL", "stats_alloc", "Signatures, work counters, allocations, bytes, payloads, and soak counts.", "engine/quality/performance_policy.json", "Portable structural evidence is a gate. Host-local wall-clock timing remains diagnostic."),
+            N("fixtures", "quality", 660, 465, 170, 155, "INDEPENDENT ORACLE", "Parity fixtures", "Full input, result, rejection, state, events, evidence, and RNG position.", "engine/fixtures", "Fixtures are reviewed evidence and cannot be generated and blessed by the implementation under test."),
+            N("determinism", "quality", 850, 465, 170, 155, "CROSS PROFILE", "Determinism", "Debug/release fingerprints, stable ordering, fixed-point values, and explicit RNG.", "tool/rust_determinism_check.dart", "Equal explicit inputs must produce equal results across supported profiles and runs."),
+            N("security", "quality", 660, 730, 360, 110, "SUPPLY CHAIN", "cargo-deny + OSV", "Pinned license, source, duplicate, advisory, and lockfile policy.", "engine/deny.toml · CI", "Licenses and sources fail closed. Time-bounded duplicate exceptions require named ownership and expiry."),
+
+            N("dart-only", "migration", 1110, 200, 200, 120, "MODE 1", "Dart only", "Current production reference and rollback origin.", "packages/aonw_core", "Dart remains production authority until the explicit Rust cutover gates pass.", "current production"),
+            N("dart-shadow", "migration", 1330, 200, 200, 120, "MODE 2", "Dart primary", "Rust shadow compares full results but cannot persist or broadcast.", "backend engine mode", "Shadow output is comparison data only and never becomes authoritative."),
+            N("rust-shadow", "migration", 1110, 410, 200, 135, "MODE 3", "Rust primary", "Dart shadow verifies confidence while Rust owns new work.", "backend engine mode", "Only the primary result is persisted and displayed. Active work remains pinned to one backend."),
+            N("rust-standby", "migration", 1330, 410, 200, 135, "MODE 4", "Rust primary", "Dart standby remains available for rollback defaults on new work.", "backend engine mode", "A kill switch changes defaults for new saves or matches, never the engine mid-session."),
+            N("rust-only", "engine", 1220, 675, 200, 135, "MODE 5", "Rust only", "Dart authority retired after every command, query, save, replay, AI, projection, host, and platform is complete.", "target production mode", "Retirement also requires no active Dart-pinned matches, supported historical readers, and completed rollback drills.", "target")
+          ],
+          edges: [
+            E("merge", "evidence", "quality"),
+            E("deep", "evidence", "quality"),
+            E("platforms", "evidence", "quality"),
+            E("coverage", "evidence", "quality"),
+            E("performance", "evidence", "quality"),
+            E("fixtures", "evidence", "quality"),
+            E("determinism", "evidence", "quality"),
+            E("security", "merge", "quality"),
+            E("dart-only", "dart-shadow", "migration"),
+            E("dart-shadow", "rust-shadow", "migration"),
+            E("rust-shadow", "rust-standby", "migration"),
+            E("rust-standby", "rust-only", "engine"),
+            E("evidence", "rust-shadow", "quality", "cutover gates"),
+            E("rust-shadow", "dart-shadow", "migration", "rollback")
+          ],
+          footer: "One save or match stays pinned to one primary engine. Readers precede writers; shadow output is never authoritative."
+        }
+      };
+
+      const stage = document.getElementById("stage");
+      const diagram = document.getElementById("diagram");
+      const drawer = document.getElementById("drawer");
+      const drawerTitle = document.getElementById("drawer-title");
+      const drawerPath = document.getElementById("drawer-path");
+      const drawerBody = document.getElementById("drawer-body");
+      const title = document.getElementById("view-title");
+      const description = document.getElementById("view-description");
+      const animateButton = document.getElementById("animate");
+      const width = 1600;
+      const height = 1000;
+      let activeView = "overview";
+      let scale = 1;
+      let offsetX = 0;
+      let offsetY = 0;
+      let drag = null;
+
+      function px(value) {
+        return value + "px";
+      }
+
+      function add(className, parent = diagram) {
+        const element = document.createElement("div");
+        element.className = className;
+        parent.appendChild(element);
+        return element;
+      }
+
+      function render() {
+        const view = views[activeView];
+        diagram.replaceChildren();
+        diagram.dataset.view = activeView;
+        title.textContent = view.title;
+        description.textContent = view.description;
+
+        const kicker = add("scene-kicker");
+        kicker.textContent = "AoNW Engine Architecture · Rust 2024";
+        const heading = add("scene-title");
+        heading.textContent = view.sceneTitle;
+        const subtitle = add("scene-subtitle");
+        subtitle.textContent = view.sceneSubtitle;
+        const flag = add("status-flag");
+        flag.textContent = view.flag;
+
+        view.sections.forEach((section) => {
+          const box = add("diagram-section " + section.type);
+          box.style.left = px(section.x);
+          box.style.top = px(section.y);
+          box.style.width = px(section.w);
+          box.style.height = px(section.h);
+          const strong = document.createElement("strong");
+          strong.textContent = section.title;
+          const small = document.createElement("small");
+          small.textContent = section.subtitle;
+          box.append(strong, small);
+        });
+
+        const nodeMap = new Map(view.nodes.map((node) => [node.id, node]));
+        view.edges.forEach((edge) => renderEdge(edge, nodeMap));
+        view.nodes.forEach(renderNode);
+
+        const footer = add("scene-footer");
+        const footerCopy = document.createElement("span");
+        footerCopy.textContent = view.footer;
+        const footerDate = document.createElement("span");
+        footerDate.textContent = "dev · workspace snapshot 2026-08-26";
+        footer.append(footerCopy, footerDate);
+        closeDrawer();
+      }
+
+      function renderEdge(edge, nodeMap) {
+        const from = nodeMap.get(edge.from);
+        const to = nodeMap.get(edge.to);
+        if (!from || !to) return;
+        const fromCenterX = from.x + from.w / 2;
+        const fromCenterY = from.y + from.h / 2;
+        const toCenterX = to.x + to.w / 2;
+        const toCenterY = to.y + to.h / 2;
+        const centerDx = toCenterX - fromCenterX;
+        const centerDy = toCenterY - fromCenterY;
+        const centerDistance = Math.max(1, Math.hypot(centerDx, centerDy));
+        const unitX = centerDx / centerDistance;
+        const unitY = centerDy / centerDistance;
+        const fromInset = Math.min(from.w, from.h) * 0.42;
+        const toInset = Math.min(to.w, to.h) * 0.46 + 8;
+        const x1 = fromCenterX + unitX * fromInset;
+        const y1 = fromCenterY + unitY * fromInset;
+        const x2 = toCenterX - unitX * toInset;
+        const y2 = toCenterY - unitY * toInset;
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const length = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        const line = add("edge " + edge.type);
+        line.style.setProperty("--x", px(x1));
+        line.style.setProperty("--y", px(y1));
+        line.style.setProperty("--length", px(length));
+        line.style.setProperty("--angle", angle + "deg");
+        if (edge.label) {
+          const label = add("edge-label");
+          label.textContent = edge.label;
+          label.style.setProperty("--label-x", px((x1 + x2) / 2));
+          label.style.setProperty("--label-y", px((y1 + y2) / 2));
+        }
+      }
+
+      function renderNode(node) {
+        const button = document.createElement("button");
+        button.className = "arch-node " + node.type;
+        button.type = "button";
+        button.style.setProperty("--node-x", px(node.x));
+        button.style.setProperty("--node-y", px(node.y));
+        button.style.setProperty("--node-w", px(node.w));
+        button.style.setProperty("--node-h", px(node.h));
+        button.dataset.node = node.id;
+        const eyebrow = document.createElement("span");
+        eyebrow.className = "node-eyebrow";
+        eyebrow.textContent = node.eyebrow;
+        const heading = document.createElement("strong");
+        heading.textContent = node.title;
+        const summary = document.createElement("span");
+        summary.className = "node-summary";
+        summary.textContent = node.summary;
+        const path = document.createElement("code");
+        path.className = "node-path";
+        path.textContent = node.path;
+        button.append(eyebrow, heading, summary, path);
+        if (node.status) {
+          const status = document.createElement("span");
+          status.className = "node-status";
+          status.textContent = node.status;
+          button.appendChild(status);
+        }
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openDrawer(node);
+        });
+        diagram.appendChild(button);
+      }
+
+      function openDrawer(node) {
+        drawerTitle.textContent = node.title;
+        drawerPath.textContent = node.path;
+        drawerBody.textContent = node.body;
+        drawer.classList.add("open");
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove("open");
+      }
+
+      function applyTransform() {
+        diagram.style.transform = "translate(" + offsetX + "px, " + offsetY + "px) scale(" + scale + ")";
+      }
+
+      function fit() {
+        const rect = stage.getBoundingClientRect();
+        scale = Math.min(rect.width / width, rect.height / height) * 0.94;
+        offsetX = (rect.width - width * scale) / 2;
+        offsetY = (rect.height - height * scale) / 2;
+        applyTransform();
+      }
+
+      function zoomAt(factor, clientX, clientY) {
+        const rect = stage.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        const next = Math.min(2.2, Math.max(0.28, scale * factor));
+        offsetX = x - (x - offsetX) * next / scale;
+        offsetY = y - (y - offsetY) * next / scale;
+        scale = next;
+        applyTransform();
+      }
+
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".nav-button").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          activeView = button.dataset.view;
+          render();
+          fit();
+        });
+      });
+
+      document.getElementById("zoom-in").addEventListener("click", () => {
+        const rect = stage.getBoundingClientRect();
+        zoomAt(1.18, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+
+      document.getElementById("zoom-out").addEventListener("click", () => {
+        const rect = stage.getBoundingClientRect();
+        zoomAt(0.84, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+
+      document.getElementById("fit").addEventListener("click", fit);
+      document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+      stage.addEventListener("click", (event) => {
+        if (event.target === stage || event.target === diagram) closeDrawer();
+      });
+
+      animateButton.addEventListener("click", () => {
+        document.body.classList.toggle("animations-on");
+        animateButton.classList.toggle("active", document.body.classList.contains("animations-on"));
+      });
+
+      document.getElementById("print").addEventListener("click", () => window.print());
+      document.getElementById("fullscreen").addEventListener("click", async () => {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await stage.requestFullscreen();
+        }
+        setTimeout(fit, 80);
+      });
+
+      stage.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        zoomAt(event.deltaY < 0 ? 1.1 : 0.9, event.clientX, event.clientY);
+      }, { passive: false });
+
+      stage.addEventListener("pointerdown", (event) => {
+        if (event.target.closest(".arch-node")) return;
+        drag = { x: event.clientX, y: event.clientY, offsetX, offsetY };
+        stage.setPointerCapture(event.pointerId);
+        stage.classList.add("dragging");
+      });
+
+      stage.addEventListener("pointermove", (event) => {
+        if (!drag) return;
+        offsetX = drag.offsetX + event.clientX - drag.x;
+        offsetY = drag.offsetY + event.clientY - drag.y;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!drag) return;
+        drag = null;
+        stage.classList.remove("dragging");
+        if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+      }
+
+      stage.addEventListener("pointerup", endDrag);
+      stage.addEventListener("pointercancel", endDrag);
+      window.addEventListener("resize", fit);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDrawer();
+      });
+
+      render();
+      requestAnimationFrame(fit);
+    </script>
+  </body>
+</html>

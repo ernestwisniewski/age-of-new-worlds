@@ -1,0 +1,9 @@
+class: GameMatchView
+fields:
+  matchId: String
+  mapId: String
+  mapHash: String
+  rulesetId: String
+  rulesetHash: String
+  revision: int
+  eventOffset: int

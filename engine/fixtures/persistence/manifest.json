@@ -1,0 +1,30 @@
+{
+  "capability": "save-and-replay-hardened",
+  "formats": [
+    "canonicalSave",
+    "segmentedReplayArchive"
+  ],
+  "limits": {
+    "replayEntriesPerSegment": 512,
+    "replaySegments": 8,
+    "replayBytes": 67108864,
+    "saveBytes": 16777216
+  },
+  "cases": [
+    "atomic-host-write",
+    "backup-promotion",
+    "corrupt-save-transactional",
+    "duplicate-field-rejected",
+    "empty-archive-rejected",
+    "hash-mismatch-rejected",
+    "install-rollback",
+    "long-replay-verification",
+    "oversized-document-rejected",
+    "restore-command-family-matrix",
+    "segment-checkpoint-chain-drift",
+    "segment-checkpoint-digest-drift",
+    "segment-rollover",
+    "truncated-document-rejected",
+    "unknown-field-rejected"
+  ]
+}

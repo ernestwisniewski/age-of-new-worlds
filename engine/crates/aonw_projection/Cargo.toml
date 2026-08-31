@@ -1,0 +1,18 @@
+[package]
+name = "aonw_projection"
+description = "Framework-independent recipient-safe projections for Age of New Worlds"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+aonw_content = { path = "../aonw_content" }
+aonw_domain = { path = "../aonw_domain" }
+aonw_engine = { path = "../aonw_engine" }
+
+[lints]
+workspace = true

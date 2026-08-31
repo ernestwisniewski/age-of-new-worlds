@@ -1,0 +1,13 @@
+{
+  "mapId": "dravonia",
+  "mapContentHash": "64d8d98659a05cf6ba19fe7e0ae0d5e83b70f8b9da753cde9bf1459199519c82",
+  "authoringProfileHash": "8232429bf1b31867a5acc58e38bee8f16c5dedb54f033d58ad42ae571515af50",
+  "generatedBaseHash": "cf5f61e0f861b4f99c90880d324134224c0f0a2d0255b38bd08bf44fc28e1f5b",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 606,
+  "rasterHeight": 530,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 27,
+  "snapshotHash": "d8988a88ffc29b1222f0a8e310fdd1a6811274cf1f0f379c3842b228c80dff3c",
+  "terrainDataDirectory": "res://assets/generated_maps/dravonia/terrain_authoring/draft/d8988a88ffc29b1222f0a8e310fdd1a6811274cf1f0f379c3842b228c80dff3c"
+}

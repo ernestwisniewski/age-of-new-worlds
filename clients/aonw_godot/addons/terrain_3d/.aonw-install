@@ -1,0 +1,6 @@
+version=1.0.2
+archive=Terrain3D_v1.0.2-stable.zip
+sha256=a071850250ec5e596aa54da61c01d75768774eb379ee997584d426a45f4884a2
+source=https://github.com/TokisanGames/Terrain3D/releases/download/v1.0.2-stable/Terrain3D_v1.0.2-stable.zip
+license=MIT
+patch=terrain3d-1.0.2-headless-display-scale

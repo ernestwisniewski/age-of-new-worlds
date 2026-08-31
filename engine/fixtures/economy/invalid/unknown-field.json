@@ -1,0 +1,9 @@
+{
+  "capability": "economy-read-model-ready",
+  "commands": [],
+  "queries": ["cityYield", "strategicResourceProjection"],
+  "turnProcessors": [],
+  "clientApiVersion": 7,
+  "cases": [],
+  "unexpectedField": true
+}

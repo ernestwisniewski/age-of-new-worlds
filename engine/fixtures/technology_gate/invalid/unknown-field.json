@@ -1,0 +1,8 @@
+{
+  "catalogHash": "a58f5b7def080e42b3d44c2ebb44955e56ea6d4f61b5d25facd3146ee5bed7b3",
+  "catalogTechnologyCount": 54,
+  "cases": [],
+  "gateCases": [],
+  "effectCase": {"unlocked": [], "ironProduction": 0, "coalProduction": 0, "globalGoldMultiplierBasisPoints": 0, "cityDefenseBonus": 0, "armyProductionMultiplierBasisPoints": 0, "armyStrengthMultiplierBasisPoints": 0, "armyAttackBonus": 0, "armyDefenseBonus": 0, "armyHitPointsBonus": 0, "maxControlledHexesBonus": 0, "cityScienceBonus": 0},
+  "unexpectedField": true
+}

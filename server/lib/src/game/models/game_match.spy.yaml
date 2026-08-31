@@ -1,0 +1,34 @@
+class: GameMatch
+table: aonw_game_match
+fields:
+  publicId: String
+  mapId: String
+  mapHash: String
+  rulesetId: String
+  rulesetHash: String
+  mapDocument: String?, scope=serverOnly
+  canonicalStateJson: String?, scope=serverOnly
+  state: String
+  turn: int
+  startedAt: DateTime
+  endedAt: DateTime?
+  outcomeCondition: String?
+  winnerPlayerId: String?
+  revision: int
+  eventOffset: int
+  createdAt: DateTime
+  updatedAt: DateTime
+  participants: List<GameParticipant>?, relation(name=game_match_participants), scope=serverOnly
+  commands: List<GameCommandLedger>?, relation(name=game_match_commands), scope=serverOnly
+  events: List<GameEvent>?, relation(name=game_match_events), scope=serverOnly
+  recipientSnapshots: List<GameRecipientSnapshot>?, relation(name=game_match_recipient_snapshots), scope=serverOnly
+indexes:
+  aonw_game_match_public_id_idx:
+    fields: publicId
+    unique: true
+  aonw_game_match_updated_idx:
+    fields: updatedAt, publicId
+  aonw_game_match_started_idx:
+    fields: startedAt
+  aonw_game_match_ended_idx:
+    fields: endedAt

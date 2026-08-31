@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {"id": "own-accepted", "actor": "player-1", "counterparty": "player-1", "hasContact": false, "configuredStatus": null, "expectedStatus": "neutral", "expectedDisclosure": "own", "hostile": "deny", "cityEntry": "allow", "territoryEntry": "allow", "attack": "deny", "automation": "allow", "trade": "deny"},
+    {"id": "undiscovered-hidden", "actor": "player-1", "counterparty": "player-2", "hasContact": false, "configuredStatus": null, "expectedStatus": "neutral", "expectedDisclosure": "hidden", "hostile": "deny", "cityEntry": "deny", "territoryEntry": "deny", "attack": "allow", "automation": "deny", "trade": "allow"},
+    {"id": "neutral-accepted", "actor": "player-1", "counterparty": "player-2", "hasContact": true, "configuredStatus": "neutral", "expectedStatus": "neutral", "expectedDisclosure": "known", "hostile": "deny", "cityEntry": "deny", "territoryEntry": "deny", "attack": "allow", "automation": "deny", "trade": "allow"},
+    {"id": "friendly-protected", "actor": "player-1", "counterparty": "player-2", "hasContact": true, "configuredStatus": "friendly", "expectedStatus": "friendly", "expectedDisclosure": "known", "hostile": "deny", "cityEntry": "deny", "territoryEntry": "allow", "attack": "deny", "automation": "allow", "trade": "allow"},
+    {"id": "hostile-accepted", "actor": "player-1", "counterparty": "player-2", "hasContact": true, "configuredStatus": "hostile", "expectedStatus": "hostile", "expectedDisclosure": "known", "hostile": "allow", "cityEntry": "deny", "territoryEntry": "deny", "attack": "allow", "automation": "deny", "trade": "allow"},
+    {"id": "truce-protected", "actor": "player-1", "counterparty": "player-2", "hasContact": true, "configuredStatus": "truce", "expectedStatus": "truce", "expectedDisclosure": "known", "hostile": "deny", "cityEntry": "deny", "territoryEntry": "deny", "attack": "deny", "automation": "deny", "trade": "allow"},
+    {"id": "war-trade-rejected", "actor": "player-1", "counterparty": "player-2", "hasContact": true, "configuredStatus": "war", "expectedStatus": "war", "expectedDisclosure": "known", "hostile": "allow", "cityEntry": "deny", "territoryEntry": "deny", "attack": "allow", "automation": "deny", "trade": "deny"}
+  ]
+}

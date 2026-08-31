@@ -1,0 +1,39 @@
+apiServer:
+  port: 8080
+  publicHost: localhost
+  publicPort: 8080
+  publicScheme: http
+
+insightsServer:
+  port: 8081
+  publicHost: localhost
+  publicPort: 8081
+  publicScheme: http
+
+webServer:
+  port: 8082
+  publicHost: localhost
+  publicPort: 8082
+  publicScheme: http
+
+database:
+  host: localhost
+  port: 5432
+  name: aonw
+  user: aonw
+
+redis:
+  enabled: true
+  host: localhost
+  port: 6379
+
+maxRequestSize: 1048576
+websocketPingInterval: 20
+
+sessionLogs:
+  persistentEnabled: true
+  consoleEnabled: true
+  consoleLogFormat: text
+  cleanupInterval: 24h
+  retentionPeriod: 90d
+  retentionCount: 100000

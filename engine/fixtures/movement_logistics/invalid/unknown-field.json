@@ -1,0 +1,8 @@
+{
+  "capability": "movement-logistics-ready",
+  "commands": [],
+  "queries": [],
+  "turnProcessors": [],
+  "cases": [],
+  "unexpectedField": true
+}

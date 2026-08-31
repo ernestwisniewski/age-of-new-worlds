@@ -1,0 +1,19 @@
+{
+  "capability": "feature-complete-command-policy",
+  "cases": [],
+  "strategies": [],
+  "productionDefault": "strategic",
+  "randomTestOnly": true,
+  "difficulties": ["easy", "normal", "hard", "veryHard"],
+  "personas": ["balanced", "aggressive", "expansive", "economic", "scientific"],
+  "strategicModes": ["expand", "consolidate", "military", "techRush"],
+  "utilityArithmetic": "bounded-fixed-point-basis-points",
+  "tacticalSearch": "visible-hostile-military-only",
+  "deterministicBudget": [],
+  "randomness": "ai-turn-lcg32",
+  "wallClockBudget": false,
+  "commands": [],
+  "queries": [],
+  "clientApiVersion": 7,
+  "unexpectedField": true
+}

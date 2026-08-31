@@ -1,0 +1,23 @@
+{
+  "capability": "combat-ready",
+  "commands": [
+    "attackHex"
+  ],
+  "queries": [
+    "combatPreview"
+  ],
+  "turnProcessors": [
+    "combat"
+  ],
+  "cases": [
+    "exact-unit-preview-apply",
+    "hidden-target-recipient-safe",
+    "city-capture-destroy",
+    "intended-turn-evidence",
+    "technology-modifiers",
+    "artifact-defense-and-loss",
+    "save-reopen-replay-exact",
+    "rejection-precedence",
+    "mutation-roll-event-evidence"
+  ]
+}

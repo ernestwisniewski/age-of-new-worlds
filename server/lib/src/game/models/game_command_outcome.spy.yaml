@@ -1,0 +1,8 @@
+class: GameCommandOutcome
+fields:
+  matchId: String
+  clientCommandId: String
+  initialEventOffset: int
+  finalEventOffset: int
+  duplicate: bool
+  outcomeJson: String

@@ -1,0 +1,156 @@
+{
+  "source": "packages/aonw_core/lib/ai.dart",
+  "sourceExportCount": 104,
+  "policy": "behavior-port-or-explicit-retire",
+  "legacyPaths": false,
+  "portCapabilities": {
+    "boundedSearch": [
+      "ai/mcts/mcts_action.dart",
+      "ai/mcts/mcts_action_generation_stats.dart",
+      "ai/mcts/mcts_action_generator.dart",
+      "ai/mcts/mcts_budget.dart",
+      "ai/mcts/mcts_combat_candidate_collector.dart",
+      "ai/mcts/mcts_command_candidate_guard.dart",
+      "ai/mcts/mcts_command_combat_scorer.dart",
+      "ai/mcts/mcts_command_movement_scorer.dart",
+      "ai/mcts/mcts_command_production_scorer.dart",
+      "ai/mcts/mcts_config.dart",
+      "ai/mcts/mcts_evaluator.dart",
+      "ai/mcts/mcts_founding_candidate_collector.dart",
+      "ai/mcts/mcts_movement_candidate_collector.dart",
+      "ai/mcts/mcts_node.dart",
+      "ai/mcts/mcts_production_candidate_collector.dart",
+      "ai/mcts/mcts_search.dart",
+      "ai/mcts/mcts_state_score_estimator.dart",
+      "ai/mcts/mcts_strategic_state_scorer.dart",
+      "ai/mcts/mcts_strategy.dart",
+      "ai/mcts/mcts_worker_candidate_collector.dart",
+      "ai/mcts/strategy_aware_action_generator.dart"
+    ],
+    "combatDefense": [
+      "ai/combat_tactics.dart",
+      "ai/military_assessment.dart",
+      "ai/strategic/defensive_stance.dart",
+      "ai/strategic/defensive_stance_planner.dart",
+      "ai/strategic/garrison_policy.dart",
+      "ai/strategies/basic_strategy_city_assault_planner.dart",
+      "ai/strategies/basic_strategy_combat_reactions_planner.dart",
+      "ai/strategies/basic_strategy_defensive_stance_planner.dart",
+      "ai/strategies/basic_strategy_founder_escort_planner.dart",
+      "ai/strategies/basic_strategy_garrison_reservation_planner.dart",
+      "ai/strategies/basic_strategy_garrison_rules.dart",
+      "ai/strategies/basic_strategy_last_military_reserve_planner.dart",
+      "ai/strategies/basic_strategy_military_pressure_planner.dart"
+    ],
+    "deterministicRng": [
+      "ai/ai_rng.dart"
+    ],
+    "diplomacy": [
+      "ai/diplomacy_ai_policy.dart",
+      "ai/strategies/basic_strategy_resource_trade_planner.dart"
+    ],
+    "expansionExploration": [
+      "ai/city_site_scorer.dart",
+      "ai/frontier_exploration_scorer.dart",
+      "ai/strategic/city_site_candidate.dart",
+      "ai/strategic/city_site_planner.dart",
+      "ai/strategic/frontier_clearing_plan.dart",
+      "ai/strategic/frontier_clearing_planner.dart",
+      "ai/strategies/basic_strategy_exploration_planner.dart",
+      "ai/strategies/basic_strategy_founding_move_planner.dart",
+      "ai/strategies/basic_strategy_founding_planner.dart",
+      "ai/strategies/basic_strategy_frontier_clearing_planner.dart"
+    ],
+    "outcomeAwareness": [
+      "game/domain/outcome.dart"
+    ],
+    "production": [
+      "ai/production_counter_pressure_scorer.dart",
+      "ai/production_map_scoring.dart",
+      "ai/production_models.dart",
+      "ai/production_scorer.dart",
+      "ai/production_scoring_cache.dart",
+      "ai/production_unit_scorer.dart",
+      "ai/strategies/basic_strategy_city_specialization_planner.dart",
+      "ai/strategies/basic_strategy_production_planner.dart"
+    ],
+    "profileWeights": [
+      "ai/ai_difficulty.dart",
+      "ai/ai_persona.dart",
+      "ai/civilization/civilization_profile.dart",
+      "ai/civilization/civilization_profiles.dart",
+      "ai/civilization/persona_weights.dart",
+      "ai/civilization/tech_branch_preferences.dart"
+    ],
+    "research": [
+      "ai/strategies/basic_strategy_research_planner.dart",
+      "ai/technology_branch_classifier.dart",
+      "ai/technology_persona_scorer.dart",
+      "ai/technology_score_snapshot.dart",
+      "ai/technology_scorer.dart",
+      "ai/technology_state_scorer.dart"
+    ],
+    "strategicAssessment": [
+      "ai/empire_assessment.dart",
+      "ai/strategic/economy_expectations.dart",
+      "ai/strategic/economy_health.dart",
+      "ai/strategic/mode_selector.dart",
+      "ai/strategic/rival_snapshot.dart",
+      "ai/strategic/strategic_mode.dart",
+      "ai/strategic/strategic_plan.dart",
+      "ai/strategic/strategic_planner.dart",
+      "ai/strategic/targetability.dart",
+      "ai/strategic/threat_assessor.dart",
+      "ai/strategic/war_front.dart",
+      "ai/strategic/war_goal.dart",
+      "ai/strategic/war_goal_generator.dart"
+    ],
+    "turnPolicy": [
+      "ai/ai_context.dart",
+      "ai/ai_player.dart",
+      "ai/ai_strategy.dart",
+      "ai/ai_strategy_id.dart",
+      "ai/ai_turn_plan.dart",
+      "ai/game_view.dart",
+      "ai/scoring.dart",
+      "ai/strategies/basic_strategy.dart",
+      "ai/strategies/basic_strategy_artifact_defense_planner.dart",
+      "ai/strategies/basic_strategy_artifact_logistics_planner.dart",
+      "ai/strategies/basic_strategy_idle_sweep_planner.dart",
+      "ai/strategies/basic_strategy_map_objective_planner.dart",
+      "ai/strategies/basic_strategy_war_goal_wake_up_planner.dart",
+      "ai/strategies/random_strategy.dart"
+    ],
+    "worker": [
+      "ai/strategic/worker_assignment_plan.dart",
+      "ai/strategic/worker_assignment_planner.dart",
+      "ai/strategies/basic_strategy_worker_planner.dart"
+    ]
+  },
+  "retire": [
+    {
+      "export": "ai/ai_strategy_registry.dart",
+      "reason": "Registry replaced by explicit Rust planner construction."
+    },
+    {
+      "export": "ai/civilization/civilization_profile_registry.dart",
+      "reason": "Registry replaced by typed profile data."
+    },
+    {
+      "export": "ai/mcts/mcts_debug.dart",
+      "reason": "Dart-only debug surface is not a gameplay capability."
+    },
+    {
+      "export": "ai/mcts/mcts_simulated_state.dart",
+      "reason": "Parallel simulated state is forbidden; Rust clones LocalRuntime."
+    },
+    {
+      "export": "ai/mcts/mcts_simulator.dart",
+      "reason": "Parallel simulator is forbidden; Rust uses public runtime transitions."
+    },
+    {
+      "export": "ai/strategies/basic_strategy_planning_session.dart",
+      "reason": "Mutable Dart planning session is replaced by revision-scoped Rust planning."
+    }
+  ]
+}

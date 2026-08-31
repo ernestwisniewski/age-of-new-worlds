@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "mapId": "terenos",
+  "mapContentHash": "c580c081e39a677e0d6f5e51f1654fe12b0274bfe9672c03994b9c61d1c88fec",
+  "authoringProfileHash": "a53a05ff79f5daaf64187ce6d88b328a1a0dcfac3dd9c4d8a34c96b2c6b53337",
+  "generatedBaseHash": "fa4418d1498e75c7432de1c24f33f63340862c1c4f21dedae22288bbce52c420",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 306,
+  "rasterHeight": 270,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 3,
+  "snapshotHash": "ad5d1c71474bcc6ad5dfaf58ea7788c64f626c749ad5c22cc8ed3d1734067477",
+  "terrainDataDirectory": "res://assets/generated_maps/terenos/terrain_authoring/draft/ad5d1c71474bcc6ad5dfaf58ea7788c64f626c749ad5c22cc8ed3d1734067477"
+}

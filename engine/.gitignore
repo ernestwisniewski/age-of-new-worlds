@@ -1,0 +1,5 @@
+/target/
+/fuzz/artifacts/
+/fuzz/corpus/
+/fuzz/target/
+/mutants.out*/

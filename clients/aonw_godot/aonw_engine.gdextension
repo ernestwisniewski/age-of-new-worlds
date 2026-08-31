@@ -1,0 +1,10 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.7
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 = "res://native/linux/x86_64/debug/libaonw_godot.so"
+linux.release.x86_64 = "res://native/linux/x86_64/release/libaonw_godot.so"
+macos.debug.arm64 = "res://native/macos/arm64/debug/libaonw_godot.dylib"
+macos.release.arm64 = "res://native/macos/arm64/release/libaonw_godot.dylib"

@@ -1,0 +1,13 @@
+{
+  "mapId": "myranth",
+  "mapContentHash": "1743616d03d54d04f53fc699c2a6ec2e1ba30f59665ddaa8776419fe06626571",
+  "authoringProfileHash": "31c606cee9accbc2fbc6f7f977378a131d9658d1dd5e8812e99871f81f6518a6",
+  "generatedBaseHash": "f51d7db93ea03efccaf89620b5968a316c680be5e02a3535b4526f08644cfbda",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 381,
+  "rasterHeight": 339,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 443,
+  "snapshotHash": "35e8a42ca943bb992393ae733011bc197773a7a77d54bedd03fbeb3f0bba1e76",
+  "terrainDataDirectory": "res://assets/generated_maps/myranth/terrain_authoring/draft/35e8a42ca943bb992393ae733011bc197773a7a77d54bedd03fbeb3f0bba1e76"
+}

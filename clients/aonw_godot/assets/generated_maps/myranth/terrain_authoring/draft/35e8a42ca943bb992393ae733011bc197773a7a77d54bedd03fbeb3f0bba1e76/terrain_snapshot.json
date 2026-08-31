@@ -1,0 +1,34 @@
+{
+  "mapId": "myranth",
+  "mapContentHash": "1743616d03d54d04f53fc699c2a6ec2e1ba30f59665ddaa8776419fe06626571",
+  "authoringProfileHash": "31c606cee9accbc2fbc6f7f977378a131d9658d1dd5e8812e99871f81f6518a6",
+  "generatedBaseHash": "f51d7db93ea03efccaf89620b5968a316c680be5e02a3535b4526f08644cfbda",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 381,
+  "rasterHeight": 339,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 443,
+  "terrainFiles": [
+    {
+      "file": "terrain3d_00_00.res",
+      "sha256": "c24546fd9295a32e5be8963bb18801bc9fab04371461b8809dd2c6dc2028fe7d",
+      "size": 54904
+    },
+    {
+      "file": "terrain3d_00_01.res",
+      "sha256": "abe8e22560a72cffed8cf4d69ab1b481f29dae270097838f8633ad848d302451",
+      "size": 9582
+    },
+    {
+      "file": "terrain3d_01_00.res",
+      "sha256": "1f8490a1323a0d4a52df7d6dc82379dd7a54fc04aec571bcf33b975bfb5aebcc",
+      "size": 15997
+    },
+    {
+      "file": "terrain3d_01_01.res",
+      "sha256": "f70362d73d3b497488afc732f588318413f1e61d4be59b6af3a39e505a518789",
+      "size": 6070
+    }
+  ],
+  "snapshotHash": "35e8a42ca943bb992393ae733011bc197773a7a77d54bedd03fbeb3f0bba1e76"
+}

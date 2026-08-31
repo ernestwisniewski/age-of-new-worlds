@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://mtc1ydmw6cri"]
+
+[ext_resource type="Script" uid="uid://d26sfcgy35r2e" path="res://game/presentation/map/map_preview_screen.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://pafcr7ftu4rk" path="res://game/presentation/map/map_surface.gd" id="2_surface"]
+[ext_resource type="Script" uid="uid://bcuodwhfvh8pa" path="res://game/presentation/camera/orbit_camera_rig.gd" id="3_camera"]
+[ext_resource type="Script" uid="uid://h06ewv82d7yc" path="res://game/presentation/map/map_overlay_layer.gd" id="4_overlay"]
+[ext_resource type="Script" uid="uid://durtsv7lp0qmt" path="res://game/presentation/map/map_interaction_controller.gd" id="5_interaction"]
+[ext_resource type="Script" uid="uid://8pgfq46qt7d6" path="res://game/presentation/map/unit_layer.gd" id="6_units"]
+[ext_resource type="Script" path="res://game/composition/map_preview_composition_root.gd" id="7_composition"]
+[ext_resource type="Script" path="res://game/presentation/turn/turn_hud.gd" id="8_turn_hud"]
+
+[sub_resource type="Environment" id="Environment_preview"]
+background_mode = 1
+background_color = Color(0.026, 0.034, 0.048, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.68, 0.75, 0.88, 1)
+ambient_light_energy = 0.65
+tonemap_mode = 2
+
+[sub_resource type="StyleBoxFlat" id="Style_toolbar"]
+bg_color = Color(0.035, 0.047, 0.066, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.24, 0.32, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MapPreview" type="Node3D" unique_id=689299749]
+script = ExtResource("1_screen")
+
+[node name="Composition" type="Node" parent="."]
+script = ExtResource("7_composition")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1240833735]
+environment = SubResource("Environment_preview")
+
+[node name="MapSurface" type="Node3D" parent="." unique_id=2002447610]
+unique_name_in_owner = true
+script = ExtResource("2_surface")
+
+[node name="Terrain3D" type="Terrain3D" parent="MapSurface" unique_id=2116543194]
+unique_name_in_owner = true
+
+[node name="ReferenceTexture" type="MeshInstance3D" parent="MapSurface" unique_id=1649038887]
+unique_name_in_owner = true
+
+[node name="HexGrid" type="MeshInstance3D" parent="MapSurface" unique_id=1271884550]
+unique_name_in_owner = true
+
+[node name="MapOverlay" type="Node3D" parent="MapSurface" unique_id=415055572]
+unique_name_in_owner = true
+script = ExtResource("4_overlay")
+
+[node name="UnitLayer" type="Node3D" parent="MapSurface" unique_id=2011736136]
+unique_name_in_owner = true
+script = ExtResource("6_units")
+
+[node name="OrbitCameraRig" type="Node3D" parent="." unique_id=583952653]
+unique_name_in_owner = true
+script = ExtResource("3_camera")
+
+[node name="Yaw" type="Node3D" parent="OrbitCameraRig" unique_id=1497743711]
+unique_name_in_owner = true
+
+[node name="Pitch" type="Node3D" parent="OrbitCameraRig/Yaw" unique_id=1855133315]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="OrbitCameraRig/Yaw/Pitch" unique_id=159891891]
+unique_name_in_owner = true
+current = true
+fov = 48.0
+far = 300.0
+
+[node name="MapInteraction" type="Node" parent="." unique_id=2137004959]
+unique_name_in_owner = true
+script = ExtResource("5_interaction")
+
+[node name="Interface" type="CanvasLayer" parent="." unique_id=1379941578]
+
+[node name="Toolbar" type="PanelContainer" parent="Interface" unique_id=52331720]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 1080.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("Style_toolbar")
+
+[node name="Margin" type="MarginContainer" parent="Interface/Toolbar" unique_id=1305189032]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 7
+
+[node name="Actions" type="HBoxContainer" parent="Interface/Toolbar/Margin" unique_id=2021919362]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MapCatalog" type="OptionButton" parent="Interface/Toolbar/Margin/Actions" unique_id=1311712925]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Verified packaged maps"
+
+[node name="GridToggle" type="CheckButton" parent="Interface/Toolbar/Margin/Actions" unique_id=1521634044]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Hex grid (G)"
+
+[node name="ConfirmMove" type="Button" parent="Interface/Toolbar/Margin/Actions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Confirm move (Enter)"
+
+[node name="TurnHud" type="HBoxContainer" parent="Interface/Toolbar/Margin/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+script = ExtResource("8_turn_hud")
+
+[node name="EndTurn" type="Button" parent="Interface/Toolbar/Margin/Actions/TurnHud"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "End turn (T)"
+
+[node name="TurnStatus" type="Label" parent="Interface/Toolbar/Margin/Actions/TurnHud"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Turn —"
+vertical_alignment = 1
+
+[node name="Separator" type="VSeparator" parent="Interface/Toolbar/Margin/Actions" unique_id=1140775945]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="Interface/Toolbar/Margin/Actions" unique_id=1161994625]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Loading map…"
+vertical_alignment = 1
+
+[node name="Help" type="Label" parent="Interface" unique_id=1438332032]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -42.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Arrows/D-pad: focus · Enter/A: select or confirm · Tab: toolbar · Shift+arrows/MMB: pan · RMB: orbit · wheel: zoom"
+
+[connection signal="toggled" from="Interface/Toolbar/Margin/Actions/GridToggle" to="." method="_on_grid_toggled"]
+[connection signal="pressed" from="Interface/Toolbar/Margin/Actions/ConfirmMove" to="." method="_on_confirm_move_pressed"]
+[connection signal="end_turn_requested" from="Interface/Toolbar/Margin/Actions/TurnHud" to="." method="_on_end_turn_pressed"]
+[connection signal="pressed" from="Interface/Toolbar/Margin/Actions/TurnHud/EndTurn" to="Interface/Toolbar/Margin/Actions/TurnHud" method="_on_end_turn_pressed"]

@@ -1,0 +1,20 @@
+groups:
+  - name: aonw-multiplayer
+    rules:
+      - alert: AonwApiLivezDown
+        expr: probe_success{job="aonw-api-livez"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AONW Serverpod API liveness probe is failing"
+          description: "The /livez endpoint has failed for 2 minutes."
+
+      - alert: AonwApiReadyzDown
+        expr: probe_success{job="aonw-api-readyz"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "AONW Serverpod API readiness probe is failing"
+          description: "The /readyz endpoint has failed for 5 minutes."

@@ -1,0 +1,5 @@
+class: SteamAuthStart
+fields:
+  requestId: String
+  authUrl: String
+  expiresAt: DateTime

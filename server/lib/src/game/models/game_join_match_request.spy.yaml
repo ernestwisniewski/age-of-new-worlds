@@ -1,0 +1,4 @@
+class: GameJoinMatchRequest
+fields:
+  matchId: String
+  playerId: String

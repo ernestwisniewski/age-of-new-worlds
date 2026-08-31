@@ -1,0 +1,29 @@
+{
+  "capability": "city-territory-ready",
+  "commands": [
+    "foundCity",
+    "selectCityExpansionHex",
+    "toggleWorkedHex"
+  ],
+  "queries": [
+    "cityExpansionOptions",
+    "cityFoundingOptions",
+    "cityWorkedHexOptions"
+  ],
+  "turnProcessors": [
+    "cityFounding"
+  ],
+  "cases": [
+    "atomic-invalid-founding",
+    "canonical-controlled-worked-order",
+    "commander-settler-consumption",
+    "expansion-ranking-selection",
+    "fog-and-recipient-safety",
+    "founding-completion",
+    "founding-draft-save-reopen",
+    "founding-legality-query",
+    "rejection-precedence",
+    "replay-exactness",
+    "worked-hex-limit-toggle"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "mapId": "terenos",
+  "mapContentHash": "c580c081e39a677e0d6f5e51f1654fe12b0274bfe9672c03994b9c61d1c88fec",
+  "authoringProfileHash": "5036195738ba6bc051784d60cf2dccf460e794370bf6aeca8a77411104e5fded",
+  "generatedBaseHash": "fdeff3b2e620b525b077e5c3f8711b1ada45ec2bf6eadd2aac7a21ec37199e61",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 306,
+  "rasterHeight": 270,
+  "sampleSpacingMeters": 1.0,
+  "schemaVersion": 1,
+  "terrainRevision": 2,
+  "terrainFiles": [
+    {
+      "file": "terrain3d_00_00.res",
+      "sha256": "50d15144127d4bfce1b00e6d87f65b9ab3ee7929cad311ca50a0583ae3debdc9",
+      "size": 25697
+    },
+    {
+      "file": "terrain3d_00_01.res",
+      "sha256": "ca500b83c1f274cd2ad6acfd88b77a414d1eb862710d9d7121e87a9d7c844f4c",
+      "size": 5880
+    },
+    {
+      "file": "terrain3d_01_00.res",
+      "sha256": "b3bd0833b67df34bb366cccc52f5a141efa16afc6ba7f5ee0340bc0e43c46557",
+      "size": 11437
+    },
+    {
+      "file": "terrain3d_01_01.res",
+      "sha256": "130a5cd6ddaa1d083a877b22fbdafb3e0f19e4fecef2feb04268795e2c236e8e",
+      "size": 5879
+    }
+  ],
+  "snapshotHash": "50afb0a5c66993a1acba7b74ae50921296be603ecbb6c3a6aa768466aa30e764"
+}

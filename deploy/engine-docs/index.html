@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07151c">
+    <meta
+      name="description"
+      content="AoNW Engine is an open-source 4X game engine in Rust. Explore its architecture and current API documentation."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AoNW Engine — a 4X game engine in Rust">
+    <meta
+      property="og:description"
+      content="Architecture and current Rust API documentation for the open-source AoNW 4X game engine."
+    >
+    <meta property="og:url" content="https://engine.aonw.net/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AoNW Engine — a 4X game engine in Rust">
+    <meta
+      name="twitter:description"
+      content="Architecture and current Rust API documentation for the open-source AoNW 4X game engine."
+    >
+    <title>AoNW Engine — a 4X game engine in Rust</title>
+    <link rel="canonical" href="https://engine.aonw.net/">
+    <link rel="icon" type="image/png" href="../../web/favicon.png">
+    <style>
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Cinzel";
+        font-style: normal;
+        font-weight: 400 900;
+        src: url("../../assets/fonts/Cinzel-VariableFont_wght.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Albert Sans";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url("../../assets/fonts/AlbertSans-VariableFont_wght.ttf") format("truetype");
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #07151c;
+        --font-body: "Aonw Albert Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-display: "Aonw Cinzel", Georgia, "Times New Roman", serif;
+        --gold: #d8b66a;
+        --gold-bright: #f0deb0;
+        --gold-pale: #f5ebcf;
+        --gold-line: rgba(216, 182, 106, 0.22);
+        --text: rgba(245, 235, 207, 0.92);
+        --muted: rgba(245, 235, 207, 0.68);
+        --quiet: rgba(216, 182, 106, 0.58);
+        --max: 70rem;
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-block: 4rem;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-body);
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+      }
+
+      body::before {
+        animation: map-journey 96s ease-in-out infinite;
+        background: url("../../assets/main_menu/background.jpg") center / cover no-repeat;
+        height: 150lvh;
+        left: -25vw;
+        top: -25lvh;
+        will-change: transform;
+        width: 150vw;
+        z-index: 0;
+      }
+
+      body::after {
+        background:
+          linear-gradient(90deg, rgba(7, 21, 28, 0.72), rgba(7, 21, 28, 0.32) 50%, rgba(6, 18, 25, 0.64)),
+          linear-gradient(0deg, rgba(6, 18, 25, 0.68), rgba(7, 21, 28, 0.18) 42%, rgba(5, 16, 22, 0.58));
+        z-index: 1;
+      }
+
+      main,
+      footer {
+        position: relative;
+        z-index: 2;
+      }
+
+      a { color: inherit; }
+
+      a:focus-visible {
+        border-radius: 0.2rem;
+        outline: 2px solid var(--gold);
+        outline-offset: 0.24rem;
+      }
+
+      @keyframes map-journey {
+        0%, 100% { transform: translate3d(-3vw, 2vh, 0) scale(1.02); }
+        25% { transform: translate3d(7vw, -6vh, 0) scale(1.07); }
+        50% { transform: translate3d(-8vw, -4vh, 0) scale(1.035); }
+        75% { transform: translate3d(5.5vw, 7vh, 0) scale(1.075); }
+      }
+
+      @keyframes content-rise {
+        from { opacity: 0; transform: translate3d(0, 1rem, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
+      }
+
+      @keyframes scroll-pulse {
+        0%, 100% { opacity: 0.4; transform: translateY(0) rotate(45deg); }
+        50% { opacity: 0.9; transform: translateY(0.32rem) rotate(45deg); }
+      }
+
+      .screen {
+        border-top: 1px solid rgba(217, 184, 93, 0.14);
+        display: grid;
+        min-height: 88svh;
+        padding: clamp(4.8rem, 9vw, 8rem) clamp(1.25rem, 4vw, 4rem);
+        place-items: center;
+        position: relative;
+      }
+
+      .screen:first-child { border-top: 0; min-height: 100svh; }
+
+      .screen-inner {
+        animation: content-rise 680ms ease both;
+        position: relative;
+        width: min(100%, var(--max));
+        z-index: 1;
+      }
+
+      .hero-inner {
+        align-items: center;
+        display: grid;
+        gap: clamp(1rem, 2.8svh, 1.8rem);
+        justify-items: center;
+        text-align: center;
+        width: min(94vw, 62rem);
+      }
+
+      .engine-lockup,
+      .screen-copy {
+        background:
+          radial-gradient(ellipse at 50% 54%, rgba(7, 21, 28, 0.68), rgba(7, 21, 28, 0.34) 60%, transparent 78%),
+          linear-gradient(90deg, transparent, rgba(241, 223, 170, 0.05) 32%, rgba(217, 184, 93, 0.08) 70%, transparent);
+        display: grid;
+        gap: 0.62rem;
+        justify-items: center;
+        max-width: min(92vw, 50rem);
+        padding: clamp(1.15rem, 2.6vw, 1.7rem) clamp(1.2rem, 4vw, 2.8rem);
+        position: relative;
+        text-align: center;
+      }
+
+      .engine-lockup::before,
+      .engine-lockup::after,
+      .screen-copy::before,
+      .screen-copy::after {
+        background: linear-gradient(90deg, transparent, rgba(217, 184, 93, 0.46), rgba(241, 223, 170, 0.28), transparent);
+        content: "";
+        height: 1px;
+        left: 50%;
+        opacity: 0.66;
+        position: absolute;
+        transform: translateX(-50%);
+        width: min(76%, 31rem);
+      }
+
+      .engine-lockup::before,
+      .screen-copy::before { top: 0; }
+      .engine-lockup::after,
+      .screen-copy::after { bottom: 0; }
+
+      .kicker {
+        color: rgba(217, 184, 93, 0.84);
+        font: 700 0.74rem/1.4 var(--font-body);
+        letter-spacing: 0.08em;
+        margin: 0;
+        text-transform: uppercase;
+        text-shadow: 0 0.16rem 0.45rem rgba(0, 0, 0, 0.92);
+      }
+
+      h1,
+      h2,
+      h3,
+      p { margin-top: 0; }
+
+      h1 {
+        color: var(--gold-pale);
+        font: 700 clamp(2.55rem, 7vw, 5.7rem)/1 var(--font-body);
+        margin-bottom: 0;
+        text-shadow:
+          0 0.16rem 0.45rem rgba(0, 0, 0, 0.98),
+          0 0.7rem 1.7rem rgba(0, 0, 0, 0.82),
+          0 0 1.8rem rgba(217, 184, 93, 0.16);
+        text-wrap: balance;
+      }
+
+      .hero-summary {
+        color: rgba(248, 235, 198, 0.82);
+        font: 300 clamp(1.02rem, 1.55vw, 1.2rem)/1.62 var(--font-body);
+        margin-bottom: 0;
+        max-width: 45rem;
+        text-wrap: balance;
+        text-shadow:
+          0 0.12rem 0.34rem rgba(0, 0, 0, 0.98),
+          0 0.54rem 1.2rem rgba(0, 0, 0, 0.78);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        justify-content: center;
+      }
+
+      .nav-link {
+        align-items: center;
+        background: rgba(7, 21, 28, 0.72);
+        border: 1px solid rgba(217, 184, 93, 0.62);
+        border-radius: 0.35rem;
+        box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.32);
+        color: var(--gold-bright);
+        display: inline-flex;
+        font: 700 0.82rem/1 var(--font-body);
+        gap: 0.55rem;
+        justify-content: center;
+        min-height: 3.15rem;
+        padding: 0.9rem 1.15rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+
+      .nav-link:hover {
+        background: rgba(16, 36, 42, 0.86);
+        border-color: rgba(241, 223, 170, 0.84);
+        box-shadow:
+          0 0.95rem 1.9rem rgba(0, 0, 0, 0.38),
+          0 0 1.2rem rgba(217, 184, 93, 0.18);
+        transform: translateY(-1px);
+      }
+
+      .nav-link.primary {
+        background: rgba(31, 28, 20, 0.8);
+        border-color: rgba(241, 223, 170, 0.76);
+        font-size: 0.94rem;
+      }
+
+      .scroll-marker {
+        animation: scroll-pulse 2.2s ease-in-out infinite;
+        border-bottom: 1px solid var(--gold);
+        border-right: 1px solid var(--gold);
+        bottom: 2rem;
+        height: 1rem;
+        position: absolute;
+        transform: rotate(45deg);
+        width: 1rem;
+      }
+
+      .section-head {
+        display: grid;
+        justify-items: center;
+        margin: 0 auto clamp(2rem, 5vw, 3.8rem);
+      }
+
+      .screen-title {
+        color: rgba(248, 235, 198, 0.94);
+        font: 700 clamp(2rem, 4vw, 2.85rem)/1.12 var(--font-body);
+        margin: 0;
+        text-align: center;
+        text-shadow:
+          0 0.14rem 0.42rem rgba(0, 0, 0, 0.98),
+          0 0.62rem 1.4rem rgba(0, 0, 0, 0.8),
+          0 0 1.35rem rgba(217, 184, 93, 0.12);
+        text-wrap: balance;
+      }
+
+      .screen-text {
+        color: rgba(248, 235, 198, 0.7);
+        font: 300 1.02rem/1.62 var(--font-body);
+        margin: 0;
+        max-width: 42rem;
+        text-align: center;
+        text-shadow:
+          0 0.12rem 0.34rem rgba(0, 0, 0, 0.98),
+          0 0.54rem 1.2rem rgba(0, 0, 0, 0.76);
+        text-wrap: balance;
+      }
+
+      .pipeline {
+        align-items: stretch;
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .pipeline-card,
+      .principle,
+      .crate,
+      .status-panel {
+        backdrop-filter: blur(0.8rem);
+        background: linear-gradient(145deg, rgba(20, 34, 34, 0.76), rgba(7, 21, 28, 0.86));
+        border: 1px solid rgba(217, 184, 93, 0.28);
+        box-shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, 0.26);
+      }
+
+      .pipeline-card {
+        min-height: 14rem;
+        padding: 1.5rem;
+        position: relative;
+      }
+
+      .pipeline-card:not(:last-child)::after {
+        color: rgba(217, 184, 93, 0.7);
+        content: "›";
+        font: 300 2rem var(--font-display);
+        position: absolute;
+        right: -1.05rem;
+        text-shadow: 0 0 0.8rem rgba(217, 184, 93, 0.35);
+        top: calc(50% - 1.2rem);
+        z-index: 2;
+      }
+
+      .card-index {
+        color: var(--quiet);
+        font: 700 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.12em;
+      }
+
+      .pipeline-card h3,
+      .principle h3 {
+        color: var(--gold-bright);
+        font: 700 1.05rem/1.3 var(--font-body);
+        margin: 3.2rem 0 0.75rem;
+      }
+
+      .pipeline-card p,
+      .principle p,
+      .crate p,
+      .status-copy p {
+        color: var(--muted);
+        font: 300 0.88rem/1.62 var(--font-body);
+        margin-bottom: 0;
+      }
+
+      .principle-grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .principle {
+        min-height: 13rem;
+        padding: 1.4rem;
+      }
+
+      .principle h3 { margin-top: 2.4rem; }
+
+      .crate-grid {
+        display: grid;
+        gap: 0.7rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .crate {
+        min-height: 11.5rem;
+        padding: 1.35rem;
+        position: relative;
+        text-decoration: none;
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+
+      .crate:hover {
+        border-color: rgba(241, 223, 170, 0.6);
+        box-shadow:
+          0 1.4rem 3rem rgba(0, 0, 0, 0.34),
+          0 0 1.2rem rgba(217, 184, 93, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .crate.primary-crate {
+        border-color: rgba(241, 223, 170, 0.48);
+        grid-column: span 2;
+      }
+
+      .crate-kind {
+        color: rgba(217, 184, 93, 0.7);
+        font: 700 0.62rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .crate h3 {
+        color: var(--gold-pale);
+        font: 700 1rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+        margin: 2rem 0 0.6rem;
+      }
+
+      .more-crates {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      .more-crates a {
+        background: rgba(7, 21, 28, 0.66);
+        border: 1px solid rgba(217, 184, 93, 0.3);
+        border-radius: 0.25rem;
+        color: rgba(241, 223, 170, 0.76);
+        font: 600 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        padding: 0.68rem 0.78rem;
+        text-decoration: none;
+      }
+
+      .more-crates a:hover { border-color: rgba(241, 223, 170, 0.62); color: var(--gold-bright); }
+
+      .status-panel {
+        display: grid;
+        gap: clamp(2rem, 5vw, 4rem);
+        grid-template-columns: 1fr 1fr;
+        padding: clamp(1.6rem, 5vw, 3.4rem);
+      }
+
+      .status-copy h2 {
+        color: var(--gold-pale);
+        font: 700 clamp(1.8rem, 4vw, 2.8rem)/1.18 var(--font-body);
+        margin-bottom: 1.3rem;
+        text-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.74);
+      }
+
+      .status-copy a {
+        color: var(--gold-bright);
+        font-weight: 600;
+        text-underline-offset: 0.18em;
+      }
+
+      .status-list { align-content: center; display: grid; }
+
+      .status-row {
+        border-bottom: 1px solid rgba(217, 184, 93, 0.16);
+        color: var(--muted);
+        display: grid;
+        font: 300 0.88rem/1.6 var(--font-body);
+        gap: 0.8rem;
+        grid-template-columns: 0.55rem 1fr;
+        padding: 0.9rem 0;
+      }
+
+      .status-row:last-child { border-bottom: 0; }
+
+      .status-dot {
+        background: var(--gold);
+        border-radius: 50%;
+        box-shadow: 0 0 0.75rem rgba(217, 184, 93, 0.46);
+        height: 0.38rem;
+        margin-top: 0.5rem;
+        width: 0.38rem;
+      }
+
+      footer {
+        border-top: 1px solid rgba(217, 184, 93, 0.16);
+        padding: 2.4rem 1.25rem;
+      }
+
+      .footer-inner {
+        align-items: center;
+        display: flex;
+        gap: 1.5rem;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: var(--max);
+      }
+
+      .footer-inner > span {
+        color: var(--quiet);
+        font: 500 0.72rem/1.4 var(--font-body);
+        text-transform: uppercase;
+      }
+
+      .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+      .footer-links a {
+        color: rgba(241, 223, 170, 0.68);
+        font: 600 0.72rem/1.4 var(--font-body);
+        text-decoration: none;
+      }
+
+      .footer-links a:hover { color: var(--gold-bright); }
+
+      @media (max-width: 900px) {
+        .pipeline,
+        .principle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .pipeline-card:not(:last-child)::after { display: none; }
+        .crate-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .status-panel { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 640px) {
+        html { scroll-padding-block: 1rem; }
+
+        body::before {
+          background-position: center;
+        }
+
+        body::after { background: linear-gradient(0deg, rgba(7, 21, 28, 0.62), rgba(7, 21, 28, 0.62)); }
+        .screen { min-height: auto; padding: 5rem 1rem; }
+        .screen:first-child { min-height: 100svh; padding-bottom: 6rem; }
+        .engine-lockup { padding: 1rem; }
+        h1 { font-size: clamp(2.25rem, 13vw, 3.7rem); }
+        .hero-summary { font-size: 0.94rem; line-height: 1.52; }
+        .nav-link { font-size: 0.74rem; min-height: 2.9rem; padding: 0.82rem 0.9rem; }
+        .screen-copy { padding: 1rem; }
+        .screen-title { font-size: 1.7rem; }
+        .screen-text { font-size: 0.92rem; line-height: 1.5; }
+        .pipeline,
+        .principle-grid,
+        .crate-grid { grid-template-columns: 1fr; }
+        .pipeline-card,
+        .principle,
+        .crate { min-height: 0; }
+        .pipeline-card h3,
+        .principle h3,
+        .crate h3 { margin-top: 1.7rem; }
+        .crate.primary-crate { grid-column: auto; }
+        .footer-inner { align-items: flex-start; flex-direction: column; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        body::before { animation: none; transform: scale(1.012); }
+        .scroll-marker,
+        .screen-inner { animation: none; }
+        .nav-link,
+        .crate { transition: none; }
+        .nav-link:hover,
+        .crate:hover { transform: none; }
+      }
+    </style>
+  </head>
+  <body data-page="engine-docs-home">
+    <main>
+      <section class="screen hero-screen" aria-labelledby="hero-title">
+        <div class="screen-inner hero-inner">
+          <div class="engine-lockup">
+            <p class="kicker">Open-source 4X game engine in Rust</p>
+            <h1 id="hero-title">AoNW Engine</h1>
+            <p class="hero-summary">
+              The framework-independent simulation core behind Age of New Worlds.
+              Maps, economies, diplomacy, cities, armies, and player intent become
+              reproducible state transitions shared by every client and host.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="nav-link primary" href="/aonw_engine/">Explore API <span aria-hidden="true">→</span></a>
+            <a class="nav-link" href="/architecture">Discover the architecture</a>
+          </div>
+        </div>
+        <a class="scroll-marker" href="#architecture" aria-label="Go to engine architecture"></a>
+      </section>
+
+      <section class="screen" id="architecture" aria-labelledby="architecture-title">
+        <div class="screen-inner">
+          <header class="section-head screen-copy">
+            <p class="kicker">Architecture</p>
+            <h2 class="screen-title" id="architecture-title">One source of truth for every turn</h2>
+            <p class="screen-text">
+              Rules stay in the deterministic core. Clients present results, adapters move
+              data, and infrastructure delivers sessions without inventing gameplay.
+            </p>
+          </header>
+          <div class="pipeline">
+            <article class="pipeline-card">
+              <span class="card-index">01 / INPUT</span>
+              <h3>Content &amp; contracts</h3>
+              <p>Validated maps, rulesets, commands, saves, replay shapes, and strict versioned boundaries.</p>
+            </article>
+            <article class="pipeline-card">
+              <span class="card-index">02 / AUTHORITY</span>
+              <h3>Pure engine</h3>
+              <p>Canonical state, queries, transitions, turn processing, domain events, and execution evidence.</p>
+            </article>
+            <article class="pipeline-card">
+              <span class="card-index">03 / LIFECYCLE</span>
+              <h3>Local runtime</h3>
+              <p>Transactional sessions, revision checks, recipient views, snapshots, patches, and replay.</p>
+            </article>
+            <article class="pipeline-card">
+              <span class="card-index">04 / CLIENTS</span>
+              <h3>Any game client</h3>
+              <p>Flutter and Godot today; Unity, Unreal, or any other client can integrate through the same versioned protocol.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" aria-labelledby="principles-title">
+        <div class="screen-inner">
+          <header class="section-head screen-copy">
+            <p class="kicker">Engine principles</p>
+            <h2 class="screen-title" id="principles-title">A hard boundary around game truth</h2>
+            <p class="screen-text">
+              The engine is designed for long-running 4X worlds where every decision,
+              hidden fact, replay, and platform boundary must remain trustworthy.
+            </p>
+          </header>
+          <div class="principle-grid">
+            <article class="principle">
+              <span class="card-index">01</span>
+              <h3>Deterministic</h3>
+              <p>Explicit inputs, fixed-point values, stable ordering, bounded work, and exact replay evidence.</p>
+            </article>
+            <article class="principle">
+              <span class="card-index">02</span>
+              <h3>Framework-free</h3>
+              <p>The pure crates depend on no UI, filesystem, network, database, wall clock, Flutter, or Godot.</p>
+            </article>
+            <article class="principle">
+              <span class="card-index">03</span>
+              <h3>Recipient-safe</h3>
+              <p>Clients receive projected snapshots and patches, never hidden canonical state reconstructed remotely.</p>
+            </article>
+            <article class="principle">
+              <span class="card-index">04</span>
+              <h3>Parity-led</h3>
+              <p>Behavior moves as complete vertical slices backed by reviewed fixtures and fail-closed gates.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="crates" aria-labelledby="crates-title">
+        <div class="screen-inner">
+          <header class="section-head screen-copy">
+            <p class="kicker">Rust API reference</p>
+            <h2 class="screen-title" id="crates-title">Follow the boundary you need</h2>
+            <p class="screen-text">
+              Start with the engine facade for commands and queries, then move outward
+              to canonical state, content, contracts, deterministic AI, runtime lifecycle,
+              or native clients.
+            </p>
+          </header>
+          <div class="crate-grid">
+            <a class="crate primary-crate" href="/aonw_engine/">
+              <span class="crate-kind">Core · commands · queries</span>
+              <h3>aonw_engine</h3>
+              <p>Deterministic transitions, query planning, turn processing, domain events, and execution evidence.</p>
+            </a>
+            <a class="crate" href="/aonw_domain/">
+              <span class="crate-kind">Canonical state</span>
+              <h3>aonw_domain</h3>
+              <p>Framework-independent entities, identifiers, invariants, topology, and match lifecycle.</p>
+            </a>
+            <a class="crate" href="/aonw_content/">
+              <span class="crate-kind">Validated content</span>
+              <h3>aonw_content</h3>
+              <p>Versioned maps, scenarios, rulesets, catalogs, normalization, and content hashes.</p>
+            </a>
+            <a class="crate" href="/aonw_contracts/">
+              <span class="crate-kind">Boundary DTOs</span>
+              <h3>aonw_contracts</h3>
+              <p>Strict client, canonical state, save, replay, persistence, and evidence data shapes.</p>
+            </a>
+            <a class="crate" href="/aonw_local_runtime/">
+              <span class="crate-kind">Session lifecycle</span>
+              <h3>aonw_local_runtime</h3>
+              <p>Transactional sessions, dispatch, recipient views, snapshots, caches, and replay verification.</p>
+            </a>
+            <a class="crate" href="/aonw_ai/">
+              <span class="crate-kind">Strategic AI</span>
+              <h3>aonw_ai</h3>
+              <p>Deterministic planners operating on recipient-safe views through public runtime commands.</p>
+            </a>
+            <a class="crate" href="/aonw_map_workbench/">
+              <span class="crate-kind">Map authoring</span>
+              <h3>aonw_map_workbench</h3>
+              <p>Framework-neutral authoring workflows and deterministic logical map generation.</p>
+            </a>
+            <a class="crate" href="/aonw_flutter/">
+              <span class="crate-kind">Native adapter</span>
+              <h3>aonw_flutter</h3>
+              <p>Panic-contained C ABI over the shared client protocol for Flutter Native Assets.</p>
+            </a>
+            <a class="crate" href="/aonw_godot/">
+              <span class="crate-kind">GDExtension</span>
+              <h3>aonw_godot</h3>
+              <p>Thin Godot integration for local sessions and map-workbench capabilities.</p>
+            </a>
+          </div>
+          <nav class="more-crates" aria-label="Additional crate documentation">
+            <a href="/aonw_contract_mapping/">aonw_contract_mapping</a>
+            <a href="/aonw_map_authoring/">aonw_map_authoring</a>
+            <a href="/aonw_map_compiler/">aonw_map_compiler</a>
+            <a href="/aonw_testkit/">aonw_testkit</a>
+          </nav>
+        </div>
+      </section>
+
+      <section class="screen" aria-labelledby="status-title">
+        <div class="screen-inner status-panel">
+          <div class="status-copy">
+            <p class="kicker">Development status</p>
+            <h2 id="status-title">Open source and in development</h2>
+            <p>
+              AoNW Engine is <a href="https://github.com/ernestwisniewski/aonw">available on GitHub</a>
+              under the <a href="https://github.com/ernestwisniewski/aonw/blob/main/LICENSE">MIT License</a>.
+              It is in active development and is being migrated into the current
+              Age of New Worlds codebase.
+            </p>
+          </div>
+          <div class="status-list">
+            <div class="status-row">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>Canonical state, deterministic gameplay slices, saves, replay, projections, and native boundaries live in Rust.</span>
+            </div>
+            <div class="status-row">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>Quality gates cover architecture, dependencies, determinism, parity, coverage, and structural performance.</span>
+            </div>
+            <div class="status-row">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>Production paths remain on their current authority until every cutover gate is complete.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span>AoNW Engine · Age of New Worlds</span>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="https://aonw.net/">Game website</a>
+          <a href="/architecture">Architecture atlas</a>
+          <a href="https://github.com/ernestwisniewski/aonw">Source</a>
+          <a href="https://github.com/ernestwisniewski/aonw/blob/main/LICENSE">MIT License</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,387 @@
+{
+  "capability": "movement",
+  "expected": {
+    "accepted": false,
+    "events": [],
+    "evidence": null,
+    "rejection": "move_target_out_of_bounds",
+    "state": {
+      "artifacts": [],
+      "cities": [],
+      "cols": 3,
+      "culturalVictoryHoldTurnsByPlayerId": {},
+      "diplomacy": {
+        "contacts": [],
+        "messages": [],
+        "pendingProposals": [],
+        "relations": [],
+        "scoreHistory": []
+      },
+      "dominationHoldTurnsByPlayerId": {},
+      "economy": {
+        "initialResourceDistribution": {
+          "placements": [],
+          "seed": 0
+        },
+        "playerGold": {
+          "player_1": 17,
+          "player_2": 23
+        },
+        "playerStabilityNet": {
+          "player_1": 4,
+          "player_2": 5
+        },
+        "playerWarWeariness": {
+          "player_1": 2,
+          "player_2": 3
+        },
+        "strategicResources": {}
+      },
+      "fieldImprovements": [],
+      "fogOfWar": [],
+      "intendedAttacks": [],
+      "interaction": {
+        "cityFoundingDraft": null,
+        "pending": null
+      },
+      "mapObjectiveHoldStates": [],
+      "matchIdentity": {
+        "gameMode": "multiplayer",
+        "matchRules": {
+          "balance": {},
+          "gameLength": {
+            "kind": "targetMinutes",
+            "paceProfile": "standard60",
+            "scoreFallbackEnabled": true,
+            "targetMinutes": 60,
+            "turnLimit": 120
+          },
+          "victory": {
+            "conquestEnabled": true,
+            "culturalEnabled": true,
+            "culturalHoldTurns": 5,
+            "culturalRequiredArtifacts": 6,
+            "dominationControlPercent": 45.0,
+            "dominationEnabled": true,
+            "dominationHoldTurns": 10,
+            "hardTimeLimitMinutes": null,
+            "scoreFallbackEnabled": true,
+            "turnLimit": 120
+          }
+        },
+        "participants": [
+          {
+            "ai": null,
+            "colorValue": 4282212264,
+            "country": "poland",
+            "id": "player_1",
+            "kind": "human",
+            "name": "Player 1"
+          },
+          {
+            "ai": null,
+            "colorValue": 4290263610,
+            "country": "japan",
+            "id": "player_2",
+            "kind": "human",
+            "name": "Player 2"
+          }
+        ]
+      },
+      "occupancyPolicy": "friendlyStacking",
+      "research": {
+        "players": {}
+      },
+      "resourceTradeAgreements": [],
+      "revision": 4,
+      "rows": 3,
+      "outcome": {
+        "condition": "ongoing",
+        "winnerPlayerId": null,
+        "scoreByPlayerId": {}
+      },
+      "transportNetwork": [],
+      "turn": 7,
+      "turnLifecycle": {
+        "afkPlayerIds": [],
+        "kickedPlayerIds": [],
+        "requiredSubmissionPlayerIds": [],
+        "submittedPlayerIds": [],
+        "timeoutStreaksByPlayerId": {},
+        "turnStartedAt": null,
+        "turnStatesByPlayerId": {
+          "player_1": "active",
+          "player_2": "active"
+        }
+      },
+      "units": [
+        {
+          "activity": {
+            "cityFoundingJob": null,
+            "excavatingArtifactId": null,
+            "workerAssignment": null,
+            "workerJob": null
+          },
+          "army": [],
+          "carriedArtifactId": null,
+          "col": 0,
+          "experiencePoints": 0,
+          "hitPoints": null,
+          "id": "commander_player_1",
+          "kind": "commander",
+          "merchantTradeRoute": null,
+          "movementUnits": 4,
+          "name": "commander",
+          "ownerPlayerId": "player_1",
+          "posture": "active",
+          "queuedPath": null,
+          "row": 0,
+          "workerBuildCharges": 0
+        }
+      ],
+      "wonderRegistry": {}
+    }
+  },
+  "fixtureVersion": 3,
+  "id": "movement-out-of-bounds-rejected",
+  "input": {
+    "actorPlayerId": "player_1",
+    "command": {
+      "expectedRevision": 4,
+      "target": {
+        "col": 9,
+        "row": 9
+      },
+      "type": "moveUnit",
+      "unitId": "commander_player_1"
+    },
+    "map": {
+      "cols": 3,
+      "gridLayout": "oddQFlatTop",
+      "mapName": "reducer_parity",
+      "objectives": [],
+      "rows": 3,
+      "schemaVersion": 1,
+      "tiles": [
+        {
+          "col": 0,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 1,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 2,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 0,
+          "height": 0,
+          "resources": [],
+          "row": 1,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 1,
+          "height": 0,
+          "resources": [],
+          "row": 1,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 2,
+          "height": 0,
+          "resources": [],
+          "row": 1,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 0,
+          "height": 0,
+          "resources": [],
+          "row": 2,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 1,
+          "height": 0,
+          "resources": [],
+          "row": 2,
+          "terrainTags": [
+            "grassland"
+          ]
+        },
+        {
+          "col": 2,
+          "height": 0,
+          "resources": [],
+          "row": 2,
+          "terrainTags": [
+            "grassland"
+          ]
+        }
+      ]
+    },
+    "rulesetId": "standard",
+    "state": {
+      "artifacts": [],
+      "cities": [],
+      "cols": 3,
+      "culturalVictoryHoldTurnsByPlayerId": {},
+      "diplomacy": {
+        "contacts": [],
+        "messages": [],
+        "pendingProposals": [],
+        "relations": [],
+        "scoreHistory": []
+      },
+      "dominationHoldTurnsByPlayerId": {},
+      "economy": {
+        "initialResourceDistribution": {
+          "placements": [],
+          "seed": 0
+        },
+        "playerGold": {
+          "player_1": 17,
+          "player_2": 23
+        },
+        "playerStabilityNet": {
+          "player_1": 4,
+          "player_2": 5
+        },
+        "playerWarWeariness": {
+          "player_1": 2,
+          "player_2": 3
+        },
+        "strategicResources": {}
+      },
+      "fieldImprovements": [],
+      "fogOfWar": [],
+      "intendedAttacks": [],
+      "interaction": {
+        "cityFoundingDraft": null,
+        "pending": null
+      },
+      "mapObjectiveHoldStates": [],
+      "matchIdentity": {
+        "gameMode": "multiplayer",
+        "matchRules": {
+          "balance": {},
+          "gameLength": {
+            "kind": "targetMinutes",
+            "paceProfile": "standard60",
+            "scoreFallbackEnabled": true,
+            "targetMinutes": 60,
+            "turnLimit": 120
+          },
+          "victory": {
+            "conquestEnabled": true,
+            "culturalEnabled": true,
+            "culturalHoldTurns": 5,
+            "culturalRequiredArtifacts": 6,
+            "dominationControlPercent": 45.0,
+            "dominationEnabled": true,
+            "dominationHoldTurns": 10,
+            "hardTimeLimitMinutes": null,
+            "scoreFallbackEnabled": true,
+            "turnLimit": 120
+          }
+        },
+        "participants": [
+          {
+            "ai": null,
+            "colorValue": 4282212264,
+            "country": "poland",
+            "id": "player_1",
+            "kind": "human",
+            "name": "Player 1"
+          },
+          {
+            "ai": null,
+            "colorValue": 4290263610,
+            "country": "japan",
+            "id": "player_2",
+            "kind": "human",
+            "name": "Player 2"
+          }
+        ]
+      },
+      "occupancyPolicy": "friendlyStacking",
+      "research": {
+        "players": {}
+      },
+      "resourceTradeAgreements": [],
+      "revision": 4,
+      "rows": 3,
+      "outcome": {
+        "condition": "ongoing",
+        "winnerPlayerId": null,
+        "scoreByPlayerId": {}
+      },
+      "transportNetwork": [],
+      "turn": 7,
+      "turnLifecycle": {
+        "afkPlayerIds": [],
+        "kickedPlayerIds": [],
+        "requiredSubmissionPlayerIds": [],
+        "submittedPlayerIds": [],
+        "timeoutStreaksByPlayerId": {},
+        "turnStartedAt": null,
+        "turnStatesByPlayerId": {
+          "player_1": "active",
+          "player_2": "active"
+        }
+      },
+      "units": [
+        {
+          "activity": {
+            "cityFoundingJob": null,
+            "excavatingArtifactId": null,
+            "workerAssignment": null,
+            "workerJob": null
+          },
+          "army": [],
+          "carriedArtifactId": null,
+          "col": 0,
+          "experiencePoints": 0,
+          "hitPoints": null,
+          "id": "commander_player_1",
+          "kind": "commander",
+          "merchantTradeRoute": null,
+          "movementUnits": 4,
+          "name": "commander",
+          "ownerPlayerId": "player_1",
+          "posture": "active",
+          "queuedPath": null,
+          "row": 0,
+          "workerBuildCharges": 0
+        }
+      ],
+      "wonderRegistry": {}
+    }
+  }
+}

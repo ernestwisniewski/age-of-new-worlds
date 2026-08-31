@@ -1,0 +1,83 @@
+{
+  "authoring": {
+    "cityCoreRadiusMeters": 4.0,
+    "cols": 7,
+    "edgeBlendMeters": 2.0,
+    "hexRadiusMeters": 10.0,
+    "maxCitySlope": 0.35,
+    "maxTerrainHeightMeters": 20.0,
+    "referenceTransform": {
+      "rotationDegrees": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "translationMeters": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0
+      }
+    },
+    "rows": 7,
+    "worldOriginMeters": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "authoringProfileHash": "52d4f1631dcb506e8a05eee30f928a6d72aabb2f1f2a1d8daf1894295ded61a2",
+  "generatedBaseHash": "220d23c5d9cc33e4aebfab58ede108114816a132f194ffe7aba22199a62825e1",
+  "generatorVersion": "aonw-map-compiler/1",
+  "layers": {
+    "base": {
+      "hash": "220d23c5d9cc33e4aebfab58ede108114816a132f194ffe7aba22199a62825e1",
+      "openExr": "base.exr",
+      "openExrSha256": "a3f9f386e25cec662ec22f3a45586dffc892fc2c02434602de5025626300c2e3",
+      "r16RangeMeters": {
+        "max": 8.0,
+        "min": 0.0
+      },
+      "rawR16": "base.r16",
+      "rawR16Sha256": "d51c005e46c414fa8649219a20c81ca217b7f68eef7f29e35e7b4b0f9bb8a82c"
+    },
+    "max": {
+      "hash": "e7e0e54311665721703ddab6cf1931a64dbf160f13d0fe7339ac570d7784b67a",
+      "openExr": "max.exr",
+      "openExrSha256": "a6b0703b704a41b032a1d502612d31dee00806937fbef50067117a0a8391b332",
+      "r16RangeMeters": {
+        "max": 12.0,
+        "min": 4.0
+      },
+      "rawR16": "max.r16",
+      "rawR16Sha256": "da3fcb8e51832d44c10c258687a6e42cbabe89b838272b06e9cb25c33ce65339"
+    },
+    "min": {
+      "hash": "16c2062b962ea9569940ff47064546e4e63191c2229d3ed71b90dd902b0f638c",
+      "openExr": "min.exr",
+      "openExrSha256": "3d56102bdcebb087582cd1b85692a282157a7b8db6f5de312aa64895006ef60f",
+      "r16RangeMeters": {
+        "max": 6.0,
+        "min": -2.0
+      },
+      "rawR16": "min.r16",
+      "rawR16Sha256": "d51c005e46c414fa8649219a20c81ca217b7f68eef7f29e35e7b4b0f9bb8a82c"
+    }
+  },
+  "mapContentHash": "4d5603cc00fa8963a71c23133570f89f43c734598d86579e12e1b1059da8712d",
+  "mapId": "aonw2_starter",
+  "raster": {
+    "height": 131,
+    "sampleSpacingMeters": 1.0,
+    "samplesPerHex": 10,
+    "width": 111,
+    "worldMinMeters": {
+      "x": -10.0,
+      "z": -8.660254037844386
+    }
+  }
+}

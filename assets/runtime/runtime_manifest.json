@@ -1,0 +1,367 @@
+{
+  "version": 1,
+  "assetRoot": "assets/runtime",
+  "sourceManifestSha256": "d1edc8aa2466085f0ab09cf2115a5ca09f9006e28adcd675157fb2daa9e3c224",
+  "externalSource": {
+    "repository": "https://github.com/ernestwisniewski/aonw-assets.git",
+    "revision": "00b572f5137feb38d68b50684001ee24383a8369"
+  },
+  "toolchain": {
+    "cwebp": "1.6.0",
+    "atlasPageSize": 2048
+  },
+  "files": {
+    "maps/dravonia/map_texture_manifest.json": {
+      "bytes": 32107,
+      "sha256": "609f9958fa0fe03f903ca57e69aa91ce5c7a8e14a65d339037490237307506a0"
+    },
+    "maps/dravonia/page_00.jpg": {
+      "bytes": 2544551,
+      "sha256": "6c218c2b367961424db6f1b9fe72abee5f5b1b2fe619406d67f0a573243a2a73"
+    },
+    "maps/dravonia/page_01.jpg": {
+      "bytes": 2668268,
+      "sha256": "6d295f85b1ae9dd3396a8cc08672e8cf1120e4a51a2fb11f468890ed5d797277"
+    },
+    "maps/dravonia/page_02.jpg": {
+      "bytes": 120370,
+      "sha256": "eb85420a57183cd47a81aaa0c28eca00af4591d2c9215e40598c6c9eba63402a"
+    },
+    "maps/dravonia/page_03.jpg": {
+      "bytes": 2074335,
+      "sha256": "fcbfb7e0053721f207a08283928177cdfe1162e9fcccd0a0b4d6133650b7c83a"
+    },
+    "maps/dravonia/page_04.jpg": {
+      "bytes": 2198969,
+      "sha256": "9de4c0946b1666a87d33648cfc38f8bc72886f34814da756e6113762acb82d4d"
+    },
+    "maps/dravonia/page_05.jpg": {
+      "bytes": 85801,
+      "sha256": "1f1fb1f685806aa099bc486ef0f9339895c9c138a53ce2446880a23853660737"
+    },
+    "maps/myranth/map_texture_manifest.json": {
+      "bytes": 14227,
+      "sha256": "d014eb0ba86c0b58a34c8a0683676db62b9877988327c34fde02e163658c8558"
+    },
+    "maps/myranth/page_00.jpg": {
+      "bytes": 1657006,
+      "sha256": "3e6dc80ecccd623b8e54d83a89b8c1882b34d1cf48bde37f5cdd121ed8382ed9"
+    },
+    "maps/myranth/page_01.jpg": {
+      "bytes": 1802335,
+      "sha256": "b06c214bcc2bad03332470874f0e81b753317d4e41f89541d16a82548d4a5989"
+    },
+    "maps/myranth/page_02.jpg": {
+      "bytes": 58981,
+      "sha256": "743ccaab318136c47205be73e9be156ee0c71669c3ea9560f5c653fd313569b2"
+    },
+    "maps/myranth/page_03.jpg": {
+      "bytes": 1158390,
+      "sha256": "5fbf4b8349310222989418df74b95ca22c8eb8d9ef36c1ff020191a151e36735"
+    },
+    "maps/myranth/page_04.jpg": {
+      "bytes": 1254443,
+      "sha256": "841ec48ca73d77acb3b3f6af62264089e0f91963917d54f00a7523a78933cea2"
+    },
+    "maps/myranth/page_05.jpg": {
+      "bytes": 38220,
+      "sha256": "9765681dbe5bf6f62fb7e24ef53ae2782f9a5537e2dd1948dc1f816f72fdd644"
+    },
+    "maps/terenos/map_texture_manifest.json": {
+      "bytes": 8925,
+      "sha256": "a279201788c63bc5a2dff4fff636da2ca5812d9ce61f694ff0dacbdc5eb3f3a9"
+    },
+    "maps/terenos/page_00.jpg": {
+      "bytes": 1626163,
+      "sha256": "7ea2aacf622c3d81e1c3991510c8fb06c0b8a700af132d526b1836f1333f8263"
+    },
+    "maps/terenos/page_01.jpg": {
+      "bytes": 1347177,
+      "sha256": "47e9835e9dcbab6eb706cb3a1b46b29e5c418363d602478346391ec50d831609"
+    },
+    "maps/terenos/page_02.jpg": {
+      "bytes": 804362,
+      "sha256": "57ed717616f47138c95473ea6d71b1063042a587741d6f1fae434fa345475a5f"
+    },
+    "maps/terenos/page_03.jpg": {
+      "bytes": 713949,
+      "sha256": "7b8ade1c413f0aabe41cfbc89c075fffab1de9cd05a34ade3109fc3e4b2c8d47"
+    },
+    "maps/verdantia/map_texture_manifest.json": {
+      "bytes": 17304,
+      "sha256": "790c7fdd70ef43fd0fc0c31602424f28ddaf627d4cfc0ec86ca4d09fa100be8b"
+    },
+    "maps/verdantia/page_00.jpg": {
+      "bytes": 1873240,
+      "sha256": "acfc537f4373416c0d8e2ff03e6ea353d03dab2c759825c885bafc5370a6ea65"
+    },
+    "maps/verdantia/page_01.jpg": {
+      "bytes": 1785802,
+      "sha256": "b190391f45c2cd9e7d68ab3785f5d3764ffe84249a1b0ae5a656ca39427cbf18"
+    },
+    "maps/verdantia/page_02.jpg": {
+      "bytes": 368060,
+      "sha256": "4befe410501496faa0cf896fd7e5201f52a6684901ba18a17453febdbeb6bab4"
+    },
+    "maps/verdantia/page_03.jpg": {
+      "bytes": 1150252,
+      "sha256": "40b0ef5e7d32a359534bf71b2804cda9b972949c7140bdaffdb828a626248e87"
+    },
+    "maps/verdantia/page_04.jpg": {
+      "bytes": 1220606,
+      "sha256": "e90eabe5056d71bcef51d6f875de9f385ce16760d3cd792a923be2373ba13f40"
+    },
+    "maps/verdantia/page_05.jpg": {
+      "bytes": 219703,
+      "sha256": "515b526fe57f9146065018dd996db66a00efb7f16962507dc7fdaf0ac4ebe585"
+    },
+    "metadata/animation_frame_adjustments.json": {
+      "bytes": 28801,
+      "sha256": "4183cb61876394c06508e554c2567168911e21f9c71eab2a13a7cd0378801f87"
+    },
+    "sprites/buildings_a/buildings_a.atlas": {
+      "bytes": 1479,
+      "sha256": "a4f90bf66d0eb3b88e43fee9ab285257d9c6268ab44a0a25d4048bb3ed0a39d8"
+    },
+    "sprites/buildings_a/buildings_a_0.webp": {
+      "bytes": 318622,
+      "sha256": "2b7d81af57af944f1218a241bdfa6b3a34f2bb2b1143356e1f75a0adaa04903b"
+    },
+    "sprites/buildings_b/buildings_b.atlas": {
+      "bytes": 1500,
+      "sha256": "39b0d4705ccbdc8864574ec36561191892300bc6d120bd747e39ada998717d36"
+    },
+    "sprites/buildings_b/buildings_b_0.webp": {
+      "bytes": 306708,
+      "sha256": "d8d71cf5a988b047cd5ebe8e5d6788e45c0efc9f723d618500c1417ad3a2edf8"
+    },
+    "sprites/buildings_c/buildings_c.atlas": {
+      "bytes": 1452,
+      "sha256": "661c46b89ea7a627d1503f43cb58b8558edd88a934111097d425d25c2ca2fb0e"
+    },
+    "sprites/buildings_c/buildings_c_0.webp": {
+      "bytes": 311318,
+      "sha256": "f5c091f805961bf5d2eed123e77cb090bc71c12fe76c1527c73fc2d20afc8395"
+    },
+    "sprites/cities/cities.atlas": {
+      "bytes": 1961,
+      "sha256": "d6f68697d110f87f5de0cf09ad238ee47cbe23dff17ed15331bed17507af488a"
+    },
+    "sprites/cities/cities_0.webp": {
+      "bytes": 761580,
+      "sha256": "062317ab4ea12f1730cc3c8eda66e566c824b9a9dcfe8f499d3fa6341d335f99"
+    },
+    "sprites/cities/cities_1.webp": {
+      "bytes": 789042,
+      "sha256": "d863780ca4896ae098c9cf393d8d68e4715528414379b4a41229522c5196af74"
+    },
+    "sprites/dice/dice.atlas": {
+      "bytes": 2118,
+      "sha256": "6fd2a97d201881ed344ad0b345bc55986525967607f76e2f61545d14bbd6f50c"
+    },
+    "sprites/dice/dice_0.webp": {
+      "bytes": 1017422,
+      "sha256": "9d89d2490f2d9d185cba7be3c0c14d8290e86c1fd9d9a2734389c53c92db2a34"
+    },
+    "sprites/icons_map/icons_map.atlas": {
+      "bytes": 2925,
+      "sha256": "199a267e90af7f1f52dc8c94de9ee426641232cf1d776e1cf935ad0df9d9e092"
+    },
+    "sprites/icons_map/icons_map_0.webp": {
+      "bytes": 445656,
+      "sha256": "2341a6e45c86d5264c35e30ed43742569ce62c0eb09eb4ddcb915f314908b6c8"
+    },
+    "sprites/improvements_1/improvements_1.atlas": {
+      "bytes": 1535,
+      "sha256": "70f910316e5a9049935c5ae545ccd1769e9f564b2a29ad06c5f49bc1a2040536"
+    },
+    "sprites/improvements_1/improvements_1_0.webp": {
+      "bytes": 533810,
+      "sha256": "f9b92fc13033ca333d537747f54126635ccb7e4d12f2fcbb5c5b3e8d81cd9166"
+    },
+    "sprites/improvements_2/improvements_2.atlas": {
+      "bytes": 1583,
+      "sha256": "d7b87ddaf933702d04cb9affe6847aa46507f5cb9fccf17d0ee9afa5df883243"
+    },
+    "sprites/improvements_2/improvements_2_0.webp": {
+      "bytes": 546892,
+      "sha256": "6d5730cea292d78530f46e609404bd937342126df6aa5a49bd8d71515fdfe1e5"
+    },
+    "sprites/improvements_3/improvements_3.atlas": {
+      "bytes": 1623,
+      "sha256": "5b199e8c196b0bfd23b593f4b77f48f83b21ab1bd5525b32f26de842d9ef39e3"
+    },
+    "sprites/improvements_3/improvements_3_0.webp": {
+      "bytes": 607252,
+      "sha256": "bfd297dd49ead2296778b3485c2b576ece12b9a42d30c239cb2afbabb1714c4e"
+    },
+    "sprites/improvements_4/improvements_4.atlas": {
+      "bytes": 1293,
+      "sha256": "1c4da0d837cfdbda5649b15da1c04422de139e472d16582419bae686fdae57b5"
+    },
+    "sprites/improvements_4/improvements_4_0.webp": {
+      "bytes": 411968,
+      "sha256": "14fcb6dad5bbb3f6a8a6523097b846f1fa0140f467159d5022e21bf1f24b50d3"
+    },
+    "sprites/sprite_manifest.json": {
+      "bytes": 162142,
+      "sha256": "274d9e19360d9e61a319d3da0c061b99f7127a0b99fdd3b09296c6cf6417746c"
+    },
+    "sprites/technologies/technologies.atlas": {
+      "bytes": 4119,
+      "sha256": "ec7209af4e30a584c4228765ea97a264e103f369c337ace5bf08dbf63b908812"
+    },
+    "sprites/technologies/technologies_0.webp": {
+      "bytes": 692044,
+      "sha256": "09fc1db6983a7d4afb12dfb4437a2425f74962b2d1def494487f590ebdba715f"
+    },
+    "sprites/unit_archer/unit_archer.atlas": {
+      "bytes": 1715,
+      "sha256": "5b8862a2aecb802724df2a0be02fa20873280278523fe0c65d815ab0f8acbbce"
+    },
+    "sprites/unit_archer/unit_archer_0.webp": {
+      "bytes": 1290796,
+      "sha256": "f38529b7639ddc1d1971053d36b072f265d576be3bbd090d231551af896bb2e6"
+    },
+    "sprites/unit_catapult/unit_catapult.atlas": {
+      "bytes": 1765,
+      "sha256": "63a53ac632bae0d18ffc78004431e467dfe9417f14333f73bdd874e162311fcb"
+    },
+    "sprites/unit_catapult/unit_catapult_0.webp": {
+      "bytes": 1415228,
+      "sha256": "0888fc9cf615a60bee6ac19c2be940bb0010a513d4c3c4a9c4daa70290f624d8"
+    },
+    "sprites/unit_cavalry/unit_cavalry.atlas": {
+      "bytes": 1740,
+      "sha256": "730fdeb29694108ea68c337aaa741533ef5fcc15351942a57c3b1b9b4ec79854"
+    },
+    "sprites/unit_cavalry/unit_cavalry_0.webp": {
+      "bytes": 1268296,
+      "sha256": "c41936db87d651ad86cad91c1f32e4012052028f820362323b1145bf0481e26e"
+    },
+    "sprites/unit_commander/unit_commander.atlas": {
+      "bytes": 1790,
+      "sha256": "c51b242f4ab3becb2e9193b0212fd40c51e3d04d56f35668dd3bb9834157da80"
+    },
+    "sprites/unit_commander/unit_commander_0.webp": {
+      "bytes": 1624800,
+      "sha256": "330a46760560d1c19a1fb11095f84f61cfac0576fe6c8a221f10778b621c56a0"
+    },
+    "sprites/unit_fieldCannon/unit_fieldCannon.atlas": {
+      "bytes": 1840,
+      "sha256": "e2469539e4baea7780de3f2996f2bef55213f4ded13df014dd7823d22f5f9dec"
+    },
+    "sprites/unit_fieldCannon/unit_fieldCannon_0.webp": {
+      "bytes": 1135044,
+      "sha256": "cbca1342949d455e2d042b93ff25ed6860225aac71b8b6d6db24c2cdacf5a415"
+    },
+    "sprites/unit_heavyInfantry/unit_heavyInfantry.atlas": {
+      "bytes": 1890,
+      "sha256": "06fe0f08398fe37a0ba57d18f94012e2825d075ca467fb73351c2d88872a1630"
+    },
+    "sprites/unit_heavyInfantry/unit_heavyInfantry_0.webp": {
+      "bytes": 1418046,
+      "sha256": "c2704ef65cb6543731e1ef86d65eb2a232980f564b6d325a70d378ebb38269be"
+    },
+    "sprites/unit_merchant/unit_merchant.atlas": {
+      "bytes": 1753,
+      "sha256": "fc68e1601eac99db692d73998be8b7147a5a85d7b96cd528ef65f1dfac965597"
+    },
+    "sprites/unit_merchant/unit_merchant_0.webp": {
+      "bytes": 1497908,
+      "sha256": "74230bb1ad4983c2c887725e9a3d63e6f3dc63f79411868bf575324143b65372"
+    },
+    "sprites/unit_reconPlane/unit_reconPlane.atlas": {
+      "bytes": 1815,
+      "sha256": "55e0650f0e4ea278f994ec5ecb417277fce9edd284608029c020f786d473c358"
+    },
+    "sprites/unit_reconPlane/unit_reconPlane_0.webp": {
+      "bytes": 1033686,
+      "sha256": "7457947d98ce8ee96ef84dc422a3595f015ec6711121e27b1ba7c189693bea67"
+    },
+    "sprites/unit_rifleman/unit_rifleman.atlas": {
+      "bytes": 1765,
+      "sha256": "7a82042e31db9b6095aaa50c21bdd2cdf4a9ec39b361d130ed82ba7825dc8730"
+    },
+    "sprites/unit_rifleman/unit_rifleman_0.webp": {
+      "bytes": 1258454,
+      "sha256": "5a0792c84a784183c9494c68878ba4b9e863412a204b4d703eb96cc610c9d970"
+    },
+    "sprites/unit_scout/unit_scout.atlas": {
+      "bytes": 1690,
+      "sha256": "02eb85e8c5a70797895ac0e5874ea2d34a3da829a3542da41fc327c7b2a4b49e"
+    },
+    "sprites/unit_scout/unit_scout_0.webp": {
+      "bytes": 1497118,
+      "sha256": "43f817f39efca63a5e6767ad905db2b4e5b2035bd6506b7c38b9ba60942d33b1"
+    },
+    "sprites/unit_scoutShip/unit_scoutShip.atlas": {
+      "bytes": 1790,
+      "sha256": "46cf2cc673082fa41d5c74acb5cd9fa47991e9a0df6eee59a9a736586bd1e8ce"
+    },
+    "sprites/unit_scoutShip/unit_scoutShip_0.webp": {
+      "bytes": 1246248,
+      "sha256": "3bc67cd56f5e108731c5f283d0cf588978ba31d20dafafbbe714275f79d4bffc"
+    },
+    "sprites/unit_settler/unit_settler.atlas": {
+      "bytes": 1728,
+      "sha256": "ab82a07a2ca513e19079100625a9b8ac7c55c7178d1357bebc337a1a89ddd75e"
+    },
+    "sprites/unit_settler/unit_settler_0.webp": {
+      "bytes": 1531726,
+      "sha256": "149292d6ac6af16806d3eefc48d47e54d9453bb39acfda5847094823cddf1f8e"
+    },
+    "sprites/unit_spearman/unit_spearman.atlas": {
+      "bytes": 1765,
+      "sha256": "d6d86ad95ae64ce9e98f3688d79aac06fdbedbdf6b2e5e4f97a587a9470f7ac0"
+    },
+    "sprites/unit_spearman/unit_spearman_0.webp": {
+      "bytes": 1084028,
+      "sha256": "6ba82702820269a1757f1e6dd4cbba837853b2ab3e0b01b224cdded57d5b45a3"
+    },
+    "sprites/unit_tank/unit_tank.atlas": {
+      "bytes": 1665,
+      "sha256": "30b060483371a10ed9d533edb4b416a5f565d87263b20563bf4a5bfe5d177f3e"
+    },
+    "sprites/unit_tank/unit_tank_0.webp": {
+      "bytes": 1209910,
+      "sha256": "db766ec99d4872779a397e70a5ad51000296a4041a705dd864c4bcab1d1600aa"
+    },
+    "sprites/unit_warrior/unit_warrior.atlas": {
+      "bytes": 1740,
+      "sha256": "da5bd1e4b08280692d98b863fe4e696f79a382c8e27775c4f27023b0b5b75398"
+    },
+    "sprites/unit_warrior/unit_warrior_0.webp": {
+      "bytes": 1465902,
+      "sha256": "9ac93c8114cd8281f7126a90de311e6a7777eb34aaa4c7bfe6c4179e3e66fd9f"
+    },
+    "sprites/unit_warship/unit_warship.atlas": {
+      "bytes": 1740,
+      "sha256": "8e4ced12814b89bddc5f01fb6bc792491f848a40d175d9e1d116b968e12fbed5"
+    },
+    "sprites/unit_warship/unit_warship_0.webp": {
+      "bytes": 1604666,
+      "sha256": "6c152c33756ce0a3bcde6ccbda14916b7bde160b6496fbe01fdc48fa87f9237f"
+    },
+    "sprites/unit_worker/unit_worker.atlas": {
+      "bytes": 1703,
+      "sha256": "612fd63c1e9ccdb5f73d54976117227523f5b32967ba203588766b7405e9f210"
+    },
+    "sprites/unit_worker/unit_worker_0.webp": {
+      "bytes": 1386062,
+      "sha256": "6dc28b763bbc63cc8b889127286e536adb5ff7c8788705c65532726cf26442e3"
+    },
+    "sprites/wonders/wonders.atlas": {
+      "bytes": 872,
+      "sha256": "9978bd8948fa118d9befaa1e4e087c655ee13ef63c72e2685fd56f82c4f5b91c"
+    },
+    "sprites/wonders/wonders_0.webp": {
+      "bytes": 201580,
+      "sha256": "6030a16cd0abf0b8a369e0c3877dde7b51d880e7b1f967b7c5151b727652c9d6"
+    },
+    "ui/logo.webp": {
+      "bytes": 294100,
+      "sha256": "056b36ae48e1d3cf388bd15da6dff29523e36530bf2e3ddae0605b4386488200"
+    }
+  }
+}

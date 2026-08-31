@@ -1,0 +1,342 @@
+{
+  "A10": {
+    "target": "rust-ai-check",
+    "capabilities": [
+      "AiRng",
+      "AiProfile",
+      "BaselinePlanner",
+      "MctsPlanner",
+      "MctsSearchStats",
+      "PlanFingerprint",
+      "PlannedCommand",
+      "PlanningBudget",
+      "RandomPlanner",
+      "SearchFingerprint",
+      "StrategicPlanner",
+      "StrategicAssessment",
+      "TacticalSearchEvidence",
+      "StrategicTurnReport"
+    ],
+    "fixtureIds": [
+      "deterministic-ai-rng",
+      "autonomous-full-turn",
+      "bounded-mcts-memory",
+      "bounded-utility-scoring",
+      "canonical-move-tie-break",
+      "cloned-runtime-rollout",
+      "context-identity-replan",
+      "deterministic-mcts-search",
+      "deterministic-plan-fingerprint",
+      "deterministic-random-plan",
+      "deterministic-strength-league",
+      "difficulty-budget-policy",
+      "diplomacy-response-policy",
+      "every-public-command-wire-shape",
+      "every-public-runtime-command-path",
+      "family-artifact-policy",
+      "family-city-policy",
+      "family-combat-policy",
+      "family-logistics-policy",
+      "family-production-policy",
+      "family-research-policy",
+      "family-worker-policy",
+      "hierarchical-strategic-goals",
+      "iteration-node-depth-budget",
+      "multi-ai-hot-seat-save-replay",
+      "multi-turn-ai-replay",
+      "one-command-per-revision",
+      "ordered-rng-evidence",
+      "persona-research-production-policy",
+      "public-runtime-execution",
+      "recipient-owned-view",
+      "research-production-worker-turn",
+      "search-fingerprint",
+      "selective-tactical-search",
+      "stale-plan-rejection",
+      "tactical-quality-guard"
+    ],
+    "maxEventsPerCommand": 1,
+    "maxMeasuredPayloadBytes": 124,
+    "maxMeasuredAllocations": 171932,
+    "maxMeasuredAllocatedBytes": 60115509,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 0,
+      "examinedEdges": 0,
+      "heapPushes": 0,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "ai/"
+    ]
+  },
+  "E0": {
+    "target": "rust-foundation-check",
+    "capabilities": [
+      "CancelUnitAction",
+      "FortifyUnit",
+      "MoveUnit",
+      "SkipUnitTurn"
+    ],
+    "fixtureIds": [
+      "movement-adjacent-accepted",
+      "movement-out-of-bounds-rejected",
+      "movement-wrong-actor-rejected",
+      "unit-action-cancel-orders-accepted",
+      "unit-action-cancel-skipped-accepted",
+      "unit-action-fortify-busy-rejected",
+      "unit-action-fortify-unrelated-pending-accepted",
+      "unit-action-skip-accepted",
+      "unit-action-wrong-actor-rejected"
+    ],
+    "maxEventsPerCommand": 1,
+    "maxMeasuredPayloadBytes": 167475,
+    "maxMeasuredAllocations": 24011,
+    "maxMeasuredAllocatedBytes": 3128748,
+    "maxWorkCounters": {
+      "frontierPops": 5971,
+      "expandedTiles": 5970,
+      "examinedEdges": 34482,
+      "heapPushes": 5987,
+      "routeRecords": 5987
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "engine/apply",
+      "engine/content_hash",
+      "engine/occupied_approach",
+      "engine/open",
+      "engine/prepared_",
+      "engine/reachable",
+      "engine/route",
+      "runtime/client_json_dispatch_",
+      "runtime/client_json_open",
+      "runtime/runtime_dispatch_",
+      "runtime/runtime_open"
+    ]
+  },
+  "T1": {
+    "target": "rust-turn-kernel-check",
+    "capabilities": [
+      "EndTurn",
+      "FinalizeTimedOutTurn",
+      "KickParticipant",
+      "SubmitTurn"
+    ],
+    "fixtureIds": [
+      "end-sequential-accepted",
+      "end-stale-rejected",
+      "kick-participant-accepted",
+      "kick-unknown-player-rejected",
+      "submit-partial-accepted",
+      "submit-wrong-actor-rejected",
+      "timeout-finalization-accepted",
+      "timeout-invalid-scope-rejected"
+    ],
+    "maxEventsPerCommand": 4,
+    "maxMeasuredPayloadBytes": 210911,
+    "maxMeasuredAllocations": 30009,
+    "maxMeasuredAllocatedBytes": 5158327,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 0,
+      "examinedEdges": 0,
+      "heapPushes": 0,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "runtime/client_json_turn_",
+      "runtime/runtime_turn_",
+      "runtime/turn_replay_verify"
+    ]
+  },
+  "U2": {
+    "target": "rust-movement-logistics-check",
+    "capabilities": [
+      "AssignMerchantTradeRoute",
+      "AutoExploreUnit",
+      "DetachTroop",
+      "MoveMerchantToCity"
+    ],
+    "fixtureIds": [
+      "auto-explore-deterministic-bounded",
+      "auto-explore-without-fog-state",
+      "merchant-current-engine-route",
+      "merchant-owned-city-stacking",
+      "save-reopen-replay-exact",
+      "troop-detachment-army-invariants",
+      "turn-logistics-evidence"
+    ],
+    "maxEventsPerCommand": 2,
+    "maxMeasuredPayloadBytes": 1,
+    "maxMeasuredAllocations": 5291,
+    "maxMeasuredAllocatedBytes": 6601241,
+    "maxWorkCounters": {
+      "frontierPops": 1200,
+      "expandedTiles": 1200,
+      "examinedEdges": 6922,
+      "heapPushes": 1200,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "engine/logistics_"
+    ]
+  },
+  "C3": {
+    "target": "rust-combat-check",
+    "capabilities": [
+      "AttackHex"
+    ],
+    "fixtureIds": [
+      "artifact-defense-and-loss",
+      "city-capture-destroy",
+      "exact-unit-preview-apply",
+      "hidden-target-recipient-safe",
+      "intended-turn-evidence",
+      "mutation-roll-event-evidence",
+      "rejection-precedence",
+      "save-reopen-replay-exact",
+      "technology-modifiers"
+    ],
+    "maxEventsPerCommand": 7,
+    "maxMeasuredPayloadBytes": 2428,
+    "maxMeasuredAllocations": 143563,
+    "maxMeasuredAllocatedBytes": 101053680,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 0,
+      "examinedEdges": 0,
+      "heapPushes": 0,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "engine/combat_",
+      "runtime/client_json_combat_",
+      "runtime/runtime_combat_"
+    ]
+  },
+  "C4": {
+    "target": "rust-city-check",
+    "capabilities": [
+      "FoundCity",
+      "SelectCityExpansionHex",
+      "ToggleWorkedHex"
+    ],
+    "fixtureIds": [
+      "atomic-invalid-founding",
+      "canonical-controlled-worked-order",
+      "commander-settler-consumption",
+      "expansion-ranking-selection",
+      "fog-and-recipient-safety",
+      "founding-completion",
+      "founding-draft-save-reopen",
+      "founding-legality-query",
+      "rejection-precedence",
+      "replay-exactness",
+      "worked-hex-limit-toggle"
+    ],
+    "maxEventsPerCommand": 1,
+    "maxMeasuredPayloadBytes": 1,
+    "maxMeasuredAllocations": 2073,
+    "maxMeasuredAllocatedBytes": 303643,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 0,
+      "examinedEdges": 0,
+      "heapPushes": 0,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "engine/city_"
+    ]
+  },
+  "W5": {
+    "target": "rust-worker-check",
+    "capabilities": [
+      "AssignWorkerToHex",
+      "AutomateWorker",
+      "BuildRoad",
+      "CancelWorkerAssignment",
+      "CancelWorkerJob",
+      "ConfirmWorkerImprovement",
+      "SelectWorkerImprovement"
+    ],
+    "fixtureIds": [
+      "all-seven-command-revision-precedence",
+      "assignment-cancel",
+      "assignment-capacity",
+      "automation-assignment-fallback",
+      "automation-deterministic-tie-break",
+      "automation-work-budget",
+      "foreign-road-rejection",
+      "improvement-charge-consumption",
+      "improvement-technology-gate",
+      "pending-confirm-ownership",
+      "query-command-shared-legality",
+      "recipient-infrastructure-projection",
+      "road-cache-invalidation",
+      "road-routing-fingerprint",
+      "save-reopen-mid-job",
+      "turn-job-completion-event",
+      "typed-replay-exactness"
+    ],
+    "maxEventsPerCommand": 1200,
+    "maxMeasuredPayloadBytes": 1,
+    "maxMeasuredAllocations": 17996,
+    "maxMeasuredAllocatedBytes": 7987078,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 1200,
+      "examinedEdges": 24000,
+      "heapPushes": 0,
+      "routeRecords": 1200
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "engine/worker_"
+    ]
+  },
+  "O9": {
+    "target": "rust-integrated-turn-check",
+    "capabilities": [
+      "GameOutcome",
+      "MatchEnded",
+      "MatchFinished"
+    ],
+    "fixtureIds": [
+      "bounded-full-game-reopen-every-turn",
+      "bounded-terminal-soak",
+      "conquest-before-score",
+      "cultural-distinct-artifacts",
+      "domination-before-cultural",
+      "domination-tied-candidates",
+      "exact-empire-scoring",
+      "match-finished-rejection",
+      "score-draw-tie",
+      "score-unique-winner",
+      "single-participant-ongoing",
+      "terminal-save-reopen-replay"
+    ],
+    "maxEventsPerCommand": 5,
+    "maxMeasuredPayloadBytes": 210911,
+    "maxMeasuredAllocations": 30009,
+    "maxMeasuredAllocatedBytes": 5158327,
+    "maxWorkCounters": {
+      "frontierPops": 0,
+      "expandedTiles": 0,
+      "examinedEdges": 0,
+      "heapPushes": 0,
+      "routeRecords": 0
+    },
+    "soakIterations": 20,
+    "workloadPrefixes": [
+      "runtime/runtime_turn_timeout_finalization",
+      "runtime/turn_replay_verify"
+    ]
+  }
+}

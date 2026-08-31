@@ -1,0 +1,32 @@
+class: ExternalAuthRequest
+serverOnly: true
+table: aonw_external_auth_request
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  requestId: String
+  state: String
+  provider: String
+  status: String
+  codeVerifier: String?
+  error: String?
+  authStrategy: String?
+  token: String?
+  tokenExpiresAt: DateTime?
+  refreshToken: String?
+  authUserId: UuidValue?
+  scopeNames: List<String>?
+  createdAt: DateTime, defaultModel=now
+  expiresAt: DateTime
+  completedAt: DateTime?
+  consumedAt: DateTime?
+indexes:
+  aonw_external_auth_request_request_id_idx:
+    fields: requestId
+    unique: true
+  aonw_external_auth_request_state_idx:
+    fields: state
+    unique: true
+  aonw_external_auth_request_status_idx:
+    fields: status
+  aonw_external_auth_request_expires_at_idx:
+    fields: expiresAt

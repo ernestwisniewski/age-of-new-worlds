@@ -1,0 +1,1890 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07151c">
+    <meta
+      name="description"
+      content="Age of New Worlds"
+    >
+    <title>Age of New Worlds</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/apple-touch-icon.png">
+    <style>
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Cinzel";
+        font-style: normal;
+        font-weight: 400 900;
+        src: url("/assets/fonts/Cinzel-VariableFont_wght.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Albert Sans";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url("/assets/fonts/AlbertSans-VariableFont_wght.ttf") format("truetype");
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #07151c;
+        --font-body: "Aonw Albert Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-display: "Aonw Cinzel", Georgia, "Times New Roman", serif;
+        --gold: #d8b66a;
+        --gold-soft: rgba(216, 182, 106, 0.32);
+        --shade: rgba(7, 21, 28, 0.4);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-block: 4svh;
+        scroll-snap-type: y proximity;
+      }
+
+      body {
+        background: var(--bg);
+        font-family: var(--font-body);
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        pointer-events: none;
+        position: fixed;
+      }
+
+      body::before {
+        animation: map-journey 96s ease-in-out infinite;
+        background: url("/assets/main_menu/background.jpg") center / cover no-repeat;
+        height: 150lvh;
+        left: -25vw;
+        top: -25lvh;
+        will-change: transform;
+        width: 150vw;
+        z-index: 0;
+      }
+
+      body::after {
+        background:
+          linear-gradient(90deg, rgba(7, 21, 28, 0.72), rgba(7, 21, 28, 0.32) 50%, rgba(6, 18, 25, 0.64)),
+          linear-gradient(0deg, rgba(6, 18, 25, 0.68), rgba(7, 21, 28, 0.18) 42%, rgba(5, 16, 22, 0.58));
+        height: 100lvh;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        z-index: 1;
+      }
+
+      main {
+        position: relative;
+        z-index: 2;
+      }
+
+      @keyframes map-journey {
+        0%,
+        100% {
+          transform: translate3d(-3vw, 2vh, 0) scale(1.02);
+        }
+
+        25% {
+          transform: translate3d(7vw, -6vh, 0) scale(1.07);
+        }
+
+        50% {
+          transform: translate3d(-8vw, -4vh, 0) scale(1.035);
+        }
+
+        75% {
+          transform: translate3d(5.5vw, 7vh, 0) scale(1.075);
+        }
+      }
+
+      @keyframes content-rise {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 1rem, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      @keyframes logo-breathe {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          transform: translate3d(0, -0.28rem, 0);
+        }
+      }
+
+      @keyframes logo-outline-pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(1.018);
+        }
+
+        50% {
+          opacity: 0.58;
+          transform: scale(1.03);
+        }
+      }
+
+      @keyframes logo-trace-flow {
+        0% {
+          background-position:
+            -120% 48%,
+            0 0;
+          opacity: 0.12;
+        }
+
+        44% {
+          opacity: 0.52;
+        }
+
+        100% {
+          background-position:
+            220% 48%,
+            2.6rem 1.4rem;
+          opacity: 0.16;
+        }
+      }
+
+      @keyframes scroll-pulse {
+        0%,
+        100% {
+          opacity: 0.45;
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          opacity: 0.9;
+          transform: translate3d(0, 0.32rem, 0);
+        }
+      }
+
+      .homepage-screen {
+        display: grid;
+        min-height: 92svh;
+        padding: clamp(1.35rem, 4vw, 4rem);
+        place-items: center;
+        position: relative;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      .homepage-screen + .homepage-screen {
+        border-top: 1px solid rgba(217, 184, 93, 0.14);
+      }
+
+      .screen-inner {
+        animation: content-rise 680ms ease both;
+        display: grid;
+        gap: clamp(1rem, 2.8svh, 1.8rem);
+        justify-items: center;
+        position: relative;
+        width: min(92vw, 64rem);
+        z-index: 1;
+      }
+
+      .reveal-item {
+        transition:
+          opacity 520ms ease,
+          transform 520ms ease;
+      }
+
+      html.is-reveal-ready .reveal-item {
+        opacity: 0;
+        transform: translate3d(0, 0.85rem, 0);
+      }
+
+      html.is-reveal-ready .reveal-item.is-visible {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+
+      .media-screen .screen-inner {
+        animation-delay: 80ms;
+      }
+
+      .platforms-screen .screen-inner {
+        animation-delay: 140ms;
+      }
+
+      .footer-screen .screen-inner {
+        animation-delay: 180ms;
+      }
+
+      .hero-inner {
+        gap: clamp(0.9rem, 2.6svh, 1.55rem);
+        margin-top: -2svh;
+      }
+
+      .hero-screen {
+        overflow: hidden;
+      }
+
+      .screen-copy {
+        background:
+          radial-gradient(ellipse at 50% 54%, rgba(7, 21, 28, 0.62), rgba(7, 21, 28, 0.3) 60%, transparent 76%),
+          linear-gradient(90deg, transparent, rgba(241, 223, 170, 0.05) 32%, rgba(217, 184, 93, 0.07) 70%, transparent);
+        display: grid;
+        gap: 0.54rem;
+        justify-items: center;
+        max-width: min(90vw, 46rem);
+        padding: clamp(0.94rem, 2vw, 1.24rem) clamp(1.08rem, 3.6vw, 2.35rem);
+        position: relative;
+        text-align: center;
+      }
+
+      .screen-copy::before,
+      .screen-copy::after {
+        background: linear-gradient(90deg, transparent, rgba(217, 184, 93, 0.38), rgba(241, 223, 170, 0.22), transparent);
+        content: "";
+        height: 1px;
+        left: 50%;
+        opacity: 0.56;
+        position: absolute;
+        transform: translateX(-50%);
+        width: min(70%, 28rem);
+      }
+
+      .screen-copy::before {
+        top: 0;
+      }
+
+      .screen-copy::after {
+        bottom: 0;
+      }
+
+      .screen-kicker {
+        color: rgba(216, 182, 106, 0.82);
+        font: 700 0.74rem var(--font-body);
+        letter-spacing: 0;
+        margin: 0;
+        text-transform: uppercase;
+        text-shadow:
+          0 0.16rem 0.45rem rgba(0, 0, 0, 0.92),
+          0 0.65rem 1.45rem rgba(0, 0, 0, 0.72);
+      }
+
+      .screen-title {
+        color: rgba(245, 235, 207, 0.96);
+        font: 700 clamp(2rem, 4vw, 2.85rem) var(--font-body);
+        line-height: 1.12;
+        margin: 0;
+        text-align: center;
+        text-wrap: balance;
+        text-shadow:
+          0 0.14rem 0.42rem rgba(0, 0, 0, 0.98),
+          0 0.62rem 1.4rem rgba(0, 0, 0, 0.8),
+          0 0 1.35rem rgba(217, 184, 93, 0.12);
+      }
+
+      .screen-text {
+        color: rgba(245, 235, 207, 0.78);
+        font: 300 1.04rem var(--font-body);
+        line-height: 1.58;
+        margin: 0;
+        max-width: 38rem;
+        text-align: center;
+        text-wrap: balance;
+        text-shadow:
+          0 0.12rem 0.34rem rgba(0, 0, 0, 0.98),
+          0 0.54rem 1.2rem rgba(0, 0, 0, 0.76);
+      }
+
+      .screen-text a {
+        color: #f0deb0;
+        font-weight: 500;
+        text-decoration: none;
+        text-underline-offset: 0.18em;
+      }
+
+      .screen-text a:hover,
+      .screen-text a:focus-visible {
+        text-decoration: underline;
+      }
+
+      .screen-text a:focus-visible {
+        border-radius: 0.2rem;
+        outline: 2px solid var(--gold);
+        outline-offset: 0.18rem;
+      }
+
+      .logo-link {
+        animation: logo-breathe 7s ease-in-out infinite;
+        display: inline-grid;
+        place-items: center;
+        width: min(80vw, 40rem);
+        outline-offset: 1rem;
+        position: relative;
+      }
+
+      .logo-link::before,
+      .logo-link::after {
+        content: "";
+        inset: 0;
+        mask-image: url("/assets/logo.png");
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        pointer-events: none;
+        position: absolute;
+        -webkit-mask-image: url("/assets/logo.png");
+        -webkit-mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+      }
+
+      .logo-link::before {
+        animation: logo-outline-pulse 6.8s ease-in-out infinite;
+        background: rgba(241, 223, 170, 0.42);
+        filter:
+          drop-shadow(0 0 0.42rem rgba(217, 184, 93, 0.28))
+          drop-shadow(0 0 1.2rem rgba(217, 184, 93, 0.16));
+        transform-origin: center;
+        z-index: 0;
+      }
+
+      .logo-link::after {
+        animation: logo-trace-flow 7.4s ease-in-out infinite;
+        background:
+          linear-gradient(100deg, transparent 32%, rgba(241, 223, 170, 0.86) 48%, transparent 64%) -120% 48% / 48% 190% no-repeat,
+          repeating-linear-gradient(110deg, transparent 0 1.14rem, rgba(217, 184, 93, 0.22) 1.18rem 1.24rem, transparent 1.3rem 2.56rem);
+        filter: drop-shadow(0 0 0.8rem rgba(217, 184, 93, 0.2));
+        mix-blend-mode: screen;
+        z-index: 2;
+      }
+
+      .logo-link:focus-visible,
+      .nav-link:focus-visible {
+        outline: 2px solid var(--gold);
+      }
+
+      .logo-link img {
+        display: block;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: min(33svh, 18.5rem);
+        object-fit: contain;
+        filter:
+          drop-shadow(0 1.25rem 2.5rem rgba(0, 0, 0, 0.6))
+          drop-shadow(0 0 2rem rgba(217, 184, 93, 0.26));
+        position: relative;
+        z-index: 1;
+      }
+
+      .game-summary {
+        background:
+          radial-gradient(ellipse at 50% 54%, rgba(7, 21, 28, 0.62), rgba(7, 21, 28, 0.3) 60%, transparent 76%),
+          linear-gradient(90deg, transparent, rgba(241, 223, 170, 0.05) 32%, rgba(217, 184, 93, 0.07) 70%, transparent);
+        color: rgba(245, 235, 207, 0.92);
+        font: 300 clamp(1.02rem, 1.45vw, 1.18rem) var(--font-body);
+        line-height: 1.64;
+        margin: -0.05rem 0 0;
+        max-width: min(90vw, 44rem);
+        padding: clamp(0.9rem, 1.8vw, 1.1rem) clamp(1.08rem, 3.4vw, 2.15rem);
+        position: relative;
+        text-align: center;
+        text-wrap: balance;
+        text-shadow:
+          0 0.11rem 0.34rem rgba(0, 0, 0, 0.98),
+          0 0.48rem 1.1rem rgba(0, 0, 0, 0.82),
+          0 0 1.2rem rgba(217, 184, 93, 0.14);
+      }
+
+      .game-summary::before,
+      .game-summary::after {
+        background: linear-gradient(90deg, transparent, rgba(217, 184, 93, 0.38), rgba(241, 223, 170, 0.22), transparent);
+        content: "";
+        height: 1px;
+        left: 50%;
+        opacity: 0.56;
+        position: absolute;
+        transform: translateX(-50%);
+        width: min(70%, 28rem);
+      }
+
+      .game-summary::before {
+        top: 0;
+      }
+
+      .game-summary::after {
+        bottom: 0;
+      }
+
+      .scroll-marker {
+        animation: scroll-pulse 2.2s ease-in-out infinite;
+        bottom: clamp(1rem, 3svh, 2rem);
+        color: rgba(241, 223, 170, 0.56);
+        display: block;
+        height: 2.3rem;
+        position: absolute;
+        width: 2.3rem;
+      }
+
+      .scroll-marker::before,
+      .scroll-marker::after {
+        content: "";
+        left: 50%;
+        position: absolute;
+        transform: translateX(-50%);
+      }
+
+      .scroll-marker::before {
+        background: currentColor;
+        height: 100%;
+        width: 1px;
+      }
+
+      .scroll-marker::after {
+        border-bottom: 1px solid currentColor;
+        border-right: 1px solid currentColor;
+        bottom: 0;
+        height: 0.45rem;
+        transform: translateX(-50%) rotate(45deg);
+        width: 0.45rem;
+      }
+
+      a.scroll-marker {
+        outline-offset: 0.28rem;
+        text-decoration: none;
+        transition:
+          color 180ms ease,
+          filter 180ms ease,
+          transform 180ms ease;
+      }
+
+      a.scroll-marker:hover {
+        color: rgba(241, 223, 170, 0.9);
+        filter: drop-shadow(0 0 0.7rem rgba(217, 184, 93, 0.28));
+      }
+
+      a.scroll-marker:focus-visible {
+        outline: 2px solid var(--gold);
+      }
+
+      .media-carousel {
+        display: grid;
+        gap: 0.82rem;
+        justify-items: center;
+        transition: transform 220ms ease;
+        width: min(92vw, 64rem, 108svh);
+      }
+
+      .media-carousel:hover {
+        transform: translateY(-0.12rem);
+      }
+
+      .carousel-viewport {
+        aspect-ratio: 16 / 9;
+        border-radius: 0.45rem;
+        cursor: grab;
+        overflow: hidden;
+        touch-action: pan-y;
+        user-select: none;
+        width: 100%;
+      }
+
+      .carousel-track {
+        display: flex;
+        height: 100%;
+        transition: transform 520ms ease;
+        width: 100%;
+      }
+
+      .media-carousel.is-dragging .carousel-viewport {
+        cursor: grabbing;
+      }
+
+      .media-carousel.is-dragging .carousel-track {
+        transition: none;
+      }
+
+      .carousel-slide {
+        align-items: center;
+        display: flex;
+        flex: 0 0 100%;
+        height: 100%;
+        justify-content: center;
+        min-width: 100%;
+        min-height: 0;
+      }
+
+      .carousel-slide--mobile {
+        background: transparent;
+      }
+
+      .carousel-slide--mobile .mobile-capture {
+        margin: 0 auto;
+      }
+
+      .mobile-capture {
+        display: block;
+        height: 100%;
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        user-select: none;
+        -webkit-user-drag: none;
+        width: auto;
+        filter:
+          drop-shadow(0 1rem 1.6rem rgba(0, 0, 0, 0.54))
+          drop-shadow(0 0 1.1rem rgba(217, 184, 93, 0.18));
+      }
+
+      .video-frame {
+        aspect-ratio: 16 / 9;
+        background: rgba(4, 14, 19, 0.78);
+        border: 1px solid rgba(217, 184, 93, 0.5);
+        border-radius: 0.45rem;
+        box-shadow:
+          0 1.4rem 3rem rgba(0, 0, 0, 0.52),
+          0 0 2rem rgba(217, 184, 93, 0.14);
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+      }
+
+      .video-frame iframe {
+        border: 0;
+        display: block;
+        height: 100%;
+        pointer-events: none;
+        width: 100%;
+      }
+
+      .video-frame.is-interactive iframe {
+        pointer-events: auto;
+      }
+
+      .video-cover {
+        appearance: none;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        display: grid;
+        inset: 0;
+        padding: 0;
+        place-items: center;
+        position: absolute;
+        z-index: 3;
+      }
+
+      .video-swipe-zone {
+        background: transparent;
+        bottom: 0;
+        cursor: grab;
+        display: block;
+        position: absolute;
+        top: 0;
+        touch-action: pan-y;
+        user-select: none;
+        width: clamp(3rem, 14%, 8rem);
+        z-index: 4;
+      }
+
+      .video-swipe-zone--left {
+        left: 0;
+      }
+
+      .video-swipe-zone--right {
+        right: 0;
+      }
+
+      .media-carousel.is-dragging .video-swipe-zone {
+        cursor: grabbing;
+      }
+
+      .video-frame.is-interactive .video-cover {
+        display: none;
+      }
+
+      .video-cover::before {
+        background: rgba(7, 21, 28, 0.78);
+        border: 1px solid rgba(241, 223, 170, 0.74);
+        border-radius: 999px;
+        box-shadow:
+          0 0.8rem 1.4rem rgba(0, 0, 0, 0.44),
+          0 0 1.2rem rgba(217, 184, 93, 0.24);
+        content: "";
+        height: clamp(3.1rem, 7vw, 4.3rem);
+        width: clamp(3.1rem, 7vw, 4.3rem);
+      }
+
+      .video-cover::after {
+        border-bottom: clamp(0.52rem, 1.14vw, 0.74rem) solid transparent;
+        border-left: clamp(0.88rem, 1.92vw, 1.24rem) solid #f1dfaa;
+        border-top: clamp(0.52rem, 1.14vw, 0.74rem) solid transparent;
+        content: "";
+        margin-left: clamp(0.16rem, 0.35vw, 0.24rem);
+        position: absolute;
+      }
+
+      .video-cover:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: -0.45rem;
+      }
+
+      .carousel-dots {
+        align-items: center;
+        display: flex;
+        gap: 0.48rem;
+        justify-content: center;
+      }
+
+      .carousel-dot {
+        appearance: none;
+        background: rgba(241, 223, 170, 0.28);
+        border: 1px solid rgba(217, 184, 93, 0.58);
+        border-radius: 999px;
+        cursor: pointer;
+        height: 0.54rem;
+        padding: 0;
+        transition:
+          background-color 180ms ease,
+          box-shadow 180ms ease,
+          transform 180ms ease;
+        width: 0.54rem;
+      }
+
+      .carousel-dot:hover {
+        transform: scale(1.14);
+      }
+
+      .carousel-dot[aria-current="true"] {
+        background: #f1dfaa;
+        border-color: #f1dfaa;
+        box-shadow: 0 0 0.72rem rgba(217, 184, 93, 0.46);
+      }
+
+      .carousel-dot:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 0.25rem;
+      }
+
+      nav {
+        display: grid;
+        gap: 0.7rem;
+        justify-items: center;
+        width: 100%;
+      }
+
+      .platform-links {
+        align-items: center;
+        display: grid;
+        gap: 1.05rem;
+        grid-template-columns: minmax(0, 1fr);
+        justify-content: center;
+        width: min(100%, 34rem);
+      }
+
+      .platform-grid {
+        display: grid;
+        column-gap: 0.95rem;
+        row-gap: 2.15rem;
+        grid-template-areas:
+          "web steam"
+          "android ios";
+        grid-template-columns: repeat(2, minmax(12.4rem, 1fr));
+        justify-self: stretch;
+        width: 100%;
+      }
+
+      .platform-grid .nav-link {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .platform-grid .nav-link.primary {
+        display: grid;
+        align-content: center;
+        gap: 0.58rem;
+        justify-items: center;
+        min-height: 8.2rem;
+        padding: 1.18rem 1rem 1.02rem;
+      }
+
+      .platform-label {
+        align-items: center;
+        display: inline-flex;
+        gap: 0.5rem;
+        justify-content: center;
+        min-width: 0;
+      }
+
+      .platform-grid .platform-label {
+        flex-direction: column;
+        gap: 0.72rem;
+        line-height: 1;
+        width: 100%;
+      }
+
+      .platform-icon {
+        background: currentColor;
+        display: block;
+        flex: 0 0 auto;
+        height: 1.18rem;
+        mask: var(--platform-icon) center / contain no-repeat;
+        opacity: 0.86;
+        width: 1.18rem;
+        -webkit-mask: var(--platform-icon) center / contain no-repeat;
+      }
+
+      .platform-engine-mark {
+        border: 1px solid currentColor;
+        clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0 50%);
+        display: grid;
+        flex: 0 0 auto;
+        font-size: 0.42rem;
+        font-weight: 900;
+        height: 1.18rem;
+        letter-spacing: -0.04em;
+        place-items: center;
+        width: 1.18rem;
+      }
+
+      .platform-grid .platform-icon {
+        height: clamp(3.1rem, 6vw, 3.8rem);
+        opacity: 0.9;
+        width: clamp(3.1rem, 6vw, 3.8rem);
+      }
+
+      .platform-icon-web {
+        --platform-icon: url("/assets/platform-icons/web.svg");
+      }
+
+      .platform-icon-steam {
+        --platform-icon: url("/assets/platform-icons/steam.svg");
+      }
+
+      .platform-icon-android {
+        --platform-icon: url("/assets/platform-icons/android.svg");
+      }
+
+      .platform-icon-ios {
+        --platform-icon: url("/assets/platform-icons/apple.svg");
+      }
+
+      .platform-icon-devlog {
+        --platform-icon: url("/assets/platform-icons/devlog.svg");
+      }
+
+      .platform-icon-stats {
+        --platform-icon: url("/assets/platform-icons/stats.svg");
+      }
+
+      .platform-icon-github {
+        --platform-icon: url("/assets/platform-icons/github.svg");
+      }
+
+      .platform-icon-reddit {
+        --platform-icon: url("/assets/platform-icons/reddit.svg");
+      }
+
+      .platform-icon-contact {
+        --platform-icon: url("/assets/platform-icons/contact.svg");
+      }
+
+      .platform-ios .platform-label {
+        text-transform: none;
+      }
+
+      .platform-web {
+        grid-area: web;
+      }
+
+      .platform-steam {
+        grid-area: steam;
+      }
+
+      .platform-ios {
+        grid-area: ios;
+      }
+
+      .platform-android {
+        grid-area: android;
+        overflow: visible;
+        position: relative;
+      }
+
+      .secondary-links {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        justify-content: center;
+      }
+
+      .asset-note {
+        color: rgba(241, 223, 170, 0.94);
+        font: 700 0.67rem var(--font-body);
+        line-height: 1.45;
+        margin: 0;
+        max-width: min(92vw, 46rem);
+        opacity: 0.65;
+        text-align: center;
+        text-shadow:
+          0 0.14rem 0.42rem rgba(0, 0, 0, 0.92),
+          0 0.6rem 1.3rem rgba(0, 0, 0, 0.72);
+      }
+
+      .footer-inner {
+        align-content: stretch;
+        grid-template-rows: 1fr auto;
+        height: 100%;
+      }
+
+      .footer-screen {
+        align-items: stretch;
+        justify-items: center;
+        min-height: 100svh;
+        padding-bottom: calc(clamp(2rem, 5svh, 4rem) + env(safe-area-inset-bottom));
+      }
+
+      .footer-screen::after {
+        background: linear-gradient(
+          0deg,
+          rgba(4, 14, 19, 0.96),
+          rgba(4, 14, 19, 0.78) 34%,
+          rgba(4, 14, 19, 0.3) 74%,
+          rgba(4, 14, 19, 0)
+        );
+        bottom: 0;
+        content: "";
+        height: min(38svh, 18rem);
+        left: 0;
+        pointer-events: none;
+        position: absolute;
+        right: 0;
+        z-index: 0;
+      }
+
+      .footer-main {
+        align-self: center;
+        display: grid;
+        gap: clamp(0.95rem, 2.5svh, 1.5rem);
+        justify-items: center;
+      }
+
+      .footer-bottom {
+        align-self: end;
+        display: grid;
+        gap: 0.58rem;
+        justify-items: center;
+        margin-bottom: clamp(1.4rem, 4svh, 2.75rem);
+        padding-bottom: 0;
+      }
+
+      .legal-links {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        justify-content: center;
+        margin-top: -0.35rem;
+      }
+
+      .legal-link {
+        color: rgba(241, 223, 170, 0.94);
+        font: 700 0.7rem var(--font-body);
+        text-decoration: underline;
+        text-decoration-color: rgba(217, 184, 93, 0.42);
+        text-underline-offset: 0.18rem;
+        text-shadow:
+          0 0.14rem 0.42rem rgba(0, 0, 0, 0.92),
+          0 0.55rem 1.15rem rgba(0, 0, 0, 0.72);
+      }
+
+      .legal-link:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 0.22rem;
+      }
+
+      .legal-separator {
+        color: rgba(241, 223, 170, 0.76);
+        font: 700 0.7rem var(--font-body);
+        text-shadow:
+          0 0.14rem 0.42rem rgba(0, 0, 0, 0.92),
+          0 0.55rem 1.15rem rgba(0, 0, 0, 0.72);
+      }
+
+      .nav-link {
+        align-items: center;
+        border: 1px solid rgba(217, 184, 93, 0.62);
+        border-radius: 0.35rem;
+        color: #f0deb0;
+        display: inline-flex;
+        font: 700 0.86rem var(--font-body);
+        gap: 0.48rem;
+        justify-content: center;
+        line-height: 1;
+        padding: 0.78rem 1.15rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        white-space: nowrap;
+        background: rgba(7, 21, 28, 0.72);
+        box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.32);
+        transition:
+          background-color 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease,
+          color 180ms ease,
+          transform 180ms ease;
+      }
+
+      a.nav-link:hover {
+        background: rgba(16, 36, 42, 0.86);
+        border-color: rgba(241, 223, 170, 0.82);
+        box-shadow:
+          0 0.95rem 1.9rem rgba(0, 0, 0, 0.36),
+          0 0 1.2rem rgba(217, 184, 93, 0.16);
+        transform: translateY(-1px);
+      }
+
+      .nav-link.primary {
+        font-size: 1.02rem;
+        min-height: 3.35rem;
+        padding: 0.95rem 1.2rem;
+      }
+
+      .secondary-links .nav-link {
+        border-color: rgba(217, 184, 93, 0.46);
+        color: #e4d09a;
+        font-size: 0.72rem;
+        padding: 0.58rem 0.78rem;
+        background: rgba(7, 21, 28, 0.6);
+        box-shadow: 0 0.45rem 1rem rgba(0, 0, 0, 0.24);
+        text-transform: none;
+      }
+
+      @media (max-width: 700px) {
+        html {
+          scroll-padding-block: 0;
+          scroll-snap-type: y mandatory;
+        }
+
+        body::before {
+          background-position: center;
+        }
+
+        .homepage-screen {
+          scroll-snap-stop: normal;
+        }
+
+        body::after {
+          background: linear-gradient(0deg, var(--shade), var(--shade));
+        }
+
+        .homepage-screen {
+          min-height: 100svh;
+          padding: clamp(1.2rem, 5vw, 2rem);
+        }
+
+        .screen-inner {
+          width: min(100%, 34rem);
+        }
+
+        .screen-copy {
+          gap: 0.44rem;
+          padding: 0.82rem 0.9rem;
+        }
+
+        .logo-link {
+          width: min(88vw, 31rem);
+        }
+
+        .logo-link img {
+          max-height: min(28svh, 13rem);
+        }
+
+        .game-summary {
+          font-size: 0.95rem;
+          line-height: 1.5;
+          padding: 0.82rem 0.95rem;
+        }
+
+        .screen-kicker {
+          font-size: 0.7rem;
+        }
+
+        .screen-title {
+          font-size: 1.78rem;
+          line-height: 1.14;
+        }
+
+        .screen-text {
+          font-size: 0.94rem;
+          line-height: 1.48;
+        }
+
+        .media-carousel {
+          width: 100%;
+        }
+
+        .platform-links {
+          justify-items: stretch;
+          width: min(100%, 46rem);
+        }
+
+        .platform-grid {
+          column-gap: 0.5rem;
+          row-gap: 1.9rem;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          width: 100%;
+        }
+
+        .platform-grid .nav-link.primary {
+          font-size: 0.78rem;
+          gap: 0;
+          min-height: 6.8rem;
+          padding: 0.9rem 0.36rem 0.78rem;
+        }
+
+        .platform-grid .platform-label {
+          gap: 0.54rem;
+        }
+
+        .platform-grid .platform-icon {
+          height: clamp(2.45rem, 11vw, 3rem);
+          width: clamp(2.45rem, 11vw, 3rem);
+        }
+
+        .footer-main {
+          transform: translateY(-1.2rem);
+        }
+
+        .footer-screen {
+          min-height: 100svh;
+          padding-bottom: calc(1.2rem + env(safe-area-inset-bottom));
+        }
+
+        .footer-bottom {
+          margin-bottom: 1.2rem;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        html {
+          scroll-snap-type: none;
+        }
+
+        .homepage-screen {
+          scroll-snap-align: none;
+          scroll-snap-stop: normal;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        body::before {
+          animation: none;
+          transform: scale(1.012);
+        }
+
+        .logo-link::before,
+        .logo-link::after {
+          animation: none;
+        }
+
+        .screen-inner,
+        .logo-link,
+        .scroll-marker {
+          animation: none;
+        }
+
+        .reveal-item,
+        .media-carousel,
+        .nav-link,
+        .carousel-dot {
+          transition: none;
+        }
+
+        html.is-reveal-ready .reveal-item {
+          opacity: 1;
+          transform: none;
+        }
+
+        .media-carousel:hover,
+        a.nav-link:hover,
+        .carousel-dot:hover {
+          transform: none;
+        }
+
+        .carousel-track {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="hero" class="homepage-screen hero-screen" aria-label="Age of New Worlds">
+        <div class="screen-inner hero-inner">
+          <a
+            class="logo-link reveal-item"
+            href="https://demo.aonw.net/"
+            aria-label="Open Age of New Worlds demo"
+          >
+            <img src="/assets/logo.png" alt="Age of New Worlds">
+          </a>
+          <p class="game-summary reveal-item">
+            Age of New Worlds is a turn-based 4X strategy game about exploring
+            unknown lands, founding cities, and growing a civilization from its
+            first settlers.
+            Expand, research, trade, and fight your way through a world shaped
+            by every turn.
+          </p>
+        </div>
+        <a class="scroll-marker" href="#media" aria-label="Go to gameplay section"></a>
+      </section>
+
+      <section
+        id="media"
+        class="homepage-screen media-screen"
+        aria-labelledby="media-title"
+      >
+        <div class="screen-inner media-inner">
+          <div class="screen-copy reveal-item">
+            <p class="screen-kicker">Gameplay</p>
+            <h2 class="screen-title" id="media-title">Watch a new world take shape</h2>
+            <p class="screen-text">
+              Move through map captures, trailers, and gameplay videos.
+            </p>
+          </div>
+          <div
+            class="media-carousel reveal-item"
+            data-carousel
+            aria-label="Age of New Worlds media"
+            aria-roledescription="carousel"
+          >
+            <div class="carousel-viewport">
+              <div class="carousel-track" data-carousel-track>
+                <div class="carousel-slide carousel-slide--mobile" data-carousel-slide>
+                  <img
+                    class="mobile-capture"
+                    src="/assets/aonw-mobile.png"
+                    alt="Age of New Worlds mobile gameplay"
+                    draggable="false"
+                  >
+                </div>
+                <div
+                  class="carousel-slide carousel-slide--video"
+                  data-carousel-slide
+                  data-video-slide
+                >
+                  <div class="video-frame" data-video-frame>
+                    <iframe
+                      id="aonwTrailer"
+                      data-youtube-player
+                      src="https://www.youtube.com/embed/UoagmgxOx70?enablejsapi=1&origin=https%3A%2F%2Faonw.net"
+                      title="Age of New Worlds trailer"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    ></iframe>
+                    <button
+                      class="video-cover"
+                      type="button"
+                      data-video-cover
+                      aria-label="Play Age of New Worlds trailer"
+                    ></button>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--left"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--right"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  class="carousel-slide carousel-slide--video"
+                  data-carousel-slide
+                  data-video-slide
+                >
+                  <div class="video-frame" data-video-frame>
+                    <iframe
+                      id="aonwNewWorldsVideo"
+                      data-youtube-player
+                      src="https://www.youtube.com/embed/d6e8rn-pxrI?enablejsapi=1&origin=https%3A%2F%2Faonw.net"
+                      title="Age of New Worlds gameplay showcase"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    ></iframe>
+                    <button
+                      class="video-cover"
+                      type="button"
+                      data-video-cover
+                      aria-label="Play Age of New Worlds gameplay showcase"
+                    ></button>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--left"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--right"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  class="carousel-slide carousel-slide--video"
+                  data-carousel-slide
+                  data-video-slide
+                >
+                  <div class="video-frame" data-video-frame>
+                    <iframe
+                      id="aonwGameplayVideo"
+                      data-youtube-player
+                      src="https://www.youtube.com/embed/hmPYdv_r-X4?enablejsapi=1&origin=https%3A%2F%2Faonw.net"
+                      title="Age of New Worlds gameplay video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                      referrerpolicy="strict-origin-when-cross-origin"
+                    ></iframe>
+                    <button
+                      class="video-cover"
+                      type="button"
+                      data-video-cover
+                      aria-label="Play Age of New Worlds gameplay video"
+                    ></button>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--left"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="video-swipe-zone video-swipe-zone--right"
+                      data-carousel-drag-zone
+                      aria-hidden="true"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-dots" aria-label="Choose media slide">
+              <button
+                class="carousel-dot"
+                type="button"
+                data-carousel-dot
+                aria-label="Show mobile gameplay"
+                aria-current="true"
+              ></button>
+              <button
+                class="carousel-dot"
+                type="button"
+                data-carousel-dot
+                aria-label="Show trailer"
+                aria-current="false"
+              ></button>
+              <button
+                class="carousel-dot"
+                type="button"
+                data-carousel-dot
+                aria-label="Show gameplay showcase"
+                aria-current="false"
+              ></button>
+              <button
+                class="carousel-dot"
+                type="button"
+                data-carousel-dot
+                aria-label="Show gameplay video"
+                aria-current="false"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <a class="scroll-marker" href="#platforms" aria-label="Go to platforms section"></a>
+      </section>
+
+      <section
+        id="platforms"
+        class="homepage-screen platforms-screen"
+        aria-labelledby="platforms-title"
+      >
+        <div class="screen-inner platform-inner">
+          <div class="screen-copy reveal-item">
+            <p class="screen-kicker">Play</p>
+            <h2 class="screen-title" id="platforms-title">Choose your platform</h2>
+            <p class="screen-text">
+              You can try Age of New Worlds for free on
+              <a href="https://ernest-dev.itch.io/aonw">itch.io</a>, or play it
+              through the store and desktop platforms that fit your setup.
+            </p>
+          </div>
+          <nav class="reveal-item" aria-label="Age of New Worlds platform links">
+            <div class="platform-links">
+              <div class="platform-grid">
+                <a class="nav-link primary platform-web" href="https://demo.aonw.net/">
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-web" aria-hidden="true"></span>
+                    Web
+                  </span>
+                </a>
+                <a
+                  class="nav-link primary platform-steam"
+                  href="https://store.steampowered.com/app/4833240/Age_of_New_Worlds/"
+                >
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-steam" aria-hidden="true"></span>
+                    Steam
+                  </span>
+                </a>
+                <a
+                  class="nav-link primary platform-android"
+                  href="https://play.google.com/store/apps/details?id=aonw.net.game"
+                >
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-android" aria-hidden="true"></span>
+                    Android
+                  </span>
+                </a>
+                <a
+                  class="nav-link primary platform-ios"
+                  href="https://apps.apple.com/pl/app/age-of-new-worlds/id6781790591"
+                >
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-ios" aria-hidden="true"></span>
+                    iOS
+                  </span>
+                </a>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <a class="scroll-marker" href="#community-title" aria-label="Go to community section"></a>
+      </section>
+
+      <section
+        id="community-title"
+        class="homepage-screen footer-screen"
+        aria-labelledby="community-heading"
+      >
+        <div class="screen-inner footer-inner">
+          <div class="footer-main">
+            <div class="screen-copy reveal-item">
+              <p class="screen-kicker">Community</p>
+              <h2 class="screen-title" id="community-heading">Follow development</h2>
+              <p class="screen-text">
+                Check the devlog, join the subreddit, or come back here as the
+                build changes.
+              </p>
+            </div>
+            <nav class="reveal-item" aria-label="Age of New Worlds footer links">
+              <div class="secondary-links">
+                <a class="nav-link" href="/stats">
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-stats" aria-hidden="true"></span>
+                    Statistics
+                  </span>
+                </a>
+                <a class="nav-link" href="https://engine.aonw.net/">
+                  <span class="platform-label">
+                    <span class="platform-engine-mark" aria-hidden="true">R24</span>
+                    AoNW Engine
+                  </span>
+                </a>
+                <a class="nav-link" href="https://ernest.dev/">
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-devlog" aria-hidden="true"></span>
+                    Devlog
+                  </span>
+                </a>
+                <a class="nav-link" href="https://github.com/ernestwisniewski/aonw">
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-github" aria-hidden="true"></span>
+                    GitHub
+                  </span>
+                </a>
+                <a class="nav-link" href="https://www.reddit.com/r/aonw/">
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-reddit" aria-hidden="true"></span>
+                    Reddit
+                  </span>
+                </a>
+                <a
+                  class="nav-link"
+                  href="#contact"
+                  data-contact-link
+                  data-contact-local="contact"
+                  data-contact-domain="aonw.net"
+                >
+                  <span class="platform-label">
+                    <span class="platform-icon platform-icon-contact" aria-hidden="true"></span>
+                    Contact
+                  </span>
+                </a>
+              </div>
+            </nav>
+          </div>
+          <div class="footer-bottom">
+            <div class="legal-links">
+              <a class="legal-link" href="/privacy-policy">Privacy Policy</a>
+              <span class="legal-separator" aria-hidden="true">|</span>
+              <a class="legal-link" href="#">Legal notes</a>
+            </div>
+            <p class="asset-note">
+              * Artwork note: some visuals were generated with AI models in this early version.
+              For now the focus is on mechanics, so they are placeholders. Over time I will
+              make the style more consistent and replace them with assets designed specifically for AoNW.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      (() => {
+        const revealItems = [...document.querySelectorAll(".reveal-item")];
+        if (revealItems.length === 0) return;
+
+        document.documentElement.classList.add("is-reveal-ready");
+        if (!("IntersectionObserver" in window)) {
+          revealItems.forEach((item) => item.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -12% 0px", threshold: 0.2 },
+        );
+
+        revealItems.forEach((item) => observer.observe(item));
+      })();
+
+      (() => {
+        const contactLink = document.querySelector("[data-contact-link]");
+        if (!contactLink) return;
+
+        const address = [
+          contactLink.dataset.contactLocal,
+          contactLink.dataset.contactDomain,
+        ].join("@");
+        const prepareContactLink = () => {
+          contactLink.href = `mailto:${address}`;
+        };
+
+        contactLink.addEventListener("pointerenter", prepareContactLink, { once: true });
+        contactLink.addEventListener("focus", prepareContactLink, { once: true });
+        contactLink.addEventListener("click", prepareContactLink);
+      })();
+
+      (() => {
+        const sections = [...document.querySelectorAll(".homepage-screen")];
+        if (sections.length < 2) return;
+
+        const supportsPrecisePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+        if (!supportsPrecisePointer) return;
+
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let isLocked = false;
+        let unlockTimer = null;
+
+        const releaseAfterScrollSettles = () => {
+          if (unlockTimer !== null) window.clearTimeout(unlockTimer);
+          unlockTimer = window.setTimeout(() => {
+            isLocked = false;
+            unlockTimer = null;
+          }, reduceMotion ? 220 : 520);
+        };
+
+        const getCurrentSectionIndex = () => sections.reduce(
+          (closest, section, sectionIndex) => {
+            const distance = Math.abs(section.getBoundingClientRect().top);
+            return distance < closest.distance
+              ? { distance, index: sectionIndex }
+              : closest;
+          },
+          { distance: Number.POSITIVE_INFINITY, index: 0 },
+        ).index;
+
+        const scrollToSection = (direction) => {
+          const currentIndex = getCurrentSectionIndex();
+          const nextIndex = Math.max(
+            0,
+            Math.min(sections.length - 1, currentIndex + direction),
+          );
+          if (nextIndex === currentIndex) return;
+
+          // Scroll with a manually clamped target instead of scrollIntoView so
+          // we never aim past the scrollable range. The last section aligns to
+          // the document bottom: the footer is exactly one viewport tall, so
+          // aiming at its padded top would leave it short of the real maximum
+          // and a stray native scroll could snap back up by that gap.
+          const maxScroll =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const paddingTop =
+            parseFloat(
+              getComputedStyle(document.documentElement).scrollPaddingTop,
+            ) || 0;
+          const target =
+            nextIndex === sections.length - 1
+              ? maxScroll
+              : Math.min(
+                  maxScroll,
+                  Math.max(0, sections[nextIndex].offsetTop - paddingTop),
+                );
+          window.scrollTo({
+            top: target,
+            behavior: reduceMotion ? "auto" : "smooth",
+          });
+        };
+
+        window.addEventListener(
+          "wheel",
+          (event) => {
+            if (event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+            if (Math.abs(event.deltaY) < 4) return;
+
+            event.preventDefault();
+            if (isLocked) {
+              releaseAfterScrollSettles();
+              return;
+            }
+
+            isLocked = true;
+            scrollToSection(event.deltaY > 0 ? 1 : -1);
+            releaseAfterScrollSettles();
+          },
+          { passive: false },
+        );
+      })();
+
+      (() => {
+        const carousel = document.querySelector("[data-carousel]");
+        if (!carousel) return;
+
+        const track = carousel.querySelector("[data-carousel-track]");
+        const viewport = carousel.querySelector(".carousel-viewport");
+        const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
+        const dots = [...carousel.querySelectorAll("[data-carousel-dot]")];
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const firstRotationDelayMs = 4000;
+        const rotationIntervalMs = 7000;
+        const dragIntentThresholdPx = 8;
+        const swipeDistanceThresholdPx = 46;
+        const quickSwipeThresholdPx = 24;
+        const quickSwipeVelocityPxPerMs = 0.45;
+        let index = 0;
+        let timer = null;
+        let paused = false;
+        let carouselFullyVisible = false;
+        let dragState = null;
+        let suppressCoverClick = false;
+        let suppressCoverClickTimer = null;
+        const videoPlayers = new Map();
+
+        const clearRotationTimer = () => {
+          if (timer !== null) {
+            window.clearTimeout(timer);
+            timer = null;
+          }
+        };
+
+        const stopRotation = () => {
+          paused = true;
+          carousel.dataset.rotation = "paused";
+          clearRotationTimer();
+        };
+
+        const showSlide = (nextIndex, options = {}) => {
+          index = (nextIndex + slides.length) % slides.length;
+          track.style.transform = `translateX(${-index * 100}%)`;
+          slides.forEach((slide, slideIndex) => {
+            slide.setAttribute("aria-hidden", String(slideIndex !== index));
+          });
+          dots.forEach((dot, dotIndex) => {
+            dot.setAttribute("aria-current", String(dotIndex === index));
+          });
+          carousel.dataset.activeSlide = String(index);
+          videoPlayers.forEach((player, playerSlideIndex) => {
+            if (playerSlideIndex !== index && player.pauseVideo) {
+              player.pauseVideo();
+            }
+          });
+          if (options.userInitiated) stopRotation();
+        };
+
+        const suppressNextCoverClick = () => {
+          suppressCoverClick = true;
+          window.clearTimeout(suppressCoverClickTimer);
+          suppressCoverClickTimer = window.setTimeout(() => {
+            suppressCoverClick = false;
+          }, 350);
+        };
+
+        const restoreDragPosition = () => {
+          track.style.transform = `translateX(${-index * 100}%)`;
+        };
+
+        const canStartCarouselDrag = (target) => {
+          if (!(target instanceof Element)) return false;
+          if (target.closest("[data-carousel-drag-zone]")) return true;
+          return !target.closest("a, button, iframe, [data-video-cover], .video-frame.is-interactive");
+        };
+
+        const scheduleNextSlide = (delayMs) => {
+          clearRotationTimer();
+          timer = window.setTimeout(() => {
+            timer = null;
+            if (paused || !carouselFullyVisible) return;
+            showSlide(index + 1);
+            scheduleNextSlide(rotationIntervalMs);
+          }, delayMs);
+        };
+
+        const startRotation = (delayMs = firstRotationDelayMs) => {
+          if (paused || reduceMotion || slides.length < 2 || !carouselFullyVisible) return;
+          if (timer !== null) return;
+          carousel.dataset.rotation = "playing";
+          scheduleNextSlide(delayMs);
+        };
+
+        const setCarouselVisibility = (isFullyVisible) => {
+          carouselFullyVisible = isFullyVisible;
+          if (!carouselFullyVisible) {
+            clearRotationTimer();
+            if (!paused) carousel.dataset.rotation = "idle";
+            return;
+          }
+          startRotation();
+        };
+
+        const observeCarouselVisibility = () => {
+          if (!("IntersectionObserver" in window)) {
+            setCarouselVisibility(true);
+            return;
+          }
+
+          const observer = new IntersectionObserver(
+            (entries) => {
+              const entry = entries[entries.length - 1];
+              setCarouselVisibility(entry.isIntersecting && entry.intersectionRatio >= 0.98);
+            },
+            { threshold: [0, 0.5, 0.98, 1] },
+          );
+          observer.observe(carousel);
+        };
+
+        dots.forEach((dot, dotIndex) => {
+          dot.addEventListener("click", () => {
+            showSlide(dotIndex, { userInitiated: true });
+          });
+        });
+
+        carousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showSlide(index - 1, { userInitiated: true });
+          }
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showSlide(index + 1, { userInitiated: true });
+          }
+        });
+
+        const finishDrag = (event, options = {}) => {
+          if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+          const state = dragState;
+          dragState = null;
+          carousel.classList.remove("is-dragging");
+          if (viewport?.hasPointerCapture?.(state.pointerId)) {
+            viewport.releasePointerCapture(state.pointerId);
+          }
+
+          if (!state.isHorizontalSwipe || options.cancelled) {
+            restoreDragPosition();
+            return;
+          }
+
+          const deltaX = event.clientX - state.startX;
+          const distance = Math.abs(deltaX);
+          const elapsedMs = Math.max(event.timeStamp - state.startTime, 1);
+          const velocity = distance / elapsedMs;
+          const isSwipe =
+            distance >= swipeDistanceThresholdPx ||
+            (distance >= quickSwipeThresholdPx && velocity >= quickSwipeVelocityPxPerMs);
+
+          if (isSwipe) {
+            showSlide(index + (deltaX < 0 ? 1 : -1), { userInitiated: true });
+            return;
+          }
+
+          restoreDragPosition();
+        };
+
+        if (viewport && slides.length > 1) {
+          viewport.addEventListener(
+            "pointerdown",
+            (event) => {
+              if (event.pointerType === "mouse" && event.button !== 0) return;
+              if (!canStartCarouselDrag(event.target)) return;
+              if (event.target instanceof HTMLImageElement) event.preventDefault();
+              dragState = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                startTime: event.timeStamp,
+                isDecided: false,
+                isHorizontalSwipe: false,
+              };
+              viewport.setPointerCapture?.(event.pointerId);
+            },
+            { passive: false },
+          );
+
+          viewport.addEventListener("dragstart", (event) => {
+            event.preventDefault();
+          });
+
+          viewport.addEventListener(
+            "pointermove",
+            (event) => {
+              if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+              const deltaX = event.clientX - dragState.startX;
+              const deltaY = event.clientY - dragState.startY;
+              const absX = Math.abs(deltaX);
+              const absY = Math.abs(deltaY);
+
+              if (!dragState.isDecided) {
+                if (Math.max(absX, absY) < dragIntentThresholdPx) return;
+                dragState.isDecided = true;
+                dragState.isHorizontalSwipe = absX > absY * 1.2;
+                if (dragState.isHorizontalSwipe) {
+                  stopRotation();
+                  carousel.classList.add("is-dragging");
+                }
+              }
+
+              if (!dragState.isHorizontalSwipe) return;
+
+              event.preventDefault();
+              suppressNextCoverClick();
+              const viewportWidth = Math.max(viewport.clientWidth, 1);
+              const isAtStart = index === 0 && deltaX > 0;
+              const isAtEnd = index === slides.length - 1 && deltaX < 0;
+              const visualDeltaX = isAtStart || isAtEnd ? deltaX * 0.38 : deltaX;
+              const offsetPercent = (visualDeltaX / viewportWidth) * 100;
+              track.style.transform = `translateX(calc(${-index * 100}% + ${offsetPercent}%))`;
+            },
+            { passive: false },
+          );
+
+          viewport.addEventListener("pointerup", finishDrag);
+          viewport.addEventListener("pointercancel", (event) => {
+            finishDrag(event, { cancelled: true });
+          });
+          viewport.addEventListener("lostpointercapture", (event) => {
+            finishDrag(event, { cancelled: true });
+          });
+        }
+
+        const videoSlides = [...carousel.querySelectorAll("[data-video-slide]")];
+        videoSlides.forEach((videoSlide) => {
+          videoSlide.addEventListener("pointerdown", stopRotation, {
+            capture: true,
+            passive: true,
+          });
+          videoSlide.addEventListener("focusin", stopRotation);
+        });
+
+        const videos = [...carousel.querySelectorAll("[data-youtube-player]")];
+        const videoCovers = [...carousel.querySelectorAll("[data-video-cover]")];
+        const unlockVideo = (cover) => {
+          stopRotation();
+          const frame = cover.closest("[data-video-frame]");
+          frame?.classList.add("is-interactive");
+          const slide = cover.closest("[data-carousel-slide]");
+          const slideIndex = slides.indexOf(slide);
+          const player = videoPlayers.get(slideIndex);
+          if (player?.playVideo) player.playVideo();
+        };
+
+        videoCovers.forEach((cover) => {
+          cover.addEventListener("click", (event) => {
+            if (suppressCoverClick) {
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            unlockVideo(cover);
+          });
+        });
+
+        if (videos.length > 0) {
+          videos.forEach((video) => {
+            video.addEventListener("pointerdown", stopRotation, { passive: true });
+          });
+          window.onYouTubeIframeAPIReady = () => {
+            videos.forEach((video) => {
+              const slide = video.closest("[data-carousel-slide]");
+              const slideIndex = slides.indexOf(slide);
+              videoPlayers.set(
+                slideIndex,
+                new YT.Player(video, {
+                  events: {
+                    onStateChange: (event) => {
+                      if (event.data === YT.PlayerState.PLAYING) {
+                        stopRotation();
+                      }
+                    },
+                  },
+                },
+              ));
+            });
+          };
+
+          const api = document.createElement("script");
+          api.src = "https://www.youtube.com/iframe_api";
+          api.async = true;
+          document.head.appendChild(api);
+        }
+
+        showSlide(0);
+        observeCarouselVisibility();
+      })();
+    </script>
+  </body>
+</html>

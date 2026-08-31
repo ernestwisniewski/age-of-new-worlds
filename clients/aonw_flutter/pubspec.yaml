@@ -1,0 +1,50 @@
+name: aonw_flutter
+description: AoNW Flutter client backed by the Rust protocol.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  aonw_rust_client:
+    path: ../../packages/aonw_rust_client
+  aonw_server_client:
+    path: ../../packages/aonw_server_client
+  crypto: 3.0.7
+  flame: 1.38.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  gamepads: 0.1.10+4
+  intl: 0.20.2
+  path_provider: 2.1.6
+  serverpod_auth_core_client: 3.4.11
+  shared_preferences: 2.5.5
+
+dev_dependencies:
+  flame_test: 2.3.0
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  image: 4.9.1
+  integration_test:
+    sdk: flutter
+  vm_service: 15.3.0
+
+dependency_overrides:
+  gamepads_linux:
+    path: ../../third_party/gamepads_linux
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/maps/aonw2_starter/
+    - assets/scenarios/
+
+hooks:
+  user_defines:
+    aonw_rust_client:
+      rust_backend: true

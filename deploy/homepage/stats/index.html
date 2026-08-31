@@ -1,0 +1,1766 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d12">
+    <meta
+      name="description"
+      content="Public multiplayer statistics for Age of New Worlds."
+    >
+    <title>Multiplayer Statistics | Age of New Worlds</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/apple-touch-icon.png">
+    <style>
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Cinzel";
+        font-style: normal;
+        font-weight: 400 900;
+        src: url("/assets/fonts/Cinzel-VariableFont_wght.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Lato";
+        font-style: normal;
+        font-weight: 300;
+        src: url("/assets/fonts/Lato-Light.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Lato";
+        font-style: normal;
+        font-weight: 400;
+        src: url("/assets/fonts/Lato-Regular.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Aonw Lato";
+        font-style: normal;
+        font-weight: 700;
+        src: url("/assets/fonts/Lato-Bold.ttf") format("truetype");
+      }
+
+      :root {
+        color-scheme: dark;
+        --bg: #090d12;
+        --panel: rgba(9, 13, 18, 0.84);
+        --panel-strong: rgba(13, 18, 23, 0.94);
+        --paper: #f1dfaa;
+        --muted: rgba(241, 223, 170, 0.7);
+        --subtle: rgba(241, 223, 170, 0.5);
+        --gold: #d9b85d;
+        --gold-soft: rgba(217, 184, 93, 0.34);
+        --gold-faint: rgba(217, 184, 93, 0.12);
+        --green: #78c6a3;
+        --blue: #75aee8;
+        --red: #d47b72;
+        --orange: #dca05f;
+        --font-body: "Aonw Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-display: "Aonw Cinzel", Georgia, "Times New Roman", serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--paper);
+        font-family: var(--font-body);
+        line-height: 1.55;
+        margin: 0;
+        min-height: 100%;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+      }
+
+      body::before {
+        background: url("/assets/main_menu/background.png") center right / cover no-repeat;
+        inset: -4vh -4vw;
+        transform: scale(1.02);
+        z-index: -2;
+      }
+
+      body::after {
+        background:
+          linear-gradient(90deg, rgba(9, 13, 18, 0.86), rgba(9, 13, 18, 0.58) 56%, rgba(9, 13, 18, 0.82)),
+          linear-gradient(0deg, rgba(9, 13, 18, 0.92), rgba(9, 13, 18, 0.34) 58%, rgba(9, 13, 18, 0.78));
+        z-index: -1;
+      }
+
+      button,
+      a {
+        font: inherit;
+      }
+
+      a {
+        color: var(--paper);
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 0.25rem;
+      }
+
+      .skip-link {
+        background: var(--paper);
+        color: var(--bg);
+        font-weight: 700;
+        left: 1rem;
+        padding: 0.65rem 0.9rem;
+        position: fixed;
+        top: 1rem;
+        transform: translateY(-200%);
+        transition: transform 160ms ease;
+        z-index: 20;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .page-shell {
+        margin: 0 auto;
+        max-width: 90rem;
+        padding: 0 clamp(1rem, 3.5vw, 3rem) 3rem;
+        width: 100%;
+      }
+
+      .site-header {
+        align-items: center;
+        display: flex;
+        gap: 1.4rem;
+        justify-content: space-between;
+        min-height: 6.6rem;
+        padding: 1rem 0;
+      }
+
+      .logo-link {
+        display: block;
+        flex: 0 1 15rem;
+        width: min(46vw, 15rem);
+      }
+
+      .logo-link img {
+        display: block;
+        filter:
+          drop-shadow(0 0.7rem 1.2rem rgba(0, 0, 0, 0.52))
+          drop-shadow(0 0 1rem rgba(217, 184, 93, 0.14));
+        height: auto;
+        width: 100%;
+      }
+
+      .site-nav {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        justify-content: flex-end;
+      }
+
+      .nav-link,
+      .button {
+        align-items: center;
+        background: rgba(9, 13, 18, 0.72);
+        border: 1px solid rgba(217, 184, 93, 0.54);
+        border-radius: 0.35rem;
+        color: var(--paper);
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 0.76rem;
+        font-weight: 700;
+        gap: 0.45rem;
+        justify-content: center;
+        letter-spacing: 0.045em;
+        line-height: 1;
+        min-height: 2.65rem;
+        padding: 0.78rem 1rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition:
+          background-color 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          transform 160ms ease;
+      }
+
+      .nav-link:hover,
+      .button:hover:not(:disabled) {
+        background: rgba(31, 33, 29, 0.9);
+        border-color: rgba(241, 223, 170, 0.84);
+        box-shadow: 0 0 1rem rgba(217, 184, 93, 0.14);
+        transform: translateY(-1px);
+      }
+
+      .button:disabled {
+        cursor: wait;
+        opacity: 0.66;
+      }
+
+      .button--compact {
+        min-height: 2.35rem;
+        padding: 0.64rem 0.85rem;
+      }
+
+      .hero {
+        display: grid;
+        gap: clamp(1.2rem, 3vw, 2.4rem);
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding: clamp(2rem, 6vh, 4.5rem) 0 clamp(1.8rem, 4vh, 3rem);
+      }
+
+      .eyebrow {
+        color: var(--gold);
+        font-size: 0.73rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        line-height: 1.12;
+      }
+
+      h1 {
+        font-size: clamp(2.25rem, 6vw, 5.2rem);
+        letter-spacing: -0.025em;
+        margin-bottom: 0.8rem;
+        max-width: 13ch;
+        text-shadow: 0 0.7rem 2.2rem rgba(0, 0, 0, 0.74);
+      }
+
+      .hero-copy {
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.16rem);
+        margin-bottom: 0;
+        max-width: 42rem;
+      }
+
+      .snapshot-meta {
+        align-self: end;
+        background: rgba(9, 13, 18, 0.66);
+        border: 1px solid var(--gold-soft);
+        border-radius: 0.4rem;
+        box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.28);
+        display: grid;
+        gap: 0.65rem;
+        justify-items: end;
+        min-width: min(100%, 17rem);
+        padding: 1rem;
+      }
+
+      .snapshot-label {
+        align-items: center;
+        color: var(--green);
+        display: flex;
+        font-size: 0.72rem;
+        font-weight: 700;
+        gap: 0.45rem;
+        letter-spacing: 0.09em;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      .snapshot-label::before {
+        background: currentColor;
+        border-radius: 50%;
+        box-shadow: 0 0 0.65rem currentColor;
+        content: "";
+        height: 0.43rem;
+        width: 0.43rem;
+      }
+
+      .last-updated {
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin: 0;
+        text-align: right;
+      }
+
+      .state-panel,
+      .chart-card,
+      .kpi-card,
+      .support-card,
+      .notice {
+        backdrop-filter: blur(0.5rem);
+        background: var(--panel);
+        border: 1px solid var(--gold-soft);
+        border-radius: 0.45rem;
+        box-shadow: 0 1.3rem 3rem rgba(0, 0, 0, 0.32);
+      }
+
+      .state-panel {
+        align-items: center;
+        display: grid;
+        justify-items: center;
+        min-height: 18rem;
+        padding: clamp(2rem, 7vw, 5rem);
+        text-align: center;
+      }
+
+      .state-panel[hidden],
+      .dashboard[hidden],
+      .notice[hidden] {
+        display: none;
+      }
+
+      .state-panel h2 {
+        color: var(--gold);
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        margin-bottom: 0.7rem;
+      }
+
+      .state-panel p {
+        color: var(--muted);
+        margin-bottom: 1.3rem;
+        max-width: 34rem;
+      }
+
+      .spinner {
+        animation: stats-spin 900ms linear infinite;
+        border: 2px solid rgba(217, 184, 93, 0.24);
+        border-radius: 50%;
+        border-top-color: var(--gold);
+        height: 2.3rem;
+        margin-bottom: 1rem;
+        width: 2.3rem;
+      }
+
+      @keyframes stats-spin {
+        to {
+          transform: rotate(1turn);
+        }
+      }
+
+      .notice {
+        align-items: center;
+        border-color: rgba(212, 123, 114, 0.55);
+        color: rgba(255, 221, 215, 0.9);
+        display: flex;
+        gap: 0.8rem;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding: 0.8rem 1rem;
+      }
+
+      .notice p {
+        margin: 0;
+      }
+
+      .kpi-grid {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-bottom: 0.9rem;
+      }
+
+      .kpi-card {
+        min-height: 9.2rem;
+        overflow: hidden;
+        padding: 1.15rem;
+        position: relative;
+      }
+
+      .kpi-card::after {
+        background: linear-gradient(90deg, var(--gold), transparent);
+        bottom: 0;
+        content: "";
+        height: 2px;
+        left: 0;
+        opacity: 0.62;
+        position: absolute;
+        right: 0;
+      }
+
+      .kpi-label {
+        color: var(--muted);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      .kpi-value {
+        color: var(--paper);
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin: 0.75rem 0 0.48rem;
+      }
+
+      .kpi-note {
+        color: var(--subtle);
+        font-size: 0.76rem;
+        margin: 0;
+      }
+
+      .support-grid {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-bottom: 0.9rem;
+      }
+
+      .support-card {
+        align-items: center;
+        background: rgba(9, 13, 18, 0.7);
+        display: flex;
+        gap: 0.8rem;
+        justify-content: space-between;
+        min-height: 4.8rem;
+        padding: 0.85rem 1rem;
+      }
+
+      .support-card--abandoned {
+        border-color: rgba(212, 123, 114, 0.38);
+      }
+
+      .support-label {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.055em;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      .support-note {
+        color: var(--subtle);
+        font-size: 0.68rem;
+        margin: 0.18rem 0 0;
+      }
+
+      .support-value {
+        color: var(--paper);
+        flex: 0 0 auto;
+        font-family: var(--font-display);
+        font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin: 0;
+      }
+
+      .chart-grid {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .chart-card {
+        min-width: 0;
+        padding: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .chart-card--wide {
+        grid-column: 1 / -1;
+      }
+
+      .chart-header {
+        align-items: start;
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        margin-bottom: 0.8rem;
+      }
+
+      .chart-header h2 {
+        font-size: clamp(1.12rem, 2.4vw, 1.48rem);
+        margin-bottom: 0.28rem;
+      }
+
+      .chart-header p {
+        color: var(--subtle);
+        font-size: 0.78rem;
+        margin-bottom: 0;
+      }
+
+      .legend {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.9rem;
+        justify-content: flex-end;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .legend li {
+        align-items: center;
+        color: var(--muted);
+        display: flex;
+        font-size: 0.72rem;
+        gap: 0.4rem;
+        white-space: nowrap;
+      }
+
+      .legend-swatch {
+        background: var(--series-color);
+        border-radius: 999px;
+        height: 0.22rem;
+        width: 1.15rem;
+      }
+
+      .chart-frame {
+        min-height: 15rem;
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      .chart-frame--activity {
+        min-height: 19rem;
+      }
+
+      .chart {
+        display: block;
+        height: auto;
+        min-width: 34rem;
+        overflow: visible;
+        width: 100%;
+      }
+
+      .chart text {
+        fill: var(--muted);
+        font-family: var(--font-body);
+        font-size: 12px;
+      }
+
+      .chart .chart-value {
+        fill: var(--paper);
+        font-weight: 700;
+      }
+
+      .chart .chart-empty-copy {
+        fill: var(--subtle);
+        font-size: 14px;
+      }
+
+      details {
+        border-top: 1px solid rgba(217, 184, 93, 0.2);
+        margin-top: 0.7rem;
+        padding-top: 0.75rem;
+      }
+
+      summary {
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 0.76rem;
+        font-weight: 700;
+        width: fit-content;
+      }
+
+      summary:hover {
+        color: var(--paper);
+      }
+
+      .table-wrap {
+        margin-top: 0.8rem;
+        overflow-x: auto;
+      }
+
+      table {
+        border-collapse: collapse;
+        font-size: 0.78rem;
+        font-variant-numeric: tabular-nums;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid rgba(217, 184, 93, 0.14);
+        padding: 0.55rem 0.7rem;
+        text-align: right;
+      }
+
+      th {
+        color: var(--paper);
+        font-weight: 700;
+      }
+
+      td {
+        color: var(--muted);
+      }
+
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+
+      .page-footer {
+        color: var(--subtle);
+        font-size: 0.74rem;
+        padding: 2.3rem 0 0;
+        text-align: center;
+      }
+
+      .page-footer a {
+        color: var(--muted);
+        text-underline-offset: 0.16rem;
+      }
+
+      .sr-only {
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+
+      @media (max-width: 72rem) {
+        .kpi-grid,
+        .support-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 50rem) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .snapshot-meta {
+          justify-items: start;
+          width: fit-content;
+        }
+
+        .last-updated {
+          text-align: left;
+        }
+
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chart-card--wide {
+          grid-column: auto;
+        }
+
+        .chart-header {
+          display: grid;
+        }
+
+        .legend {
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 38rem) {
+        .page-shell {
+          padding-inline: 0.8rem;
+        }
+
+        .site-header {
+          align-items: flex-start;
+          min-height: 5rem;
+        }
+
+        .logo-link {
+          flex-basis: 9.5rem;
+          width: 9.5rem;
+        }
+
+        .site-nav {
+          gap: 0.4rem;
+        }
+
+        .site-nav .nav-link {
+          font-size: 0.68rem;
+          min-height: 2.3rem;
+          padding: 0.65rem 0.72rem;
+        }
+
+        .site-nav .nav-link:last-child {
+          display: none;
+        }
+
+        .hero {
+          padding-top: 2rem;
+        }
+
+        h1 {
+          font-size: clamp(2.15rem, 15vw, 3.5rem);
+        }
+
+        .snapshot-meta {
+          width: 100%;
+        }
+
+        .kpi-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .kpi-card {
+          min-height: 8.4rem;
+          padding: 0.9rem;
+        }
+
+        .kpi-value {
+          font-size: 2.2rem;
+        }
+
+        .chart-card {
+          padding: 0.9rem;
+        }
+
+        .notice {
+          align-items: stretch;
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        .spinner {
+          animation: none;
+          border-color: var(--gold);
+        }
+      }
+
+      @media (forced-colors: active) {
+        .legend-swatch,
+        .snapshot-label::before {
+          forced-color-adjust: none;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="multiplayer-stats">
+    <a class="skip-link" href="#main-content">Skip to statistics</a>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="logo-link" href="/" aria-label="Age of New Worlds home">
+          <img src="/assets/logo.png" alt="Age of New Worlds">
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link" href="https://demo.aonw.net/">Play online</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">Public multiplayer dashboard</p>
+            <h1 id="page-title">Multiplayer Statistics</h1>
+            <p class="hero-copy">
+              A live view of aggregate multiplayer activity across Age of New Worlds.
+              Statistics contain aggregate game data only and refresh automatically.
+            </p>
+          </div>
+          <div class="snapshot-meta" aria-label="Statistics update status">
+            <p class="snapshot-label">Live service data</p>
+            <p class="last-updated">
+              Last updated:
+              <time id="last-updated">Waiting for data</time>
+            </p>
+            <button class="button button--compact" id="refresh-button" type="button">
+              Refresh data
+            </button>
+          </div>
+        </section>
+
+        <div id="live-status" class="sr-only" role="status" aria-live="polite"></div>
+
+        <section
+          class="state-panel"
+          id="loading-state"
+          data-stats-loading
+          role="status"
+          aria-labelledby="loading-title"
+          hidden
+        >
+          <div>
+            <div class="spinner" aria-hidden="true"></div>
+            <h2 id="loading-title">Gathering multiplayer data</h2>
+            <p>The latest public statistics are being prepared.</p>
+          </div>
+        </section>
+
+        <section
+          class="state-panel"
+          id="error-state"
+          data-stats-error
+          role="alert"
+          aria-labelledby="error-title"
+          hidden
+        >
+          <div>
+            <h2 id="error-title">Statistics are unavailable</h2>
+            <p id="error-message">
+              The multiplayer service could not be reached. Please try again.
+            </p>
+            <button class="button" id="retry-button" type="button">Try again</button>
+          </div>
+        </section>
+
+        <section
+          class="state-panel"
+          id="empty-state"
+          aria-labelledby="empty-title"
+          hidden
+        >
+          <div>
+            <h2 id="empty-title">No multiplayer activity yet</h2>
+            <p>
+              This dashboard will fill up when players create lobbies and begin
+              their first matches.
+            </p>
+            <a class="button" href="https://demo.aonw.net/">Start a match</a>
+          </div>
+        </section>
+
+        <div class="notice" id="refresh-notice" role="status" hidden>
+          <p id="refresh-notice-message">
+            The latest refresh failed. The previously loaded data is still displayed.
+          </p>
+          <button class="button button--compact" id="notice-retry-button" type="button">
+            Retry
+          </button>
+        </div>
+
+        <section class="dashboard" id="dashboard" aria-label="Multiplayer statistics" hidden>
+          <div class="kpi-grid">
+            <article class="kpi-card">
+              <p class="kpi-label">Active sessions</p>
+              <p class="kpi-value" id="active-sessions">0</p>
+              <p class="kpi-note">Running matches; closed after 12 hours without player activity</p>
+            </article>
+            <article class="kpi-card">
+              <p class="kpi-label">Matches started</p>
+              <p class="kpi-value" id="matches-started">0</p>
+              <p class="kpi-note">All recorded multiplayer games</p>
+            </article>
+            <article class="kpi-card">
+              <p class="kpi-label">Completed matches</p>
+              <p class="kpi-value" id="matches-completed">0</p>
+              <p class="kpi-note">Resolved after a match began</p>
+            </article>
+            <article class="kpi-card">
+              <p class="kpi-label">Average turns</p>
+              <p class="kpi-value" id="average-turns">0</p>
+              <p class="kpi-note">Across completed matches</p>
+            </article>
+          </div>
+
+          <div class="support-grid" aria-label="Supporting multiplayer statistics">
+            <article class="support-card">
+              <div>
+                <p class="support-label">Open lobbies</p>
+                <p class="support-note">Waiting for players</p>
+              </div>
+              <p class="support-value" id="support-open-lobbies">0</p>
+            </article>
+            <article class="support-card">
+              <div>
+                <p class="support-label">Longest match</p>
+                <p class="support-note">Completed game</p>
+              </div>
+              <p class="support-value"><span id="longest-match">0</span> turns</p>
+            </article>
+            <article class="support-card">
+              <div>
+                <p class="support-label">Total turns</p>
+                <p class="support-note">Played in tracked matches</p>
+              </div>
+              <p class="support-value" id="total-turns">0</p>
+            </article>
+            <article class="support-card support-card--abandoned">
+              <div>
+                <p class="support-label">Abandoned count</p>
+                <p class="support-note">Reported separately</p>
+              </div>
+              <p class="support-value" id="matches-abandoned">0</p>
+            </article>
+          </div>
+
+          <div class="chart-grid">
+            <article class="chart-card chart-card--wide">
+              <header class="chart-header">
+                <div>
+                  <h2 id="activity-heading">30-day match activity</h2>
+                  <p>Matches recorded per UTC day</p>
+                </div>
+                <ul class="legend" aria-label="Activity chart legend">
+                  <li>
+                    <span class="legend-swatch" style="--series-color: var(--gold)" aria-hidden="true">&#8203;</span>
+                    Started
+                  </li>
+                  <li>
+                    <span class="legend-swatch" style="--series-color: var(--green)" aria-hidden="true">&#8203;</span>
+                    Completed
+                  </li>
+                </ul>
+              </header>
+              <div class="chart-frame chart-frame--activity">
+                <svg
+                  class="chart"
+                  id="activity-chart"
+                  viewBox="0 0 900 330"
+                  role="img"
+                  aria-labelledby="activity-chart-title activity-chart-description"
+                ></svg>
+              </div>
+              <details>
+                <summary>View activity data table</summary>
+                <div class="table-wrap">
+                  <table>
+                    <caption class="sr-only">Daily multiplayer match activity</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">UTC day</th>
+                        <th scope="col">Started</th>
+                        <th scope="col">Completed</th>
+                      </tr>
+                    </thead>
+                    <tbody id="activity-table-body"></tbody>
+                  </table>
+                </div>
+              </details>
+            </article>
+
+            <article class="chart-card">
+              <header class="chart-header">
+                <div>
+                  <h2>Completed match length</h2>
+                  <p>Completed matches grouped by turns played</p>
+                </div>
+              </header>
+              <div class="chart-frame">
+                <svg
+                  class="chart"
+                  id="turn-chart"
+                  viewBox="0 0 620 320"
+                  role="img"
+                  aria-labelledby="turn-chart-title turn-chart-description"
+                ></svg>
+              </div>
+              <details>
+                <summary>View match length data table</summary>
+                <div class="table-wrap">
+                  <table>
+                    <caption class="sr-only">Completed matches grouped by turn count</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Turns</th>
+                        <th scope="col">Matches</th>
+                      </tr>
+                    </thead>
+                    <tbody id="turn-table-body"></tbody>
+                  </table>
+                </div>
+              </details>
+            </article>
+
+            <article class="chart-card">
+              <header class="chart-header">
+                <div>
+                  <h2>Outcome breakdown</h2>
+                  <p>How completed matches reached their result</p>
+                </div>
+              </header>
+              <div class="chart-frame">
+                <svg
+                  class="chart"
+                  id="outcome-chart"
+                  viewBox="0 0 620 320"
+                  role="img"
+                  aria-labelledby="outcome-chart-title outcome-chart-description"
+                ></svg>
+              </div>
+              <details>
+                <summary>View outcome data table</summary>
+                <div class="table-wrap">
+                  <table>
+                    <caption class="sr-only">Completed match outcomes</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Outcome</th>
+                        <th scope="col">Matches</th>
+                      </tr>
+                    </thead>
+                    <tbody id="outcome-table-body"></tbody>
+                  </table>
+                </div>
+              </details>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <p>
+          Aggregate public statistics only ·
+          <a href="/privacy-policy">Privacy Policy</a>
+        </p>
+      </footer>
+    </div>
+
+    <noscript>
+      <p class="state-panel">
+        JavaScript is required to load live multiplayer statistics.
+      </p>
+    </noscript>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const API_URL = "/api/stats";
+        const REFRESH_INTERVAL_MS = 60_000;
+        const REQUEST_TIMEOUT_MS = 10_000;
+        const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+        const SERIES = {
+          started: "#d9b85d",
+          completed: "#78c6a3",
+        };
+        const OUTCOME_COLORS = [
+          "#d9b85d",
+          "#78c6a3",
+          "#75aee8",
+          "#dca05f",
+          "#c38ad9",
+          "#d47b72",
+          "#83b6a8",
+          "#b8a3e0",
+        ];
+
+        const elements = {
+          loading: document.getElementById("loading-state"),
+          error: document.getElementById("error-state"),
+          errorMessage: document.getElementById("error-message"),
+          empty: document.getElementById("empty-state"),
+          dashboard: document.getElementById("dashboard"),
+          refreshNotice: document.getElementById("refresh-notice"),
+          refreshNoticeMessage: document.getElementById("refresh-notice-message"),
+          refreshButton: document.getElementById("refresh-button"),
+          retryButton: document.getElementById("retry-button"),
+          noticeRetryButton: document.getElementById("notice-retry-button"),
+          liveStatus: document.getElementById("live-status"),
+          lastUpdated: document.getElementById("last-updated"),
+          activityHeading: document.getElementById("activity-heading"),
+          activityChart: document.getElementById("activity-chart"),
+          turnChart: document.getElementById("turn-chart"),
+          outcomeChart: document.getElementById("outcome-chart"),
+          activityTableBody: document.getElementById("activity-table-body"),
+          turnTableBody: document.getElementById("turn-table-body"),
+          outcomeTableBody: document.getElementById("outcome-table-body"),
+          activeSessions: document.getElementById("active-sessions"),
+          openLobbies: document.getElementById("support-open-lobbies"),
+          matchesStarted: document.getElementById("matches-started"),
+          matchesCompleted: document.getElementById("matches-completed"),
+          matchesAbandoned: document.getElementById("matches-abandoned"),
+          averageTurns: document.getElementById("average-turns"),
+          longestMatch: document.getElementById("longest-match"),
+          totalTurns: document.getElementById("total-turns"),
+        };
+
+        const numberFormatter = new Intl.NumberFormat(undefined, {
+          maximumFractionDigits: 0,
+        });
+        const averageFormatter = new Intl.NumberFormat(undefined, {
+          maximumFractionDigits: 1,
+        });
+        const compactDateFormatter = new Intl.DateTimeFormat(undefined, {
+          day: "numeric",
+          month: "short",
+          timeZone: "UTC",
+        });
+        const updatedFormatter = new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        });
+
+        let currentRequest = null;
+        let refreshTimer = null;
+        let lastSuccessfulFetch = 0;
+        let hasRenderedData = false;
+
+        function createSvgElement(name, attributes = {}) {
+          const element = document.createElementNS(SVG_NAMESPACE, name);
+          Object.entries(attributes).forEach(([key, value]) => {
+            element.setAttribute(key, String(value));
+          });
+          return element;
+        }
+
+        function appendSvgText(parent, text, attributes = {}) {
+          const node = createSvgElement("text", attributes);
+          node.textContent = text;
+          parent.append(node);
+          return node;
+        }
+
+        function appendChartDescription(svg, titleId, title, descriptionId, description) {
+          const titleNode = createSvgElement("title", { id: titleId });
+          titleNode.textContent = title;
+          const descriptionNode = createSvgElement("desc", { id: descriptionId });
+          descriptionNode.textContent = description;
+          svg.append(titleNode, descriptionNode);
+        }
+
+        function readCount(value, fieldName) {
+          if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+            throw new Error(`Invalid ${fieldName} value.`);
+          }
+          return Math.floor(value);
+        }
+
+        function readNonNegativeNumber(value, fieldName) {
+          if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+            throw new Error(`Invalid ${fieldName} value.`);
+          }
+          return value;
+        }
+
+        function readPositiveInteger(value, fallback) {
+          if (typeof value !== "number" || !Number.isInteger(value) || value <= 0) {
+            return fallback;
+          }
+          return value;
+        }
+
+        function parseSnapshot(payload) {
+          if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+            throw new Error("The statistics response is not an object.");
+          }
+          if (payload.schemaVersion !== 1) {
+            throw new Error("Unsupported statistics response version.");
+          }
+
+          const totals = payload.totals;
+          const turns = payload.turns;
+          if (!totals || typeof totals !== "object" || Array.isArray(totals)) {
+            throw new Error("The statistics response has no totals.");
+          }
+          if (!turns || typeof turns !== "object" || Array.isArray(turns)) {
+            throw new Error("The statistics response has no turn data.");
+          }
+          if (!Array.isArray(payload.activity) || !Array.isArray(payload.outcomes)) {
+            throw new Error("The statistics response has no chart data.");
+          }
+          if (!Array.isArray(turns.distribution)) {
+            throw new Error("The statistics response has no turn distribution.");
+          }
+
+          const activity = payload.activity.map((entry, index) => {
+            if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+              throw new Error(`Invalid activity entry ${index + 1}.`);
+            }
+            const day = entry.day ?? entry.date;
+            if (typeof day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day)) {
+              throw new Error(`Invalid activity day ${index + 1}.`);
+            }
+            return {
+              day,
+              started: readCount(entry.started, "activity.started"),
+              completed: readCount(entry.completed, "activity.completed"),
+            };
+          });
+
+          const turnDistribution = turns.distribution.map((entry, index) => {
+            if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+              throw new Error(`Invalid turn distribution entry ${index + 1}.`);
+            }
+            if (typeof entry.label !== "string" || entry.label.trim() === "") {
+              throw new Error(`Invalid turn distribution label ${index + 1}.`);
+            }
+            return {
+              label: entry.label.trim(),
+              count: readCount(entry.count, "turns.distribution.count"),
+            };
+          });
+
+          const outcomes = payload.outcomes.map((entry, index) => {
+            if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+              throw new Error(`Invalid outcome entry ${index + 1}.`);
+            }
+            if (typeof entry.condition !== "string" || entry.condition.trim() === "") {
+              throw new Error(`Invalid outcome condition ${index + 1}.`);
+            }
+            return {
+              condition: entry.condition.trim(),
+              count: readCount(entry.count, "outcomes.count"),
+            };
+          });
+
+          const generatedAt = new Date(payload.generatedAt);
+          if (typeof payload.generatedAt !== "string" || Number.isNaN(generatedAt.getTime())) {
+            throw new Error("Invalid statistics timestamp.");
+          }
+
+          return {
+            schemaVersion: payload.schemaVersion,
+            generatedAt,
+            windowDays: readPositiveInteger(payload.windowDays, activity.length || 30),
+            totals: {
+              activeSessions: readCount(totals.activeSessions, "totals.activeSessions"),
+              openLobbies: readCount(totals.openLobbies, "totals.openLobbies"),
+              matchesStarted: readCount(totals.matchesStarted, "totals.matchesStarted"),
+              matchesCompleted: readCount(totals.matchesCompleted, "totals.matchesCompleted"),
+              matchesAbandoned: readCount(totals.matchesAbandoned, "totals.matchesAbandoned"),
+            },
+            turns: {
+              averageCompleted: readNonNegativeNumber(
+                turns.averageCompleted,
+                "turns.averageCompleted",
+              ),
+              longestCompleted: readCount(turns.longestCompleted, "turns.longestCompleted"),
+              totalPlayed: readCount(turns.totalPlayed, "turns.totalPlayed"),
+              distribution: turnDistribution,
+            },
+            activity,
+            outcomes,
+          };
+        }
+
+        function formatCount(value) {
+          return numberFormatter.format(value);
+        }
+
+        function formatAverage(value) {
+          return averageFormatter.format(value);
+        }
+
+        function formatOutcomeLabel(condition) {
+          return condition
+            .replace(/[_-]+/g, " ")
+            .replace(/\b\w/g, (letter) => letter.toUpperCase());
+        }
+
+        function formatActivityDay(day) {
+          const date = new Date(`${day}T00:00:00Z`);
+          return Number.isNaN(date.getTime()) ? day : compactDateFormatter.format(date);
+        }
+
+        function setView(view) {
+          elements.loading.hidden = view !== "loading";
+          elements.error.hidden = view !== "error";
+          elements.empty.hidden = view !== "empty";
+          elements.dashboard.hidden = view !== "dashboard";
+        }
+
+        function setBusy(isBusy) {
+          elements.refreshButton.disabled = isBusy;
+          elements.retryButton.disabled = isBusy;
+          elements.noticeRetryButton.disabled = isBusy;
+          elements.refreshButton.setAttribute("aria-busy", String(isBusy));
+          elements.refreshButton.textContent = isBusy ? "Refreshing…" : "Refresh data";
+        }
+
+        function announce(message) {
+          elements.liveStatus.textContent = "";
+          window.setTimeout(() => {
+            elements.liveStatus.textContent = message;
+          }, 20);
+        }
+
+        function isEmptySnapshot(snapshot) {
+          const totals = Object.values(snapshot.totals);
+          const activityTotal = snapshot.activity.reduce(
+            (sum, day) => sum + day.started + day.completed,
+            0,
+          );
+          const outcomeTotal = snapshot.outcomes.reduce((sum, outcome) => sum + outcome.count, 0);
+          const turnDistributionTotal = snapshot.turns.distribution.reduce(
+            (sum, bucket) => sum + bucket.count,
+            0,
+          );
+          return (
+            totals.every((value) => value === 0) &&
+            snapshot.turns.totalPlayed === 0 &&
+            activityTotal === 0 &&
+            outcomeTotal === 0 &&
+            turnDistributionTotal === 0
+          );
+        }
+
+        function updateSummary(snapshot) {
+          elements.activeSessions.textContent = formatCount(snapshot.totals.activeSessions);
+          elements.openLobbies.textContent = formatCount(snapshot.totals.openLobbies);
+          elements.matchesStarted.textContent = formatCount(snapshot.totals.matchesStarted);
+          elements.matchesCompleted.textContent = formatCount(snapshot.totals.matchesCompleted);
+          elements.matchesAbandoned.textContent = formatCount(snapshot.totals.matchesAbandoned);
+          elements.averageTurns.textContent = formatAverage(snapshot.turns.averageCompleted);
+          elements.longestMatch.textContent = formatCount(snapshot.turns.longestCompleted);
+          elements.totalTurns.textContent = formatCount(snapshot.turns.totalPlayed);
+          elements.activityHeading.textContent = `${snapshot.windowDays}-day match activity`;
+
+          elements.lastUpdated.dateTime = snapshot.generatedAt.toISOString();
+          elements.lastUpdated.textContent = updatedFormatter.format(snapshot.generatedAt);
+        }
+
+        function renderActivityChart(activity) {
+          const svg = elements.activityChart;
+          svg.replaceChildren();
+          const totals = activity.reduce(
+            (result, day) => {
+              result.started += day.started;
+              result.completed += day.completed;
+              return result;
+            },
+            { started: 0, completed: 0 },
+          );
+          appendChartDescription(
+            svg,
+            "activity-chart-title",
+            "Daily match activity",
+            "activity-chart-description",
+            `${formatCount(totals.started)} started and ${formatCount(totals.completed)} completed matches in the reporting window.`,
+          );
+
+          if (activity.length === 0) {
+            appendSvgText(svg, "No daily activity data is available.", {
+              class: "chart-empty-copy",
+              x: 450,
+              y: 165,
+              "text-anchor": "middle",
+            });
+            return;
+          }
+
+          const width = 900;
+          const height = 330;
+          const padding = { top: 24, right: 28, bottom: 48, left: 58 };
+          const plotWidth = width - padding.left - padding.right;
+          const plotHeight = height - padding.top - padding.bottom;
+          const maxValue = Math.max(
+            1,
+            ...activity.flatMap((day) => [day.started, day.completed]),
+          );
+          const roundedMax = maxValue <= 4 ? maxValue : Math.ceil(maxValue / 4) * 4;
+          const tickCount = Math.min(4, roundedMax);
+
+          for (let tick = 0; tick <= tickCount; tick += 1) {
+            const value = Math.round((roundedMax * tick) / tickCount);
+            const y = padding.top + plotHeight - (plotHeight * tick) / tickCount;
+            svg.append(
+              createSvgElement("line", {
+                x1: padding.left,
+                x2: width - padding.right,
+                y1: y,
+                y2: y,
+                stroke: "rgba(217, 184, 93, 0.16)",
+                "stroke-width": 1,
+              }),
+            );
+            appendSvgText(svg, formatCount(value), {
+              x: padding.left - 12,
+              y: y + 4,
+              "text-anchor": "end",
+            });
+          }
+
+          const xForIndex = (index) => {
+            if (activity.length === 1) return padding.left + plotWidth / 2;
+            return padding.left + (plotWidth * index) / (activity.length - 1);
+          };
+          const yForValue = (value) => padding.top + plotHeight - (plotHeight * value) / roundedMax;
+          const labelIndexes = new Set([
+            0,
+            Math.floor((activity.length - 1) * 0.25),
+            Math.floor((activity.length - 1) * 0.5),
+            Math.floor((activity.length - 1) * 0.75),
+            activity.length - 1,
+          ]);
+
+          labelIndexes.forEach((index) => {
+            appendSvgText(svg, formatActivityDay(activity[index].day), {
+              x: xForIndex(index),
+              y: height - 17,
+              "text-anchor": index === 0 ? "start" : index === activity.length - 1 ? "end" : "middle",
+            });
+          });
+
+          Object.entries(SERIES).forEach(([key, color]) => {
+            const pathData = activity
+              .map((day, index) => {
+                const command = index === 0 ? "M" : "L";
+                return `${command} ${xForIndex(index).toFixed(2)} ${yForValue(day[key]).toFixed(2)}`;
+              })
+              .join(" ");
+            svg.append(
+              createSvgElement("path", {
+                d: pathData,
+                fill: "none",
+                stroke: color,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round",
+                "stroke-width": 3,
+                "vector-effect": "non-scaling-stroke",
+              }),
+            );
+          });
+        }
+
+        function renderTurnChart(distribution) {
+          const svg = elements.turnChart;
+          svg.replaceChildren();
+          const total = distribution.reduce((sum, bucket) => sum + bucket.count, 0);
+          appendChartDescription(
+            svg,
+            "turn-chart-title",
+            "Completed match length distribution",
+            "turn-chart-description",
+            total === 0
+              ? "No completed match lengths have been recorded."
+              : distribution
+                  .map((bucket) => `${bucket.label} turns: ${formatCount(bucket.count)} matches`)
+                  .join(". "),
+          );
+
+          if (distribution.length === 0) {
+            appendSvgText(svg, "No match length categories are available.", {
+              class: "chart-empty-copy",
+              x: 310,
+              y: 150,
+              "text-anchor": "middle",
+            });
+            return;
+          }
+
+          const chartHeight = Math.max(220, distribution.length * 55 + 42);
+          svg.setAttribute("viewBox", `0 0 620 ${chartHeight}`);
+          const maxValue = Math.max(1, ...distribution.map((bucket) => bucket.count));
+          distribution.forEach((bucket, index) => {
+            const y = 29 + index * 55;
+            const barWidth = 568 * (bucket.count / maxValue);
+            appendSvgText(svg, `${bucket.label} turns`, { x: 24, y });
+            appendSvgText(svg, formatCount(bucket.count), {
+              class: "chart-value",
+              x: 592,
+              y,
+              "text-anchor": "end",
+            });
+            svg.append(
+              createSvgElement("rect", {
+                x: 24,
+                y: y + 13,
+                width: 568,
+                height: 17,
+                rx: 8.5,
+                fill: "rgba(217, 184, 93, 0.1)",
+              }),
+              createSvgElement("rect", {
+                x: 24,
+                y: y + 13,
+                width: barWidth,
+                height: 17,
+                rx: 8.5,
+                fill: OUTCOME_COLORS[index % OUTCOME_COLORS.length],
+              }),
+            );
+          });
+
+          if (total === 0) {
+            appendSvgText(svg, "No completed match lengths recorded yet.", {
+              class: "chart-empty-copy",
+              x: 310,
+              y: chartHeight - 8,
+              "text-anchor": "middle",
+            });
+          }
+        }
+
+        function renderOutcomeChart(outcomes) {
+          const svg = elements.outcomeChart;
+          svg.replaceChildren();
+          const total = outcomes.reduce((sum, outcome) => sum + outcome.count, 0);
+          appendChartDescription(
+            svg,
+            "outcome-chart-title",
+            "Completed match outcomes",
+            "outcome-chart-description",
+            total === 0
+              ? "No completed match outcomes have been recorded."
+              : outcomes
+                  .map((outcome) => `${formatOutcomeLabel(outcome.condition)}: ${formatCount(outcome.count)}`)
+                  .join(". "),
+          );
+
+          const centerX = 145;
+          const centerY = 142;
+          const radius = 82;
+          svg.append(
+            createSvgElement("circle", {
+              cx: centerX,
+              cy: centerY,
+              r: radius,
+              fill: "none",
+              stroke: "rgba(217, 184, 93, 0.12)",
+              "stroke-width": 32,
+            }),
+          );
+
+          let offset = 0;
+          if (total > 0) {
+            outcomes.forEach((outcome, index) => {
+              if (outcome.count === 0) return;
+              const percentage = (outcome.count / total) * 100;
+              svg.append(
+                createSvgElement("circle", {
+                  cx: centerX,
+                  cy: centerY,
+                  r: radius,
+                  fill: "none",
+                  stroke: OUTCOME_COLORS[index % OUTCOME_COLORS.length],
+                  "stroke-width": 32,
+                  "stroke-dasharray": `${percentage} ${100 - percentage}`,
+                  "stroke-dashoffset": -offset,
+                  "stroke-linecap": "butt",
+                  pathLength: 100,
+                  transform: `rotate(-90 ${centerX} ${centerY})`,
+                }),
+              );
+              offset += percentage;
+            });
+          }
+
+          appendSvgText(svg, formatCount(total), {
+            class: "chart-value",
+            x: centerX,
+            y: centerY + 2,
+            "font-family": "Aonw Cinzel, serif",
+            "font-size": 30,
+            "text-anchor": "middle",
+          });
+          appendSvgText(svg, total === 1 ? "result" : "results", {
+            x: centerX,
+            y: centerY + 24,
+            "text-anchor": "middle",
+          });
+
+          outcomes.forEach((outcome, index) => {
+            const x = 292;
+            const y = 31 + index * 43;
+            svg.append(
+              createSvgElement("rect", {
+                x,
+                y: y - 10,
+                width: 12,
+                height: 12,
+                rx: 2,
+                fill: OUTCOME_COLORS[index % OUTCOME_COLORS.length],
+              }),
+            );
+            appendSvgText(svg, formatOutcomeLabel(outcome.condition), {
+              x: x + 22,
+              y,
+            });
+            appendSvgText(svg, formatCount(outcome.count), {
+              class: "chart-value",
+              x: 592,
+              y,
+              "text-anchor": "end",
+            });
+          });
+
+          if (outcomes.length === 0) {
+            appendSvgText(svg, "No outcome categories are available.", {
+              class: "chart-empty-copy",
+              x: 430,
+              y: 150,
+              "text-anchor": "middle",
+            });
+          }
+        }
+
+        function appendTableRow(tableBody, cells) {
+          const row = document.createElement("tr");
+          cells.forEach((cell, index) => {
+            const node = document.createElement(index === 0 ? "th" : "td");
+            if (index === 0) node.scope = "row";
+            node.textContent = cell;
+            row.append(node);
+          });
+          tableBody.append(row);
+        }
+
+        function renderTables(activity, turnDistribution, outcomes) {
+          elements.activityTableBody.replaceChildren();
+          activity.forEach((day) => {
+            appendTableRow(elements.activityTableBody, [
+              day.day,
+              formatCount(day.started),
+              formatCount(day.completed),
+            ]);
+          });
+
+          elements.turnTableBody.replaceChildren();
+          turnDistribution.forEach((bucket) => {
+            appendTableRow(elements.turnTableBody, [
+              bucket.label,
+              formatCount(bucket.count),
+            ]);
+          });
+
+          elements.outcomeTableBody.replaceChildren();
+          outcomes.forEach((outcome) => {
+            appendTableRow(elements.outcomeTableBody, [
+              formatOutcomeLabel(outcome.condition),
+              formatCount(outcome.count),
+            ]);
+          });
+        }
+
+        function renderSnapshot(snapshot) {
+          updateSummary(snapshot);
+          renderActivityChart(snapshot.activity);
+          renderTurnChart(snapshot.turns.distribution);
+          renderOutcomeChart(snapshot.outcomes);
+          renderTables(snapshot.activity, snapshot.turns.distribution, snapshot.outcomes);
+
+          const empty = isEmptySnapshot(snapshot);
+          setView(empty ? "empty" : "dashboard");
+          elements.refreshNotice.hidden = true;
+          hasRenderedData = true;
+          announce(empty ? "Statistics loaded. No multiplayer activity has been recorded yet." : "Multiplayer statistics updated.");
+        }
+
+        function friendlyError(error) {
+          if (error instanceof TypeError) {
+            return "The multiplayer service could not be reached. Check your connection and try again.";
+          }
+          return "The multiplayer service returned data that could not be displayed. Please try again shortly.";
+        }
+
+        async function loadStats({ background = false } = {}) {
+          if (currentRequest) currentRequest.abort();
+          currentRequest = new AbortController();
+          const request = currentRequest;
+          let timedOut = false;
+          const timeout = window.setTimeout(() => {
+            timedOut = true;
+            request.abort();
+          }, REQUEST_TIMEOUT_MS);
+
+          if (!hasRenderedData && !background) setView("loading");
+          elements.refreshNotice.hidden = true;
+          setBusy(true);
+          if (!background) announce("Refreshing multiplayer statistics.");
+
+          try {
+            const response = await fetch(API_URL, {
+              headers: { Accept: "application/json" },
+              signal: request.signal,
+            });
+            if (!response.ok) {
+              throw new Error(`Statistics request failed with status ${response.status}.`);
+            }
+            const snapshot = parseSnapshot(await response.json());
+            renderSnapshot(snapshot);
+            lastSuccessfulFetch = Date.now();
+          } catch (error) {
+            if (
+              error instanceof DOMException &&
+              error.name === "AbortError" &&
+              !timedOut
+            ) {
+              return;
+            }
+            const message = timedOut
+              ? "The multiplayer service took too long to respond. Please try again."
+              : friendlyError(error);
+            if (hasRenderedData) {
+              elements.refreshNoticeMessage.textContent = `${message} Previously loaded data is still displayed.`;
+              elements.refreshNotice.hidden = false;
+              announce("The statistics refresh failed. Previously loaded data remains visible.");
+            } else {
+              elements.errorMessage.textContent = message;
+              setView("error");
+            }
+          } finally {
+            window.clearTimeout(timeout);
+            if (currentRequest === request) {
+              currentRequest = null;
+              setBusy(false);
+            }
+          }
+        }
+
+        function stopRefreshTimer() {
+          if (refreshTimer !== null) {
+            window.clearInterval(refreshTimer);
+            refreshTimer = null;
+          }
+        }
+
+        function startRefreshTimer() {
+          stopRefreshTimer();
+          if (document.visibilityState !== "visible") return;
+          refreshTimer = window.setInterval(() => {
+            if (document.visibilityState === "visible") loadStats({ background: true });
+          }, REFRESH_INTERVAL_MS);
+        }
+
+        function handleVisibilityChange() {
+          if (document.visibilityState === "visible") {
+            if (lastSuccessfulFetch > 0 && Date.now() - lastSuccessfulFetch >= REFRESH_INTERVAL_MS) {
+              loadStats({ background: true });
+            }
+            startRefreshTimer();
+          } else {
+            stopRefreshTimer();
+          }
+        }
+
+        elements.refreshButton.addEventListener("click", () => loadStats());
+        elements.retryButton.addEventListener("click", () => loadStats());
+        elements.noticeRetryButton.addEventListener("click", () => loadStats());
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("pagehide", () => {
+          stopRefreshTimer();
+          if (currentRequest) currentRequest.abort();
+        });
+
+        loadStats();
+        startRefreshTimer();
+      })();
+    </script>
+  </body>
+</html>

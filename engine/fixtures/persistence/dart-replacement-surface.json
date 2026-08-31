@@ -1,0 +1,2635 @@
+{
+  "sourceRoot": "packages/aonw_core/lib",
+  "policy": "one-current-rust-replacement-no-legacy",
+  "sourceBarrelCount": 49,
+  "sourceExportCount": 515,
+  "legacyPaths": false,
+  "barrels": [
+    "ai.dart",
+    "ai/production_scorer.dart",
+    "ai/simulation/economy_simulation.dart",
+    "ai/strategic/defensive_stance.dart",
+    "application.dart",
+    "domain.dart",
+    "domain/world_map.dart",
+    "game/domain/artifact.dart",
+    "game/domain/artifact/cultural_victory_progress.dart",
+    "game/domain/city.dart",
+    "game/domain/city/city_founding.dart",
+    "game/domain/combat.dart",
+    "game/domain/combat/intended_attack.dart",
+    "game/domain/command.dart",
+    "game/domain/diplomacy.dart",
+    "game/domain/diplomacy/diplomacy_state.dart",
+    "game/domain/event.dart",
+    "game/domain/fog.dart",
+    "game/domain/hex.dart",
+    "game/domain/hex/hex_coordinate.dart",
+    "game/domain/map_validation.dart",
+    "game/domain/match_rules.dart",
+    "game/domain/movement.dart",
+    "game/domain/objective.dart",
+    "game/domain/objective/game_objective.dart",
+    "game/domain/objective/map_objective.dart",
+    "game/domain/outcome.dart",
+    "game/domain/outcome/domination_progress_calculator.dart",
+    "game/domain/resource.dart",
+    "game/domain/ruleset.dart",
+    "game/domain/runtime.dart",
+    "game/domain/save.dart",
+    "game/domain/save/game_save.dart",
+    "game/domain/stability.dart",
+    "game/domain/state.dart",
+    "game/domain/state/canonical_game_snapshot.dart",
+    "game/domain/technology.dart",
+    "game/domain/telemetry.dart",
+    "game/domain/telemetry/balance_telemetry.dart",
+    "game/domain/terrain.dart",
+    "game/domain/tile_yield.dart",
+    "game/domain/trade.dart",
+    "game/domain/transport.dart",
+    "game/domain/turn.dart",
+    "game/domain/unit.dart",
+    "game/domain/wonder.dart",
+    "game/view.dart",
+    "map/persistence.dart",
+    "protocol.dart"
+  ],
+  "entries": [
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_context.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_difficulty.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_persona.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_player.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_rng.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_strategy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_strategy_id.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_strategy_registry.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/ai_turn_plan.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/city_site_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/civilization/civilization_profile.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/civilization/civilization_profile_registry.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/civilization/civilization_profiles.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/civilization/persona_weights.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/civilization/tech_branch_preferences.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/combat_tactics.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/diplomacy_ai_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/empire_assessment.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/frontier_exploration_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/game_view.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_action.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_action_generation_stats.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_action_generator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_budget.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_combat_candidate_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_command_candidate_guard.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_command_combat_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_command_movement_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_command_production_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_config.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_debug.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_evaluator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_founding_candidate_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_movement_candidate_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_node.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_production_candidate_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_search.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_simulated_state.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_simulator.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_state_score_estimator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_strategic_state_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_strategy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/mcts_worker_candidate_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/mcts/strategy_aware_action_generator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/military_assessment.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_counter_pressure_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_map_scoring.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_models.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_scoring_cache.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/production_unit_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/scoring.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/city_site_candidate.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/city_site_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/defensive_stance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/defensive_stance_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/economy_expectations.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/economy_health.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/frontier_clearing_plan.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/frontier_clearing_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/garrison_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/mode_selector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/rival_snapshot.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/strategic_mode.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/strategic_plan.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/strategic_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/targetability.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/threat_assessor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/war_front.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/war_goal.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/war_goal_generator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/worker_assignment_plan.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategic/worker_assignment_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_artifact_defense_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_artifact_logistics_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_city_assault_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_city_specialization_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_combat_reactions_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_defensive_stance_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_exploration_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_founder_escort_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_founding_move_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_founding_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_frontier_clearing_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_garrison_reservation_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_garrison_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_idle_sweep_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_last_military_reserve_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_map_objective_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_military_pressure_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_planning_session.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_production_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_research_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_resource_trade_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_war_goal_wake_up_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/basic_strategy_worker_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/strategies/random_strategy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/technology_branch_classifier.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/technology_persona_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/technology_score_snapshot.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/technology_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "ai/technology_state_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai.dart",
+      "export": "game/domain/outcome.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai/production_scorer.dart",
+      "export": "package:aonw_core/ai/production_models.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai/simulation/economy_simulation.dart",
+      "export": "package:aonw_core/ai/simulation/economy_simulation_models.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "ai/strategic/defensive_stance.dart",
+      "export": "garrison_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/artifact_trade_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/city_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/combat_animation_fact.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/combat_animation_fact_codec.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/combat_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/diplomacy_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/game_engine.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/game_engine_context.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/game_engine_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/movement_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/movement_execution_delta.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/production_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/research_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/system_command.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/turn_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/engine/worker_engine_handler.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/lifecycle/match_lifecycle_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/lifecycle/match_lifecycle_transition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/lifecycle/match_lifecycle_wire_adapter.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/lifecycle/participant_resignation_transition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/turn/canonical_turn_pipeline.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "application.dart",
+      "export": "game/application/turn/timeout_actor_selector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "ai.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "domain/hex_coord.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "domain/intended_attack.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "domain/map_objective_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "domain/world_map.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/artifact.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/city.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/combat.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/command.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/diplomacy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/entity_lookup.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/event.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/fog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/hex.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/hex_assessment/hex_assessment_input.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/map_validation.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/match_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/movement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/objective.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/outcome.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/player.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/runtime.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/save.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/stability.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/technology.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/telemetry.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/terrain.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/tile_yield.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/trade.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/transport.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/turn.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/unit.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "game/domain/wonder.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/hex_grid_topology.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_config.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_constraints.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_player_capacity.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_read_view.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_selection.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_survey.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_tile_view.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/map_view_mode.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/domain/terrain_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain.dart",
+      "export": "map/persistence.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain/world_map.dart",
+      "export": "package:aonw_core/map/domain/map_read_view.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain/world_map.dart",
+      "export": "package:aonw_core/map/domain/map_tile_source.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain/world_map.dart",
+      "export": "package:aonw_core/map/domain/map_tile_view.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "domain/world_map.dart",
+      "export": "package:aonw_core/map/domain/tile_terrain_semantics.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/artifact_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/artifact_turn_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/cultural_victory_progress.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/domain_artifact_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/world_artifact.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/world_artifact_bonuses.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/world_artifact_generator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact.dart",
+      "export": "artifact/world_artifact_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/artifact/cultural_victory_progress.dart",
+      "export": "cultural_victory_progress_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_effect.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_requirement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_requirement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_building_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_economy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_economy_breakdown.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_expansion_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_expansion_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_expansion_selector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_founding.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_founding_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_founding_draft.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_founding_job_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_growth_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_hex.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_initial_territory_selector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_name_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_production_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_production_queue.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_production_target.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_progression.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_progression_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_project_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_project_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_resource_inventory.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_rulesets.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_site_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_specialization.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_specialization_scorer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_technology_effect_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_territory_boundary.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_territory_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_tile_yield_breakdown.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_tile_yield_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_turn_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_turn_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_unit_production_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_unit_supply_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_worked_hex_selector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_yield_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/city_yield_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/domain_city_expansion_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/domain_city_founding_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/domain_city_production_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/domain_city_worked_hex_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/domain_worker_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement_requirement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/field_improvement_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/game_city.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/rush_production_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/toggle_worked_hex_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_assignment_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_automation_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_automation_target.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_improvement_recommendation.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_improvement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city.dart",
+      "export": "city/worker_improvement_scoring.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/city/city_founding.dart",
+      "export": "package:aonw_core/game/domain/city/city_founding_draft.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/city_combat_health.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/city_conquest_action.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_command_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_command_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_command_visibility_mode.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_distance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_modifier.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_modifier_collector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_outcome.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_retreat_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_rng.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_serialization.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_stats.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combat_step.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/combatant.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/domain_combat_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/intended_attack.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/unit_combat_health.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat.dart",
+      "export": "combat/unit_combat_stats.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/combat/intended_attack.dart",
+      "export": "../../../domain/intended_attack.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/command.dart",
+      "export": "command/game_command.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/command.dart",
+      "export": "command/game_command_serialization.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/city_entry_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomacy_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomacy_command_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomacy_command_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomacy_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomacy_turn_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_action_guard.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_contact.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_message_effects.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_relation_benefits.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_shared_war.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/diplomatic_warmonger_reputation.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/domain_diplomacy_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy.dart",
+      "export": "diplomacy/gold_amount.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomacy_primitives.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomatic_gold_gift_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomatic_message.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomatic_proposal.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomatic_relation.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/diplomacy/diplomacy_state.dart",
+      "export": "diplomatic_score_entry.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/event.dart",
+      "export": "event/event_serialization.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/event.dart",
+      "export": "event/game_event.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/event.dart",
+      "export": "event/game_event_domain_descriptor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/event.dart",
+      "export": "event/game_event_ownership_index.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_balance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_of_war_service.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_of_war_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_reveal_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_reveal_source.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_visibility.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_visibility_query.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/fog_visibility_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/fog.dart",
+      "export": "fog/player_fog_of_war.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/hex.dart",
+      "export": "hex/hex_coordinate.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/hex.dart",
+      "export": "hex/hex_distance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/hex.dart",
+      "export": "hex/hex_neighbors.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/hex/hex_coordinate.dart",
+      "export": "package:aonw_core/domain/hex_coord.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/map_validation.dart",
+      "export": "map_validation/map_validation_model.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/match_rules.dart",
+      "export": "match_rules/game_length_config.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/match_rules.dart",
+      "export": "match_rules/match_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/match_rules.dart",
+      "export": "match_rules/pace_balance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/match_rules.dart",
+      "export": "match_rules/victory_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/auto_explore_command_phase.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/auto_explore_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/auto_explore_command_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/auto_explore_command_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/domain_auto_explore_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/domain_merchant_routing_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/domain_move_unit_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/domain_unit_action_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/domain_worker_automation_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/merchant_routing_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/merchant_trade_route_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_execution.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_path_constraints.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_command_visibility_mode.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_cost.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_hidden_obstacle_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_point_scale.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/movement_snapshot_migration.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/queued_move_path.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/scout_auto_explore_planner.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/scout_auto_explore_target.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_action_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_manual_movement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_balance.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_cost_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_feasibility.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_pathfinder.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_plan.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_result.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_movement_visibility_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/unit_traversal_cost_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/movement.dart",
+      "export": "movement/worker_automation_command_phase.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective.dart",
+      "export": "objective/game_objective.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective.dart",
+      "export": "objective/map_objective.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/game_objective.dart",
+      "export": "game_objective_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/game_objective.dart",
+      "export": "game_objective_model.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/game_objective.dart",
+      "export": "game_objective_progress_evaluator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/game_objective.dart",
+      "export": "game_objective_strategic_tracker.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/game_objective.dart",
+      "export": "game_objective_tracker.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/objective/map_objective.dart",
+      "export": "package:aonw_core/domain/map_objective_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/domination_progress_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/empire_score_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/game_outcome.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/game_outcome_detector.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/game_outcome_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/score_pressure_advisor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome.dart",
+      "export": "outcome/score_race_analyzer.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome/domination_progress_calculator.dart",
+      "export": "domination_progress.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/outcome/domination_progress_calculator.dart",
+      "export": "domination_progress_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/initial_resource_distribution.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/initial_resource_distribution_generator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/resource_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/resource_economy_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/strategic_resource_accounts.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/strategic_resource_bundle.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/strategic_resource_production_projection.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/resource.dart",
+      "export": "resource/strategic_resource_stockpile.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/ruleset.dart",
+      "export": "resource.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/ruleset.dart",
+      "export": "ruleset/game_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/runtime.dart",
+      "export": "runtime/pending_player_action.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/save.dart",
+      "export": "save/game_save.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/save.dart",
+      "export": "save/game_save_origin.dart",
+      "disposition": "retire"
+    },
+    {
+      "barrel": "game/domain/save.dart",
+      "export": "save/multiplayer_save_name.dart",
+      "disposition": "move-to-server"
+    },
+    {
+      "barrel": "game/domain/save/game_save.dart",
+      "export": "package:aonw_core/game/domain/state/game_mode.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/cohesion_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/core_city_locator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/hegemony_pressure_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_band.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_breakdown.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_input_builder.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_inputs.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_modifier.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_source_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/stability_turn_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/stability.dart",
+      "export": "stability/war_weariness_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/state.dart",
+      "export": "state/canonical_game_snapshot.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/state.dart",
+      "export": "state/canonical_game_snapshot_codec.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/domain/state.dart",
+      "export": "state/domain_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/state.dart",
+      "export": "state/game_mode.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/state.dart",
+      "export": "state/game_snapshot_metadata.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/state/canonical_game_snapshot.dart",
+      "export": "package:aonw_core/game/domain/state/domain_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/domain_research_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/player_research_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/research_cost_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/research_overflow_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/research_selection_pending_action_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/research_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/research_turn_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/resource_visibility_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/science_yield.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/science_yield_calculator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/select_technology_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/strategic_resource_discovery_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_availability_service.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_boost.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_boost_evaluator.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_effect.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_effect_summary.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_era.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_id.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_rulesets.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_tree_position.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_unlock.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/technology.dart",
+      "export": "technology/technology_unlock_query.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/telemetry.dart",
+      "export": "telemetry/balance_telemetry.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/telemetry/balance_telemetry.dart",
+      "export": "balance_telemetry_models.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/terrain.dart",
+      "export": "terrain/tile_terrain_profile.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/terrain.dart",
+      "export": "terrain/tile_terrain_profile_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/tile_yield.dart",
+      "export": "tile_yield/resource_yield_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/tile_yield.dart",
+      "export": "tile_yield/terrain_yield_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/tile_yield.dart",
+      "export": "tile_yield/tile_yield.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/tile_yield.dart",
+      "export": "tile_yield/tile_yield_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/trade.dart",
+      "export": "trade/domain_resource_trade_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/trade.dart",
+      "export": "trade/resource_trade_agreement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/trade.dart",
+      "export": "trade/resource_trade_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/trade.dart",
+      "export": "trade/resource_trade_delivery_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/trade.dart",
+      "export": "trade/resource_trade_export_availability.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/domain_transport_command_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/road_construction_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/transport_network_index.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/transport_network_state.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/transport_network_visibility_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/transport.dart",
+      "export": "transport/transport_segment.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/city_hit_point_recovery_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/domain_turn_combat_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/domain_turn_economy_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/domain_turn_movement_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/persistent_city_hit_point_recovery_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/turn.dart",
+      "export": "turn/turn_victory_progress_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/army_troop.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/city_founding_job.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/detach_troop_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/domain_unit_detachment_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/game_unit.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/game_unit_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/merchant_trade_route.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/starting_position_seed.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/starting_units.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_capabilities.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_detachment_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_fortification_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_movement_domain.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_production_availability.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_production_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_production_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_production_requirement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_production_requirement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_spec.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_spec_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_strategic_resource_availability.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_upkeep_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/unit_veterancy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/worker_assignment.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/worker_improvement_charge_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/worker_job.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/unit.dart",
+      "export": "unit/worker_turn_processor.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_availability_policy.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_catalog.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_completion_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_definition.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_effect.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_effect_resolver.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_registry.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_requirement.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_requirement_rules.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_ruleset.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/domain/wonder.dart",
+      "export": "wonder/wonder_type.dart",
+      "disposition": "port-to-rust"
+    },
+    {
+      "barrel": "game/view.dart",
+      "export": "view/player_view_state.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "game/view.dart",
+      "export": "view/recipient_snapshot.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "map/persistence.dart",
+      "export": "persistence/map_data_codec.dart",
+      "disposition": "replace-with-content"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/lobby_roster_policy.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/movement_execution_wire_mapper.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/multiplayer_limits.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/protocol_version.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/system_event_wire.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_command.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_command_ack.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_event.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_json.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_match.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_movement_execution.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_player.dart",
+      "disposition": "replace-with-protocol"
+    },
+    {
+      "barrel": "protocol.dart",
+      "export": "protocol/wire_snapshot.dart",
+      "disposition": "replace-with-protocol"
+    }
+  ]
+}

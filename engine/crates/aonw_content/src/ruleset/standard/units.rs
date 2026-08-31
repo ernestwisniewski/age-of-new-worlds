@@ -1,0 +1,128 @@
+use crate::ruleset::{UnitDefinition, UnitKindValue, UnitMovementDomainValue};
+
+use super::{
+    AIR_RECON, LAND_CIVILIAN, LAND_MILITARY, LAND_RECON, NAVAL_MILITARY, NAVAL_RECON, PRODUCIBLE,
+    TRADE, caps, stats, unit,
+};
+
+pub(crate) const STANDARD_UNITS: [UnitDefinition; 17] = [
+    unit(
+        UnitKindValue::Commander,
+        5,
+        30,
+        LAND_MILITARY,
+        stats(1, 1, 8, 1, 2),
+    ),
+    unit(
+        UnitKindValue::Warrior,
+        3,
+        15,
+        LAND_MILITARY,
+        stats(4, 3, 10, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Archer,
+        3,
+        17,
+        LAND_MILITARY,
+        stats(3, 1, 7, 2, 1),
+    ),
+    unit(
+        UnitKindValue::Settler,
+        3,
+        18,
+        LAND_CIVILIAN,
+        stats(0, 1, 1, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Worker,
+        3,
+        12,
+        LAND_CIVILIAN,
+        stats(0, 1, 1, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Merchant,
+        3,
+        14,
+        caps(UnitMovementDomainValue::Land, PRODUCIBLE | TRADE),
+        stats(0, 1, 1, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Scout,
+        3,
+        10,
+        LAND_RECON,
+        stats(1, 1, 5, 1, 3),
+    ),
+    unit(
+        UnitKindValue::Spearman,
+        3,
+        18,
+        LAND_MILITARY,
+        stats(3, 5, 10, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Cavalry,
+        5,
+        24,
+        LAND_MILITARY,
+        stats(6, 3, 10, 1, 3),
+    ),
+    unit(
+        UnitKindValue::Catapult,
+        2,
+        25,
+        LAND_MILITARY,
+        stats(7, 1, 7, 2, 1),
+    ),
+    unit(
+        UnitKindValue::HeavyInfantry,
+        3,
+        30,
+        LAND_MILITARY,
+        stats(7, 6, 13, 1, 1),
+    ),
+    unit(
+        UnitKindValue::FieldCannon,
+        2,
+        35,
+        LAND_MILITARY,
+        stats(10, 2, 8, 2, 1),
+    ),
+    unit(
+        UnitKindValue::Rifleman,
+        3,
+        38,
+        LAND_MILITARY,
+        stats(8, 7, 11, 1, 1),
+    ),
+    unit(
+        UnitKindValue::Tank,
+        5,
+        50,
+        LAND_MILITARY,
+        stats(13, 9, 16, 1, 3),
+    ),
+    unit(
+        UnitKindValue::ScoutShip,
+        5,
+        20,
+        NAVAL_RECON,
+        stats(3, 3, 8, 1, 3),
+    ),
+    unit(
+        UnitKindValue::Warship,
+        5,
+        40,
+        NAVAL_MILITARY,
+        stats(10, 7, 14, 2, 2),
+    ),
+    unit(
+        UnitKindValue::ReconPlane,
+        7,
+        36,
+        AIR_RECON,
+        stats(1, 3, 6, 3, 5),
+    ),
+];

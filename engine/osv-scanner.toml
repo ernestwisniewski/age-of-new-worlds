@@ -1,0 +1,4 @@
+[[IgnoredVulns]]
+id = "RUSTSEC-2024-0436"
+ignoreUntil = 2027-08-22
+reason = "paste is an unmaintained transitive build dependency of exr through pulp; it is used only by the trusted offline terrain compiler, and no fixed upstream version exists"

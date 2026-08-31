@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "aonw2_local_duel",
+  "mapId": "aonw2_starter",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "player-1-commander",
+      "ownerPlayerId": "player-1",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 2,
+      "row": 1
+    },
+    {
+      "id": "player-2-commander",
+      "ownerPlayerId": "player-2",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 6,
+      "row": 3
+    }
+  ]
+}

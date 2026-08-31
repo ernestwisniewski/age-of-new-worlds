@@ -1,0 +1,28 @@
+[package]
+name = "aonw_ai"
+description = "Deterministic planners for the Age of New Worlds engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+aonw_domain = { path = "../aonw_domain" }
+aonw_engine = { path = "../aonw_engine" }
+aonw_local_runtime = { path = "../aonw_local_runtime" }
+sha2.workspace = true
+
+[dev-dependencies]
+aonw_content = { path = "../aonw_content" }
+serde_json.workspace = true
+stats_alloc.workspace = true
+
+[[bench]]
+name = "planner"
+harness = false
+
+[lints]
+workspace = true

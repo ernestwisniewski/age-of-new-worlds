@@ -1,0 +1,18 @@
+class: GameCommandLedger
+table: aonw_game_command_ledger
+fields:
+  match: GameMatch?, relation(name=game_match_commands, onDelete=Cascade)
+  playerId: String
+  clientCommandId: String
+  expectedRevision: int
+  initialEventOffset: int
+  finalEventOffset: int
+  requestJson: String?, scope=serverOnly
+  recipientOutcomeJson: String
+  createdAt: DateTime
+indexes:
+  aonw_game_command_idempotency_idx:
+    fields: matchId, playerId, clientCommandId
+    unique: true
+  aonw_game_command_offset_idx:
+    fields: matchId, finalEventOffset

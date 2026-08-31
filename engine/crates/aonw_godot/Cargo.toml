@@ -1,0 +1,30 @@
+[package]
+name = "aonw_godot"
+description = "Godot GDExtension adapter for the AoNW Rust engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+editor-tools = ["dep:aonw_map_workbench"]
+
+[dependencies]
+aonw_ai = { path = "../aonw_ai" }
+aonw_contracts = { path = "../aonw_contracts" }
+aonw_local_runtime = { path = "../aonw_local_runtime" }
+aonw_map_workbench = { path = "../aonw_map_workbench", optional = true }
+godot.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,44 @@
+{
+  "caseCount": 6,
+  "randomSampleCount": 48,
+  "unhandledDecisions": 0,
+  "movementFamilyUsage": 78,
+  "profiles": {
+    "easy": {
+      "normalizedScoreBasisPoints": 10000,
+      "qualityGuardedSelections": 0,
+      "searchIterations": 0,
+      "tacticalSearches": 0,
+      "vsRandom": {"wins": 39, "draws": 9, "losses": 0},
+      "vsBaseline": {"wins": 0, "draws": 6, "losses": 0},
+      "vsReference": {"wins": 0, "draws": 6, "losses": 0}
+    },
+    "normal": {
+      "normalizedScoreBasisPoints": 10000,
+      "qualityGuardedSelections": 5,
+      "searchIterations": 48,
+      "tacticalSearches": 6,
+      "vsRandom": {"wins": 39, "draws": 9, "losses": 0},
+      "vsBaseline": {"wins": 0, "draws": 6, "losses": 0},
+      "vsReference": {"wins": 0, "draws": 6, "losses": 0}
+    },
+    "hard": {
+      "normalizedScoreBasisPoints": 10000,
+      "qualityGuardedSelections": 5,
+      "searchIterations": 96,
+      "tacticalSearches": 6,
+      "vsRandom": {"wins": 39, "draws": 9, "losses": 0},
+      "vsBaseline": {"wins": 0, "draws": 6, "losses": 0},
+      "vsReference": {"wins": 0, "draws": 6, "losses": 0}
+    },
+    "veryHard": {
+      "normalizedScoreBasisPoints": 10000,
+      "qualityGuardedSelections": 5,
+      "searchIterations": 192,
+      "tacticalSearches": 6,
+      "vsRandom": {"wins": 39, "draws": 9, "losses": 0},
+      "vsBaseline": {"wins": 0, "draws": 6, "losses": 0},
+      "vsReference": {"wins": 0, "draws": 6, "losses": 0}
+    }
+  }
+}

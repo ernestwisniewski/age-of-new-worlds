@@ -1,0 +1,19 @@
+[package]
+name = "aonw_testkit"
+description = "Independent canonical fixture runner for the Age of New Worlds engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+aonw_content = { path = "../aonw_content" }
+aonw_contracts = { path = "../aonw_contracts" }
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

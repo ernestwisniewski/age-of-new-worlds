@@ -1,0 +1,9 @@
+class: GameCreateMatchRequest
+fields:
+  mapId: String
+  mapDocument: String
+  scenarioDocument: String
+  rulesetId: String
+  matchIdentityJson: String
+  fogEnabled: bool
+  creatorPlayerId: String

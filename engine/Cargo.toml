@@ -1,0 +1,54 @@
+[workspace]
+resolver = "3"
+members = [
+  "crates/aonw_ai",
+  "crates/aonw_content",
+  "crates/aonw_contract_mapping",
+  "crates/aonw_contracts",
+  "crates/aonw_domain",
+  "crates/aonw_engine",
+  "crates/aonw_flutter",
+  "crates/aonw_godot",
+  "crates/aonw_local_runtime",
+  "crates/aonw_map_authoring",
+  "crates/aonw_map_compiler",
+  "crates/aonw_map_compiler_cli",
+  "crates/aonw_map_workbench",
+  "crates/aonw_projection",
+  "crates/aonw_server_runtime",
+  "crates/aonw_server_native",
+  "crates/aonw_testkit",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+authors = ["Age of New Worlds contributors"]
+license = "MIT"
+repository = "https://github.com/ernestwisniewski/aonw"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["arbitrary_precision"] }
+sha2 = "0.10"
+godot = "0.5.5"
+exr = { version = "1.74.2", default-features = false }
+stats_alloc = "=0.1.10"
+
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "deny"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+opt-level = 3
+overflow-checks = true

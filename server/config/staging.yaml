@@ -1,0 +1,39 @@
+apiServer:
+  port: 8080
+  publicHost: api.aonw.net
+  publicPort: 443
+  publicScheme: https
+
+insightsServer:
+  port: 8081
+  publicHost: 127.0.0.1
+  publicPort: 8081
+  publicScheme: http
+
+webServer:
+  port: 8082
+  publicHost: api.aonw.net
+  publicPort: 443
+  publicScheme: https
+
+database:
+  host: postgres
+  port: 5432
+  name: aonw
+  user: aonw
+
+redis:
+  enabled: true
+  host: redis
+  port: 6379
+
+maxRequestSize: 1048576
+websocketPingInterval: 20
+
+sessionLogs:
+  persistentEnabled: true
+  consoleEnabled: true
+  consoleLogFormat: json
+  cleanupInterval: 24h
+  retentionPeriod: 90d
+  retentionCount: 100000

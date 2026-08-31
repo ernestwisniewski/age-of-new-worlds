@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b5y1q4bh4in8h"]
+
+[ext_resource type="Script" uid="uid://bc2cwmfqjovrm" path="res://editor/map_authoring/presentation/terrain_authoring_surface.gd" id="1_u0hpo"]
+
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_vsbnm"]
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_548t3"]
+
+[node name="terenos" type="Node3D" unique_id=415710315]
+
+[node name="TerrainAuthoring" type="Node3D" parent="." unique_id=838901327]
+script = ExtResource("1_u0hpo")
+source_map_id = "terenos"
+compiled_artifact_directory = "res://.godot/terrain_compiled/terenos"
+authoring_root = "res://assets/generated_maps/terenos/terrain_authoring"
+terrain_material = SubResource("Terrain3DMaterial_vsbnm")
+terrain_assets = SubResource("Terrain3DAssets_548t3")
+
+[node name="Terrain3D" type="Terrain3D" parent="TerrainAuthoring" unique_id=723545133]
+material = SubResource("Terrain3DMaterial_vsbnm")
+assets = SubResource("Terrain3DAssets_548t3")
+free_editor_textures = false
+
+[node name="ReferenceTexture" type="MeshInstance3D" parent="TerrainAuthoring" unique_id=1388039936]
+
+[node name="HexGrid" type="MeshInstance3D" parent="TerrainAuthoring" unique_id=1946940082]
+
+[node name="CityCoreMarker" type="MeshInstance3D" parent="TerrainAuthoring" unique_id=1411596697]
+
+[node name="GeneratedWorld" type="Node3D" parent="TerrainAuthoring" unique_id=469099755]
+
+[node name="ManualWorld" type="Node3D" parent="TerrainAuthoring" unique_id=1945837754]

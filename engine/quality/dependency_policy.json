@@ -1,0 +1,26 @@
+{
+  "reviewedDate": "2026-08-24",
+  "cargoDeny": {
+    "executable": "cargo-deny",
+    "version": "0.20.2",
+    "source": "https://crates.io/crates/cargo-deny/0.20.2",
+    "config": "engine/deny.toml"
+  },
+  "workspaceManifest": "engine/Cargo.toml",
+  "allowedSources": [
+    "registry+https://github.com/rust-lang/crates.io-index"
+  ],
+  "duplicateAllowlist": [
+    {
+      "name": "syn",
+      "versions": [
+        "2.0.119",
+        "3.0.3"
+      ],
+      "owner": "engine-foundation",
+      "reason": "The EXR/zerocopy proc-macro chain still resolves syn 2 while current serde resolves syn 3.",
+      "risk": "docs/rust-engine-migration.md#rust-quality-baseline",
+      "expires": "2027-08-24"
+    }
+  ]
+}

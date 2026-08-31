@@ -1,0 +1,11 @@
+class: GameEvent
+table: aonw_game_event
+fields:
+  match: GameMatch?, relation(name=game_match_events, onDelete=Cascade)
+  offset: int
+  eventJson: String?, scope=serverOnly
+  createdAt: DateTime
+indexes:
+  aonw_game_event_match_offset_idx:
+    fields: matchId, offset
+    unique: true

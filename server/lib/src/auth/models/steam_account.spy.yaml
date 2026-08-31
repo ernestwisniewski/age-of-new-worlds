@@ -1,0 +1,16 @@
+class: SteamAccount
+serverOnly: true
+table: aonw_steam_account
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  steamId: String
+  authUser: module:serverpod_auth_core:AuthUser?, relation(onDelete=Cascade)
+  createdAt: DateTime, defaultModel=now
+  lastSeenAt: DateTime
+indexes:
+  aonw_steam_account_steam_id_idx:
+    fields: steamId
+    unique: true
+  aonw_steam_account_auth_user_idx:
+    fields: authUserId
+    unique: true

@@ -1,0 +1,42 @@
+{
+  "catalogHash": "a58f5b7def080e42b3d44c2ebb44955e56ea6d4f61b5d25facd3146ee5bed7b3",
+  "catalogTechnologyCount": 54,
+  "cases": [
+    {"id": "foundation-available", "technology": "agriculture", "unlocked": [], "active": null, "cityCount": 1, "fulfilledBoost": false, "expectedAvailability": "available", "expectedCost": 6, "expectedUnlocks": ["improvement:farm", "improvement:riverFarm", "improvement:orchard"]},
+    {"id": "prerequisite-rejected", "technology": "writing", "unlocked": [], "active": null, "cityCount": 1, "fulfilledBoost": false, "expectedAvailability": "lockedByPrerequisites", "expectedCost": 8, "expectedUnlocks": ["building:archive", "wonder:greatLibrary"]},
+    {"id": "active-after-prerequisite", "technology": "writing", "unlocked": ["agriculture"], "active": "writing", "cityCount": 2, "fulfilledBoost": false, "expectedAvailability": "active", "expectedCost": 10, "expectedUnlocks": ["building:archive", "wonder:greatLibrary"]},
+    {"id": "city-scaling-and-boost", "technology": "storage", "unlocked": ["agriculture"], "active": null, "cityCount": 2, "fulfilledBoost": true, "expectedAvailability": "available", "expectedCost": 10, "expectedUnlocks": ["building:storehouse"]},
+    {"id": "multi-prerequisite-rejected", "technology": "horsebackRiding", "unlocked": ["animalHusbandry"], "active": null, "cityCount": 1, "fulfilledBoost": true, "expectedAvailability": "lockedByPrerequisites", "expectedCost": 18, "expectedUnlocks": ["building:stable", "improvement:horseRanch", "unit:cavalry"]},
+    {"id": "industry-rounds-up", "technology": "tactics", "unlocked": ["logistics"], "active": null, "cityCount": 1, "fulfilledBoost": false, "expectedAvailability": "available", "expectedCost": 41, "expectedUnlocks": ["building:trainingGrounds"]},
+    {"id": "late-tree-prerequisites-rejected", "technology": "nuclearPhysics", "unlocked": ["scientificMethod"], "active": null, "cityCount": 3, "fulfilledBoost": true, "expectedAvailability": "lockedByPrerequisites", "expectedCost": 229, "expectedUnlocks": ["building:reactor", "improvement:uraniumMine", "resourceVisibility:uranium", "wonder:svalbardSeedVault"]}
+  ],
+  "gateCases": [
+    {"id": "base-building-accepted", "kind": "building", "value": "granary", "unlocked": [], "expectedUnlocked": true},
+    {"id": "building-rejected", "kind": "building", "value": "workshop", "unlocked": [], "expectedUnlocked": false},
+    {"id": "building-accepted", "kind": "building", "value": "workshop", "unlocked": ["craftsmanship"], "expectedUnlocked": true},
+    {"id": "worker-option-rejected", "kind": "improvement", "value": "oilWell", "unlocked": [], "expectedUnlocked": false},
+    {"id": "worker-option-accepted", "kind": "improvement", "value": "oilWell", "unlocked": ["combustion"], "expectedUnlocked": true},
+    {"id": "base-unit-accepted", "kind": "unit", "value": "warrior", "unlocked": [], "expectedUnlocked": true},
+    {"id": "unit-rejected", "kind": "unit", "value": "tank", "unlocked": [], "expectedUnlocked": false},
+    {"id": "unit-accepted", "kind": "unit", "value": "tank", "unlocked": ["massProduction"], "expectedUnlocked": true},
+    {"id": "wonder-rejected", "kind": "wonder", "value": "greatLibrary", "unlocked": [], "expectedUnlocked": false},
+    {"id": "wonder-accepted", "kind": "wonder", "value": "greatLibrary", "unlocked": ["writing"], "expectedUnlocked": true},
+    {"id": "strategic-resource-hidden", "kind": "resource", "value": "horses", "unlocked": [], "expectedUnlocked": false},
+    {"id": "strategic-resource-revealed", "kind": "resource", "value": "horses", "unlocked": ["animalHusbandry"], "expectedUnlocked": true},
+    {"id": "base-resource-visible", "kind": "resource", "value": "wheat", "unlocked": [], "expectedUnlocked": true}
+  ],
+  "effectCase": {
+    "unlocked": ["militaryOrganization", "ironWorking", "coalMining", "logistics", "tactics", "economy", "urbanization", "fortifications", "strategy", "specialization"],
+    "ironProduction": 1,
+    "coalProduction": 1,
+    "globalGoldMultiplierBasisPoints": 1000,
+    "cityDefenseBonus": 2,
+    "armyProductionMultiplierBasisPoints": 1500,
+    "armyStrengthMultiplierBasisPoints": 1000,
+    "armyAttackBonus": 1,
+    "armyDefenseBonus": 2,
+    "armyHitPointsBonus": 3,
+    "maxControlledHexesBonus": 1,
+    "cityScienceBonus": 1
+  }
+}

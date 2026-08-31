@@ -1,0 +1,41 @@
+{
+  "capability": "worker-infrastructure-ready",
+  "commands": [
+    "assignWorkerToHex",
+    "automateWorker",
+    "buildRoad",
+    "cancelWorkerAssignment",
+    "cancelWorkerJob",
+    "confirmWorkerImprovement",
+    "selectWorkerImprovement"
+  ],
+  "queries": [
+    "workerOptions"
+  ],
+  "turnProcessors": [
+    "workerJobs",
+    "workerAutomation"
+  ],
+  "automationTileBudget": 1200,
+  "automationLegalityBudget": 24000,
+  "clientApiVersion": 7,
+  "cases": [
+    "all-seven-command-revision-precedence",
+    "assignment-capacity",
+    "assignment-cancel",
+    "automation-assignment-fallback",
+    "automation-deterministic-tie-break",
+    "automation-work-budget",
+    "foreign-road-rejection",
+    "improvement-charge-consumption",
+    "improvement-technology-gate",
+    "pending-confirm-ownership",
+    "query-command-shared-legality",
+    "recipient-infrastructure-projection",
+    "road-cache-invalidation",
+    "road-routing-fingerprint",
+    "save-reopen-mid-job",
+    "turn-job-completion-event",
+    "typed-replay-exactness"
+  ]
+}

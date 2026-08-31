@@ -1,0 +1,32 @@
+appStatus:
+  - versionStatus:
+accountProfile:
+  - ensureAccount:
+appleIdp:
+  - login:
+  - hasAccount:
+authStatus:
+  - signOutRefreshToken:
+emailIdp:
+  - login:
+  - createAccount:
+  - displayName:
+  - updateDisplayName:
+  - hasAccount:
+externalAuth:
+  - start:
+  - poll:
+googleIdp:
+  - login:
+  - hasAccount:
+jwtRefresh:
+  - refreshAccessToken:
+steamAuth:
+  - start:
+  - poll:
+game:
+  - createMatch:
+  - joinMatch:
+  - listMatches:
+  - submitTurn:
+  - resync:

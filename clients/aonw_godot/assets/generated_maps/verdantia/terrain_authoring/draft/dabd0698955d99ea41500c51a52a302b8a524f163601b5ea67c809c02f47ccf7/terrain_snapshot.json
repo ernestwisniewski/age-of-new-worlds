@@ -1,0 +1,34 @@
+{
+  "mapId": "verdantia",
+  "mapContentHash": "8765fc5eb23e7d715a97a743a533c6381988b7afbad57f208868223c6d46fbb5",
+  "authoringProfileHash": "3eb23d3955802c763692c91cab84cec2e8ef645c757fa5a0e906443c1ea56757",
+  "generatedBaseHash": "48de139df1682dfe11a0e9274d84a5a33d991d3c3950a56d4df9393d284af7eb",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 456,
+  "rasterHeight": 357,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 8721,
+  "terrainFiles": [
+    {
+      "file": "terrain3d_00_00.res",
+      "sha256": "a67d1bb60e5e254ec1a6ac3d7e285b0deaa8690d9add30cfa249527abbc656de",
+      "size": 51303
+    },
+    {
+      "file": "terrain3d_00_01.res",
+      "sha256": "913f98cf7d00ed82c40be41b7f8328507ea3d9b132738e041e894766e511f941",
+      "size": 18058
+    },
+    {
+      "file": "terrain3d_01_00.res",
+      "sha256": "2e7cda4f32b2fac0391b14727140bfecc9b5885484f8d0c3ed3a18af752082bf",
+      "size": 37945
+    },
+    {
+      "file": "terrain3d_01_01.res",
+      "sha256": "958af2ece7acd4a16f68128ed5f9b37946b42090ef4073ac773fed06616633dd",
+      "size": 13798
+    }
+  ],
+  "snapshotHash": "dabd0698955d99ea41500c51a52a302b8a524f163601b5ea67c809c02f47ccf7"
+}

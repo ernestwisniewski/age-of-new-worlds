@@ -1,0 +1,5 @@
+class: SteamAuthPollResult
+fields:
+  status: String
+  auth: module:serverpod_auth_core:AuthSuccess?
+  error: String?

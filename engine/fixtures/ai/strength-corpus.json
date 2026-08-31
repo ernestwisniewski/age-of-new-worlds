@@ -1,0 +1,21 @@
+{
+  "capability": "deterministic-ai-strength-gate",
+  "evaluation": "legal-move-progress-basis-points",
+  "cases": [
+    {"id": "diagonal-north-east", "cols": 12, "rows": 7, "actor": [0, 6], "opponent": [11, 0], "movementUnits": 60},
+    {"id": "diagonal-south-east", "cols": 12, "rows": 7, "actor": [0, 0], "opponent": [11, 6], "movementUnits": 60},
+    {"id": "east-front", "cols": 12, "rows": 3, "actor": [0, 1], "opponent": [11, 1], "movementUnits": 60},
+    {"id": "offset-east-front", "cols": 11, "rows": 6, "actor": [1, 1], "opponent": [9, 4], "movementUnits": 50},
+    {"id": "offset-west-front", "cols": 11, "rows": 6, "actor": [9, 1], "opponent": [1, 4], "movementUnits": 50},
+    {"id": "west-front", "cols": 12, "rows": 3, "actor": [11, 1], "opponent": [0, 1], "movementUnits": 60}
+  ],
+  "randomSeeds": [1, 7, 19, 77, 101, 313, 997, 4093],
+  "thresholds": {
+    "minimumDefaultVsRandomWinRateBasisPoints": 6000,
+    "maximumBaselineLossesPerProfile": 0,
+    "maximumReferenceLossesPerProfile": 0,
+    "maximumUnhandledDecisions": 0,
+    "minimumMovementFamilyUsage": 78,
+    "difficultyScoreMonotonic": true
+  }
+}

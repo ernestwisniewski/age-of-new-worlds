@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "aonw2_starter",
+  "mapId": "aonw2_starter",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "preview-commander",
+      "ownerPlayerId": "preview-player",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 2,
+      "row": 1
+    }
+  ]
+}

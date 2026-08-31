@@ -1,0 +1,17 @@
+name: aonw_rust_client
+description: Native Assets client for the shared AoNW Rust local protocol.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  code_assets: ^1.2.1
+  ffi: ^2.1.4
+  hooks: ^2.0.2
+  logging: ^1.3.0
+  native_toolchain_c: ^0.19.2
+
+dev_dependencies:
+  test: ^1.28.0

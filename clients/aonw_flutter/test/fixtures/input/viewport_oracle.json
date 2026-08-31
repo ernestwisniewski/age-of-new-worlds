@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "map": {
+    "cols": 3,
+    "rows": 3
+  },
+  "inputCases": [
+    {
+      "source": "pointer",
+      "hex": [0, 1],
+      "expectedSelectedHex": [0, 1]
+    },
+    {
+      "source": "keyboard",
+      "events": ["arrowLeft", "enter"],
+      "expectedSelectedHex": [0, 1]
+    },
+    {
+      "source": "gamepad",
+      "events": ["dpadLeft", "a"],
+      "expectedSelectedHex": [0, 1]
+    }
+  ],
+  "lifecycle": {
+    "routeReplace": {
+      "oldRepositoryCloseCalls": 1,
+      "oldInputCloseCalls": 1,
+      "newRepositoryLoadCalls": 1
+    },
+    "pauseResume": {
+      "inputActiveStates": [true, false, true],
+      "repositoryCloseCallsBeforeUnmount": 0,
+      "telemetry": ["app_started", "app_suspended", "app_resumed"]
+    }
+  }
+}

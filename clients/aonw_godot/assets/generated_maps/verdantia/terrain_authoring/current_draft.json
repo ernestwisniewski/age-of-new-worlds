@@ -1,0 +1,13 @@
+{
+  "mapId": "verdantia",
+  "mapContentHash": "8765fc5eb23e7d715a97a743a533c6381988b7afbad57f208868223c6d46fbb5",
+  "authoringProfileHash": "11e5a241c2d3004f96fd11e8f197a906efacf71956c5e93c072fc4dd35f57729",
+  "generatedBaseHash": "3985c2b047d6808083e16f2278b58cf7fb696ff9e552265a1322033f923d690e",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 456,
+  "rasterHeight": 357,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 8757,
+  "snapshotHash": "32a6a34c950465e82cc2440513857323d4c642165c075624d7ae74aa6679f54a",
+  "terrainDataDirectory": "res://assets/generated_maps/verdantia/terrain_authoring/draft/32a6a34c950465e82cc2440513857323d4c642165c075624d7ae74aa6679f54a"
+}

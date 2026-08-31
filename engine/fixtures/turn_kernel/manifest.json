@@ -1,0 +1,34 @@
+{
+  "capability": "turn-kernel-ready",
+  "enabledProcessors": [
+    "submission",
+    "lifecycle",
+    "combat",
+    "cityFounding",
+    "workerJobs",
+    "economy",
+    "production",
+    "artifacts",
+    "movementReset",
+    "queuedMovement",
+    "tradeRoutes",
+    "workerAutomation",
+    "autoExplore",
+    "reversibleSkipCleanup",
+    "research",
+    "diplomacy",
+    "agreements",
+    "objectives",
+    "outcome"
+  ],
+  "fixtures": [
+    {"id": "submit-partial-accepted", "recordKind": "player", "commandType": "submitTurn", "expectedEventCount": 0, "requiredProcessors": ["submission", "lifecycle"]},
+    {"id": "submit-wrong-actor-rejected", "recordKind": "player", "commandType": "submitTurn", "expectedEventCount": 0, "requiredProcessors": ["submission", "lifecycle"]},
+    {"id": "end-sequential-accepted", "recordKind": "player", "commandType": "endTurn", "expectedEventCount": 1, "requiredProcessors": ["lifecycle", "cityFounding", "workerJobs", "economy", "production", "artifacts", "movementReset", "queuedMovement", "tradeRoutes", "workerAutomation", "autoExplore", "reversibleSkipCleanup", "research", "diplomacy", "agreements", "objectives", "outcome"]},
+    {"id": "end-stale-rejected", "recordKind": "player", "commandType": "endTurn", "expectedEventCount": 0, "requiredProcessors": ["lifecycle"]},
+    {"id": "timeout-finalization-accepted", "recordKind": "system", "commandType": "finalizeTimedOutTurn", "expectedEventCount": 4, "requiredProcessors": ["submission", "lifecycle", "combat", "cityFounding", "workerJobs", "economy", "production", "artifacts", "movementReset", "queuedMovement", "tradeRoutes", "workerAutomation", "autoExplore", "reversibleSkipCleanup", "research", "diplomacy", "agreements", "objectives", "outcome"]},
+    {"id": "timeout-invalid-scope-rejected", "recordKind": "system", "commandType": "finalizeTimedOutTurn", "expectedEventCount": 0, "requiredProcessors": ["submission", "lifecycle"]},
+    {"id": "kick-participant-accepted", "recordKind": "system", "commandType": "kickParticipant", "expectedEventCount": 1, "requiredProcessors": ["lifecycle"]},
+    {"id": "kick-unknown-player-rejected", "recordKind": "system", "commandType": "kickParticipant", "expectedEventCount": 0, "requiredProcessors": ["lifecycle"]}
+  ]
+}

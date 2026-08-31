@@ -1,0 +1,65 @@
+# Operating systems
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+
+# Local Codex workspace
+.codex/
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+.history/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Rust
+**/target/
+**/fuzz/artifacts/
+**/fuzz/corpus/
+**/mutants.out*/
+*.profraw
+*.profdata
+
+# Dart and Flutter
+**/.dart_tool/
+**/.packages
+**/.pub/
+**/.pub-cache/
+**/build/
+**/coverage/
+**/doc/api/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+app.*.symbols
+app.*.map.json
+
+# Apple platform build products
+**/Flutter/ephemeral/
+**/Pods/
+**/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+
+# Godot caches and generated native libraries
+**/.godot/
+/clients/aonw_godot/native/

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b38u3nnvjgb33"]
+
+[ext_resource type="Script" uid="uid://bc2cwmfqjovrm" path="res://editor/map_authoring/presentation/terrain_authoring_surface.gd" id="1_4l83s"]
+
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_7hrgr"]
+world_background = 0
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_fsoi5"]
+
+[node name="myranth" type="Node3D" unique_id=212166464]
+
+[node name="TerrainAuthoring" type="Node3D" parent="." unique_id=275180875]
+script = ExtResource("1_4l83s")
+source_map_id = "myranth"
+compiled_artifact_directory = "res://.godot/terrain_compiled/myranth"
+authoring_root = "res://assets/generated_maps/myranth/terrain_authoring"
+terrain_material = SubResource("Terrain3DMaterial_7hrgr")
+terrain_assets = SubResource("Terrain3DAssets_fsoi5")
+
+[node name="Terrain3D" type="Terrain3D" parent="TerrainAuthoring" unique_id=483620771]
+material = SubResource("Terrain3DMaterial_7hrgr")
+assets = SubResource("Terrain3DAssets_fsoi5")
+free_editor_textures = false
+
+[node name="ManualWorld" type="Node3D" parent="TerrainAuthoring" unique_id=1761537744]

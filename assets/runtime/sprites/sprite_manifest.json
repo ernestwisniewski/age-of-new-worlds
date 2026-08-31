@@ -1,0 +1,9127 @@
+{
+  "version": 1,
+  "sourceManifestSha256": "d1edc8aa2466085f0ab09cf2115a5ca09f9006e28adcd675157fb2daa9e3c224",
+  "contracts": {
+    "maxPageSize": 2048,
+    "padding": 4,
+    "rotation": false,
+    "premultiplyAlpha": false,
+    "filterQuality": "medium"
+  },
+  "atlases": {
+    "buildings_a": "assets/runtime/sprites/buildings_a/buildings_a.atlas",
+    "buildings_b": "assets/runtime/sprites/buildings_b/buildings_b.atlas",
+    "buildings_c": "assets/runtime/sprites/buildings_c/buildings_c.atlas",
+    "cities": "assets/runtime/sprites/cities/cities.atlas",
+    "dice": "assets/runtime/sprites/dice/dice.atlas",
+    "icons_map": "assets/runtime/sprites/icons_map/icons_map.atlas",
+    "improvements_1": "assets/runtime/sprites/improvements_1/improvements_1.atlas",
+    "improvements_2": "assets/runtime/sprites/improvements_2/improvements_2.atlas",
+    "improvements_3": "assets/runtime/sprites/improvements_3/improvements_3.atlas",
+    "improvements_4": "assets/runtime/sprites/improvements_4/improvements_4.atlas",
+    "technologies": "assets/runtime/sprites/technologies/technologies.atlas",
+    "unit_archer": "assets/runtime/sprites/unit_archer/unit_archer.atlas",
+    "unit_catapult": "assets/runtime/sprites/unit_catapult/unit_catapult.atlas",
+    "unit_cavalry": "assets/runtime/sprites/unit_cavalry/unit_cavalry.atlas",
+    "unit_commander": "assets/runtime/sprites/unit_commander/unit_commander.atlas",
+    "unit_fieldCannon": "assets/runtime/sprites/unit_fieldCannon/unit_fieldCannon.atlas",
+    "unit_heavyInfantry": "assets/runtime/sprites/unit_heavyInfantry/unit_heavyInfantry.atlas",
+    "unit_merchant": "assets/runtime/sprites/unit_merchant/unit_merchant.atlas",
+    "unit_reconPlane": "assets/runtime/sprites/unit_reconPlane/unit_reconPlane.atlas",
+    "unit_rifleman": "assets/runtime/sprites/unit_rifleman/unit_rifleman.atlas",
+    "unit_scout": "assets/runtime/sprites/unit_scout/unit_scout.atlas",
+    "unit_scoutShip": "assets/runtime/sprites/unit_scoutShip/unit_scoutShip.atlas",
+    "unit_settler": "assets/runtime/sprites/unit_settler/unit_settler.atlas",
+    "unit_spearman": "assets/runtime/sprites/unit_spearman/unit_spearman.atlas",
+    "unit_tank": "assets/runtime/sprites/unit_tank/unit_tank.atlas",
+    "unit_warrior": "assets/runtime/sprites/unit_warrior/unit_warrior.atlas",
+    "unit_warship": "assets/runtime/sprites/unit_warship/unit_warship.atlas",
+    "unit_worker": "assets/runtime/sprites/unit_worker/unit_worker.atlas",
+    "wonders": "assets/runtime/sprites/wonders/wonders.atlas"
+  },
+  "frames": {
+    "building.academy": {
+      "atlas": "buildings_b",
+      "region": "building.academy",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "building.airfield": {
+      "atlas": "buildings_c",
+      "region": "building.airfield",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "building.apothecary": {
+      "atlas": "buildings_b",
+      "region": "building.apothecary",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "building.aqueduct": {
+      "atlas": "buildings_a",
+      "region": "building.aqueduct",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "building.archive": {
+      "atlas": "buildings_b",
+      "region": "building.archive",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "building.armory": {
+      "atlas": "buildings_b",
+      "region": "building.armory",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "building.artisansGuild": {
+      "atlas": "buildings_c",
+      "region": "building.artisansGuild",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "building.assemblyPlant": {
+      "atlas": "buildings_c",
+      "region": "building.assemblyPlant",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "building.bank": {
+      "atlas": "buildings_a",
+      "region": "building.bank",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "building.barracks": {
+      "atlas": "buildings_a",
+      "region": "building.barracks",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "building.borderFort": {
+      "atlas": "buildings_c",
+      "region": "building.borderFort",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "building.broadcastTower": {
+      "atlas": "buildings_c",
+      "region": "building.broadcastTower",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "building.buildersGuild": {
+      "atlas": "buildings_a",
+      "region": "building.buildersGuild",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "building.citadel": {
+      "atlas": "buildings_b",
+      "region": "building.citadel",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "building.conscriptionOffice": {
+      "atlas": "buildings_c",
+      "region": "building.conscriptionOffice",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "building.court": {
+      "atlas": "buildings_b",
+      "region": "building.court",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "building.courthouse": {
+      "atlas": "buildings_b",
+      "region": "building.courthouse",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "building.dryDock": {
+      "atlas": "buildings_c",
+      "region": "building.dryDock",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "building.factory": {
+      "atlas": "buildings_a",
+      "region": "building.factory",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "building.forge": {
+      "atlas": "buildings_a",
+      "region": "building.forge",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "building.governorsOffice": {
+      "atlas": "buildings_b",
+      "region": "building.governorsOffice",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "building.granary": {
+      "atlas": "buildings_a",
+      "region": "building.granary",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "building.harborCustoms": {
+      "atlas": "buildings_c",
+      "region": "building.harborCustoms",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "building.hospital": {
+      "atlas": "buildings_b",
+      "region": "building.hospital",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "building.housing": {
+      "atlas": "buildings_a",
+      "region": "building.housing",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "building.laboratory": {
+      "atlas": "buildings_b",
+      "region": "building.laboratory",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "building.lighthouse": {
+      "atlas": "buildings_a",
+      "region": "building.lighthouse",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "building.mapRoom": {
+      "atlas": "buildings_c",
+      "region": "building.mapRoom",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "building.marketplace": {
+      "atlas": "buildings_a",
+      "region": "building.marketplace",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "building.masterWorkshop": {
+      "atlas": "buildings_c",
+      "region": "building.masterWorkshop",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "building.merchantHall": {
+      "atlas": "buildings_a",
+      "region": "building.merchantHall",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "building.ministries": {
+      "atlas": "buildings_b",
+      "region": "building.ministries",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "building.monument": {
+      "atlas": "buildings_a",
+      "region": "building.monument",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "building.museum": {
+      "atlas": "buildings_c",
+      "region": "building.museum",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "building.navalAcademy": {
+      "atlas": "buildings_c",
+      "region": "building.navalAcademy",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "building.observatory": {
+      "atlas": "buildings_b",
+      "region": "building.observatory",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "building.parliament": {
+      "atlas": "buildings_c",
+      "region": "building.parliament",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "building.planningOffice": {
+      "atlas": "buildings_b",
+      "region": "building.planningOffice",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "building.port": {
+      "atlas": "buildings_a",
+      "region": "building.port",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "building.powerPlant": {
+      "atlas": "buildings_c",
+      "region": "building.powerPlant",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "building.publicBaths": {
+      "atlas": "buildings_b",
+      "region": "building.publicBaths",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "building.railDepot": {
+      "atlas": "buildings_c",
+      "region": "building.railDepot",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "building.reactor": {
+      "atlas": "buildings_b",
+      "region": "building.reactor",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "building.refinery": {
+      "atlas": "buildings_c",
+      "region": "building.refinery",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "building.shipyard": {
+      "atlas": "buildings_c",
+      "region": "building.shipyard",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "building.siegeWorkshop": {
+      "atlas": "buildings_b",
+      "region": "building.siegeWorkshop",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "building.stable": {
+      "atlas": "buildings_a",
+      "region": "building.stable",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "building.steelworks": {
+      "atlas": "buildings_c",
+      "region": "building.steelworks",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "building.stonemason": {
+      "atlas": "buildings_a",
+      "region": "building.stonemason",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "building.storehouse": {
+      "atlas": "buildings_a",
+      "region": "building.storehouse",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "building.surveyorsOffice": {
+      "atlas": "buildings_b",
+      "region": "building.surveyorsOffice",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "building.townHall": {
+      "atlas": "buildings_a",
+      "region": "building.townHall",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "building.trainingGrounds": {
+      "atlas": "buildings_a",
+      "region": "building.trainingGrounds",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "building.university": {
+      "atlas": "buildings_b",
+      "region": "building.university",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "building.walls": {
+      "atlas": "buildings_b",
+      "region": "building.walls",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "building.warCollege": {
+      "atlas": "buildings_b",
+      "region": "building.warCollege",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "building.waterMill": {
+      "atlas": "buildings_a",
+      "region": "building.waterMill",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "building.workshop": {
+      "atlas": "buildings_a",
+      "region": "building.workshop",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "building.worldFairGrounds": {
+      "atlas": "buildings_c",
+      "region": "building.worldFairGrounds",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "city.growthCivic.0": {
+      "atlas": "cities",
+      "region": "city.growthCivic.0",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "city.growthCivic.1": {
+      "atlas": "cities",
+      "region": "city.growthCivic.1",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "city.growthCivic.2": {
+      "atlas": "cities",
+      "region": "city.growthCivic.2",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "city.growthCivic.3": {
+      "atlas": "cities",
+      "region": "city.growthCivic.3",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "city.growthCivic.4": {
+      "atlas": "cities",
+      "region": "city.growthCivic.4",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "city.growthCivic.5": {
+      "atlas": "cities",
+      "region": "city.growthCivic.5",
+      "index": -1,
+      "grid": [
+        5,
+        0
+      ]
+    },
+    "city.industryModern.0": {
+      "atlas": "cities",
+      "region": "city.industryModern.0",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "city.industryModern.1": {
+      "atlas": "cities",
+      "region": "city.industryModern.1",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "city.industryModern.2": {
+      "atlas": "cities",
+      "region": "city.industryModern.2",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "city.industryModern.3": {
+      "atlas": "cities",
+      "region": "city.industryModern.3",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "city.industryModern.4": {
+      "atlas": "cities",
+      "region": "city.industryModern.4",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "city.industryModern.5": {
+      "atlas": "cities",
+      "region": "city.industryModern.5",
+      "index": -1,
+      "grid": [
+        5,
+        3
+      ]
+    },
+    "city.militaryFortified.0": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.0",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "city.militaryFortified.1": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.1",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "city.militaryFortified.2": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.2",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "city.militaryFortified.3": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.3",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "city.militaryFortified.4": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.4",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "city.militaryFortified.5": {
+      "atlas": "cities",
+      "region": "city.militaryFortified.5",
+      "index": -1,
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "city.tradeKnowledgeMaritime.0": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.0",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "city.tradeKnowledgeMaritime.1": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.1",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "city.tradeKnowledgeMaritime.2": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.2",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "city.tradeKnowledgeMaritime.3": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.3",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "city.tradeKnowledgeMaritime.4": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.4",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "city.tradeKnowledgeMaritime.5": {
+      "atlas": "cities",
+      "region": "city.tradeKnowledgeMaritime.5",
+      "index": -1,
+      "grid": [
+        5,
+        1
+      ]
+    },
+    "dice.0": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 0,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "dice.1": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "dice.10": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 10,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "dice.11": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 11,
+      "grid": [
+        5,
+        1
+      ]
+    },
+    "dice.12": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 12,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "dice.13": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 13,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "dice.14": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 14,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "dice.15": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 15,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "dice.16": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 16,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "dice.17": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 17,
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "dice.18": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 18,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "dice.19": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 19,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "dice.2": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 2,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "dice.20": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 20,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "dice.21": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 21,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "dice.22": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 22,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "dice.23": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 23,
+      "grid": [
+        5,
+        3
+      ]
+    },
+    "dice.24": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 24,
+      "grid": [
+        0,
+        4
+      ]
+    },
+    "dice.25": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 25,
+      "grid": [
+        1,
+        4
+      ]
+    },
+    "dice.26": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 26,
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "dice.27": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 27,
+      "grid": [
+        3,
+        4
+      ]
+    },
+    "dice.28": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 28,
+      "grid": [
+        4,
+        4
+      ]
+    },
+    "dice.29": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 29,
+      "grid": [
+        5,
+        4
+      ]
+    },
+    "dice.3": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 3,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "dice.30": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 30,
+      "grid": [
+        0,
+        5
+      ]
+    },
+    "dice.31": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 31,
+      "grid": [
+        1,
+        5
+      ]
+    },
+    "dice.32": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 32,
+      "grid": [
+        2,
+        5
+      ]
+    },
+    "dice.33": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 33,
+      "grid": [
+        3,
+        5
+      ]
+    },
+    "dice.34": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 34,
+      "grid": [
+        4,
+        5
+      ]
+    },
+    "dice.35": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 35,
+      "grid": [
+        5,
+        5
+      ]
+    },
+    "dice.4": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 4,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "dice.5": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 5,
+      "grid": [
+        5,
+        0
+      ]
+    },
+    "dice.6": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 6,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "dice.7": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 7,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "dice.8": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 8,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "dice.9": {
+      "atlas": "dice",
+      "region": "dice",
+      "index": 9,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "improvement.bauxiteMine.0": {
+      "atlas": "improvements_4",
+      "region": "improvement.bauxiteMine.0",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "improvement.bauxiteMine.1": {
+      "atlas": "improvements_4",
+      "region": "improvement.bauxiteMine.1",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "improvement.bauxiteMine.2": {
+      "atlas": "improvements_4",
+      "region": "improvement.bauxiteMine.2",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "improvement.bauxiteMine.3": {
+      "atlas": "improvements_4",
+      "region": "improvement.bauxiteMine.3",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "improvement.camp.0": {
+      "atlas": "improvements_1",
+      "region": "improvement.camp.0",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "improvement.camp.1": {
+      "atlas": "improvements_1",
+      "region": "improvement.camp.1",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "improvement.camp.2": {
+      "atlas": "improvements_1",
+      "region": "improvement.camp.2",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "improvement.camp.3": {
+      "atlas": "improvements_1",
+      "region": "improvement.camp.3",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "improvement.coalShaft.0": {
+      "atlas": "improvements_4",
+      "region": "improvement.coalShaft.0",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "improvement.coalShaft.1": {
+      "atlas": "improvements_4",
+      "region": "improvement.coalShaft.1",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "improvement.coalShaft.2": {
+      "atlas": "improvements_4",
+      "region": "improvement.coalShaft.2",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "improvement.coalShaft.3": {
+      "atlas": "improvements_4",
+      "region": "improvement.coalShaft.3",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "improvement.farm.0": {
+      "atlas": "improvements_1",
+      "region": "improvement.farm.0",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "improvement.farm.1": {
+      "atlas": "improvements_1",
+      "region": "improvement.farm.1",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "improvement.farm.2": {
+      "atlas": "improvements_1",
+      "region": "improvement.farm.2",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "improvement.farm.3": {
+      "atlas": "improvements_1",
+      "region": "improvement.farm.3",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "improvement.fishingBoats.0": {
+      "atlas": "improvements_2",
+      "region": "improvement.fishingBoats.0",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "improvement.fishingBoats.1": {
+      "atlas": "improvements_2",
+      "region": "improvement.fishingBoats.1",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "improvement.fishingBoats.2": {
+      "atlas": "improvements_2",
+      "region": "improvement.fishingBoats.2",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "improvement.fishingBoats.3": {
+      "atlas": "improvements_2",
+      "region": "improvement.fishingBoats.3",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "improvement.horseRanch.0": {
+      "atlas": "improvements_3",
+      "region": "improvement.horseRanch.0",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "improvement.horseRanch.1": {
+      "atlas": "improvements_3",
+      "region": "improvement.horseRanch.1",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "improvement.horseRanch.2": {
+      "atlas": "improvements_3",
+      "region": "improvement.horseRanch.2",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "improvement.horseRanch.3": {
+      "atlas": "improvements_3",
+      "region": "improvement.horseRanch.3",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "improvement.lumberMill.0": {
+      "atlas": "improvements_2",
+      "region": "improvement.lumberMill.0",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "improvement.lumberMill.1": {
+      "atlas": "improvements_2",
+      "region": "improvement.lumberMill.1",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "improvement.lumberMill.2": {
+      "atlas": "improvements_2",
+      "region": "improvement.lumberMill.2",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "improvement.lumberMill.3": {
+      "atlas": "improvements_2",
+      "region": "improvement.lumberMill.3",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "improvement.mine.0": {
+      "atlas": "improvements_2",
+      "region": "improvement.mine.0",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "improvement.mine.1": {
+      "atlas": "improvements_2",
+      "region": "improvement.mine.1",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "improvement.mine.2": {
+      "atlas": "improvements_2",
+      "region": "improvement.mine.2",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "improvement.mine.3": {
+      "atlas": "improvements_2",
+      "region": "improvement.mine.3",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "improvement.oilWell.0": {
+      "atlas": "improvements_4",
+      "region": "improvement.oilWell.0",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "improvement.oilWell.1": {
+      "atlas": "improvements_4",
+      "region": "improvement.oilWell.1",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "improvement.oilWell.2": {
+      "atlas": "improvements_4",
+      "region": "improvement.oilWell.2",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "improvement.oilWell.3": {
+      "atlas": "improvements_4",
+      "region": "improvement.oilWell.3",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "improvement.orchard.0": {
+      "atlas": "improvements_1",
+      "region": "improvement.orchard.0",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "improvement.orchard.1": {
+      "atlas": "improvements_1",
+      "region": "improvement.orchard.1",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "improvement.orchard.2": {
+      "atlas": "improvements_1",
+      "region": "improvement.orchard.2",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "improvement.orchard.3": {
+      "atlas": "improvements_1",
+      "region": "improvement.orchard.3",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "improvement.pasture.0": {
+      "atlas": "improvements_1",
+      "region": "improvement.pasture.0",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "improvement.pasture.1": {
+      "atlas": "improvements_1",
+      "region": "improvement.pasture.1",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "improvement.pasture.2": {
+      "atlas": "improvements_1",
+      "region": "improvement.pasture.2",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "improvement.pasture.3": {
+      "atlas": "improvements_1",
+      "region": "improvement.pasture.3",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "improvement.pearlDivers.0": {
+      "atlas": "improvements_2",
+      "region": "improvement.pearlDivers.0",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "improvement.pearlDivers.1": {
+      "atlas": "improvements_2",
+      "region": "improvement.pearlDivers.1",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "improvement.pearlDivers.2": {
+      "atlas": "improvements_2",
+      "region": "improvement.pearlDivers.2",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "improvement.pearlDivers.3": {
+      "atlas": "improvements_2",
+      "region": "improvement.pearlDivers.3",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "improvement.plantation.0": {
+      "atlas": "improvements_3",
+      "region": "improvement.plantation.0",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "improvement.plantation.1": {
+      "atlas": "improvements_3",
+      "region": "improvement.plantation.1",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "improvement.plantation.2": {
+      "atlas": "improvements_3",
+      "region": "improvement.plantation.2",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "improvement.plantation.3": {
+      "atlas": "improvements_3",
+      "region": "improvement.plantation.3",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "improvement.prospectorCamp.0": {
+      "atlas": "improvements_3",
+      "region": "improvement.prospectorCamp.0",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "improvement.prospectorCamp.1": {
+      "atlas": "improvements_3",
+      "region": "improvement.prospectorCamp.1",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "improvement.prospectorCamp.2": {
+      "atlas": "improvements_3",
+      "region": "improvement.prospectorCamp.2",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "improvement.prospectorCamp.3": {
+      "atlas": "improvements_3",
+      "region": "improvement.prospectorCamp.3",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "improvement.quarry.0": {
+      "atlas": "improvements_2",
+      "region": "improvement.quarry.0",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "improvement.quarry.1": {
+      "atlas": "improvements_2",
+      "region": "improvement.quarry.1",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "improvement.quarry.2": {
+      "atlas": "improvements_2",
+      "region": "improvement.quarry.2",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "improvement.quarry.3": {
+      "atlas": "improvements_2",
+      "region": "improvement.quarry.3",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "improvement.riverFarm.0": {
+      "atlas": "improvements_1",
+      "region": "improvement.riverFarm.0",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "improvement.riverFarm.1": {
+      "atlas": "improvements_1",
+      "region": "improvement.riverFarm.1",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "improvement.riverFarm.2": {
+      "atlas": "improvements_1",
+      "region": "improvement.riverFarm.2",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "improvement.riverFarm.3": {
+      "atlas": "improvements_1",
+      "region": "improvement.riverFarm.3",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "improvement.tradingPost.0": {
+      "atlas": "improvements_3",
+      "region": "improvement.tradingPost.0",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "improvement.tradingPost.1": {
+      "atlas": "improvements_3",
+      "region": "improvement.tradingPost.1",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "improvement.tradingPost.2": {
+      "atlas": "improvements_3",
+      "region": "improvement.tradingPost.2",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "improvement.tradingPost.3": {
+      "atlas": "improvements_3",
+      "region": "improvement.tradingPost.3",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "improvement.uraniumMine.0": {
+      "atlas": "improvements_4",
+      "region": "improvement.uraniumMine.0",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "improvement.uraniumMine.1": {
+      "atlas": "improvements_4",
+      "region": "improvement.uraniumMine.1",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "improvement.uraniumMine.2": {
+      "atlas": "improvements_4",
+      "region": "improvement.uraniumMine.2",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "improvement.uraniumMine.3": {
+      "atlas": "improvements_4",
+      "region": "improvement.uraniumMine.3",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "improvement.vineyard.0": {
+      "atlas": "improvements_3",
+      "region": "improvement.vineyard.0",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "improvement.vineyard.1": {
+      "atlas": "improvements_3",
+      "region": "improvement.vineyard.1",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "improvement.vineyard.2": {
+      "atlas": "improvements_3",
+      "region": "improvement.vineyard.2",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "improvement.vineyard.3": {
+      "atlas": "improvements_3",
+      "region": "improvement.vineyard.3",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "map.resource.aluminium": {
+      "atlas": "icons_map",
+      "region": "map.icon.aluminium",
+      "index": -1
+    },
+    "map.resource.apple": {
+      "atlas": "icons_map",
+      "region": "map.icon.apple",
+      "index": -1
+    },
+    "map.resource.banana": {
+      "atlas": "icons_map",
+      "region": "map.icon.bananas",
+      "index": -1
+    },
+    "map.resource.citrus": {
+      "atlas": "icons_map",
+      "region": "map.icon.citrus",
+      "index": -1
+    },
+    "map.resource.coal": {
+      "atlas": "icons_map",
+      "region": "map.icon.coal",
+      "index": -1
+    },
+    "map.resource.cocoa": {
+      "atlas": "icons_map",
+      "region": "map.icon.cocoa",
+      "index": -1
+    },
+    "map.resource.coffee": {
+      "atlas": "icons_map",
+      "region": "map.icon.coffee",
+      "index": -1
+    },
+    "map.resource.cotton": {
+      "atlas": "icons_map",
+      "region": "map.icon.cotton",
+      "index": -1
+    },
+    "map.resource.cow": {
+      "atlas": "icons_map",
+      "region": "map.icon.cow",
+      "index": -1
+    },
+    "map.resource.deer": {
+      "atlas": "icons_map",
+      "region": "map.icon.deer",
+      "index": -1
+    },
+    "map.resource.fish": {
+      "atlas": "icons_map",
+      "region": "map.icon.fish",
+      "index": -1
+    },
+    "map.resource.gems": {
+      "atlas": "icons_map",
+      "region": "map.icon.gems",
+      "index": -1
+    },
+    "map.resource.gold": {
+      "atlas": "icons_map",
+      "region": "map.icon.gold",
+      "index": -1
+    },
+    "map.resource.grapes": {
+      "atlas": "icons_map",
+      "region": "map.icon.grapes",
+      "index": -1
+    },
+    "map.resource.horses": {
+      "atlas": "icons_map",
+      "region": "map.icon.horse",
+      "index": -1
+    },
+    "map.resource.iron": {
+      "atlas": "icons_map",
+      "region": "map.icon.ironore",
+      "index": -1
+    },
+    "map.resource.ivory": {
+      "atlas": "icons_map",
+      "region": "map.icon.ivory",
+      "index": -1
+    },
+    "map.resource.marble": {
+      "atlas": "icons_map",
+      "region": "map.icon.marble",
+      "index": -1
+    },
+    "map.resource.oil": {
+      "atlas": "icons_map",
+      "region": "map.icon.oil",
+      "index": -1
+    },
+    "map.resource.pearls": {
+      "atlas": "icons_map",
+      "region": "map.icon.pearls",
+      "index": -1
+    },
+    "map.resource.rice": {
+      "atlas": "icons_map",
+      "region": "map.icon.rice",
+      "index": -1
+    },
+    "map.resource.sheep": {
+      "atlas": "icons_map",
+      "region": "map.icon.sheep",
+      "index": -1
+    },
+    "map.resource.silk": {
+      "atlas": "icons_map",
+      "region": "map.icon.silk",
+      "index": -1
+    },
+    "map.resource.silver": {
+      "atlas": "icons_map",
+      "region": "map.icon.silver",
+      "index": -1
+    },
+    "map.resource.spices": {
+      "atlas": "icons_map",
+      "region": "map.icon.spices",
+      "index": -1
+    },
+    "map.resource.sugar": {
+      "atlas": "icons_map",
+      "region": "map.icon.sugar",
+      "index": -1
+    },
+    "map.resource.tobacco": {
+      "atlas": "icons_map",
+      "region": "map.icon.tobbacco",
+      "index": -1
+    },
+    "map.resource.uranium": {
+      "atlas": "icons_map",
+      "region": "map.icon.uranium",
+      "index": -1
+    },
+    "map.resource.wheat": {
+      "atlas": "icons_map",
+      "region": "map.icon.wheat",
+      "index": -1
+    },
+    "map.terrain.coast": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_coast",
+      "index": -1
+    },
+    "map.terrain.desert": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_desert",
+      "index": -1
+    },
+    "map.terrain.forest": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_forest",
+      "index": -1
+    },
+    "map.terrain.grassland": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_grassland",
+      "index": -1
+    },
+    "map.terrain.hills": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_hills",
+      "index": -1
+    },
+    "map.terrain.jungle": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_jungle",
+      "index": -1
+    },
+    "map.terrain.lake": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_coast",
+      "index": -1
+    },
+    "map.terrain.mountain": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_mountain",
+      "index": -1
+    },
+    "map.terrain.ocean": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_ocean",
+      "index": -1
+    },
+    "map.terrain.plains": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_plains",
+      "index": -1
+    },
+    "map.terrain.river": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_river",
+      "index": -1
+    },
+    "map.terrain.snow": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_snow",
+      "index": -1
+    },
+    "map.terrain.tundra": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_tundra",
+      "index": -1
+    },
+    "map.terrain.wetlands": {
+      "atlas": "icons_map",
+      "region": "map.icon.terrain_river",
+      "index": -1
+    },
+    "technology.administration": {
+      "atlas": "technologies",
+      "region": "technology.administration",
+      "index": -1,
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "technology.advancedTrade": {
+      "atlas": "technologies",
+      "region": "technology.advancedTrade",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "technology.agriculture": {
+      "atlas": "technologies",
+      "region": "technology.agriculture",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "technology.animalHusbandry": {
+      "atlas": "technologies",
+      "region": "technology.animalHusbandry",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "technology.banking": {
+      "atlas": "technologies",
+      "region": "technology.banking",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "technology.bureaucracy": {
+      "atlas": "technologies",
+      "region": "technology.bureaucracy",
+      "index": -1,
+      "grid": [
+        4,
+        5
+      ]
+    },
+    "technology.cartography": {
+      "atlas": "technologies",
+      "region": "technology.cartography",
+      "index": -1,
+      "grid": [
+        5,
+        4
+      ]
+    },
+    "technology.civilService": {
+      "atlas": "technologies",
+      "region": "technology.civilService",
+      "index": -1,
+      "grid": [
+        3,
+        4
+      ]
+    },
+    "technology.coalMining": {
+      "atlas": "technologies",
+      "region": "technology.coalMining",
+      "index": -1,
+      "grid": [
+        0,
+        3
+      ]
+    },
+    "technology.combustion": {
+      "atlas": "technologies",
+      "region": "technology.combustion",
+      "index": -1,
+      "grid": [
+        1,
+        6
+      ]
+    },
+    "technology.construction": {
+      "atlas": "technologies",
+      "region": "technology.construction",
+      "index": -1,
+      "grid": [
+        5,
+        1
+      ]
+    },
+    "technology.craftsmanship": {
+      "atlas": "technologies",
+      "region": "technology.craftsmanship",
+      "index": -1,
+      "grid": [
+        6,
+        0
+      ]
+    },
+    "technology.economy": {
+      "atlas": "technologies",
+      "region": "technology.economy",
+      "index": -1,
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "technology.education": {
+      "atlas": "technologies",
+      "region": "technology.education",
+      "index": -1,
+      "grid": [
+        0,
+        5
+      ]
+    },
+    "technology.electricity": {
+      "atlas": "technologies",
+      "region": "technology.electricity",
+      "index": -1,
+      "grid": [
+        0,
+        6
+      ]
+    },
+    "technology.engineering": {
+      "atlas": "technologies",
+      "region": "technology.engineering",
+      "index": -1,
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "technology.fishing": {
+      "atlas": "technologies",
+      "region": "technology.fishing",
+      "index": -1,
+      "grid": [
+        5,
+        0
+      ]
+    },
+    "technology.flight": {
+      "atlas": "technologies",
+      "region": "technology.flight",
+      "index": -1,
+      "grid": [
+        2,
+        6
+      ]
+    },
+    "technology.fortifications": {
+      "atlas": "technologies",
+      "region": "technology.fortifications",
+      "index": -1,
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "technology.guilds": {
+      "atlas": "technologies",
+      "region": "technology.guilds",
+      "index": -1,
+      "grid": [
+        6,
+        4
+      ]
+    },
+    "technology.horsebackRiding": {
+      "atlas": "technologies",
+      "region": "technology.horsebackRiding",
+      "index": -1,
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "technology.hunting": {
+      "atlas": "technologies",
+      "region": "technology.hunting",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "technology.ironWorking": {
+      "atlas": "technologies",
+      "region": "technology.ironWorking",
+      "index": -1,
+      "grid": [
+        7,
+        2
+      ]
+    },
+    "technology.irrigation": {
+      "atlas": "technologies",
+      "region": "technology.irrigation",
+      "index": -1,
+      "grid": [
+        7,
+        1
+      ]
+    },
+    "technology.law": {
+      "atlas": "technologies",
+      "region": "technology.law",
+      "index": -1,
+      "grid": [
+        7,
+        4
+      ]
+    },
+    "technology.logistics": {
+      "atlas": "technologies",
+      "region": "technology.logistics",
+      "index": -1,
+      "grid": [
+        6,
+        2
+      ]
+    },
+    "technology.machinery": {
+      "atlas": "technologies",
+      "region": "technology.machinery",
+      "index": -1,
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "technology.massProduction": {
+      "atlas": "technologies",
+      "region": "technology.massProduction",
+      "index": -1,
+      "grid": [
+        3,
+        6
+      ]
+    },
+    "technology.mathematics": {
+      "atlas": "technologies",
+      "region": "technology.mathematics",
+      "index": -1,
+      "grid": [
+        1,
+        4
+      ]
+    },
+    "technology.medicine": {
+      "atlas": "technologies",
+      "region": "technology.medicine",
+      "index": -1,
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "technology.metallurgy": {
+      "atlas": "technologies",
+      "region": "technology.metallurgy",
+      "index": -1,
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "technology.militaryOrganization": {
+      "atlas": "technologies",
+      "region": "technology.militaryOrganization",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "technology.mining": {
+      "atlas": "technologies",
+      "region": "technology.mining",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "technology.nationalism": {
+      "atlas": "technologies",
+      "region": "technology.nationalism",
+      "index": -1,
+      "grid": [
+        5,
+        5
+      ]
+    },
+    "technology.navalDoctrine": {
+      "atlas": "technologies",
+      "region": "technology.navalDoctrine",
+      "index": -1,
+      "grid": [
+        2,
+        5
+      ]
+    },
+    "technology.navigation": {
+      "atlas": "technologies",
+      "region": "technology.navigation",
+      "index": -1,
+      "grid": [
+        6,
+        1
+      ]
+    },
+    "technology.nuclearPhysics": {
+      "atlas": "technologies",
+      "region": "technology.nuclearPhysics",
+      "index": -1,
+      "grid": [
+        5,
+        6
+      ]
+    },
+    "technology.radio": {
+      "atlas": "technologies",
+      "region": "technology.radio",
+      "index": -1,
+      "grid": [
+        4,
+        6
+      ]
+    },
+    "technology.scientificMethod": {
+      "atlas": "technologies",
+      "region": "technology.scientificMethod",
+      "index": -1,
+      "grid": [
+        6,
+        5
+      ]
+    },
+    "technology.shipbuilding": {
+      "atlas": "technologies",
+      "region": "technology.shipbuilding",
+      "index": -1,
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "technology.siegecraft": {
+      "atlas": "technologies",
+      "region": "technology.siegecraft",
+      "index": -1,
+      "grid": [
+        4,
+        4
+      ]
+    },
+    "technology.specialization": {
+      "atlas": "technologies",
+      "region": "technology.specialization",
+      "index": -1,
+      "grid": [
+        7,
+        3
+      ]
+    },
+    "technology.steamPower": {
+      "atlas": "technologies",
+      "region": "technology.steamPower",
+      "index": -1,
+      "grid": [
+        7,
+        5
+      ]
+    },
+    "technology.steel": {
+      "atlas": "technologies",
+      "region": "technology.steel",
+      "index": -1,
+      "grid": [
+        3,
+        5
+      ]
+    },
+    "technology.stoneworking": {
+      "atlas": "technologies",
+      "region": "technology.stoneworking",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "technology.storage": {
+      "atlas": "technologies",
+      "region": "technology.storage",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "technology.strategy": {
+      "atlas": "technologies",
+      "region": "technology.strategy",
+      "index": -1,
+      "grid": [
+        6,
+        3
+      ]
+    },
+    "technology.tactics": {
+      "atlas": "technologies",
+      "region": "technology.tactics",
+      "index": -1,
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "technology.trade": {
+      "atlas": "technologies",
+      "region": "technology.trade",
+      "index": -1,
+      "grid": [
+        7,
+        0
+      ]
+    },
+    "technology.urbanPlanning": {
+      "atlas": "technologies",
+      "region": "technology.urbanPlanning",
+      "index": -1,
+      "grid": [
+        1,
+        5
+      ]
+    },
+    "technology.urbanization": {
+      "atlas": "technologies",
+      "region": "technology.urbanization",
+      "index": -1,
+      "grid": [
+        5,
+        3
+      ]
+    },
+    "technology.waterEngineering": {
+      "atlas": "technologies",
+      "region": "technology.waterEngineering",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "technology.woodworking": {
+      "atlas": "technologies",
+      "region": "technology.woodworking",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "technology.writing": {
+      "atlas": "technologies",
+      "region": "technology.writing",
+      "index": -1,
+      "grid": [
+        0,
+        4
+      ]
+    },
+    "unit.archer.attack.0": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 0,
+      "content": [
+        13,
+        24,
+        238,
+        270
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.attack.1": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 1,
+      "content": [
+        0,
+        24,
+        233,
+        272
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.attack.2": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 2,
+      "content": [
+        11,
+        32,
+        241,
+        264
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.attack.3": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 3,
+      "content": [
+        18,
+        31,
+        234,
+        264
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.attack.4": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 4,
+      "content": [
+        3,
+        35,
+        190,
+        261
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.attack.5": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.attack",
+      "index": 5,
+      "content": [
+        0,
+        36,
+        179,
+        261
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 49.5
+    },
+    "unit.archer.die.0": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 0,
+      "content": [
+        5,
+        0,
+        235,
+        268
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.die.1": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 1,
+      "content": [
+        0,
+        0,
+        252,
+        272
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.die.2": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 2,
+      "content": [
+        0,
+        20,
+        220,
+        251
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.die.3": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 3,
+      "content": [
+        0,
+        87,
+        237,
+        186
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.die.4": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 4,
+      "content": [
+        0,
+        67,
+        232,
+        206
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.die.5": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.die",
+      "index": 5,
+      "content": [
+        0,
+        146,
+        246,
+        133
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 61.5
+    },
+    "unit.archer.idle.0": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 0,
+      "content": [
+        32,
+        120,
+        198,
+        260
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.idle.1": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 1,
+      "content": [
+        14,
+        118,
+        197,
+        262
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.idle.2": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 2,
+      "content": [
+        28,
+        118,
+        198,
+        262
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.idle.3": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 3,
+      "content": [
+        31,
+        118,
+        200,
+        262
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.idle.4": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 4,
+      "content": [
+        21,
+        118,
+        203,
+        262
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.idle.5": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.idle",
+      "index": 5,
+      "content": [
+        25,
+        120,
+        199,
+        260
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 136.0
+    },
+    "unit.archer.walk.0": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 0,
+      "content": [
+        24,
+        0,
+        203,
+        345
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.archer.walk.1": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 1,
+      "content": [
+        6,
+        0,
+        203,
+        345
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.archer.walk.2": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 2,
+      "content": [
+        22,
+        0,
+        200,
+        345
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.archer.walk.3": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 3,
+      "content": [
+        21,
+        0,
+        203,
+        345
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.archer.walk.4": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 4,
+      "content": [
+        16,
+        68,
+        200,
+        277
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.archer.walk.5": {
+      "atlas": "unit_archer",
+      "region": "unit.archer.walk",
+      "index": 5,
+      "content": [
+        9,
+        0,
+        201,
+        345
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.catapult.attack.0": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 0,
+      "content": [
+        11,
+        91,
+        241,
+        237
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.attack.1": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 1,
+      "content": [
+        0,
+        108,
+        252,
+        225
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.attack.2": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 2,
+      "content": [
+        0,
+        62,
+        252,
+        274
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.attack.3": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 3,
+      "content": [
+        0,
+        23,
+        252,
+        315
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.attack.4": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 4,
+      "content": [
+        0,
+        5,
+        252,
+        334
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.attack.5": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.attack",
+      "index": 5,
+      "content": [
+        0,
+        107,
+        252,
+        229
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 94.5
+    },
+    "unit.catapult.die.0": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 0,
+      "content": [
+        0,
+        34,
+        252,
+        252
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.die.1": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 1,
+      "content": [
+        0,
+        33,
+        252,
+        254
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.die.2": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 2,
+      "content": [
+        0,
+        25,
+        252,
+        264
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.die.3": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 3,
+      "content": [
+        0,
+        96,
+        252,
+        196
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.die.4": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 4,
+      "content": [
+        0,
+        104,
+        252,
+        182
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.die.5": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.die",
+      "index": 5,
+      "content": [
+        0,
+        124,
+        252,
+        161
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 83.0
+    },
+    "unit.catapult.idle.0": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 0,
+      "content": [
+        11,
+        88,
+        241,
+        292
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.idle.1": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 1,
+      "content": [
+        1,
+        99,
+        251,
+        281
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.idle.2": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 2,
+      "content": [
+        0,
+        94,
+        252,
+        286
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.idle.3": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 3,
+      "content": [
+        0,
+        93,
+        252,
+        287
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.idle.4": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 4,
+      "content": [
+        0,
+        97,
+        252,
+        283
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.idle.5": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.idle",
+      "index": 5,
+      "content": [
+        0,
+        96,
+        252,
+        284
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 113.0
+    },
+    "unit.catapult.walk.0": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 0,
+      "content": [
+        6,
+        74,
+        246,
+        288
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.catapult.walk.1": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 1,
+      "content": [
+        0,
+        80,
+        252,
+        285
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.catapult.walk.2": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 2,
+      "content": [
+        2,
+        79,
+        250,
+        288
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.catapult.walk.3": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 3,
+      "content": [
+        0,
+        78,
+        252,
+        291
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.catapult.walk.4": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 4,
+      "content": [
+        0,
+        82,
+        252,
+        290
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.catapult.walk.5": {
+      "atlas": "unit_catapult",
+      "region": "unit.catapult.walk",
+      "index": 5,
+      "content": [
+        0,
+        87,
+        252,
+        287
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 97.5
+    },
+    "unit.cavalry.attack.0": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 0,
+      "content": [
+        0,
+        47,
+        252,
+        237
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.attack.1": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 1,
+      "content": [
+        0,
+        67,
+        252,
+        244
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.attack.2": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 2,
+      "content": [
+        0,
+        68,
+        252,
+        243
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.attack.3": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 3,
+      "content": [
+        0,
+        150,
+        247,
+        124
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.attack.4": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 4,
+      "content": [
+        0,
+        75,
+        252,
+        232
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.attack.5": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.attack",
+      "index": 5,
+      "content": [
+        0,
+        13,
+        245,
+        284
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 85.5
+    },
+    "unit.cavalry.die.0": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 0,
+      "content": [
+        0,
+        0,
+        252,
+        275
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.die.1": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 1,
+      "content": [
+        0,
+        74,
+        252,
+        220
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.die.2": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 2,
+      "content": [
+        0,
+        120,
+        252,
+        192
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.die.3": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 3,
+      "content": [
+        0,
+        107,
+        230,
+        166
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.die.4": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 4,
+      "content": [
+        3,
+        112,
+        249,
+        164
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.die.5": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.die",
+      "index": 5,
+      "content": [
+        0,
+        160,
+        247,
+        174
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 127.5
+    },
+    "unit.cavalry.idle.0": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 0,
+      "content": [
+        4,
+        12,
+        248,
+        337
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.idle.1": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 1,
+      "content": [
+        3,
+        12,
+        249,
+        338
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.idle.2": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 2,
+      "content": [
+        0,
+        13,
+        252,
+        335
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.idle.3": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 3,
+      "content": [
+        1,
+        14,
+        251,
+        335
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.idle.4": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 4,
+      "content": [
+        5,
+        21,
+        247,
+        331
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.idle.5": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.idle",
+      "index": 5,
+      "content": [
+        3,
+        11,
+        246,
+        343
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 30.5
+    },
+    "unit.cavalry.walk.0": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 0,
+      "content": [
+        2,
+        21,
+        246,
+        297
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.cavalry.walk.1": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 1,
+      "content": [
+        0,
+        18,
+        238,
+        303
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.cavalry.walk.2": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 2,
+      "content": [
+        0,
+        17,
+        233,
+        304
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.cavalry.walk.3": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 3,
+      "content": [
+        0,
+        15,
+        236,
+        303
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.cavalry.walk.4": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 4,
+      "content": [
+        0,
+        12,
+        232,
+        306
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.cavalry.walk.5": {
+      "atlas": "unit_cavalry",
+      "region": "unit.cavalry.walk",
+      "index": 5,
+      "content": [
+        0,
+        16,
+        232,
+        302
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 34.5
+    },
+    "unit.commander.attack.0": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 0,
+      "content": [
+        16,
+        0,
+        236,
+        334
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.attack.1": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 1,
+      "content": [
+        0,
+        5,
+        252,
+        330
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.attack.2": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 2,
+      "content": [
+        0,
+        10,
+        252,
+        326
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.attack.3": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 3,
+      "content": [
+        0,
+        2,
+        252,
+        334
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.attack.4": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 4,
+      "content": [
+        5,
+        108,
+        247,
+        225
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.attack.5": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.attack",
+      "index": 5,
+      "content": [
+        0,
+        5,
+        201,
+        333
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 23.0
+    },
+    "unit.commander.die.0": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 0,
+      "content": [
+        11,
+        0,
+        234,
+        313
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.die.1": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 1,
+      "content": [
+        0,
+        5,
+        226,
+        312
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.die.2": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 2,
+      "content": [
+        0,
+        7,
+        252,
+        312
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.die.3": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 3,
+      "content": [
+        0,
+        28,
+        252,
+        293
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.die.4": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 4,
+      "content": [
+        0,
+        69,
+        252,
+        251
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.die.5": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.die",
+      "index": 5,
+      "content": [
+        0,
+        143,
+        236,
+        178
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 35.5
+    },
+    "unit.commander.idle.0": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 0,
+      "content": [
+        24,
+        23,
+        224,
+        357
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.idle.1": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 1,
+      "content": [
+        14,
+        24,
+        238,
+        356
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.idle.2": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 2,
+      "content": [
+        15,
+        24,
+        236,
+        356
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.idle.3": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 3,
+      "content": [
+        8,
+        27,
+        224,
+        353
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.idle.4": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 4,
+      "content": [
+        4,
+        26,
+        224,
+        354
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.idle.5": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.idle",
+      "index": 5,
+      "content": [
+        0,
+        26,
+        218,
+        354
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 43.0
+    },
+    "unit.commander.walk.0": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 0,
+      "content": [
+        25,
+        23,
+        224,
+        329
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.commander.walk.1": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 1,
+      "content": [
+        1,
+        22,
+        231,
+        331
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.commander.walk.2": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 2,
+      "content": [
+        0,
+        23,
+        234,
+        330
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.commander.walk.3": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 3,
+      "content": [
+        0,
+        18,
+        223,
+        334
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.commander.walk.4": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 4,
+      "content": [
+        0,
+        18,
+        252,
+        334
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.commander.walk.5": {
+      "atlas": "unit_commander",
+      "region": "unit.commander.walk",
+      "index": 5,
+      "content": [
+        0,
+        6,
+        197,
+        348
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 38.0
+    },
+    "unit.fieldCannon.attack.0": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 0,
+      "content": [
+        26,
+        45,
+        226,
+        227
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.attack.1": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 1,
+      "content": [
+        9,
+        66,
+        243,
+        205
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.attack.2": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 2,
+      "content": [
+        8,
+        71,
+        239,
+        200
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.attack.3": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 3,
+      "content": [
+        0,
+        47,
+        252,
+        224
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.attack.4": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 4,
+      "content": [
+        0,
+        37,
+        252,
+        235
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.attack.5": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.attack",
+      "index": 5,
+      "content": [
+        0,
+        48,
+        224,
+        225
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 65.5
+    },
+    "unit.fieldCannon.die.0": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 0,
+      "content": [
+        2,
+        40,
+        247,
+        218
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.die.1": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 1,
+      "content": [
+        0,
+        45,
+        252,
+        216
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.die.2": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 2,
+      "content": [
+        0,
+        50,
+        233,
+        214
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.die.3": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 3,
+      "content": [
+        0,
+        60,
+        252,
+        200
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.die.4": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 4,
+      "content": [
+        0,
+        97,
+        238,
+        163
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.die.5": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.die",
+      "index": 5,
+      "content": [
+        0,
+        127,
+        226,
+        134
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 73.0
+    },
+    "unit.fieldCannon.idle.0": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 0,
+      "content": [
+        29,
+        116,
+        223,
+        225
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.idle.1": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 1,
+      "content": [
+        11,
+        117,
+        238,
+        224
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.idle.2": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 2,
+      "content": [
+        6,
+        108,
+        235,
+        234
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.idle.3": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 3,
+      "content": [
+        4,
+        126,
+        236,
+        215
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.idle.4": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 4,
+      "content": [
+        0,
+        122,
+        233,
+        219
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.idle.5": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.idle",
+      "index": 5,
+      "content": [
+        0,
+        108,
+        223,
+        234
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 134.5
+    },
+    "unit.fieldCannon.walk.0": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 0,
+      "content": [
+        6,
+        122,
+        246,
+        185
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.fieldCannon.walk.1": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 1,
+      "content": [
+        0,
+        125,
+        252,
+        182
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.fieldCannon.walk.2": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 2,
+      "content": [
+        7,
+        122,
+        245,
+        185
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.fieldCannon.walk.3": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 3,
+      "content": [
+        4,
+        123,
+        243,
+        183
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.fieldCannon.walk.4": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 4,
+      "content": [
+        0,
+        124,
+        236,
+        182
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.fieldCannon.walk.5": {
+      "atlas": "unit_fieldCannon",
+      "region": "unit.fieldCannon.walk",
+      "index": 5,
+      "content": [
+        0,
+        124,
+        247,
+        182
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 141.5
+    },
+    "unit.heavyInfantry.attack.0": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 0,
+      "content": [
+        21,
+        42,
+        231,
+        338
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.attack.1": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 1,
+      "content": [
+        13,
+        48,
+        231,
+        256
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.attack.2": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 2,
+      "content": [
+        7,
+        48,
+        234,
+        256
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.attack.3": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 3,
+      "content": [
+        0,
+        50,
+        252,
+        249
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.attack.4": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 4,
+      "content": [
+        0,
+        42,
+        222,
+        265
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.attack.5": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.attack",
+      "index": 5,
+      "content": [
+        0,
+        41,
+        209,
+        266
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 63.0
+    },
+    "unit.heavyInfantry.die.0": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 0,
+      "content": [
+        20,
+        0,
+        226,
+        248
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.die.1": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 1,
+      "content": [
+        5,
+        10,
+        243,
+        241
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.die.2": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 2,
+      "content": [
+        0,
+        36,
+        252,
+        218
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.die.3": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 3,
+      "content": [
+        0,
+        104,
+        252,
+        151
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.die.4": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 4,
+      "content": [
+        0,
+        24,
+        252,
+        237
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.die.5": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.die",
+      "index": 5,
+      "content": [
+        0,
+        92,
+        240,
+        164
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 48.0
+    },
+    "unit.heavyInfantry.idle.0": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 0,
+      "content": [
+        34,
+        116,
+        218,
+        264
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.idle.1": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 1,
+      "content": [
+        26,
+        115,
+        223,
+        265
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.idle.2": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 2,
+      "content": [
+        18,
+        118,
+        222,
+        262
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.idle.3": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 3,
+      "content": [
+        9,
+        116,
+        221,
+        264
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.idle.4": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 4,
+      "content": [
+        0,
+        116,
+        222,
+        264
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.idle.5": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.idle",
+      "index": 5,
+      "content": [
+        0,
+        117,
+        215,
+        263
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 134.0
+    },
+    "unit.heavyInfantry.walk.0": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 0,
+      "content": [
+        24,
+        72,
+        226,
+        281
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.heavyInfantry.walk.1": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 1,
+      "content": [
+        18,
+        73,
+        226,
+        281
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.heavyInfantry.walk.2": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 2,
+      "content": [
+        12,
+        73,
+        229,
+        281
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.heavyInfantry.walk.3": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 3,
+      "content": [
+        5,
+        75,
+        227,
+        279
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.heavyInfantry.walk.4": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 4,
+      "content": [
+        0,
+        75,
+        223,
+        278
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.heavyInfantry.walk.5": {
+      "atlas": "unit_heavyInfantry",
+      "region": "unit.heavyInfantry.walk",
+      "index": 5,
+      "content": [
+        0,
+        75,
+        216,
+        278
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 92.0
+    },
+    "unit.merchant.die.0": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 0,
+      "content": [
+        6,
+        0,
+        245,
+        271
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.die.1": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 1,
+      "content": [
+        2,
+        0,
+        250,
+        268
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.die.2": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 2,
+      "content": [
+        0,
+        36,
+        249,
+        247
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.die.3": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 3,
+      "content": [
+        0,
+        104,
+        251,
+        181
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.die.4": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 4,
+      "content": [
+        0,
+        133,
+        252,
+        153
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.die.5": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.die",
+      "index": 5,
+      "content": [
+        0,
+        132,
+        242,
+        178
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 88.0
+    },
+    "unit.merchant.idle.0": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 0,
+      "content": [
+        22,
+        84,
+        230,
+        296
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.idle.1": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 1,
+      "content": [
+        0,
+        88,
+        252,
+        292
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.idle.2": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 2,
+      "content": [
+        15,
+        93,
+        237,
+        287
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.idle.3": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 3,
+      "content": [
+        5,
+        87,
+        247,
+        293
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.idle.4": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 4,
+      "content": [
+        4,
+        92,
+        243,
+        288
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.idle.5": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.idle",
+      "index": 5,
+      "content": [
+        0,
+        89,
+        245,
+        291
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 106.5
+    },
+    "unit.merchant.walk.0": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 0,
+      "content": [
+        19,
+        36,
+        233,
+        296
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.walk.1": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 1,
+      "content": [
+        16,
+        35,
+        236,
+        297
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.walk.2": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 2,
+      "content": [
+        11,
+        39,
+        241,
+        293
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.walk.3": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 3,
+      "content": [
+        5,
+        38,
+        245,
+        294
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.walk.4": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 4,
+      "content": [
+        2,
+        39,
+        238,
+        293
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.walk.5": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.walk",
+      "index": 5,
+      "content": [
+        0,
+        38,
+        237,
+        294
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 56.0
+    },
+    "unit.merchant.work.0": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 0,
+      "content": [
+        7,
+        0,
+        245,
+        380
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.merchant.work.1": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 1,
+      "content": [
+        1,
+        0,
+        251,
+        380
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.merchant.work.2": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 2,
+      "content": [
+        0,
+        1,
+        252,
+        290
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.merchant.work.3": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 3,
+      "content": [
+        0,
+        0,
+        252,
+        285
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.merchant.work.4": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 4,
+      "content": [
+        0,
+        1,
+        252,
+        289
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.merchant.work.5": {
+      "atlas": "unit_merchant",
+      "region": "unit.merchant.work",
+      "index": 5,
+      "content": [
+        0,
+        6,
+        248,
+        284
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 18.0
+    },
+    "unit.reconPlane.attack.0": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 0,
+      "content": [
+        43,
+        28,
+        209,
+        190
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.attack.1": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 1,
+      "content": [
+        20,
+        28,
+        226,
+        281
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.attack.2": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 2,
+      "content": [
+        13,
+        32,
+        226,
+        294
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.attack.3": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 3,
+      "content": [
+        0,
+        35,
+        210,
+        267
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.attack.4": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 4,
+      "content": [
+        2,
+        40,
+        222,
+        266
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.attack.5": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.attack",
+      "index": 5,
+      "content": [
+        0,
+        50,
+        215,
+        193
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 51.5
+    },
+    "unit.reconPlane.die.0": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 0,
+      "content": [
+        23,
+        14,
+        228,
+        200
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.die.1": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 1,
+      "content": [
+        10,
+        18,
+        229,
+        220
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.die.2": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 2,
+      "content": [
+        11,
+        22,
+        221,
+        239
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.die.3": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 3,
+      "content": [
+        17,
+        53,
+        182,
+        222
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.die.4": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 4,
+      "content": [
+        10,
+        63,
+        242,
+        222
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.die.5": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.die",
+      "index": 5,
+      "content": [
+        0,
+        160,
+        195,
+        137
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 55.5
+    },
+    "unit.reconPlane.idle.0": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 0,
+      "content": [
+        17,
+        117,
+        235,
+        212
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.idle.1": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 1,
+      "content": [
+        4,
+        115,
+        248,
+        214
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.idle.2": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 2,
+      "content": [
+        0,
+        114,
+        252,
+        216
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.idle.3": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 3,
+      "content": [
+        0,
+        117,
+        252,
+        217
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.idle.4": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 4,
+      "content": [
+        0,
+        119,
+        219,
+        213
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.idle.5": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.idle",
+      "index": 5,
+      "content": [
+        0,
+        120,
+        221,
+        216
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 135.0
+    },
+    "unit.reconPlane.walk.0": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 0,
+      "content": [
+        46,
+        86,
+        206,
+        193
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.reconPlane.walk.1": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 1,
+      "content": [
+        34,
+        86,
+        218,
+        196
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.reconPlane.walk.2": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 2,
+      "content": [
+        21,
+        93,
+        228,
+        194
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.reconPlane.walk.3": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 3,
+      "content": [
+        0,
+        94,
+        227,
+        192
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.reconPlane.walk.4": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 4,
+      "content": [
+        0,
+        91,
+        222,
+        199
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.reconPlane.walk.5": {
+      "atlas": "unit_reconPlane",
+      "region": "unit.reconPlane.walk",
+      "index": 5,
+      "content": [
+        0,
+        100,
+        215,
+        201
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 110.0
+    },
+    "unit.rifleman.attack.0": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 0,
+      "content": [
+        11,
+        11,
+        241,
+        369
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.attack.1": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 1,
+      "content": [
+        0,
+        14,
+        252,
+        366
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.attack.2": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 2,
+      "content": [
+        0,
+        12,
+        252,
+        368
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.attack.3": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 3,
+      "content": [
+        0,
+        13,
+        252,
+        266
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.attack.4": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 4,
+      "content": [
+        0,
+        13,
+        252,
+        268
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.attack.5": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.attack",
+      "index": 5,
+      "content": [
+        0,
+        17,
+        227,
+        265
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 31.0
+    },
+    "unit.rifleman.die.0": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 0,
+      "content": [
+        11,
+        0,
+        241,
+        232
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.die.1": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 1,
+      "content": [
+        20,
+        0,
+        229,
+        238
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.die.2": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 2,
+      "content": [
+        0,
+        0,
+        252,
+        236
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.die.3": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 3,
+      "content": [
+        0,
+        19,
+        252,
+        237
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.die.4": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 4,
+      "content": [
+        0,
+        29,
+        252,
+        235
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.die.5": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.die",
+      "index": 5,
+      "content": [
+        0,
+        113,
+        251,
+        127
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 18.5
+    },
+    "unit.rifleman.idle.0": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 0,
+      "content": [
+        10,
+        100,
+        242,
+        280
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.idle.1": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 1,
+      "content": [
+        0,
+        109,
+        252,
+        270
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.idle.2": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 2,
+      "content": [
+        0,
+        106,
+        252,
+        272
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.idle.3": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 3,
+      "content": [
+        0,
+        107,
+        252,
+        273
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.idle.4": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 4,
+      "content": [
+        0,
+        103,
+        252,
+        276
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.idle.5": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.idle",
+      "index": 5,
+      "content": [
+        0,
+        107,
+        240,
+        273
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 124.5
+    },
+    "unit.rifleman.walk.0": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 0,
+      "content": [
+        12,
+        52,
+        240,
+        287
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.rifleman.walk.1": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 1,
+      "content": [
+        0,
+        56,
+        252,
+        285
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.rifleman.walk.2": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 2,
+      "content": [
+        0,
+        55,
+        252,
+        284
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.rifleman.walk.3": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 3,
+      "content": [
+        0,
+        56,
+        252,
+        285
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.rifleman.walk.4": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 4,
+      "content": [
+        0,
+        53,
+        252,
+        287
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.rifleman.walk.5": {
+      "atlas": "unit_rifleman",
+      "region": "unit.rifleman.walk",
+      "index": 5,
+      "content": [
+        0,
+        55,
+        218,
+        286
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 73.0
+    },
+    "unit.scout.attack.0": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 0,
+      "content": [
+        0,
+        64,
+        252,
+        251
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.attack.1": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 1,
+      "content": [
+        0,
+        75,
+        252,
+        242
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.attack.2": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 2,
+      "content": [
+        0,
+        77,
+        252,
+        240
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.attack.3": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 3,
+      "content": [
+        0,
+        79,
+        252,
+        237
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.attack.4": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 4,
+      "content": [
+        0,
+        88,
+        252,
+        227
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.attack.5": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.attack",
+      "index": 5,
+      "content": [
+        0,
+        96,
+        252,
+        222
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 96.0
+    },
+    "unit.scout.die.0": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 0,
+      "content": [
+        7,
+        11,
+        245,
+        265
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.die.1": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 1,
+      "content": [
+        0,
+        17,
+        252,
+        246
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.die.2": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 2,
+      "content": [
+        0,
+        62,
+        219,
+        219
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.die.3": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 3,
+      "content": [
+        0,
+        68,
+        246,
+        193
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.die.4": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 4,
+      "content": [
+        0,
+        67,
+        252,
+        202
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.die.5": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.die",
+      "index": 5,
+      "content": [
+        4,
+        110,
+        248,
+        173
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 82.5
+    },
+    "unit.scout.idle.0": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 0,
+      "content": [
+        12,
+        121,
+        240,
+        259
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.idle.1": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 1,
+      "content": [
+        0,
+        126,
+        252,
+        254
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.idle.2": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 2,
+      "content": [
+        0,
+        129,
+        252,
+        251
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.idle.3": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 3,
+      "content": [
+        0,
+        128,
+        252,
+        252
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.idle.4": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 4,
+      "content": [
+        0,
+        124,
+        247,
+        256
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.idle.5": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.idle",
+      "index": 5,
+      "content": [
+        0,
+        126,
+        245,
+        254
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 144.0
+    },
+    "unit.scout.walk.0": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 0,
+      "content": [
+        4,
+        110,
+        248,
+        242
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scout.walk.1": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 1,
+      "content": [
+        0,
+        109,
+        252,
+        245
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scout.walk.2": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 2,
+      "content": [
+        0,
+        108,
+        252,
+        245
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scout.walk.3": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 3,
+      "content": [
+        0,
+        110,
+        252,
+        245
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scout.walk.4": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 4,
+      "content": [
+        0,
+        112,
+        252,
+        243
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scout.walk.5": {
+      "atlas": "unit_scout",
+      "region": "unit.scout.walk",
+      "index": 5,
+      "content": [
+        0,
+        111,
+        252,
+        245
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 128.0
+    },
+    "unit.scoutShip.attack.0": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 0,
+      "content": [
+        60,
+        57,
+        192,
+        296
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.attack.1": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 1,
+      "content": [
+        43,
+        56,
+        204,
+        298
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.attack.2": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 2,
+      "content": [
+        25,
+        59,
+        203,
+        296
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.attack.3": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 3,
+      "content": [
+        12,
+        59,
+        240,
+        298
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.attack.4": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 4,
+      "content": [
+        4,
+        60,
+        218,
+        303
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.attack.5": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.attack",
+      "index": 5,
+      "content": [
+        0,
+        59,
+        195,
+        299
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 77.0
+    },
+    "unit.scoutShip.die.0": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 0,
+      "content": [
+        39,
+        0,
+        213,
+        291
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.die.1": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 1,
+      "content": [
+        43,
+        13,
+        206,
+        280
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.die.2": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 2,
+      "content": [
+        22,
+        54,
+        220,
+        243
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.die.3": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 3,
+      "content": [
+        18,
+        104,
+        212,
+        201
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.die.4": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 4,
+      "content": [
+        8,
+        177,
+        208,
+        128
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.die.5": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.die",
+      "index": 5,
+      "content": [
+        0,
+        206,
+        215,
+        101
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 97.0
+    },
+    "unit.scoutShip.idle.0": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 0,
+      "content": [
+        54,
+        99,
+        198,
+        281
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.idle.1": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 1,
+      "content": [
+        46,
+        98,
+        202,
+        282
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.idle.2": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 2,
+      "content": [
+        37,
+        99,
+        201,
+        281
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.idle.3": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 3,
+      "content": [
+        22,
+        99,
+        202,
+        281
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.idle.4": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 4,
+      "content": [
+        10,
+        97,
+        202,
+        283
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.idle.5": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.idle",
+      "index": 5,
+      "content": [
+        1,
+        99,
+        201,
+        281
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 117.0
+    },
+    "unit.scoutShip.walk.0": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 0,
+      "content": [
+        32,
+        0,
+        220,
+        380
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.scoutShip.walk.1": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 1,
+      "content": [
+        30,
+        0,
+        222,
+        380
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.scoutShip.walk.2": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 2,
+      "content": [
+        0,
+        0,
+        252,
+        380
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.scoutShip.walk.3": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 3,
+      "content": [
+        0,
+        0,
+        242,
+        380
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.scoutShip.walk.4": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 4,
+      "content": [
+        0,
+        0,
+        252,
+        380
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.scoutShip.walk.5": {
+      "atlas": "unit_scoutShip",
+      "region": "unit.scoutShip.walk",
+      "index": 5,
+      "content": [
+        0,
+        0,
+        219,
+        380
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.die.0": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 0,
+      "content": [
+        26,
+        35,
+        226,
+        242
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.die.1": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 1,
+      "content": [
+        0,
+        14,
+        252,
+        287
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.die.2": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 2,
+      "content": [
+        0,
+        61,
+        252,
+        229
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.die.3": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 3,
+      "content": [
+        9,
+        94,
+        243,
+        201
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.die.4": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 4,
+      "content": [
+        0,
+        139,
+        252,
+        161
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.die.5": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.die",
+      "index": 5,
+      "content": [
+        0,
+        170,
+        220,
+        130
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 95.5
+    },
+    "unit.settler.idle.0": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 0,
+      "content": [
+        35,
+        72,
+        217,
+        308
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.idle.1": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 1,
+      "content": [
+        0,
+        74,
+        252,
+        306
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.idle.2": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 2,
+      "content": [
+        0,
+        74,
+        252,
+        306
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.idle.3": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 3,
+      "content": [
+        0,
+        72,
+        252,
+        308
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.idle.4": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 4,
+      "content": [
+        0,
+        75,
+        252,
+        305
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.idle.5": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.idle",
+      "index": 5,
+      "content": [
+        0,
+        75,
+        217,
+        305
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 92.0
+    },
+    "unit.settler.walk.0": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 0,
+      "content": [
+        29,
+        0,
+        223,
+        374
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.walk.1": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 1,
+      "content": [
+        22,
+        0,
+        230,
+        374
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.walk.2": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 2,
+      "content": [
+        9,
+        0,
+        235,
+        379
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.walk.3": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 3,
+      "content": [
+        0,
+        0,
+        252,
+        374
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.walk.4": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 4,
+      "content": [
+        0,
+        0,
+        252,
+        377
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.walk.5": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.walk",
+      "index": 5,
+      "content": [
+        0,
+        0,
+        201,
+        380
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.settler.work.0": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 0,
+      "content": [
+        21,
+        68,
+        231,
+        258
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.settler.work.1": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 1,
+      "content": [
+        0,
+        54,
+        252,
+        271
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.settler.work.2": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 2,
+      "content": [
+        0,
+        56,
+        252,
+        283
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.settler.work.3": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 3,
+      "content": [
+        0,
+        68,
+        252,
+        276
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.settler.work.4": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 4,
+      "content": [
+        0,
+        73,
+        252,
+        282
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.settler.work.5": {
+      "atlas": "unit_settler",
+      "region": "unit.settler.work",
+      "index": 5,
+      "content": [
+        0,
+        70,
+        231,
+        271
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 86.0
+    },
+    "unit.spearman.attack.0": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 0,
+      "content": [
+        19,
+        17,
+        233,
+        275
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.attack.1": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 1,
+      "content": [
+        0,
+        16,
+        252,
+        276
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.attack.2": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 2,
+      "content": [
+        0,
+        80,
+        252,
+        213
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.attack.3": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 3,
+      "content": [
+        0,
+        82,
+        252,
+        213
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.attack.4": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 4,
+      "content": [
+        0,
+        78,
+        242,
+        217
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.attack.5": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.attack",
+      "index": 5,
+      "content": [
+        0,
+        21,
+        230,
+        263
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 67.5
+    },
+    "unit.spearman.die.0": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 0,
+      "content": [
+        22,
+        7,
+        230,
+        232
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.die.1": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 1,
+      "content": [
+        5,
+        29,
+        247,
+        261
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.die.2": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 2,
+      "content": [
+        0,
+        66,
+        252,
+        232
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.die.3": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 3,
+      "content": [
+        0,
+        95,
+        252,
+        203
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.die.4": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 4,
+      "content": [
+        0,
+        98,
+        252,
+        208
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.die.5": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.die",
+      "index": 5,
+      "content": [
+        0,
+        139,
+        243,
+        153
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 98.5
+    },
+    "unit.spearman.idle.0": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 0,
+      "content": [
+        43,
+        47,
+        209,
+        298
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.idle.1": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 1,
+      "content": [
+        0,
+        47,
+        252,
+        301
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.idle.2": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 2,
+      "content": [
+        0,
+        47,
+        252,
+        302
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.idle.3": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 3,
+      "content": [
+        8,
+        53,
+        244,
+        298
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.idle.4": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 4,
+      "content": [
+        0,
+        50,
+        235,
+        298
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.idle.5": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.idle",
+      "index": 5,
+      "content": [
+        0,
+        55,
+        223,
+        295
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 66.5
+    },
+    "unit.spearman.walk.0": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 0,
+      "content": [
+        29,
+        6,
+        223,
+        298
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.spearman.walk.1": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 1,
+      "content": [
+        0,
+        16,
+        252,
+        292
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.spearman.walk.2": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 2,
+      "content": [
+        0,
+        16,
+        252,
+        298
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.spearman.walk.3": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 3,
+      "content": [
+        0,
+        17,
+        252,
+        297
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.spearman.walk.4": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 4,
+      "content": [
+        0,
+        14,
+        252,
+        292
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.spearman.walk.5": {
+      "atlas": "unit_spearman",
+      "region": "unit.spearman.walk",
+      "index": 5,
+      "content": [
+        0,
+        22,
+        219,
+        291
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 34.0
+    },
+    "unit.tank.attack.0": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 0,
+      "content": [
+        9,
+        64,
+        243,
+        257
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.attack.1": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 1,
+      "content": [
+        0,
+        90,
+        252,
+        231
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.attack.2": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 2,
+      "content": [
+        0,
+        93,
+        252,
+        228
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.attack.3": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 3,
+      "content": [
+        0,
+        92,
+        252,
+        230
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.attack.4": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 4,
+      "content": [
+        0,
+        71,
+        231,
+        251
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.attack.5": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.attack",
+      "index": 5,
+      "content": [
+        0,
+        71,
+        228,
+        250
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 98.5
+    },
+    "unit.tank.die.0": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 0,
+      "content": [
+        12,
+        47,
+        240,
+        229
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.die.1": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 1,
+      "content": [
+        5,
+        48,
+        243,
+        227
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.die.2": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 2,
+      "content": [
+        0,
+        50,
+        243,
+        226
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.die.3": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 3,
+      "content": [
+        0,
+        52,
+        237,
+        224
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.die.4": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 4,
+      "content": [
+        0,
+        98,
+        252,
+        178
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.die.5": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.die",
+      "index": 5,
+      "content": [
+        0,
+        125,
+        247,
+        149
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 69.0
+    },
+    "unit.tank.idle.0": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 0,
+      "content": [
+        0,
+        116,
+        252,
+        264
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.idle.1": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 1,
+      "content": [
+        0,
+        129,
+        252,
+        251
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.idle.2": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 2,
+      "content": [
+        0,
+        135,
+        252,
+        245
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.idle.3": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 3,
+      "content": [
+        0,
+        133,
+        245,
+        247
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.idle.4": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 4,
+      "content": [
+        0,
+        123,
+        252,
+        257
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.idle.5": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.idle",
+      "index": 5,
+      "content": [
+        0,
+        132,
+        228,
+        248
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 148.5
+    },
+    "unit.tank.walk.0": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 0,
+      "content": [
+        17,
+        113,
+        235,
+        236
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.tank.walk.1": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 1,
+      "content": [
+        9,
+        115,
+        243,
+        234
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.tank.walk.2": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 2,
+      "content": [
+        2,
+        124,
+        250,
+        225
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.tank.walk.3": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 3,
+      "content": [
+        0,
+        123,
+        243,
+        226
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.tank.walk.4": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 4,
+      "content": [
+        0,
+        124,
+        252,
+        226
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.tank.walk.5": {
+      "atlas": "unit_tank",
+      "region": "unit.tank.walk",
+      "index": 5,
+      "content": [
+        0,
+        113,
+        228,
+        236
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 137.0
+    },
+    "unit.warrior.attack.0": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 0,
+      "content": [
+        11,
+        0,
+        241,
+        380
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.attack.1": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 1,
+      "content": [
+        7,
+        1,
+        245,
+        379
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.attack.2": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 2,
+      "content": [
+        4,
+        2,
+        248,
+        285
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.attack.3": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 3,
+      "content": [
+        0,
+        2,
+        252,
+        286
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.attack.4": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 4,
+      "content": [
+        0,
+        3,
+        252,
+        285
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.attack.5": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.attack",
+      "index": 5,
+      "content": [
+        0,
+        8,
+        251,
+        280
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 20.0
+    },
+    "unit.warrior.die.0": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 0,
+      "content": [
+        10,
+        0,
+        235,
+        262
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.die.1": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 1,
+      "content": [
+        3,
+        0,
+        249,
+        272
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.die.2": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 2,
+      "content": [
+        0,
+        38,
+        251,
+        243
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.die.3": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 3,
+      "content": [
+        0,
+        103,
+        252,
+        176
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.die.4": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 4,
+      "content": [
+        0,
+        136,
+        237,
+        152
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.die.5": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.die",
+      "index": 5,
+      "content": [
+        0,
+        137,
+        239,
+        169
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 88.5
+    },
+    "unit.warrior.idle.0": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 0,
+      "content": [
+        22,
+        91,
+        230,
+        289
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.idle.1": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 1,
+      "content": [
+        16,
+        92,
+        236,
+        288
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.idle.2": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 2,
+      "content": [
+        15,
+        97,
+        230,
+        283
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.idle.3": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 3,
+      "content": [
+        10,
+        92,
+        242,
+        288
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.idle.4": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 4,
+      "content": [
+        8,
+        95,
+        244,
+        285
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.idle.5": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.idle",
+      "index": 5,
+      "content": [
+        0,
+        93,
+        248,
+        287
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 110.5
+    },
+    "unit.warrior.walk.0": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 0,
+      "content": [
+        19,
+        39,
+        233,
+        289
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warrior.walk.1": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 1,
+      "content": [
+        15,
+        36,
+        237,
+        292
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warrior.walk.2": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 2,
+      "content": [
+        13,
+        39,
+        239,
+        290
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warrior.walk.3": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 3,
+      "content": [
+        8,
+        39,
+        244,
+        291
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warrior.walk.4": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 4,
+      "content": [
+        5,
+        41,
+        241,
+        288
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warrior.walk.5": {
+      "atlas": "unit_warrior",
+      "region": "unit.warrior.walk",
+      "index": 5,
+      "content": [
+        0,
+        40,
+        237,
+        289
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 57.0
+    },
+    "unit.warship.attack.0": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 0,
+      "content": [
+        24,
+        43,
+        228,
+        306
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.attack.1": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 1,
+      "content": [
+        0,
+        45,
+        252,
+        308
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.attack.2": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 2,
+      "content": [
+        9,
+        47,
+        243,
+        307
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.attack.3": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 3,
+      "content": [
+        0,
+        47,
+        252,
+        304
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.attack.4": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 4,
+      "content": [
+        0,
+        47,
+        252,
+        308
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.attack.5": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.attack",
+      "index": 5,
+      "content": [
+        0,
+        48,
+        221,
+        309
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 65.0
+    },
+    "unit.warship.die.0": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 0,
+      "content": [
+        25,
+        3,
+        227,
+        301
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.die.1": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 1,
+      "content": [
+        0,
+        9,
+        252,
+        299
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.die.2": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 2,
+      "content": [
+        12,
+        14,
+        240,
+        291
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.die.3": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 3,
+      "content": [
+        3,
+        40,
+        230,
+        266
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.die.4": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 4,
+      "content": [
+        0,
+        75,
+        252,
+        230
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.die.5": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.die",
+      "index": 5,
+      "content": [
+        0,
+        110,
+        209,
+        189
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 45.0
+    },
+    "unit.warship.idle.0": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 0,
+      "content": [
+        28,
+        78,
+        224,
+        302
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.idle.1": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 1,
+      "content": [
+        0,
+        78,
+        252,
+        302
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.idle.2": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 2,
+      "content": [
+        0,
+        79,
+        252,
+        301
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.idle.3": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 3,
+      "content": [
+        0,
+        79,
+        252,
+        301
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.idle.4": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 4,
+      "content": [
+        0,
+        84,
+        252,
+        296
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.idle.5": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.idle",
+      "index": 5,
+      "content": [
+        0,
+        83,
+        224,
+        297
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 97.0
+    },
+    "unit.warship.walk.0": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 0,
+      "content": [
+        25,
+        69,
+        227,
+        306
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.warship.walk.1": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 1,
+      "content": [
+        0,
+        71,
+        252,
+        304
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.warship.walk.2": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 2,
+      "content": [
+        0,
+        72,
+        252,
+        297
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.warship.walk.3": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 3,
+      "content": [
+        0,
+        72,
+        252,
+        303
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.warship.walk.4": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 4,
+      "content": [
+        0,
+        77,
+        252,
+        301
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.warship.walk.5": {
+      "atlas": "unit_warship",
+      "region": "unit.warship.walk",
+      "index": 5,
+      "content": [
+        0,
+        77,
+        224,
+        302
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 90.0
+    },
+    "unit.worker.die.0": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 0,
+      "content": [
+        15,
+        0,
+        237,
+        240
+      ],
+      "grid": [
+        0,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.die.1": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 1,
+      "content": [
+        0,
+        10,
+        252,
+        232
+      ],
+      "grid": [
+        1,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.die.2": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 2,
+      "content": [
+        7,
+        43,
+        245,
+        194
+      ],
+      "grid": [
+        2,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.die.3": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 3,
+      "content": [
+        18,
+        36,
+        214,
+        185
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.die.4": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 4,
+      "content": [
+        0,
+        63,
+        252,
+        164
+      ],
+      "grid": [
+        4,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.die.5": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.die",
+      "index": 5,
+      "content": [
+        0,
+        92,
+        239,
+        149
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "statusTop": 57.5
+    },
+    "unit.worker.idle.0": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 0,
+      "content": [
+        10,
+        161,
+        242,
+        219
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.idle.1": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 1,
+      "content": [
+        9,
+        162,
+        243,
+        218
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.idle.2": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 2,
+      "content": [
+        13,
+        165,
+        239,
+        215
+      ],
+      "grid": [
+        2,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.idle.3": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 3,
+      "content": [
+        2,
+        168,
+        250,
+        212
+      ],
+      "grid": [
+        3,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.idle.4": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 4,
+      "content": [
+        0,
+        169,
+        246,
+        211
+      ],
+      "grid": [
+        4,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.idle.5": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.idle",
+      "index": 5,
+      "content": [
+        0,
+        169,
+        228,
+        211
+      ],
+      "grid": [
+        5,
+        0
+      ],
+      "statusTop": 184.5
+    },
+    "unit.worker.walk.0": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 0,
+      "content": [
+        6,
+        0,
+        246,
+        374
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.walk.1": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 1,
+      "content": [
+        7,
+        0,
+        245,
+        375
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.walk.2": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 2,
+      "content": [
+        1,
+        0,
+        251,
+        375
+      ],
+      "grid": [
+        2,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.walk.3": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 3,
+      "content": [
+        0,
+        0,
+        252,
+        376
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.walk.4": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 4,
+      "content": [
+        0,
+        0,
+        252,
+        375
+      ],
+      "grid": [
+        4,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.walk.5": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.walk",
+      "index": 5,
+      "content": [
+        0,
+        0,
+        248,
+        376
+      ],
+      "grid": [
+        5,
+        1
+      ],
+      "statusTop": 0.0
+    },
+    "unit.worker.work.0": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 0,
+      "content": [
+        5,
+        67,
+        247,
+        229
+      ],
+      "grid": [
+        0,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "unit.worker.work.1": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 1,
+      "content": [
+        3,
+        32,
+        232,
+        264
+      ],
+      "grid": [
+        1,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "unit.worker.work.2": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 2,
+      "content": [
+        1,
+        69,
+        230,
+        236
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "unit.worker.work.3": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 3,
+      "content": [
+        0,
+        66,
+        242,
+        233
+      ],
+      "grid": [
+        3,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "unit.worker.work.4": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 4,
+      "content": [
+        0,
+        36,
+        208,
+        254
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "unit.worker.work.5": {
+      "atlas": "unit_worker",
+      "region": "unit.worker.work",
+      "index": 5,
+      "content": [
+        0,
+        66,
+        221,
+        234
+      ],
+      "grid": [
+        5,
+        2
+      ],
+      "statusTop": 84.0
+    },
+    "wonder.centralBank": {
+      "atlas": "wonders",
+      "region": "wonder.centralBank",
+      "index": -1,
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "wonder.grandCathedral": {
+      "atlas": "wonders",
+      "region": "wonder.grandCathedral",
+      "index": -1,
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "wonder.grandExposition": {
+      "atlas": "wonders",
+      "region": "wonder.grandExposition",
+      "index": -1,
+      "grid": [
+        0,
+        2
+      ]
+    },
+    "wonder.greatLibrary": {
+      "atlas": "wonders",
+      "region": "wonder.greatLibrary",
+      "index": -1,
+      "grid": [
+        0,
+        0
+      ]
+    },
+    "wonder.greatWall": {
+      "atlas": "wonders",
+      "region": "wonder.greatWall",
+      "index": -1,
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "wonder.hangingGardens": {
+      "atlas": "wonders",
+      "region": "wonder.hangingGardens",
+      "index": -1,
+      "grid": [
+        1,
+        0
+      ]
+    },
+    "wonder.imperialUniversity": {
+      "atlas": "wonders",
+      "region": "wonder.imperialUniversity",
+      "index": -1,
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "wonder.motherFactory": {
+      "atlas": "wonders",
+      "region": "wonder.motherFactory",
+      "index": -1,
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "wonder.nationalObservatory": {
+      "atlas": "wonders",
+      "region": "wonder.nationalObservatory",
+      "index": -1,
+      "grid": [
+        3,
+        1
+      ]
+    },
+    "wonder.petra": {
+      "atlas": "wonders",
+      "region": "wonder.petra",
+      "index": -1,
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "wonder.svalbardSeedVault": {
+      "atlas": "wonders",
+      "region": "wonder.svalbardSeedVault",
+      "index": -1,
+      "grid": [
+        4,
+        1
+      ]
+    }
+  }
+}

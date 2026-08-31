@@ -1,0 +1,416 @@
+{
+  "capability": "unit-action",
+  "expected": {
+    "accepted": true,
+    "events": [],
+    "evidence": null,
+    "rejection": null,
+    "state": {
+      "artifacts": [
+        {
+          "id": "artifact_excavation",
+          "location": {
+            "coordinate": {
+              "col": 1,
+              "row": 0
+            },
+            "kind": "map"
+          },
+          "type": "astronomersTablets"
+        }
+      ],
+      "cities": [],
+      "cols": 4,
+      "culturalVictoryHoldTurnsByPlayerId": {},
+      "diplomacy": {
+        "contacts": [],
+        "messages": [],
+        "pendingProposals": [],
+        "relations": [],
+        "scoreHistory": []
+      },
+      "dominationHoldTurnsByPlayerId": {},
+      "economy": {
+        "initialResourceDistribution": {
+          "placements": [],
+          "seed": 0
+        },
+        "playerGold": {
+          "player_1": 17,
+          "player_2": 23
+        },
+        "playerStabilityNet": {
+          "player_1": 4,
+          "player_2": 5
+        },
+        "playerWarWeariness": {
+          "player_1": 2,
+          "player_2": 3
+        },
+        "strategicResources": {}
+      },
+      "fieldImprovements": [],
+      "fogOfWar": [],
+      "intendedAttacks": [],
+      "interaction": {
+        "cityFoundingDraft": null,
+        "pending": null
+      },
+      "mapObjectiveHoldStates": [],
+      "matchIdentity": {
+        "gameMode": "multiplayer",
+        "matchRules": {
+          "balance": {},
+          "gameLength": {
+            "kind": "targetMinutes",
+            "paceProfile": "standard60",
+            "scoreFallbackEnabled": true,
+            "targetMinutes": 60,
+            "turnLimit": 120
+          },
+          "victory": {
+            "conquestEnabled": true,
+            "culturalEnabled": true,
+            "culturalHoldTurns": 5,
+            "culturalRequiredArtifacts": 6,
+            "dominationControlPercent": 45.0,
+            "dominationEnabled": true,
+            "dominationHoldTurns": 10,
+            "hardTimeLimitMinutes": null,
+            "scoreFallbackEnabled": true,
+            "turnLimit": 120
+          }
+        },
+        "participants": [
+          {
+            "ai": null,
+            "colorValue": 4282212264,
+            "country": "poland",
+            "id": "player_1",
+            "kind": "human",
+            "name": "Player 1"
+          },
+          {
+            "ai": null,
+            "colorValue": 4290263610,
+            "country": "japan",
+            "id": "player_2",
+            "kind": "human",
+            "name": "Player 2"
+          }
+        ]
+      },
+      "occupancyPolicy": "friendlyStacking",
+      "research": {
+        "players": {}
+      },
+      "resourceTradeAgreements": [],
+      "revision": 72,
+      "rows": 1,
+      "outcome": {
+        "condition": "ongoing",
+        "winnerPlayerId": null,
+        "scoreByPlayerId": {}
+      },
+      "transportNetwork": [],
+      "turn": 7,
+      "turnLifecycle": {
+        "afkPlayerIds": [],
+        "kickedPlayerIds": [],
+        "requiredSubmissionPlayerIds": [],
+        "submittedPlayerIds": [],
+        "timeoutStreaksByPlayerId": {},
+        "turnStartedAt": "2026-01-02T01:02:03.000Z",
+        "turnStatesByPlayerId": {
+          "player_1": "active",
+          "player_2": "active"
+        }
+      },
+      "units": [
+        {
+          "activity": {
+            "cityFoundingJob": null,
+            "excavatingArtifactId": null,
+            "workerAssignment": null,
+            "workerJob": null
+          },
+          "army": [],
+          "carriedArtifactId": null,
+          "col": 1,
+          "experiencePoints": 0,
+          "hitPoints": null,
+          "id": "settler_1",
+          "kind": "settler",
+          "merchantTradeRoute": null,
+          "movementUnits": 2,
+          "name": "settler",
+          "ownerPlayerId": "player_1",
+          "posture": "active",
+          "queuedPath": null,
+          "row": 0,
+          "workerBuildCharges": 0
+        }
+      ],
+      "wonderRegistry": {}
+    }
+  },
+  "fixtureVersion": 3,
+  "id": "unit-action-cancel-orders-accepted",
+  "input": {
+    "actorPlayerId": "player_1",
+    "command": {
+      "expectedRevision": 71,
+      "type": "cancelUnitAction",
+      "unitId": "settler_1"
+    },
+    "map": {
+      "cols": 4,
+      "gridLayout": "oddQFlatTop",
+      "mapName": "reducer_parity",
+      "objectives": [],
+      "rows": 1,
+      "schemaVersion": 1,
+      "tiles": [
+        {
+          "col": 0,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "plains"
+          ]
+        },
+        {
+          "col": 1,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "plains"
+          ]
+        },
+        {
+          "col": 2,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "plains"
+          ]
+        },
+        {
+          "col": 3,
+          "height": 0,
+          "resources": [],
+          "row": 0,
+          "terrainTags": [
+            "plains"
+          ]
+        }
+      ]
+    },
+    "rulesetId": "standard",
+    "state": {
+      "artifacts": [
+        {
+          "id": "artifact_excavation",
+          "location": {
+            "coordinate": {
+              "col": 1,
+              "row": 0
+            },
+            "kind": "excavation",
+            "remainingTurns": 2,
+            "unitId": "settler_1"
+          },
+          "type": "astronomersTablets"
+        }
+      ],
+      "cities": [],
+      "cols": 4,
+      "culturalVictoryHoldTurnsByPlayerId": {},
+      "diplomacy": {
+        "contacts": [],
+        "messages": [],
+        "pendingProposals": [],
+        "relations": [],
+        "scoreHistory": []
+      },
+      "dominationHoldTurnsByPlayerId": {},
+      "economy": {
+        "initialResourceDistribution": {
+          "placements": [],
+          "seed": 0
+        },
+        "playerGold": {
+          "player_1": 17,
+          "player_2": 23
+        },
+        "playerStabilityNet": {
+          "player_1": 4,
+          "player_2": 5
+        },
+        "playerWarWeariness": {
+          "player_1": 2,
+          "player_2": 3
+        },
+        "strategicResources": {}
+      },
+      "fieldImprovements": [],
+      "fogOfWar": [],
+      "intendedAttacks": [],
+      "interaction": {
+        "cityFoundingDraft": null,
+        "pending": null
+      },
+      "mapObjectiveHoldStates": [],
+      "matchIdentity": {
+        "gameMode": "multiplayer",
+        "matchRules": {
+          "balance": {},
+          "gameLength": {
+            "kind": "targetMinutes",
+            "paceProfile": "standard60",
+            "scoreFallbackEnabled": true,
+            "targetMinutes": 60,
+            "turnLimit": 120
+          },
+          "victory": {
+            "conquestEnabled": true,
+            "culturalEnabled": true,
+            "culturalHoldTurns": 5,
+            "culturalRequiredArtifacts": 6,
+            "dominationControlPercent": 45.0,
+            "dominationEnabled": true,
+            "dominationHoldTurns": 10,
+            "hardTimeLimitMinutes": null,
+            "scoreFallbackEnabled": true,
+            "turnLimit": 120
+          }
+        },
+        "participants": [
+          {
+            "ai": null,
+            "colorValue": 4282212264,
+            "country": "poland",
+            "id": "player_1",
+            "kind": "human",
+            "name": "Player 1"
+          },
+          {
+            "ai": null,
+            "colorValue": 4290263610,
+            "country": "japan",
+            "id": "player_2",
+            "kind": "human",
+            "name": "Player 2"
+          }
+        ]
+      },
+      "occupancyPolicy": "friendlyStacking",
+      "research": {
+        "players": {}
+      },
+      "resourceTradeAgreements": [],
+      "revision": 71,
+      "rows": 1,
+      "outcome": {
+        "condition": "ongoing",
+        "winnerPlayerId": null,
+        "scoreByPlayerId": {}
+      },
+      "transportNetwork": [],
+      "turn": 7,
+      "turnLifecycle": {
+        "afkPlayerIds": [],
+        "kickedPlayerIds": [],
+        "requiredSubmissionPlayerIds": [],
+        "submittedPlayerIds": [],
+        "timeoutStreaksByPlayerId": {},
+        "turnStartedAt": "2026-01-02T01:02:03.000Z",
+        "turnStatesByPlayerId": {
+          "player_1": "active",
+          "player_2": "active"
+        }
+      },
+      "units": [
+        {
+          "activity": {
+            "cityFoundingJob": {
+              "center": {
+                "col": 1,
+                "row": 0
+              },
+              "controlledHexes": [
+                {
+                  "col": 1,
+                  "row": 0
+                },
+                {
+                  "col": 2,
+                  "row": 0
+                }
+              ],
+              "remainingTurns": 1,
+              "totalTurns": 2
+            },
+            "excavatingArtifactId": "artifact_excavation",
+            "workerAssignment": null,
+            "workerJob": null
+          },
+          "army": [],
+          "carriedArtifactId": null,
+          "col": 1,
+          "experiencePoints": 0,
+          "hitPoints": null,
+          "id": "settler_1",
+          "kind": "settler",
+          "merchantTradeRoute": {
+            "destinationCityId": "city_destination",
+            "originCityId": "city_origin",
+            "steps": [
+              {
+                "col": 1,
+                "cumulativeCostUnits": 0,
+                "enterCostUnits": 0,
+                "row": 0
+              },
+              {
+                "col": 2,
+                "cumulativeCostUnits": 2,
+                "enterCostUnits": 2,
+                "row": 0
+              }
+            ],
+            "transportNetworkFingerprint": ""
+          },
+          "movementUnits": 2,
+          "name": "settler",
+          "ownerPlayerId": "player_1",
+          "posture": "active",
+          "queuedPath": {
+            "steps": [
+              {
+                "col": 1,
+                "cumulativeCostUnits": 0,
+                "enterCostUnits": 0,
+                "row": 0
+              },
+              {
+                "col": 2,
+                "cumulativeCostUnits": 2,
+                "enterCostUnits": 2,
+                "row": 0
+              }
+            ],
+            "targetCol": 2,
+            "targetRow": 0
+          },
+          "row": 0,
+          "workerBuildCharges": 0
+        }
+      ],
+      "wonderRegistry": {}
+    }
+  }
+}

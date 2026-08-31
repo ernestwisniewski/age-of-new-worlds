@@ -1,0 +1,26 @@
+{
+  "capability": "movement-logistics-ready",
+  "commands": [
+    "autoExploreUnit",
+    "assignMerchantTradeRoute",
+    "moveMerchantToCity",
+    "detachTroop"
+  ],
+  "queries": [
+    "unitLogisticsOptions"
+  ],
+  "turnProcessors": [
+    "queuedMovement",
+    "tradeRoutes",
+    "autoExplore"
+  ],
+  "cases": [
+    "auto-explore-deterministic-bounded",
+    "auto-explore-without-fog-state",
+    "merchant-current-engine-route",
+    "merchant-owned-city-stacking",
+    "troop-detachment-army-invariants",
+    "turn-logistics-evidence",
+    "save-reopen-replay-exact"
+  ]
+}

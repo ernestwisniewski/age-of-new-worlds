@@ -1,0 +1,2 @@
+# Terrain3D draft and published snapshots are loaded explicitly by the authoring store.
+# ResourceFS must not index their duplicated immutable resource UIDs.

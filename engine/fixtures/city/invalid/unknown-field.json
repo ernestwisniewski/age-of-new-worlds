@@ -1,0 +1,8 @@
+{
+  "capability": "city-territory-ready",
+  "commands": [],
+  "queries": [],
+  "turnProcessors": [],
+  "cases": [],
+  "unexpectedField": true
+}

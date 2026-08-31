@@ -1,0 +1,12 @@
+class: GameRecipientSnapshot
+table: aonw_game_recipient_snapshot
+fields:
+  match: GameMatch?, relation(name=game_match_recipient_snapshots, onDelete=Cascade)
+  playerId: String
+  eventOffset: int
+  snapshotJson: String
+  updatedAt: DateTime
+indexes:
+  aonw_game_recipient_snapshot_idx:
+    fields: matchId, playerId
+    unique: true

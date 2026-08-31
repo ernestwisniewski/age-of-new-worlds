@@ -1,0 +1,39 @@
+[package]
+name = "aonw_engine_fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+aonw_contract_mapping = { path = "../crates/aonw_contract_mapping" }
+aonw_contracts = { path = "../crates/aonw_contracts" }
+aonw_flutter = { path = "../crates/aonw_flutter" }
+libfuzzer-sys = "=0.4.13"
+serde_json = "1.0"
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "persistence_codec"
+path = "fuzz_targets/persistence_codec.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "canonical_mapping"
+path = "fuzz_targets/canonical_mapping.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "flutter_ffi"
+path = "fuzz_targets/flutter_ffi.rs"
+test = false
+doc = false
+bench = false

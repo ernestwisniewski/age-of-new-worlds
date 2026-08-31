@@ -1,0 +1,8 @@
+include:
+  - package:lints/recommended.yaml
+  - ../../analysis_options_base.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/src/protocol/**

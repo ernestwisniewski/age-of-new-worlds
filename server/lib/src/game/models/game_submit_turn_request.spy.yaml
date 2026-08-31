@@ -1,0 +1,5 @@
+class: GameSubmitTurnRequest
+fields:
+  matchId: String
+  clientCommandId: String
+  expectedRevision: int

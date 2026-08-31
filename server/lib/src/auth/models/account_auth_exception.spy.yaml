@@ -1,0 +1,4 @@
+exception: AccountAuthException
+fields:
+  code: String
+  message: String?

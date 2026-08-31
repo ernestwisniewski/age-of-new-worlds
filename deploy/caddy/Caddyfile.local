@@ -1,0 +1,67 @@
+# Local-only Caddy config for previewing the static sites in a browser.
+# No Let's Encrypt / ACME: auto_https is disabled and everything is served over
+# plain HTTP on localhost. The production config stays in ./Caddyfile.
+{
+	admin off
+	auto_https off
+}
+
+# Homepage — the same static site served at https://aonw.net.
+http://localhost:8088 {
+	encode zstd gzip
+
+	@homepageHtml {
+		path / /index.html /privacy-policy /privacy-policy/ /privacy-policy/index.html /architecture /architecture/ /architecture/index.html /stats /stats/ /stats/index.html
+	}
+	header @homepageHtml {
+		Cache-Control "no-cache, must-revalidate"
+		Content-Type "text/html; charset=utf-8"
+	}
+
+	@homepageDownloads {
+		path /download/*
+	}
+	header @homepageDownloads {
+		Cache-Control "public, max-age=0, s-maxage=3600, must-revalidate"
+		Cloudflare-CDN-Cache-Control "public, max-age=3600"
+	}
+
+	redir /privacy-policy/ /privacy-policy 308
+	redir /architecture/ /architecture 308
+	redir /architecture/index.html /architecture 308
+	redir /stats/ /stats 308
+
+	@homepageStatsApi path /api/stats
+	handle @homepageStatsApi {
+		reverse_proxy {$AONW_WEB_UPSTREAM:host.docker.internal:8082}
+	}
+
+	handle {
+		root * /srv/homepage
+		try_files {path} {path}/index.html
+		file_server
+	}
+}
+
+# Flutter web demo (populate build/demo with: flutter build web).
+http://localhost:8089 {
+	encode zstd gzip
+
+	@demoRuntime {
+		path / /index.html /flutter_bootstrap.js /flutter.js /flutter_service_worker.js /main.dart.js /main.dart.mjs /main.dart.wasm /version.json /manifest.json
+	}
+	header @demoRuntime {
+		Cache-Control "no-cache, must-revalidate"
+	}
+
+	@demoAssets {
+		path /assets/* /canvaskit/* /icons/*
+	}
+	header @demoAssets {
+		Cache-Control "public, max-age=3600, must-revalidate"
+	}
+
+	root * /srv/demo
+	try_files {path} /index.html
+	file_server
+}

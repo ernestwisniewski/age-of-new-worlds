@@ -1,0 +1,5 @@
+class: ExternalAuthStart
+fields:
+  requestId: String
+  authUrl: String
+  expiresAt: DateTime

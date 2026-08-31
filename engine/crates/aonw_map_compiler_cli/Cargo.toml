@@ -1,0 +1,31 @@
+[package]
+name = "aonw_map_compiler_cli"
+description = "Filesystem adapter for compiled AoNW terrain rasters"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "aonw-map-compiler"
+path = "src/main.rs"
+doc = false
+
+[[bin]]
+name = "aonw-map-profile"
+path = "src/profile.rs"
+doc = false
+
+[dependencies]
+aonw_content = { path = "../aonw_content" }
+aonw_map_authoring = { path = "../aonw_map_authoring" }
+aonw_map_compiler = { path = "../aonw_map_compiler" }
+exr.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true

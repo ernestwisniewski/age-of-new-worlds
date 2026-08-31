@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-08-24",
+  "baseline": "performance/fm0_custom_painter_baseline.json",
+  "candidate": "performance/fm5_flame_cutover_baseline.json",
+  "comparisonScope": {
+    "semantic": "shared geometry and map render probes",
+    "visual": "reviewed Flame terrain, reference and gameplay goldens",
+    "accessibility": "Flutter semantics, focus, keyboard and reduced-motion widget tests",
+    "lifecycle": "route visibility, app lifecycle, disposal and idle pause tests",
+    "memoryAndPerformance": "pinned native macOS records with complete frame arrays"
+  },
+  "workloadCaveat": "FM0 measured the 7 by 7 Canvas oracle, while FM5 deliberately exercises a 40 by 30 Flame world with 120 visible units. Percentage changes are directional evidence, not an equivalent-workload microbenchmark.",
+  "candidateVersusBaselinePercent": {
+    "startupMicros": -87.96,
+    "residentMemoryDeltaBytes": -68.79,
+    "averageFrameBuildTimeMillis": -40.44,
+    "p99FrameBuildTimeMillis": -64.45,
+    "averageFrameRasterizerTimeMillis": 18.54,
+    "p99FrameRasterizerTimeMillis": -20.95
+  },
+  "acceptance": {
+    "buildP99Millis": 3.493,
+    "rasterP99Millis": 3.702,
+    "missedFrameBudgetCount": 0,
+    "residentMemoryDeltaBytes": 49676288,
+    "idleEffectUpdates": 0,
+    "hardBudgetsPassed": true,
+    "rendererPathsInProduction": 1,
+    "rollback": "revert to commit e91c616c"
+  },
+  "decision": "accept-flame-cutover"
+}

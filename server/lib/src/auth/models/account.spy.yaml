@@ -1,0 +1,21 @@
+class: AonwAccount
+serverOnly: true
+table: aonw_account
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  authUser: module:serverpod_auth_core:AuthUser?, relation(onDelete=Cascade)
+  email: String
+  displayName: String
+  displayNameKey: String
+  passwordHash: String
+  createdAt: DateTime, defaultModel=now
+indexes:
+  aonw_account_email_idx:
+    fields: email
+    unique: true
+  aonw_account_display_name_idx:
+    fields: displayNameKey
+    unique: true
+  aonw_account_auth_user_idx:
+    fields: authUserId
+    unique: true

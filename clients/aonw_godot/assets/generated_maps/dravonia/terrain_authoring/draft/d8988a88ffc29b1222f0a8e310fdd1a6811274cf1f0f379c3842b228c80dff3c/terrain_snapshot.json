@@ -1,0 +1,59 @@
+{
+  "mapId": "dravonia",
+  "mapContentHash": "64d8d98659a05cf6ba19fe7e0ae0d5e83b70f8b9da753cde9bf1459199519c82",
+  "authoringProfileHash": "8232429bf1b31867a5acc58e38bee8f16c5dedb54f033d58ad42ae571515af50",
+  "generatedBaseHash": "cf5f61e0f861b4f99c90880d324134224c0f0a2d0255b38bd08bf44fc28e1f5b",
+  "generatorVersion": "aonw-map-compiler/1",
+  "rasterWidth": 606,
+  "rasterHeight": 530,
+  "sampleSpacingMeters": 1.0,
+  "terrainRevision": 27,
+  "terrainFiles": [
+    {
+      "file": "terrain3d_00_00.res",
+      "sha256": "e6438fe2e2c5462ba68a333a99efc25ea17440a6fea19fefe79d8d1c900a8d80",
+      "size": 43133
+    },
+    {
+      "file": "terrain3d_00_01.res",
+      "sha256": "7e1be8122727d74df7ad08fe5ced2ab180b23ea11a38b0d32e319926c7dc5a1a",
+      "size": 36659
+    },
+    {
+      "file": "terrain3d_00_02.res",
+      "sha256": "e16a33f5a3ae45aa88cdd261c850830a6ecf454422f8dff0231e051e44b649f2",
+      "size": 5878
+    },
+    {
+      "file": "terrain3d_01_00.res",
+      "sha256": "a49fae406c65438beb88f7b68c2c953477eb4d13cf2f1f273e6f1c17f408ead5",
+      "size": 33748
+    },
+    {
+      "file": "terrain3d_01_01.res",
+      "sha256": "4ce93387b9fb1bcdfdabbc295a9a2cced46d229928f36fc39cb314e9f1d5d0e9",
+      "size": 39660
+    },
+    {
+      "file": "terrain3d_01_02.res",
+      "sha256": "52692bc80692ba08be2b36cbf28878d6fbe0bd0d8ae0a680ca4bb92b07134d31",
+      "size": 6358
+    },
+    {
+      "file": "terrain3d_02_00.res",
+      "sha256": "be49d61c65c2afcfb465b21b52e4bc70e2b3bde46d607fb373e1787f655ce791",
+      "size": 17131
+    },
+    {
+      "file": "terrain3d_02_01.res",
+      "sha256": "b901c6f9b4b289c361ccb3ddc55661de18ca1a3159f2b7c48cb0be5c5016d295",
+      "size": 18882
+    },
+    {
+      "file": "terrain3d_02_02.res",
+      "sha256": "bbb3a9914ddf9e3eadc7df4a9a369b057da78772781df9798f00b674236158d0",
+      "size": 5879
+    }
+  ],
+  "snapshotHash": "d8988a88ffc29b1222f0a8e310fdd1a6811274cf1f0f379c3842b228c80dff3c"
+}

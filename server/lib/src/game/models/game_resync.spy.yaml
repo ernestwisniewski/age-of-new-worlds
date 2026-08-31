@@ -1,0 +1,6 @@
+class: GameResync
+fields:
+  matchId: String
+  playerId: String
+  eventOffset: int
+  snapshotJson: String

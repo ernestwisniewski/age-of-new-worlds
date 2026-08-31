@@ -1,0 +1,21 @@
+[package]
+name = "aonw_map_workbench"
+description = "Logical map authoring and deterministic generation use cases for AoNW"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+aonw_content = { path = "../aonw_content" }
+aonw_domain = { path = "../aonw_domain" }
+aonw_map_authoring = { path = "../aonw_map_authoring" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true

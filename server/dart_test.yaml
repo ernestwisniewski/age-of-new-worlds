@@ -1,0 +1,10 @@
+tags:
+  integration:
+    skip: Requires local PostgreSQL and Serverpod migrations. Run with -P integration.
+    presets:
+      integration:
+        skip: false
+
+presets:
+  integration:
+    include_tags: integration

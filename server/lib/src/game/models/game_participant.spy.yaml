@@ -1,0 +1,14 @@
+class: GameParticipant
+table: aonw_game_participant
+fields:
+  match: GameMatch?, relation(name=game_match_participants, onDelete=Cascade)
+  userIdentifier: String
+  playerId: String
+  joinedAt: DateTime
+indexes:
+  aonw_game_participant_match_user_idx:
+    fields: matchId, userIdentifier
+    unique: true
+  aonw_game_participant_match_player_idx:
+    fields: matchId, playerId
+    unique: true

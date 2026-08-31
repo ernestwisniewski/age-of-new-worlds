@@ -1,0 +1,5 @@
+#include "../../Flutter/Flutter-Release.xcconfig"
+#include "Warnings.xcconfig"
+
+// The shipped client is qualified as a thin Apple Silicon artifact.
+EXCLUDED_ARCHS = x86_64
