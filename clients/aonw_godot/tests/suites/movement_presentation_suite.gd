@@ -67,9 +67,9 @@ func _test_route_confirmation_and_evidence_animation() -> void:
 		and session.revision() == 0
 		and unit_layer.unit_at(Vector2i(2, 1)) == "preview-commander"
 		and not end_turn.disabled
-		and map_catalog.item_count == 1
+		and map_catalog.item_count == 5
 		and map_catalog.get_item_text(0) == "aonw2_starter"
-		and map_catalog.disabled
+		and not map_catalog.disabled
 		and interaction.is_input_enabled()
 		and interaction.focused_hex() == Vector2i(2, 1)
 		and turn_status.text.begins_with("Turn 1 · active"),

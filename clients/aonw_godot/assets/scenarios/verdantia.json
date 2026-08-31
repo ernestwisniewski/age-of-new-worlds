@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "verdantia",
+  "mapId": "verdantia",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "preview-commander",
+      "ownerPlayerId": "preview-player",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 14,
+      "row": 10
+    }
+  ]
+}

@@ -108,7 +108,7 @@ flutter-client-test: flutter-client-analyze
 flutter-client-map-contract-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/features/map/presentation/geometry/odd_q_flat_top_geometry_test.dart
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/tool/map_asset_bundle_compiler_test.dart
-	@cd $(FLUTTER_CLIENT) && $(DART) --packages=.dart_tool/package_config.json ../../tool/assets/compile/starter_map_bundle.dart check
+	@cd $(FLUTTER_CLIENT) && $(DART) --packages=.dart_tool/package_config.json ../../tool/assets/compile/packaged_map_bundles.dart check
 
 client-dependency-check:
 	@tool/check_client_dependencies.sh
@@ -206,6 +206,7 @@ engine-client-test: engine-client-dependencies flutter-client-dependencies
 
 godot-check:
 	@cd $(RUST_WORKSPACE) && $(CARGO) test --locked -p aonw_godot
+	@tool/check_godot_runtime_assets.py
 
 server-client-analyze: server-client-dependencies
 	@cd packages/aonw_server_client && $(DART) analyze --fatal-infos --fatal-warnings

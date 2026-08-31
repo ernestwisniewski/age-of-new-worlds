@@ -1,0 +1,83 @@
+{
+  "authoring": {
+    "cityCoreRadiusMeters": 4.0,
+    "cols": 25,
+    "edgeBlendMeters": 2.0,
+    "hexRadiusMeters": 10.0,
+    "maxCitySlope": 0.35,
+    "maxTerrainHeightMeters": 29.5,
+    "referenceTransform": {
+      "rotationDegrees": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "translationMeters": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0
+      }
+    },
+    "rows": 19,
+    "worldOriginMeters": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "authoringProfileHash": "942486bc84f810c011fc42a4e97dd841f056348e7d92570bd42b8b40e7680485",
+  "generatedBaseHash": "c2d7afa63f111fa8034585927e98cf02abcd210f0118c5061fa54adb9ee4816b",
+  "generatorVersion": "aonw-map-compiler/1",
+  "layers": {
+    "base": {
+      "hash": "c2d7afa63f111fa8034585927e98cf02abcd210f0118c5061fa54adb9ee4816b",
+      "openExr": "base.exr",
+      "openExrSha256": "5b9c91a3fc8e13ae49405a072d0cdee359d9644211dae02db42cc173ee6c3124",
+      "r16RangeMeters": {
+        "max": 29.5,
+        "min": 0.0
+      },
+      "rawR16": "base.r16",
+      "rawR16Sha256": "01c5c42cf0ff980ae7da6a17b20ec0374747db99c5d9f6aaa6b1a5ee41ce5be8"
+    },
+    "max": {
+      "hash": "e53bed35a30b716e50c5b1b8cf63d0a7b184e9b3474dfcee605e0356e784d748",
+      "openExr": "max.exr",
+      "openExrSha256": "cc24a2c2af217949c599210e1538b8adc79e95ba0e702a92ded34dfbc66eb61d",
+      "r16RangeMeters": {
+        "max": 29.5,
+        "min": 5.9
+      },
+      "rawR16": "max.r16",
+      "rawR16Sha256": "b04efc51331d19ac1fb45e407778502c20c0ad42652cc3c9a747a73b77f6e9f9"
+    },
+    "min": {
+      "hash": "cb6ce46bd8974a7c49e70ff9cff4222c3b249830417855384a32efad4f77d17d",
+      "openExr": "min.exr",
+      "openExrSha256": "d0a97b225caaf1100b37c79a7eb3a339c1765abaca903da1c11a0e5a7176b13e",
+      "r16RangeMeters": {
+        "max": 26.55,
+        "min": -2.95
+      },
+      "rawR16": "min.r16",
+      "rawR16Sha256": "abd278d9b79a4e207956e8baccf553573d3757b3b57448c75d3ec5160361e519"
+    }
+  },
+  "mapContentHash": "1743616d03d54d04f53fc699c2a6ec2e1ba30f59665ddaa8776419fe06626571",
+  "mapId": "myranth",
+  "raster": {
+    "height": 339,
+    "sampleSpacingMeters": 1.0,
+    "samplesPerHex": 10,
+    "width": 381,
+    "worldMinMeters": {
+      "x": -10.0,
+      "z": -8.660254037844386
+    }
+  }
+}

@@ -897,6 +897,46 @@ func _test_native_engine_boundary() -> void:
 		"one Godot session keeps one Rust transport for its complete lifecycle",
 	)
 	await session.close_async()
+	_test_packaged_scenario_sessions()
+
+func _test_packaged_scenario_sessions() -> void:
+	for map_id in ["dravonia", "myranth", "terenos", "verdantia"]:
+		var map_file := FileAccess.open(
+			"res://assets/maps/%s/map.json" % map_id,
+			FileAccess.READ,
+		)
+		var scenario_file := FileAccess.open(
+			"res://assets/scenarios/%s.json" % map_id,
+			FileAccess.READ,
+		)
+		var manifest_file := FileAccess.open(
+			"res://assets/maps/%s/map_texture_manifest.json" % map_id,
+			FileAccess.READ,
+		)
+		_check(
+			map_file != null and scenario_file != null and manifest_file != null,
+			"%s runtime documents open" % map_id,
+		)
+		if map_file == null or scenario_file == null or manifest_file == null:
+			continue
+		var manifest: Dictionary = JSON.parse_string(manifest_file.get_as_text())
+		var controller := LocalMatchSessionController.new(
+			LocalMatchGateway.new(NativeLocalSession.new())
+		)
+		var opened: Dictionary = controller.open(
+			map_file.get_as_text(),
+			scenario_file.get_as_text(),
+			"preview-player",
+		)
+		var snapshot: Dictionary = controller.snapshot() if opened["ok"] else opened
+		_check(
+			opened["ok"]
+			and snapshot["ok"]
+			and snapshot["value"].units.size() == 1
+			and snapshot["value"].stamp.map_hash == manifest["mapContentHash"],
+			"%s packaged scenario opens through the native engine" % map_id,
+		)
+		controller.close()
 
 func _test_shared_client_contract() -> void:
 	var inspect_request_file := FileAccess.open(

@@ -1,0 +1,83 @@
+{
+  "authoring": {
+    "cityCoreRadiusMeters": 4.0,
+    "cols": 30,
+    "edgeBlendMeters": 2.0,
+    "hexRadiusMeters": 10.0,
+    "maxCitySlope": 0.35,
+    "maxTerrainHeightMeters": 20.0,
+    "referenceTransform": {
+      "rotationDegrees": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "translationMeters": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0
+      }
+    },
+    "rows": 20,
+    "worldOriginMeters": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "authoringProfileHash": "95a9ddbeb77629eae80af77194df94342d1725b41488830329dbef70a1ee4706",
+  "generatedBaseHash": "f410f5554adf4fa73ece04755380ec7dd487603aaea58aaefd6defb3e69c32b1",
+  "generatorVersion": "aonw-map-compiler/1",
+  "layers": {
+    "base": {
+      "hash": "f410f5554adf4fa73ece04755380ec7dd487603aaea58aaefd6defb3e69c32b1",
+      "openExr": "base.exr",
+      "openExrSha256": "b51c20e13e8630428214890c8a6e6c386eee16ef9ae926de2b6c6d69ab6984b0",
+      "r16RangeMeters": {
+        "max": 20.0,
+        "min": 0.0
+      },
+      "rawR16": "base.r16",
+      "rawR16Sha256": "6cda96350461040b7f3cc8fccf257512fb99d55764577b05f00388b90169e160"
+    },
+    "max": {
+      "hash": "f0ddfcd1170511178aebbe4a38b4caf34ef0c66c6f45d7fef7e8d9a28094b524",
+      "openExr": "max.exr",
+      "openExrSha256": "677f633e88a4857e4a904a9ada10e7b79526f684912cc4e5e140e66f9e902bb8",
+      "r16RangeMeters": {
+        "max": 20.0,
+        "min": 4.0
+      },
+      "rawR16": "max.r16",
+      "rawR16Sha256": "761d97834ed0e0c26b852790ac002253867395778dbdc28b7bf5ff3ca30863f8"
+    },
+    "min": {
+      "hash": "15e8bf2449fc79d3a514e84798ac6f09e6c6abd19680d5743ed62c3437fc43b5",
+      "openExr": "min.exr",
+      "openExrSha256": "ace71868ec794fb86cbf2504e35b51cc255c812a6d69a238ba85ec72b1726c35",
+      "r16RangeMeters": {
+        "max": 18.0,
+        "min": -2.0
+      },
+      "rawR16": "min.r16",
+      "rawR16Sha256": "7070e92b51fbf4c3f1b4bbdc6ba095d0dcf7cc560daa2f588d5c2f5aee6e0298"
+    }
+  },
+  "mapContentHash": "8765fc5eb23e7d715a97a743a533c6381988b7afbad57f208868223c6d46fbb5",
+  "mapId": "verdantia",
+  "raster": {
+    "height": 357,
+    "sampleSpacingMeters": 1.0,
+    "samplesPerHex": 10,
+    "width": 456,
+    "worldMinMeters": {
+      "x": -10.0,
+      "z": -8.660254037844386
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "terenos",
+  "mapId": "terenos",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "preview-commander",
+      "ownerPlayerId": "preview-player",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 10,
+      "row": 7
+    }
+  ]
+}

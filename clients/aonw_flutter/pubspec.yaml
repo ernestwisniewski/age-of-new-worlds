@@ -77,6 +77,10 @@ flutter:
     - assets/runtime/sprites/unit_worker/
     - assets/runtime/sprites/wonders/
     - assets/maps/aonw2_starter/
+    - assets/maps/dravonia/
+    - assets/maps/myranth/
+    - assets/maps/terenos/
+    - assets/maps/verdantia/
     - assets/scenarios/
   fonts:
     - family: Cinzel

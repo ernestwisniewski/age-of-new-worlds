@@ -116,16 +116,23 @@ func _test_bundled_checkout_without_asset_masters() -> void:
 		"res://missing-runtime-assets",
 	)
 	var sources := catalog.discover()
-	_check(sources.size() == 1, "bundled checkout needs no external asset masters")
-	if sources.size() != 1:
-		return
-	var result := _open_map().execute(sources[0])
-	_check(
-		result["ok"]
-		and result["map"].map_id() == &"aonw2_starter"
-		and result["map"].content_hash() == result["terrain_artifact"].map_content_hash,
-		"bundled checkout resolves one Rust MapView and matching Terrain3D artifact",
-	)
+	var expected_ids := [
+		"aonw2_starter",
+		"dravonia",
+		"myranth",
+		"terenos",
+		"verdantia",
+	]
+	_check(sources.size() == expected_ids.size(), "bundled checkout includes every map")
+	for source in sources:
+		_check(source.map_id in expected_ids, "%s is a supported bundled map" % source.map_id)
+		var result := _open_map().execute(source)
+		_check(
+			result["ok"]
+			and result["map"].map_id() == source.map_id
+			and result["map"].content_hash() == result["terrain_artifact"].map_content_hash,
+			"%s resolves a Rust MapView and matching Terrain3D artifact" % source.map_id,
+		)
 
 func _test_catalog() -> void:
 	var sources := MapAssetCatalog.new().discover()

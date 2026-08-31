@@ -34,6 +34,13 @@ const TerrainArtifactRepository := preload(
 	"res://game/infrastructure/terrain/terrain_compiled_artifact_repository.gd"
 )
 const RUNTIME_TERRAIN_ROOT := "res://assets/terrain_compiled"
+const PACKAGED_MAP_IDS := [
+	"aonw2_starter",
+	"dravonia",
+	"myranth",
+	"terenos",
+	"verdantia",
+]
 
 func _ready() -> void:
 	var transport := NativeLocalSession.new()
@@ -46,14 +53,16 @@ func _ready() -> void:
 	var local_session := LocalMatchSessionController.new(LocalMatchGateway.new(transport))
 	var open_local_match := OpenLocalMatch.new(local_session, documents)
 	var local_match := LocalMatchWorkflow.new(local_session, open_local_match)
-	var packaged_sources: Array[AonwMapSource] = [
-		MapSource.new(
-			"aonw2_starter",
-			"res://assets/maps/aonw2_starter/map.json",
-			"res://assets/maps/aonw2_starter",
-			"package",
-		),
-	]
+	var packaged_sources: Array[AonwMapSource] = []
+	for map_id in PACKAGED_MAP_IDS:
+		packaged_sources.append(
+			MapSource.new(
+				map_id,
+				"res://assets/maps/%s/map.json" % map_id,
+				"res://assets/maps/%s" % map_id,
+				"package",
+			),
+		)
 	var packaged_maps := PackagedMapCatalog.new(packaged_sources)
 	var screen := get_parent()
 	assert(screen.has_method("configure"), "Map preview screen must accept its ports")

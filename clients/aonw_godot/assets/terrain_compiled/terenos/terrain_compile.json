@@ -1,0 +1,83 @@
+{
+  "authoring": {
+    "cityCoreRadiusMeters": 4.0,
+    "cols": 20,
+    "edgeBlendMeters": 2.0,
+    "hexRadiusMeters": 10.0,
+    "maxCitySlope": 0.35,
+    "maxTerrainHeightMeters": 16.0,
+    "referenceTransform": {
+      "rotationDegrees": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "translationMeters": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0
+      }
+    },
+    "rows": 15,
+    "worldOriginMeters": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "authoringProfileHash": "da0e5bd3e93d3633e9c35cbfa1aedcec26496955b381215efc4828428f3acf66",
+  "generatedBaseHash": "24591f599c1079206dc7a845c8207ee87a0bbb14072edbd5edd2ef3fce4c27dd",
+  "generatorVersion": "aonw-map-compiler/1",
+  "layers": {
+    "base": {
+      "hash": "24591f599c1079206dc7a845c8207ee87a0bbb14072edbd5edd2ef3fce4c27dd",
+      "openExr": "base.exr",
+      "openExrSha256": "e90187ac2d0843934d9fdae3f13868ad2f8537290573965bf28772ac9b0edd8c",
+      "r16RangeMeters": {
+        "max": 16.0,
+        "min": 0.0
+      },
+      "rawR16": "base.r16",
+      "rawR16Sha256": "db66d8ebb258708c822ce450f9fef8cf485a267296b7c72447267a91408d8970"
+    },
+    "max": {
+      "hash": "3df33f1324a957ae1bf9574cc65e6f3dba86da2e480b7d1cb8f8fb483763a744",
+      "openExr": "max.exr",
+      "openExrSha256": "07c717b1a777bf3e4231ce77523259130f3cd480edc9f83403103b5872c5bff7",
+      "r16RangeMeters": {
+        "max": 16.0,
+        "min": 3.2
+      },
+      "rawR16": "max.r16",
+      "rawR16Sha256": "96ec1778771f3d8db994184666e2e96faf87efee64ef28275e798f563d5b99ef"
+    },
+    "min": {
+      "hash": "fa1265df1213301627faf3648a72bd00dac3f6a2e9c0036df879a7ad12d76fc0",
+      "openExr": "min.exr",
+      "openExrSha256": "225f45bd38da217eb0474a6caea9f70ec7ded7665b1dbbe47dab2b8dff12f7e8",
+      "r16RangeMeters": {
+        "max": 14.4,
+        "min": -1.6
+      },
+      "rawR16": "min.r16",
+      "rawR16Sha256": "adb766bf9d7dd03fd48d21c9aa8937176d96ab1e653a289e2d73aefaa1dc0bf9"
+    }
+  },
+  "mapContentHash": "c580c081e39a677e0d6f5e51f1654fe12b0274bfe9672c03994b9c61d1c88fec",
+  "mapId": "terenos",
+  "raster": {
+    "height": 270,
+    "sampleSpacingMeters": 1.0,
+    "samplesPerHex": 10,
+    "width": 306,
+    "worldMinMeters": {
+      "x": -10.0,
+      "z": -8.660254037844386
+    }
+  }
+}

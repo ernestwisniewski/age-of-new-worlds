@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "dravonia",
+  "mapId": "dravonia",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "preview-commander",
+      "ownerPlayerId": "preview-player",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 19,
+      "row": 15
+    }
+  ]
+}

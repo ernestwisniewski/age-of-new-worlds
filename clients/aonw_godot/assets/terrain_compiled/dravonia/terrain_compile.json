@@ -1,0 +1,83 @@
+{
+  "authoring": {
+    "cityCoreRadiusMeters": 4.0,
+    "cols": 40,
+    "edgeBlendMeters": 2.0,
+    "hexRadiusMeters": 10.0,
+    "maxCitySlope": 0.35,
+    "maxTerrainHeightMeters": 18.5,
+    "referenceTransform": {
+      "rotationDegrees": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "translationMeters": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0
+      }
+    },
+    "rows": 30,
+    "worldOriginMeters": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "authoringProfileHash": "992889792364c00ee7a841d90e3e705d475e9dde7956aabd174a8eeb429d23c7",
+  "generatedBaseHash": "f9ee67966beb4dcf492780c79e54f04ce611ad0d4a9db0a65599fb29a1150d99",
+  "generatorVersion": "aonw-map-compiler/1",
+  "layers": {
+    "base": {
+      "hash": "f9ee67966beb4dcf492780c79e54f04ce611ad0d4a9db0a65599fb29a1150d99",
+      "openExr": "base.exr",
+      "openExrSha256": "c730319b4e71b6173ec104f4b9267eeda16f89d894aa28eac1e9e6e2c23a1002",
+      "r16RangeMeters": {
+        "max": 18.5,
+        "min": 0.0
+      },
+      "rawR16": "base.r16",
+      "rawR16Sha256": "3ffa53742be473f0f50d943c0e366f1d6deaa21d2e617dc099351d2ae2dc0f32"
+    },
+    "max": {
+      "hash": "af1e905c3aea6ee0912f79efb34aa623f040a8e62807becec6a2ef50d6ca97dd",
+      "openExr": "max.exr",
+      "openExrSha256": "2c3804a307d88a28834d83fad99b9bb3ba9eb054642f51b25ba00eafff024b77",
+      "r16RangeMeters": {
+        "max": 18.5,
+        "min": 3.7
+      },
+      "rawR16": "max.r16",
+      "rawR16Sha256": "d7162447c41da922c6dbc35becc46dd53866622fe8f8d47448bdce17baab081f"
+    },
+    "min": {
+      "hash": "e8cdff4a547b7c088661bf676b068ccf3a463d3a66d8885d010cb4f50ecbd0ac",
+      "openExr": "min.exr",
+      "openExrSha256": "0ffda1ab4d04cf62defdcd59cd88a18532a040c7f1546e33cb387c0f1defb455",
+      "r16RangeMeters": {
+        "max": 16.65,
+        "min": -1.85
+      },
+      "rawR16": "min.r16",
+      "rawR16Sha256": "af9fa893c370969f7cf5d963a082522f8eaa18852f5c40379f0b6620790d5dd4"
+    }
+  },
+  "mapContentHash": "64d8d98659a05cf6ba19fe7e0ae0d5e83b70f8b9da753cde9bf1459199519c82",
+  "mapId": "dravonia",
+  "raster": {
+    "height": 530,
+    "sampleSpacingMeters": 1.0,
+    "samplesPerHex": 10,
+    "width": 606,
+    "worldMinMeters": {
+      "x": -10.0,
+      "z": -8.660254037844386
+    }
+  }
+}

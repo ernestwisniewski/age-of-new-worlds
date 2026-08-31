@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../tool/assets/compile/map_asset_bundle_manifest.dart';
 import '../../../../tool/assets/compile/map_texture_geometry.dart';
+import '../../../../tool/assets/compile/packaged_map_bundles.dart';
 import '../../../../tool/assets/compile/starter_map_bundle.dart';
 
 void main() {
@@ -60,6 +61,36 @@ void main() {
       ),
       throwsFormatException,
     );
+  });
+
+  test('all packaged map bundles are deterministic and complete', () async {
+    final temporary = await Directory.systemTemp.createTemp(
+      'packaged-map-bundles-test-',
+    );
+    addTearDown(() => temporary.delete(recursive: true));
+    final workspace = Directory('../..').absolute;
+    final first = Directory('${temporary.path}/first');
+    final second = Directory('${temporary.path}/second');
+
+    await buildPackagedMapBundles(workspace: workspace, output: first);
+    await buildPackagedMapBundles(workspace: workspace, output: second);
+
+    for (final mapId in packagedMapIds) {
+      final firstFiles = await _files(Directory('${first.path}/$mapId'));
+      final secondFiles = await _files(Directory('${second.path}/$mapId'));
+      expect(firstFiles.keys, secondFiles.keys, reason: mapId);
+      for (final path in firstFiles.keys) {
+        expect(firstFiles[path], secondFiles[path], reason: '$mapId/$path');
+      }
+      final manifest = MapAssetBundleManifest.decode(
+        String.fromCharCodes(firstFiles[mapAssetBundleManifestName]!),
+      );
+      expect(manifest.mapId, mapId);
+      expect(firstFiles.keys, contains('map.json'));
+      for (final page in manifest.pages) {
+        expect(firstFiles[page.file], isNotNull, reason: '$mapId/${page.file}');
+      }
+    }
   });
 }
 
