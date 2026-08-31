@@ -14,7 +14,7 @@ use aonw_contracts::client::{
 };
 use aonw_contracts::{
     CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto, PlayerKindDto,
-    PlayerTurnStateDto, UnitKindDto, UnitPostureDto,
+    PlayerTurnStateDto, TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
 #[path = "client_contract/artifact.rs"]
@@ -66,6 +66,7 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
     PlayerViewSnapshotDto {
         stamp: stamp(),
         turn: 7,
+        turn_mode: TurnModeDto::Simultaneous,
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,
@@ -113,6 +114,7 @@ fn command_result() -> ClientCommandResultDto {
             from_revision: 7,
             to_revision: 8,
             turn: 7,
+            turn_mode: TurnModeDto::Simultaneous,
             turn_lifecycle: None,
             outcome: None,
             upserted_units: vec![unit()],

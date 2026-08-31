@@ -40,6 +40,7 @@ pub fn encode_player_view_patch(value: &PlayerViewPatch) -> PlayerViewPatchDto {
         from_revision: value.from_revision,
         to_revision: value.to_revision,
         turn: value.turn,
+        turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode),
         turn_lifecycle: value.turn_lifecycle.map(encode_turn_lifecycle),
         outcome: value.outcome.as_ref().map(crate::encode_game_outcome),
         upserted_units: value.upserted_units.iter().map(unit).collect(),

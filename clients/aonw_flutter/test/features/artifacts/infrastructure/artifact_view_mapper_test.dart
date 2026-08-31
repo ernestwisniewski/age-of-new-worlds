@@ -110,6 +110,7 @@ AonwPlayerViewPatch _patch({int toRevision = 0}) => AonwPlayerViewPatch(
   fromRevision: 0,
   toRevision: toRevision,
   turn: 1,
+  turnMode: AonwTurnMode.sequential,
   turnLifecycle: null,
   outcome: null,
   upsertedUnits: const [],

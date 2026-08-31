@@ -84,6 +84,7 @@ Map<String, Object?> _outcome() => {
       'fromRevision': 7,
       'toRevision': 8,
       'turn': 1,
+      'turnMode': 'simultaneous',
       'turnLifecycle': {
         'ownState': 'active',
         'ownSubmitted': true,
@@ -113,6 +114,7 @@ Map<String, Object?> _outcome() => {
 Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
   'stamp': _stamp(revision),
   'turn': 1,
+  'turnMode': 'simultaneous',
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,

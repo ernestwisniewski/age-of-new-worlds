@@ -4,7 +4,7 @@
 
 use aonw_domain::{
     CityId, FieldImprovementKind, GameState, HexCoord, PendingInteraction, PlayerId,
-    PlayerTurnState, UnitId,
+    PlayerTurnState, TurnMode, UnitId,
 };
 use std::sync::Arc;
 
@@ -88,6 +88,7 @@ pub struct PlayerViewSnapshot {
     recipient_player_id: Arc<PlayerId>,
     stamp: SessionStamp,
     turn: u32,
+    turn_mode: TurnMode,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -106,6 +107,7 @@ impl PlayerViewSnapshot {
         recipient_player_id: Arc<PlayerId>,
         stamp: SessionStamp,
         turn: u32,
+        turn_mode: TurnMode,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -121,6 +123,7 @@ impl PlayerViewSnapshot {
             recipient_player_id,
             stamp,
             turn,
+            turn_mode,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -149,6 +152,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub const fn turn(&self) -> u32 {
         self.turn
+    }
+    /// Returns the authoritative participant turn resolution model.
+    #[must_use]
+    pub const fn turn_mode(&self) -> TurnMode {
+        self.turn_mode
     }
     /// Returns the persisted authoritative match result.
     #[must_use]

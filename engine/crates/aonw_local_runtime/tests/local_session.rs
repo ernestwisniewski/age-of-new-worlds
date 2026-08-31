@@ -6,7 +6,7 @@ use aonw_content::{
 };
 use aonw_contract_mapping::decode_game_state;
 use aonw_contracts::{ReplayLogDto, SaveGameDto};
-use aonw_domain::{HexCoord, PlayerId, StateRevision, UnitId, UnitKind};
+use aonw_domain::{HexCoord, PlayerId, StateRevision, TurnMode, UnitId, UnitKind};
 use aonw_local_runtime::{
     LocalRuntime, MoveUnitRequest, OpenSession, OpenSessionError, PendingActionView,
     PersistenceError, ReachableRequest, ReplayVerification, RoutePlanRequest, RuntimeError,
@@ -70,6 +70,7 @@ fn local_session_supports_snapshot_queries_and_dispatch() {
 
     let snapshot = runtime.snapshot().expect("snapshot");
     assert_eq!(snapshot.turn(), 1);
+    assert_eq!(snapshot.turn_mode(), TurnMode::Sequential);
     assert_eq!(snapshot.pending_action(), None);
     assert_eq!(snapshot.units().len(), 1);
     assert_eq!(snapshot.units()[0].id().as_str(), "unit-1");
@@ -110,6 +111,7 @@ fn local_session_supports_snapshot_queries_and_dispatch() {
     assert!(moved.evidence.is_some());
     assert_eq!(moved.view_patch.from_revision, 0);
     assert_eq!(moved.view_patch.to_revision, 1);
+    assert_eq!(moved.view_patch.turn_mode, TurnMode::Sequential);
     assert_eq!(moved.view_patch.upserted_units[0].col(), 1);
 }
 
@@ -460,6 +462,6 @@ fn deterministic_replay_signature_is_stable() {
     assert!(!replay_json.contains("initialRngState"));
     assert_eq!(
         format!("{:x}", Sha256::digest(replay_json.as_bytes())),
-        "e2cef5469d728feb6ba10ccbd30c978644b9d7122fa39c0d7d856abff45c076b"
+        "f774b704496a876ad3b01a64ac754365e62816083e9f810f4b9a7d4f4cfed584"
     );
 }

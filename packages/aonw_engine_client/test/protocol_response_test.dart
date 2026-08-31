@@ -42,6 +42,7 @@ void main() {
       'snapshot': {
         'stamp': _stamp,
         'turn': 7,
+        'turnMode': 'sequential',
         'turnLifecycle': {
           'ownState': 'active',
           'ownSubmitted': false,
@@ -350,6 +351,7 @@ const _stamp = {
 const _snapshot = {
   'stamp': _stamp,
   'turn': 1,
+  'turnMode': 'sequential',
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
@@ -390,6 +392,7 @@ Map<String, Object?> _commandResult(Map<String, Object?> outcome) => {
     'fromRevision': 7,
     'toRevision': 7,
     'turn': 7,
+    'turnMode': 'sequential',
     'turnLifecycle': null,
     'outcome': null,
     'upsertedUnits': <Object?>[],

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     ArmyTroopDto, CoordinateDto, GameOutcomeDto, MerchantTradeRouteDto, PlayerKindDto,
-    PlayerTurnStateDto, QueuedMovePathDto, UnitKindDto, UnitPostureDto,
+    PlayerTurnStateDto, QueuedMovePathDto, TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
 use super::MapViewDto;
@@ -256,6 +256,8 @@ pub struct PlayerViewSnapshotDto {
     pub stamp: ClientSessionStampDto,
     /// Authoritative turn number.
     pub turn: u32,
+    /// Authoritative participant turn resolution model.
+    pub turn_mode: TurnModeDto,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.
@@ -366,6 +368,8 @@ pub struct PlayerViewPatchDto {
     pub to_revision: u64,
     /// Authoritative turn number represented after the patch.
     pub turn: u32,
+    /// Authoritative participant turn resolution model.
+    pub turn_mode: TurnModeDto,
     /// Replacement lifecycle projection when turn/readiness changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleViewDto>,
     /// Replacement match result when it changed.

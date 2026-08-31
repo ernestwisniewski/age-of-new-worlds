@@ -101,6 +101,7 @@ void main() {
     final invalid = AonwPlayerViewSnapshot(
       stamp: snapshot.stamp,
       turn: 0,
+      turnMode: snapshot.turnMode,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,
@@ -359,6 +360,7 @@ AonwPlayerViewSnapshot _snapshot(
     rulesetHash: 'c' * 64,
   ),
   turn: 7,
+  turnMode: AonwTurnMode.sequential,
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

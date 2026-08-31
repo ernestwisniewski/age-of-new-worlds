@@ -95,6 +95,7 @@ AonwCommandResult _command({
     fromRevision: 0,
     toRevision: revision,
     turn: 1,
+    turnMode: AonwTurnMode.sequential,
     turnLifecycle: null,
     outcome: null,
     upsertedUnits: const [],

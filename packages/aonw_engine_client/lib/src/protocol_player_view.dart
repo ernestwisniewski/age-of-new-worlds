@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/src/protocol_city_view.dart';
 import 'package:aonw_engine_client/src/protocol_coordinate.dart';
 import 'package:aonw_engine_client/src/protocol_diplomacy.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
+import 'package:aonw_engine_client/src/protocol_match.dart';
 import 'package:aonw_engine_client/src/protocol_outcome.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
@@ -84,6 +85,7 @@ final class AonwPlayerViewSnapshot {
   const AonwPlayerViewSnapshot({
     required this.stamp,
     required this.turn,
+    required this.turnMode,
     required this.outcome,
     required this.turnLifecycle,
     required this.pendingAction,
@@ -101,6 +103,7 @@ final class AonwPlayerViewSnapshot {
     requireKeys(value, const {
       'stamp',
       'turn',
+      'turnMode',
       'outcome',
       'turnLifecycle',
       'pendingAction',
@@ -115,6 +118,7 @@ final class AonwPlayerViewSnapshot {
     return AonwPlayerViewSnapshot(
       stamp: AonwSessionStamp.fromJson(value['stamp']),
       turn: readUnsigned(value['turn'], 'snapshot turn'),
+      turnMode: AonwTurnMode.fromJson(value['turnMode']),
       outcome: AonwGameOutcome.fromJson(value['outcome']),
       turnLifecycle: AonwPlayerTurnLifecycle.fromJson(value['turnLifecycle']),
       pendingAction: value['pendingAction'] == null
@@ -150,6 +154,7 @@ final class AonwPlayerViewSnapshot {
 
   final AonwSessionStamp stamp;
   final int turn;
+  final AonwTurnMode turnMode;
   final AonwGameOutcome outcome;
   final AonwPlayerTurnLifecycle turnLifecycle;
   final AonwPendingActionView? pendingAction;
@@ -167,6 +172,7 @@ final class AonwPlayerViewPatch {
     required this.fromRevision,
     required this.toRevision,
     required this.turn,
+    required this.turnMode,
     required this.turnLifecycle,
     required this.outcome,
     required this.upsertedUnits,
@@ -193,6 +199,7 @@ final class AonwPlayerViewPatch {
       fromRevision: readUnsigned(value['fromRevision'], 'source revision'),
       toRevision: readUnsigned(value['toRevision'], 'patch target revision'),
       turn: readUnsigned(value['turn'], 'patch turn'),
+      turnMode: AonwTurnMode.fromJson(value['turnMode']),
       turnLifecycle: _optional(
         value['turnLifecycle'],
         AonwPlayerTurnLifecycle.fromJson,
@@ -227,6 +234,7 @@ final class AonwPlayerViewPatch {
   final int fromRevision;
   final int toRevision;
   final int turn;
+  final AonwTurnMode turnMode;
   final AonwPlayerTurnLifecycle? turnLifecycle;
   final AonwGameOutcome? outcome;
   final List<AonwPlayerUnitView> upsertedUnits;
@@ -305,6 +313,7 @@ void _requirePlayerViewPatchKeys(Map<String, Object?> value) {
     'fromRevision',
     'toRevision',
     'turn',
+    'turnMode',
     'turnLifecycle',
     'outcome',
     'upsertedUnits',

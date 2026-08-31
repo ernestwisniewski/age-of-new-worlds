@@ -1,7 +1,9 @@
 use core::cmp::Ordering;
 use std::sync::Arc;
 
-use aonw_domain::{ArtifactId, CityId, GameOutcome, GameState, HexCoord, PlayerId, UnitId};
+use aonw_domain::{
+    ArtifactId, CityId, GameOutcome, GameState, HexCoord, PlayerId, TurnMode, UnitId,
+};
 
 use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
@@ -19,6 +21,8 @@ pub struct PlayerViewPatch {
     pub to_revision: u64,
     /// Authoritative turn number after the patch.
     pub turn: u32,
+    /// Authoritative participant turn resolution model.
+    pub turn_mode: TurnMode,
     /// Replacement turn projection when lifecycle state changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleView>,
     /// Replacement authoritative match result when it changed.
@@ -56,6 +60,7 @@ pub struct PlayerViewPatch {
 pub struct ProjectedView {
     recipient_player_id: Arc<PlayerId>,
     turn_number: u32,
+    turn_mode: TurnMode,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -83,6 +88,7 @@ impl ProjectedView {
         Self {
             recipient_player_id: Arc::new(PlayerId::new("test-player").expect("player id")),
             turn_number: 0,
+            turn_mode: TurnMode::Sequential,
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -94,6 +100,12 @@ impl ProjectedView {
             pending_action: None,
             city_founding_draft: None,
         }
+    }
+
+    #[cfg(test)]
+    fn with_turn_mode(mut self, turn_mode: TurnMode) -> Self {
+        self.turn_mode = turn_mode;
+        self
     }
 
     /// Builds a complete recipient-safe projection from canonical state.
@@ -111,6 +123,7 @@ impl ProjectedView {
         Self {
             recipient_player_id: actor,
             turn_number: state.turn(),
+            turn_mode: state.match_lifecycle().identity().turn_mode(),
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -131,6 +144,7 @@ impl ProjectedView {
             self.recipient_player_id.clone(),
             stamp,
             self.turn_number,
+            self.turn_mode,
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),
@@ -216,6 +230,7 @@ pub fn diff_view(
         from_revision,
         to_revision,
         turn: after.turn_number,
+        turn_mode: after.turn_mode,
         turn_lifecycle: (before.turn != after.turn).then_some(after.turn),
         outcome,
         upserted_units: upserted_units.into_boxed_slice(),
@@ -241,6 +256,7 @@ pub fn unchanged_view(revision: u64, view: &ProjectedView) -> PlayerViewPatch {
         from_revision: revision,
         to_revision: revision,
         turn: view.turn_number,
+        turn_mode: view.turn_mode,
         turn_lifecycle: None,
         outcome: None,
         upserted_units: Box::new([]),
@@ -366,7 +382,9 @@ fn diff_cities(
 
 #[cfg(test)]
 mod tests {
-    use aonw_domain::{GameOutcome, HexCoord, MovementUnits, PlayerId, Unit, UnitId, UnitKind};
+    use aonw_domain::{
+        GameOutcome, HexCoord, MovementUnits, PlayerId, TurnMode, Unit, UnitId, UnitKind,
+    };
 
     use super::{ProjectedView, diff_coordinate_views, diff_view};
     use crate::{PlayerDiplomacyView, PlayerTurnLifecycleView, PlayerUnitView};
@@ -385,7 +403,8 @@ mod tests {
             Vec::new(),
             Vec::new(),
             (Vec::new(), Vec::new()),
-        );
+        )
+        .with_turn_mode(TurnMode::Simultaneous);
         let after = ProjectedView::new(
             turn,
             GameOutcome::ongoing(),
@@ -394,12 +413,14 @@ mod tests {
             Vec::new(),
             Vec::new(),
             (Vec::new(), Vec::new()),
-        );
+        )
+        .with_turn_mode(TurnMode::Simultaneous);
         let patch = diff_view(4, 5, &before, &after);
 
         assert_eq!(patch.from_revision, 4);
         assert_eq!(patch.to_revision, 5);
         assert_eq!(patch.turn, 0);
+        assert_eq!(patch.turn_mode, TurnMode::Simultaneous);
         assert_eq!(
             patch
                 .upserted_units

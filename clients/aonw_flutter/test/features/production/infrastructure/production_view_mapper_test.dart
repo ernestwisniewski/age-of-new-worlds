@@ -173,6 +173,7 @@ AonwCommandResult _rejected(AonwCommandRejectionCode code) => AonwCommandResult(
     fromRevision: 0,
     toRevision: 0,
     turn: 1,
+    turnMode: AonwTurnMode.sequential,
     turnLifecycle: null,
     outcome: null,
     upsertedUnits: [],

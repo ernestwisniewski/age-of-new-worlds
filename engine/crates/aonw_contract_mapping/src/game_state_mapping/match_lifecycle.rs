@@ -375,7 +375,7 @@ fn encode_game_mode(value: GameMode) -> GameModeDto {
 fn decode_turn_mode(value: TurnModeDto) -> TurnMode {
     map_enum!(value, TurnModeDto::Sequential => TurnMode::Sequential, TurnModeDto::Simultaneous => TurnMode::Simultaneous)
 }
-fn encode_turn_mode(value: TurnMode) -> TurnModeDto {
+pub(crate) fn encode_turn_mode(value: TurnMode) -> TurnModeDto {
     map_enum!(value, TurnMode::Sequential => TurnModeDto::Sequential, TurnMode::Simultaneous => TurnModeDto::Simultaneous)
 }
 fn decode_player_kind(value: PlayerKindDto) -> PlayerKind {

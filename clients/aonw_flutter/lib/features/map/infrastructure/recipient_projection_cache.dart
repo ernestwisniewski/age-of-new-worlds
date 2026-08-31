@@ -68,6 +68,7 @@ final class RecipientProjectionCache {
     final after = AonwPlayerViewSnapshot(
       stamp: command.stamp,
       turn: patch.turn,
+      turnMode: patch.turnMode,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -89,6 +90,11 @@ final class RecipientProjectionCache {
     if (!_validator.hasSameStaticIdentity(_snapshot.stamp, snapshot.stamp)) {
       throw const FormatException(
         'Recipient resync belongs to another session identity.',
+      );
+    }
+    if (snapshot.turnMode != _snapshot.turnMode) {
+      throw const FormatException(
+        'Recipient resync changed the immutable turn mode.',
       );
     }
     if (snapshot.stamp.revision < _snapshot.stamp.revision) {
@@ -121,6 +127,11 @@ final class RecipientProjectionCache {
         patch.toRevision != command.stamp.revision) {
       throw const FormatException(
         'Recipient patch does not continue the cached revision.',
+      );
+    }
+    if (patch.turnMode != before.turnMode) {
+      throw const FormatException(
+        'Recipient patch changed the immutable turn mode.',
       );
     }
     if (command.accepted) {

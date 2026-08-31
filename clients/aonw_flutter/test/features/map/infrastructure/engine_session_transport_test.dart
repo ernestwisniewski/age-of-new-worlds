@@ -92,6 +92,7 @@ AonwPlayerViewSnapshot _snapshot() => AonwPlayerViewSnapshot(
     rulesetHash: 'c' * 64,
   ),
   turn: 1,
+  turnMode: AonwTurnMode.sequential,
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,

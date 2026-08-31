@@ -45,6 +45,7 @@ void main() {
 
     expect(after.stamp.revision, 1);
     expect(after.turn, 2);
+    expect(after.turnMode, AonwTurnMode.sequential);
     expect(after.turnLifecycle, same(lifecycle));
     expect(after.outcome, same(outcome));
     expect(after.diplomacy, same(diplomacy));
@@ -278,6 +279,26 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('rejects turn mode drift in patches and resync snapshots', () {
+    final initial = _snapshot(turnMode: AonwTurnMode.simultaneous);
+    final cache = _cache(initial);
+
+    expect(
+      () => cache.apply(
+        _command(
+          stamp: _stamp(revision: 1, stateDigest: 'd' * 64),
+          patch: _patch(fromRevision: 0, toRevision: 1, turn: 1),
+        ),
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => cache.replaceAfterResync(_snapshot(revision: 1)),
+      throwsFormatException,
+    );
+    expect(cache.snapshot, same(initial));
+  });
 }
 
 RecipientProjectionCache _cache(AonwPlayerViewSnapshot snapshot) =>
@@ -286,6 +307,7 @@ RecipientProjectionCache _cache(AonwPlayerViewSnapshot snapshot) =>
 AonwPlayerViewSnapshot _snapshot({
   int revision = 0,
   String? rulesetHash,
+  AonwTurnMode turnMode = AonwTurnMode.sequential,
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
 }) => AonwPlayerViewSnapshot(
@@ -295,6 +317,7 @@ AonwPlayerViewSnapshot _snapshot({
     rulesetHash: rulesetHash,
   ),
   turn: 1,
+  turnMode: turnMode,
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -365,6 +388,7 @@ AonwPlayerViewPatch _patch({
   required int fromRevision,
   required int toRevision,
   required int turn,
+  AonwTurnMode turnMode = AonwTurnMode.sequential,
   AonwPlayerTurnLifecycle? turnLifecycle,
   AonwGameOutcome? outcome,
   AonwPlayerDiplomacyView? diplomacy,
@@ -376,6 +400,7 @@ AonwPlayerViewPatch _patch({
   fromRevision: fromRevision,
   toRevision: toRevision,
   turn: turn,
+  turnMode: turnMode,
   turnLifecycle: turnLifecycle,
   outcome: outcome,
   upsertedUnits: upsertedUnits,

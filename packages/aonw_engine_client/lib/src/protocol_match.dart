@@ -1,6 +1,19 @@
+import 'package:aonw_engine_client/src/protocol_json.dart';
+
 enum AonwGameMode { hotSeat, multiplayer }
 
-enum AonwTurnMode { sequential, simultaneous }
+enum AonwTurnMode {
+  sequential,
+  simultaneous;
+
+  factory AonwTurnMode.fromJson(Object? source) {
+    final name = readString(source, 'turn mode');
+    return values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => throw FormatException('Unknown AoNW turn mode $name.'),
+    );
+  }
+}
 
 enum AonwPlayerKind { human, ai }
 

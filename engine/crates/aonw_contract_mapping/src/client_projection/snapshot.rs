@@ -24,6 +24,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
     PlayerViewSnapshotDto {
         stamp: encode_client_stamp(*value.stamp()),
         turn: value.turn(),
+        turn_mode: crate::game_state_mapping::encode_turn_mode(value.turn_mode()),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
