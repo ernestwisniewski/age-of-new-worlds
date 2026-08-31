@@ -164,15 +164,22 @@ func _test_every_catalog_source_matches_available_artifacts() -> void:
 		var manifest_path := ProjectSettings.globalize_path(
 			source.visual_directory.path_join("map_texture_manifest.json")
 		)
-		if FileAccess.file_exists(manifest_path):
-			var manifest_file := FileAccess.open(manifest_path, FileAccess.READ)
-			_check(manifest_file != null, "%s asset bundle opens" % source.map_id)
-			if manifest_file != null:
-				var manifest: Variant = JSON.parse_string(manifest_file.get_as_text())
-				_check(
-					atlas_repository._manifest_error(manifest, map_result["map"]).is_empty(),
-					"%s asset bundle matches its Rust map content hash" % source.map_id,
-				)
+		_check(FileAccess.file_exists(manifest_path), "%s texture manifest exists" % source.map_id)
+		var atlas_result := atlas_repository.load_atlas(
+			map_result["map"],
+			source.visual_directory,
+		)
+		_check(
+			atlas_result["ok"],
+			"%s reference texture assembles: %s"
+			% [source.map_id, atlas_result.get("message", "unknown error")],
+		)
+		if atlas_result["ok"]:
+			var reference_texture: Texture2D = atlas_result["reference_texture"]
+			_check(
+				reference_texture.get_width() > 0 and reference_texture.get_height() > 0,
+				"%s reference texture has drawable dimensions" % source.map_id,
+			)
 		var terrain_result := terrain_repository.load_terrain(map_result["map"])
 		_check(
 			terrain_result["ok"],

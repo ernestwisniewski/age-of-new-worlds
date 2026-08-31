@@ -25,8 +25,14 @@ const INVALID_HEX := Vector2i(-1, -1)
 @export var generated_base_hash := ""
 @export var generator_version := ""
 @export var terrain_revision := 0
-@export var reference_visible := true
-@export_range(0.0, 1.0, 0.01) var reference_opacity := 0.65
+@export var reference_visible := true:
+	set(value):
+		reference_visible = value
+		_apply_visibility()
+@export_range(0.0, 1.0, 0.01) var reference_opacity := 0.65:
+	set(value):
+		reference_opacity = clampf(value, 0.0, 1.0)
+		_update_opacity(_reference, reference_opacity)
 @export var grid_visible := true
 @export_range(0.0, 1.0, 0.01) var grid_opacity := 0.72
 @export_range(0.01, 2.0, 0.01) var grid_width := 0.35
@@ -130,13 +136,12 @@ func open_session(
 	return {"ok": true}
 
 func set_reference_visible(value: bool) -> void:
-	reference_visible = value and _reference_texture != null
 	_ensure_nodes()
-	_reference.visible = value
+	reference_visible = value
 
 func set_reference_opacity(value: float) -> void:
-	reference_opacity = clampf(value, 0.0, 1.0)
-	_update_opacity(_reference, reference_opacity)
+	_ensure_nodes()
+	reference_opacity = value
 
 func set_grid_visible(value: bool) -> void:
 	grid_visible = value

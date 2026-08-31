@@ -113,6 +113,21 @@ func _test_every_content_map_opens_its_own_terrain() -> void:
 			"%s opens only its own logical map and Terrain3D artifact" % source.map_id,
 		)
 		if result["ok"]:
+			_check(
+				surface.has_reference_texture()
+				and surface.get_node("ReferenceTexture").mesh is ArrayMesh,
+				"%s exposes its old-client texture as the editor reference" % source.map_id,
+			)
+			surface.reference_visible = false
+			_check(
+				not surface.get_node("ReferenceTexture").visible,
+				"%s reference can be hidden directly from the Inspector" % source.map_id,
+			)
+			surface.reference_visible = true
+			_check(
+				surface.get_node("ReferenceTexture").visible,
+				"%s reference can be shown directly from the Inspector" % source.map_id,
+			)
 			opened.append(source.map_id)
 		root.queue_free()
 		await Engine.get_main_loop().process_frame
