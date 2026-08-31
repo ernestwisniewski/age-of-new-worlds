@@ -152,6 +152,36 @@ abstract class AonwLocalizations {
   /// **'Hotseat setup is not available yet.'**
   String get hotseatUnavailable;
 
+  /// No description provided for @hotseatHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass the device'**
+  String get hotseatHandoffTitle;
+
+  /// No description provided for @hotseatHandoffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the device to {name}. Their map remains hidden until they confirm.'**
+  String hotseatHandoffBody(String name);
+
+  /// No description provided for @hotseatContinueAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue as {name}'**
+  String hotseatContinueAs(String name);
+
+  /// No description provided for @hotseatHandoffSwitching.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the next player'**
+  String get hotseatHandoffSwitching;
+
+  /// No description provided for @hotseatHandoffFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The next local player could not be opened safely.'**
+  String get hotseatHandoffFailure;
+
   /// No description provided for @loadGame.
   ///
   /// In en, this message translates to:
@@ -637,6 +667,186 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Create local game'**
   String get newGameTitle;
+
+  /// No description provided for @singlePlayerSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play with the computer'**
+  String get singlePlayerSetupTitle;
+
+  /// No description provided for @singlePlayerSetupIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your civilization and tune the authoritative local duel.'**
+  String get singlePlayerSetupIntro;
+
+  /// No description provided for @hotseatSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play in hotseat mode'**
+  String get hotseatSetupTitle;
+
+  /// No description provided for @hotseatSetupIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Share one device. Every human view stays hidden until the next player confirms the handoff.'**
+  String get hotseatSetupIntro;
+
+  /// No description provided for @chooseCivilizationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose civilization'**
+  String get chooseCivilizationTitle;
+
+  /// No description provided for @gameSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Game setup'**
+  String get gameSetupTitle;
+
+  /// No description provided for @opponentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponents'**
+  String get opponentsTitle;
+
+  /// No description provided for @opponentControlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponent control'**
+  String get opponentControlLabel;
+
+  /// No description provided for @humanOpponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Human player'**
+  String get humanOpponent;
+
+  /// No description provided for @aiOpponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer'**
+  String get aiOpponent;
+
+  /// No description provided for @mapSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get mapSetupTitle;
+
+  /// No description provided for @mapSetupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A compact authored 7 × 7 map for a focused two-civilization match.'**
+  String get mapSetupBody;
+
+  /// No description provided for @victoryPathsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Victory paths'**
+  String get victoryPathsTitle;
+
+  /// No description provided for @victoryPathsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Conquest, domination, culture and score are resolved by the game engine.'**
+  String get victoryPathsBody;
+
+  /// No description provided for @settlementToEmpireTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From settlement to empire'**
+  String get settlementToEmpireTitle;
+
+  /// No description provided for @settlementToEmpireBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore, found cities, research, produce armies and build lasting advantages.'**
+  String get settlementToEmpireBody;
+
+  /// No description provided for @continueToSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to summary'**
+  String get continueToSummary;
+
+  /// No description provided for @gameSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expedition ready'**
+  String get gameSummaryTitle;
+
+  /// No description provided for @gameSummaryIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Review every local participant before creating the match.'**
+  String get gameSummaryIntro;
+
+  /// No description provided for @summaryModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
+  String get summaryModeLabel;
+
+  /// No description provided for @summaryCivilizationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your civilization'**
+  String get summaryCivilizationLabel;
+
+  /// No description provided for @summaryOpponentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponent'**
+  String get summaryOpponentLabel;
+
+  /// No description provided for @summaryMapLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get summaryMapLabel;
+
+  /// No description provided for @summaryFogLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fog of war'**
+  String get summaryFogLabel;
+
+  /// No description provided for @summaryAiLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer profile'**
+  String get summaryAiLabel;
+
+  /// No description provided for @changeSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Change setup'**
+  String get changeSetup;
+
+  /// No description provided for @localModeName.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, singlePlayer{Single player} hotseat{Hotseat} other{Local game}}'**
+  String localModeName(String value);
+
+  /// No description provided for @participantControlName.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, human{Human} ai{Computer} other{Unknown}}'**
+  String participantControlName(String value);
+
+  /// No description provided for @fogSettingName.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, enabled{Enabled} disabled{Disabled} other{Unknown}}'**
+  String fogSettingName(String value);
+
+  /// No description provided for @defaultSecondPlayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Player 2'**
+  String get defaultSecondPlayerName;
 
   /// No description provided for @scenarioLabel.
   ///

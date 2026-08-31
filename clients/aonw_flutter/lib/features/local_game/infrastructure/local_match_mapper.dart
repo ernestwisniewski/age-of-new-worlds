@@ -10,6 +10,18 @@ final class LocalMatchMapper {
     gameMode: AonwGameMode.hotSeat,
   );
 
+  LocalMatchControlPlanView restoredControlPlan(
+    Iterable<AonwParticipantControl> participants,
+  ) => LocalMatchControlPlanView(
+    participants.map(
+      (participant) => LocalParticipantControlView(
+        id: participant.id,
+        name: participant.name,
+        control: LocalPlayerControlView.values.byName(participant.kind.name),
+      ),
+    ),
+  );
+
   AonwParticipant _participant(LocalParticipantSetupView value) =>
       AonwParticipant(
         id: value.id,

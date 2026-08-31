@@ -120,7 +120,15 @@ void main() {
       _success({'type': 'sessionClosed'}): AonwSessionClosedResponse,
       _success({'type': 'saveExported', 'document': '{}'}):
           AonwSaveExportedResponse,
-      _success({'type': 'saveOpened', 'stamp': _stamp}): AonwSaveOpenedResponse,
+      _success({
+        'type': 'saveOpened',
+        'stamp': _stamp,
+        'actorPlayerId': 'player-1',
+        'participants': [
+          {'id': 'player-1', 'name': 'Player', 'kind': 'human'},
+          {'id': 'player-2', 'name': 'Computer', 'kind': 'ai'},
+        ],
+      }): AonwSaveOpenedResponse,
       _success({'type': 'replayExported', 'document': '{}'}):
           AonwReplayExportedResponse,
       _success({
@@ -145,6 +153,30 @@ void main() {
         expectedType,
       );
     }
+  });
+
+  test('save restore exposes only ordered local participant control', () {
+    final response = AonwClientResponse.parse(
+      _success({
+        'type': 'saveOpened',
+        'stamp': _stamp,
+        'actorPlayerId': 'player-2',
+        'participants': [
+          {'id': 'player-1', 'name': 'Ada', 'kind': 'human'},
+          {'id': 'player-2', 'name': 'Grace', 'kind': 'human'},
+          {'id': 'player-3', 'name': 'Computer', 'kind': 'ai'},
+        ],
+      }),
+    ).require<AonwSaveOpenedResponse>();
+
+    expect(response.actorPlayerId, 'player-2');
+    expect(
+      response.participants.map((participant) => participant.id),
+      ['player-1', 'player-2', 'player-3'],
+    );
+    expect(response.participants[1].name, 'Grace');
+    expect(response.participants[1].kind, AonwPlayerKind.human);
+    expect(response.participants[2].kind, AonwPlayerKind.ai);
   });
 
   test('typed parser covers both movement query results', () {

@@ -4,7 +4,8 @@ extension MapCoordinatorActions on MapCoordinator {
   void inspectSelectedCity(String cityId) {
     final current = _state;
     if (current is! GameSessionReady ||
-        current.recipient.turnView.outcome.isTerminal) {
+        current.recipient.turnView.outcome.isTerminal ||
+        current.localHandoff.blocksGameplay) {
       return;
     }
     final city = current.recipient.cityById(cityId);
@@ -50,7 +51,8 @@ extension MapCoordinatorActions on MapCoordinator {
   void openCityFounding() {
     final state = _state;
     if (state is! GameSessionReady ||
-        state.recipient.turnView.outcome.isTerminal) {
+        state.recipient.turnView.outcome.isTerminal ||
+        state.localHandoff.blocksGameplay) {
       return;
     }
     final unitId = state.interaction.selectedUnitId;
@@ -238,7 +240,7 @@ extension MapCoordinatorActions on MapCoordinator {
       readState: () => _state,
       publish: _setState,
       isDisposed: () => _disposed,
-      onAccepted: _advanceLocalAiTurns,
+      onAccepted: _advanceLocalTurns,
     );
   }
 

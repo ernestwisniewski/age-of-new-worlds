@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
-import '../../../design_system/widgets/aonw_panel.dart';
+import '../../../design_system/widgets/aonw_menu_backdrop.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/presentation/map_presentation_controller.dart';
 import '../application/local_game_catalog.dart';
 import '../application/local_game_session_port.dart';
+import 'local_game_launch_mode.dart';
+import 'new_game_review_step.dart';
+import 'new_game_setup_step.dart';
 
 final class NewGameScreen extends StatefulWidget {
   const NewGameScreen({
     required this.mapController,
     required this.onStarted,
+    this.initialMode = LocalGameLaunchModeView.singlePlayer,
     super.key,
   });
 
   final MapPresentationController mapController;
   final VoidCallback onStarted;
+  final LocalGameLaunchModeView initialMode;
 
   @override
   State<NewGameScreen> createState() => _NewGameScreenState();
@@ -24,84 +29,51 @@ final class NewGameScreen extends StatefulWidget {
 final class _NewGameScreenState extends State<NewGameScreen> {
   var _scenario = LocalGameCatalog.entries.first;
   var _humanCountry = LocalPlayerCountryView.poland;
-  var _aiCountry = LocalPlayerCountryView.japan;
+  var _opponentCountry = LocalPlayerCountryView.japan;
   var _difficulty = LocalAiDifficultyView.normal;
   var _persona = LocalAiPersonaView.balanced;
   var _fogEnabled = true;
+  var _opponentControl = LocalPlayerControlView.ai;
+  var _reviewing = false;
   var _starting = false;
   var _failed = false;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialMode == LocalGameLaunchModeView.hotseat) {
+      _opponentControl = LocalPlayerControlView.human;
+    }
+  }
+
+  LocalGameLaunchModeView get _actualMode =>
+      _opponentControl == LocalPlayerControlView.human
+      ? LocalGameLaunchModeView.hotseat
+      : LocalGameLaunchModeView.singlePlayer;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
+    final title = _reviewing
+        ? l10n.gameSummaryTitle
+        : widget.initialMode == LocalGameLaunchModeView.hotseat
+        ? l10n.hotseatSetupTitle
+        : l10n.singlePlayerSetupTitle;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.newGameTitle)),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AonwSpacing.md),
-            child: AonwPanel(
-              semanticLabel: l10n.newGameTitle,
-              maxWidth: 560,
-              padding: const EdgeInsets.all(AonwSpacing.xl),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _scenarioField(l10n),
-                  const SizedBox(height: AonwSpacing.md),
-                  _countryField(
-                    key: const ValueKey('human-country'),
-                    label: l10n.humanCountryLabel,
-                    value: _humanCountry,
-                    onChanged: (value) => setState(() => _humanCountry = value),
-                  ),
-                  const SizedBox(height: AonwSpacing.md),
-                  _countryField(
-                    key: const ValueKey('ai-country'),
-                    label: l10n.aiCountryLabel,
-                    value: _aiCountry,
-                    onChanged: (value) => setState(() => _aiCountry = value),
-                  ),
-                  const SizedBox(height: AonwSpacing.md),
-                  _difficultyField(l10n),
-                  const SizedBox(height: AonwSpacing.md),
-                  _personaField(l10n),
-                  const SizedBox(height: AonwSpacing.sm),
-                  SwitchListTile.adaptive(
-                    key: const ValueKey('fog-of-war'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(l10n.fogOfWarLabel),
-                    value: _fogEnabled,
-                    onChanged: _starting
-                        ? null
-                        : (value) => setState(() => _fogEnabled = value),
-                  ),
-                  if (_failed) ...[
-                    const SizedBox(height: AonwSpacing.sm),
-                    Semantics(
-                      liveRegion: true,
-                      child: Text(
-                        l10n.localGameStartFailed,
-                        key: const ValueKey('new-game-failure'),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: AonwSpacing.lg),
-                  FilledButton.icon(
-                    key: const ValueKey('start-game'),
-                    onPressed: _starting ? null : _start,
-                    icon: _starting
-                        ? const SizedBox.square(
-                            dimension: AonwSizes.compactProgress,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.play_arrow),
-                    label: Text(_starting ? l10n.startingGame : l10n.startGame),
-                  ),
-                ],
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+      ),
+      body: AonwMenuBackdrop(
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(AonwSpacing.lg),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: _reviewing ? _reviewStep() : _setupStep(),
               ),
             ),
           ),
@@ -110,75 +82,66 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     );
   }
 
-  Widget _scenarioField(AonwLocalizations l10n) =>
-      DropdownButtonFormField<LocalGameCatalogEntryView>(
-        key: ValueKey(('scenario', _scenario.id)),
-        initialValue: _scenario,
-        decoration: InputDecoration(labelText: l10n.scenarioLabel),
-        items: [
-          for (final entry in LocalGameCatalog.entries)
-            DropdownMenuItem(
-              value: entry,
-              child: Text(l10n.localScenarioName(entry.id.name)),
-            ),
-        ],
-        onChanged: _starting
-            ? null
-            : (value) => setState(() => _scenario = value!),
-      );
-
-  Widget _countryField({
-    required Key key,
-    required String label,
-    required LocalPlayerCountryView value,
-    required ValueChanged<LocalPlayerCountryView> onChanged,
-  }) => DropdownButtonFormField<LocalPlayerCountryView>(
-    key: ValueKey((key, value)),
-    initialValue: value,
-    decoration: InputDecoration(labelText: label),
-    items: [
-      for (final country in LocalPlayerCountryView.values)
-        DropdownMenuItem(
-          value: country,
-          child: Text(context.aonwL10n.countryName(country.name)),
-        ),
-    ],
-    onChanged: _starting ? null : (value) => onChanged(value!),
+  Widget _setupStep() => NewGameSetupStep(
+    launchMode: widget.initialMode,
+    scenario: _scenario,
+    humanCountry: _humanCountry,
+    opponentCountry: _opponentCountry,
+    opponentControl: _opponentControl,
+    difficulty: _difficulty,
+    persona: _persona,
+    fogEnabled: _fogEnabled,
+    onScenarioChanged: (value) => setState(() => _scenario = value),
+    onHumanCountryChanged: _changeHumanCountry,
+    onOpponentCountryChanged: _changeOpponentCountry,
+    onOpponentControlChanged: (value) => setState(() {
+      _opponentControl = value;
+      _failed = false;
+    }),
+    onDifficultyChanged: (value) => setState(() => _difficulty = value),
+    onPersonaChanged: (value) => setState(() => _persona = value),
+    onFogChanged: (value) => setState(() => _fogEnabled = value),
+    onContinue: () => setState(() {
+      _reviewing = true;
+      _failed = false;
+    }),
   );
 
-  Widget _difficultyField(AonwLocalizations l10n) =>
-      DropdownButtonFormField<LocalAiDifficultyView>(
-        key: ValueKey(('difficulty', _difficulty)),
-        initialValue: _difficulty,
-        decoration: InputDecoration(labelText: l10n.aiDifficultyLabel),
-        items: [
-          for (final value in LocalAiDifficultyView.values)
-            DropdownMenuItem(
-              value: value,
-              child: Text(l10n.aiDifficultyName(value.name)),
-            ),
-        ],
-        onChanged: _starting
-            ? null
-            : (value) => setState(() => _difficulty = value!),
-      );
+  Widget _reviewStep() => NewGameReviewStep(
+    actualMode: _actualMode,
+    scenario: _scenario,
+    humanCountry: _humanCountry,
+    opponentCountry: _opponentCountry,
+    opponentControl: _opponentControl,
+    difficulty: _difficulty,
+    persona: _persona,
+    fogEnabled: _fogEnabled,
+    starting: _starting,
+    failed: _failed,
+    onBack: () => setState(() {
+      _reviewing = false;
+      _failed = false;
+    }),
+    onStart: _start,
+  );
 
-  Widget _personaField(AonwLocalizations l10n) =>
-      DropdownButtonFormField<LocalAiPersonaView>(
-        key: ValueKey(('persona', _persona)),
-        initialValue: _persona,
-        decoration: InputDecoration(labelText: l10n.aiPersonaLabel),
-        items: [
-          for (final value in LocalAiPersonaView.values)
-            DropdownMenuItem(
-              value: value,
-              child: Text(l10n.aiPersonaName(value.name)),
-            ),
-        ],
-        onChanged: _starting
-            ? null
-            : (value) => setState(() => _persona = value!),
-      );
+  void _changeHumanCountry(LocalPlayerCountryView value) {
+    setState(() {
+      if (value == _opponentCountry) {
+        _opponentCountry = _humanCountry;
+      }
+      _humanCountry = value;
+    });
+  }
+
+  void _changeOpponentCountry(LocalPlayerCountryView value) {
+    setState(() {
+      if (value == _humanCountry) {
+        _humanCountry = _opponentCountry;
+      }
+      _opponentCountry = value;
+    });
+  }
 
   Future<void> _start() async {
     setState(() {
@@ -186,6 +149,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
       _failed = false;
     });
     final l10n = context.aonwL10n;
+    final opponentIsAi = _opponentControl == LocalPlayerControlView.ai;
     final started = await widget.mapController.startLocalMatch(
       _scenario,
       LocalMatchSetupView(
@@ -200,15 +164,19 @@ final class _NewGameScreenState extends State<NewGameScreen> {
           ),
           LocalParticipantSetupView(
             id: 'player-2',
-            name: l10n.defaultAiName,
+            name: opponentIsAi
+                ? l10n.defaultAiName
+                : l10n.defaultSecondPlayerName,
             colorValue: 0xffee6c4d,
-            country: _aiCountry,
-            control: LocalPlayerControlView.ai,
-            ai: LocalAiProfileView(
-              difficulty: _difficulty,
-              persona: _persona,
-              seed: DateTime.now().microsecondsSinceEpoch,
-            ),
+            country: _opponentCountry,
+            control: _opponentControl,
+            ai: opponentIsAi
+                ? LocalAiProfileView(
+                    difficulty: _difficulty,
+                    persona: _persona,
+                    seed: DateTime.now().microsecondsSinceEpoch,
+                  )
+                : null,
           ),
         ],
         fogEnabled: _fogEnabled,

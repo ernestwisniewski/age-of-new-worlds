@@ -100,9 +100,17 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('single-player')));
     await tester.pumpAndSettle();
-    expect(find.text('Create local game'), findsOneWidget);
+    expect(find.text('Play with the computer'), findsOneWidget);
     expect(find.text('Starter duel'), findsOneWidget);
 
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('continue-to-summary')),
+    );
+    await tester.tap(find.byKey(const ValueKey('continue-to-summary')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('new-game-review')), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const ValueKey('start-game')));
     await tester.tap(find.byKey(const ValueKey('start-game')));
     await tester.pumpAndSettle();
 
@@ -171,8 +179,8 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('finish-onboarding')));
     await tester.pumpAndSettle();
-    expect(find.text('Utwórz grę lokalną'), findsOneWidget);
-    expect(find.byKey(const ValueKey('start-game')), findsOneWidget);
+    expect(find.text('Graj z komputerem'), findsOneWidget);
+    expect(find.byKey(const ValueKey('continue-to-summary')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -331,12 +339,21 @@ final class _ResumeSession implements GameSaveSessionPort {
   Future<String> exportSaveDocument() async => 'engine-save';
 
   @override
-  Future<MapScene> openSaveDocument({
+  Future<OpenedGameSaveView> openSaveDocument({
     required MapAssetPaths assets,
     required String document,
   }) async {
     openedDocuments.add(document);
-    return scene;
+    return OpenedGameSaveView(
+      scene: scene,
+      controlPlan: LocalMatchControlPlanView([
+        LocalParticipantControlView(
+          id: scene.player.actorPlayerId,
+          name: 'Player',
+          control: LocalPlayerControlView.human,
+        ),
+      ]),
+    );
   }
 }
 

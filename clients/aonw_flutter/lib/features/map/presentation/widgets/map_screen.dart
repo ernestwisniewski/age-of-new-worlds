@@ -9,6 +9,8 @@ import '../../../../l10n/l10n.dart';
 import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../local_game/application/local_ai_turn_state.dart';
+import '../../../local_game/application/local_handoff_state.dart';
+import '../../../local_game/presentation/local_handoff_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../research/presentation/research_overlay.dart';
@@ -29,6 +31,8 @@ import '../map_render_snapshot.dart';
 import 'flame_map_viewport.dart';
 import 'map_selection_overlay.dart';
 import 'map_status.dart';
+
+part 'map_screen_ready.dart';
 
 final class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -170,6 +174,7 @@ final class _MapScreenState extends State<MapScreen>
         :final research,
         :final diplomacy,
         :final localAiTurn,
+        :final localHandoff,
         :final localSave,
       ) =>
         _ReadyMap(
@@ -180,6 +185,7 @@ final class _MapScreenState extends State<MapScreen>
           research: research,
           diplomacy: diplomacy,
           localAiTurn: localAiTurn,
+          localHandoff: localHandoff,
           localSave: localSave,
           controller: widget.controller,
           onInput: _handleInput,
@@ -256,6 +262,7 @@ final class _MapScreenState extends State<MapScreen>
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
     final state = widget.controller.state;
     if (state is! GameSessionReady) return;
+    if (state.localHandoff.blocksGameplay) return;
     _handleReadyInput(state, command);
   }
 
@@ -288,6 +295,8 @@ final class _MapScreenState extends State<MapScreen>
 
   void _handleHexIntent(MapHexIntent intent) {
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
+    final state = widget.controller.state;
+    if (state is GameSessionReady && state.localHandoff.blocksGameplay) return;
     switch (intent) {
       case MapHexHoverIntent(:final coordinate):
         widget.controller.hover(coordinate);
@@ -297,137 +306,17 @@ final class _MapScreenState extends State<MapScreen>
   }
 }
 
-final class _ReadyMap extends StatelessWidget {
-  const _ReadyMap({
-    required this.scene,
-    required this.interaction,
-    required this.turnPresentations,
-    required this.turnAction,
-    required this.research,
-    required this.diplomacy,
-    required this.localAiTurn,
-    required this.localSave,
-    required this.controller,
-    required this.onInput,
-    required this.onOpenSettings,
-    required this.flameGame,
-    required this.flameGeneration,
-    required this.flameFocusNode,
-    required this.onRetryFlame,
-  });
-
-  final MapScene scene;
-  final MapInteractionState interaction;
-  final TurnPresentationQueue turnPresentations;
-  final TurnActionState turnAction;
-  final ResearchState research;
-  final DiplomacyState diplomacy;
-  final LocalAiTurnState localAiTurn;
-  final LocalSaveState localSave;
-  final MapPresentationController controller;
-  final ValueChanged<MapInputCommand> onInput;
-  final VoidCallback? onOpenSettings;
-  final AonwFlameGame flameGame;
-  final int flameGeneration;
-  final FocusNode flameFocusNode;
-  final VoidCallback onRetryFlame;
-
-  @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      Positioned.fill(
-        child: FlameMapViewport(
-          scene: scene,
-          interaction: interaction,
-          onInput: onInput,
-          game: flameGame,
-          generation: flameGeneration,
-          focusNode: flameFocusNode,
-          onRetry: onRetryFlame,
-        ),
-      ),
-      TurnBanner(
-        presentation: turnPresentations.active,
-        onFinished: controller.completeTurnPresentation,
-      ),
-      Positioned.fill(
-        child: TurnPresentationOverlays(
-          turn: scene.player.turnView,
-          action: turnAction,
-          presentations: turnPresentations,
-          localAiTurn: localAiTurn,
-          onEndTurn: controller.endTurn,
-        ),
-      ),
-      if (onOpenSettings case final openSettings?)
-        Positioned(
-          top: AonwSpacing.md,
-          left: AonwSpacing.md,
-          child: IconButton.filledTonal(
-            key: const ValueKey('open-settings'),
-            tooltip: context.aonwL10n.openSettings,
-            onPressed: openSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ),
-      Positioned(
-        top: 240,
-        left: AonwSpacing.md,
-        child: _SaveAction(
-          localSave: localSave,
-          localAiTurn: localAiTurn,
-          onSave: controller.saveLocalGame,
-        ),
-      ),
-      Positioned(
-        top: AonwSpacing.md,
-        right: AonwSpacing.md,
-        child: MapReferenceToggle(
-          visible: interaction.referenceVisible,
-          onPressed: controller.toggleReference,
-        ),
-      ),
-      MapSelectionOverlay(
-        scene: scene,
-        interaction: interaction,
-        controller: controller,
-      ),
-      Positioned.fill(
-        child: ResearchOverlay(
-          state: research,
-          selectionRequired:
-              scene.player.pendingAction is PendingResearchSelectionView,
-          onSelect: controller.selectTechnology,
-          onRetry: controller.refreshResearch,
-        ),
-      ),
-      Positioned.fill(
-        child: DiplomacyOverlay(
-          actorPlayerId: scene.player.actorPlayerId,
-          view: scene.player.diplomacy,
-          state: diplomacy,
-          onAction: controller.executeDiplomacyAction,
-        ),
-      ),
-      Positioned.fill(
-        child: ObjectiveOverlay(
-          objectives: scene.map.objectives,
-          outcome: scene.player.turnView.outcome,
-        ),
-      ),
-    ],
-  );
-}
-
 final class _SaveAction extends StatelessWidget {
   const _SaveAction({
     required this.localSave,
     required this.localAiTurn,
+    required this.localHandoff,
     required this.onSave,
   });
 
   final LocalSaveState localSave;
   final LocalAiTurnState localAiTurn;
+  final LocalHandoffState localHandoff;
   final VoidCallback onSave;
 
   @override
@@ -441,7 +330,10 @@ final class _SaveAction extends StatelessWidget {
           tooltip: localSave.inFlight
               ? context.aonwL10n.savingGame
               : context.aonwL10n.saveGame,
-          onPressed: localSave.inFlight || localAiTurn.blocksGameplay
+          onPressed:
+              localSave.inFlight ||
+                  localAiTurn.blocksGameplay ||
+                  localHandoff.blocksGameplay
               ? null
               : onSave,
           icon: Icon(

@@ -1,5 +1,6 @@
 mod decode;
 mod encode;
+mod persistence_open;
 
 use core::num::NonZeroU32;
 use std::fmt::Write as _;
@@ -296,26 +297,6 @@ fn dispatch_ai_turn(
     }
 }
 
-fn dispatch_open_save(
-    runtime: &mut LocalRuntime,
-    map_document: &str,
-    save_document: &str,
-) -> ClientResponseDto {
-    match decode::map(map_document) {
-        Ok(map) => match runtime.open_save_json(
-            map,
-            aonw_content::RulesetDefinition::standard().clone(),
-            save_document,
-        ) {
-            Ok(stamp) => success(ClientResponseBodyDto::SaveOpened {
-                stamp: encode::stamp(stamp),
-            }),
-            Err(error) => failure("save_open_failed", error),
-        },
-        Err(error) => error.into_response(),
-    }
-}
-
 fn dispatch_persistence(
     runtime: &mut LocalRuntime,
     request: ClientRequestBodyDto,
@@ -328,7 +309,7 @@ fn dispatch_persistence(
         ClientRequestBodyDto::OpenSave {
             map_document,
             save_document,
-        } => dispatch_open_save(runtime, &map_document, &save_document),
+        } => persistence_open::dispatch_open_save(runtime, &map_document, &save_document),
         ClientRequestBodyDto::ExportReplay => match runtime.export_replay_json() {
             Ok(document) => success(ClientResponseBodyDto::ReplayExported { document }),
             Err(error) => failure("replay_export_failed", error),

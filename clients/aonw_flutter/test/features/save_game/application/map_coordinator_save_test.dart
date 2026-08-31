@@ -1,9 +1,11 @@
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
+import 'package:aonw_flutter/features/local_game/application/local_handoff_state.dart';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/replay/application/replay_capture.dart';
 import 'package:aonw_flutter/features/save_game/application/game_save_session_port.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_state.dart';
@@ -85,6 +87,50 @@ void main() {
     expect(result.failure, LocalResumeFailureViewCode.incompatible);
     expect(coordinator.state, same(before));
   });
+
+  test('keeps a restored hotseat recipient behind a privacy gate', () async {
+    final restored = testMapScene().withPlayer(
+      PlayerMapView.preview(
+        actorPlayerId: 'player-2',
+        stamp: testSessionStamp(revision: 8),
+        turn: 4,
+        pendingAction: null,
+        units: const [],
+      ),
+    );
+    final hotseatPlan = LocalMatchControlPlanView([
+      LocalParticipantControlView(
+        id: 'player-1',
+        name: 'Player 1',
+        control: LocalPlayerControlView.human,
+      ),
+      LocalParticipantControlView(
+        id: 'player-2',
+        name: 'Player 2',
+        control: LocalPlayerControlView.human,
+      ),
+    ]);
+    final saveSession = _FakeSaveSession(
+      exported: '{}',
+      opened: restored,
+      validDocument: 'hotseat-save',
+      controlPlan: hotseatPlan,
+    );
+    final coordinator = _coordinator(
+      FakeGameSession.success(testMapScene()),
+      saveSession,
+      _MemorySaveStore(primary: 'hotseat-save'),
+    );
+    addTearDown(coordinator.dispose);
+
+    final result = await coordinator.resumeLatestLocalGame();
+
+    final ready = coordinator.state as GameSessionReady;
+    expect(result.started, isTrue);
+    expect(ready.recipient.actorPlayerId, 'player-2');
+    expect(ready.localHandoff.phase, LocalHandoffPhase.awaitingConfirmation);
+    expect(ready.localHandoff.playerName, 'Player 2');
+  });
 }
 
 MapCoordinator _coordinator(
@@ -108,7 +154,7 @@ const _assets = MapAssetPaths(
 const _entry = LocalGameCatalogEntryView(
   id: LocalGameScenarioView.starterDuel,
   assets: _assets,
-  aiPlayerIds: ['player-2'],
+  participantIds: ['player-1', 'player-2'],
 );
 
 LocalMatchSetupView _setup() => LocalMatchSetupView(
@@ -134,11 +180,17 @@ LocalMatchSetupView _setup() => LocalMatchSetupView(
 );
 
 final class _FakeSaveSession implements GameSaveSessionPort {
-  _FakeSaveSession({required this.exported, this.opened, this.validDocument});
+  _FakeSaveSession({
+    required this.exported,
+    this.opened,
+    this.validDocument,
+    this.controlPlan,
+  });
 
   final String exported;
   final MapScene? opened;
   final String? validDocument;
+  final LocalMatchControlPlanView? controlPlan;
   final openedDocuments = <String>[];
   var exportCalls = 0;
 
@@ -149,7 +201,7 @@ final class _FakeSaveSession implements GameSaveSessionPort {
   }
 
   @override
-  Future<MapScene> openSaveDocument({
+  Future<OpenedGameSaveView> openSaveDocument({
     required MapAssetPaths assets,
     required String document,
   }) async {
@@ -160,7 +212,10 @@ final class _FakeSaveSession implements GameSaveSessionPort {
         message: 'Invalid save.',
       );
     }
-    return opened!;
+    return OpenedGameSaveView(
+      scene: opened!,
+      controlPlan: controlPlan ?? _setup().controlPlan,
+    );
   }
 }
 

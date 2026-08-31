@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../design_system/widgets/aonw_panel.dart';
 import '../../features/help/presentation/help_screen.dart';
+import '../../features/local_game/presentation/local_game_launch_mode.dart';
 import '../../features/local_game/presentation/new_game_screen.dart';
 import '../../features/main_menu/presentation/main_menu_screen.dart';
 import '../../features/main_menu/presentation/main_menu_support_screens.dart';
@@ -27,6 +28,7 @@ enum AonwRoute {
   help('/help'),
   onboarding('/onboarding'),
   newGame('/new-game'),
+  hotseat('/hotseat'),
   multiplayer('/multiplayer'),
   loadGame('/load-game'),
   credits('/credits'),
@@ -87,6 +89,7 @@ final class AonwRouter {
     AonwRoute.help: _helpScreen,
     AonwRoute.onboarding: _onboardingScreen,
     AonwRoute.newGame: _newGameScreen,
+    AonwRoute.hotseat: _hotseatScreen,
     AonwRoute.multiplayer: _multiplayerScreen,
     AonwRoute.loadGame: _loadGameScreen,
     AonwRoute.credits: _creditsScreen,
@@ -102,7 +105,8 @@ final class AonwRouter {
     onOpenMultiplayer: multiplayerController == null
         ? null
         : () => Navigator.of(context).pushNamed(AonwRoute.multiplayer.location),
-    onOpenHotseat: null,
+    onOpenHotseat: () =>
+        Navigator.of(context).pushNamed(AonwRoute.hotseat.location),
     onOpenLoadGame: () =>
         Navigator.of(context).pushNamed(AonwRoute.loadGame.location),
     onOpenSettings: () =>
@@ -130,6 +134,14 @@ final class AonwRouter {
 
   Widget _newGameScreen(BuildContext context) => NewGameScreen(
     mapController: mapController,
+    initialMode: LocalGameLaunchModeView.singlePlayer,
+    onStarted: () =>
+        Navigator.of(context).pushReplacementNamed(AonwRoute.map.location),
+  );
+
+  Widget _hotseatScreen(BuildContext context) => NewGameScreen(
+    mapController: mapController,
+    initialMode: LocalGameLaunchModeView.hotseat,
     onStarted: () =>
         Navigator.of(context).pushReplacementNamed(AonwRoute.map.location),
   );

@@ -50,14 +50,11 @@
     },
     "flutter_client_lib": {
       "files": {
-        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart": 569,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart": 598,
-        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart": 731
+        "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart": 569
       },
       "legacyFiles": {},
       "declarations": {
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator": 424,
-        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 671,
+        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 417,
         "clients/aonw_flutter/lib/features/multiplayer/application/multiplayer_coordinator.dart::class:MultiplayerCoordinator": 402,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 359
       },
@@ -68,15 +65,11 @@
         "clients/aonw_flutter/lib/features/diplomacy/infrastructure/engine_diplomacy_gateway.dart::function:_request": 71,
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyOverlayState/method:build": 61,
         "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
-        "clients/aonw_flutter/lib/features/local_game/presentation/new_game_screen.dart::class:_NewGameScreenState/method:build": 75,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 72,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
-        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway/method:advanceAiTurn/closure:_serialize#1": 61,
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:fromWire": 65,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
-        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_screen.dart::class:_ReadyMap/method:build": 85,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
         "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 65,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_projection_decoder.dart::class:ServerProjectionDecoder/method:command": 63,
@@ -106,9 +99,7 @@
         "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::function:_interactionCommandPending": 12,
         "clients/aonw_flutter/lib/features/diplomacy/infrastructure/diplomacy_command_mapper.dart::function:_validateEvents": 17,
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 28,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 17,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_openSession": 11,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_saveLocalGame": 11,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::function:_interactionBusy": 12,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_select": 11,
         "clients/aonw_flutter/lib/features/map/application/unit_action_workflow.dart::function:_actionable": 13,
@@ -137,7 +128,6 @@
         "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::function:_executable": 17,
         "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 17,
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 20,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_advanceLocalAiTurns": 34,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 34,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 37,
         "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 20,
@@ -152,11 +142,11 @@
       "files": {
         "clients/aonw_flutter/test/features/map/application/map_coordinator_test.dart": 598,
         "clients/aonw_flutter/test/game/gameplay_map_layers_test.dart": 580,
-        "clients/aonw_flutter/test/support/map_test_fixture.dart": 830
+        "clients/aonw_flutter/test/support/map_test_fixture.dart": 827
       },
       "legacyFiles": {},
       "declarations": {
-        "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 499
+        "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 495
       },
       "callableLines": {
         "clients/aonw_flutter/test/architecture/architecture_callable_metrics_test.dart::function:main/closure:test[control-flow_complexity_has_deterministic_golden_values]#1": 131

@@ -1,0 +1,1 @@
+enum LocalGameLaunchModeView { singlePlayer, hotseat }

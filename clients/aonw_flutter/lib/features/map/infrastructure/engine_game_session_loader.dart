@@ -17,11 +17,13 @@ final class PreparedEngineGameSession {
     required this.session,
     required this.scene,
     required this.cache,
+    this.restoredParticipants = const [],
   });
 
   final AonwEngineSession session;
   final MapScene scene;
   final RecipientProjectionCache cache;
+  final List<AonwParticipantControl> restoredParticipants;
 }
 
 final class PreparedEngineReplaySession {
@@ -191,7 +193,14 @@ final class EngineGameSessionLoader {
     );
     final document = await _assets.loadString(assets.document);
     final map = await _inspectMap(candidate, document);
-    final snapshot = saveDocument == null
+    final restored = saveDocument == null
+        ? null
+        : await _openSavedPlayer(
+            candidate,
+            mapDocument: document,
+            saveDocument: saveDocument,
+          );
+    final snapshot = restored == null
         ? await _openPlayer(
             candidate,
             mapDocument: document,
@@ -200,15 +209,12 @@ final class EngineGameSessionLoader {
             matchIdentity: matchIdentity,
             fogEnabled: fogEnabled,
           )
-        : await _openSavedPlayer(
-            candidate,
-            mapDocument: document,
-            saveDocument: saveDocument,
-          );
+        : restored.snapshot;
+    final actorPlayerId = restored?.actorPlayerId ?? assets.actorPlayerId;
     final player = _playerMapper.fromWire(
       snapshot,
       map: map,
-      actorPlayerId: assets.actorPlayerId,
+      actorPlayerId: actorPlayerId,
     );
     final reference = await _bundleLoader.load(
       manifestAsset: assets.bundleManifest,
@@ -218,10 +224,18 @@ final class EngineGameSessionLoader {
       session: candidate,
       scene: MapScene(map: map, reference: reference, player: player),
       cache: RecipientProjectionCache.open(snapshot: snapshot, map: map),
+      restoredParticipants: restored?.participants ?? const [],
     );
   }
 
-  Future<AonwPlayerViewSnapshot> _openSavedPlayer(
+  Future<
+    ({
+      String actorPlayerId,
+      List<AonwParticipantControl> participants,
+      AonwPlayerViewSnapshot snapshot,
+    })
+  >
+  _openSavedPlayer(
     AonwEngineSession candidate, {
     required String mapDocument,
     required String saveDocument,
@@ -232,15 +246,20 @@ final class EngineGameSessionLoader {
         saveDocument: saveDocument,
       ),
     );
-    _loadResponse<AonwSaveOpenedResponse>(
+    final restored = _loadResponse<AonwSaveOpenedResponse>(
       opened,
       'The saved game could not be opened.',
     );
     final snapshot = await candidate.send(AonwClientRequest.snapshot());
-    return _loadResponse<AonwSnapshotResponse>(
+    final player = _loadResponse<AonwSnapshotResponse>(
       snapshot,
       'The restored player view could not be loaded.',
     ).snapshot;
+    return (
+      actorPlayerId: restored.actorPlayerId,
+      participants: restored.participants,
+      snapshot: player,
+    );
   }
 
   Future<AonwPlayerViewSnapshot> _openPlayer(

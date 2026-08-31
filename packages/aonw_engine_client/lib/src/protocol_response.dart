@@ -1,6 +1,7 @@
 import 'package:aonw_engine_client/src/protocol_execution.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_map.dart';
+import 'package:aonw_engine_client/src/protocol_match.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
 import 'package:aonw_engine_client/src/protocol_query.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
@@ -186,14 +187,62 @@ final class AonwSaveExportedResponse extends AonwClientResponseBody {
 }
 
 final class AonwSaveOpenedResponse extends AonwClientResponseBody {
-  const AonwSaveOpenedResponse(this.stamp);
+  const AonwSaveOpenedResponse({
+    required this.stamp,
+    required this.actorPlayerId,
+    required this.participants,
+  });
 
   factory AonwSaveOpenedResponse.fromJson(Map<String, Object?> value) {
-    requireKeys(value, const {'type', 'stamp'}, 'save opened response');
-    return AonwSaveOpenedResponse(AonwSessionStamp.fromJson(value['stamp']));
+    requireKeys(value, const {
+      'type',
+      'stamp',
+      'actorPlayerId',
+      'participants',
+    }, 'save opened response');
+    return AonwSaveOpenedResponse(
+      stamp: AonwSessionStamp.fromJson(value['stamp']),
+      actorPlayerId: readString(value['actorPlayerId'], 'restored actor id'),
+      participants: readList(
+        value['participants'],
+        'restored participants',
+        (item, _) => AonwParticipantControl.fromJson(item),
+      ),
+    );
   }
 
   final AonwSessionStamp stamp;
+  final String actorPlayerId;
+  final List<AonwParticipantControl> participants;
+}
+
+final class AonwParticipantControl {
+  const AonwParticipantControl({
+    required this.id,
+    required this.name,
+    required this.kind,
+  });
+
+  factory AonwParticipantControl.fromJson(Object? source) {
+    final value = readObject(source, 'restored participant');
+    requireKeys(value, const {'id', 'name', 'kind'}, 'restored participant');
+    final kindName = readString(value['kind'], 'restored participant kind');
+    final AonwPlayerKind kind;
+    try {
+      kind = AonwPlayerKind.values.byName(kindName);
+    } on ArgumentError {
+      throw FormatException('Unknown restored participant kind $kindName.');
+    }
+    return AonwParticipantControl(
+      id: readString(value['id'], 'restored participant id'),
+      name: readString(value['name'], 'restored participant name'),
+      kind: kind,
+    );
+  }
+
+  final String id;
+  final String name;
+  final AonwPlayerKind kind;
 }
 
 final class AonwReplayExportedResponse extends AonwClientResponseBody {

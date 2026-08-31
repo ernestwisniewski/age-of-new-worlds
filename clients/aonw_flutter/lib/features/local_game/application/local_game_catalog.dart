@@ -6,12 +6,12 @@ final class LocalGameCatalogEntryView {
   const LocalGameCatalogEntryView({
     required this.id,
     required this.assets,
-    required this.aiPlayerIds,
+    required this.participantIds,
   });
 
   final LocalGameScenarioView id;
   final MapAssetPaths assets;
-  final List<String> aiPlayerIds;
+  final List<String> participantIds;
 }
 
 abstract final class LocalGameCatalog {
@@ -24,7 +24,7 @@ abstract final class LocalGameCatalog {
         scenarioDocument: 'assets/scenarios/aonw2_local_duel.json',
         actorPlayerId: 'player-1',
       ),
-      aiPlayerIds: ['player-2'],
+      participantIds: ['player-1', 'player-2'],
     ),
   ];
 }

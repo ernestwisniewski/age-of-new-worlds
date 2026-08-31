@@ -37,6 +37,26 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get hotseatUnavailable => 'Hotseat setup is not available yet.';
 
   @override
+  String get hotseatHandoffTitle => 'Pass the device';
+
+  @override
+  String hotseatHandoffBody(String name) {
+    return 'Give the device to $name. Their map remains hidden until they confirm.';
+  }
+
+  @override
+  String hotseatContinueAs(String name) {
+    return 'Continue as $name';
+  }
+
+  @override
+  String get hotseatHandoffSwitching => 'Preparing the next player';
+
+  @override
+  String get hotseatHandoffFailure =>
+      'The next local player could not be opened safely.';
+
+  @override
   String get loadGame => 'Load game';
 
   @override
@@ -339,6 +359,123 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get newGameTitle => 'Create local game';
+
+  @override
+  String get singlePlayerSetupTitle => 'Play with the computer';
+
+  @override
+  String get singlePlayerSetupIntro =>
+      'Choose your civilization and tune the authoritative local duel.';
+
+  @override
+  String get hotseatSetupTitle => 'Play in hotseat mode';
+
+  @override
+  String get hotseatSetupIntro =>
+      'Share one device. Every human view stays hidden until the next player confirms the handoff.';
+
+  @override
+  String get chooseCivilizationTitle => 'Choose civilization';
+
+  @override
+  String get gameSetupTitle => 'Game setup';
+
+  @override
+  String get opponentsTitle => 'Opponents';
+
+  @override
+  String get opponentControlLabel => 'Opponent control';
+
+  @override
+  String get humanOpponent => 'Human player';
+
+  @override
+  String get aiOpponent => 'Computer';
+
+  @override
+  String get mapSetupTitle => 'Map';
+
+  @override
+  String get mapSetupBody =>
+      'A compact authored 7 × 7 map for a focused two-civilization match.';
+
+  @override
+  String get victoryPathsTitle => 'Victory paths';
+
+  @override
+  String get victoryPathsBody =>
+      'Conquest, domination, culture and score are resolved by the game engine.';
+
+  @override
+  String get settlementToEmpireTitle => 'From settlement to empire';
+
+  @override
+  String get settlementToEmpireBody =>
+      'Explore, found cities, research, produce armies and build lasting advantages.';
+
+  @override
+  String get continueToSummary => 'Continue to summary';
+
+  @override
+  String get gameSummaryTitle => 'Expedition ready';
+
+  @override
+  String get gameSummaryIntro =>
+      'Review every local participant before creating the match.';
+
+  @override
+  String get summaryModeLabel => 'Mode';
+
+  @override
+  String get summaryCivilizationLabel => 'Your civilization';
+
+  @override
+  String get summaryOpponentLabel => 'Opponent';
+
+  @override
+  String get summaryMapLabel => 'Map';
+
+  @override
+  String get summaryFogLabel => 'Fog of war';
+
+  @override
+  String get summaryAiLabel => 'Computer profile';
+
+  @override
+  String get changeSetup => 'Change setup';
+
+  @override
+  String localModeName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'singlePlayer': 'Single player',
+      'hotseat': 'Hotseat',
+      'other': 'Local game',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String participantControlName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'human': 'Human',
+      'ai': 'Computer',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String fogSettingName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'enabled': 'Enabled',
+      'disabled': 'Disabled',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get defaultSecondPlayerName => 'Player 2';
 
   @override
   String get scenarioLabel => 'Scenario';

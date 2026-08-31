@@ -1,0 +1,106 @@
+part of 'map_coordinator.dart';
+
+extension MapCoordinatorLocalSave on MapCoordinator {
+  Future<bool> hasLocalSave() => _saveWorkflow.hasSave();
+
+  Future<LocalResumeResultView> resumeLatestLocalGame() async {
+    if (_disposed) {
+      return const LocalResumeResultView.failed(
+        LocalResumeFailureViewCode.unavailable,
+      );
+    }
+    final previous = _state;
+    final generation = ++_loadGeneration;
+    _interactionGeneration += 1;
+    _setCursor(null);
+    _setState(const GameSessionLoading());
+    final attempt = await _saveWorkflow.resumeLatest();
+    if (!_isCurrent(generation)) {
+      return const LocalResumeResultView.failed(
+        LocalResumeFailureViewCode.unavailable,
+      );
+    }
+    if (!attempt.started) {
+      _setState(previous);
+      return LocalResumeResultView.failed(attempt.failure!);
+    }
+    final ready = _restoredState(attempt);
+    if (ready == null) {
+      _setState(previous);
+      return const LocalResumeResultView.failed(
+        LocalResumeFailureViewCode.incompatible,
+      );
+    }
+    _localGameEntry = attempt.entry;
+    _localControlPlan = attempt.controlPlan;
+    _setState(ready);
+    return const LocalResumeResultView.started();
+  }
+
+  GameSessionReady? _restoredState(LocalResumeAttemptView attempt) {
+    final ready = GameSessionReady.initial(attempt.scene!);
+    final controlPlan = attempt.controlPlan!;
+    if (!controlPlan.requiresPrivateHandoff) return ready;
+    final actor = controlPlan.participant(ready.recipient.actorPlayerId);
+    if (actor == null || actor.control != LocalPlayerControlView.human) {
+      return null;
+    }
+    return ready.withLocalHandoff(
+      LocalHandoffState.awaitingConfirmation(
+        playerId: actor.id,
+        playerName: actor.name,
+      ),
+    );
+  }
+
+  void saveLocalGame() => unawaited(_saveLocalGame());
+
+  Future<void> _saveLocalGame() async {
+    final current = _state;
+    if (current is! GameSessionReady || _localFlowBusy(current)) return;
+    final entry = _localGameEntry;
+    if (entry == null) {
+      _setState(
+        current.withLocalSave(
+          const LocalSaveState.failed(LocalSaveFailureViewCode.unavailable),
+        ),
+      );
+      return;
+    }
+    final generation = _loadGeneration;
+    _setState(current.withLocalSave(const LocalSaveState.saving()));
+    final failure = await _saveWorkflow.save(entry);
+    if (!_isCurrent(generation)) return;
+    if (failure == null) {
+      await _captureReplay(entry);
+      if (!_isCurrent(generation)) return;
+    }
+    final ready = _state;
+    if (ready is GameSessionReady) {
+      _setState(
+        ready.withLocalSave(
+          failure == null
+              ? const LocalSaveState.saved()
+              : LocalSaveState.failed(failure),
+        ),
+      );
+    }
+  }
+
+  bool _localFlowBusy(GameSessionReady current) =>
+      current.localSave.inFlight ||
+      current.localAiTurn.blocksGameplay ||
+      current.localHandoff.blocksGameplay;
+
+  Future<void> _captureReplay(LocalGameCatalogEntryView entry) async {
+    try {
+      await _replayCapture?.captureReplay(entry);
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter(
+        'unexpected_replay_capture_failure',
+        error,
+        stackTrace,
+      );
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:aonw_flutter/features/local_game/application/local_ai_turn_state.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
+import 'package:aonw_flutter/features/local_game/application/local_handoff_state.dart';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
@@ -181,12 +182,84 @@ void main() {
       expect(session.endTurnCalls, 1);
     },
   );
+
+  test('hides the next human view until that player confirms', () async {
+    final session = FakeGameSession.success(
+      testMapScene(),
+      turnResult: TurnCommandResultView.accepted(
+        player: _player('player-1', revision: 1),
+        activities: const [],
+        evidence: _turnEvidence,
+      ),
+      handoffPlayers: {'player-2': _player('player-2', revision: 1)},
+    );
+    final controller = _controller(session);
+    addTearDown(controller.dispose);
+    await controller.startLocalMatch(
+      _localEntry,
+      _localSetup(secondControl: LocalPlayerControlView.human),
+    );
+
+    controller.endTurn();
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+
+    var ready = controller.state as GameSessionReady;
+    expect(session.handoffRequests, ['player-2']);
+    expect(ready.recipient.actorPlayerId, 'player-2');
+    expect(ready.localHandoff.phase, LocalHandoffPhase.awaitingConfirmation);
+
+    controller.endTurn();
+    await Future<void>.delayed(Duration.zero);
+    expect(session.endTurnCalls, 1);
+
+    controller.confirmLocalHandoff();
+    ready = controller.state as GameSessionReady;
+    expect(ready.localHandoff.phase, LocalHandoffPhase.idle);
+  });
+
+  test('advances AI before privately handing off to the next human', () async {
+    final returnedHuman = _player('player-1', revision: 4, turn: 2);
+    final session = FakeGameSession.success(
+      testMapScene(),
+      turnResult: TurnCommandResultView.accepted(
+        player: _player('player-1', revision: 1),
+        activities: const [],
+        evidence: _turnEvidence,
+      ),
+      aiTurnResults: [
+        LocalAiTurnExecutionView(
+          aiPlayerId: 'player-2',
+          executedCommands: 3,
+          completedTurn: true,
+          player: returnedHuman,
+        ),
+      ],
+      handoffPlayers: {'player-3': _player('player-3', revision: 4, turn: 2)},
+    );
+    final controller = _controller(session);
+    addTearDown(controller.dispose);
+    await controller.startLocalMatch(_threePlayerEntry, _mixedSetup());
+
+    controller.endTurn();
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+
+    final ready = controller.state as GameSessionReady;
+    expect(session.aiTurnRequests.single.aiPlayerId, 'player-2');
+    expect(session.handoffRequests, ['player-3']);
+    expect(ready.recipient.actorPlayerId, 'player-3');
+    expect(ready.localHandoff.phase, LocalHandoffPhase.awaitingConfirmation);
+  });
 }
 
 MapCoordinator _controller(FakeGameSession session) =>
     MapCoordinator(capabilities: testGameSessionCapabilities(session));
 
-LocalMatchSetupView _localSetup() => LocalMatchSetupView(
+LocalMatchSetupView _localSetup({
+  LocalPlayerControlView secondControl = LocalPlayerControlView.ai,
+}) => LocalMatchSetupView(
   assets: const MapAssetPaths(
     document: 'map',
     bundleManifest: 'manifest',
@@ -203,11 +276,13 @@ LocalMatchSetupView _localSetup() => LocalMatchSetupView(
     ),
     LocalParticipantSetupView(
       id: 'player-2',
-      name: 'AI',
+      name: secondControl == LocalPlayerControlView.ai ? 'AI' : 'Player 2',
       colorValue: 2,
       country: LocalPlayerCountryView.japan,
-      control: LocalPlayerControlView.ai,
-      ai: const LocalAiProfileView(seed: 7),
+      control: secondControl,
+      ai: secondControl == LocalPlayerControlView.ai
+          ? const LocalAiProfileView(seed: 7)
+          : null,
     ),
   ],
   fogEnabled: true,
@@ -221,8 +296,57 @@ const _localEntry = LocalGameCatalogEntryView(
     scenarioDocument: 'scenario',
     actorPlayerId: 'player-1',
   ),
-  aiPlayerIds: ['player-2'],
+  participantIds: ['player-1', 'player-2'],
 );
+
+const _threePlayerEntry = LocalGameCatalogEntryView(
+  id: LocalGameScenarioView.starterDuel,
+  assets: MapAssetPaths(
+    document: 'map',
+    bundleManifest: 'manifest',
+    scenarioDocument: 'scenario',
+    actorPlayerId: 'player-1',
+  ),
+  participantIds: ['player-1', 'player-2', 'player-3'],
+);
+
+LocalMatchSetupView _mixedSetup() => LocalMatchSetupView(
+  assets: _threePlayerEntry.assets,
+  participants: [
+    LocalParticipantSetupView(
+      id: 'player-1',
+      name: 'Player 1',
+      colorValue: 1,
+      country: LocalPlayerCountryView.poland,
+      control: LocalPlayerControlView.human,
+    ),
+    LocalParticipantSetupView(
+      id: 'player-2',
+      name: 'AI',
+      colorValue: 2,
+      country: LocalPlayerCountryView.japan,
+      control: LocalPlayerControlView.ai,
+      ai: const LocalAiProfileView(seed: 7),
+    ),
+    LocalParticipantSetupView(
+      id: 'player-3',
+      name: 'Player 3',
+      colorValue: 3,
+      country: LocalPlayerCountryView.france,
+      control: LocalPlayerControlView.human,
+    ),
+  ],
+  fogEnabled: true,
+);
+
+PlayerMapView _player(String actor, {required int revision, int turn = 1}) =>
+    PlayerMapView.preview(
+      actorPlayerId: actor,
+      stamp: testSessionStamp(revision: revision),
+      turn: turn,
+      pendingAction: null,
+      units: const [],
+    );
 
 final _turnEvidence = TurnKernelEvidenceView(
   processors: [],

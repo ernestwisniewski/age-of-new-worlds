@@ -31,6 +31,7 @@ import 'package:aonw_flutter/features/workers/application/worker_session_port.da
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
 part 'city_test_fixture.dart';
+part 'local_game_test_fixture.dart';
 
 typedef ProductionOverviewFixture = ({
   ProductionOptionsView options,
@@ -309,6 +310,7 @@ CombatExecutionView testCombatExecutionView({int revision = 1}) =>
     );
 
 final class FakeGameSession
+    with FakeLocalGameSessionFixture
     implements
         MapSessionPort,
         MovementSessionPort,
@@ -359,6 +361,7 @@ final class FakeGameSession
     this.cityFailure,
     this.aiTurnResults = const [],
     this.aiTurnFailure,
+    this.handoffPlayers = const {},
   }) : failure = null;
   FakeGameSession.failure(this.failure)
     : scene = null,
@@ -395,7 +398,8 @@ final class FakeGameSession
       cityResult = null,
       cityFailure = null,
       aiTurnResults = const [],
-      aiTurnFailure = null;
+      aiTurnFailure = null,
+      handoffPlayers = const {};
 
   final MapScene? scene;
   final MapLoadException? failure;
@@ -435,8 +439,12 @@ final class FakeGameSession
   final CityInspectionView? cityInspection;
   final CityCommandResultView? cityResult;
   final CitySessionException? cityFailure;
+  @override
   final List<LocalAiTurnExecutionView> aiTurnResults;
+  @override
   final LocalGameSessionException? aiTurnFailure;
+  @override
+  final Map<String, PlayerMapView> handoffPlayers;
   var unitActionCalls = 0;
   UnitActionKindView? lastUnitAction;
   int? lastUnitActionExpectedRevision;
@@ -475,8 +483,12 @@ final class FakeGameSession
   CityActionView? lastCityAction;
   var localStartCalls = 0;
   LocalMatchSetupView? lastLocalMatchSetup;
+  @override
   var aiTurnCalls = 0;
+  @override
   final aiTurnRequests = <LocalAiTurnRequestView>[];
+  @override
+  final handoffRequests = <String>[];
   final selectionRequestOrder = <String>[];
 
   @override
@@ -500,21 +512,6 @@ final class FakeGameSession
       );
     }
     return scene!;
-  }
-
-  @override
-  Future<LocalAiTurnExecutionView> advanceAiTurn(
-    LocalAiTurnRequestView request,
-  ) async {
-    aiTurnCalls += 1;
-    aiTurnRequests.add(request);
-    final error = aiTurnFailure;
-    if (error != null) throw error;
-    if (aiTurnResults.isEmpty) throw StateError('No AI turn fixture.');
-    final index = aiTurnCalls <= aiTurnResults.length
-        ? aiTurnCalls - 1
-        : aiTurnResults.length - 1;
-    return aiTurnResults[index];
   }
 
   @override

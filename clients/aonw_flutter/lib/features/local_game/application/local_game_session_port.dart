@@ -98,6 +98,79 @@ final class LocalMatchSetupView {
   final MapAssetPaths assets;
   final List<LocalParticipantSetupView> participants;
   final bool fogEnabled;
+
+  LocalMatchControlPlanView get controlPlan =>
+      LocalMatchControlPlanView.fromParticipants(participants);
+}
+
+final class LocalParticipantControlView {
+  LocalParticipantControlView({
+    required String id,
+    required String name,
+    required this.control,
+  }) : id = _requireIdentifier(id, 'id'),
+       name = _requireName(name);
+
+  final String id;
+  final String name;
+  final LocalPlayerControlView control;
+}
+
+final class LocalMatchControlPlanView {
+  LocalMatchControlPlanView.fromParticipants(
+    Iterable<LocalParticipantSetupView> participants,
+  ) : this(
+        participants.map(
+          (participant) => LocalParticipantControlView(
+            id: participant.id,
+            name: participant.name,
+            control: participant.control,
+          ),
+        ),
+      );
+
+  LocalMatchControlPlanView(Iterable<LocalParticipantControlView> values)
+    : participants = List.unmodifiable(values) {
+    if (participants.isEmpty) {
+      throw ArgumentError.value(values, 'participants', 'must not be empty');
+    }
+    final ids = <String>{};
+    for (final participant in participants) {
+      if (!ids.add(participant.id)) {
+        throw ArgumentError.value(
+          participant.id,
+          'participants',
+          'participant ids must be unique',
+        );
+      }
+    }
+  }
+
+  final List<LocalParticipantControlView> participants;
+
+  Iterable<LocalParticipantControlView> get humanParticipants =>
+      participants.where(
+        (participant) => participant.control == LocalPlayerControlView.human,
+      );
+
+  bool get requiresPrivateHandoff => humanParticipants.length > 1;
+
+  LocalParticipantControlView? participant(String playerId) {
+    for (final participant in participants) {
+      if (participant.id == playerId) return participant;
+    }
+    return null;
+  }
+
+  Iterable<LocalParticipantControlView> after(String playerId) sync* {
+    final start = participants.indexWhere((item) => item.id == playerId);
+    if (start < 0) {
+      throw ArgumentError.value(playerId, 'playerId', 'must be a participant');
+    }
+    for (var offset = 1; offset <= participants.length; offset += 1) {
+      yield participants[(start + offset) % participants.length];
+    }
+  }
 }
 
 final class LocalAiTurnRequestView {
@@ -130,6 +203,8 @@ final class LocalAiTurnExecutionView {
 
 abstract interface class LocalGameSessionPort {
   Future<MapScene> startLocalMatch(LocalMatchSetupView setup);
+
+  Future<PlayerMapView> handoffLocalActor(String playerId);
 
   Future<LocalAiTurnExecutionView> advanceAiTurn(
     LocalAiTurnRequestView request,

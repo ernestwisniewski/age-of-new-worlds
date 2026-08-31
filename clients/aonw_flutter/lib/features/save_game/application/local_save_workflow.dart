@@ -1,4 +1,5 @@
 import '../../local_game/application/local_game_catalog.dart';
+import '../../local_game/application/local_game_session_port.dart';
 import '../../map/read_model/map_scene.dart';
 import 'game_save_session_port.dart';
 import 'local_save_state.dart';
@@ -11,14 +12,17 @@ final class LocalResumeAttemptView {
   const LocalResumeAttemptView.started({
     required this.entry,
     required this.scene,
+    required this.controlPlan,
   }) : failure = null;
 
   const LocalResumeAttemptView.failed(this.failure)
     : entry = null,
-      scene = null;
+      scene = null,
+      controlPlan = null;
 
   final LocalGameCatalogEntryView? entry;
   final MapScene? scene;
+  final LocalMatchControlPlanView? controlPlan;
   final LocalResumeFailureViewCode? failure;
 
   bool get started => entry != null && scene != null;
@@ -112,11 +116,15 @@ final class LocalSaveWorkflow {
         if (document == null) continue;
         foundDocument = true;
         try {
-          final scene = await session.openSaveDocument(
+          final opened = await session.openSaveDocument(
             assets: entry.assets,
             document: document,
           );
-          return LocalResumeAttemptView.started(entry: entry, scene: scene);
+          return LocalResumeAttemptView.started(
+            entry: entry,
+            scene: opened.scene,
+            controlPlan: opened.controlPlan,
+          );
         } on GameSaveSessionException catch (error, stackTrace) {
           _reportSessionFailure(error, stackTrace);
         } on Object catch (error, stackTrace) {

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    ArmyTroopDto, CoordinateDto, GameOutcomeDto, MerchantTradeRouteDto, PlayerTurnStateDto,
-    QueuedMovePathDto, UnitKindDto, UnitPostureDto,
+    ArmyTroopDto, CoordinateDto, GameOutcomeDto, MerchantTradeRouteDto, PlayerKindDto,
+    PlayerTurnStateDto, QueuedMovePathDto, UnitKindDto, UnitPostureDto,
 };
 
 use super::MapViewDto;
@@ -150,6 +150,10 @@ pub enum ClientResponseBodyDto {
     SaveOpened {
         /// Current authoritative identity.
         stamp: ClientSessionStampDto,
+        /// Recipient restored from the canonical save header.
+        actor_player_id: String,
+        /// Ordered local participant controls required to resume orchestration.
+        participants: Vec<ClientParticipantControlDto>,
     },
     /// Current replay document.
     ReplayExported {
@@ -170,6 +174,16 @@ pub enum ClientResponseBodyDto {
         /// Recipient-safe snapshot at this exact entry boundary.
         snapshot: PlayerViewSnapshotDto,
     },
+}
+
+/// Minimal participant identity needed by a local client after save restore.
+#[allow(missing_docs)]
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ClientParticipantControlDto {
+    pub id: String,
+    pub name: String,
+    pub kind: PlayerKindDto,
 }
 
 /// Stable client-visible feature identifiers.

@@ -13,6 +13,7 @@ import '../../diplomacy/read_model/diplomacy_view.dart';
 import '../../local_game/application/local_ai_turn_state.dart';
 import '../../local_game/application/local_game_catalog.dart';
 import '../../local_game/application/local_game_session_port.dart';
+import '../../local_game/application/local_handoff_state.dart';
 import '../../logistics/application/unit_logistics_state.dart';
 import '../../logistics/application/unit_logistics_workflow.dart';
 import '../../logistics/read_model/unit_logistics_view.dart';
@@ -45,6 +46,8 @@ import 'movement_command_runner.dart';
 import 'unit_action_workflow.dart';
 
 part 'map_coordinator_actions.dart';
+part 'map_coordinator_local_save.dart';
+part 'map_coordinator_local_turns.dart';
 part 'map_coordinator_selection.dart';
 
 typedef MapDiagnosticReporter =
@@ -115,6 +118,7 @@ final class MapCoordinator {
 
   final MapSessionPort _session;
   LocalGameCatalogEntryView? _localGameEntry;
+  LocalMatchControlPlanView? _localControlPlan;
   final MovementCommandRunner _movement;
   final CombatWorkflow _combat;
   final CityWorkflow _cities;
@@ -150,7 +154,11 @@ final class MapCoordinator {
   Stream<MapHexCoordinate?> get cursorChanges => _cursorChanges.stream;
 
   Future<void> load() async {
-    await _openSession(() => _session.load(assets), localGameEntry: null);
+    await _openSession(
+      () => _session.load(assets),
+      localGameEntry: null,
+      controlPlan: null,
+    );
   }
 
   Future<bool> startLocalMatch(
@@ -158,97 +166,26 @@ final class MapCoordinator {
     LocalMatchSetupView setup,
   ) {
     _validateCatalogSetup(entry, setup);
-    return _openSession(() {
-      final localGame = _localGame;
-      if (localGame == null) {
-        throw const LocalGameSessionException(
-          code: 'local_game_unavailable',
-          message: 'The local game session is unavailable.',
-        );
-      }
-      return localGame.startLocalMatch(setup);
-    }, localGameEntry: entry);
-  }
-
-  Future<bool> hasLocalSave() => _saveWorkflow.hasSave();
-
-  Future<LocalResumeResultView> resumeLatestLocalGame() async {
-    if (_disposed) {
-      return const LocalResumeResultView.failed(
-        LocalResumeFailureViewCode.unavailable,
-      );
-    }
-    final previous = _state;
-    final generation = ++_loadGeneration;
-    _interactionGeneration += 1;
-    _setCursor(null);
-    _setState(const GameSessionLoading());
-    final attempt = await _saveWorkflow.resumeLatest();
-    if (!_isCurrent(generation)) {
-      return const LocalResumeResultView.failed(
-        LocalResumeFailureViewCode.unavailable,
-      );
-    }
-    if (attempt.started) {
-      _localGameEntry = attempt.entry;
-      _setState(GameSessionReady.initial(attempt.scene!));
-      return const LocalResumeResultView.started();
-    }
-    _setState(previous);
-    return LocalResumeResultView.failed(attempt.failure!);
-  }
-
-  void saveLocalGame() {
-    unawaited(_saveLocalGame());
-  }
-
-  Future<void> _saveLocalGame() async {
-    final current = _state;
-    if (current is! GameSessionReady ||
-        current.localSave.inFlight ||
-        current.localAiTurn.blocksGameplay) {
-      return;
-    }
-    final entry = _localGameEntry;
-    if (entry == null) {
-      _setState(
-        current.withLocalSave(
-          const LocalSaveState.failed(LocalSaveFailureViewCode.unavailable),
-        ),
-      );
-      return;
-    }
-    final generation = _loadGeneration;
-    _setState(current.withLocalSave(const LocalSaveState.saving()));
-    final failure = await _saveWorkflow.save(entry);
-    if (!_isCurrent(generation)) return;
-    if (failure == null) {
-      try {
-        await _replayCapture?.captureReplay(entry);
-      } on Object catch (error, stackTrace) {
-        _diagnosticReporter(
-          'unexpected_replay_capture_failure',
-          error,
-          stackTrace,
-        );
-      }
-      if (!_isCurrent(generation)) return;
-    }
-    final ready = _state;
-    if (ready is GameSessionReady) {
-      _setState(
-        ready.withLocalSave(
-          failure == null
-              ? const LocalSaveState.saved()
-              : LocalSaveState.failed(failure),
-        ),
-      );
-    }
+    return _openSession(
+      () {
+        final localGame = _localGame;
+        if (localGame == null) {
+          throw const LocalGameSessionException(
+            code: 'local_game_unavailable',
+            message: 'The local game session is unavailable.',
+          );
+        }
+        return localGame.startLocalMatch(setup);
+      },
+      localGameEntry: entry,
+      controlPlan: setup.controlPlan,
+    );
   }
 
   Future<bool> _openSession(
     Future<MapScene> Function() open, {
     required LocalGameCatalogEntryView? localGameEntry,
+    required LocalMatchControlPlanView? controlPlan,
   }) async {
     if (_disposed) return false;
     final generation = ++_loadGeneration;
@@ -259,6 +196,7 @@ final class MapCoordinator {
       final scene = await open();
       if (!_isCurrent(generation)) return false;
       _localGameEntry = localGameEntry;
+      _localControlPlan = controlPlan;
       _setState(GameSessionReady.initial(scene));
       return true;
     } on MapLoadException catch (error, stackTrace) {
@@ -299,7 +237,9 @@ final class MapCoordinator {
 
   void hover(MapHexCoordinate? coordinate) {
     final current = _state;
-    if (current is! GameSessionReady) return;
+    if (current is! GameSessionReady || current.localHandoff.blocksGameplay) {
+      return;
+    }
     final next = coordinate != null && current.scene.map.contains(coordinate)
         ? coordinate
         : null;
@@ -317,7 +257,7 @@ final class MapCoordinator {
   Future<void> _confirmMove() async {
     final current = _state;
     if (current is! GameSessionReady ||
-        current.recipient.turnView.outcome.isTerminal ||
+        !_gameplayActive() ||
         current.research.commandPending ||
         current.diplomacy.commandPending ||
         _interactionBusy(current.interaction)) {
@@ -369,80 +309,8 @@ final class MapCoordinator {
     return current is GameSessionReady &&
         !current.recipient.turnView.outcome.isTerminal &&
         !current.localAiTurn.blocksGameplay &&
+        !current.localHandoff.blocksGameplay &&
         !current.localSave.inFlight;
-  }
-
-  Future<void> _advanceLocalAiTurns(GameSessionReady afterHuman) async {
-    final entry = _localGameEntry;
-    final localGame = _localGame;
-    if (entry == null || localGame == null) return;
-    final generation = _loadGeneration;
-    var current = afterHuman;
-    for (final aiPlayerId in entry.aiPlayerIds) {
-      if (current.recipient.turnView.outcome.isTerminal) break;
-      _setState(current.withLocalAiTurn(LocalAiTurnState.running(aiPlayerId)));
-      try {
-        final execution = await localGame.advanceAiTurn(
-          LocalAiTurnRequestView(
-            aiPlayerId: aiPlayerId,
-            humanPlayerId: entry.assets.actorPlayerId,
-          ),
-        );
-        if (!_isCurrent(generation)) return;
-        final ready = _state;
-        if (ready is! GameSessionReady) return;
-        current = ready.withRecipient(execution.player);
-        if (!execution.completedTurn &&
-            !execution.player.turnView.outcome.isTerminal) {
-          _setState(
-            current.withLocalAiTurn(
-              const LocalAiTurnState.failed(
-                LocalAiTurnFailureViewCode.incomplete,
-              ),
-            ),
-          );
-          return;
-        }
-        current = current.withLocalAiTurn(const LocalAiTurnState.idle());
-        _setState(current);
-      } on LocalGameSessionException catch (error, stackTrace) {
-        if (!_isCurrent(generation)) return;
-        _diagnosticReporter(
-          error.code,
-          error.diagnosticCause ?? error,
-          error.diagnosticStackTrace ?? stackTrace,
-        );
-        final ready = _state;
-        if (ready is! GameSessionReady) return;
-        final synchronized = error.resyncedPlayer == null
-            ? ready
-            : ready.withRecipient(error.resyncedPlayer!);
-        _setState(
-          synchronized.withLocalAiTurn(
-            LocalAiTurnState.failed(
-              error.code == 'invalid_ai_turn_protocol'
-                  ? LocalAiTurnFailureViewCode.responseIncompatible
-                  : LocalAiTurnFailureViewCode.requestFailed,
-            ),
-          ),
-        );
-        return;
-      } on Object catch (error, stackTrace) {
-        if (!_isCurrent(generation)) return;
-        _diagnosticReporter('unexpected_ai_turn_failure', error, stackTrace);
-        final ready = _state;
-        if (ready is GameSessionReady) {
-          _setState(
-            ready.withLocalAiTurn(
-              const LocalAiTurnState.failed(
-                LocalAiTurnFailureViewCode.requestFailed,
-              ),
-            ),
-          );
-        }
-        return;
-      }
-    }
   }
 
   GameSessionReady? _currentInteraction(int generation) {
@@ -574,16 +442,15 @@ void _validateCatalogSetup(
       'must match the selected catalog entry',
     );
   }
-  final aiPlayerIds = [
-    for (final participant in setup.participants)
-      if (participant.control == LocalPlayerControlView.ai) participant.id,
+  final participantIds = [
+    for (final participant in setup.participants) participant.id,
   ];
-  if (aiPlayerIds.length != entry.aiPlayerIds.length ||
-      !entry.aiPlayerIds.every(aiPlayerIds.contains)) {
+  if (participantIds.length != entry.participantIds.length ||
+      !entry.participantIds.every(participantIds.contains)) {
     throw ArgumentError.value(
-      aiPlayerIds,
+      participantIds,
       'setup.participants',
-      'AI participants must match the selected catalog entry',
+      'participants must match the selected catalog entry',
     );
   }
 }

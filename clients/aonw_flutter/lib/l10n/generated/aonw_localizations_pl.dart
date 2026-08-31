@@ -38,6 +38,26 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'Konfiguracja hotseat nie jest jeszcze dostępna.';
 
   @override
+  String get hotseatHandoffTitle => 'Przekaż urządzenie';
+
+  @override
+  String hotseatHandoffBody(String name) {
+    return 'Przekaż urządzenie graczowi $name. Jego mapa pozostanie ukryta do potwierdzenia.';
+  }
+
+  @override
+  String hotseatContinueAs(String name) {
+    return 'Kontynuuj jako $name';
+  }
+
+  @override
+  String get hotseatHandoffSwitching => 'Przygotowywanie następnego gracza';
+
+  @override
+  String get hotseatHandoffFailure =>
+      'Nie udało się bezpiecznie otworzyć widoku następnego gracza.';
+
+  @override
   String get loadGame => 'Wczytaj grę';
 
   @override
@@ -341,6 +361,123 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get newGameTitle => 'Utwórz grę lokalną';
+
+  @override
+  String get singlePlayerSetupTitle => 'Graj z komputerem';
+
+  @override
+  String get singlePlayerSetupIntro =>
+      'Wybierz cywilizację i skonfiguruj autorytatywny pojedynek lokalny.';
+
+  @override
+  String get hotseatSetupTitle => 'Graj w trybie hotseat';
+
+  @override
+  String get hotseatSetupIntro =>
+      'Korzystajcie z jednego urządzenia. Widok każdego człowieka pozostaje ukryty do potwierdzenia przekazania tury.';
+
+  @override
+  String get chooseCivilizationTitle => 'Wybierz cywilizację';
+
+  @override
+  String get gameSetupTitle => 'Ustawienie rozgrywki';
+
+  @override
+  String get opponentsTitle => 'Przeciwnicy';
+
+  @override
+  String get opponentControlLabel => 'Sterowanie przeciwnikiem';
+
+  @override
+  String get humanOpponent => 'Żywy gracz';
+
+  @override
+  String get aiOpponent => 'Komputer';
+
+  @override
+  String get mapSetupTitle => 'Mapa';
+
+  @override
+  String get mapSetupBody =>
+      'Kompaktowa, ręcznie przygotowana mapa 7 × 7 do skupionego pojedynku dwóch cywilizacji.';
+
+  @override
+  String get victoryPathsTitle => 'Drogi do zwycięstwa';
+
+  @override
+  String get victoryPathsBody =>
+      'Podbój, dominacja, kultura i punkty są rozstrzygane przez silnik gry.';
+
+  @override
+  String get settlementToEmpireTitle => 'Od osady do imperium';
+
+  @override
+  String get settlementToEmpireBody =>
+      'Eksploruj, zakładaj miasta, prowadź badania, twórz armie i buduj trwałą przewagę.';
+
+  @override
+  String get continueToSummary => 'Przejdź do podsumowania';
+
+  @override
+  String get gameSummaryTitle => 'Wyprawa gotowa';
+
+  @override
+  String get gameSummaryIntro =>
+      'Sprawdź wszystkich lokalnych uczestników przed utworzeniem rozgrywki.';
+
+  @override
+  String get summaryModeLabel => 'Tryb';
+
+  @override
+  String get summaryCivilizationLabel => 'Twoja cywilizacja';
+
+  @override
+  String get summaryOpponentLabel => 'Przeciwnik';
+
+  @override
+  String get summaryMapLabel => 'Mapa';
+
+  @override
+  String get summaryFogLabel => 'Mgła wojny';
+
+  @override
+  String get summaryAiLabel => 'Profil komputera';
+
+  @override
+  String get changeSetup => 'Zmień ustawienia';
+
+  @override
+  String localModeName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'singlePlayer': 'Gra jednoosobowa',
+      'hotseat': 'Hotseat',
+      'other': 'Gra lokalna',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String participantControlName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'human': 'Człowiek',
+      'ai': 'Komputer',
+      'other': 'Nieznane',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String fogSettingName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'enabled': 'Włączona',
+      'disabled': 'Wyłączona',
+      'other': 'Nieznane',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get defaultSecondPlayerName => 'Gracz 2';
 
   @override
   String get scenarioLabel => 'Scenariusz';
