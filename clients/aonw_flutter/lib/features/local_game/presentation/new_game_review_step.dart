@@ -17,6 +17,7 @@ final class NewGameReviewStep extends StatelessWidget {
     required this.difficulty,
     required this.persona,
     required this.fogEnabled,
+    required this.turnMode,
     required this.starting,
     required this.failed,
     required this.onBack,
@@ -32,6 +33,7 @@ final class NewGameReviewStep extends StatelessWidget {
   final LocalAiDifficultyView difficulty;
   final LocalAiPersonaView persona;
   final bool fogEnabled;
+  final LocalTurnModeView turnMode;
   final bool starting;
   final bool failed;
   final VoidCallback onBack;
@@ -105,6 +107,10 @@ final class NewGameReviewStep extends StatelessWidget {
           NewGameSummaryRow(
             label: l10n.summaryModeLabel,
             value: l10n.localModeName(actualMode.name),
+          ),
+          NewGameSummaryRow(
+            label: l10n.summaryTurnModeLabel,
+            value: l10n.turnModeName(turnMode.name),
           ),
           NewGameSummaryRow(
             label: l10n.summaryCivilizationLabel,

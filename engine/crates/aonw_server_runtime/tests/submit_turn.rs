@@ -9,6 +9,7 @@ use aonw_contracts::server::{
 };
 use aonw_contracts::{
     GameModeDto, MatchIdentityDto, MatchRulesDto, ParticipantDto, PlayerCountryDto, PlayerKindDto,
+    TurnModeDto,
 };
 use aonw_domain::{
     FogOfWar, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules,
@@ -260,7 +261,7 @@ fn rust_constructs_and_projects_multiplayer_matches() {
 }
 
 #[test]
-fn server_match_creation_rejects_non_multiplayer_identity() {
+fn server_match_creation_requires_multiplayer_with_simultaneous_turns() {
     let map = map(2);
     let ruleset = RulesetDefinition::standard().clone();
     let scenario_document = serde_json::json!({
@@ -283,11 +284,26 @@ fn server_match_creation_rejects_non_multiplayer_identity() {
         api_version: SERVER_HOST_API_VERSION,
         map_hash: world.map_hash().to_string(),
         ruleset_hash: world.ruleset_hash().to_string(),
-        scenario_document,
+        scenario_document: scenario_document.clone(),
         match_identity: match_identity(GameModeDto::HotSeat),
         fog_enabled: false,
     };
 
+    assert_eq!(
+        create_server_match_dto(&world, request),
+        Err(ServerBoundaryError::UnsupportedGameMode)
+    );
+
+    let mut sequential_multiplayer = match_identity(GameModeDto::Multiplayer);
+    sequential_multiplayer.turn_mode = Some(TurnModeDto::Sequential);
+    let request = CreateServerMatchRequestDto {
+        api_version: SERVER_HOST_API_VERSION,
+        map_hash: world.map_hash().to_string(),
+        ruleset_hash: world.ruleset_hash().to_string(),
+        scenario_document,
+        match_identity: sequential_multiplayer,
+        fog_enabled: false,
+    };
     assert_eq!(
         create_server_match_dto(&world, request),
         Err(ServerBoundaryError::UnsupportedGameMode)
@@ -463,5 +479,9 @@ fn match_identity(game_mode: GameModeDto) -> MatchIdentityDto {
         })
         .collect(),
         game_mode,
+        turn_mode: Some(match game_mode {
+            GameModeDto::HotSeat => TurnModeDto::Sequential,
+            GameModeDto::Multiplayer => TurnModeDto::Simultaneous,
+        }),
     }
 }

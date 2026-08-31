@@ -19,11 +19,11 @@ use aonw_contracts::{
     PlayerResearchStateDto, PlayerTurnStateDto, QueuedMovePathDto, ResearchStateDto,
     ResourceTradeAgreementDto, ResourceTypeDto, RuleValueDto, StrategicResourceStockpileDto,
     TechnologyIdDto, TransportConditionDto, TransportSegmentDto, TransportSegmentKindDto,
-    TroopKindDto, TurnLifecycleDto, UnitActivityDto, UnitDto, UnitKindDto, UnitOccupancyPolicyDto,
-    UnitPostureDto, VictoryRulesDto, WonderRegistryDto, WonderTypeDto, WorkerJobDto,
-    WorldArtifactDto, WorldArtifactLocationDto, WorldArtifactTypeDto,
+    TroopKindDto, TurnLifecycleDto, TurnModeDto, UnitActivityDto, UnitDto, UnitKindDto,
+    UnitOccupancyPolicyDto, UnitPostureDto, VictoryRulesDto, WonderRegistryDto, WonderTypeDto,
+    WorkerJobDto, WorldArtifactDto, WorldArtifactLocationDto, WorldArtifactTypeDto,
 };
-use aonw_domain::{FogVisibility, HexCoord, PlayerId, PlayerPair, UnitId};
+use aonw_domain::{FogVisibility, HexCoord, PlayerId, PlayerPair, TurnMode, UnitId};
 
 #[path = "game_state_contract/numeric_invariant_contract.rs"]
 mod numeric_invariant_contract;
@@ -416,6 +416,7 @@ fn match_identity() -> MatchIdentityDto {
             },
         ],
         game_mode: GameModeDto::Multiplayer,
+        turn_mode: Some(TurnModeDto::Simultaneous),
     }
 }
 
@@ -500,6 +501,26 @@ fn identity_and_lifecycle_round_trip_preserves_typed_values() {
         "2026-08-23T12:34:56.123456Z"
     );
     assert_eq!(encode_game_state(&state), source);
+}
+
+#[test]
+fn legacy_identity_without_turn_mode_uses_the_historical_session_default() {
+    let mut multiplayer = contract();
+    multiplayer.match_identity.turn_mode = None;
+    let multiplayer = decode_game_state(multiplayer).expect("legacy multiplayer identity");
+    assert_eq!(
+        multiplayer.match_lifecycle().identity().turn_mode(),
+        TurnMode::Simultaneous
+    );
+
+    let mut hot_seat = contract();
+    hot_seat.match_identity.game_mode = GameModeDto::HotSeat;
+    hot_seat.match_identity.turn_mode = None;
+    let hot_seat = decode_game_state(hot_seat).expect("legacy hot-seat identity");
+    assert_eq!(
+        hot_seat.match_lifecycle().identity().turn_mode(),
+        TurnMode::Sequential
+    );
 }
 
 #[test]

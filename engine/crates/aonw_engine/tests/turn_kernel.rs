@@ -22,7 +22,8 @@ use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, Ti
 use aonw_domain::{
     GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits,
     Participant, PlayerCountry, PlayerId, PlayerKind, PlayerTurnState, StateRevision,
-    TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy, UnitPosture, UtcTimestamp,
+    TurnLifecycle, TurnMode, Unit, UnitId, UnitKind, UnitOccupancyPolicy, UnitPosture,
+    UtcTimestamp,
 };
 use aonw_engine::{
     CommandRejectionCode, DomainEvent, EngineContext, ExecutionEvidence, GameEngine, PlayerCommand,
@@ -152,6 +153,33 @@ fn player_rejection_precedence_and_sequential_handoff_are_stable() {
 }
 
 #[test]
+fn local_match_can_use_simultaneous_turn_resolution() {
+    let map = map();
+    let rules = RulesetDefinition::standard();
+    let p1 = player("player-1");
+    let initial = state_with_turn_mode(GameMode::HotSeat, TurnMode::Simultaneous, [], None);
+
+    let partial = GameEngine::apply_player_owned(
+        initial,
+        EngineContext::canonical(&p1, &map, rules),
+        PlayerCommand::EndTurn(TurnCommand::new(7, &p1)),
+    )
+    .expect("local simultaneous submit");
+
+    assert!(partial.is_accepted());
+    assert_eq!(partial.state().turn(), 7);
+    assert_eq!(partial.revision(), StateRevision::new(8));
+    assert_eq!(
+        partial
+            .state()
+            .match_lifecycle()
+            .turn()
+            .submitted_player_ids(),
+        &BTreeSet::from([p1])
+    );
+}
+
+#[test]
 fn fixture_manifest_covers_all_supported_processors() {
     let root = engine_root();
     let manifest: serde_json::Value = serde_json::from_slice(
@@ -225,6 +253,33 @@ fn state_with_posture(
     second_unit_posture: Option<UnitPosture>,
     with_economy: bool,
 ) -> GameState {
+    state_with_turn_mode_and_posture(
+        mode,
+        mode.default_turn_mode(),
+        submitted,
+        started,
+        second_unit_posture,
+        with_economy,
+    )
+}
+
+fn state_with_turn_mode(
+    mode: GameMode,
+    turn_mode: TurnMode,
+    submitted: impl IntoIterator<Item = PlayerId>,
+    started: Option<UtcTimestamp>,
+) -> GameState {
+    state_with_turn_mode_and_posture(mode, turn_mode, submitted, started, None, false)
+}
+
+fn state_with_turn_mode_and_posture(
+    mode: GameMode,
+    turn_mode: TurnMode,
+    submitted: impl IntoIterator<Item = PlayerId>,
+    started: Option<UtcTimestamp>,
+    second_unit_posture: Option<UnitPosture>,
+    with_economy: bool,
+) -> GameState {
     let p1 = player("player-1");
     let p2 = player("player-2");
     let participants = [
@@ -232,7 +287,8 @@ fn state_with_posture(
         participant(p2.clone(), "Two"),
     ];
     let identity =
-        MatchIdentity::try_new(MatchRules::default(), participants, mode).expect("identity");
+        MatchIdentity::try_new_with_turn_mode(MatchRules::default(), participants, mode, turn_mode)
+            .expect("identity");
     let submitted = submitted.into_iter().collect::<BTreeSet<_>>();
     let lifecycle = TurnLifecycle::try_new(
         &identity,

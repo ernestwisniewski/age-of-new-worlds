@@ -276,7 +276,8 @@
             "ai": null
           }
         ],
-        "gameMode": "hotSeat"
+        "gameMode": "hotSeat",
+        "turnMode": "sequential"
       },
       "turnLifecycle": {
         "turnStatesByPlayerId": {
@@ -403,7 +404,8 @@
             "ai": null
           }
         ],
-        "gameMode": "hotSeat"
+        "gameMode": "hotSeat",
+        "turnMode": "sequential"
       },
       "turnLifecycle": {
         "turnStatesByPlayerId": {

@@ -13,7 +13,7 @@ mod worker_phase;
 use std::collections::BTreeSet;
 
 use aonw_content::{ContentHash, MapDefinition, RulesetDefinition};
-use aonw_domain::{GameMode, GameState, PlayerId, PlayerTurnState, UtcTimestamp};
+use aonw_domain::{GameState, PlayerId, PlayerTurnState, TurnMode, UtcTimestamp};
 
 use crate::movement::{TurnMovementUpdate, advance_turn_movement};
 use crate::{
@@ -114,7 +114,7 @@ pub(crate) fn apply_end_turn(
         return Ok(reject(state, code, map_hash, ruleset_hash));
     }
     let identity = state.match_lifecycle().identity();
-    if identity.game_mode() == GameMode::Multiplayer {
+    if identity.turn_mode() == TurnMode::Simultaneous {
         return apply_submit_turn(state, context, command, map_hash, ruleset_hash);
     }
     let progress = match sequential_progress(&state, command.player_id()) {

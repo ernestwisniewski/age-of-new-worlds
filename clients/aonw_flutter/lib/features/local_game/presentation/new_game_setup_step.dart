@@ -17,6 +17,7 @@ final class NewGameSetupStep extends StatelessWidget {
     required this.difficulty,
     required this.persona,
     required this.fogEnabled,
+    required this.turnMode,
     required this.onScenarioChanged,
     required this.onHumanCountryChanged,
     required this.onOpponentCountryChanged,
@@ -24,6 +25,7 @@ final class NewGameSetupStep extends StatelessWidget {
     required this.onDifficultyChanged,
     required this.onPersonaChanged,
     required this.onFogChanged,
+    required this.onTurnModeChanged,
     required this.onContinue,
     super.key,
   });
@@ -36,6 +38,7 @@ final class NewGameSetupStep extends StatelessWidget {
   final LocalAiDifficultyView difficulty;
   final LocalAiPersonaView persona;
   final bool fogEnabled;
+  final LocalTurnModeView turnMode;
   final ValueChanged<LocalGameCatalogEntryView> onScenarioChanged;
   final ValueChanged<LocalPlayerCountryView> onHumanCountryChanged;
   final ValueChanged<LocalPlayerCountryView> onOpponentCountryChanged;
@@ -43,6 +46,7 @@ final class NewGameSetupStep extends StatelessWidget {
   final ValueChanged<LocalAiDifficultyView> onDifficultyChanged;
   final ValueChanged<LocalAiPersonaView> onPersonaChanged;
   final ValueChanged<bool> onFogChanged;
+  final ValueChanged<LocalTurnModeView> onTurnModeChanged;
   final VoidCallback onContinue;
 
   @override
@@ -68,6 +72,8 @@ final class NewGameSetupStep extends StatelessWidget {
           child: Column(
             children: [
               _scenarioField(l10n),
+              const SizedBox(height: AonwSpacing.md),
+              _turnModeField(context, l10n),
               SwitchListTile.adaptive(
                 key: const ValueKey('fog-of-war'),
                 contentPadding: EdgeInsets.zero,
@@ -111,6 +117,47 @@ final class NewGameSetupStep extends StatelessWidget {
           onChanged: onHumanCountryChanged,
         ),
       );
+
+  Widget _turnModeField(BuildContext context, AonwLocalizations l10n) => Column(
+    key: const ValueKey('turn-mode'),
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text(l10n.turnModeTitle, style: Theme.of(context).textTheme.titleSmall),
+      const SizedBox(height: AonwSpacing.sm),
+      if (launchMode == LocalGameLaunchModeView.singlePlayer)
+        SegmentedButton<LocalTurnModeView>(
+          key: const ValueKey('turn-mode-selector'),
+          segments: [
+            for (final value in LocalTurnModeView.values)
+              ButtonSegment(
+                value: value,
+                icon: Icon(
+                  value == LocalTurnModeView.sequential
+                      ? Icons.redo
+                      : Icons.sync_alt,
+                ),
+                label: Text(l10n.turnModeName(value.name)),
+              ),
+          ],
+          selected: {turnMode},
+          onSelectionChanged: (values) => onTurnModeChanged(values.single),
+        )
+      else
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.redo),
+          title: Text(l10n.turnModeName(LocalTurnModeView.sequential.name)),
+        ),
+      const SizedBox(height: AonwSpacing.sm),
+      Text(
+        turnMode == LocalTurnModeView.simultaneous &&
+                launchMode == LocalGameLaunchModeView.singlePlayer
+            ? l10n.turnModeSimultaneousDescription
+            : l10n.turnModeSequentialDescription,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ],
+  );
 
   Widget _scenarioField(AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalGameCatalogEntryView>(

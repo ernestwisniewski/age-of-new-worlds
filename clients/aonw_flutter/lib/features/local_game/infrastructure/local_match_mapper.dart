@@ -8,6 +8,7 @@ final class LocalMatchMapper {
   AonwMatchIdentity toWire(LocalMatchSetupView setup) => AonwMatchIdentity(
     participants: setup.participants.map(_participant),
     gameMode: AonwGameMode.hotSeat,
+    turnMode: AonwTurnMode.values.byName(setup.turnMode.name),
   );
 
   LocalMatchControlPlanView restoredControlPlan(

@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use aonw_content::MapDefinition;
 use aonw_domain::{
-    FogOfWar, GameMode, GameState, GameStateBuildError, MatchIdentity, MatchLifecycle, PlayerFog,
-    PlayerId, PlayerTurnState, TurnLifecycle, TurnLifecycleBuildError,
+    FogOfWar, GameState, GameStateBuildError, MatchIdentity, MatchLifecycle, PlayerFog, PlayerId,
+    PlayerTurnState, TurnLifecycle, TurnLifecycleBuildError, TurnMode,
 };
 
 use crate::movement::{merge_discovered_contacts, recompute_after_move};
@@ -63,7 +63,7 @@ pub fn start_match(
         .iter()
         .map(|participant| (participant.id().clone(), PlayerTurnState::Active))
         .collect::<BTreeMap<_, _>>();
-    let required_submission_player_ids = if identity.game_mode() == GameMode::Multiplayer {
+    let required_submission_player_ids = if identity.turn_mode() == TurnMode::Simultaneous {
         identity
             .participants()
             .iter()

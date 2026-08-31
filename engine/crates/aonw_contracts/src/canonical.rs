@@ -39,7 +39,7 @@ pub use match_lifecycle::{
     AiDifficultyDto, AiPersonaDto, AiPlayerDto, AiStrategyIdDto, GameLengthConfigDto,
     GameLengthKindDto, GameModeDto, MatchIdentityDto, MatchRulesDto, PaceProfileDto,
     ParticipantDto, PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, RuleValueDto,
-    TurnLifecycleDto, VictoryRulesDto,
+    TurnLifecycleDto, TurnModeDto, VictoryRulesDto,
 };
 pub use objective::{
     CulturalVictoryHoldTurnsDto, DominationHoldTurnsDto, MapObjectiveHoldStateDto,

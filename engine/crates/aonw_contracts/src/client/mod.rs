@@ -37,4 +37,4 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 7;
+pub const CLIENT_API_VERSION: u16 = 8;

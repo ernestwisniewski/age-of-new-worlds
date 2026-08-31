@@ -389,6 +389,27 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get gameSetupTitle => 'Ustawienie rozgrywki';
 
   @override
+  String get turnModeTitle => 'Tryb tur';
+
+  @override
+  String turnModeName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'sequential': 'Tradycyjne',
+      'simultaneous': 'Symultaniczne',
+      'other': 'Nieznane',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get turnModeSequentialDescription =>
+      'Cywilizacje wykonują i rozliczają swoje tury kolejno.';
+
+  @override
+  String get turnModeSimultaneousDescription =>
+      'Gracz i komputer działają w ramach tej samej tury, zanim silnik rozliczy jej wspólne fazy.';
+
+  @override
   String get opponentsTitle => 'Przeciwnicy';
 
   @override
@@ -433,6 +454,9 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get summaryModeLabel => 'Tryb';
+
+  @override
+  String get summaryTurnModeLabel => 'Tury';
 
   @override
   String get summaryCivilizationLabel => 'Twoja cywilizacja';

@@ -5,7 +5,7 @@ mod value;
 
 pub use participant::{
     AiDifficulty, AiPersona, AiPlayer, AiStrategyId, GameMode, MatchIdentity, Participant,
-    PlayerCountry, PlayerKind,
+    PlayerCountry, PlayerKind, TurnMode,
 };
 pub use rules::{
     GameLengthConfig, GameLengthKind, MatchRules, MatchRulesBuildError, PaceProfile, VictoryRules,

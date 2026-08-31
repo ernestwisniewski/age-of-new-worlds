@@ -13,6 +13,30 @@ pub enum GameMode {
     Multiplayer,
 }
 
+impl GameMode {
+    /// Returns the historical turn model associated with this session mode.
+    ///
+    /// Explicit match configuration may override this default. Keeping the
+    /// mapping here preserves existing callers while allowing local matches to
+    /// opt into simultaneous resolution.
+    #[must_use]
+    pub const fn default_turn_mode(self) -> TurnMode {
+        match self {
+            Self::HotSeat => TurnMode::Sequential,
+            Self::Multiplayer => TurnMode::Simultaneous,
+        }
+    }
+}
+
+/// Authoritative lifecycle model used to resolve participant turns.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TurnMode {
+    /// Participants complete and resolve their turns one after another.
+    Sequential,
+    /// Participants submit within one shared turn before common resolution.
+    Simultaneous,
+}
+
 /// Human or engine-controlled participant.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum PlayerKind {
@@ -211,6 +235,7 @@ pub struct MatchIdentity {
     match_rules: MatchRules,
     participants: Box<[Participant]>,
     game_mode: GameMode,
+    turn_mode: TurnMode,
 }
 
 impl Default for MatchIdentity {
@@ -219,6 +244,7 @@ impl Default for MatchIdentity {
             match_rules: MatchRules::default(),
             participants: Box::new([]),
             game_mode: GameMode::HotSeat,
+            turn_mode: TurnMode::Sequential,
         }
     }
 }
@@ -234,6 +260,25 @@ impl MatchIdentity {
         participants: impl IntoIterator<Item = Participant>,
         game_mode: GameMode,
     ) -> Result<Self, PlayerId> {
+        Self::try_new_with_turn_mode(
+            match_rules,
+            participants,
+            game_mode,
+            game_mode.default_turn_mode(),
+        )
+    }
+
+    /// Constructs match identity with an explicit turn resolution model.
+    ///
+    /// # Errors
+    ///
+    /// Returns the duplicated identifier when participant identities repeat.
+    pub fn try_new_with_turn_mode(
+        match_rules: MatchRules,
+        participants: impl IntoIterator<Item = Participant>,
+        game_mode: GameMode,
+        turn_mode: TurnMode,
+    ) -> Result<Self, PlayerId> {
         let participants = participants.into_iter().collect::<Vec<_>>();
         let mut ids = BTreeSet::new();
         for participant in &participants {
@@ -245,6 +290,7 @@ impl MatchIdentity {
             match_rules,
             participants: participants.into_boxed_slice(),
             game_mode,
+            turn_mode,
         })
     }
 
@@ -262,6 +308,11 @@ impl MatchIdentity {
     #[must_use]
     pub const fn game_mode(&self) -> GameMode {
         self.game_mode
+    }
+    /// Returns the authoritative participant turn resolution model.
+    #[must_use]
+    pub const fn turn_mode(&self) -> TurnMode {
+        self.turn_mode
     }
     /// Returns whether an identifier belongs to this match.
     #[must_use]

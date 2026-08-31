@@ -47,6 +47,7 @@
       "mapObjectiveHoldStates": [],
       "matchIdentity": {
         "gameMode": "multiplayer",
+        "turnMode": "simultaneous",
         "matchRules": {
           "balance": {},
           "gameLength": {
@@ -249,6 +250,7 @@
       "mapObjectiveHoldStates": [],
       "matchIdentity": {
         "gameMode": "multiplayer",
+        "turnMode": "simultaneous",
         "matchRules": {
           "balance": {},
           "gameLength": {

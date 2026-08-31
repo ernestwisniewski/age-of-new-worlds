@@ -716,6 +716,30 @@ abstract class AonwLocalizations {
   /// **'Game setup'**
   String get gameSetupTitle;
 
+  /// No description provided for @turnModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn mode'**
+  String get turnModeTitle;
+
+  /// No description provided for @turnModeName.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, sequential{Traditional} simultaneous{Simultaneous} other{Unknown}}'**
+  String turnModeName(String value);
+
+  /// No description provided for @turnModeSequentialDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Civilizations complete and resolve their turns one after another.'**
+  String get turnModeSequentialDescription;
+
+  /// No description provided for @turnModeSimultaneousDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You and the computer act within one shared turn before the engine resolves its common phases.'**
+  String get turnModeSimultaneousDescription;
+
   /// No description provided for @opponentsTitle.
   ///
   /// In en, this message translates to:
@@ -799,6 +823,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Mode'**
   String get summaryModeLabel;
+
+  /// No description provided for @summaryTurnModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Turns'**
+  String get summaryTurnModeLabel;
 
   /// No description provided for @summaryCivilizationLabel.
   ///

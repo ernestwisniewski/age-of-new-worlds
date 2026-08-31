@@ -387,6 +387,27 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get gameSetupTitle => 'Game setup';
 
   @override
+  String get turnModeTitle => 'Turn mode';
+
+  @override
+  String turnModeName(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'sequential': 'Traditional',
+      'simultaneous': 'Simultaneous',
+      'other': 'Unknown',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get turnModeSequentialDescription =>
+      'Civilizations complete and resolve their turns one after another.';
+
+  @override
+  String get turnModeSimultaneousDescription =>
+      'You and the computer act within one shared turn before the engine resolves its common phases.';
+
+  @override
   String get opponentsTitle => 'Opponents';
 
   @override
@@ -431,6 +452,9 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get summaryModeLabel => 'Mode';
+
+  @override
+  String get summaryTurnModeLabel => 'Turns';
 
   @override
   String get summaryCivilizationLabel => 'Your civilization';

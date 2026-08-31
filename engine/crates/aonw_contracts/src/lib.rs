@@ -31,7 +31,7 @@ pub use canonical::{
     PlayerFogDto, PlayerKindDto, PlayerPairDto, PlayerResearchStateDto, PlayerTurnStateDto,
     ResearchStateDto, ResourceTradeAgreementDto, ResourceTypeDto, RuleValueDto,
     StrategicResourceStockpileDto, TechnologyIdDto, TransportConditionDto, TransportSegmentDto,
-    TransportSegmentKindDto, TroopKindDto, TurnLifecycleDto, UnitActivityDto, UnitDto,
+    TransportSegmentKindDto, TroopKindDto, TurnLifecycleDto, TurnModeDto, UnitActivityDto, UnitDto,
     UnitOccupancyPolicyDto, VictoryRulesDto, WonderRegistryDto, WonderTypeDto, WorkerJobDto,
     WorldArtifactDto, WorldArtifactLocationDto, WorldArtifactTypeDto,
 };

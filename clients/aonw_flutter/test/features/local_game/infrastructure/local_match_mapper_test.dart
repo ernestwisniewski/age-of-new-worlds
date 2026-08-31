@@ -13,6 +13,7 @@ void main() {
             as Map<String, Object?>;
 
     expect(wire['gameMode'], 'hotSeat');
+    expect(wire['turnMode'], 'simultaneous');
     expect(participants, hasLength(2));
     expect(ai, {
       'strategyId': 'utility',
@@ -67,4 +68,5 @@ LocalMatchSetupView _setup() => LocalMatchSetupView(
     ),
   ],
   fogEnabled: true,
+  turnMode: LocalTurnModeView.simultaneous,
 );

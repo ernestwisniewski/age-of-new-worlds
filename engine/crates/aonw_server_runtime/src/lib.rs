@@ -16,7 +16,7 @@ use aonw_contracts::server::{
     ServerProjectionResultDto, ServerRecipientOutcomeDto, ServerRecipientSnapshotDto,
     SubmitTurnServerRequestDto,
 };
-use aonw_domain::{GameMode, GameState, PlayerId};
+use aonw_domain::{GameMode, GameState, PlayerId, TurnMode};
 use aonw_engine::{
     CanonicalEngineError, CommandRejectionCode, CompiledMovementMap, CompiledMovementMapError,
     DomainEvent, ExecutionEvidence, GameEngine, start_match,
@@ -263,7 +263,9 @@ pub fn create_server_match_dto(
     .map_err(|error| ServerBoundaryError::InvalidScenarioDocument(error.to_string()))?;
     let identity = decode_match_identity(request.match_identity)
         .map_err(|error| ServerBoundaryError::InvalidMatchIdentity(error.to_string()))?;
-    if identity.game_mode() != GameMode::Multiplayer {
+    if identity.game_mode() != GameMode::Multiplayer
+        || identity.turn_mode() != TurnMode::Simultaneous
+    {
         return Err(ServerBoundaryError::UnsupportedGameMode);
     }
     let seed = scenario

@@ -33,6 +33,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
   var _difficulty = LocalAiDifficultyView.normal;
   var _persona = LocalAiPersonaView.balanced;
   var _fogEnabled = true;
+  var _turnMode = LocalTurnModeView.sequential;
   var _opponentControl = LocalPlayerControlView.ai;
   var _reviewing = false;
   var _starting = false;
@@ -91,6 +92,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     difficulty: _difficulty,
     persona: _persona,
     fogEnabled: _fogEnabled,
+    turnMode: _turnMode,
     onScenarioChanged: (value) => setState(() => _scenario = value),
     onHumanCountryChanged: _changeHumanCountry,
     onOpponentCountryChanged: _changeOpponentCountry,
@@ -101,6 +103,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     onDifficultyChanged: (value) => setState(() => _difficulty = value),
     onPersonaChanged: (value) => setState(() => _persona = value),
     onFogChanged: (value) => setState(() => _fogEnabled = value),
+    onTurnModeChanged: (value) => setState(() => _turnMode = value),
     onContinue: () => setState(() {
       _reviewing = true;
       _failed = false;
@@ -116,6 +119,9 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     difficulty: _difficulty,
     persona: _persona,
     fogEnabled: _fogEnabled,
+    turnMode: widget.initialMode == LocalGameLaunchModeView.hotseat
+        ? LocalTurnModeView.sequential
+        : _turnMode,
     starting: _starting,
     failed: _failed,
     onBack: () => setState(() {
@@ -180,6 +186,9 @@ final class _NewGameScreenState extends State<NewGameScreen> {
           ),
         ],
         fogEnabled: _fogEnabled,
+        turnMode: widget.initialMode == LocalGameLaunchModeView.hotseat
+            ? LocalTurnModeView.sequential
+            : _turnMode,
       ),
     );
     if (!mounted) return;

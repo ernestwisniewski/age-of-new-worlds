@@ -1,5 +1,7 @@
 enum AonwGameMode { hotSeat, multiplayer }
 
+enum AonwTurnMode { sequential, simultaneous }
+
 enum AonwPlayerKind { human, ai }
 
 enum AonwPlayerCountry {
@@ -220,12 +222,15 @@ final class AonwMatchIdentity {
     AonwMatchRules? matchRules,
     required Iterable<AonwParticipant> participants,
     required this.gameMode,
+    AonwTurnMode? turnMode,
   }) : matchRules = matchRules ?? AonwMatchRules(),
-       participants = _validatedParticipants(participants);
+       participants = _validatedParticipants(participants),
+       turnMode = turnMode ?? _defaultTurnMode(gameMode);
 
   final AonwMatchRules matchRules;
   final List<AonwParticipant> participants;
   final AonwGameMode gameMode;
+  final AonwTurnMode turnMode;
 
   Map<String, Object?> toJson() => {
     'matchRules': matchRules.toJson(),
@@ -233,8 +238,14 @@ final class AonwMatchIdentity {
       for (final participant in participants) participant.toJson(),
     ],
     'gameMode': gameMode.name,
+    'turnMode': turnMode.name,
   };
 }
+
+AonwTurnMode _defaultTurnMode(AonwGameMode gameMode) => switch (gameMode) {
+  AonwGameMode.hotSeat => AonwTurnMode.sequential,
+  AonwGameMode.multiplayer => AonwTurnMode.simultaneous,
+};
 
 List<AonwParticipant> _validatedParticipants(Iterable<AonwParticipant> values) {
   final participants = List<AonwParticipant>.unmodifiable(values);

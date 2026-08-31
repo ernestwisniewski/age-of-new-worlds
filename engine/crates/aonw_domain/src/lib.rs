@@ -71,7 +71,7 @@ pub use match_lifecycle::{
     AiDifficulty, AiPersona, AiPlayer, AiStrategyId, GameLengthConfig, GameLengthKind, GameMode,
     MatchIdentity, MatchLifecycle, MatchRules, MatchRulesBuildError, PaceProfile, Participant,
     PlayerCountry, PlayerKind, PlayerTurnState, RuleNumber, RuleNumberError, RuleValue,
-    TurnLifecycle, TurnLifecycleBuildError, UtcTimestamp, VictoryRules,
+    TurnLifecycle, TurnLifecycleBuildError, TurnMode, UtcTimestamp, VictoryRules,
 };
 pub use movement_path::{MovementPathError, MovementStep, QueuedMovePath};
 pub use movement_units::MovementUnits;

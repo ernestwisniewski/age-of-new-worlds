@@ -18,7 +18,7 @@
   "turnProcessors": [
     "outcome"
   ],
-  "clientApiVersion": 7,
+  "clientApiVersion": 8,
   "cases": [
     "bounded-full-game-reopen-every-turn",
     "bounded-terminal-soak",

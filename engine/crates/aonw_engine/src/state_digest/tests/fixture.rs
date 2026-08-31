@@ -16,9 +16,9 @@ use aonw_contracts::{
     PlayerResearchStateDto, PlayerTurnStateDto, QueuedMovePathDto, ResearchStateDto,
     ResourceTradeAgreementDto, ResourceTypeDto, RuleValueDto, StrategicResourceStockpileDto,
     TechnologyIdDto, TransportConditionDto, TransportSegmentDto, TransportSegmentKindDto,
-    TroopKindDto, TurnLifecycleDto, UnitActivityDto, UnitDto, UnitKindDto, UnitOccupancyPolicyDto,
-    UnitPostureDto, WonderRegistryDto, WonderTypeDto, WorkerJobDto, WorldArtifactDto,
-    WorldArtifactLocationDto, WorldArtifactTypeDto,
+    TroopKindDto, TurnLifecycleDto, TurnModeDto, UnitActivityDto, UnitDto, UnitKindDto,
+    UnitOccupancyPolicyDto, UnitPostureDto, WonderRegistryDto, WonderTypeDto, WorkerJobDto,
+    WorldArtifactDto, WorldArtifactLocationDto, WorldArtifactTypeDto,
 };
 
 pub(super) fn complete_state_contract() -> GameStateDto {
@@ -317,6 +317,7 @@ fn complete_match_identity() -> MatchIdentityDto {
             },
         ],
         game_mode: GameModeDto::Multiplayer,
+        turn_mode: Some(TurnModeDto::Simultaneous),
     }
 }
 

@@ -41,7 +41,7 @@ class ForeignVersionTransport:
 
 	func request(_body: Dictionary) -> Dictionary:
 		return {
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {
 				"status": "success",
 				"response": {"type": "capabilities"},
@@ -85,7 +85,7 @@ class MissingFeatureTransport:
 
 	func _success(response: Dictionary) -> Dictionary:
 		return {
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {"status": "success", "response": response},
 		}
 
@@ -126,7 +126,7 @@ class MalformedSnapshotTransport:
 
 	func _success(response: Dictionary) -> Dictionary:
 		return {
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {"status": "success", "response": response},
 		}
 
@@ -177,7 +177,7 @@ class TypedGatewayTransport:
 
 	func _success(response: Dictionary) -> Dictionary:
 		return {
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {"status": "success", "response": response},
 		}
 
@@ -303,7 +303,7 @@ class ExtraEnvelopeFieldTransport:
 
 	func request(_body: Dictionary) -> Dictionary:
 		return {
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {
 				"status": "success",
 				"response": {"type": "capabilities", "features": []},
@@ -404,7 +404,7 @@ class CoalescingSessionDouble:
 		if job_id != 2:
 			return ""
 		return JSON.stringify({
-			"apiVersion": 7,
+			"apiVersion": 8,
 			"outcome": {
 				"status": "success",
 				"response": {"type": "capabilities", "features": []},
@@ -948,7 +948,7 @@ func _test_shared_client_contract() -> void:
 		var inspect_request: Variant = JSON.parse_string(inspect_request_file.get_as_text())
 		_check(
 			inspect_request is Dictionary
-			and inspect_request["apiVersion"] == 7
+			and inspect_request["apiVersion"] == 8
 			and inspect_request["request"]["type"] == "inspectMap",
 			"Godot consumes the shared inspectMap request contract",
 		)
@@ -962,7 +962,7 @@ func _test_shared_client_contract() -> void:
 		var request: Variant = JSON.parse_string(request_file.get_as_text())
 		_check(
 			request is Dictionary
-			and request["apiVersion"] == 7
+			and request["apiVersion"] == 8
 			and request["request"]["command"]["type"] == "moveUnit",
 			"Godot consumes the shared move request contract",
 		)

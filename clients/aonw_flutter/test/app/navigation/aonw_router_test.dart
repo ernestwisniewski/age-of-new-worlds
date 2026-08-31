@@ -103,6 +103,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Play with the computer'), findsOneWidget);
     expect(find.text('Starter duel'), findsOneWidget);
+    final turnMode = tester.widget<SegmentedButton<LocalTurnModeView>>(
+      find.byKey(const ValueKey('turn-mode-selector')),
+    );
+    expect(turnMode.selected, {LocalTurnModeView.sequential});
+    await tester.tap(find.text('Simultaneous'));
+    await tester.pumpAndSettle();
 
     await tester.ensureVisible(
       find.byKey(const ValueKey('continue-to-summary')),
@@ -110,6 +116,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('continue-to-summary')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('new-game-review')), findsOneWidget);
+    expect(find.text('Simultaneous'), findsOneWidget);
 
     await tester.ensureVisible(find.byKey(const ValueKey('start-game')));
     await tester.tap(find.byKey(const ValueKey('start-game')));
@@ -119,6 +126,7 @@ void main() {
     expect(session.localStartCalls, 1);
     final setup = session.lastLocalMatchSetup!;
     expect(setup.assets.scenarioDocument, contains('aonw2_local_duel.json'));
+    expect(setup.turnMode, LocalTurnModeView.simultaneous);
     expect(setup.participants.map((item) => item.id), ['player-1', 'player-2']);
     expect(
       setup.participants.last.ai?.difficulty,

@@ -137,6 +137,7 @@
       ],
       "matchIdentity": {
         "gameMode": "multiplayer",
+        "turnMode": "simultaneous",
         "matchRules": {
           "balance": {},
           "gameLength": {
@@ -441,6 +442,7 @@
       ],
       "matchIdentity": {
         "gameMode": "multiplayer",
+        "turnMode": "simultaneous",
         "matchRules": {
           "balance": {},
           "gameLength": {

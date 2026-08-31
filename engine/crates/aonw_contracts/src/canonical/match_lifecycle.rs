@@ -10,6 +10,10 @@ pub struct MatchIdentityDto {
     pub match_rules: MatchRulesDto,
     pub participants: Vec<ParticipantDto>,
     pub game_mode: GameModeDto,
+    /// Explicit turn resolution model. Omission is accepted only for documents
+    /// produced before turn mode became independent from session mode.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub turn_mode: Option<TurnModeDto>,
 }
 
 impl Default for MatchIdentityDto {
@@ -18,6 +22,7 @@ impl Default for MatchIdentityDto {
             match_rules: MatchRulesDto::default(),
             participants: Vec::new(),
             game_mode: GameModeDto::HotSeat,
+            turn_mode: Some(TurnModeDto::Sequential),
         }
     }
 }
@@ -165,6 +170,14 @@ pub enum PaceProfileDto {
 pub enum GameModeDto {
     HotSeat,
     Multiplayer,
+}
+
+#[allow(missing_docs)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum TurnModeDto {
+    Sequential,
+    Simultaneous,
 }
 
 #[allow(missing_docs)]

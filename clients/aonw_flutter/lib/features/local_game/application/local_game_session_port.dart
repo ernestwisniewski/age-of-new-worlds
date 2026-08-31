@@ -4,6 +4,8 @@ import '../../map/read_model/player_map_view.dart';
 
 enum LocalPlayerControlView { human, ai }
 
+enum LocalTurnModeView { sequential, simultaneous }
+
 enum LocalPlayerCountryView {
   poland,
   ukraine,
@@ -93,11 +95,13 @@ final class LocalMatchSetupView {
     required this.assets,
     required Iterable<LocalParticipantSetupView> participants,
     required this.fogEnabled,
+    this.turnMode = LocalTurnModeView.sequential,
   }) : participants = _validateParticipants(participants, assets.actorPlayerId);
 
   final MapAssetPaths assets;
   final List<LocalParticipantSetupView> participants;
   final bool fogEnabled;
+  final LocalTurnModeView turnMode;
 
   LocalMatchControlPlanView get controlPlan =>
       LocalMatchControlPlanView.fromParticipants(participants);

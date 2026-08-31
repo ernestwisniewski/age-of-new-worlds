@@ -1,7 +1,7 @@
 use aonw_domain::{
     AiDifficulty, AiPersona, AiPlayer, AiStrategyId, GameLengthKind, GameMode, MatchIdentity,
     MatchLifecycle, MatchRules, PaceProfile, Participant, PlayerCountry, PlayerKind,
-    PlayerTurnState, RuleValue, TurnLifecycle,
+    PlayerTurnState, RuleValue, TurnLifecycle, TurnMode,
 };
 
 use super::writer::DigestWriter;
@@ -47,9 +47,11 @@ fn hash_rules(writer: &mut DigestWriter, rules: &MatchRules) {
 }
 
 fn hash_identity(writer: &mut DigestWriter, identity: &MatchIdentity) {
-    writer.u8(match identity.game_mode() {
-        GameMode::HotSeat => 0,
-        GameMode::Multiplayer => 1,
+    writer.u8(match (identity.game_mode(), identity.turn_mode()) {
+        (GameMode::HotSeat, TurnMode::Sequential) => 0,
+        (GameMode::Multiplayer, TurnMode::Simultaneous) => 1,
+        (GameMode::HotSeat, TurnMode::Simultaneous) => 2,
+        (GameMode::Multiplayer, TurnMode::Sequential) => 3,
     });
     writer.usize(identity.participants().len());
     for participant in identity.participants() {

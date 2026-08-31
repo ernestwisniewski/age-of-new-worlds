@@ -48,6 +48,7 @@ void main() {
 
     expect(request['type'], 'startMatch');
     expect(match['gameMode'], 'hotSeat');
+    expect(match['turnMode'], 'sequential');
     expect((match['matchRules']! as Map<String, Object?>)['balance'], isEmpty);
     expect(participants, hasLength(2));
     expect((participants.last! as Map<String, Object?>)['ai'], {
@@ -84,6 +85,32 @@ void main() {
         scoreFallbackEnabled: true,
       ),
       throwsArgumentError,
+    );
+  });
+
+  test('match identity keeps turn resolution separate from session mode', () {
+    final participant = AonwParticipant(
+      id: 'player-1',
+      name: 'Player 1',
+      colorValue: 0xff3d5a80,
+      country: AonwPlayerCountry.poland,
+      kind: AonwPlayerKind.human,
+    );
+
+    expect(
+      AonwMatchIdentity(
+        participants: [participant],
+        gameMode: AonwGameMode.hotSeat,
+      ).turnMode,
+      AonwTurnMode.sequential,
+    );
+    expect(
+      AonwMatchIdentity(
+        participants: [participant],
+        gameMode: AonwGameMode.hotSeat,
+        turnMode: AonwTurnMode.simultaneous,
+      ).toJson()['turnMode'],
+      'simultaneous',
     );
   });
 }

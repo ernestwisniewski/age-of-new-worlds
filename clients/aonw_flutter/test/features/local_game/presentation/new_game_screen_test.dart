@@ -28,6 +28,7 @@ void main() {
       find.byKey(const ValueKey('opponent-control')),
     );
     expect(control.selected, {LocalPlayerControlView.human});
+    expect(find.byKey(const ValueKey('turn-mode-selector')), findsNothing);
     expect(find.text('Victory paths'), findsOneWidget);
     expect(find.text('From settlement to empire'), findsOneWidget);
 
@@ -51,6 +52,7 @@ void main() {
       LocalPlayerControlView.human,
     ]);
     expect(setup.participants.last.ai, isNull);
+    expect(setup.turnMode, LocalTurnModeView.sequential);
     expect(find.byKey(const ValueKey('map-viewport')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());

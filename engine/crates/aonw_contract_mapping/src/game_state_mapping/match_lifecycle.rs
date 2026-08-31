@@ -4,12 +4,13 @@ use aonw_contracts::{
     AiDifficultyDto, AiPersonaDto, AiPlayerDto, AiStrategyIdDto, GameLengthConfigDto,
     GameLengthKindDto, GameModeDto, MatchIdentityDto, MatchRulesDto, PaceProfileDto,
     ParticipantDto, PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, RuleValueDto,
-    TurnLifecycleDto, VictoryRulesDto,
+    TurnLifecycleDto, TurnModeDto, VictoryRulesDto,
 };
 use aonw_domain::{
     AiDifficulty, AiPersona, AiPlayer, AiStrategyId, GameLengthConfig, GameLengthKind, GameMode,
     MatchIdentity, MatchLifecycle, MatchRules, PaceProfile, Participant, PlayerCountry, PlayerId,
-    PlayerKind, PlayerTurnState, RuleNumber, RuleValue, TurnLifecycle, UtcTimestamp, VictoryRules,
+    PlayerKind, PlayerTurnState, RuleNumber, RuleValue, TurnLifecycle, TurnMode, UtcTimestamp,
+    VictoryRules,
 };
 
 use super::error::GameStateMappingError;
@@ -37,16 +38,21 @@ pub(super) fn encode_match_lifecycle(
 pub fn decode_match_identity(
     dto: MatchIdentityDto,
 ) -> Result<MatchIdentity, GameStateMappingError> {
+    let game_mode = decode_game_mode(dto.game_mode);
+    let turn_mode = dto
+        .turn_mode
+        .map_or_else(|| game_mode.default_turn_mode(), decode_turn_mode);
     let participants = dto
         .participants
         .into_iter()
         .enumerate()
         .map(|(index, participant)| decode_participant(index, participant))
         .collect::<Result<Vec<_>, _>>()?;
-    MatchIdentity::try_new(
+    MatchIdentity::try_new_with_turn_mode(
         decode_rules(dto.match_rules)?,
         participants,
-        decode_game_mode(dto.game_mode),
+        game_mode,
+        turn_mode,
     )
     .map_err(|player| {
         GameStateMappingError::new(
@@ -65,6 +71,7 @@ fn encode_identity(value: &MatchIdentity) -> MatchIdentityDto {
             .map(encode_participant)
             .collect(),
         game_mode: encode_game_mode(value.game_mode()),
+        turn_mode: Some(encode_turn_mode(value.turn_mode())),
     }
 }
 
@@ -364,6 +371,12 @@ fn decode_game_mode(value: GameModeDto) -> GameMode {
 }
 fn encode_game_mode(value: GameMode) -> GameModeDto {
     map_enum!(value, GameMode::HotSeat => GameModeDto::HotSeat, GameMode::Multiplayer => GameModeDto::Multiplayer)
+}
+fn decode_turn_mode(value: TurnModeDto) -> TurnMode {
+    map_enum!(value, TurnModeDto::Sequential => TurnMode::Sequential, TurnModeDto::Simultaneous => TurnMode::Simultaneous)
+}
+fn encode_turn_mode(value: TurnMode) -> TurnModeDto {
+    map_enum!(value, TurnMode::Sequential => TurnModeDto::Sequential, TurnMode::Simultaneous => TurnModeDto::Simultaneous)
 }
 fn decode_player_kind(value: PlayerKindDto) -> PlayerKind {
     map_enum!(value, PlayerKindDto::Human => PlayerKind::Human, PlayerKindDto::Ai => PlayerKind::Ai)
