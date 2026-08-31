@@ -41,11 +41,12 @@ final class MapReachableLayerComponent extends Component with HasVisibility {
       isVisible = false;
       return;
     }
-    final bounds = cache.geometry.bounds;
-    final offset = ui.Offset(-bounds.x, -bounds.y);
     final path = ui.Path();
     for (final tile in reachable.tiles) {
-      path.addPath(aonwHexPath(cache.geometry, tile.coordinate), offset);
+      path.addPath(
+        aonwProjectedHexPath(cache.projection, tile.coordinate),
+        ui.Offset.zero,
+      );
     }
     _path = path;
     _pathBuildCount += 1;
@@ -91,12 +92,11 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
       isVisible = false;
       return;
     }
-    final bounds = cache.geometry.bounds;
     final path = ui.Path();
     for (var index = 0; index < route.steps.length; index++) {
-      final center = cache.geometry.center(route.steps[index].coordinate);
-      final x = center.x - bounds.x;
-      final y = center.y - bounds.y;
+      final center = cache.projection.hexCenter(route.steps[index].coordinate);
+      final x = center.x;
+      final y = center.y;
       if (index == 0) {
         path.moveTo(x, y);
       } else {
@@ -204,9 +204,8 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
     MapStaticRenderCache cache,
     MapHexCoordinate coordinate,
   ) {
-    final bounds = cache.geometry.bounds;
-    final center = cache.geometry.center(coordinate);
-    return ui.Offset(center.x - bounds.x, center.y - bounds.y);
+    final center = cache.projection.hexCenter(coordinate);
+    return ui.Offset(center.x, center.y - 12);
   }
 }
 
@@ -439,10 +438,9 @@ final class MapSelectionLayerComponent extends Component with HasVisibility {
     MapHexCoordinate? coordinate,
   ) {
     if (coordinate == null) return null;
-    final bounds = cache.geometry.bounds;
     return ui.Path()..addPath(
-      aonwHexPath(cache.geometry, coordinate),
-      ui.Offset(-bounds.x, -bounds.y),
+      aonwProjectedHexPath(cache.projection, coordinate),
+      ui.Offset.zero,
     );
   }
 }

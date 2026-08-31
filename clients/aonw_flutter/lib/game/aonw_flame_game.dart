@@ -405,7 +405,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   }
 
   @override
-  Color backgroundColor() => const Color(0x00000000);
+  Color backgroundColor() => const Color(0xFF000000);
 
   @override
   void onAttach() {

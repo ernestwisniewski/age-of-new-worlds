@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../features/map/presentation/camera/map_viewport_projection.dart';
 import '../../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../../features/map/presentation/layers/map_canvas_paths.dart';
 import '../../features/map/presentation/map_palette.dart';
@@ -22,6 +23,7 @@ final class MapStaticRenderCache {
   MapStaticRenderCache._({
     required this.identity,
     required this.geometry,
+    required this.projection,
     required this.terrainPaths,
     required this.gridPath,
     required this.clipPath,
@@ -35,15 +37,15 @@ final class MapStaticRenderCache {
       radius: aonwMapHexRadius,
     );
     final bounds = geometry.bounds;
-    final offset = ui.Offset(-bounds.x, -bounds.y);
+    final projection = MapViewportProjection(geometry);
     final terrainPaths = <MapTerrain, ui.Path>{};
     final gridPath = ui.Path();
     for (final tile in map.tiles) {
-      final hex = aonwHexPath(geometry, tile.coordinate);
+      final hex = aonwProjectedHexPath(projection, tile.coordinate);
       terrainPaths
           .putIfAbsent(tile.displayTerrain, ui.Path.new)
-          .addPath(hex, offset);
-      gridPath.addPath(hex, offset);
+          .addPath(hex, ui.Offset.zero);
+      gridPath.addPath(hex, ui.Offset.zero);
     }
     return MapStaticRenderCache._(
       identity: (
@@ -53,15 +55,20 @@ final class MapStaticRenderCache {
         rows: map.rows,
       ),
       geometry: geometry,
+      projection: projection,
       terrainPaths: Map.unmodifiable(terrainPaths),
       gridPath: gridPath,
-      clipPath: aonwMapClipPath(map, geometry, translateToOrigin: true),
-      size: ui.Size(bounds.width, bounds.height),
+      clipPath: aonwProjectedMapClipPath(map, projection),
+      size: ui.Size(
+        bounds.width,
+        bounds.height * MapViewportProjection.perspectiveY,
+      ),
     );
   }
 
   final MapStaticRenderIdentity identity;
   final AonwOddQFlatTopGeometry geometry;
+  final MapViewportProjection projection;
   final Map<MapTerrain, ui.Path> terrainPaths;
   final ui.Path gridPath;
   final ui.Path clipPath;
@@ -114,11 +121,7 @@ final class MapReferenceLayerComponent extends Component
     isVisible = false;
   }
 
-  static const _opacity = 0.52;
-
-  final _paint = ui.Paint()
-    ..color = const ui.Color.fromRGBO(255, 255, 255, _opacity)
-    ..filterQuality = ui.FilterQuality.medium;
+  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;
   MapStaticRenderCache? _cache;
   MapReferenceBundle? _reference;
   List<_DecodedReferencePage> _pages = const [];
@@ -219,9 +222,9 @@ final class MapReferenceLayerComponent extends Component
         ),
         destination: ui.Rect.fromLTWH(
           page.destination.x,
-          page.destination.y,
+          page.destination.y * MapViewportProjection.perspectiveY,
           page.destination.width,
-          page.destination.height,
+          page.destination.height * MapViewportProjection.perspectiveY,
         ),
       ));
     }

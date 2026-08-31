@@ -246,7 +246,6 @@ final class MapRoadComponent extends PositionComponent {
 }
 
 ui.Offset _center(MapStaticRenderCache cache, MapHexCoordinate coordinate) {
-  final center = cache.geometry.center(coordinate);
-  final bounds = cache.geometry.bounds;
-  return ui.Offset(center.x - bounds.x, center.y - bounds.y);
+  final center = cache.projection.hexTopFaceCenter(coordinate);
+  return ui.Offset(center.x, center.y);
 }

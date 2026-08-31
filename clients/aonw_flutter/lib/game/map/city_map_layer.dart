@@ -85,9 +85,8 @@ final class MapCityLayerComponent extends Component with HasVisibility {
   }
 
   static ui.Offset _center(MapStaticRenderCache cache, CityView city) {
-    final center = cache.geometry.center(city.center);
-    final bounds = cache.geometry.bounds;
-    return ui.Offset(center.x - bounds.x, center.y - bounds.y);
+    final center = cache.projection.hexTopFaceCenter(city.center);
+    return ui.Offset(center.x, center.y);
   }
 }
 

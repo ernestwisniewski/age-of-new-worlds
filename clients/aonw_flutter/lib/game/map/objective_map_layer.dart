@@ -45,11 +45,10 @@ final class MapObjectiveLayerComponent extends Component with HasVisibility {
     clearLayer();
     _mapIdentity = identity;
     for (final objective in map.objectives) {
-      final center = cache.geometry.center(objective.coordinate);
-      final bounds = cache.geometry.bounds;
+      final center = cache.projection.hexTopFaceCenter(objective.coordinate);
       final component = MapObjectiveComponent(
         objective: objective,
-        center: ui.Offset(center.x - bounds.x, center.y - bounds.y),
+        center: ui.Offset(center.x, center.y - 31),
       );
       _objectivesById[objective.id] = component;
       add(component);

@@ -1,4 +1,5 @@
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
+import 'package:aonw_flutter/features/map/presentation/camera/map_viewport_projection.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -25,6 +26,14 @@ void main() {
       1200,
     );
     expect(cache.terrainPaths.length, lessThanOrEqualTo(14));
+    expect(
+      cache.size.height,
+      closeTo(
+        cache.geometry.bounds.height * MapViewportProjection.perspectiveY,
+        1e-9,
+      ),
+    );
+    expect(cache.clipPath.getBounds(), cache.gridPath.getBounds());
   });
 
   testWithGame<AonwFlameGame>(

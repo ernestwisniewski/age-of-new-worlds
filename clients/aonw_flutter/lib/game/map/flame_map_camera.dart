@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../features/map/presentation/camera/map_camera_transform.dart';
-import '../../features/map/presentation/camera/map_viewport_projection.dart';
 import '../../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../../features/map/presentation/input/map_viewport_intent.dart';
 import '../../features/map/read_model/map_view.dart';
@@ -70,23 +69,21 @@ final class FlameMapCameraController {
     final cache = _cache;
     final transform = _transform;
     if (cache == null || transform == null) return null;
-    return MapViewportProjection(
-      cache.geometry,
-    ).hexAt(transform.screenToWorld(screenPoint));
+    return cache.projection.hexAt(transform.screenToWorld(screenPoint));
   }
 
   AonwPoint? screenForHex(MapHexCoordinate coordinate) {
     final cache = _cache;
     final transform = _transform;
     if (cache == null || transform == null) return null;
-    final world = MapViewportProjection(cache.geometry).hexCenter(coordinate);
+    final world = cache.projection.hexCenter(coordinate);
     return transform.worldToScreen(world);
   }
 
   void centerOnHex(MapHexCoordinate coordinate) {
     final cache = _cache;
     if (cache == null) return;
-    final world = MapViewportProjection(cache.geometry).hexCenter(coordinate);
+    final world = cache.projection.hexCenter(coordinate);
     final transform = _transform;
     if (transform == null) {
       _pendingWorldCenter = world;
