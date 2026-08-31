@@ -24,6 +24,7 @@ AonwPlayerViewSnapshot _snapshot({
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
   AonwPlayerEconomyView? economy,
+  AonwPlayerResearchView? research,
 }) => AonwPlayerViewSnapshot(
   stamp: _stamp(
     revision: revision,
@@ -35,6 +36,7 @@ AonwPlayerViewSnapshot _snapshot({
   participants: participants,
   fog: fog,
   economy: economy ?? AonwPlayerEconomyView.empty(),
+  research: research ?? AonwPlayerResearchView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -87,6 +89,18 @@ AonwPlayerDiplomacyView _diplomacy() => const AonwPlayerDiplomacyView(
   resourceTradeAgreements: [],
 );
 
+AonwPlayerResearchView _research({int progress = 4}) => AonwPlayerResearchView(
+  activeTechnology: AonwTechnologyId.agriculture,
+  activeProgress: progress,
+  activeEffectiveCost: 20,
+  scienceOverflow: 0,
+  scienceYield: AonwScienceYieldBreakdown(
+    total: 0,
+    byCityId: const {},
+    sources: const [],
+  ),
+);
+
 AonwCommandResult _command({
   required AonwSessionStamp stamp,
   required AonwPlayerViewPatch patch,
@@ -110,6 +124,7 @@ AonwPlayerViewPatch _patch({
   AonwGameOutcome? outcome,
   AonwPlayerFogView? fog,
   AonwPlayerEconomyView? economy,
+  AonwPlayerResearchView? research,
   AonwPlayerDiplomacyView? diplomacy,
   AonwPendingActionView? pendingAction,
   AonwCityFoundingDraft? cityFoundingDraft,
@@ -122,6 +137,7 @@ AonwPlayerViewPatch _patch({
   turnMode: turnMode,
   fog: fog,
   economy: economy,
+  research: research,
   turnLifecycle: turnLifecycle,
   outcome: outcome,
   upsertedUnits: upsertedUnits,

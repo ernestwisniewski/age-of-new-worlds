@@ -29,6 +29,8 @@ fn research_protocol_is_complete_and_replayable() {
         ))
         .expect("open");
 
+    assert_initial_research(&runtime);
+
     let capabilities = dispatch(&mut runtime, ClientRequestBodyDto::Capabilities);
     let ClientResponseBodyDto::Capabilities { features } = capabilities else {
         panic!("capabilities response")
@@ -77,6 +79,14 @@ fn research_protocol_is_complete_and_replayable() {
     };
     assert_eq!(result.outcome, ClientCommandOutcomeDto::Accepted);
     assert_eq!(result.stamp.revision, 1);
+    let selected_research = result.view_patch.research.expect("selected research patch");
+    assert_eq!(
+        selected_research.active_technology_id,
+        Some(TechnologyIdDto::Agriculture)
+    );
+    assert_eq!(selected_research.active_progress, Some(0));
+    assert!(selected_research.active_effective_cost.is_some());
+    assert_eq!(selected_research.science_yield.total, 2);
 
     let advanced = dispatch(
         &mut runtime,
@@ -96,8 +106,12 @@ fn research_protocol_is_complete_and_replayable() {
             ClientEventDto::TurnEnded { .. }
         ]
     ));
+    let progressed_research = result.view_patch.research.expect("research progress patch");
+    assert_eq!(progressed_research.active_progress, Some(2));
+    assert_eq!(progressed_research.science_yield.total, 2);
 
     let expected = runtime.snapshot().expect("research snapshot");
+    assert_eq!(expected.research().active_progress(), Some(2));
     let save = runtime.export_save_json().expect("research save");
     let mut reopened = LocalRuntime::default();
     reopened
@@ -111,6 +125,14 @@ fn research_protocol_is_complete_and_replayable() {
         LocalRuntime::verify_replay_json(map, ruleset, &replay).expect("verify research replay");
     assert_eq!(verification.entry_count, 2);
     assert_eq!(verification.final_stamp.revision, StateRevision::new(2));
+}
+
+fn assert_initial_research(runtime: &LocalRuntime) {
+    let snapshot = runtime.snapshot().expect("initial research snapshot");
+    assert_eq!(snapshot.research().active_technology_id(), None);
+    assert_eq!(snapshot.research().science_per_turn(), 2);
+    assert_eq!(snapshot.research().science_by_city_id().len(), 1);
+    assert_eq!(snapshot.research().science_sources().len(), 1);
 }
 
 fn dispatch(runtime: &mut LocalRuntime, request: ClientRequestBodyDto) -> ClientResponseBodyDto {

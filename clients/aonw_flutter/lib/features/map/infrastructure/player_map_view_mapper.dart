@@ -56,6 +56,7 @@ final class PlayerMapViewMapper {
       participants: _mapParticipants(wire.participants),
       fog: _mapFog(wire.fog),
       economy: _mapEconomy(wire.economy),
+      research: _mapResearch(wire.research),
       turnView: _mapTurnView(wire, pendingAction),
       diplomacy: _diplomacyMapper.fromWire(
         wire.diplomacy,
@@ -400,6 +401,26 @@ PlayerEconomyView _mapEconomy(AonwPlayerEconomyView economy) =>
               source.improvement.name,
             ),
             amountPerTurn: source.amountPerTurn,
+          ),
+      ],
+    );
+
+PlayerResearchSummaryView _mapResearch(AonwPlayerResearchView research) =>
+    PlayerResearchSummaryView(
+      activeTechnologyId: research.activeTechnology?.name,
+      activeProgress: research.activeProgress,
+      activeEffectiveCost: research.activeEffectiveCost,
+      scienceOverflow: research.scienceOverflow,
+      sciencePerTurn: research.scienceYield.total,
+      scienceByCityId: research.scienceYield.byCityId,
+      scienceSources: [
+        for (final source in research.scienceYield.sources)
+          PlayerScienceYieldSourceView(
+            cityId: source.cityId,
+            amount: source.amount,
+            kind: PlayerScienceYieldSourceKindView.values.byName(
+              source.kind.name,
+            ),
           ),
       ],
     );

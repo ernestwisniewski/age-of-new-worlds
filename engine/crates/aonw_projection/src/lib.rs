@@ -17,6 +17,7 @@ mod diplomacy;
 mod disclosure;
 mod economy;
 mod infrastructure;
+mod research;
 mod unit;
 mod view_diff;
 
@@ -35,6 +36,7 @@ pub use economy::{
 };
 pub(crate) use infrastructure::visible_infrastructure;
 pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
+pub use research::{PlayerResearchView, PlayerScienceYieldSourceView};
 pub(crate) use unit::visible_units;
 pub use unit::{OwnedUnitDetailsView, PlayerUnitView};
 pub use view_diff::{PlayerViewPatch, ProjectedView, diff_view, unchanged_view};
@@ -191,6 +193,7 @@ pub struct PlayerViewSnapshot {
     participants: Arc<[PlayerParticipantView]>,
     fog: Arc<PlayerFogView>,
     economy: Arc<PlayerEconomyView>,
+    research: Arc<PlayerResearchView>,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -213,6 +216,7 @@ impl PlayerViewSnapshot {
         participants: Arc<[PlayerParticipantView]>,
         fog: Arc<PlayerFogView>,
         economy: Arc<PlayerEconomyView>,
+        research: Arc<PlayerResearchView>,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -232,6 +236,7 @@ impl PlayerViewSnapshot {
             participants,
             fog,
             economy,
+            research,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -280,6 +285,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub fn economy(&self) -> &PlayerEconomyView {
         &self.economy
+    }
+    /// Returns the recipient's private research progress and science forecast.
+    #[must_use]
+    pub fn research(&self) -> &PlayerResearchView {
+        &self.research
     }
     /// Returns the persisted authoritative match result.
     #[must_use]

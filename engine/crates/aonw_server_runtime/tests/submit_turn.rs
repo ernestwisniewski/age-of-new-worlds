@@ -13,9 +13,10 @@ use aonw_contracts::{
 };
 use aonw_domain::{
     EconomyState, FogOfWar, GameMode, GameState, HexCoord, InitialResourceDistribution,
-    MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
-    PlayerFog, PlayerId, PlayerKind, PlayerTurnState, ResourceType, StateRevision,
-    StrategicResourceStockpile, TurnLifecycle, Unit, UnitId, UnitKind,
+    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
+    PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
+    ResearchState, ResourceType, StateRevision, StrategicResourceStockpile, TechnologyId,
+    TurnLifecycle, Unit, UnitId, UnitKind, WonderRegistry,
 };
 use aonw_engine::{CommandRejectionCode, DomainEvent, GameEngine};
 use aonw_server_runtime::{
@@ -111,6 +112,16 @@ fn final_submit_returns_exact_offsets_and_every_recipient_projection() {
             assert_eq!(projected.resource(), *resource);
             assert_eq!(projected.amount(), *amount);
         }
+        let (technology, progress, overflow) = expected_research(actor);
+        assert_eq!(
+            recipient.snapshot.research().active_technology_id(),
+            Some(technology)
+        );
+        assert_eq!(
+            recipient.snapshot.research().active_progress(),
+            Some(progress)
+        );
+        assert_eq!(recipient.snapshot.research().science_overflow(), overflow);
     }
 }
 
@@ -234,6 +245,14 @@ fn strict_dto_maps_transactional_and_recipient_safe_output() {
             recipient.snapshot.economy.strategic_resource_stockpile[0].amount,
             amount
         );
+        let (technology, progress, overflow) =
+            expected_research(&player(&recipient.recipient_player_id));
+        assert_eq!(
+            recipient.snapshot.research.active_technology_id,
+            Some(aonw_contract_mapping::encode_technology(technology))
+        );
+        assert_eq!(recipient.snapshot.research.active_progress, Some(progress));
+        assert_eq!(recipient.snapshot.research.science_overflow, overflow);
     }
 }
 
@@ -470,6 +489,7 @@ fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture {
     )
     .expect("economy");
     let units = [unit("unit-1", &p1, 0), unit("unit-2", &p2, 1)];
+    let research = fixture_research(&p1, &p2);
     let fog = FogOfWar::try_new([
         PlayerFog::new(p1, [], [HexCoord::new(0, 0)]),
         PlayerFog::new(p2, [], [HexCoord::new(1, 0)]),
@@ -484,11 +504,38 @@ fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture {
     )
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .with_economy(economy)
+    .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
     .with_fog_of_war(fog)
     .try_build()
     .expect("state");
     let world = PreparedServerWorld::try_new(map, ruleset).expect("prepared world");
     Fixture { state, world }
+}
+
+fn fixture_research(player_one: &PlayerId, player_two: &PlayerId) -> ResearchState {
+    ResearchState::try_new([
+        (
+            player_one.clone(),
+            PlayerResearchState::try_new(
+                [],
+                Some(TechnologyId::Agriculture),
+                [(TechnologyId::Agriculture, 3)],
+                1,
+            )
+            .expect("player one research"),
+        ),
+        (
+            player_two.clone(),
+            PlayerResearchState::try_new(
+                [],
+                Some(TechnologyId::Mining),
+                [(TechnologyId::Mining, 11)],
+                4,
+            )
+            .expect("player two research"),
+        ),
+    ])
+    .expect("research")
 }
 
 fn participant(id: PlayerId, name: &str) -> Participant {
@@ -547,6 +594,14 @@ fn expected_economy(player: &PlayerId) -> (i64, i64, i64, ResourceType, i64) {
         (17, 2, 0, ResourceType::Oil, 4)
     } else {
         (91, 8, 0, ResourceType::Aluminium, 9)
+    }
+}
+
+fn expected_research(player: &PlayerId) -> (TechnologyId, i64, i64) {
+    if player.as_str() == "player-1" {
+        (TechnologyId::Agriculture, 3, 1)
+    } else {
+        (TechnologyId::Mining, 11, 4)
     }
 }
 

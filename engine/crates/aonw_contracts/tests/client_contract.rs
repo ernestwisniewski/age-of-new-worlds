@@ -9,14 +9,15 @@ use aonw_contracts::client::{
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
-    PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerTurnLifecycleViewDto,
-    PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto, ReachableTileViewDto,
-    StrategicResourceAmountDto, StrategicResourceSourceDto,
+    PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerResearchViewDto,
+    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
+    ReachableTileViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
 };
 use aonw_contracts::{
     CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto,
-    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, ResourceTypeDto, TurnModeDto, UnitKindDto,
-    UnitPostureDto,
+    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, ResourceTypeDto, TechnologyIdDto,
+    TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
 #[path = "client_contract/artifact.rs"]
@@ -87,6 +88,24 @@ fn economy() -> PlayerEconomyViewDto {
     }
 }
 
+fn research() -> PlayerResearchViewDto {
+    PlayerResearchViewDto {
+        active_technology_id: Some(TechnologyIdDto::Agriculture),
+        active_progress: Some(9),
+        active_effective_cost: Some(42),
+        science_overflow: 1,
+        science_yield: ScienceYieldBreakdownDto {
+            total: 3,
+            by_city_id: BTreeMap::from([("city-1".to_owned(), 3)]),
+            sources: vec![ScienceYieldSourceDto {
+                city_id: "city-1".to_owned(),
+                amount: 3,
+                kind: ScienceYieldSourceKindDto::CityScience,
+            }],
+        },
+    }
+}
+
 fn player_snapshot() -> PlayerViewSnapshotDto {
     PlayerViewSnapshotDto {
         stamp: stamp(),
@@ -105,6 +124,7 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
             visible_hexes: vec![coordinate(3, 4)],
         },
         economy: economy(),
+        research: research(),
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,
@@ -159,6 +179,7 @@ fn command_result() -> ClientCommandResultDto {
                 visible_hexes: vec![coordinate(3, 4)],
             }),
             economy: Some(economy()),
+            research: Some(research()),
             turn_lifecycle: None,
             outcome: None,
             upserted_units: vec![unit()],

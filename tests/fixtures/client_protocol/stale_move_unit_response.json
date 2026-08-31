@@ -24,6 +24,7 @@
           "turnMode": "sequential",
           "fog": null,
           "economy": null,
+          "research": null,
           "turnLifecycle": null,
           "outcome": null,
           "upsertedUnits": [],

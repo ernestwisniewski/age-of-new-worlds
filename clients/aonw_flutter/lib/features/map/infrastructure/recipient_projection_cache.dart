@@ -96,6 +96,7 @@ final class RecipientProjectionCache {
       participants: before.participants,
       fog: patch.fog ?? before.fog,
       economy: patch.economy ?? before.economy,
+      research: patch.research ?? before.research,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -204,6 +205,7 @@ final class RecipientProjectionCache {
       patch.outcome != null ||
       patch.fog != null ||
       patch.economy != null ||
+      patch.research != null ||
       patch.diplomacy != null ||
       !_samePendingAction(patch.pendingAction, before.pendingAction) ||
       !_sameFoundingDraft(patch.cityFoundingDraft, before.cityFoundingDraft) ||

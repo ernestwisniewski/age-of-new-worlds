@@ -135,6 +135,56 @@ final class PlayerEconomyView {
   }
 }
 
+enum PlayerScienceYieldSourceKindView {
+  cityScience,
+  cityResearchProject,
+  worldArtifact,
+  worldWonder,
+}
+
+final class PlayerScienceYieldSourceView {
+  const PlayerScienceYieldSourceView({
+    required this.cityId,
+    required this.amount,
+    required this.kind,
+  });
+
+  final String cityId;
+  final int amount;
+  final PlayerScienceYieldSourceKindView kind;
+}
+
+final class PlayerResearchSummaryView {
+  PlayerResearchSummaryView({
+    required this.activeTechnologyId,
+    required this.activeProgress,
+    required this.activeEffectiveCost,
+    required this.scienceOverflow,
+    required this.sciencePerTurn,
+    required Map<String, int> scienceByCityId,
+    required List<PlayerScienceYieldSourceView> scienceSources,
+  }) : scienceByCityId = Map.unmodifiable(scienceByCityId),
+       scienceSources = List.unmodifiable(scienceSources);
+
+  factory PlayerResearchSummaryView.empty() => PlayerResearchSummaryView(
+    activeTechnologyId: null,
+    activeProgress: null,
+    activeEffectiveCost: null,
+    scienceOverflow: 0,
+    sciencePerTurn: 0,
+    scienceByCityId: const {},
+    scienceSources: const [],
+  );
+
+  final String? activeTechnologyId;
+  final int? activeProgress;
+  final int? activeEffectiveCost;
+  final int scienceOverflow;
+  final int sciencePerTurn;
+  final Map<String, int> scienceByCityId;
+  final List<PlayerScienceYieldSourceView> scienceSources;
+}
+
 enum MatchParticipantKindView { human, ai }
 
 enum MatchParticipantCountryView {
@@ -245,6 +295,7 @@ final class PlayerMapView {
     required List<MatchParticipantView> participants,
     required this.fog,
     required this.economy,
+    required this.research,
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
@@ -325,6 +376,7 @@ final class PlayerMapView {
     ],
     fog: MapFogView.disabled(),
     economy: PlayerEconomyView.empty(),
+    research: PlayerResearchSummaryView.empty(),
     turnView: RecipientTurnView(
       number: turn,
       ownState: RecipientTurnStateView.active,
@@ -355,6 +407,7 @@ final class PlayerMapView {
   final List<MatchParticipantView> participants;
   final MapFogView fog;
   final PlayerEconomyView economy;
+  final PlayerResearchSummaryView research;
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;

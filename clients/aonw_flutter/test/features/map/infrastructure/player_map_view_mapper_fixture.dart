@@ -10,6 +10,7 @@ AonwPlayerViewSnapshot _snapshot(
   List<AonwFieldImprovementView> fieldImprovements = const [],
   List<AonwRoadView> roads = const [],
   AonwPlayerEconomyView? economy,
+  AonwPlayerResearchView? research,
   AonwPlayerFogView fog = const AonwPlayerFogView(
     enabled: true,
     discoveredHexes: [
@@ -45,6 +46,7 @@ AonwPlayerViewSnapshot _snapshot(
   ],
   fog: fog,
   economy: economy ?? AonwPlayerEconomyView.empty(),
+  research: research ?? AonwPlayerResearchView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -170,4 +172,27 @@ AonwPlayerEconomyView _economy({
           ),
         ]
       : const [],
+);
+
+AonwPlayerResearchView _research({
+  AonwTechnologyId? activeTechnology = AonwTechnologyId.agriculture,
+  int? activeProgress = 4,
+  int? activeEffectiveCost = 20,
+  String sourceCityId = 'city-a',
+}) => AonwPlayerResearchView(
+  activeTechnology: activeTechnology,
+  activeProgress: activeProgress,
+  activeEffectiveCost: activeEffectiveCost,
+  scienceOverflow: 1,
+  scienceYield: AonwScienceYieldBreakdown(
+    total: 5,
+    byCityId: {sourceCityId: 5},
+    sources: [
+      AonwScienceYieldSource(
+        cityId: sourceCityId,
+        amount: 5,
+        kind: AonwScienceYieldSourceKind.cityScience,
+      ),
+    ],
+  ),
 );

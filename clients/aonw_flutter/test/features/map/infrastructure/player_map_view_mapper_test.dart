@@ -91,6 +91,49 @@ void main() {
     expect(source.amountPerTurn, 1);
   });
 
+  test('maps recipient-owned research progress and science evidence', () {
+    final player = mapper.fromWire(
+      _snapshot(const [], cities: [_city()], research: _research()),
+      map: testMapScene().map,
+      actorPlayerId: 'player-1',
+    );
+
+    expect(player.research.activeTechnologyId, 'agriculture');
+    expect(player.research.activeProgress, 4);
+    expect(player.research.activeEffectiveCost, 20);
+    expect(player.research.scienceOverflow, 1);
+    expect(player.research.sciencePerTurn, 5);
+    expect(player.research.scienceByCityId, {'city-a': 5});
+    expect(player.research.scienceSources.single.cityId, 'city-a');
+    expect(
+      player.research.scienceSources.single.kind,
+      PlayerScienceYieldSourceKindView.cityScience,
+    );
+  });
+
+  test('rejects inconsistent or unowned research evidence', () {
+    expect(
+      () => mapper.fromWire(
+        _snapshot(
+          const [],
+          cities: [_city()],
+          research: _research(activeProgress: null),
+        ),
+        map: testMapScene().map,
+        actorPlayerId: 'player-1',
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => mapper.fromWire(
+        _snapshot(const [], research: _research()),
+        map: testMapScene().map,
+        actorPlayerId: 'player-1',
+      ),
+      throwsFormatException,
+    );
+  });
+
   test('rejects inconsistent recipient economy data', () {
     expect(
       () => mapper.fromWire(
@@ -187,6 +230,7 @@ void main() {
       participants: snapshot.participants,
       fog: snapshot.fog,
       economy: snapshot.economy,
+      research: snapshot.research,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,

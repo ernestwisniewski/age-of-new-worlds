@@ -1,6 +1,7 @@
 use aonw_contracts::client::{
     ClientSessionStampDto, PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
-    PlayerViewSnapshotDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
+    PlayerResearchViewDto, PlayerViewSnapshotDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
@@ -31,6 +32,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
         participants: value.participants().iter().map(participant).collect(),
         fog: fog(value.fog()),
         economy: economy(value.economy()),
+        research: research(value.research()),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
@@ -46,6 +48,47 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
             .map(field_improvement)
             .collect(),
         roads: value.roads().iter().copied().map(road).collect(),
+    }
+}
+
+pub(super) fn research(value: &aonw_projection::PlayerResearchView) -> PlayerResearchViewDto {
+    PlayerResearchViewDto {
+        active_technology_id: value.active_technology_id().map(crate::encode_technology),
+        active_progress: value.active_progress(),
+        active_effective_cost: value.active_effective_cost(),
+        science_overflow: value.science_overflow(),
+        science_yield: ScienceYieldBreakdownDto {
+            total: value.science_per_turn(),
+            by_city_id: value
+                .science_by_city_id()
+                .iter()
+                .map(|(city, amount)| (city.as_str().to_owned(), *amount))
+                .collect(),
+            sources: value
+                .science_sources()
+                .iter()
+                .map(|source| ScienceYieldSourceDto {
+                    city_id: source.city_id().as_str().to_owned(),
+                    amount: source.amount(),
+                    kind: science_source_kind(source.kind()),
+                })
+                .collect(),
+        },
+    }
+}
+
+const fn science_source_kind(
+    value: aonw_engine::ScienceYieldSourceKind,
+) -> ScienceYieldSourceKindDto {
+    match value {
+        aonw_engine::ScienceYieldSourceKind::CityScience => ScienceYieldSourceKindDto::CityScience,
+        aonw_engine::ScienceYieldSourceKind::CityResearchProject => {
+            ScienceYieldSourceKindDto::CityResearchProject
+        }
+        aonw_engine::ScienceYieldSourceKind::WorldArtifact => {
+            ScienceYieldSourceKindDto::WorldArtifact
+        }
+        aonw_engine::ScienceYieldSourceKind::WorldWonder => ScienceYieldSourceKindDto::WorldWonder,
     }
 }
 

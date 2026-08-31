@@ -81,6 +81,22 @@ pub struct ScienceYieldBreakdownDto {
     pub sources: Vec<ScienceYieldSourceDto>,
 }
 
+/// Recipient-owned active research progress and current science forecast.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerResearchViewDto {
+    /// Selected technology, when research is active.
+    pub active_technology_id: Option<TechnologyIdDto>,
+    /// Persisted progress for the active technology.
+    pub active_progress: Option<i64>,
+    /// Current pace-, city-, and boost-adjusted active cost.
+    pub active_effective_cost: Option<u32>,
+    /// Stored science available after choosing a technology.
+    pub science_overflow: i64,
+    /// Complete engine-owned next-turn science forecast.
+    pub science_yield: ScienceYieldBreakdownDto,
+}
+
 /// Complete selection view of one technology.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]

@@ -43,8 +43,8 @@ pub use query::{
 };
 pub use rejection::ClientCommandRejectionCodeDto;
 pub use research::{
-    ResearchOptionDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
-    TechnologyAvailabilityDto, TechnologyUnlockDto,
+    PlayerResearchViewDto, ResearchOptionDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyUnlockDto,
 };
 pub use session::{ClientErrorDto, ClientReplayVerificationDto};
 pub use worker::{
@@ -292,6 +292,8 @@ pub struct PlayerViewSnapshotDto {
     pub fog: PlayerFogViewDto,
     /// Recipient-owned economy accounts and strategic-resource flow.
     pub economy: PlayerEconomyViewDto,
+    /// Recipient-owned research progress and science forecast.
+    pub research: PlayerResearchViewDto,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.
@@ -408,6 +410,8 @@ pub struct PlayerViewPatchDto {
     pub fog: Option<PlayerFogViewDto>,
     /// Replacement recipient economy state when any account or resource flow changed.
     pub economy: Option<PlayerEconomyViewDto>,
+    /// Replacement recipient research state when progress or science changed.
+    pub research: Option<PlayerResearchViewDto>,
     /// Replacement lifecycle projection when turn/readiness changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleViewDto>,
     /// Replacement match result when it changed.

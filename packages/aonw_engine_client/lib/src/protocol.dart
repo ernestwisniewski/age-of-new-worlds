@@ -8,7 +8,7 @@ import 'package:aonw_engine_client/src/protocol_diplomacy.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_match.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
-import 'package:aonw_engine_client/src/protocol_query.dart';
+import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_response.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
@@ -24,8 +24,10 @@ export 'protocol_match.dart';
 export 'protocol_outcome.dart';
 export 'protocol_pending_action.dart';
 export 'protocol_player_economy.dart';
+export 'protocol_player_research.dart';
 export 'protocol_player_view.dart';
 export 'protocol_query.dart';
+export 'protocol_research_values.dart';
 export 'protocol_response.dart';
 export 'protocol_values.dart';
 

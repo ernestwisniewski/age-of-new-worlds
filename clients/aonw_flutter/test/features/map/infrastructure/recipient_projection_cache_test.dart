@@ -36,6 +36,7 @@ void main() {
       strategicResourceOutput: const [],
       strategicResourceSources: const [],
     );
+    final research = _research(progress: 7);
     final cache = _cache(initial);
 
     final after = cache.apply(
@@ -48,6 +49,7 @@ void main() {
           turnLifecycle: lifecycle,
           outcome: outcome,
           economy: economy,
+          research: research,
           diplomacy: diplomacy,
           upsertedUnits: [_unit(col: 1, row: 0)],
         ),
@@ -61,6 +63,7 @@ void main() {
     expect(after.outcome, same(outcome));
     expect(after.diplomacy, same(diplomacy));
     expect(after.economy, same(economy));
+    expect(after.research, same(research));
     expect(after.pendingAction, isNull);
     expect(after.cityFoundingDraft, isNull);
     expect(after.units.single.coordinate.col, 1);
@@ -88,6 +91,28 @@ void main() {
               strategicResourceOutput: const [],
               strategicResourceSources: const [],
             ),
+          ),
+        ),
+      ),
+      throwsFormatException,
+    );
+    expect(cache.snapshot, same(initial));
+  });
+
+  test('rejects a research replacement on an unchanged command', () {
+    final initial = _snapshot();
+    final cache = _cache(initial);
+
+    expect(
+      () => cache.apply(
+        _command(
+          accepted: false,
+          stamp: initial.stamp,
+          patch: _patch(
+            fromRevision: 0,
+            toRevision: 0,
+            turn: 1,
+            research: _research(),
           ),
         ),
       ),

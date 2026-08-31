@@ -87,6 +87,7 @@ Map<String, Object?> _outcome() => {
       'turnMode': 'simultaneous',
       'fog': null,
       'economy': null,
+      'research': null,
       'turnLifecycle': {
         'ownState': 'active',
         'ownSubmitted': true,
@@ -150,6 +151,17 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
     'strategicResourceStockpile': <Object?>[],
     'strategicResourceOutput': <Object?>[],
     'strategicResourceSources': <Object?>[],
+  },
+  'research': {
+    'activeTechnologyId': null,
+    'activeProgress': null,
+    'activeEffectiveCost': null,
+    'scienceOverflow': 0,
+    'scienceYield': {
+      'total': 0,
+      'byCityId': <String, int>{},
+      'sources': <Object?>[],
+    },
   },
   'outcome': {
     'condition': 'ongoing',

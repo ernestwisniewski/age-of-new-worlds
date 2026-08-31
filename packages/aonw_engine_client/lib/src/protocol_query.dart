@@ -5,6 +5,7 @@ import 'package:aonw_engine_client/src/protocol_execution.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
+import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
 part 'protocol_city_query.dart';

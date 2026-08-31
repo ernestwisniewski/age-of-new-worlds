@@ -10,9 +10,9 @@ use aonw_engine::CanonicalQueryError;
 use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
     PlayerDiplomacyView, PlayerEconomyView, PlayerFieldImprovementView, PlayerFogView,
-    PlayerParticipantView, PlayerRoadView, PlayerTurnLifecycleView, PlayerUnitView,
-    PlayerViewSnapshot, SessionStamp, city_founding_draft, diplomacy_view, pending_action,
-    visible_artifacts, visible_cities, visible_infrastructure, visible_units,
+    PlayerParticipantView, PlayerResearchView, PlayerRoadView, PlayerTurnLifecycleView,
+    PlayerUnitView, PlayerViewSnapshot, SessionStamp, city_founding_draft, diplomacy_view,
+    pending_action, visible_artifacts, visible_cities, visible_infrastructure, visible_units,
 };
 
 /// Recipient-safe view delta produced by one dispatch.
@@ -30,6 +30,8 @@ pub struct PlayerViewPatch {
     pub fog: Option<PlayerFogView>,
     /// Replacement recipient economy state when any account or resource flow changed.
     pub economy: Option<PlayerEconomyView>,
+    /// Replacement recipient research state when progress or science changed.
+    pub research: Option<PlayerResearchView>,
     /// Replacement turn projection when lifecycle state changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleView>,
     /// Replacement authoritative match result when it changed.
@@ -71,6 +73,7 @@ pub struct ProjectedView {
     participants: Arc<[PlayerParticipantView]>,
     fog: Arc<PlayerFogView>,
     economy: Arc<PlayerEconomyView>,
+    research: Arc<PlayerResearchView>,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -106,6 +109,7 @@ impl ProjectedView {
                 visible_hexes: Arc::from([]),
             }),
             economy: Arc::new(PlayerEconomyView::empty()),
+            research: Arc::new(PlayerResearchView::default()),
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -141,11 +145,17 @@ impl ProjectedView {
         self
     }
 
+    #[cfg(test)]
+    fn with_science_per_turn(mut self, amount: i64) -> Self {
+        self.research = Arc::new(PlayerResearchView::default().with_science_per_turn(amount));
+        self
+    }
+
     /// Builds a complete recipient-safe projection from canonical state and content.
     ///
     /// # Errors
     ///
-    /// Returns an error when an authoritative economy projection cannot be computed.
+    /// Returns an error when an authoritative economy or research projection cannot be computed.
     pub fn try_for_recipient(
         state: &GameState,
         actor: Arc<PlayerId>,
@@ -165,6 +175,9 @@ impl ProjectedView {
         let economy = Arc::new(PlayerEconomyView::try_for_recipient(
             state, recipient, map, ruleset,
         )?);
+        let research = Arc::new(PlayerResearchView::try_for_recipient(
+            state, recipient, map, ruleset,
+        )?);
         let participants = state
             .match_lifecycle()
             .identity()
@@ -180,6 +193,7 @@ impl ProjectedView {
             participants,
             fog,
             economy,
+            research,
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -204,6 +218,7 @@ impl ProjectedView {
             self.participants.clone(),
             self.fog.clone(),
             self.economy.clone(),
+            self.research.clone(),
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),
@@ -254,6 +269,7 @@ pub fn diff_view(
     let diplomacy = (before.diplomacy != after.diplomacy).then(|| after.diplomacy.as_ref().clone());
     let fog = (before.fog != after.fog).then(|| after.fog.as_ref().clone());
     let economy = (before.economy != after.economy).then(|| after.economy.as_ref().clone());
+    let research = (before.research != after.research).then(|| after.research.as_ref().clone());
     let mut before_units = before.units.iter().peekable();
     let mut after_units = after.units.iter().peekable();
     let mut upserted_units = Vec::new();
@@ -294,6 +310,7 @@ pub fn diff_view(
         turn_mode: after.turn_mode,
         fog,
         economy,
+        research,
         turn_lifecycle: (before.turn != after.turn).then_some(after.turn),
         outcome,
         upserted_units: upserted_units.into_boxed_slice(),
@@ -322,6 +339,7 @@ pub fn unchanged_view(revision: u64, view: &ProjectedView) -> PlayerViewPatch {
         turn_mode: view.turn_mode,
         fog: None,
         economy: None,
+        research: None,
         turn_lifecycle: None,
         outcome: None,
         upserted_units: Box::new([]),
@@ -481,6 +499,7 @@ mod tests {
         )
         .with_turn_mode(TurnMode::Simultaneous)
         .with_gold(25)
+        .with_science_per_turn(7)
         .with_fog(
             &[HexCoord::new(1, 0), HexCoord::new(2, 0)],
             &[HexCoord::new(2, 0)],
@@ -499,6 +518,10 @@ mod tests {
         );
         assert_eq!(fog.visible_hexes(), [HexCoord::new(2, 0)]);
         assert_eq!(patch.economy.expect("changed economy").gold(), 25);
+        assert_eq!(
+            patch.research.expect("changed research").science_per_turn(),
+            7
+        );
         assert_eq!(
             patch
                 .upserted_units
