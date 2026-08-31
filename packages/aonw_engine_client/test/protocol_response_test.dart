@@ -170,10 +170,11 @@ void main() {
     ).require<AonwSaveOpenedResponse>();
 
     expect(response.actorPlayerId, 'player-2');
-    expect(
-      response.participants.map((participant) => participant.id),
-      ['player-1', 'player-2', 'player-3'],
-    );
+    expect(response.participants.map((participant) => participant.id), [
+      'player-1',
+      'player-2',
+      'player-3',
+    ]);
     expect(response.participants[1].name, 'Grace');
     expect(response.participants[1].kind, AonwPlayerKind.human);
     expect(response.participants[2].kind, AonwPlayerKind.ai);
