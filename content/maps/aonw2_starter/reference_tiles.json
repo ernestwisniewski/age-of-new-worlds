@@ -1,0 +1,23 @@
+{
+  "mapId": "aonw2_starter",
+  "mapContentHash": "4d5603cc00fa8963a71c23133570f89f43c734598d86579e12e1b1059da8712d",
+  "cols": 7,
+  "rows": 7,
+  "tilePixelSize": [96, 84],
+  "palette": {
+    "ocean": "245b91",
+    "coast": "4f9dc4",
+    "grassland": "6e9c54",
+    "plains": "b7a66a",
+    "mountain": "666b6f"
+  },
+  "tileRows": [
+    ["ocean", "ocean", "coast", "coast", "coast", "ocean", "ocean"],
+    ["ocean", "coast", "grassland", "plains", "grassland", "coast", "ocean"],
+    ["coast", "grassland", "grassland", "plains", "plains", "grassland", "coast"],
+    ["coast", "plains", "plains", "grassland", "plains", "grassland", "coast"],
+    ["coast", "grassland", "grassland", "plains", "grassland", "plains", "coast"],
+    ["ocean", "coast", "grassland", "plains", "mountain", "coast", "ocean"],
+    ["ocean", "ocean", "coast", "coast", "coast", "ocean", "ocean"]
+  ]
+}

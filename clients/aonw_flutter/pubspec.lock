@@ -256,7 +256,7 @@ packages:
   gamepads_linux:
     dependency: "direct overridden"
     description:
-      path: "../../third_party/gamepads_linux"
+      path: "plugins/gamepads_linux"
       relative: true
     source: path
     version: "0.1.2"

@@ -35,7 +35,7 @@ dev_dependencies:
 
 dependency_overrides:
   gamepads_linux:
-    path: ../../third_party/gamepads_linux
+    path: plugins/gamepads_linux
 
 flutter:
   generate: true

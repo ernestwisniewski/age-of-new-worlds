@@ -9,7 +9,7 @@ void main() {
   test('maps strict wire DTOs into feature-local immutable values', () {
     final wire = AonwClientResponse.parse(
       File(
-        '../../test/fixtures/client_protocol/map_inspected_response.json',
+        '../../tests/fixtures/client_protocol/map_inspected_response.json',
       ).readAsStringSync(),
     ).require<AonwMapInspectedResponse>().map;
 

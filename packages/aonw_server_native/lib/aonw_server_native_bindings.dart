@@ -1,7 +1,6 @@
 import 'dart:ffi' as ffi;
 
-const _assetId =
-    'package:aonw_server_native/aonw_server_native_bindings.dart';
+const _assetId = 'package:aonw_server_native/aonw_server_native_bindings.dart';
 
 @ffi.Native<ffi.Uint8 Function()>(
   symbol: 'aonw_server_native_is_available',

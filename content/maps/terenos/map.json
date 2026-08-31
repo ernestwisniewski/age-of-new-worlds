@@ -1,0 +1,3048 @@
+{
+  "schemaVersion": 1,
+  "gridLayout": "oddQFlatTop",
+  "cols": 20,
+  "rows": 15,
+  "mapName": "terenos",
+  "defaultZoom": 1.0,
+  "objectives": [
+    {
+      "id": "terenos_old_pass",
+      "type": "strategicPass",
+      "hex": {
+        "col": 9,
+        "row": 6
+      },
+      "requiredHoldTurns": 2,
+      "victoryPoints": 4,
+      "goldPerTurn": 1
+    },
+    {
+      "id": "terenos_sunken_shrine",
+      "type": "holySite",
+      "hex": {
+        "col": 12,
+        "row": 8
+      },
+      "requiredHoldTurns": 3,
+      "victoryPoints": 3,
+      "goldPerTurn": 2
+    }
+  ],
+  "tiles": [
+    {
+      "col": 0,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "hills",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 0,
+      "terrainTags": [
+        "coast",
+        "mountain"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 8,
+      "row": 0,
+      "terrainTags": [
+        "mountain",
+        "coast"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 9,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "hills",
+        "snow"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 10,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "snow",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "snow",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 0,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 0,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 1,
+      "terrainTags": [
+        "coast",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 1,
+      "terrainTags": [
+        "coast",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 1,
+      "terrainTags": [
+        "coast",
+        "mountain"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 7,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 5
+    },
+    {
+      "col": 8,
+      "row": 1,
+      "terrainTags": [
+        "hills",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "terrainTags": [
+        "snow",
+        "forest",
+        "tundra"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 1,
+      "terrainTags": [
+        "snow",
+        "tundra",
+        "hills"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 11,
+      "row": 1,
+      "terrainTags": [
+        "coast",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 1,
+      "terrainTags": [
+        "hills",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 1,
+      "terrainTags": [
+        "snow",
+        "hills"
+      ],
+      "resources": [
+        "uranium"
+      ],
+      "height": 1
+    },
+    {
+      "col": 14,
+      "row": 1,
+      "terrainTags": [
+        "coast",
+        "snow",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 1,
+      "terrainTags": [
+        "snow",
+        "hills"
+      ],
+      "resources": [
+        "silver"
+      ],
+      "height": 2
+    },
+    {
+      "col": 16,
+      "row": 1,
+      "terrainTags": [
+        "hills",
+        "snow"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 17,
+      "row": 1,
+      "terrainTags": [
+        "snow",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 1,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 1,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 2,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 2,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 2,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [
+        "fish"
+      ],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 2,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 2,
+      "terrainTags": [
+        "coast",
+        "mountain"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 6,
+      "row": 2,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 4
+    },
+    {
+      "col": 7,
+      "row": 2,
+      "terrainTags": [
+        "forest",
+        "hills"
+      ],
+      "resources": [],
+      "height": 3
+    },
+    {
+      "col": 8,
+      "row": 2,
+      "terrainTags": [
+        "coast",
+        "lake",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 2,
+      "terrainTags": [
+        "forest",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 2,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 2,
+      "terrainTags": [
+        "snow",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 2,
+      "terrainTags": [
+        "coast",
+        "lake",
+        "snow",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 2,
+      "terrainTags": [
+        "snow",
+        "tundra"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "terrainTags": [
+        "forest",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 2,
+      "terrainTags": [
+        "hills",
+        "snow",
+        "forest"
+      ],
+      "resources": [
+        "iron"
+      ],
+      "height": 2
+    },
+    {
+      "col": 17,
+      "row": 2,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 18,
+      "row": 2,
+      "terrainTags": [
+        "snow",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 2,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 3,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 3,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 3,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [
+        "pearls"
+      ],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "hills"
+      ],
+      "resources": [
+        "marble"
+      ],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 3,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 4
+    },
+    {
+      "col": 6,
+      "row": 3,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 4
+    },
+    {
+      "col": 7,
+      "row": 3,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 8,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "lake"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 3,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 3,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 12,
+      "row": 3,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 3,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "forest",
+        "snow"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 3,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [
+        "deer"
+      ],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 3,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [
+        "apple"
+      ],
+      "height": 2
+    },
+    {
+      "col": 17,
+      "row": 3,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 18,
+      "row": 3,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 3,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 4,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 4,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [
+        "deer"
+      ],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 4,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "terrainTags": [
+        "coast",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "terrainTags": [
+        "coast",
+        "lake"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "terrainTags": [
+        "river",
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 4,
+      "terrainTags": [
+        "forest",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "terrainTags": [
+        "forest",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "terrainTags": [
+        "forest",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 4,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "terrainTags": [
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 18,
+      "row": 4,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 4,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 5,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 5,
+      "terrainTags": [
+        "hills",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 5,
+      "terrainTags": [
+        "ocean",
+        "forest",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 5,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 5,
+      "terrainTags": [
+        "coast",
+        "forest",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 5,
+      "terrainTags": [
+        "hills",
+        "jungle"
+      ],
+      "resources": [],
+      "height": 3
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "terrainTags": [
+        "forest",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 15,
+      "row": 5,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 5,
+      "terrainTags": [
+        "river",
+        "coast",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 5,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 6,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 6,
+      "terrainTags": [
+        "hills",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 6,
+      "terrainTags": [
+        "coast",
+        "hills"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 6,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 6,
+      "terrainTags": [
+        "hills",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "terrainTags": [
+        "hills"
+      ],
+      "resources": [
+        "iron"
+      ],
+      "height": 2
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "terrainTags": [
+        "river",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "terrainTags": [
+        "hills",
+        "river",
+        "plains",
+        "forest"
+      ],
+      "resources": [
+        "coal"
+      ],
+      "height": 2
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "terrainTags": [
+        "forest",
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "terrainTags": [
+        "river",
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 6,
+      "terrainTags": [
+        "river",
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 6,
+      "terrainTags": [
+        "river",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "terrainTags": [
+        "plains",
+        "river"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 6,
+      "terrainTags": [
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "terrainTags": [
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 18,
+      "row": 6,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 6,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 7,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 7,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 7,
+      "terrainTags": [
+        "coast",
+        "grassland"
+      ],
+      "resources": [
+        "horses"
+      ],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 7,
+      "terrainTags": [
+        "forest",
+        "grassland",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 6,
+      "row": 7,
+      "terrainTags": [
+        "hills",
+        "forest",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 7,
+      "row": 7,
+      "terrainTags": [
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 7,
+      "terrainTags": [
+        "hills",
+        "river",
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 7,
+      "terrainTags": [
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 10,
+      "row": 7,
+      "terrainTags": [
+        "forest",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 11,
+      "row": 7,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 7,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 7,
+      "terrainTags": [
+        "plains",
+        "river"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 14,
+      "row": 7,
+      "terrainTags": [
+        "river",
+        "jungle",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 15,
+      "row": 7,
+      "terrainTags": [
+        "forest",
+        "river"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 16,
+      "row": 7,
+      "terrainTags": [
+        "river",
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "terrainTags": [
+        "hills",
+        "coast"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 18,
+      "row": 7,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 7,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 8,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 8,
+      "terrainTags": [
+        "ocean",
+        "forest",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 8,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "terrainTags": [
+        "forest",
+        "grassland",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "terrainTags": [
+        "plains",
+        "forest",
+        "grassland",
+        "river"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "forest",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "terrainTags": [
+        "hills"
+      ],
+      "resources": [],
+      "height": 3
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "terrainTags": [
+        "plains",
+        "forest",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "forest",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "terrainTags": [
+        "forest",
+        "river"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "desert",
+        "hills"
+      ],
+      "resources": [
+        "oil"
+      ],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "terrainTags": [
+        "hills"
+      ],
+      "resources": [],
+      "height": 3
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "forest",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 15,
+      "row": 8,
+      "terrainTags": [
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 8,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "terrainTags": [
+        "plains",
+        "hills"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 18,
+      "row": 8,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 8,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 9,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 9,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 9,
+      "terrainTags": [
+        "plains",
+        "grassland",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 9,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 9,
+      "terrainTags": [
+        "plains",
+        "river"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "terrainTags": [
+        "river",
+        "plains",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "terrainTags": [
+        "hills",
+        "coast",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "terrainTags": [
+        "hills"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 9,
+      "row": 9,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "terrainTags": [
+        "plains",
+        "grassland",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "terrainTags": [
+        "plains",
+        "grassland",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 9,
+      "terrainTags": [
+        "river",
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 9,
+      "terrainTags": [
+        "forest",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 9,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 15,
+      "row": 9,
+      "terrainTags": [
+        "lake",
+        "coast"
+      ],
+      "resources": [
+        "fish"
+      ],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 9,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "terrainTags": [
+        "coast",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 9,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 9,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 10,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 10,
+      "terrainTags": [
+        "plains",
+        "grassland",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "terrainTags": [
+        "mountain"
+      ],
+      "resources": [],
+      "height": 3
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 10,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "grassland",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "terrainTags": [
+        "river",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 14,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "lake",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "lake",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 10,
+      "terrainTags": [
+        "lake"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 10,
+      "terrainTags": [
+        "coast",
+        "forest",
+        "hills",
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 19,
+      "row": 10,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 11,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 3,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 11,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 11,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 11,
+      "terrainTags": [
+        "coast",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 11,
+      "terrainTags": [
+        "coast",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 11,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 11,
+      "terrainTags": [
+        "coast",
+        "plains"
+      ],
+      "resources": [
+        "grapes"
+      ],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 11,
+      "terrainTags": [
+        "plains",
+        "grassland"
+      ],
+      "resources": [
+        "wheat"
+      ],
+      "height": 1
+    },
+    {
+      "col": 16,
+      "row": 11,
+      "terrainTags": [
+        "coast",
+        "plains"
+      ],
+      "resources": [
+        "horses"
+      ],
+      "height": 1
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "terrainTags": [
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 18,
+      "row": 11,
+      "terrainTags": [
+        "forest"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 19,
+      "row": 11,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 12,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 1
+    },
+    {
+      "col": 2,
+      "row": 12,
+      "terrainTags": [
+        "hills",
+        "mountain"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 3,
+      "row": 12,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 12,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 12,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 12,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 12,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 12,
+      "terrainTags": [
+        "plains",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "forest",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 12,
+      "terrainTags": [
+        "forest",
+        "plains",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 12,
+      "terrainTags": [
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 12,
+      "terrainTags": [
+        "hills",
+        "grassland",
+        "plains"
+      ],
+      "resources": [
+        "aluminium"
+      ],
+      "height": 2
+    },
+    {
+      "col": 18,
+      "row": 12,
+      "terrainTags": [
+        "hills",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 2
+    },
+    {
+      "col": 19,
+      "row": 12,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 13,
+      "terrainTags": [
+        "coast",
+        "ocean",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 13,
+      "terrainTags": [
+        "coast",
+        "plains",
+        "grassland"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast",
+        "grassland",
+        "plains"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 13,
+      "terrainTags": [
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 13,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 13,
+      "terrainTags": [
+        "coast",
+        "forest",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 13,
+      "terrainTags": [
+        "plains",
+        "forest"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 13,
+      "terrainTags": [
+        "plains",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 13,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 0,
+      "row": 14,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 1,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 2,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 3,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 4,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 5,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 6,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 7,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 8,
+      "row": 14,
+      "terrainTags": [
+        "ocean",
+        "coast"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 9,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 10,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 11,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 12,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 13,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 14,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 15,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 16,
+      "row": 14,
+      "terrainTags": [
+        "coast",
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 17,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 18,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    },
+    {
+      "col": 19,
+      "row": 14,
+      "terrainTags": [
+        "ocean"
+      ],
+      "resources": [],
+      "height": 0
+    }
+  ]
+}

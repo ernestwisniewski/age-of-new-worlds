@@ -1,0 +1,43 @@
+{
+  "apiVersion": 7,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "command",
+      "result": {
+        "stamp": {
+          "revision": 7,
+          "stateDigest": "digest-7",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "outcome": {
+          "status": "rejected",
+          "code": "stale_revision"
+        },
+        "events": [],
+        "evidence": null,
+        "viewPatch": {
+          "fromRevision": 7,
+          "toRevision": 7,
+          "turn": 7,
+          "turnLifecycle": null,
+          "outcome": null,
+          "upsertedUnits": [],
+          "removedUnitIds": [],
+          "upsertedCities": [],
+          "removedCityIds": [],
+          "upsertedArtifacts": [],
+          "removedArtifactIds": [],
+          "upsertedFieldImprovements": [],
+          "removedFieldImprovementCoordinates": [],
+          "upsertedRoads": [],
+          "removedRoadCoordinates": [],
+          "pendingAction": null,
+          "cityFoundingDraft": null,
+          "diplomacy": null
+        }
+      }
+    }
+  }
+}

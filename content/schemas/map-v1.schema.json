@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aonw.invalid/schemas/map-v1.schema.json",
+  "title": "Age of New Worlds map v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "gridLayout",
+    "cols",
+    "rows",
+    "mapName",
+    "defaultZoom",
+    "objectives",
+    "tiles"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "gridLayout": { "const": "oddQFlatTop" },
+    "cols": { "type": "integer", "minimum": 5, "maximum": 40 },
+    "rows": { "type": "integer", "minimum": 5, "maximum": 30 },
+    "mapName": { "$ref": "#/$defs/contentId" },
+    "defaultZoom": { "type": "number", "exclusiveMinimum": 0 },
+    "objectives": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/objective" }
+    },
+    "tiles": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tile" }
+    }
+  },
+  "$defs": {
+    "contentId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$"
+    },
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["col", "row"],
+      "properties": {
+        "col": { "type": "integer", "minimum": 0 },
+        "row": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "terrainTag": {
+      "enum": [
+        "ocean",
+        "coast",
+        "lake",
+        "plains",
+        "grassland",
+        "desert",
+        "tundra",
+        "snow",
+        "mountain",
+        "hills",
+        "wetlands",
+        "jungle",
+        "forest",
+        "river"
+      ]
+    },
+    "resource": {
+      "enum": [
+        "wheat",
+        "fish",
+        "deer",
+        "sheep",
+        "rice",
+        "cow",
+        "apple",
+        "banana",
+        "citrus",
+        "gold",
+        "silver",
+        "gems",
+        "silk",
+        "spices",
+        "cotton",
+        "grapes",
+        "ivory",
+        "pearls",
+        "coffee",
+        "cocoa",
+        "tobacco",
+        "sugar",
+        "iron",
+        "coal",
+        "oil",
+        "aluminium",
+        "uranium",
+        "horses",
+        "marble"
+      ]
+    },
+    "tile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "col",
+        "row",
+        "terrainTags",
+        "resources",
+        "height"
+      ],
+      "properties": {
+        "col": { "type": "integer", "minimum": 0 },
+        "row": { "type": "integer", "minimum": 0 },
+        "terrainTags": {
+          "description": "Ordered terrain source of truth; order expresses authored precedence.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/terrainTag" }
+        },
+        "resources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/resource" }
+        },
+        "height": { "type": "integer", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "hex",
+        "requiredHoldTurns",
+        "victoryPoints",
+        "goldPerTurn"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/contentId" },
+        "type": {
+          "enum": [
+            "ruins",
+            "strategicPass",
+            "holySite",
+            "legendaryResource"
+          ]
+        },
+        "hex": { "$ref": "#/$defs/coordinate" },
+        "requiredHoldTurns": { "type": "integer", "minimum": 1 },
+        "victoryPoints": { "type": "integer", "minimum": 0 },
+        "goldPerTurn": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

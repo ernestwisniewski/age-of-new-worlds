@@ -30,7 +30,7 @@ void main() {
     final identity =
         jsonDecode(
               File(
-                '../../aonw_tests/fixtures/maps/aonw2_starter/'
+                '../../tests/fixtures/maps/aonw2_starter/'
                 'map_view_identity.json',
               ).readAsStringSync(),
             )

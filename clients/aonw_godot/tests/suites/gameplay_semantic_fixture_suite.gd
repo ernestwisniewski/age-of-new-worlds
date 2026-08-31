@@ -110,7 +110,7 @@ func _actual(command: AonwClientReadModels.CommandResult) -> Dictionary:
 
 func _fixture_document(name: String) -> String:
 	var file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/%s" % name,
+		"res://../../tests/fixtures/client_protocol/%s" % name,
 		FileAccess.READ,
 	)
 	if file == null:

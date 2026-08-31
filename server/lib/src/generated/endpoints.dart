@@ -10,6 +10,7 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../app_status/app_status_endpoint.dart' as _i2;
 import '../auth/account_profile_endpoint.dart' as _i3;

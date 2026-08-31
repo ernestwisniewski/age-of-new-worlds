@@ -1,0 +1,73 @@
+{
+  "floatTolerance": 0.0001,
+  "maps": [
+    {
+      "mapId": "aonw2_starter",
+      "document": "content/maps/aonw2_starter/map.json",
+      "contentHash": "4d5603cc00fa8963a71c23133570f89f43c734598d86579e12e1b1059da8712d",
+      "cols": 7,
+      "rows": 7
+    },
+    {
+      "mapId": "dravonia",
+      "document": "content/maps/dravonia/map.json",
+      "contentHash": "64d8d98659a05cf6ba19fe7e0ae0d5e83b70f8b9da753cde9bf1459199519c82",
+      "cols": 40,
+      "rows": 30
+    }
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "name": "compact",
+      "width": 800,
+      "height": 600
+    }
+  ],
+  "cases": [
+    {
+      "name": "center",
+      "kind": "center",
+      "hex": [2, 2],
+      "expectedHex": [2, 2]
+    },
+    {
+      "name": "outerEdge",
+      "kind": "edge",
+      "hex": [0, 0],
+      "corners": [2, 3],
+      "expectedHex": null
+    },
+    {
+      "name": "corner",
+      "kind": "corner",
+      "hex": [2, 2],
+      "corner": 0,
+      "expectedHex": [2, 2]
+    },
+    {
+      "name": "outsideMap",
+      "kind": "normalized",
+      "point": [-0.05, -0.05],
+      "expectedHex": null
+    },
+    {
+      "name": "hexBoundary",
+      "kind": "centerMidpoint",
+      "hexes": [
+        [0, 0],
+        [1, 0]
+      ],
+      "expectedHex": [0, 0]
+    }
+  ],
+  "largeMapDiagnosticBudget": {
+    "mapId": "dravonia",
+    "maxDurationMicros": 5000000,
+    "maxResidentMemoryDeltaBytes": 536870912
+  }
+}

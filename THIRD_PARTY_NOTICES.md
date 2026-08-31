@@ -46,7 +46,7 @@ subject to their owners' trademark guidelines.
   its upstream MIT license. The local patch adds current Swift SDK authorization
   error cases while preserving the 7.x Dart API required by
   the pinned `serverpod_auth_idp_flutter` release.
-- `third_party/gamepads_linux/` vendors `gamepads_linux` 0.1.2 under its
+- `clients/aonw_flutter/plugins/gamepads_linux/` vendors `gamepads_linux` 0.1.2 under its
   upstream MIT license. The local patch makes missing Linux input devices a
   supported state, synchronizes hotplug state, and delivers native events on
   the GTK main context.

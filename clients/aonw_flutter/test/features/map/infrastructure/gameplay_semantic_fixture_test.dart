@@ -62,7 +62,7 @@ Map<String, dynamic> _fixture(String name) =>
 String _fixturePath(String name) {
   for (final root in [
     'test/fixtures/client_protocol',
-    '../../test/fixtures/client_protocol',
+    '../../tests/fixtures/client_protocol',
   ]) {
     final path = '$root/$name';
     if (File(path).existsSync()) return path;

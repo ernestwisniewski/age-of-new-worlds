@@ -1,0 +1,23 @@
+# Workspace-wide analysis policy. Package configs compose this file with the
+# appropriate upstream profile (`flutter_lints` or `lints/recommended`).
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    discarded_futures: true
+    unawaited_futures: true
+    avoid_void_async: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    always_use_package_imports: true
+    directives_ordering: true
+    avoid_dynamic_calls: true
+    avoid_returning_this: true
+    cascade_invocations: true
+    require_trailing_commas: true

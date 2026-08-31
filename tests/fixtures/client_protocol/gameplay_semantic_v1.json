@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "intentFixture": "move_unit_request.json",
+  "expectedIntent": {
+    "type": "moveUnit",
+    "expectedRevision": 7,
+    "unitId": "unit-1",
+    "target": {
+      "col": 3,
+      "row": 4
+    }
+  },
+  "cases": [
+    {
+      "name": "accepted",
+      "responseFixture": "command_result_response.json",
+      "expected": {
+        "accepted": true,
+        "rejection": null,
+        "revision": 8,
+        "patch": {
+          "fromRevision": 7,
+          "toRevision": 8,
+          "turn": 7,
+          "upsertedUnitIds": [
+            "unit-1"
+          ],
+          "removedUnitIds": []
+        },
+        "events": [
+          {
+            "revision": 8,
+            "index": 0,
+            "kind": "unitMoved"
+          }
+        ],
+        "evidenceKind": "unitMovement",
+        "outcomeCondition": null
+      }
+    },
+    {
+      "name": "stale",
+      "responseFixture": "stale_move_unit_response.json",
+      "expected": {
+        "accepted": false,
+        "rejection": "stale_revision",
+        "revision": 7,
+        "patch": {
+          "fromRevision": 7,
+          "toRevision": 7,
+          "turn": 7,
+          "upsertedUnitIds": [],
+          "removedUnitIds": []
+        },
+        "events": [],
+        "evidenceKind": null,
+        "outcomeCondition": null
+      }
+    }
+  ]
+}

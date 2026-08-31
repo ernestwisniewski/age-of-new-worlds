@@ -1,0 +1,3359 @@
+{
+  "schemaVersion": 1,
+  "sourceMapContentHash": "1743616d03d54d04f53fc699c2a6ec2e1ba30f59665ddaa8776419fe06626571",
+  "orientation": "oddQFlatTop",
+  "hexRadiusMeters": 10.0,
+  "maxTerrainHeightMeters": 29.5,
+  "worldOriginMeters": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "referenceTransform": {
+    "translationMeters": {
+      "x": 0.0,
+      "y": 0.05,
+      "z": 0.0
+    },
+    "rotationDegrees": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  "edgeBlendMeters": 2.0,
+  "cityCoreRadiusMeters": 4.0,
+  "maxCitySlope": 0.35,
+  "hexHeights": [
+    {
+      "col": 0,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 0,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 6,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 1,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 6,
+      "row": 1,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 7,
+      "row": 1,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 1,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 19,
+      "row": 1,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 20,
+      "row": 1,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 21,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 4,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 2,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 6,
+      "row": 2,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 7,
+      "row": 2,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 2,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 18,
+      "row": 2,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 19,
+      "row": 2,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 20,
+      "row": 2,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 21,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 3,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 5,
+      "row": 3,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 6,
+      "row": 3,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 7,
+      "row": 3,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 3,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 11,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 3,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 14,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 3,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 3,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 18,
+      "row": 3,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 19,
+      "row": 3,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 20,
+      "row": 3,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 21,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 3,
+      "row": 4,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 10,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 4,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 20,
+      "row": 4,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 21,
+      "row": 4,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 22,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 2,
+      "row": 5,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 3,
+      "row": 5,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 5,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 5,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 5,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 19,
+      "row": 5,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 20,
+      "row": 5,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 21,
+      "row": 5,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 22,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 2,
+      "row": 6,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 3,
+      "row": 6,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 5,
+      "row": 6,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 6,
+      "row": 6,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 12,
+      "row": 6,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 13,
+      "row": 6,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 6,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 6,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 20,
+      "row": 6,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 21,
+      "row": 6,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 22,
+      "row": 6,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 23,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 2,
+      "row": 7,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 3,
+      "row": 7,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 5,
+      "row": 7,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 6,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 7,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 11,
+      "row": 7,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 12,
+      "row": 7,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 13,
+      "row": 7,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 14,
+      "row": 7,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 15,
+      "row": 7,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 7,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 19,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 7,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 23,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 8,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 3,
+      "row": 8,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 15,
+      "row": 8,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 16,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 9,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 5,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 9,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 12,
+      "row": 9,
+      "baseHeightMeters": 29.5,
+      "minHeightMeters": 26.55,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 13,
+      "row": 9,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 14,
+      "row": 9,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 15,
+      "row": 9,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 16,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 11,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 9,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 13,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 15,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 18,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 12,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 9,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 12,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 12,
+      "row": 12,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 13,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 12,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 16,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 2,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 3,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 8,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 13,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 16,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 13,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 20,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 14,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 8,
+      "row": 14,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 9,
+      "row": 14,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 10,
+      "row": 14,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 11,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 14,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 14,
+      "row": 14,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 15,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 14,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 19,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 15,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 7,
+      "row": 15,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 8,
+      "row": 15,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 9,
+      "row": 15,
+      "baseHeightMeters": 23.6,
+      "minHeightMeters": 20.650000000000002,
+      "maxHeightMeters": 29.5
+    },
+    {
+      "col": 10,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 15,
+      "baseHeightMeters": 5.9,
+      "minHeightMeters": 2.95,
+      "maxHeightMeters": 11.8
+    },
+    {
+      "col": 12,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 16,
+      "baseHeightMeters": 11.8,
+      "minHeightMeters": 8.850000000000001,
+      "maxHeightMeters": 17.700000000000003
+    },
+    {
+      "col": 9,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 16,
+      "baseHeightMeters": 17.700000000000003,
+      "minHeightMeters": 14.750000000000004,
+      "maxHeightMeters": 23.6
+    },
+    {
+      "col": 11,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 0,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 1,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 2,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 3,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 4,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 5,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 6,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 7,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 8,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 9,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 10,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 11,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 12,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 13,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 14,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 15,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 16,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 17,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 18,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 19,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 20,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 21,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 22,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 23,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    },
+    {
+      "col": 24,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.95,
+      "maxHeightMeters": 5.9
+    }
+  ]
+}

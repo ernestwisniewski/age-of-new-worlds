@@ -8,6 +8,11 @@ Desktop.ini
 # Local Codex workspace
 .codex/
 
+# Workspace-local toolchains and generated distributions
+.fvm/
+.toolchains/
+dist/
+
 # Editors and IDEs
 .idea/
 .vscode/
@@ -27,10 +32,25 @@ Desktop.ini
 *.orig
 
 # Local environment and secrets
+.envrc
 .env
 .env.*
+*.env
 !.env.example
 !.env.*.example
+server/config/passwords.yaml
+
+# Signing material, release credentials, and database snapshots
+*.jks
+*.keystore
+*.p12
+*.pem
+*.mobileprovision
+*.provisionprofile
+*.sql
+*.sql.gz
+*.dump
+*.backup
 
 # Rust
 **/target/
@@ -50,6 +70,7 @@ Desktop.ini
 **/doc/api/
 **/.flutter-plugins
 **/.flutter-plugins-dependencies
+**/lcov.info
 app.*.symbols
 app.*.map.json
 
@@ -59,6 +80,18 @@ app.*.map.json
 **/DerivedData/
 **/xcuserdata/
 *.xcuserstate
+
+# Android platform-local state and release artifacts
+**/android/.gradle/
+**/android/.kotlin/
+**/android/.cxx/
+**/android/local.properties
+**/android/key.properties
+**/android/**/release/
+
+# Linux and Windows Flutter generated files
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
 
 # Godot caches and generated native libraries
 **/.godot/

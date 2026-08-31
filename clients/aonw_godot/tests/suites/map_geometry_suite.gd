@@ -20,9 +20,9 @@ const TerrainArtifactRepository := preload(
 	"res://game/infrastructure/terrain/terrain_compiled_artifact_repository.gd"
 )
 const MapSurface := preload("res://game/presentation/map/map_surface.gd")
-const GEOMETRY_FIXTURE := "res://../../aonw_tests/fixtures/geometry/odd_q_flat_top.json"
+const GEOMETRY_FIXTURE := "res://../../tests/fixtures/geometry/odd_q_flat_top.json"
 const IDENTITY_FIXTURE := (
-	"res://../../aonw_tests/fixtures/maps/aonw2_starter/map_view_identity.json"
+	"res://../../tests/fixtures/maps/aonw2_starter/map_view_identity.json"
 )
 
 var _failures: Array[String]

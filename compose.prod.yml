@@ -1,0 +1,12 @@
+services:
+  postgres:
+    profiles: !override ["prod"]
+
+  redis:
+    profiles: !override ["prod"]
+
+  server:
+    profiles: !override ["prod"]
+    environment:
+      AONW_COMPOSE_RUN_MODE: production
+      AONW_PROD_OVERLAY: "1"

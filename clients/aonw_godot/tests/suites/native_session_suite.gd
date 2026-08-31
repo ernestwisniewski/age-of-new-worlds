@@ -900,7 +900,7 @@ func _test_native_engine_boundary() -> void:
 
 func _test_shared_client_contract() -> void:
 	var inspect_request_file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/inspect_map_request.json",
+		"res://../../tests/fixtures/client_protocol/inspect_map_request.json",
 		FileAccess.READ,
 	)
 	_check(inspect_request_file != null, "shared inspectMap request golden opens in Godot")
@@ -914,7 +914,7 @@ func _test_shared_client_contract() -> void:
 		)
 
 	var request_file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/move_unit_request.json",
+		"res://../../tests/fixtures/client_protocol/move_unit_request.json",
 		FileAccess.READ,
 	)
 	_check(request_file != null, "shared client request golden opens in Godot")
@@ -928,7 +928,7 @@ func _test_shared_client_contract() -> void:
 		)
 
 	var response_file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/command_result_response.json",
+		"res://../../tests/fixtures/client_protocol/command_result_response.json",
 		FileAccess.READ,
 	)
 	_check(response_file != null, "shared client response golden opens in Godot")
@@ -996,7 +996,7 @@ func _test_shared_client_contract() -> void:
 		)
 
 	var rejection_codes_file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/command_rejection_codes.json",
+		"res://../../tests/fixtures/client_protocol/command_rejection_codes.json",
 		FileAccess.READ,
 	)
 	_check(rejection_codes_file != null, "shared command rejection-code fixture opens in Godot")
@@ -1008,7 +1008,7 @@ func _test_shared_client_contract() -> void:
 		)
 
 	var map_response_file := FileAccess.open(
-		"res://../../test/fixtures/client_protocol/map_inspected_response.json",
+		"res://../../tests/fixtures/client_protocol/map_inspected_response.json",
 		FileAccess.READ,
 	)
 	_check(map_response_file != null, "shared map response golden opens in Godot")

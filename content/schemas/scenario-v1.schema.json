@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aonw.dev/schemas/scenario-v1.schema.json",
+  "title": "AoNW Scenario v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scenarioId", "mapId", "rulesetId", "initialUnits"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "scenarioId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "mapId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "rulesetId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "initialUnits": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "ownerPlayerId", "kind", "name", "col", "row"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "ownerPlayerId": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "kind": {
+            "enum": [
+              "commander", "warrior", "archer", "settler", "worker", "merchant",
+              "scout", "spearman", "cavalry", "catapult", "heavyInfantry",
+              "fieldCannon", "rifleman", "tank", "scoutShip", "warship", "reconPlane"
+            ]
+          },
+          "name": { "type": "string", "minLength": 1 },
+          "col": { "type": "integer" },
+          "row": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

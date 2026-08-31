@@ -278,7 +278,7 @@ Directory _repositoryRoot() {
   var candidate = Directory.current.absolute;
   while (candidate.parent.path != candidate.path) {
     if (File('${candidate.path}/Makefile').existsSync() &&
-        Directory('${candidate.path}/aonw_tests').existsSync()) {
+        Directory('${candidate.path}/tests').existsSync()) {
       return candidate;
     }
     candidate = candidate.parent;

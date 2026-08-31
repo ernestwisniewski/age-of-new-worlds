@@ -409,7 +409,7 @@ File _starterMap() {
 File _fixture(String name) {
   for (final root in [
     'test/fixtures/client_protocol',
-    '../../test/fixtures/client_protocol',
+    '../../tests/fixtures/client_protocol',
   ]) {
     final candidate = File('$root/$name');
     if (candidate.existsSync()) return candidate;

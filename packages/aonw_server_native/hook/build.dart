@@ -26,10 +26,7 @@ void _requireNativeHostTarget(CodeConfig code) {
   );
 }
 
-Future<void> _buildRust(
-  BuildInput input,
-  BuildOutputBuilder output,
-) async {
+Future<void> _buildRust(BuildInput input, BuildOutputBuilder output) async {
   final engineRoot = input.packageRoot.resolve('../../engine/');
   final code = input.config.code;
   final target = _rustTarget(code);
@@ -86,21 +83,19 @@ Future<void> _buildRust(
   );
 }
 
-String _rustTarget(CodeConfig code) => switch ((
-  code.targetOS,
-  code.targetArchitecture,
-)) {
-  (OS.macOS, Architecture.arm64) => 'aarch64-apple-darwin',
-  (OS.macOS, Architecture.x64) => 'x86_64-apple-darwin',
-  (OS.linux, Architecture.arm64) => 'aarch64-unknown-linux-gnu',
-  (OS.linux, Architecture.x64) => 'x86_64-unknown-linux-gnu',
-  (OS.windows, Architecture.arm64) => 'aarch64-pc-windows-msvc',
-  (OS.windows, Architecture.x64) => 'x86_64-pc-windows-msvc',
-  _ => throw UnsupportedError(
-    'Unsupported Serverpod Rust host target: '
-    '${code.targetOS}/${code.targetArchitecture}.',
-  ),
-};
+String _rustTarget(CodeConfig code) =>
+    switch ((code.targetOS, code.targetArchitecture)) {
+      (OS.macOS, Architecture.arm64) => 'aarch64-apple-darwin',
+      (OS.macOS, Architecture.x64) => 'x86_64-apple-darwin',
+      (OS.linux, Architecture.arm64) => 'aarch64-unknown-linux-gnu',
+      (OS.linux, Architecture.x64) => 'x86_64-unknown-linux-gnu',
+      (OS.windows, Architecture.arm64) => 'aarch64-pc-windows-msvc',
+      (OS.windows, Architecture.x64) => 'x86_64-pc-windows-msvc',
+      _ => throw UnsupportedError(
+        'Unsupported Serverpod Rust host target: '
+        '${code.targetOS}/${code.targetArchitecture}.',
+      ),
+    };
 
 Future<void> _addEngineDependencies(
   Uri engineRoot,

@@ -1,0 +1,4234 @@
+{
+  "schemaVersion": 1,
+  "sourceMapContentHash": "8765fc5eb23e7d715a97a743a533c6381988b7afbad57f208868223c6d46fbb5",
+  "orientation": "oddQFlatTop",
+  "hexRadiusMeters": 10.0,
+  "maxTerrainHeightMeters": 20.0,
+  "worldOriginMeters": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "referenceTransform": {
+    "translationMeters": {
+      "x": 0.0,
+      "y": 0.05,
+      "z": 0.0
+    },
+    "rotationDegrees": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  "edgeBlendMeters": 2.0,
+  "cityCoreRadiusMeters": 4.0,
+  "maxCitySlope": 0.35,
+  "hexHeights": [
+    {
+      "col": 0,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 2,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 3,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 5,
+      "row": 0,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 6,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 7,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 9,
+      "row": 0,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 10,
+      "row": 0,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 11,
+      "row": 0,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 12,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 13,
+      "row": 0,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 15,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 16,
+      "row": 0,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 17,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 18,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 0,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 0,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 26,
+      "row": 0,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 27,
+      "row": 0,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 28,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 0,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 2,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 3,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 4,
+      "row": 1,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 5,
+      "row": 1,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 6,
+      "row": 1,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 7,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 8,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 10,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 11,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 1,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 15,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 16,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 17,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 1,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 24,
+      "row": 1,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 25,
+      "row": 1,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 26,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 27,
+      "row": 1,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 1,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 29,
+      "row": 1,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 0,
+      "row": 2,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 1,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 2,
+      "row": 2,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 4,
+      "row": 2,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 5,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 6,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 7,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 2,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 16,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 17,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 18,
+      "row": 2,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 2,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 21,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 23,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 24,
+      "row": 2,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 25,
+      "row": 2,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 26,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 28,
+      "row": 2,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 29,
+      "row": 2,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 3,
+      "row": 3,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 5,
+      "row": 3,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 6,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 15,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 16,
+      "row": 3,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 17,
+      "row": 3,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 18,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 3,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 3,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 23,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 3,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 25,
+      "row": 3,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 26,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 3,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 29,
+      "row": 3,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 0,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 10,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 18,
+      "row": 4,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 19,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 4,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 23,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 25,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 26,
+      "row": 4,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 27,
+      "row": 4,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 28,
+      "row": 4,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 29,
+      "row": 4,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 6,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 5,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 9,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 12,
+      "row": 5,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 13,
+      "row": 5,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 5,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 19,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 5,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 22,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 5,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 5,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 5,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 5,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 29,
+      "row": 5,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 0,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 6,
+      "row": 6,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 13,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 15,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 20,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 21,
+      "row": 6,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 22,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 23,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 26,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 6,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 6,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 29,
+      "row": 6,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 0,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 2,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 3,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 6,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 7,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 7,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 9,
+      "row": 7,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 10,
+      "row": 7,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 11,
+      "row": 7,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 12,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 14,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 18,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 7,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 20,
+      "row": 7,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 21,
+      "row": 7,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 22,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 23,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 7,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 7,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 29,
+      "row": 7,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 8,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 2,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 16,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 18,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 21,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 27,
+      "row": 8,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 8,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 29,
+      "row": 8,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 2,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 3,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 5,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 18,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 9,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 25,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 26,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 9,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 29,
+      "row": 9,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 0,
+      "row": 10,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 1,
+      "row": 10,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 2,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 7,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 16,
+      "row": 10,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 17,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 10,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 10,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 20,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 23,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 25,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 10,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 27,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 28,
+      "row": 10,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 29,
+      "row": 10,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 11,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 3,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 4,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 5,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 8,
+      "row": 11,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 9,
+      "row": 11,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 10,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 14,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 11,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 19,
+      "row": 11,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 11,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 21,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 11,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 11,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 25,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 26,
+      "row": 11,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 11,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 29,
+      "row": 11,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 12,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 2,
+      "row": 12,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 3,
+      "row": 12,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 4,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 12,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 6,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 12,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 9,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 12,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 15,
+      "row": 12,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 16,
+      "row": 12,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 17,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 18,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 12,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 12,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 28,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 12,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 13,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 1,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 2,
+      "row": 13,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 3,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 4,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 5,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 6,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 7,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 13,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 14,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 15,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 16,
+      "row": 13,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 17,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 18,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 13,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 22,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 25,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 13,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 13,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 14,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 1,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 3,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 6,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 9,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 10,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 14,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 13,
+      "row": 14,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 14,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 15,
+      "row": 14,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 16,
+      "row": 14,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 17,
+      "row": 14,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 18,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 14,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 23,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 14,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 26,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 27,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 14,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 15,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 3,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 15,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 5,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 6,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 15,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 14,
+      "row": 15,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 15,
+      "row": 15,
+      "baseHeightMeters": 20.0,
+      "minHeightMeters": 18.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 16,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 17,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 18,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 15,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 23,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 24,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 25,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 26,
+      "row": 15,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 15,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 16,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 3,
+      "row": 16,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 4,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 8,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 9,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 10,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 16,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 13,
+      "row": 16,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 14,
+      "row": 16,
+      "baseHeightMeters": 16.0,
+      "minHeightMeters": 14.0,
+      "maxHeightMeters": 20.0
+    },
+    {
+      "col": 15,
+      "row": 16,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 16,
+      "row": 16,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 17,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 23,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 16,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 25,
+      "row": 16,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 27,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 16,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 17,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 3,
+      "row": 17,
+      "baseHeightMeters": 12.0,
+      "minHeightMeters": 10.0,
+      "maxHeightMeters": 16.0
+    },
+    {
+      "col": 4,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 9,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 10,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 17,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 14,
+      "row": 17,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 15,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 16,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 17,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 19,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 22,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 23,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 26,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 27,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 28,
+      "row": 17,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 29,
+      "row": 17,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 3,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 4,
+      "row": 18,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 5,
+      "row": 18,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 6,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 7,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 9,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 11,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 12,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 13,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 14,
+      "row": 18,
+      "baseHeightMeters": 8.0,
+      "minHeightMeters": 6.0,
+      "maxHeightMeters": 12.0
+    },
+    {
+      "col": 15,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 16,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 19,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 20,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 21,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 23,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 25,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 26,
+      "row": 18,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 18,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 0,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 1,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 2,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 3,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 4,
+      "row": 19,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 5,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 6,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 7,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 8,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 9,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 10,
+      "row": 19,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 11,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 12,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 13,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 14,
+      "row": 19,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 15,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 16,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 17,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 18,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 19,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 20,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 21,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 22,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 23,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 24,
+      "row": 19,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 25,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 26,
+      "row": 19,
+      "baseHeightMeters": 4.0,
+      "minHeightMeters": 2.0,
+      "maxHeightMeters": 8.0
+    },
+    {
+      "col": 27,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 28,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    },
+    {
+      "col": 29,
+      "row": 19,
+      "baseHeightMeters": 0.0,
+      "minHeightMeters": -2.0,
+      "maxHeightMeters": 4.0
+    }
+  ]
+}

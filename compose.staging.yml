@@ -1,0 +1,12 @@
+services:
+  postgres:
+    profiles: !override ["staging"]
+
+  redis:
+    profiles: !override ["staging"]
+
+  server:
+    profiles: !override ["staging"]
+    environment:
+      AONW_COMPOSE_RUN_MODE: staging
+      AONW_STAGING_OVERLAY: "1"
