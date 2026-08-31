@@ -28,11 +28,12 @@ Boundaries are:
 
 ```mermaid
 flowchart LR
-  Flutter["Flutter / Flame"] --> LocalBoundary["Dart native binding"]
-  Godot["Godot"] --> GodotBoundary["GDExtension"]
+  Flutter["Flutter / Flame"] -->|local play| LocalBoundary["Dart native binding"]
+  Godot["Godot"] -->|local play| GodotBoundary["GDExtension"]
   LocalBoundary --> Rust["Rust engine and local runtime"]
   GodotBoundary --> Rust
-  Flutter --> Serverpod["Serverpod auth and game host"]
+  Flutter -->|online play| Serverpod["Serverpod auth and game host"]
+  Godot -->|online play| Serverpod
   Serverpod --> ServerBoundary["Server native binding"]
   ServerBoundary --> Rust
   Serverpod --> PostgreSQL[(PostgreSQL)]
