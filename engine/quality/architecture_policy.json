@@ -81,6 +81,7 @@
     ],
     "aonw_server_runtime": [
       "dev:aonw_local_runtime",
+      "dev:aonw_testkit",
       "normal:aonw_content",
       "normal:aonw_contract_mapping",
       "normal:aonw_contracts",
@@ -158,6 +159,7 @@
     "engine/crates/aonw_engine/src/movement/route_search.rs": 551,
     "engine/crates/aonw_engine/src/state_digest/tests/state_completeness.rs": 640,
     "engine/crates/aonw_local_runtime/src/client_protocol/decode.rs": 524,
-    "engine/crates/aonw_local_runtime/src/session/runtime.rs": 556
+    "engine/crates/aonw_local_runtime/src/session/runtime.rs": 556,
+    "engine/crates/aonw_server_runtime/tests/player_command_parity.rs": 619
   }
 }

@@ -181,6 +181,7 @@ dependencies = [
  "aonw_engine",
  "aonw_local_runtime",
  "aonw_projection",
+ "aonw_testkit",
  "serde_json",
 ]
 

@@ -19,6 +19,7 @@ aonw_projection = { path = "../aonw_projection" }
 
 [dev-dependencies]
 aonw_local_runtime = { path = "../aonw_local_runtime" }
+aonw_testkit = { path = "../aonw_testkit" }
 serde_json.workspace = true
 
 [lints]
