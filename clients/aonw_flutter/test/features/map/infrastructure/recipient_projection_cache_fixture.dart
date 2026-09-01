@@ -26,6 +26,7 @@ AonwPlayerViewSnapshot _snapshot({
   AonwPlayerEconomyView? economy,
   AonwPlayerResearchView? research,
   AonwPlayerVictoryView? victory,
+  List<AonwPlayerUnitView>? units,
 }) => AonwPlayerViewSnapshot(
   stamp: _stamp(
     revision: revision,
@@ -53,7 +54,7 @@ AonwPlayerViewSnapshot _snapshot({
   pendingAction: pendingAction,
   cityFoundingDraft: cityFoundingDraft,
   diplomacy: _diplomacy(),
-  units: [_unit()],
+  units: units ?? [_unit()],
   cities: const [],
   artifacts: const [],
   fieldImprovements: const [],
@@ -71,7 +72,12 @@ AonwSessionStamp _stamp({
   rulesetHash: rulesetHash ?? 'c' * 64,
 );
 
-AonwPlayerUnitView _unit({int col = 0, int row = 0}) => AonwPlayerUnitView(
+AonwPlayerUnitView _unit({
+  int col = 0,
+  int row = 0,
+  int? hitPoints = 7,
+  int? maximumHitPoints = 10,
+}) => AonwPlayerUnitView(
   id: 'unit-1',
   ownerPlayerId: 'player-1',
   kind: AonwUnitKind.commander,
@@ -79,6 +85,8 @@ AonwPlayerUnitView _unit({int col = 0, int row = 0}) => AonwPlayerUnitView(
   coordinate: AonwCoordinate(col: col, row: row),
   movementUnits: 8,
   posture: AonwUnitPosture.active,
+  hitPoints: hitPoints,
+  maximumHitPoints: maximumHitPoints,
   workerBuildCharges: 0,
   workerJob: null,
   workerAssignment: null,

@@ -219,6 +219,21 @@ void main() {
     expect(cache.snapshot, same(after));
   });
 
+  test('rejects missing or overflowing authoritative unit health', () {
+    expect(
+      () => _cache(
+        _snapshot(units: [_unit(hitPoints: 7, maximumHitPoints: null)]),
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => _cache(
+        _snapshot(units: [_unit(hitPoints: 11, maximumHitPoints: 10)]),
+      ),
+      throwsFormatException,
+    );
+  });
+
   test('rejects every conditional-field mutation on a rejected command', () {
     final cases =
         <

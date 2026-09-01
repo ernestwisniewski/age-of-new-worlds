@@ -124,7 +124,10 @@ void main() {
     final command = response.require<AonwCommandResponse>().result;
     expect(command.stamp.revision, 8);
     expect(command.viewPatch.turn, 7);
-    expect(command.viewPatch.upsertedUnits.single.kind, AonwUnitKind.commander);
+    final unit = command.viewPatch.upsertedUnits.single;
+    expect(unit.kind, AonwUnitKind.commander);
+    expect(unit.hitPoints, 7);
+    expect(unit.maximumHitPoints, 10);
     expect(command.events.single, isA<AonwUnitMovedEvent>());
     expect(command.evidence, isA<AonwUnitMovementEvidence>());
 

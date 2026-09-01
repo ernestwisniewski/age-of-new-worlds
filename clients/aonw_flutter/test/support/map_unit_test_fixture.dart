@@ -1,0 +1,32 @@
+part of 'map_test_fixture.dart';
+
+VisibleUnitView testVisibleUnit({
+  String id = 'preview-commander',
+  String ownerPlayerId = 'preview-player',
+  MapHexCoordinate coordinate = (col: 0, row: 0),
+  int movementUnits = 12,
+  VisibleUnitKind kind = VisibleUnitKind.commander,
+  VisibleUnitPosture posture = VisibleUnitPosture.active,
+  int? hitPoints,
+  int? maximumHitPoints,
+  int workerBuildCharges = 0,
+  WorkerJobView? workerJob,
+  MapHexCoordinate? workerAssignment,
+  String? carriedArtifactId,
+  String? excavatingArtifactId,
+}) => VisibleUnitView(
+  id: id,
+  ownerPlayerId: ownerPlayerId,
+  kind: kind,
+  name: 'Commander',
+  coordinate: coordinate,
+  movementUnits: movementUnits,
+  posture: posture,
+  hitPoints: hitPoints,
+  maximumHitPoints: maximumHitPoints,
+  workerBuildCharges: workerBuildCharges,
+  workerJob: workerJob,
+  workerAssignment: workerAssignment,
+  carriedArtifactId: carriedArtifactId,
+  excavatingArtifactId: excavatingArtifactId,
+);

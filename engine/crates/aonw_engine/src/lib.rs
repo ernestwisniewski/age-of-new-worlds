@@ -55,7 +55,7 @@ pub use city::{
 pub use combat::{
     AttackHexCommand, CombatExecution, CombatModifier, CombatModifierKind, CombatOutcome,
     CombatPreview, CombatPreviewQuery, CombatRng, CombatRoll, CombatStatTarget, CombatTarget,
-    EffectiveCombatStats,
+    EffectiveCombatStats, unit_max_hit_points,
 };
 pub use context::{EngineContext, SystemContext};
 pub use diplomacy::{

@@ -59,12 +59,21 @@ pub struct PlayerUnitView {
     movement_units: u32,
     posture: UnitPosture,
     hit_points: Option<u32>,
+    maximum_hit_points: Option<u32>,
     carried_artifact_id: Option<ArtifactId>,
     owned_details: Option<OwnedUnitDetailsView>,
 }
 
 impl PlayerUnitView {
-    pub(crate) fn from_unit(unit: &Unit, disclose_worker: bool) -> Self {
+    pub(crate) fn from_unit(
+        state: &GameState,
+        ruleset: &aonw_content::RulesetDefinition,
+        unit: &Unit,
+        disclose_worker: bool,
+    ) -> Self {
+        let maximum_hit_points = unit
+            .hit_points()
+            .and_then(|_| aonw_engine::unit_max_hit_points(state, ruleset, unit));
         Self {
             id: unit.id().clone(),
             owner_player_id: unit.owner_player_id().clone(),
@@ -75,6 +84,7 @@ impl PlayerUnitView {
             movement_units: unit.movement_units().get(),
             posture: unit.posture(),
             hit_points: unit.hit_points(),
+            maximum_hit_points,
             carried_artifact_id: unit.carried_artifact_id().cloned(),
             owned_details: disclose_worker.then(|| OwnedUnitDetailsView {
                 army: unit.army().to_vec().into_boxed_slice(),
@@ -132,6 +142,11 @@ impl PlayerUnitView {
     pub const fn hit_points(&self) -> Option<u32> {
         self.hit_points
     }
+    /// Returns authoritative maximum combat health when explicit health is used.
+    #[must_use]
+    pub const fn maximum_hit_points(&self) -> Option<u32> {
+        self.maximum_hit_points
+    }
     /// Returns the publicly visible carried artifact.
     #[must_use]
     pub const fn carried_artifact_id(&self) -> Option<&ArtifactId> {
@@ -144,7 +159,11 @@ impl PlayerUnitView {
     }
 }
 
-pub(crate) fn visible_units(state: &GameState, actor: &PlayerId) -> Vec<PlayerUnitView> {
+pub(crate) fn visible_units(
+    state: &GameState,
+    actor: &PlayerId,
+    ruleset: &aonw_content::RulesetDefinition,
+) -> Vec<PlayerUnitView> {
     state
         .units()
         .iter()
@@ -152,12 +171,15 @@ pub(crate) fn visible_units(state: &GameState, actor: &PlayerId) -> Vec<PlayerUn
             unit.owner_player_id() == actor
                 || state.fog_of_war().visibility(actor, unit.position()) == FogVisibility::Visible
         })
-        .map(|unit| PlayerUnitView::from_unit(unit, unit.owner_player_id() == actor))
+        .map(|unit| {
+            PlayerUnitView::from_unit(state, ruleset, unit, unit.owner_player_id() == actor)
+        })
         .collect()
 }
 
 #[cfg(test)]
 mod tests {
+    use aonw_content::RulesetDefinition;
     use aonw_domain::{
         FogOfWar, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFog, PlayerId,
         StateRevision, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
@@ -180,7 +202,7 @@ mod tests {
         )
         .expect("state");
 
-        let identifiers = visible_units(&state, &actor)
+        let identifiers = visible_units(&state, &actor, RulesetDefinition::standard())
             .into_iter()
             .map(|unit| unit.id().as_str().to_owned())
             .collect::<Vec<_>>();
@@ -213,11 +235,42 @@ mod tests {
         .try_build()
         .expect("state");
 
-        let identifiers = visible_units(&state, &actor)
+        let identifiers = visible_units(&state, &actor, RulesetDefinition::standard())
             .into_iter()
             .map(|unit| unit.id().as_str().to_owned())
             .collect::<Vec<_>>();
         assert_eq!(identifiers, ["foreign-visible", "owned-hidden"]);
+    }
+
+    #[test]
+    fn visible_unit_health_includes_authoritative_maximum() {
+        let actor = PlayerId::new("player-1").expect("actor id");
+        let damaged = Unit::builder(
+            UnitId::new("damaged").expect("unit id"),
+            actor.clone(),
+            UnitKind::Commander,
+            "Commander",
+            HexCoord::new(1, 1),
+            MovementUnits::new(10),
+        )
+        .with_hit_points(Some(3))
+        .build()
+        .expect("unit");
+        let state = GameState::try_new(
+            StateRevision::INITIAL,
+            0,
+            HexGridBounds::new(3, 3).expect("bounds"),
+            UnitOccupancyPolicy::Exclusive,
+            [damaged],
+        )
+        .expect("state");
+
+        let view = visible_units(&state, &actor, RulesetDefinition::standard())
+            .into_iter()
+            .next()
+            .expect("visible unit");
+        assert_eq!(view.hit_points(), Some(3));
+        assert_eq!(view.maximum_hit_points(), Some(8));
     }
 
     fn unit(id: &str, actor: &PlayerId, position: HexCoord) -> Unit {

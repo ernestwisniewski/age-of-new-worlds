@@ -151,6 +151,8 @@ AonwPlayerUnitView _unit(
   coordinate: AonwCoordinate(col: col, row: row),
   movementUnits: 12,
   posture: AonwUnitPosture.active,
+  hitPoints: 7,
+  maximumHitPoints: 10,
   workerBuildCharges: ownedDetails?.workerBuildCharges ?? 0,
   workerJob: ownedDetails?.workerJob,
   workerAssignment: ownedDetails?.workerAssignment,

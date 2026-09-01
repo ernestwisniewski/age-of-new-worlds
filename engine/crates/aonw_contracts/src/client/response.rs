@@ -18,7 +18,6 @@ mod research;
 mod session;
 mod victory;
 mod worker;
-
 pub use artifact::{PlayerArtifactLocationViewDto, PlayerArtifactViewDto};
 pub use city::{
     CityExpansionCandidateDto, CityFoundingDraftViewDto, OwnedCityDetailsViewDto, PlayerCityViewDto,
@@ -356,6 +355,8 @@ pub struct PlayerUnitViewDto {
     pub posture: UnitPostureDto,
     /// Public combat health when the unit type uses explicit health.
     pub hit_points: Option<u32>,
+    /// Authoritative maximum combat health in the unit's current progression state.
+    pub maximum_hit_points: Option<u32>,
     /// Publicly visible carried artifact, when present.
     pub carried_artifact_id: Option<String>,
     /// Complete private command and progression state for a recipient-owned unit.

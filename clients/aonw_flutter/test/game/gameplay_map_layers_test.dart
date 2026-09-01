@@ -66,7 +66,7 @@ void main() {
       );
       expect(game.world.unitLayer.debugCreatedCount, 2);
       expect(game.world.unitLayer.debugUpdatedCount, 1);
-      expect(game.world.unitLayer.debugSharedPaintCount, 3);
+      expect(game.world.unitLayer.debugSharedPaintCount, 8);
       expect(game.world.reachableLayer.debugPathBuildCount, 1);
       expect(game.world.routeLayer.debugPathBuildCount, 1);
       expect(game.world.selectionLayer.debugUpdateCount, 2);
@@ -254,7 +254,7 @@ void main() {
       expect(game.world.unitLayer.debugUnitCount, 120);
       expect(game.world.unitLayer.children, hasLength(120));
       expect(game.world.unitLayer.debugCreatedCount, 120);
-      expect(game.world.unitLayer.debugSharedPaintCount, 3);
+      expect(game.world.unitLayer.debugSharedPaintCount, 8);
       expect(game.world.children, hasLength(15));
     },
   );

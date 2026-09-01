@@ -104,6 +104,7 @@ fn unit(value: &PlayerUnitView) -> PlayerUnitViewDto {
         movement_units: value.movement_units(),
         posture: encode_unit_posture(value.posture()),
         hit_points: value.hit_points(),
+        maximum_hit_points: value.maximum_hit_points(),
         carried_artifact_id: value.carried_artifact_id().map(|id| id.as_str().to_owned()),
         owned_details: value.owned_details().map(|details| {
             let activity = details.activity();

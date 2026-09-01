@@ -178,7 +178,7 @@ impl ProjectedView {
         let (field_improvements, roads) = visible_infrastructure(state, recipient, ruleset);
         let turn = PlayerTurnLifecycleView::new(state, recipient);
         let diplomacy = Arc::new(diplomacy_view(state, recipient));
-        let units = visible_units(state, recipient).into();
+        let units = visible_units(state, recipient, ruleset).into();
         let cities = visible_cities(state, recipient).into();
         let artifacts = visible_artifacts(state, recipient).into();
         let pending_action = pending_action(state, recipient).map(Arc::new);

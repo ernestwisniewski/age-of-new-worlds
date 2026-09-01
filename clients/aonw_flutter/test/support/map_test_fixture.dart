@@ -16,6 +16,7 @@ import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
+import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/production/application/production_session_port.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
@@ -32,6 +33,7 @@ import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
 part 'city_test_fixture.dart';
 part 'local_game_test_fixture.dart';
+part 'map_unit_test_fixture.dart';
 
 typedef ProductionOverviewFixture = ({
   ProductionOptionsView options,
@@ -84,6 +86,8 @@ MapScene testMapScene({
   List<RoadView> roads = const [],
   CityFoundingDraftView? cityFoundingDraft,
   GameOutcomeView? outcome,
+  PendingActionView? pendingAction,
+  int actorColorValue = 0xff000000,
 }) {
   final terrains = MapTerrain.values;
   final tiles = <MapTileView>[];
@@ -130,7 +134,7 @@ MapScene testMapScene({
         rulesetHash: 'c' * 64,
       ),
       turn: 1,
-      pendingAction: null,
+      pendingAction: pendingAction,
       outcome: outcome,
       units: units,
       diplomacy:
@@ -156,35 +160,10 @@ MapScene testMapScene({
       fieldImprovements: fieldImprovements,
       roads: roads,
       cityFoundingDraft: cityFoundingDraft,
+      actorColorValue: actorColorValue,
     ),
   );
 }
-
-VisibleUnitView testVisibleUnit({
-  String id = 'preview-commander',
-  String ownerPlayerId = 'preview-player',
-  MapHexCoordinate coordinate = (col: 0, row: 0),
-  int movementUnits = 12,
-  VisibleUnitKind kind = VisibleUnitKind.commander,
-  int workerBuildCharges = 0,
-  WorkerJobView? workerJob,
-  MapHexCoordinate? workerAssignment,
-  String? carriedArtifactId,
-  String? excavatingArtifactId,
-}) => VisibleUnitView(
-  id: id,
-  ownerPlayerId: ownerPlayerId,
-  kind: kind,
-  name: 'Commander',
-  coordinate: coordinate,
-  movementUnits: movementUnits,
-  posture: VisibleUnitPosture.active,
-  workerBuildCharges: workerBuildCharges,
-  workerJob: workerJob,
-  workerAssignment: workerAssignment,
-  carriedArtifactId: carriedArtifactId,
-  excavatingArtifactId: excavatingArtifactId,
-);
 
 SessionStampView testSessionStamp({int revision = 0, String? stateDigest}) =>
     SessionStampView(

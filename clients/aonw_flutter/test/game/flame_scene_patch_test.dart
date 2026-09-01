@@ -92,6 +92,19 @@ void main() {
     expect(patch.removedUnitIds, ['removed']);
   });
 
+  test('upserts a stable unit when authoritative health changes', () {
+    final healthy = testVisibleUnit(hitPoints: 8, maximumHitPoints: 8);
+    final damaged = testVisibleUnit(hitPoints: 3, maximumHitPoints: 8);
+    final scene = testMapScene(units: [healthy]);
+
+    final patch = FlameScenePatch.between(
+      _snapshot(scene, player: scene.player),
+      _snapshot(scene, player: _player(units: [damaged])),
+    );
+
+    expect(patch.unitUpserts, [same(damaged)]);
+  });
+
   test('derives one bounded combat cue only from accepted exact evidence', () {
     final unit = testVisibleUnit();
     final scene = testMapScene(units: [unit]);

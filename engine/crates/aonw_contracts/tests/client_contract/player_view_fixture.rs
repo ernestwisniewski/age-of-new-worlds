@@ -35,7 +35,8 @@ pub(super) fn unit() -> PlayerUnitViewDto {
         coordinate: coordinate(3, 4),
         movement_units: 8,
         posture: UnitPostureDto::Active,
-        hit_points: None,
+        hit_points: Some(7),
+        maximum_hit_points: Some(10),
         carried_artifact_id: None,
         owned_details: None,
     }

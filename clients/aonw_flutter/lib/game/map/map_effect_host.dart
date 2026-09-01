@@ -79,7 +79,11 @@ final class MapEffectHostComponent extends Component {
     for (final movement in patch.movements) {
       final unit = _units.componentForUnit(movement.unitId);
       if (unit == null) continue;
-      final target = _units.centerFor(cache, movement.to);
+      final target = _units.visualCenterFor(
+        cache,
+        movement.unitId,
+        movement.to,
+      );
       if (_reducedMotion) {
         unit.setVisualCenter(target);
         _completedMovementCount += 1;

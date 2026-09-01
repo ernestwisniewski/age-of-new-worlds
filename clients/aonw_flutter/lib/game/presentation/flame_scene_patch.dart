@@ -181,7 +181,7 @@ final class FlameScenePatch {
   }
 
   static bool _unitChanged(VisibleUnitView? before, VisibleUnitView next) =>
-      before == null || !_sameUnit(before, next);
+      before == null || !_sameFlameUnit(before, next);
 
   static List<String> _removedUnitIds(
     MapRenderSnapshot previous,
@@ -278,20 +278,6 @@ final class FlameScenePatch {
       previous.map.cols == next.map.cols &&
       previous.map.rows == next.map.rows;
 
-  static bool _sameUnit(VisibleUnitView left, VisibleUnitView right) =>
-      left.id == right.id &&
-      left.ownerPlayerId == right.ownerPlayerId &&
-      left.kind == right.kind &&
-      left.name == right.name &&
-      left.coordinate == right.coordinate &&
-      left.movementUnits == right.movementUnits &&
-      left.posture == right.posture &&
-      left.carriedArtifactId == right.carriedArtifactId &&
-      left.excavatingArtifactId == right.excavatingArtifactId &&
-      left.workerBuildCharges == right.workerBuildCharges &&
-      left.workerAssignment == right.workerAssignment &&
-      _sameWorkerJob(left.workerJob, right.workerJob);
-
   static bool _sameCity(CityView? left, CityView right) =>
       sameFlameCity(left, right);
 
@@ -358,6 +344,60 @@ final class FlameScenePatch {
       _ => false,
     };
   }
+}
+
+bool _sameFlameUnit(VisibleUnitView left, VisibleUnitView right) =>
+    (
+          left.id,
+          left.ownerPlayerId,
+          left.kind,
+          left.name,
+          left.coordinate,
+          left.movementUnits,
+          left.posture,
+          left.hitPoints,
+          left.maximumHitPoints,
+          left.queuedTarget,
+          left.merchantRouteDestinationCityId,
+          left.carriedArtifactId,
+          left.excavatingArtifactId,
+          left.workerBuildCharges,
+          left.workerAssignment,
+          left.cityFoundingRemainingTurns,
+        ) ==
+        (
+          right.id,
+          right.ownerPlayerId,
+          right.kind,
+          right.name,
+          right.coordinate,
+          right.movementUnits,
+          right.posture,
+          right.hitPoints,
+          right.maximumHitPoints,
+          right.queuedTarget,
+          right.merchantRouteDestinationCityId,
+          right.carriedArtifactId,
+          right.excavatingArtifactId,
+          right.workerBuildCharges,
+          right.workerAssignment,
+          right.cityFoundingRemainingTurns,
+        ) &&
+    _sameFlameArmy(left.army, right.army) &&
+    FlameScenePatch._sameWorkerJob(left.workerJob, right.workerJob);
+
+bool _sameFlameArmy(
+  List<VisibleArmyTroopView> left,
+  List<VisibleArmyTroopView> right,
+) {
+  if (left.length != right.length) return false;
+  for (var index = 0; index < left.length; index += 1) {
+    if (left[index].kind != right[index].kind ||
+        left[index].count != right[index].count) {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool _sameFlameImprovement(

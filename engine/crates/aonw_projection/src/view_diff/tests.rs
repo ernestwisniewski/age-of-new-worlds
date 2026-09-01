@@ -1,5 +1,7 @@
+use aonw_content::RulesetDefinition;
 use aonw_domain::{
-    GameOutcome, HexCoord, MovementUnits, PlayerId, TurnMode, Unit, UnitId, UnitKind,
+    GameOutcome, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerId, StateRevision,
+    TurnMode, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
 };
 
 use super::{ProjectedView, diff_coordinate_views, diff_view};
@@ -116,5 +118,13 @@ fn view(id: &str, col: i32) -> PlayerUnitView {
     )
     .build()
     .expect("unit");
-    PlayerUnitView::from_unit(&unit, true)
+    let state = GameState::try_new(
+        StateRevision::INITIAL,
+        0,
+        HexGridBounds::new(8, 2).expect("bounds"),
+        UnitOccupancyPolicy::Exclusive,
+        [unit.clone()],
+    )
+    .expect("state");
+    PlayerUnitView::from_unit(&state, RulesetDefinition::standard(), &unit, true)
 }

@@ -26,6 +26,7 @@ final class AonwPlayerUnitView {
     required this.workerJob,
     required this.workerAssignment,
     this.hitPoints,
+    this.maximumHitPoints,
     this.carriedArtifactId,
     this.ownedDetails,
   });
@@ -41,6 +42,7 @@ final class AonwPlayerUnitView {
       'movementUnits',
       'posture',
       'hitPoints',
+      'maximumHitPoints',
       'carriedArtifactId',
       'ownedDetails',
     }, 'player unit view');
@@ -61,6 +63,9 @@ final class AonwPlayerUnitView {
       hitPoints: value['hitPoints'] == null
           ? null
           : readUnsigned(value['hitPoints'], 'unit hit points'),
+      maximumHitPoints: value['maximumHitPoints'] == null
+          ? null
+          : readUnsigned(value['maximumHitPoints'], 'unit maximum hit points'),
       carriedArtifactId: readNullableString(
         value['carriedArtifactId'],
         'carried artifact id',
@@ -80,6 +85,7 @@ final class AonwPlayerUnitView {
   final AonwWorkerJobView? workerJob;
   final AonwCoordinate? workerAssignment;
   final int? hitPoints;
+  final int? maximumHitPoints;
   final String? carriedArtifactId;
   final AonwOwnedUnitDetails? ownedDetails;
 }

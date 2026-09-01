@@ -186,12 +186,15 @@ final class VisibleUnitView {
     required this.coordinate,
     required this.movementUnits,
     required this.posture,
+    this.hitPoints,
+    this.maximumHitPoints,
     List<VisibleArmyTroopView> army = const [],
     this.queuedTarget,
     this.merchantRouteDestinationCityId,
     this.workerBuildCharges = 0,
     this.workerJob,
     this.workerAssignment,
+    this.cityFoundingRemainingTurns,
     this.carriedArtifactId,
     this.excavatingArtifactId,
   }) : army = List.unmodifiable(army);
@@ -203,12 +206,15 @@ final class VisibleUnitView {
   final MapHexCoordinate coordinate;
   final int movementUnits;
   final VisibleUnitPosture posture;
+  final int? hitPoints;
+  final int? maximumHitPoints;
   final List<VisibleArmyTroopView> army;
   final MapHexCoordinate? queuedTarget;
   final String? merchantRouteDestinationCityId;
   final int workerBuildCharges;
   final WorkerJobView? workerJob;
   final MapHexCoordinate? workerAssignment;
+  final int? cityFoundingRemainingTurns;
   final String? carriedArtifactId;
   final String? excavatingArtifactId;
 }

@@ -73,6 +73,8 @@ void main() {
     expect(player.units.first.kind, VisibleUnitKind.commander);
     expect(player.units.first.posture, VisibleUnitPosture.active);
     expect(player.units.first.movementUnits, 12);
+    expect(player.units.first.hitPoints, 7);
+    expect(player.units.first.maximumHitPoints, 10);
   });
 
   test('maps recipient-owned research progress and science evidence', () {

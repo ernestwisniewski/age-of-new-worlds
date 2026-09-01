@@ -72,6 +72,7 @@ void main() {
             'movementUnits': 4,
             'posture': 'active',
             'hitPoints': null,
+            'maximumHitPoints': null,
             'carriedArtifactId': null,
             'ownedDetails': null,
             'unknown': true,

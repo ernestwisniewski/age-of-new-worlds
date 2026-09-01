@@ -122,6 +122,8 @@ final class PlayerMapViewMapper {
         coordinate: _coordinate(unit),
         movementUnits: unit.movementUnits,
         posture: _posture(unit.posture),
+        hitPoints: unit.hitPoints,
+        maximumHitPoints: unit.maximumHitPoints,
         army: [
           for (final troop
               in unit.ownedDetails?.army ?? const <AonwArmyTroop>[])
@@ -140,6 +142,8 @@ final class PlayerMapViewMapper {
         workerAssignment: unit.workerAssignment == null
             ? null
             : _ownedCoordinate(unit.workerAssignment!, map),
+        cityFoundingRemainingTurns:
+            unit.ownedDetails?.cityFoundingJob?.remainingTurns,
         carriedArtifactId: unit.carriedArtifactId,
         excavatingArtifactId: unit.ownedDetails?.excavatingArtifactId,
       );

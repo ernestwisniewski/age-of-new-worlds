@@ -110,6 +110,15 @@ final class RecipientProjectionValidator {
       if (!participantIds.contains(unit.ownerPlayerId)) {
         throw const FormatException('Recipient unit owner is unknown.');
       }
+      final hitPoints = unit.hitPoints;
+      final maximumHitPoints = unit.maximumHitPoints;
+      if ((hitPoints == null) != (maximumHitPoints == null) ||
+          maximumHitPoints != null &&
+              (maximumHitPoints == 0 || hitPoints! > maximumHitPoints)) {
+        throw const FormatException(
+          'Recipient projection contains invalid unit health.',
+        );
+      }
       requireCoordinate(unit.coordinate, 'unit');
       final assignment = unit.workerAssignment;
       if (assignment != null) {
