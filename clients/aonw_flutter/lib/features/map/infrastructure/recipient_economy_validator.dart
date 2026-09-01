@@ -32,6 +32,7 @@ final class RecipientEconomyValidator {
         'Recipient strategic resource output does not match its sources.',
       );
     }
+    _validateForecast(economy, cities);
   }
 
   void _validateAmounts(
@@ -100,6 +101,148 @@ final class RecipientEconomyValidator {
     if (!_matchesImprovement(source)) {
       throw const FormatException(
         'Recipient strategic resource source improvement is invalid.',
+      );
+    }
+  }
+
+  void _validateForecast(
+    AonwPlayerEconomyView economy,
+    List<AonwPlayerCityView> cities,
+  ) {
+    final forecast = economy.forecast;
+    if (forecast.treasury != economy.gold ||
+        forecast.cityIncome < 0 ||
+        forecast.projectIncome < 0 ||
+        forecast.grossIncome != forecast.cityIncome + forecast.projectIncome) {
+      throw const FormatException('Recipient gold forecast is inconsistent.');
+    }
+    final cityIds = {
+      for (final city in cities)
+        if (city.ownedDetails != null) city.id,
+    };
+    final cityIncome = _validateGoldSources(
+      forecast.citySources,
+      cityIds,
+      'city income',
+    );
+    final projectIncome = _validateGoldSources(
+      forecast.projectSources,
+      cityIds,
+      'project income',
+    );
+    if (cityIncome != forecast.cityIncome ||
+        projectIncome != forecast.projectIncome) {
+      throw const FormatException(
+        'Recipient gold forecast does not match its sources.',
+      );
+    }
+    _validateUpkeep(forecast.upkeep);
+    if (forecast.netPerTurn != forecast.grossIncome - forecast.upkeep.total) {
+      throw const FormatException('Recipient net gold forecast is invalid.');
+    }
+    _validateStability(economy);
+  }
+
+  int _validateGoldSources(
+    List<AonwGoldIncomeSource> sources,
+    Set<String> cityIds,
+    String label,
+  ) {
+    String? previousCityId;
+    var total = 0;
+    for (final source in sources) {
+      if (source.cityId.isEmpty ||
+          !cityIds.contains(source.cityId) ||
+          source.amount <= 0 ||
+          (previousCityId != null &&
+              previousCityId.compareTo(source.cityId) >= 0)) {
+        throw FormatException(
+          'Recipient $label source is invalid or unordered.',
+        );
+      }
+      previousCityId = source.cityId;
+      total += source.amount;
+    }
+    return total;
+  }
+
+  void _validateUpkeep(AonwUnitUpkeepBreakdown upkeep) {
+    _validateUpkeepSummary(upkeep);
+    final totals = _upkeepSourceTotals(upkeep.sources);
+    if (totals.paidCount != upkeep.paidUnitCount ||
+        totals.amount != upkeep.total) {
+      throw const FormatException(
+        'Recipient unit upkeep does not match its sources.',
+      );
+    }
+  }
+
+  void _validateUpkeepSummary(AonwUnitUpkeepBreakdown upkeep) {
+    final expectedPaid = upkeep.upkeepBearingUnitCount - upkeep.freeUnitCount;
+    if (upkeep.upkeepBearingUnitCount < 0 ||
+        upkeep.freeUnitCount < 0 ||
+        upkeep.paidUnitCount != (expectedPaid > 0 ? expectedPaid : 0) ||
+        upkeep.total < 0 ||
+        upkeep.nextWorkerUpkeep < 0) {
+      throw const FormatException('Recipient unit upkeep is inconsistent.');
+    }
+  }
+
+  ({int paidCount, int amount}) _upkeepSourceTotals(
+    List<AonwUnitUpkeepSource> sources,
+  ) {
+    int? previousKind;
+    var paidCount = 0;
+    var total = 0;
+    for (final source in sources) {
+      _validateUpkeepSource(source, previousKind);
+      previousKind = source.kind.index;
+      paidCount += source.paidUnitCount;
+      total += source.amount;
+    }
+    return (paidCount: paidCount, amount: total);
+  }
+
+  void _validateUpkeepSource(AonwUnitUpkeepSource source, int? previousKind) {
+    if (source.kind == AonwUnitKind.commander ||
+        source.paidUnitCount <= 0 ||
+        source.amount <= 0 ||
+        (previousKind != null && previousKind >= source.kind.index)) {
+      throw const FormatException(
+        'Recipient unit upkeep source is invalid or unordered.',
+      );
+    }
+  }
+
+  void _validateStability(AonwPlayerEconomyView economy) {
+    final stability = economy.forecast.stability;
+    final sources = [
+      stability.baseOrder,
+      stability.buildingSources,
+      stability.luxurySources,
+      stability.technologySources,
+      stability.artifactSources,
+      stability.wonderSources,
+    ];
+    final costs = [
+      stability.cityCost,
+      stability.populationCost,
+      stability.cohesionCost,
+      stability.conqueredCityCost,
+      stability.warWearinessCost,
+      stability.hegemonyTax,
+    ];
+    if (sources.any((value) => value < 0) ||
+        costs.any((value) => value < 0) ||
+        stability.sourceTotal != sources.fold(0, (sum, value) => sum + value) ||
+        stability.costTotal != costs.fold(0, (sum, value) => sum + value) ||
+        stability.warWearinessCost != economy.warWeariness ||
+        stability.effectiveNet !=
+            stability.sourceTotal -
+                stability.costTotal +
+                stability.relativeStandingAdjustment) {
+      throw const FormatException(
+        'Recipient stability breakdown is inconsistent.',
       );
     }
   }

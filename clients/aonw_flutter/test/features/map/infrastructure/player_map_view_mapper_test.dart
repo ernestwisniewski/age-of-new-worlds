@@ -11,10 +11,12 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 part 'player_map_view_mapper_fixture.dart';
+part 'player_economy_view_mapper_cases.dart';
 part 'player_victory_view_mapper_cases.dart';
 
 void main() {
   const mapper = PlayerMapViewMapper();
+  registerPlayerEconomyViewMapperCases(mapper);
   registerPlayerVictoryViewMapperCases(mapper);
 
   test('maps the complete recipient-safe unit snapshot', () {
@@ -73,26 +75,6 @@ void main() {
     expect(player.units.first.movementUnits, 12);
   });
 
-  test('maps authoritative strategic resource output and source evidence', () {
-    final player = mapper.fromWire(
-      _snapshot(
-        const [],
-        cities: [_city()],
-        economy: _economy(withOutput: true),
-      ),
-      map: testMapScene().map,
-      actorPlayerId: 'player-1',
-    );
-
-    expect(player.economy.outputPerTurnFor(MapResource.oil), 1);
-    final source = player.economy.strategicResourceSources.single;
-    expect(source.cityId, 'city-a');
-    expect(source.coordinate, (col: 1, row: 1));
-    expect(source.resource, MapResource.oil);
-    expect(source.improvement, FieldImprovementKind.oilWell);
-    expect(source.amountPerTurn, 1);
-  });
-
   test('maps recipient-owned research progress and science evidence', () {
     final player = mapper.fromWire(
       _snapshot(const [], cities: [_city()], research: _research()),
@@ -129,25 +111,6 @@ void main() {
     expect(
       () => mapper.fromWire(
         _snapshot(const [], research: _research()),
-        map: testMapScene().map,
-        actorPlayerId: 'player-1',
-      ),
-      throwsFormatException,
-    );
-  });
-
-  test('rejects inconsistent recipient economy data', () {
-    expect(
-      () => mapper.fromWire(
-        _snapshot(const [], economy: _economy(gold: -1)),
-        map: testMapScene().map,
-        actorPlayerId: 'player-1',
-      ),
-      throwsFormatException,
-    );
-    expect(
-      () => mapper.fromWire(
-        _snapshot(const [], economy: _economy(withOutput: true)),
         map: testMapScene().map,
         actorPlayerId: 'player-1',
       ),

@@ -20,7 +20,7 @@ use aonw_domain::{
 };
 use aonw_engine::{CommandRejectionCode, DomainEvent, GameEngine};
 use aonw_server_runtime::{
-    PreparedServerWorld, ServerBoundaryError, ServerHostError, SubmitTurnRequest,
+    PreparedServerWorld, RecipientOutcome, ServerBoundaryError, ServerHostError, SubmitTurnRequest,
     apply_submit_turn, apply_submit_turn_dto, create_server_match_dto,
 };
 
@@ -76,42 +76,8 @@ fn final_submit_returns_exact_offsets_and_every_recipient_projection() {
                 .filter(|unit| unit.owner_player_id() != &recipient.recipient_player_id)
                 .all(|unit| unit.owned_details().is_none())
         );
-        let canonical_economy = outcome.state.economy();
+        assert_recipient_economy(recipient, &outcome.state);
         let actor = &recipient.recipient_player_id;
-        assert_eq!(
-            recipient.snapshot.economy().gold(),
-            canonical_economy
-                .player_gold()
-                .get(actor)
-                .copied()
-                .unwrap_or(0)
-        );
-        assert_eq!(
-            recipient.snapshot.economy().war_weariness(),
-            canonical_economy
-                .player_war_weariness()
-                .get(actor)
-                .copied()
-                .unwrap_or(0)
-        );
-        assert_eq!(
-            recipient.snapshot.economy().stability_net(),
-            canonical_economy
-                .player_stability_net()
-                .get(actor)
-                .copied()
-                .unwrap_or(0)
-        );
-        let stockpile = recipient.snapshot.economy().strategic_resource_stockpile();
-        let canonical_stockpile = canonical_economy
-            .strategic_resources()
-            .get(actor)
-            .expect("actor stockpile");
-        assert_eq!(stockpile.len(), canonical_stockpile.amounts().len());
-        for (projected, (resource, amount)) in stockpile.iter().zip(canonical_stockpile.amounts()) {
-            assert_eq!(projected.resource(), *resource);
-            assert_eq!(projected.amount(), *amount);
-        }
         let (technology, progress, overflow) = expected_research(actor);
         assert_eq!(
             recipient.snapshot.research().active_technology_id(),
@@ -125,6 +91,48 @@ fn final_submit_returns_exact_offsets_and_every_recipient_projection() {
         assert_eq!(recipient.snapshot.victory().score_by_player_id().len(), 2);
         assert_eq!(recipient.snapshot.victory().domination().len(), 2);
         assert_eq!(recipient.snapshot.victory().own_cultural().hold_turns(), 0);
+    }
+}
+
+fn assert_recipient_economy(recipient: &RecipientOutcome, state: &GameState) {
+    let canonical = state.economy();
+    let actor = &recipient.recipient_player_id;
+    let projected = recipient.snapshot.economy();
+    assert_eq!(
+        projected.gold(),
+        canonical.player_gold().get(actor).copied().unwrap_or(0)
+    );
+    assert_eq!(
+        projected.war_weariness(),
+        canonical
+            .player_war_weariness()
+            .get(actor)
+            .copied()
+            .unwrap_or(0)
+    );
+    assert_eq!(
+        projected.stability_net(),
+        canonical
+            .player_stability_net()
+            .get(actor)
+            .copied()
+            .unwrap_or(0)
+    );
+    let forecast = projected.forecast();
+    assert_eq!(forecast.treasury, projected.gold());
+    assert_eq!(
+        forecast.stability.war_weariness_cost,
+        projected.war_weariness()
+    );
+    let stockpile = projected.strategic_resource_stockpile();
+    let canonical_stockpile = canonical
+        .strategic_resources()
+        .get(actor)
+        .expect("actor stockpile");
+    assert_eq!(stockpile.len(), canonical_stockpile.amounts().len());
+    for (projected, (resource, amount)) in stockpile.iter().zip(canonical_stockpile.amounts()) {
+        assert_eq!(projected.resource(), *resource);
+        assert_eq!(projected.amount(), *amount);
     }
 }
 
@@ -394,244 +402,7 @@ fn server_match_creation_requires_multiplayer_with_simultaneous_turns() {
     );
 }
 
-struct Fixture {
-    state: GameState,
-    world: PreparedServerWorld,
-}
+#[path = "submit_turn/support.rs"]
+mod support;
 
-impl Fixture {
-    fn request(
-        &self,
-        actor: &str,
-        expected_revision: u64,
-        initial_event_offset: u64,
-    ) -> SubmitTurnRequest {
-        SubmitTurnRequest {
-            state: self.state.clone(),
-            world: self.world.clone(),
-            authenticated_actor: player(actor),
-            expected_revision,
-            initial_event_offset,
-        }
-    }
-
-    fn request_with_world(
-        &self,
-        actor: &str,
-        expected_revision: u64,
-        initial_event_offset: u64,
-        world: PreparedServerWorld,
-    ) -> SubmitTurnRequest {
-        SubmitTurnRequest {
-            state: self.state.clone(),
-            world,
-            authenticated_actor: player(actor),
-            expected_revision,
-            initial_event_offset,
-        }
-    }
-}
-
-fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture {
-    let p1 = player("player-1");
-    let p2 = player("player-2");
-    let map = map(2);
-    let ruleset = RulesetDefinition::standard().clone();
-    let participants = [
-        participant(p1.clone(), "One"),
-        participant(p2.clone(), "Two"),
-    ];
-    let identity =
-        MatchIdentity::try_new(MatchRules::default(), participants, GameMode::Multiplayer)
-            .expect("identity");
-    let submitted = submitted.into_iter().collect::<BTreeSet<_>>();
-    let lifecycle = TurnLifecycle::try_new(
-        &identity,
-        BTreeMap::from([
-            (
-                p1.clone(),
-                if submitted.contains(&p1) {
-                    PlayerTurnState::Finished
-                } else {
-                    PlayerTurnState::Active
-                },
-            ),
-            (
-                p2.clone(),
-                if submitted.contains(&p2) {
-                    PlayerTurnState::Finished
-                } else {
-                    PlayerTurnState::Active
-                },
-            ),
-        ]),
-        [p1.clone(), p2.clone()],
-        submitted,
-        BTreeMap::new(),
-        [],
-        [],
-        None,
-    )
-    .expect("lifecycle");
-    let economy = EconomyState::try_new(
-        &identity,
-        map.bounds(),
-        BTreeMap::from([(p1.clone(), 17), (p2.clone(), 91)]),
-        BTreeMap::from([(p1.clone(), 2), (p2.clone(), 8)]),
-        BTreeMap::new(),
-        BTreeMap::from([
-            (
-                p1.clone(),
-                StrategicResourceStockpile::try_new(BTreeMap::from([(ResourceType::Oil, 4)]))
-                    .expect("player one stockpile"),
-            ),
-            (
-                p2.clone(),
-                StrategicResourceStockpile::try_new(BTreeMap::from([(ResourceType::Aluminium, 9)]))
-                    .expect("player two stockpile"),
-            ),
-        ]),
-        InitialResourceDistribution::default(),
-    )
-    .expect("economy");
-    let units = [unit("unit-1", &p1, 0), unit("unit-2", &p2, 1)];
-    let research = fixture_research(&p1, &p2);
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(p1, [], [HexCoord::new(0, 0)]),
-        PlayerFog::new(p2, [], [HexCoord::new(1, 0)]),
-    ])
-    .expect("fog");
-    let state = GameState::builder(
-        StateRevision::new(7),
-        7,
-        map.bounds(),
-        ruleset.occupancy_policy(),
-        units,
-    )
-    .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
-    .with_economy(economy)
-    .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
-    .with_fog_of_war(fog)
-    .try_build()
-    .expect("state");
-    let world = PreparedServerWorld::try_new(map, ruleset).expect("prepared world");
-    Fixture { state, world }
-}
-
-fn fixture_research(player_one: &PlayerId, player_two: &PlayerId) -> ResearchState {
-    ResearchState::try_new([
-        (
-            player_one.clone(),
-            PlayerResearchState::try_new(
-                [],
-                Some(TechnologyId::Agriculture),
-                [(TechnologyId::Agriculture, 3)],
-                1,
-            )
-            .expect("player one research"),
-        ),
-        (
-            player_two.clone(),
-            PlayerResearchState::try_new(
-                [],
-                Some(TechnologyId::Mining),
-                [(TechnologyId::Mining, 11)],
-                4,
-            )
-            .expect("player two research"),
-        ),
-    ])
-    .expect("research")
-}
-
-fn participant(id: PlayerId, name: &str) -> Participant {
-    Participant::try_new(
-        id,
-        name,
-        0xff00_0000,
-        PlayerCountry::Poland,
-        PlayerKind::Human,
-        None,
-    )
-    .expect("participant")
-}
-
-fn unit(id: &str, owner: &PlayerId, col: i32) -> Unit {
-    Unit::builder(
-        UnitId::new(id).expect("unit id"),
-        owner.clone(),
-        UnitKind::Commander,
-        id,
-        HexCoord::new(col, 0),
-        MovementUnits::ZERO,
-    )
-    .build()
-    .expect("unit")
-}
-
-fn map(cols: u16) -> MapDefinition {
-    MapDefinition::try_new(
-        "server-host-test",
-        GridLayout::OddQFlatTop,
-        cols,
-        1,
-        (0..cols)
-            .map(|col| {
-                TileDefinition::try_new_for_simulation(
-                    HexCoord::new(i32::from(col), 0),
-                    vec![TerrainType::Plains],
-                    Vec::new(),
-                    0,
-                )
-                .expect("tile")
-            })
-            .collect(),
-        Vec::new(),
-    )
-    .expect("map")
-}
-
-fn player(id: &str) -> PlayerId {
-    PlayerId::new(id).expect("player id")
-}
-
-fn expected_economy(player: &PlayerId) -> (i64, i64, i64, ResourceType, i64) {
-    if player.as_str() == "player-1" {
-        (17, 2, 0, ResourceType::Oil, 4)
-    } else {
-        (91, 8, 0, ResourceType::Aluminium, 9)
-    }
-}
-
-fn expected_research(player: &PlayerId) -> (TechnologyId, i64, i64) {
-    if player.as_str() == "player-1" {
-        (TechnologyId::Agriculture, 3, 1)
-    } else {
-        (TechnologyId::Mining, 11, 4)
-    }
-}
-
-fn match_identity(game_mode: GameModeDto) -> MatchIdentityDto {
-    MatchIdentityDto {
-        match_rules: MatchRulesDto::default(),
-        participants: [
-            ("player-1", "One", PlayerCountryDto::Poland),
-            ("player-2", "Two", PlayerCountryDto::Germany),
-        ]
-        .into_iter()
-        .map(|(id, name, country)| ParticipantDto {
-            id: id.to_owned(),
-            name: name.to_owned(),
-            color_value: 0xff00_0000,
-            country,
-            kind: PlayerKindDto::Human,
-            ai: None,
-        })
-        .collect(),
-        game_mode,
-        turn_mode: Some(match game_mode {
-            GameModeDto::HotSeat => TurnModeDto::Sequential,
-            GameModeDto::Multiplayer => TurnModeDto::Simultaneous,
-        }),
-    }
-}
+use support::{expected_economy, expected_research, fixture, map, match_identity, player};

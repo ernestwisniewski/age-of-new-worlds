@@ -8,9 +8,9 @@ use aonw_content::{
 };
 use aonw_contracts::client::{
     CLIENT_API_VERSION, ClientOutcomeDto, ClientQueryDto, ClientQueryResultDto,
-    ClientRequestBodyDto, ClientRequestDto, ClientResponseBodyDto,
+    ClientRequestBodyDto, ClientRequestDto, ClientResponseBodyDto, PlayerEconomyViewDto,
 };
-use aonw_contracts::{FieldImprovementKindDto, ResourceTypeDto};
+use aonw_contracts::{FieldImprovementKindDto, ResourceTypeDto, StabilityBandDto};
 use aonw_domain::{
     City, CityId, EconomyState, FieldImprovement, FieldImprovementKind, GameMode, GameState,
     HexCoord, InfrastructureState, InitialResourceDistribution, KnowledgeState, MatchIdentity,
@@ -50,18 +50,7 @@ fn runtime_and_protocol_return_the_same_city_yield() {
     let ClientResponseBodyDto::Snapshot { snapshot } = *response else {
         panic!("snapshot response")
     };
-    assert_eq!(snapshot.economy.gold, 73);
-    assert_eq!(snapshot.economy.war_weariness, 5);
-    assert_eq!(snapshot.economy.stability_net, -4);
-    assert_eq!(snapshot.economy.strategic_resource_stockpile.len(), 1);
-    assert_eq!(
-        snapshot.economy.strategic_resource_stockpile[0].resource,
-        ResourceTypeDto::Oil
-    );
-    assert_eq!(snapshot.economy.strategic_resource_stockpile[0].amount, 2);
-    assert_eq!(snapshot.economy.strategic_resource_output.len(), 1);
-    assert_eq!(snapshot.economy.strategic_resource_sources.len(), 1);
-
+    assert_snapshot_economy(&snapshot.economy);
     assert_city_query_cache(&mut runtime, &city_id);
 
     let request = ClientRequestDto {
@@ -120,6 +109,40 @@ fn runtime_and_protocol_return_the_same_city_yield() {
     assert_eq!(sources[0].resource, ResourceTypeDto::Oil);
     assert_eq!(sources[0].improvement, FieldImprovementKindDto::OilWell);
     assert_eq!(sources[0].amount_per_turn, 1);
+}
+
+fn assert_snapshot_economy(economy: &PlayerEconomyViewDto) {
+    assert_eq!(economy.gold, 73);
+    assert_eq!(economy.war_weariness, 5);
+    assert_eq!(economy.stability_net, -4);
+    assert_eq!(economy.strategic_resource_stockpile.len(), 1);
+    assert_eq!(
+        economy.strategic_resource_stockpile[0].resource,
+        ResourceTypeDto::Oil
+    );
+    assert_eq!(economy.strategic_resource_stockpile[0].amount, 2);
+    assert_eq!(economy.strategic_resource_output.len(), 1);
+    assert_eq!(economy.strategic_resource_sources.len(), 1);
+    let forecast = &economy.forecast;
+    assert_eq!(forecast.treasury, 73);
+    assert_eq!(forecast.city_income, 0);
+    assert_eq!(forecast.project_income, 0);
+    assert_eq!(forecast.gross_income, 0);
+    assert_eq!(forecast.net_per_turn, 0);
+    assert!(forecast.city_sources.is_empty());
+    assert!(forecast.project_sources.is_empty());
+    assert_eq!(forecast.upkeep.upkeep_bearing_unit_count, 0);
+    assert_eq!(forecast.upkeep.free_unit_count, 4);
+    assert_eq!(forecast.upkeep.paid_unit_count, 0);
+    assert_eq!(forecast.upkeep.total, 0);
+    assert_eq!(forecast.upkeep.next_worker_upkeep, 0);
+    assert!(forecast.upkeep.sources.is_empty());
+    assert_eq!(forecast.stability.base_order, 6);
+    assert_eq!(forecast.stability.war_weariness_cost, 5);
+    assert_eq!(forecast.stability.source_total, 6);
+    assert_eq!(forecast.stability.cost_total, 5);
+    assert_eq!(forecast.stability.effective_net, 1);
+    assert_eq!(forecast.stability.band, StabilityBandDto::Stable);
 }
 
 fn assert_city_query_cache(runtime: &mut LocalRuntime, city_id: &CityId) {

@@ -9,6 +9,7 @@ import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'pending_action_view_mapper.dart';
+import 'player_economy_view_mapper.dart';
 import 'player_victory_view_mapper.dart';
 import 'recipient_projection_validator.dart';
 
@@ -56,7 +57,7 @@ final class PlayerMapViewMapper {
       turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
       participants: _mapParticipants(wire.participants),
       fog: _mapFog(wire.fog),
-      economy: _mapEconomy(wire.economy),
+      economy: mapPlayerEconomyView(wire.economy),
       research: _mapResearch(wire.research),
       victory: mapPlayerVictoryView(wire.victory),
       turnView: _mapTurnView(wire, pendingAction),
@@ -370,42 +371,6 @@ MapFogView _mapFog(AonwPlayerFogView fog) => MapFogView(
       (col: coordinate.col, row: coordinate.row),
   ],
 );
-
-PlayerEconomyView _mapEconomy(AonwPlayerEconomyView economy) =>
-    PlayerEconomyView(
-      gold: economy.gold,
-      warWeariness: economy.warWeariness,
-      stabilityNet: economy.stabilityNet,
-      strategicResourceStockpile: [
-        for (final amount in economy.strategicResourceStockpile)
-          PlayerStrategicResourceAmountView(
-            resource: MapResource.values.byName(amount.resource.name),
-            amount: amount.amount,
-          ),
-      ],
-      strategicResourceOutput: [
-        for (final amount in economy.strategicResourceOutput)
-          PlayerStrategicResourceAmountView(
-            resource: MapResource.values.byName(amount.resource.name),
-            amount: amount.amount,
-          ),
-      ],
-      strategicResourceSources: [
-        for (final source in economy.strategicResourceSources)
-          PlayerStrategicResourceSourceView(
-            cityId: source.cityId,
-            coordinate: (
-              col: source.coordinate.col,
-              row: source.coordinate.row,
-            ),
-            resource: MapResource.values.byName(source.resource.name),
-            improvement: FieldImprovementKind.values.byName(
-              source.improvement.name,
-            ),
-            amountPerTurn: source.amountPerTurn,
-          ),
-      ],
-    );
 
 PlayerResearchSummaryView _mapResearch(AonwPlayerResearchView research) =>
     PlayerResearchSummaryView(

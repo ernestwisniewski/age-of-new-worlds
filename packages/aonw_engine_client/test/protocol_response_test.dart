@@ -215,6 +215,23 @@ void main() {
     expect(snapshot.economy.strategicResourceStockpile.single.amount, 2);
     expect(snapshot.economy.strategicResourceOutput.single.amount, 1);
     expect(snapshot.economy.strategicResourceSources.single.cityId, 'city-a');
+    expect(snapshot.economy.forecast.treasury, 73);
+    expect(snapshot.economy.forecast.cityIncome, 7);
+    expect(snapshot.economy.forecast.projectIncome, 2);
+    expect(snapshot.economy.forecast.grossIncome, 9);
+    expect(snapshot.economy.forecast.netPerTurn, 5);
+    expect(snapshot.economy.forecast.citySources.single.cityId, 'city-a');
+    expect(snapshot.economy.forecast.projectSources.single.amount, 2);
+    expect(snapshot.economy.forecast.upkeep.total, 4);
+    expect(snapshot.economy.forecast.upkeep.nextWorkerUpkeep, 2);
+    expect(
+      snapshot.economy.forecast.upkeep.sources.single.kind,
+      AonwUnitKind.worker,
+    );
+    expect(snapshot.economy.forecast.stability.sourceTotal, 11);
+    expect(snapshot.economy.forecast.stability.costTotal, 9);
+    expect(snapshot.economy.forecast.stability.effectiveNet, 1);
+    expect(snapshot.economy.forecast.stability.band, AonwStabilityBand.stable);
     expect(snapshot.research.activeTechnology, AonwTechnologyId.agriculture);
     expect(snapshot.research.activeProgress, 4);
     expect(snapshot.research.activeEffectiveCost, 20);
@@ -234,6 +251,21 @@ void main() {
       () => AonwPlayerViewSnapshot.fromJson({
         ..._snapshot,
         'participants': [leakedParticipant],
+      }),
+      throwsFormatException,
+    );
+
+    expect(
+      () => AonwPlayerViewSnapshot.fromJson({
+        ..._snapshot,
+        'economy': {
+          ..._snapshot['economy']! as Map<String, Object?>,
+          'forecast': {
+            ...(_snapshot['economy']! as Map<String, Object?>)['forecast']!
+                as Map<String, Object?>,
+            'clientCalculatedNet': 5,
+          },
+        },
       }),
       throwsFormatException,
     );

@@ -7,18 +7,14 @@ use aonw_contracts::client::{
     ClientCommandRejectionCodeDto, ClientCommandResultDto, ClientErrorDto, ClientEventDto,
     ClientEvidenceDto, ClientFeatureDto, ClientOutcomeDto, ClientParticipantControlDto,
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
-    ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
-    CulturalVictoryProgressDto, DominationVictoryProgressDto, MapObjectiveProgressDto,
-    MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
-    PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerResearchViewDto,
-    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerVictoryViewDto, PlayerViewPatchDto,
-    PlayerViewSnapshotDto, ReachableTileViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
-    ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
+    ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, MovementSearchMetricsDto,
+    MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto, PlayerFogViewDto,
+    PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerViewPatchDto,
+    PlayerViewSnapshotDto, ReachableTileViewDto,
 };
 use aonw_contracts::{
-    CoordinateDto, FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto,
-    PlayerCountryDto, PlayerKindDto, PlayerTurnStateDto, ResourceTypeDto, TechnologyIdDto,
-    TurnModeDto, UnitKindDto, UnitPostureDto,
+    FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto, PlayerCountryDto,
+    PlayerKindDto, PlayerTurnStateDto, TurnModeDto,
 };
 
 #[path = "client_contract/artifact.rs"]
@@ -29,6 +25,8 @@ mod diplomacy_contract;
 mod economy_contract;
 #[path = "client_contract/objective.rs"]
 mod objective_contract;
+#[path = "client_contract/player_view_fixture.rs"]
+mod player_view_fixture;
 #[path = "client_contract/production.rs"]
 mod production_contract;
 #[path = "client_contract/research.rs"]
@@ -38,105 +36,7 @@ mod strictness_contract;
 #[path = "client_contract/worker.rs"]
 mod worker_contract;
 
-fn coordinate(col: i32, row: i32) -> CoordinateDto {
-    CoordinateDto { col, row }
-}
-
-fn stamp() -> ClientSessionStampDto {
-    ClientSessionStampDto {
-        revision: 8,
-        state_digest: "digest-8".to_owned(),
-        map_hash: "map-hash".to_owned(),
-        ruleset_hash: "ruleset-hash".to_owned(),
-    }
-}
-
-fn unit() -> PlayerUnitViewDto {
-    PlayerUnitViewDto {
-        id: "unit-1".to_owned(),
-        owner_player_id: "player-1".to_owned(),
-        kind: UnitKindDto::Commander,
-        name: "Commander".to_owned(),
-        coordinate: coordinate(3, 4),
-        movement_units: 8,
-        posture: UnitPostureDto::Active,
-        hit_points: None,
-        carried_artifact_id: None,
-        owned_details: None,
-    }
-}
-
-fn economy() -> PlayerEconomyViewDto {
-    PlayerEconomyViewDto {
-        gold: 125,
-        war_weariness: 3,
-        stability_net: -2,
-        strategic_resource_stockpile: vec![StrategicResourceAmountDto {
-            resource: ResourceTypeDto::Oil,
-            amount: 4,
-        }],
-        strategic_resource_output: vec![StrategicResourceAmountDto {
-            resource: ResourceTypeDto::Oil,
-            amount: 1,
-        }],
-        strategic_resource_sources: vec![StrategicResourceSourceDto {
-            city_id: "city-1".to_owned(),
-            coordinate: coordinate(3, 4),
-            resource: ResourceTypeDto::Oil,
-            improvement: FieldImprovementKindDto::OilWell,
-            amount_per_turn: 1,
-        }],
-    }
-}
-
-fn research() -> PlayerResearchViewDto {
-    PlayerResearchViewDto {
-        active_technology_id: Some(TechnologyIdDto::Agriculture),
-        active_progress: Some(9),
-        active_effective_cost: Some(42),
-        science_overflow: 1,
-        science_yield: ScienceYieldBreakdownDto {
-            total: 3,
-            by_city_id: BTreeMap::from([("city-1".to_owned(), 3)]),
-            sources: vec![ScienceYieldSourceDto {
-                city_id: "city-1".to_owned(),
-                amount: 3,
-                kind: ScienceYieldSourceKindDto::CityScience,
-            }],
-        },
-    }
-}
-
-fn victory() -> PlayerVictoryViewDto {
-    PlayerVictoryViewDto {
-        conquest_enabled: true,
-        domination_enabled: true,
-        domination_required_control_percent: 60.into(),
-        domination_required_hold_turns: 5,
-        cultural_enabled: true,
-        cultural_required_artifacts: 6,
-        cultural_required_hold_turns: 5,
-        score_fallback_enabled: true,
-        turn_limit: Some(20),
-        remaining_turns: Some(13),
-        score_by_player_id: BTreeMap::from([("player-1".to_owned(), 37)]),
-        domination: vec![DominationVictoryProgressDto {
-            player_id: "player-1".to_owned(),
-            controlled_passable_hexes: 3,
-            total_passable_hexes: 10,
-            hold_turns: 0,
-        }],
-        own_cultural: CulturalVictoryProgressDto {
-            unique_stored_artifacts: 2,
-            hold_turns: 0,
-        },
-        map_objectives: vec![MapObjectiveProgressDto {
-            objective_id: "central-ruins".to_owned(),
-            controller_player_id: Some("player-1".to_owned()),
-            hold_turns: 2,
-        }],
-    }
-}
+use player_view_fixture::{coordinate, economy, research, stamp, unit, victory};
 
 fn player_snapshot() -> PlayerViewSnapshotDto {
     PlayerViewSnapshotDto {

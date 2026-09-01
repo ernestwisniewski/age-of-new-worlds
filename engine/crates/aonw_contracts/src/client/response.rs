@@ -5,8 +5,6 @@ use crate::{
     PlayerKindDto, PlayerTurnStateDto, QueuedMovePathDto, TurnModeDto, UnitKindDto, UnitPostureDto,
 };
 
-use super::MapViewDto;
-
 mod artifact;
 mod city;
 mod diplomacy;
@@ -30,8 +28,9 @@ pub use diplomacy::{
     PlayerDiplomaticRelationViewDto, PlayerResourceTradeAgreementViewDto,
 };
 pub use economy::{
-    CityYieldContributionDto, CityYieldContributionKindDto, PlayerEconomyViewDto,
-    StrategicResourceAmountDto, StrategicResourceSourceDto, YieldValueDto,
+    CityYieldContributionDto, CityYieldContributionKindDto, EconomyForecastDto,
+    GoldIncomeSourceDto, PlayerEconomyViewDto, StabilityBreakdownDto, StrategicResourceAmountDto,
+    StrategicResourceSourceDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto, YieldValueDto,
 };
 pub use event::ClientEventDto;
 pub use logistics::{
@@ -106,7 +105,7 @@ pub enum ClientResponseBodyDto {
     /// A strict authored map was projected for presentation.
     MapInspected {
         /// Validated framework-neutral map view.
-        map: MapViewDto,
+        map: super::MapViewDto,
     },
     /// A local session was opened.
     SessionOpened {

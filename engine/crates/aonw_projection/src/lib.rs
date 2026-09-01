@@ -3,8 +3,8 @@
 #![forbid(unsafe_code)]
 
 use aonw_domain::{
-    CityId, FieldImprovementKind, GameState, HexCoord, Participant, PendingInteraction,
-    PlayerCountry, PlayerId, PlayerKind, PlayerTurnState, TurnMode, UnitId,
+    CityId, FieldImprovementKind, GameState, HexCoord, PendingInteraction, PlayerId,
+    PlayerTurnState, TurnMode, UnitId,
 };
 use std::sync::Arc;
 
@@ -17,6 +17,7 @@ mod diplomacy;
 mod disclosure;
 mod economy;
 mod infrastructure;
+mod participant;
 mod research;
 mod unit;
 mod victory;
@@ -33,10 +34,13 @@ pub use diplomacy::{
 };
 pub use disclosure::RecipientDisclosure;
 pub use economy::{
-    PlayerEconomyView, PlayerStrategicResourceAmountView, PlayerStrategicResourceSourceView,
+    PlayerEconomyForecastView, PlayerEconomyView, PlayerGoldIncomeSourceView,
+    PlayerStabilityBreakdownView, PlayerStrategicResourceAmountView,
+    PlayerStrategicResourceSourceView, PlayerUnitUpkeepSourceView, PlayerUnitUpkeepView,
 };
 pub(crate) use infrastructure::visible_infrastructure;
 pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
+pub use participant::PlayerParticipantView;
 pub use research::{PlayerResearchView, PlayerScienceYieldSourceView};
 pub(crate) use unit::visible_units;
 pub use unit::{OwnedUnitDetailsView, PlayerUnitView};
@@ -91,54 +95,6 @@ pub enum PendingActionView {
     CommanderMergeSelection {
         unit_id: UnitId,
     },
-}
-
-/// Public immutable participant identity available to every match recipient.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct PlayerParticipantView {
-    id: PlayerId,
-    name: Box<str>,
-    color_value: u32,
-    country: PlayerCountry,
-    kind: PlayerKind,
-}
-
-impl PlayerParticipantView {
-    fn from_participant(value: &Participant) -> Self {
-        Self {
-            id: value.id().clone(),
-            name: value.name().into(),
-            color_value: value.color_value(),
-            country: value.country(),
-            kind: value.kind(),
-        }
-    }
-
-    /// Returns the stable participant identifier.
-    #[must_use]
-    pub const fn id(&self) -> &PlayerId {
-        &self.id
-    }
-    /// Returns the persisted participant display name.
-    #[must_use]
-    pub const fn name(&self) -> &str {
-        &self.name
-    }
-    /// Returns the persisted participant ARGB color.
-    #[must_use]
-    pub const fn color_value(&self) -> u32 {
-        self.color_value
-    }
-    /// Returns the participant country identity.
-    #[must_use]
-    pub const fn country(&self) -> PlayerCountry {
-        self.country
-    }
-    /// Returns whether the participant is human- or engine-controlled.
-    #[must_use]
-    pub const fn kind(&self) -> PlayerKind {
-        self.kind
-    }
 }
 
 /// Recipient-safe fog state for rendering the map without canonical access.

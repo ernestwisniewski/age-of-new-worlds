@@ -1,9 +1,10 @@
 use aonw_contracts::client::{
     ClientSessionStampDto, CulturalVictoryProgressDto, DominationVictoryProgressDto,
-    MapObjectiveProgressDto, PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
-    PlayerResearchViewDto, PlayerVictoryViewDto, PlayerViewSnapshotDto, ScienceYieldBreakdownDto,
-    ScienceYieldSourceDto, ScienceYieldSourceKindDto, StrategicResourceAmountDto,
-    StrategicResourceSourceDto,
+    EconomyForecastDto, GoldIncomeSourceDto, MapObjectiveProgressDto, PlayerEconomyViewDto,
+    PlayerFogViewDto, PlayerParticipantViewDto, PlayerResearchViewDto, PlayerVictoryViewDto,
+    PlayerViewSnapshotDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    ScienceYieldSourceKindDto, StabilityBreakdownDto, StrategicResourceAmountDto,
+    StrategicResourceSourceDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
@@ -171,6 +172,75 @@ pub(super) fn economy(value: &aonw_projection::PlayerEconomyView) -> PlayerEcono
                 amount_per_turn: source.amount_per_turn(),
             })
             .collect(),
+        forecast: economy_forecast(value.forecast()),
+    }
+}
+
+fn economy_forecast(value: &aonw_projection::PlayerEconomyForecastView) -> EconomyForecastDto {
+    let gold_source = |source: &aonw_projection::PlayerGoldIncomeSourceView| GoldIncomeSourceDto {
+        city_id: source.city_id().as_str().to_owned(),
+        amount: source.amount(),
+    };
+    EconomyForecastDto {
+        treasury: value.treasury,
+        city_income: value.city_income,
+        project_income: value.project_income,
+        gross_income: value.gross_income,
+        net_per_turn: value.net_per_turn,
+        city_sources: value.city_sources.iter().map(gold_source).collect(),
+        project_sources: value.project_sources.iter().map(gold_source).collect(),
+        upkeep: UnitUpkeepBreakdownDto {
+            upkeep_bearing_unit_count: value.upkeep.upkeep_bearing_unit_count(),
+            free_unit_count: value.upkeep.free_unit_count(),
+            paid_unit_count: value.upkeep.paid_unit_count(),
+            total: value.upkeep.total(),
+            next_worker_upkeep: value.upkeep.next_worker_upkeep(),
+            sources: value
+                .upkeep
+                .sources()
+                .iter()
+                .copied()
+                .map(|source| UnitUpkeepSourceDto {
+                    kind: crate::encode_unit_kind(source.kind()),
+                    paid_unit_count: source.paid_unit_count(),
+                    amount: source.amount(),
+                })
+                .collect(),
+        },
+        stability: stability_breakdown(&value.stability),
+    }
+}
+
+fn stability_breakdown(
+    value: &aonw_projection::PlayerStabilityBreakdownView,
+) -> StabilityBreakdownDto {
+    StabilityBreakdownDto {
+        base_order: value.base_order,
+        building_sources: value.building_sources,
+        luxury_sources: value.luxury_sources,
+        technology_sources: value.technology_sources,
+        artifact_sources: value.artifact_sources,
+        wonder_sources: value.wonder_sources,
+        city_cost: value.city_cost,
+        population_cost: value.population_cost,
+        cohesion_cost: value.cohesion_cost,
+        conquered_city_cost: value.conquered_city_cost,
+        war_weariness_cost: value.war_weariness_cost,
+        hegemony_tax: value.hegemony_tax,
+        source_total: value.source_total,
+        cost_total: value.cost_total,
+        relative_standing_adjustment: value.relative_standing_adjustment,
+        effective_net: value.effective_net,
+        band: stability_band(value.band),
+    }
+}
+
+const fn stability_band(value: aonw_engine::StabilityBand) -> aonw_contracts::StabilityBandDto {
+    match value {
+        aonw_engine::StabilityBand::Content => aonw_contracts::StabilityBandDto::Content,
+        aonw_engine::StabilityBand::Stable => aonw_contracts::StabilityBandDto::Stable,
+        aonw_engine::StabilityBand::Strained => aonw_contracts::StabilityBandDto::Strained,
+        aonw_engine::StabilityBand::Unrest => aonw_contracts::StabilityBandDto::Unrest,
     }
 }
 

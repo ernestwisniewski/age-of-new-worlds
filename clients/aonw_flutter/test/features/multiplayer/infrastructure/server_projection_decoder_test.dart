@@ -119,40 +119,9 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
   'stamp': _stamp(revision),
   'turn': 1,
   'turnMode': 'simultaneous',
-  'participants': [
-    {
-      'id': 'player-1',
-      'name': 'Player One',
-      'colorValue': 0xff000000,
-      'country': 'poland',
-      'kind': 'human',
-    },
-    {
-      'id': 'player-2',
-      'name': 'Player Two',
-      'colorValue': 0xffffffff,
-      'country': 'germany',
-      'kind': 'human',
-    },
-  ],
-  'fog': {
-    'enabled': true,
-    'discoveredHexes': [
-      {'col': 1, 'row': 1},
-      {'col': 2, 'row': 1},
-    ],
-    'visibleHexes': [
-      {'col': 2, 'row': 1},
-    ],
-  },
-  'economy': {
-    'gold': 100,
-    'warWeariness': 0,
-    'stabilityNet': 0,
-    'strategicResourceStockpile': <Object?>[],
-    'strategicResourceOutput': <Object?>[],
-    'strategicResourceSources': <Object?>[],
-  },
+  'participants': _participants(),
+  'fog': _fog(),
+  'economy': _economy(),
   'research': {
     'activeTechnologyId': null,
     'activeProgress': null,
@@ -164,35 +133,7 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
       'sources': <Object?>[],
     },
   },
-  'victory': {
-    'conquestEnabled': true,
-    'dominationEnabled': true,
-    'dominationRequiredControlPercent': 60,
-    'dominationRequiredHoldTurns': 5,
-    'culturalEnabled': true,
-    'culturalRequiredArtifacts': 6,
-    'culturalRequiredHoldTurns': 5,
-    'scoreFallbackEnabled': false,
-    'turnLimit': null,
-    'remainingTurns': null,
-    'scoreByPlayerId': {'player-1': 0, 'player-2': 0},
-    'domination': [
-      {
-        'playerId': 'player-1',
-        'controlledPassableHexes': 0,
-        'totalPassableHexes': 6,
-        'holdTurns': 0,
-      },
-      {
-        'playerId': 'player-2',
-        'controlledPassableHexes': 0,
-        'totalPassableHexes': 6,
-        'holdTurns': 0,
-      },
-    ],
-    'ownCultural': {'uniqueStoredArtifacts': 0, 'holdTurns': 0},
-    'mapObjectives': <Object?>[],
-  },
+  'victory': _victory(),
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
@@ -217,6 +158,109 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
   'artifacts': <Object?>[],
   'fieldImprovements': <Object?>[],
   'roads': <Object?>[],
+};
+
+List<Map<String, Object?>> _participants() => [
+  {
+    'id': 'player-1',
+    'name': 'Player One',
+    'colorValue': 0xff000000,
+    'country': 'poland',
+    'kind': 'human',
+  },
+  {
+    'id': 'player-2',
+    'name': 'Player Two',
+    'colorValue': 0xffffffff,
+    'country': 'germany',
+    'kind': 'human',
+  },
+];
+
+Map<String, Object?> _fog() => {
+  'enabled': true,
+  'discoveredHexes': [
+    {'col': 1, 'row': 1},
+    {'col': 2, 'row': 1},
+  ],
+  'visibleHexes': [
+    {'col': 2, 'row': 1},
+  ],
+};
+
+Map<String, Object?> _economy() => {
+  'gold': 100,
+  'warWeariness': 0,
+  'stabilityNet': 0,
+  'strategicResourceStockpile': <Object?>[],
+  'strategicResourceOutput': <Object?>[],
+  'strategicResourceSources': <Object?>[],
+  'forecast': {
+    'treasury': 100,
+    'cityIncome': 0,
+    'projectIncome': 0,
+    'grossIncome': 0,
+    'netPerTurn': 0,
+    'citySources': <Object?>[],
+    'projectSources': <Object?>[],
+    'upkeep': {
+      'upkeepBearingUnitCount': 0,
+      'freeUnitCount': 0,
+      'paidUnitCount': 0,
+      'total': 0,
+      'nextWorkerUpkeep': 0,
+      'sources': <Object?>[],
+    },
+    'stability': {
+      'baseOrder': 0,
+      'buildingSources': 0,
+      'luxurySources': 0,
+      'technologySources': 0,
+      'artifactSources': 0,
+      'wonderSources': 0,
+      'cityCost': 0,
+      'populationCost': 0,
+      'cohesionCost': 0,
+      'conqueredCityCost': 0,
+      'warWearinessCost': 0,
+      'hegemonyTax': 0,
+      'sourceTotal': 0,
+      'costTotal': 0,
+      'relativeStandingAdjustment': 0,
+      'effectiveNet': 0,
+      'band': 'stable',
+    },
+  },
+};
+
+Map<String, Object?> _victory() => {
+  'conquestEnabled': true,
+  'dominationEnabled': true,
+  'dominationRequiredControlPercent': 60,
+  'dominationRequiredHoldTurns': 5,
+  'culturalEnabled': true,
+  'culturalRequiredArtifacts': 6,
+  'culturalRequiredHoldTurns': 5,
+  'scoreFallbackEnabled': false,
+  'turnLimit': null,
+  'remainingTurns': null,
+  'scoreByPlayerId': {'player-1': 0, 'player-2': 0},
+  'domination': [
+    {
+      'playerId': 'player-1',
+      'controlledPassableHexes': 0,
+      'totalPassableHexes': 6,
+      'holdTurns': 0,
+    },
+    {
+      'playerId': 'player-2',
+      'controlledPassableHexes': 0,
+      'totalPassableHexes': 6,
+      'holdTurns': 0,
+    },
+  ],
+  'ownCultural': {'uniqueStoredArtifacts': 0, 'holdTurns': 0},
+  'mapObjectives': <Object?>[],
 };
 
 Map<String, Object?> _stamp(int revision) => {

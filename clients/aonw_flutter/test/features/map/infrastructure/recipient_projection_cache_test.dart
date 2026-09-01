@@ -35,6 +35,7 @@ void main() {
       strategicResourceStockpile: const [],
       strategicResourceOutput: const [],
       strategicResourceSources: const [],
+      forecast: AonwEconomyForecast.empty(treasury: 25, warWeariness: 2),
     );
     final research = _research(progress: 7);
     final victory = _victory(turn: 2, score: 8);
@@ -93,6 +94,7 @@ void main() {
               strategicResourceStockpile: const [],
               strategicResourceOutput: const [],
               strategicResourceSources: const [],
+              forecast: AonwEconomyForecast.empty(treasury: 1),
             ),
           ),
         ),

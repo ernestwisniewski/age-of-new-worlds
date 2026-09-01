@@ -181,6 +181,7 @@ AonwPlayerEconomyView _economy({
   int warWeariness = 0,
   int stabilityNet = 0,
   bool withOutput = false,
+  AonwEconomyForecast? forecast,
 }) => AonwPlayerEconomyView(
   gold: gold,
   warWeariness: warWeariness,
@@ -210,6 +211,44 @@ AonwPlayerEconomyView _economy({
           ),
         ]
       : const [],
+  forecast: forecast ?? _forecast(treasury: gold, warWeariness: warWeariness),
+);
+
+AonwEconomyForecast _forecast({
+  required int treasury,
+  int warWeariness = 0,
+  int cityIncome = 0,
+  int projectIncome = 0,
+  List<AonwGoldIncomeSource> citySources = const [],
+  List<AonwGoldIncomeSource> projectSources = const [],
+}) => AonwEconomyForecast(
+  treasury: treasury,
+  cityIncome: cityIncome,
+  projectIncome: projectIncome,
+  grossIncome: cityIncome + projectIncome,
+  netPerTurn: cityIncome + projectIncome,
+  citySources: citySources,
+  projectSources: projectSources,
+  upkeep: AonwUnitUpkeepBreakdown.empty(),
+  stability: AonwStabilityBreakdown(
+    baseOrder: 0,
+    buildingSources: 0,
+    luxurySources: 0,
+    technologySources: 0,
+    artifactSources: 0,
+    wonderSources: 0,
+    cityCost: 0,
+    populationCost: 0,
+    cohesionCost: 0,
+    conqueredCityCost: 0,
+    warWearinessCost: warWeariness,
+    hegemonyTax: 0,
+    sourceTotal: 0,
+    costTotal: warWeariness,
+    relativeStandingAdjustment: 0,
+    effectiveNet: -warWeariness,
+    band: AonwStabilityBand.stable,
+  ),
 );
 
 AonwPlayerResearchView _research({
