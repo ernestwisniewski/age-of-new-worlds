@@ -731,7 +731,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String saveImportCompleted(String map) {
-    return 'Imported $map. The previous save for this map was preserved as a backup.';
+    return 'Imported $map as a separate saved game.';
   }
 
   @override

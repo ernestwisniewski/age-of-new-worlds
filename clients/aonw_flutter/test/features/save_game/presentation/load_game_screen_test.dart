@@ -3,6 +3,7 @@ import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
 import 'package:aonw_flutter/features/replay/presentation/replay_presentation_controller.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_state.dart';
+import 'package:aonw_flutter/features/save_game/application/local_save_store.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_summary.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_transfer.dart';
 import 'package:aonw_flutter/features/save_game/presentation/load_game_screen.dart';
@@ -49,29 +50,40 @@ void main() {
     tester,
   ) async {
     var resumeCalls = 0;
-    LocalGameScenarioView? resumedScenario;
+    LocalSaveSlotView? resumedSlot;
     await tester.pumpWidget(
       LocalizedTestApp(
         home: LoadGameScreen(
-          listLocalSaves: () async => const [
+          listLocalSaves: () async => [
             LocalSaveSummaryView.ready(
-              scenario: LocalGameScenarioView.starterDuel,
+              slot: _slot('starter-slot', LocalGameScenarioView.starterDuel),
               gameMode: LocalSaveGameModeView.singlePlayer,
               turnMode: MatchTurnModeView.simultaneous,
               turn: 7,
               recoveredFromBackup: false,
             ),
             LocalSaveSummaryView.ready(
-              scenario: LocalGameScenarioView.dravonia,
+              slot: _slot('dravonia-slot', LocalGameScenarioView.dravonia),
               gameMode: LocalSaveGameModeView.hotseat,
               turnMode: MatchTurnModeView.sequential,
               turn: 12,
               recoveredFromBackup: true,
             ),
+            LocalSaveSummaryView.ready(
+              slot: _slot(
+                'dravonia-older-slot',
+                LocalGameScenarioView.dravonia,
+                name: 'Earlier Dravonia campaign',
+              ),
+              gameMode: LocalSaveGameModeView.hotseat,
+              turnMode: MatchTurnModeView.sequential,
+              turn: 4,
+              recoveredFromBackup: false,
+            ),
           ],
-          resumeLocalGame: (scenario) async {
+          resumeLocalGame: (slot) async {
             resumeCalls += 1;
-            resumedScenario = scenario;
+            resumedSlot = slot;
             return const LocalResumeResultView.started();
           },
           onResumed: () {},
@@ -86,13 +98,19 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Single player · Starter'), findsOneWidget);
-    expect(find.text('Hotseat · Dravonia'), findsOneWidget);
-    expect(find.text('Turn 7 · Simultaneous'), findsOneWidget);
-    expect(find.text('Turn 12 · Traditional'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('continue-game-dravonia')));
+    expect(find.text('Hotseat · Dravonia'), findsNWidgets(2));
+    expect(find.textContaining('Turn 7 · Simultaneous'), findsOneWidget);
+    expect(find.textContaining('Turn 12 · Traditional'), findsOneWidget);
+    final olderSave = find.byKey(
+      const ValueKey('continue-game-dravonia-older-slot'),
+    );
+    await tester.ensureVisible(olderSave);
+    await tester.pumpAndSettle();
+    await tester.tap(olderSave);
     await tester.pump();
     expect(resumeCalls, 1);
-    expect(resumedScenario, LocalGameScenarioView.dravonia);
+    expect(resumedSlot?.scenario, LocalGameScenarioView.dravonia);
+    expect(resumedSlot?.id, 'dravonia-older-slot');
   });
 
   testWidgets(
@@ -157,14 +175,18 @@ void main() {
     tester,
   ) async {
     var imported = false;
-    LocalGameScenarioView? exportedScenario;
+    LocalSaveSlotView? exportedSlot;
     await tester.pumpWidget(
       LocalizedTestApp(
         home: LoadGameScreen(
           listLocalSaves: () async => imported
-              ? const [
+              ? [
                   LocalSaveSummaryView.ready(
-                    scenario: LocalGameScenarioView.dravonia,
+                    slot: _slot(
+                      'imported-dravonia',
+                      LocalGameScenarioView.dravonia,
+                      name: 'Campaign North',
+                    ),
                     gameMode: LocalSaveGameModeView.singlePlayer,
                     turnMode: MatchTurnModeView.simultaneous,
                     turn: 5,
@@ -187,9 +209,11 @@ void main() {
               scenario: LocalGameScenarioView.dravonia,
             );
           },
-          onExportSave: (scenario) async {
-            exportedScenario = scenario;
-            return LocalSaveTransferResultView.completed(scenario: scenario);
+          onExportSave: (slot) async {
+            exportedSlot = slot;
+            return LocalSaveTransferResultView.completed(
+              scenario: slot.scenario,
+            );
           },
         ),
       ),
@@ -200,15 +224,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Single player · Dravonia'), findsOneWidget);
     expect(
-      find.text(
-        'Imported Dravonia. The previous save for this map was preserved as a backup.',
-      ),
+      find.text('Imported Dravonia as a separate saved game.'),
       findsOneWidget,
     );
 
-    await tester.tap(find.byKey(const ValueKey('export-save-dravonia')));
+    await tester.tap(
+      find.byKey(const ValueKey('export-save-imported-dravonia')),
+    );
     await tester.pumpAndSettle();
-    expect(exportedScenario, LocalGameScenarioView.dravonia);
+    expect(exportedSlot?.scenario, LocalGameScenarioView.dravonia);
     expect(find.text('Exported Dravonia.'), findsOneWidget);
   });
 
@@ -247,3 +271,14 @@ void main() {
     expect(openCalls, 1);
   });
 }
+
+LocalSaveSlotView _slot(
+  String id,
+  LocalGameScenarioView scenario, {
+  String? name,
+}) => LocalSaveSlotView(
+  id: id,
+  scenario: scenario,
+  name: name,
+  savedAt: DateTime.utc(2026, 9, 1, 12, 30),
+);

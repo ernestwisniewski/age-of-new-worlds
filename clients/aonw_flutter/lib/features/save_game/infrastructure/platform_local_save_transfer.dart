@@ -20,7 +20,7 @@ final class PlatformLocalSaveTransfer implements LocalSaveTransferPort {
   ];
 
   @override
-  Future<String?> pickSaveDocument() async {
+  Future<LocalSavePickedDocumentView?> pickSaveDocument() async {
     try {
       final file = await openFile(acceptedTypeGroups: _saveTypes);
       if (file == null) return null;
@@ -37,7 +37,10 @@ final class PlatformLocalSaveTransfer implements LocalSaveTransferPort {
           message: 'The selected save document is too large.',
         );
       }
-      return utf8.decode(bytes, allowMalformed: false);
+      return LocalSavePickedDocumentView(
+        document: utf8.decode(bytes, allowMalformed: false),
+        name: _saveName(file.name),
+      );
     } on LocalSaveTransferException {
       rethrow;
     } on Object catch (error, stackTrace) {
@@ -105,4 +108,11 @@ final class PlatformLocalSaveTransfer implements LocalSaveTransferPort {
         TargetPlatform.windows => true,
         _ => false,
       };
+}
+
+String? _saveName(String fileName) {
+  final normalized = fileName.trim();
+  if (normalized.isEmpty) return null;
+  final dot = normalized.lastIndexOf('.');
+  return dot <= 0 ? normalized : normalized.substring(0, dot);
 }

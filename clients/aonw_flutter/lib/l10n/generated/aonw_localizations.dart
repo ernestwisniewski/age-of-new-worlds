@@ -1205,7 +1205,7 @@ abstract class AonwLocalizations {
   /// No description provided for @saveImportCompleted.
   ///
   /// In en, this message translates to:
-  /// **'Imported {map}. The previous save for this map was preserved as a backup.'**
+  /// **'Imported {map} as a separate saved game.'**
   String saveImportCompleted(String map);
 
   /// No description provided for @saveExportCompleted.

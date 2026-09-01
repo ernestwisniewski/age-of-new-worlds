@@ -17,7 +17,7 @@ final class _LocalSaveCard extends StatelessWidget {
   final bool resuming;
   final bool openingReplay;
   final bool exporting;
-  final VoidCallback onResume;
+  final VoidCallback? onResume;
   final VoidCallback onOpenReplay;
   final VoidCallback? onExportSave;
 
@@ -27,16 +27,21 @@ final class _LocalSaveCard extends StatelessWidget {
     final save = entry.save;
     final compatible = save?.compatible == true;
     return Card(
-      key: ValueKey('local-save-${entry.scenario.name}'),
+      key: ValueKey('local-save-${entry.id}'),
       child: Padding(
         padding: const EdgeInsets.all(AonwSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              save?.slot.name ?? l10n.localScenarioName(entry.scenario.name),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: AonwSpacing.xs),
+            Text(
               '${_modeName(context)} · '
               '${l10n.localScenarioName(entry.scenario.name)}',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: AonwSpacing.xs),
             Text(
@@ -45,6 +50,7 @@ final class _LocalSaveCard extends StatelessWidget {
             ),
             const SizedBox(height: AonwSpacing.md),
             _SaveCardActions(
+              saveId: save?.slot.id ?? entry.id,
               scenario: entry.scenario,
               canResume: compatible && !busy,
               canReplay: entry.hasReplay && !busy,
@@ -73,13 +79,21 @@ final class _LocalSaveCard extends StatelessWidget {
     if (save?.compatible != true) {
       return l10n.resumeFailure(LocalResumeFailureViewCode.incompatible.name);
     }
-    return '${l10n.multiplayerTurn(save!.turn!)} · '
-        '${l10n.turnModeName(save.turnMode!.name)}';
+    final savedAt = save!.slot.savedAt.toLocal();
+    final material = MaterialLocalizations.of(context);
+    final date = material.formatMediumDate(savedAt);
+    final time = material.formatTimeOfDay(
+      TimeOfDay.fromDateTime(savedAt),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+    return '${l10n.multiplayerTurn(save.turn!)} · '
+        '${l10n.turnModeName(save.turnMode!.name)} · $date $time';
   }
 }
 
 final class _SaveCardActions extends StatelessWidget {
   const _SaveCardActions({
+    required this.saveId,
     required this.scenario,
     required this.canResume,
     required this.canReplay,
@@ -92,6 +106,7 @@ final class _SaveCardActions extends StatelessWidget {
     required this.onExportSave,
   });
 
+  final String saveId;
   final LocalGameScenarioView scenario;
   final bool canResume;
   final bool canReplay;
@@ -99,7 +114,7 @@ final class _SaveCardActions extends StatelessWidget {
   final bool resuming;
   final bool openingReplay;
   final bool exporting;
-  final VoidCallback onResume;
+  final VoidCallback? onResume;
   final VoidCallback onOpenReplay;
   final VoidCallback? onExportSave;
 
@@ -109,7 +124,7 @@ final class _SaveCardActions extends StatelessWidget {
     runSpacing: AonwSpacing.sm,
     children: [
       _ResumeSaveButton(
-        scenario: scenario,
+        saveId: saveId,
         enabled: canResume,
         active: resuming,
         onPressed: onResume,
@@ -121,7 +136,7 @@ final class _SaveCardActions extends StatelessWidget {
         onPressed: onOpenReplay,
       ),
       _ExportSaveButton(
-        scenario: scenario,
+        saveId: saveId,
         enabled: canExport,
         active: exporting,
         onPressed: onExportSave,
@@ -132,20 +147,20 @@ final class _SaveCardActions extends StatelessWidget {
 
 final class _ResumeSaveButton extends StatelessWidget {
   const _ResumeSaveButton({
-    required this.scenario,
+    required this.saveId,
     required this.enabled,
     required this.active,
     required this.onPressed,
   });
 
-  final LocalGameScenarioView scenario;
+  final String saveId;
   final bool enabled;
   final bool active;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => FilledButton.icon(
-    key: ValueKey('continue-game-${scenario.name}'),
+    key: ValueKey('continue-game-$saveId'),
     onPressed: enabled ? onPressed : null,
     icon: _ProgressIcon(active: active, fallback: Icons.play_arrow),
     label: Text(
@@ -180,13 +195,13 @@ final class _OpenReplayButton extends StatelessWidget {
 
 final class _ExportSaveButton extends StatelessWidget {
   const _ExportSaveButton({
-    required this.scenario,
+    required this.saveId,
     required this.enabled,
     required this.active,
     required this.onPressed,
   });
 
-  final LocalGameScenarioView scenario;
+  final String saveId;
   final bool enabled;
   final bool active;
   final VoidCallback? onPressed;
@@ -195,7 +210,7 @@ final class _ExportSaveButton extends StatelessWidget {
   Widget build(BuildContext context) => Tooltip(
     message: onPressed == null ? context.aonwL10n.saveTransferUnavailable : '',
     child: OutlinedButton.icon(
-      key: ValueKey('export-save-${scenario.name}'),
+      key: ValueKey('export-save-$saveId'),
       onPressed: enabled ? onPressed : null,
       icon: _ProgressIcon(
         active: active,

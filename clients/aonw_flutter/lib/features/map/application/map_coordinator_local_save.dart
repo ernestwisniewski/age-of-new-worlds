@@ -11,13 +11,11 @@ extension MapCoordinatorLocalSave on MapCoordinator {
   Future<LocalSaveTransferResultView> importLocalSave() =>
       _saveWorkflow.importSave();
 
-  Future<LocalSaveTransferResultView> exportLocalSave(
-    LocalGameScenarioView scenario,
-  ) => _saveWorkflow.exportSave(scenario);
+  Future<LocalSaveTransferResultView> exportLocalSave(LocalSaveSlotView slot) =>
+      _saveWorkflow.exportSave(slot);
 
-  Future<LocalResumeResultView> resumeLocalGame(
-    LocalGameScenarioView scenario,
-  ) => _resumeLocalGame(() => _saveWorkflow.resume(scenario));
+  Future<LocalResumeResultView> resumeLocalGame(LocalSaveSlotView slot) =>
+      _resumeLocalGame(() => _saveWorkflow.resume(slot));
 
   Future<LocalResumeResultView> resumeLatestLocalGame() =>
       _resumeLocalGame(_saveWorkflow.resumeLatest);
@@ -53,6 +51,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
       );
     }
     _localGameEntry = attempt.entry;
+    _localSaveSlot = attempt.slot;
     _localControlPlan = attempt.controlPlan;
     _setState(ready);
     return const LocalResumeResultView.started();
@@ -90,9 +89,10 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     }
     final generation = _loadGeneration;
     _setState(current.withLocalSave(const LocalSaveState.saving()));
-    final failure = await _saveWorkflow.save(entry);
+    final result = await _saveWorkflow.save(entry, slot: _localSaveSlot);
     if (!_isCurrent(generation)) return;
-    if (failure == null) {
+    if (result.saved) {
+      _localSaveSlot = result.slot;
       await _captureReplay(entry);
       if (!_isCurrent(generation)) return;
     }
@@ -100,9 +100,9 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     if (ready is GameSessionReady) {
       _setState(
         ready.withLocalSave(
-          failure == null
+          result.saved
               ? const LocalSaveState.saved()
-              : LocalSaveState.failed(failure),
+              : LocalSaveState.failed(result.failure!),
         ),
       );
     }

@@ -35,8 +35,15 @@ final class LocalSaveTransferResultView {
 
 enum LocalSaveExportDisposition { completed, cancelled }
 
+final class LocalSavePickedDocumentView {
+  const LocalSavePickedDocumentView({required this.document, this.name});
+
+  final String document;
+  final String? name;
+}
+
 abstract interface class LocalSaveTransferPort {
-  Future<String?> pickSaveDocument();
+  Future<LocalSavePickedDocumentView?> pickSaveDocument();
 
   Future<LocalSaveExportDisposition> exportSaveDocument({
     required String suggestedName,

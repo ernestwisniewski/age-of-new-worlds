@@ -10,6 +10,7 @@ import '../../local_game/application/local_game_catalog.dart';
 import '../../replay/application/replay_state.dart';
 import '../../replay/presentation/replay_presentation_controller.dart';
 import '../application/local_save_state.dart';
+import '../application/local_save_store.dart';
 import '../application/local_save_summary.dart';
 import '../application/local_save_transfer.dart';
 
@@ -20,17 +21,16 @@ part 'load_game_body.dart';
 
 typedef LocalSaveIndexReader = Future<List<LocalSaveSummaryView>> Function();
 typedef LocalGameResume =
-    Future<LocalResumeResultView> Function(LocalGameScenarioView scenario);
+    Future<LocalResumeResultView> Function(LocalSaveSlotView slot);
 typedef LocalReplayAvailabilityReader =
     Future<bool> Function(LocalGameScenarioView scenario);
 typedef LocalReplayOpen =
     Future<ReplayOpenResultView> Function(LocalGameScenarioView scenario);
 typedef LocalSaveImport = Future<LocalSaveTransferResultView> Function();
 typedef LocalSaveExport =
-    Future<LocalSaveTransferResultView> Function(
-      LocalGameScenarioView scenario,
-    );
-typedef LocalArchiveAction =
+    Future<LocalSaveTransferResultView> Function(LocalSaveSlotView slot);
+typedef LocalArchiveAction = Future<void> Function(LocalSaveSlotView slot);
+typedef LocalReplayAction =
     Future<void> Function(LocalGameScenarioView scenario);
 typedef OnlineSaveIndexReader = OnlineSaveIndexView Function();
 typedef OnlineGameResume = Future<bool> Function(String matchId);
@@ -79,8 +79,9 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   var _openingReplay = false;
   var _resumingOnline = false;
   var _transferring = false;
-  LocalGameScenarioView? _activeScenario;
-  LocalGameScenarioView? _transferScenario;
+  String? _activeSaveId;
+  LocalGameScenarioView? _activeReplayScenario;
+  String? _transferSaveId;
   String? _activeOnlineMatchId;
   String? _onlineFailureCode;
   LocalResumeFailureViewCode? _resumeFailure;
@@ -123,12 +124,13 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             importing:
                 _transferring &&
                 _transferAction == _LocalSaveTransferAction.importSave,
-            exportingScenario:
+            exportingSaveId:
                 _transferring &&
                     _transferAction == _LocalSaveTransferAction.exportSave
-                ? _transferScenario
+                ? _transferSaveId
                 : null,
-            activeScenario: _activeScenario,
+            activeSaveId: _activeSaveId,
+            activeReplayScenario: _activeReplayScenario,
             resumeFailure: _resumeFailure,
             replayFailure: _replayFailure,
             onResume: _resume,
@@ -154,44 +156,57 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
 
   Future<_LoadAvailability> _readAvailability() async {
     final saves = await widget.listLocalSaves();
-    final savesByScenario = {for (final save in saves) save.scenario: save};
     final replayAvailability = await Future.wait([
       for (final entry in LocalGameCatalog.entries)
         widget.hasLocalReplay(entry.id),
     ]);
-    return _LoadAvailability([
+    final replayByScenario = {
       for (var index = 0; index < LocalGameCatalog.entries.length; index += 1)
-        if (savesByScenario[LocalGameCatalog.entries[index].id] != null ||
-            replayAvailability[index])
-          _LoadEntry(
-            scenario: LocalGameCatalog.entries[index].id,
-            save: savesByScenario[LocalGameCatalog.entries[index].id],
-            hasReplay: replayAvailability[index],
-          ),
-    ]);
+        LocalGameCatalog.entries[index].id: replayAvailability[index],
+    };
+    final replayAssigned = <LocalGameScenarioView>{};
+    final entries = <_LoadEntry>[
+      for (final save in saves)
+        _LoadEntry(
+          scenario: save.scenario,
+          save: save,
+          hasReplay:
+              replayByScenario[save.scenario] == true &&
+              replayAssigned.add(save.scenario),
+        ),
+    ];
+    for (final scenario in LocalGameScenarioView.values) {
+      if (replayByScenario[scenario] == true &&
+          !replayAssigned.contains(scenario)) {
+        entries.add(
+          _LoadEntry(scenario: scenario, save: null, hasReplay: true),
+        );
+      }
+    }
+    return _LoadAvailability(entries);
   }
 
-  Future<void> _resume(LocalGameScenarioView scenario) async {
+  Future<void> _resume(LocalSaveSlotView slot) async {
     setState(() {
       _resuming = true;
-      _activeScenario = scenario;
+      _activeSaveId = slot.id;
       _resumeFailure = null;
       _replayFailure = null;
       _transferResult = null;
     });
-    final result = await widget.resumeLocalGame(scenario);
+    final result = await widget.resumeLocalGame(slot);
     if (!mounted) return;
     if (result.started) {
       setState(() {
         _resuming = false;
-        _activeScenario = null;
+        _activeSaveId = null;
       });
       widget.onResumed();
       return;
     }
     setState(() {
       _resuming = false;
-      _activeScenario = null;
+      _activeSaveId = null;
       _resumeFailure = result.failure;
       _availability = _readAvailability();
     });
@@ -200,7 +215,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   Future<void> _openReplay(LocalGameScenarioView scenario) async {
     setState(() {
       _openingReplay = true;
-      _activeScenario = scenario;
+      _activeReplayScenario = scenario;
       _resumeFailure = null;
       _replayFailure = null;
       _transferResult = null;
@@ -211,13 +226,13 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       widget.onReplayOpened();
       setState(() {
         _openingReplay = false;
-        _activeScenario = null;
+        _activeReplayScenario = null;
       });
       return;
     }
     setState(() {
       _openingReplay = false;
-      _activeScenario = null;
+      _activeReplayScenario = null;
       _replayFailure = result.failure;
       _availability = _readAvailability();
     });
@@ -246,22 +261,22 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
     operation: widget.onImportSave!,
   );
 
-  Future<void> _exportSave(LocalGameScenarioView scenario) => _runTransfer(
+  Future<void> _exportSave(LocalSaveSlotView slot) => _runTransfer(
     action: _LocalSaveTransferAction.exportSave,
-    scenario: scenario,
-    operation: () => widget.onExportSave!(scenario),
+    slot: slot,
+    operation: () => widget.onExportSave!(slot),
   );
 
   Future<void> _runTransfer({
     required _LocalSaveTransferAction action,
     required Future<LocalSaveTransferResultView> Function() operation,
-    LocalGameScenarioView? scenario,
+    LocalSaveSlotView? slot,
   }) async {
     if (_transferring) return;
     setState(() {
       _transferring = true;
       _transferAction = action;
-      _transferScenario = scenario;
+      _transferSaveId = slot?.id;
       _transferResult = null;
       _onlineFailureCode = null;
       _resumeFailure = null;
@@ -280,7 +295,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
     if (!mounted) return;
     setState(() {
       _transferring = false;
-      _transferScenario = null;
+      _transferSaveId = null;
       _transferResult = result;
       if (result.completed && action == _LocalSaveTransferAction.importSave) {
         _availability = _readAvailability();
@@ -315,4 +330,6 @@ final class _LoadEntry {
   final LocalGameScenarioView scenario;
   final LocalSaveSummaryView? save;
   final bool hasReplay;
+
+  String get id => save?.slot.id ?? 'replay-${scenario.name}';
 }

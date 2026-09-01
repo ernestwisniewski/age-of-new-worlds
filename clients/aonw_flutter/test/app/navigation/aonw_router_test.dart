@@ -213,11 +213,13 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('load-game')));
     await tester.pumpAndSettle();
     final continueButton = tester.widget<FilledButton>(
-      find.byKey(const ValueKey('continue-game-starterDuel')),
+      find.byKey(const ValueKey('continue-game-test-starter-save')),
     );
     expect(continueButton.onPressed, isNotNull);
 
-    await tester.tap(find.byKey(const ValueKey('continue-game-starterDuel')));
+    await tester.tap(
+      find.byKey(const ValueKey('continue-game-test-starter-save')),
+    );
     await tester.pumpAndSettle();
 
     expect(persistence.openedDocuments, ['engine-save']);
@@ -300,7 +302,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.byKey(const ValueKey('load-game')));
     await tester.tap(find.byKey(const ValueKey('load-game')));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
     final replayButton = tester.widget<OutlinedButton>(
       find.byKey(const ValueKey('open-replay-starterDuel')),
     );
@@ -329,7 +332,8 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('pause-replay')));
     await tester.tap(find.byKey(const ValueKey('close-replay')));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
     expect(
       find.byKey(const ValueKey('open-replay-starterDuel')),
       findsOneWidget,
@@ -381,24 +385,38 @@ final class _SingleSaveStore implements LocalSaveStore {
   _SingleSaveStore([this.document]);
 
   String? document;
+  final slot = LocalSaveSlotView(
+    id: 'test-starter-save',
+    scenario: LocalGameScenarioView.starterDuel,
+    savedAt: DateTime.utc(2026, 9, 1),
+  );
 
   @override
-  Future<bool> contains(LocalGameScenarioView scenario) async =>
-      scenario == LocalGameScenarioView.starterDuel && document != null;
+  Future<List<LocalSaveSlotView>> list() async => [if (document != null) slot];
 
   @override
-  Future<String?> read(
-    LocalGameScenarioView scenario,
-    LocalSaveCopyView copy,
-  ) async =>
-      scenario == LocalGameScenarioView.starterDuel &&
-          copy == LocalSaveCopyView.primary
+  Future<String?> read(LocalSaveSlotView slot, LocalSaveCopyView copy) async =>
+      slot.id == this.slot.id && copy == LocalSaveCopyView.primary
       ? document
       : null;
 
   @override
-  Future<void> write(LocalGameScenarioView scenario, String document) async {
+  Future<LocalSaveSlotView> create({
+    required LocalGameScenarioView scenario,
+    required String? name,
+    required String document,
+  }) async {
     this.document = document;
+    return slot;
+  }
+
+  @override
+  Future<LocalSaveSlotView> write(
+    LocalSaveSlotView slot,
+    String document,
+  ) async {
+    this.document = document;
+    return this.slot;
   }
 }
 

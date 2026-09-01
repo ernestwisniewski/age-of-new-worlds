@@ -96,13 +96,11 @@ final class MapPresentationController extends ChangeNotifier {
   Future<LocalSaveTransferResultView> importLocalSave() =>
       _coordinator.importLocalSave();
 
-  Future<LocalSaveTransferResultView> exportLocalSave(
-    LocalGameScenarioView scenario,
-  ) => _coordinator.exportLocalSave(scenario);
+  Future<LocalSaveTransferResultView> exportLocalSave(LocalSaveSlotView slot) =>
+      _coordinator.exportLocalSave(slot);
 
-  Future<LocalResumeResultView> resumeLocalGame(
-    LocalGameScenarioView scenario,
-  ) => _coordinator.resumeLocalGame(scenario);
+  Future<LocalResumeResultView> resumeLocalGame(LocalSaveSlotView slot) =>
+      _coordinator.resumeLocalGame(slot);
 
   Future<LocalResumeResultView> resumeLatestLocalGame() =>
       _coordinator.resumeLatestLocalGame();

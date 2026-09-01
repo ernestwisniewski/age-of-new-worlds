@@ -13,16 +13,17 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
         LocalSaveTransferFailureViewCode.unavailable,
       );
     }
-    final String? document;
+    final LocalSavePickedDocumentView? picked;
     try {
-      document = await transfer.pickSaveDocument();
+      picked = await transfer.pickSaveDocument();
     } on Object catch (error, stackTrace) {
       _reportTransferFailure('save_import_read_failed', error, stackTrace);
       return LocalSaveTransferResultView.failed(_importFailure(error));
     }
-    if (document == null) {
+    if (picked == null) {
       return const LocalSaveTransferResultView.cancelled();
     }
+    final document = picked.document;
     if (_documentBytes(document) > maxLocalSaveDocumentBytes) {
       return const LocalSaveTransferResultView.failed(
         LocalSaveTransferFailureViewCode.tooLarge,
@@ -35,7 +36,11 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
       );
     }
     try {
-      await store.write(scenario, document);
+      await store.create(
+        scenario: scenario,
+        name: picked.name,
+        document: document,
+      );
       return LocalSaveTransferResultView.completed(scenario: scenario);
     } on Object catch (error, stackTrace) {
       _reportTransferFailure('save_import_write_failed', error, stackTrace);
@@ -45,9 +50,7 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
     }
   }
 
-  Future<LocalSaveTransferResultView> exportSave(
-    LocalGameScenarioView scenario,
-  ) async {
+  Future<LocalSaveTransferResultView> exportSave(LocalSaveSlotView slot) async {
     final session = _session;
     final store = _store;
     final transfer = _transfer;
@@ -57,21 +60,21 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
       );
     }
     final entry = LocalGameCatalog.entries.singleWhere(
-      (candidate) => candidate.id == scenario,
+      (candidate) => candidate.id == slot.scenario,
     );
-    final candidate = await _exportCandidate(session, store, entry);
+    final candidate = await _exportCandidate(session, store, slot, entry);
     if (candidate.document == null) {
       return LocalSaveTransferResultView.failed(candidate.failure!);
     }
     try {
       final disposition = await transfer.exportSaveDocument(
-        suggestedName: 'aonw-${scenario.name}.aonwsave',
+        suggestedName: _exportName(slot),
         document: candidate.document!,
       );
       if (disposition == LocalSaveExportDisposition.cancelled) {
         return const LocalSaveTransferResultView.cancelled();
       }
-      return LocalSaveTransferResultView.completed(scenario: scenario);
+      return LocalSaveTransferResultView.completed(scenario: slot.scenario);
     } on Object catch (error, stackTrace) {
       _reportTransferFailure('save_export_transfer_failed', error, stackTrace);
       return const LocalSaveTransferResultView.failed(
@@ -112,12 +115,13 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
   _exportCandidate(
     GameSaveSessionPort session,
     LocalSaveStore store,
+    LocalSaveSlotView slot,
     LocalGameCatalogEntryView entry,
   ) async {
     var found = false;
     var readFailed = false;
     for (final copy in LocalSaveCopyView.values) {
-      final read = await _readSaveDocument(store, entry.id, copy);
+      final read = await _readSaveDocument(store, slot, copy);
       readFailed = readFailed || read.failed;
       final document = read.document;
       if (document == null) continue;
@@ -171,3 +175,14 @@ extension LocalSaveTransferWorkflow on LocalSaveWorkflow {
 }
 
 int _documentBytes(String document) => utf8.encode(document).length;
+
+String _exportName(LocalSaveSlotView slot) {
+  final preferred = slot.name?.trim();
+  final stem = preferred == null || preferred.isEmpty
+      ? slot.scenario.name
+      : preferred
+            .replaceAll(RegExp(r'[^A-Za-z0-9._-]+'), '-')
+            .replaceAll(RegExp(r'-+'), '-')
+            .replaceAll(RegExp(r'^-|-$'), '');
+  return 'aonw-${stem.isEmpty ? slot.scenario.name : stem}.aonwsave';
+}

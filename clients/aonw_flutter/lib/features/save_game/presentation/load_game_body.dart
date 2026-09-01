@@ -8,8 +8,9 @@ final class _LoadGameBody extends StatelessWidget {
     required this.resuming,
     required this.openingReplay,
     required this.importing,
-    required this.exportingScenario,
-    required this.activeScenario,
+    required this.exportingSaveId,
+    required this.activeSaveId,
+    required this.activeReplayScenario,
     required this.resumeFailure,
     required this.replayFailure,
     required this.onResume,
@@ -33,12 +34,13 @@ final class _LoadGameBody extends StatelessWidget {
   final bool resuming;
   final bool openingReplay;
   final bool importing;
-  final LocalGameScenarioView? exportingScenario;
-  final LocalGameScenarioView? activeScenario;
+  final String? exportingSaveId;
+  final String? activeSaveId;
+  final LocalGameScenarioView? activeReplayScenario;
   final LocalResumeFailureViewCode? resumeFailure;
   final ReplayFailureViewCode? replayFailure;
   final LocalArchiveAction onResume;
-  final LocalArchiveAction onOpenReplay;
+  final LocalReplayAction onOpenReplay;
   final VoidCallback onStartSinglePlayer;
   final VoidCallback? onImportSave;
   final LocalArchiveAction? onExportSave;
@@ -76,8 +78,9 @@ final class _LoadGameBody extends StatelessWidget {
                 busy: busy,
                 resuming: resuming,
                 openingReplay: openingReplay,
-                exportingScenario: exportingScenario,
-                activeScenario: activeScenario,
+                exportingSaveId: exportingSaveId,
+                activeSaveId: activeSaveId,
+                activeReplayScenario: activeReplayScenario,
                 onResume: onResume,
                 onOpenReplay: onOpenReplay,
                 onStartSinglePlayer: onStartSinglePlayer,
@@ -121,8 +124,9 @@ final class _LocalSaveSection extends StatelessWidget {
     required this.busy,
     required this.resuming,
     required this.openingReplay,
-    required this.exportingScenario,
-    required this.activeScenario,
+    required this.exportingSaveId,
+    required this.activeSaveId,
+    required this.activeReplayScenario,
     required this.onResume,
     required this.onOpenReplay,
     required this.onStartSinglePlayer,
@@ -135,10 +139,11 @@ final class _LocalSaveSection extends StatelessWidget {
   final bool busy;
   final bool resuming;
   final bool openingReplay;
-  final LocalGameScenarioView? exportingScenario;
-  final LocalGameScenarioView? activeScenario;
+  final String? exportingSaveId;
+  final String? activeSaveId;
+  final LocalGameScenarioView? activeReplayScenario;
   final LocalArchiveAction onResume;
-  final LocalArchiveAction onOpenReplay;
+  final LocalReplayAction onOpenReplay;
   final VoidCallback onStartSinglePlayer;
   final LocalArchiveAction? onExportSave;
 
@@ -157,14 +162,19 @@ final class _LocalSaveSection extends StatelessWidget {
             child: _LocalSaveCard(
               entry: entry,
               busy: busy,
-              resuming: resuming && activeScenario == entry.scenario,
-              openingReplay: openingReplay && activeScenario == entry.scenario,
-              exporting: exportingScenario == entry.scenario,
-              onResume: () => onResume(entry.scenario),
+              resuming: resuming && activeSaveId == entry.save?.slot.id,
+              openingReplay:
+                  openingReplay && activeReplayScenario == entry.scenario,
+              exporting: exportingSaveId == entry.save?.slot.id,
+              onResume: entry.save == null
+                  ? null
+                  : () => onResume(entry.save!.slot),
               onOpenReplay: () => onOpenReplay(entry.scenario),
               onExportSave: onExportSave == null
                   ? null
-                  : () => onExportSave!(entry.scenario),
+                  : entry.save == null
+                  ? null
+                  : () => onExportSave!(entry.save!.slot),
             ),
           ),
       ],

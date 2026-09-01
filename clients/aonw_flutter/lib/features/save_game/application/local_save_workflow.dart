@@ -17,21 +17,35 @@ typedef LocalSaveDiagnosticReporter =
 final class LocalResumeAttemptView {
   const LocalResumeAttemptView.started({
     required this.entry,
+    required this.slot,
     required this.scene,
     required this.controlPlan,
   }) : failure = null;
 
   const LocalResumeAttemptView.failed(this.failure)
     : entry = null,
+      slot = null,
       scene = null,
       controlPlan = null;
 
   final LocalGameCatalogEntryView? entry;
+  final LocalSaveSlotView? slot;
   final MapScene? scene;
   final LocalMatchControlPlanView? controlPlan;
   final LocalResumeFailureViewCode? failure;
 
   bool get started => entry != null && scene != null;
+}
+
+final class LocalSaveWriteResultView {
+  const LocalSaveWriteResultView.saved(this.slot) : failure = null;
+
+  const LocalSaveWriteResultView.failed(this.failure) : slot = null;
+
+  final LocalSaveSlotView? slot;
+  final LocalSaveFailureViewCode? failure;
+
+  bool get saved => slot != null;
 }
 
 final class LocalSaveWorkflow {
@@ -54,10 +68,7 @@ final class LocalSaveWorkflow {
     final store = _store;
     if (store == null) return false;
     try {
-      for (final entry in LocalGameCatalog.entries) {
-        if (await store.contains(entry.id)) return true;
-      }
-      return false;
+      return (await store.list()).isNotEmpty;
     } on Object catch (error, stackTrace) {
       _diagnosticReporter('save_lookup_failed', error, stackTrace);
       return false;
@@ -68,53 +79,89 @@ final class LocalSaveWorkflow {
     final store = _store;
     if (store == null) return const [];
     final summaries = <LocalSaveSummaryView>[];
-    for (final entry in LocalGameCatalog.entries) {
-      final summary = await _inspectEntry(store, entry);
+    List<LocalSaveSlotView> slots;
+    try {
+      slots = await store.list();
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('save_index_failed', error, stackTrace);
+      return const [];
+    }
+    for (final slot in slots) {
+      final summary = await _inspectSlot(store, slot);
       if (summary != null) summaries.add(summary);
     }
     return List.unmodifiable(summaries);
   }
 
-  Future<LocalSaveFailureViewCode?> save(
-    LocalGameCatalogEntryView entry,
-  ) async {
+  Future<LocalSaveWriteResultView> save(
+    LocalGameCatalogEntryView entry, {
+    required LocalSaveSlotView? slot,
+  }) async {
     final session = _session;
     final store = _store;
     if (session == null || store == null) {
-      return LocalSaveFailureViewCode.unavailable;
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.unavailable,
+      );
     }
     String document;
     try {
       document = await session.exportSaveDocument();
     } on GameSaveSessionException catch (error, stackTrace) {
       _reportSessionFailure(error, stackTrace);
-      return LocalSaveFailureViewCode.exportFailed;
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.exportFailed,
+      );
     } on Object catch (error, stackTrace) {
       _diagnosticReporter('unexpected_save_export_failure', error, stackTrace);
-      return LocalSaveFailureViewCode.exportFailed;
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.exportFailed,
+      );
     }
     try {
-      await store.write(entry.id, document);
-      return null;
+      final updated = slot == null
+          ? await store.create(
+              scenario: entry.id,
+              name: null,
+              document: document,
+            )
+          : await store.write(slot, document);
+      return LocalSaveWriteResultView.saved(updated);
     } on LocalSaveStoreException catch (error, stackTrace) {
       _reportStoreFailure(error, stackTrace);
-      return LocalSaveFailureViewCode.writeFailed;
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.writeFailed,
+      );
     } on Object catch (error, stackTrace) {
       _diagnosticReporter('unexpected_save_write_failure', error, stackTrace);
-      return LocalSaveFailureViewCode.writeFailed;
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.writeFailed,
+      );
     }
   }
 
-  Future<LocalResumeAttemptView> resume(LocalGameScenarioView scenario) =>
-      _resumeEntries([
-        LocalGameCatalog.entries.singleWhere((entry) => entry.id == scenario),
-      ]);
+  Future<LocalResumeAttemptView> resume(LocalSaveSlotView slot) =>
+      _resumeSlots([slot]);
 
-  Future<LocalResumeAttemptView> resumeLatest() =>
-      _resumeEntries(LocalGameCatalog.entries);
+  Future<LocalResumeAttemptView> resumeLatest() async {
+    final store = _store;
+    if (store == null) {
+      return const LocalResumeAttemptView.failed(
+        LocalResumeFailureViewCode.unavailable,
+      );
+    }
+    try {
+      return _resumeSlots(await store.list());
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('save_index_failed', error, stackTrace);
+      return const LocalResumeAttemptView.failed(
+        LocalResumeFailureViewCode.unreadable,
+      );
+    }
+  }
 
-  Future<LocalResumeAttemptView> _resumeEntries(
-    Iterable<LocalGameCatalogEntryView> entries,
+  Future<LocalResumeAttemptView> _resumeSlots(
+    Iterable<LocalSaveSlotView> slots,
   ) async {
     final session = _session;
     final store = _store;
@@ -125,9 +172,12 @@ final class LocalSaveWorkflow {
     }
     var foundDocument = false;
     var readFailed = false;
-    for (final entry in entries) {
+    for (final slot in slots) {
+      final entry = LocalGameCatalog.entries.singleWhere(
+        (candidate) => candidate.id == slot.scenario,
+      );
       for (final copy in LocalSaveCopyView.values) {
-        final read = await _readSaveDocument(store, entry.id, copy);
+        final read = await _readSaveDocument(store, slot, copy);
         readFailed = readFailed || read.failed;
         final document = read.document;
         if (document == null) continue;
@@ -136,6 +186,7 @@ final class LocalSaveWorkflow {
         if (opened != null) {
           return LocalResumeAttemptView.started(
             entry: entry,
+            slot: slot,
             scene: opened.scene,
             controlPlan: opened.controlPlan,
           );
@@ -169,26 +220,19 @@ final class LocalSaveWorkflow {
     return null;
   }
 
-  Future<LocalSaveSummaryView?> _inspectEntry(
+  Future<LocalSaveSummaryView?> _inspectSlot(
     LocalSaveStore store,
-    LocalGameCatalogEntryView entry,
+    LocalSaveSlotView slot,
   ) async {
-    try {
-      if (!await store.contains(entry.id)) return null;
-    } on Object catch (error, stackTrace) {
-      _diagnosticReporter('save_lookup_failed', error, stackTrace);
-      return null;
-    }
+    final entry = LocalGameCatalog.entries.singleWhere(
+      (candidate) => candidate.id == slot.scenario,
+    );
     final session = _session;
     if (session == null) {
-      return LocalSaveSummaryView.incompatible(scenario: entry.id);
+      return LocalSaveSummaryView.incompatible(slot: slot);
     }
     for (final copy in LocalSaveCopyView.values) {
-      final document = (await _readSaveDocument(
-        store,
-        entry.id,
-        copy,
-      )).document;
+      final document = (await _readSaveDocument(store, slot, copy)).document;
       if (document == null) continue;
       try {
         final inspected = await session.inspectSaveDocument(
@@ -196,7 +240,7 @@ final class LocalSaveWorkflow {
           document: document,
         );
         return LocalSaveSummaryView.ready(
-          scenario: entry.id,
+          slot: slot,
           gameMode: inspected.controlPlan.requiresPrivateHandoff
               ? LocalSaveGameModeView.hotseat
               : LocalSaveGameModeView.singlePlayer,
@@ -214,16 +258,16 @@ final class LocalSaveWorkflow {
         );
       }
     }
-    return LocalSaveSummaryView.incompatible(scenario: entry.id);
+    return LocalSaveSummaryView.incompatible(slot: slot);
   }
 
   Future<({String? document, bool failed})> _readSaveDocument(
     LocalSaveStore store,
-    LocalGameScenarioView scenario,
+    LocalSaveSlotView slot,
     LocalSaveCopyView copy,
   ) async {
     try {
-      return (document: await store.read(scenario, copy), failed: false);
+      return (document: await store.read(slot, copy), failed: false);
     } on LocalSaveStoreException catch (error, stackTrace) {
       _reportStoreFailure(error, stackTrace);
     } on Object catch (error, stackTrace) {

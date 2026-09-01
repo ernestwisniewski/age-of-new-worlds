@@ -16,6 +16,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
 
+part 'map_coordinator_save_test_support.dart';
+
 void main() {
   test(
     'stores the authoritative engine document and publishes success',
@@ -141,23 +143,31 @@ void main() {
       opened: restored,
       validDocument: 'dravonia-save',
     );
+    final store = _MemorySaveStore(
+      primary: 'dravonia-save',
+      scenario: LocalGameScenarioView.dravonia,
+    );
     final coordinator = _coordinator(
       FakeGameSession.success(testMapScene()),
       saveSession,
-      _MemorySaveStore(
-        primary: 'dravonia-save',
-        scenario: LocalGameScenarioView.dravonia,
-      ),
+      store,
     );
     addTearDown(coordinator.dispose);
 
-    final result = await coordinator.resumeLocalGame(
-      LocalGameScenarioView.dravonia,
-    );
+    final result = await coordinator.resumeLocalGame(store.slot!);
 
     expect(result.started, isTrue);
     expect(saveSession.openedDocuments, ['dravonia-save']);
     expect((coordinator.state as GameSessionReady).scene, same(restored));
+
+    final resumedSlotId = store.slot!.id;
+    coordinator.saveLocalGame();
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(store.slot!.id, resumedSlotId);
+    expect(store.primary, '{}');
+    expect(store.backup, 'dravonia-save');
   });
 
   test('keeps a restored hotseat recipient behind a privacy gate', () async {
@@ -260,6 +270,10 @@ void main() {
     'exports the first backup that passes authoritative validation',
     () async {
       final transfer = _FakeSaveTransfer();
+      final store = _MemorySaveStore(
+        primary: 'broken-primary',
+        backup: 'valid-backup',
+      );
       final coordinator = _coordinator(
         FakeGameSession.success(testMapScene()),
         _FakeSaveSession(
@@ -267,14 +281,12 @@ void main() {
           opened: testMapScene(mapId: 'aonw2_starter'),
           validDocument: 'valid-backup',
         ),
-        _MemorySaveStore(primary: 'broken-primary', backup: 'valid-backup'),
+        store,
         saveTransfer: transfer,
       );
       addTearDown(coordinator.dispose);
 
-      final result = await coordinator.exportLocalSave(
-        LocalGameScenarioView.starterDuel,
-      );
+      final result = await coordinator.exportLocalSave(store.slot!);
 
       expect(result.status, LocalSaveTransferStatusView.completed);
       expect(transfer.exportedDocument, 'valid-backup');
@@ -405,22 +417,19 @@ final class _MemorySaveStore implements LocalSaveStore {
     this.primary,
     this.backup,
     this.scenario = LocalGameScenarioView.starterDuel,
-  });
+  }) : slot = primary == null && backup == null ? null : _testSlot(scenario);
 
   String? primary;
   String? backup;
   LocalGameScenarioView scenario;
+  LocalSaveSlotView? slot;
 
   @override
-  Future<bool> contains(LocalGameScenarioView scenario) async =>
-      scenario == this.scenario && (primary != null || backup != null);
+  Future<List<LocalSaveSlotView>> list() async => [?slot];
 
   @override
-  Future<String?> read(
-    LocalGameScenarioView scenario,
-    LocalSaveCopyView copy,
-  ) async {
-    if (scenario != this.scenario) return null;
+  Future<String?> read(LocalSaveSlotView slot, LocalSaveCopyView copy) async {
+    if (slot.id != this.slot?.id) return null;
     return switch (copy) {
       LocalSaveCopyView.primary => primary,
       LocalSaveCopyView.backup => backup,
@@ -428,10 +437,27 @@ final class _MemorySaveStore implements LocalSaveStore {
   }
 
   @override
-  Future<void> write(LocalGameScenarioView scenario, String document) async {
+  Future<LocalSaveSlotView> create({
+    required LocalGameScenarioView scenario,
+    required String? name,
+    required String document,
+  }) async {
+    this.scenario = scenario;
+    slot = _testSlot(scenario, name: name, id: 'created-${scenario.name}');
+    primary = document;
+    return slot!;
+  }
+
+  @override
+  Future<LocalSaveSlotView> write(
+    LocalSaveSlotView slot,
+    String document,
+  ) async {
     backup = primary;
     primary = document;
-    this.scenario = scenario;
+    scenario = slot.scenario;
+    this.slot = _testSlot(slot.scenario, name: slot.name, id: slot.id);
+    return this.slot!;
   }
 }
 
@@ -443,7 +469,13 @@ final class _FakeSaveTransfer implements LocalSaveTransferPort {
   String? exportedDocument;
 
   @override
-  Future<String?> pickSaveDocument() async => imported;
+  Future<LocalSavePickedDocumentView?> pickSaveDocument() async =>
+      imported == null
+      ? null
+      : LocalSavePickedDocumentView(
+          document: imported!,
+          name: 'Imported campaign',
+        );
 
   @override
   Future<LocalSaveExportDisposition> exportSaveDocument({
@@ -456,11 +488,13 @@ final class _FakeSaveTransfer implements LocalSaveTransferPort {
   }
 }
 
-final class _ReplayCapture implements ReplayCapture {
-  final entries = <LocalGameCatalogEntryView>[];
-
-  @override
-  Future<void> captureReplay(LocalGameCatalogEntryView entry) async {
-    entries.add(entry);
-  }
-}
+LocalSaveSlotView _testSlot(
+  LocalGameScenarioView scenario, {
+  String? name,
+  String? id,
+}) => LocalSaveSlotView(
+  id: id ?? 'slot-${scenario.name}',
+  scenario: scenario,
+  savedAt: DateTime.utc(2026, 9, 1, 12),
+  name: name,
+);

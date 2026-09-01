@@ -129,6 +129,7 @@ final class MapCoordinator {
 
   final MapSessionPort _session;
   LocalGameCatalogEntryView? _localGameEntry;
+  LocalSaveSlotView? _localSaveSlot;
   LocalMatchControlPlanView? _localControlPlan;
   final MovementCommandRunner _movement;
   final CombatWorkflow _combat;
@@ -207,6 +208,7 @@ final class MapCoordinator {
       final scene = await open();
       if (!_isCurrent(generation)) return false;
       _localGameEntry = localGameEntry;
+      _localSaveSlot = null;
       _localControlPlan = controlPlan;
       _setState(GameSessionReady.initial(scene));
       return true;
