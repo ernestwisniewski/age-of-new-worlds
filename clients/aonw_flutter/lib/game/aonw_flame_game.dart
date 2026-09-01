@@ -13,6 +13,7 @@ import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
 import 'map/artifact_map_layer.dart';
 import 'map/city_map_layer.dart';
+import 'map/city_territory_layer.dart';
 import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
@@ -30,7 +31,8 @@ final class AonwWorld extends World implements FlameSceneSink {
     : terrainLayer = MapTerrainLayerComponent(),
       referenceLayer = MapReferenceLayerComponent(),
       gridLayer = MapGridLayerComponent(),
-      tileDetailsLayer = MapTileDetailsLayerComponent() {
+      tileDetailsLayer = MapTileDetailsLayerComponent(),
+      cityTerritoryLayer = MapCityTerritoryLayerComponent() {
     unitLayer = MapUnitLayerComponent();
     cityLayer = MapCityLayerComponent();
     artifactLayer = MapArtifactLayerComponent();
@@ -45,6 +47,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       terrainLayer,
       referenceLayer,
       gridLayer,
+      cityTerritoryLayer,
       tileDetailsLayer,
       workerInfrastructureLayer,
       fogLayer,
@@ -61,6 +64,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   final MapTerrainLayerComponent terrainLayer;
   final MapReferenceLayerComponent referenceLayer;
   final MapGridLayerComponent gridLayer;
+  final MapCityTerritoryLayerComponent cityTerritoryLayer;
   final MapTileDetailsLayerComponent tileDetailsLayer;
   late final MapReachableLayerComponent reachableLayer;
   late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
@@ -114,6 +118,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       visible: snapshot.effectiveViewMode.showsReference,
     );
     gridLayer.applyCache(cache);
+    cityTerritoryLayer.applySnapshot(snapshot, cache);
     tileDetailsLayer.applyMap(snapshot.map, cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
@@ -146,6 +151,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     terrainLayer.clearCache();
     referenceLayer.clearCache();
     gridLayer.clearCache();
+    cityTerritoryLayer.clearLayer();
     tileDetailsLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
@@ -177,7 +183,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     pauseWhenBackgrounded = false;
     pauseEngine();
     _hexIntentSink = onHexIntent;
-    mapCamera = FlameMapCameraController(this.camera);
+    mapCamera = FlameMapCameraController(
+      this.camera,
+      onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
+    );
     inputSurface = FlameMapInputSurface(
       onIntent: _handleViewportIntent,
       requestFrame: _requestInputFrame,
@@ -216,11 +225,9 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @visibleForTesting
   MapHexCoordinate? debugHexAtScreen(AonwPoint screenPoint) =>
       mapCamera.hexAtScreen(screenPoint);
-
   @visibleForTesting
   AonwPoint? debugScreenForHex(MapHexCoordinate coordinate) =>
       mapCamera.screenForHex(coordinate);
-
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
     world.replaceScene(snapshot);
@@ -231,7 +238,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
         authoredZoom: snapshot.map.defaultZoom,
       );
       if (mapChanged) {
-        final focus = _initialFocus(snapshot);
+        final focus = initialMapFocus(snapshot);
         if (focus != null) mapCamera.centerOnHex(focus);
       }
     }
@@ -484,16 +491,5 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       _inputFrameScheduled = false;
       if (!_disposed && isAttached && paused) stepEngine(stepTime: 0);
     });
-  }
-
-  MapHexCoordinate? _initialFocus(MapRenderSnapshot snapshot) {
-    final actorPlayerId = snapshot.player.actorPlayerId;
-    for (final unit in snapshot.player.units) {
-      if (unit.ownerPlayerId == actorPlayerId) return unit.coordinate;
-    }
-    for (final city in snapshot.player.cities) {
-      if (city.ownerPlayerId == actorPlayerId) return city.center;
-    }
-    return null;
   }
 }

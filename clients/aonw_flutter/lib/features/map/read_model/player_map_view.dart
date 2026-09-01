@@ -296,6 +296,7 @@ final class PlayerMapView {
     List<FieldImprovementView> fieldImprovements = const [],
     List<RoadView> roads = const [],
     CityFoundingDraftView? cityFoundingDraft,
+    int actorColorValue = 0xff000000,
   }) => PlayerMapView(
     actorPlayerId: actorPlayerId,
     stamp: stamp,
@@ -304,7 +305,7 @@ final class PlayerMapView {
       MatchParticipantView(
         id: actorPlayerId,
         name: actorPlayerId,
-        colorValue: 0xff000000,
+        colorValue: actorColorValue,
         country: MatchParticipantCountryView.poland,
         kind: MatchParticipantKindView.human,
       ),

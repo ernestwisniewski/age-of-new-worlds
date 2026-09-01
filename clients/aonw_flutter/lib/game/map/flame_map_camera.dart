@@ -4,13 +4,27 @@ import 'package:flutter/foundation.dart';
 import '../../features/map/presentation/camera/map_camera_transform.dart';
 import '../../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../../features/map/presentation/input/map_viewport_intent.dart';
+import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/map_view.dart';
 import 'static_map_layers.dart';
 
+MapHexCoordinate? initialMapFocus(MapRenderSnapshot snapshot) {
+  final actorPlayerId = snapshot.player.actorPlayerId;
+  for (final unit in snapshot.player.units) {
+    if (unit.ownerPlayerId == actorPlayerId) return unit.coordinate;
+  }
+  for (final city in snapshot.player.cities) {
+    if (city.ownerPlayerId == actorPlayerId) return city.center;
+  }
+  return null;
+}
+
 final class FlameMapCameraController {
-  FlameMapCameraController(this._camera);
+  FlameMapCameraController(this._camera, {void Function(double)? onZoomChanged})
+    : _onZoomChanged = onZoomChanged;
 
   final CameraComponent _camera;
+  final void Function(double)? _onZoomChanged;
   MapStaticRenderCache? _cache;
   MapCameraTransform? _transform;
   Vector2 _viewport = Vector2.zero();
@@ -154,6 +168,7 @@ final class FlameMapCameraController {
   void _apply(MapCameraTransform transform) {
     _transform = transform;
     _transformUpdateCount += 1;
+    _onZoomChanged?.call(transform.zoom);
     _camera.viewfinder
       ..anchor = Anchor.center
       ..position = Vector2(transform.worldCenter.x, transform.worldCenter.y)

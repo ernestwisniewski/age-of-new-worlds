@@ -5,17 +5,19 @@ CityView testCityView({
   String ownerPlayerId = 'preview-player',
   String name = 'Preview City',
   MapHexCoordinate center = const (col: 1, row: 1),
+  List<MapHexCoordinate>? visibleControlledHexes,
+  int population = 1,
   bool owned = true,
 }) => CityView(
   id: id,
   ownerPlayerId: ownerPlayerId,
   name: name,
   center: center,
-  visibleControlledHexes: [center],
+  visibleControlledHexes: visibleControlledHexes ?? [center],
   hitPoints: 10,
   ownedDetails: owned
       ? OwnedCityDetailsView(
-          population: 1,
+          population: population,
           storedFood: 0,
           maxHexes: 4,
           territoryRadius: 2,

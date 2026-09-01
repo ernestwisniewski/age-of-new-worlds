@@ -255,7 +255,7 @@ void main() {
       expect(game.world.unitLayer.children, hasLength(120));
       expect(game.world.unitLayer.debugCreatedCount, 120);
       expect(game.world.unitLayer.debugSharedPaintCount, 3);
-      expect(game.world.children, hasLength(14));
+      expect(game.world.children, hasLength(15));
     },
   );
 

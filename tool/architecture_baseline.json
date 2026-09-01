@@ -46,7 +46,7 @@
     "flutter_client_lib": {
       "files": {},
       "declarations": {
-        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 359
+        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 353
       },
       "callableLines": {
         "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 78,

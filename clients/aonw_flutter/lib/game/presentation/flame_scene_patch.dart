@@ -4,6 +4,7 @@ import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
+import 'flame_city_equality.dart';
 
 /// The presentation-only delta between two validated map snapshots.
 ///
@@ -292,13 +293,7 @@ final class FlameScenePatch {
       _sameWorkerJob(left.workerJob, right.workerJob);
 
   static bool _sameCity(CityView? left, CityView right) =>
-      left != null &&
-      left.id == right.id &&
-      left.ownerPlayerId == right.ownerPlayerId &&
-      left.name == right.name &&
-      left.center == right.center &&
-      left.hitPoints == right.hitPoints &&
-      left.visibleControlledHexes.length == right.visibleControlledHexes.length;
+      sameFlameCity(left, right);
 
   static bool _sameImprovement(
     FieldImprovementView? left,

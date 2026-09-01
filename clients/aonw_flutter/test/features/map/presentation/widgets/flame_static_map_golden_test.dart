@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
@@ -176,14 +177,30 @@ MapRenderSnapshot _gameplaySnapshot(
         coordinate: (col: 3, row: 3),
       ),
     ],
+    cities: [
+      testCityView(
+        center: (col: 1, row: 2),
+        visibleControlledHexes: const [
+          (col: 1, row: 1),
+          (col: 2, row: 1),
+          (col: 2, row: 2),
+        ],
+        population: 6,
+      ),
+    ],
   ),
 );
 
-PlayerMapView _player(MapView map, {List<VisibleUnitView> units = const []}) =>
-    PlayerMapView.preview(
-      actorPlayerId: 'preview-player',
-      stamp: starterMapGoldenStamp(map.contentHash),
-      turn: 1,
-      pendingAction: null,
-      units: units,
-    );
+PlayerMapView _player(
+  MapView map, {
+  List<VisibleUnitView> units = const [],
+  List<CityView> cities = const [],
+}) => PlayerMapView.preview(
+  actorPlayerId: 'preview-player',
+  actorColorValue: 0xff4c80c8,
+  stamp: starterMapGoldenStamp(map.contentHash),
+  turn: 1,
+  pendingAction: null,
+  units: units,
+  cities: cities,
+);
