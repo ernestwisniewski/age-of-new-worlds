@@ -2,6 +2,8 @@
 
 #[path = "economy/manifest.rs"]
 mod manifest;
+#[path = "economy/stability.rs"]
+mod stability;
 
 use std::collections::BTreeMap;
 
@@ -224,38 +226,6 @@ fn economy_forecast_reuses_turn_income_upkeep_and_stability_rules() {
     assert_eq!(stability.relative_standing_adjustment(), 3);
     assert_eq!(stability.effective_net(), 10);
     assert_eq!(stability.band(), StabilityBand::Content);
-}
-
-#[test]
-fn cityless_empire_forecast_never_creates_a_negative_city_cost() {
-    let map = forecast_map();
-    let actor = player("player-1");
-    let state = state_with_economy_parts(
-        &map,
-        vec![unit(
-            "commander-1",
-            &actor,
-            UnitKind::Commander,
-            HexCoord::new(0, 0),
-        )],
-        Vec::new(),
-        InteractionState::default(),
-        InfrastructureState::default(),
-        Vec::new(),
-    );
-    let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
-
-    let QueryResult::EconomyForecast(forecast) = GameEngine::query(
-        &state,
-        context,
-        GameQuery::EconomyForecast(EconomyForecastQuery::new(9)),
-    )
-    .expect("cityless economy forecast") else {
-        panic!("economy forecast result")
-    };
-
-    assert_eq!(forecast.stability().city_cost(), 0);
-    assert_eq!(forecast.stability().cost_total(), 0);
 }
 
 #[test]
