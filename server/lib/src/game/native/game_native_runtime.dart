@@ -90,14 +90,28 @@ final class GameNativeRuntime {
     required int expectedRevision,
     required int initialEventOffset,
     required Map<String, Object?> canonicalState,
+  }) => applyPlayerCommand(
+    content: content,
+    authenticatedActorPlayerId: authenticatedActorPlayerId,
+    command: {'type': 'submitTurn', 'expectedRevision': expectedRevision},
+    initialEventOffset: initialEventOffset,
+    canonicalState: canonicalState,
+  );
+
+  Map<String, Object?> applyPlayerCommand({
+    required PreparedGameContent content,
+    required String authenticatedActorPlayerId,
+    required Map<String, Object?> command,
+    required int initialEventOffset,
+    required Map<String, Object?> canonicalState,
   }) {
     try {
-      final response = _host.submitTurnJson(
+      final response = _host.applyPlayerCommandJson(
         content._world,
         jsonEncode({
           'apiVersion': aonwServerHostApiVersion,
           'authenticatedActorPlayerId': authenticatedActorPlayerId,
-          'expectedRevision': expectedRevision,
+          'command': command,
           'initialEventOffset': initialEventOffset,
           'mapHash': content.mapHash,
           'rulesetHash': content.rulesetHash,
@@ -107,11 +121,37 @@ final class GameNativeRuntime {
       return _result(response, 'commandApplied');
     } on AonwServerNativeException catch (error) {
       if (error.code != 'invalid_request') rethrow;
+      _rethrowInvalidRequest(
+        error: error,
+        content: content,
+        canonicalState: canonicalState,
+      );
+    }
+  }
+
+  Never _rethrowInvalidRequest({
+    required AonwServerNativeException error,
+    required PreparedGameContent content,
+    required Map<String, Object?> canonicalState,
+  }) {
+    try {
+      _host.projectStateJson(
+        content._world,
+        jsonEncode({
+          'apiVersion': aonwServerHostApiVersion,
+          'mapHash': content.mapHash,
+          'rulesetHash': content.rulesetHash,
+          'state': canonicalState,
+        }),
+      );
+    } on AonwServerNativeException catch (stateError) {
+      if (stateError.code != 'invalid_request') rethrow;
       throw const AonwServerNativeException(
         'invalid_canonical_state',
         'Persisted canonical state does not match the current contract.',
       );
     }
+    throw error;
   }
 
   void close() {

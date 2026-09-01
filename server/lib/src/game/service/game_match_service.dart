@@ -13,6 +13,7 @@ part 'game_match_service_support.dart';
 const _maximumIdentifierLength = 128;
 const _maximumContentDocumentBytes = 16 * 1024 * 1024;
 const _maximumIdentityDocumentBytes = 2 * 1024 * 1024;
+const _maximumCommandDocumentBytes = 64 * 1024;
 
 /// Transactional application service for engine-authoritative matches.
 final class GameMatchService {
@@ -36,6 +37,11 @@ final class GameMatchService {
     Session session,
     GameSubmitTurnRequest request,
   ) => _submitTurn(this, session, request);
+
+  Future<GameCommandOutcome> applyCommand(
+    Session session,
+    GamePlayerCommandRequest request,
+  ) => _applyCommand(this, session, request);
 
   Future<GameResync> resync(Session session, String matchId) =>
       _resync(session, matchId);

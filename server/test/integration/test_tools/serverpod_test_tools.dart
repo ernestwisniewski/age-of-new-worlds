@@ -35,6 +35,8 @@ import 'package:aonw_server/src/generated/game/models/game_command_outcome.dart'
     as _i13;
 import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
     as _i14;
+import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
+    as _i15;
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:aonw_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -977,6 +979,37 @@ class _GameEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'game',
           methodName: 'submitTurn',
+          parameters: _i1.testObjectToJson({'request': request}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _i3.Future<_i13.GameCommandOutcome>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i13.GameCommandOutcome> applyCommand(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i15.GamePlayerCommandRequest request,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'game',
+            method: 'applyCommand',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'game',
+          methodName: 'applyCommand',
           parameters: _i1.testObjectToJson({'request': request}),
           serializationManager: _serializationManager,
         );

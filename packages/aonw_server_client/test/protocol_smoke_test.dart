@@ -21,5 +21,18 @@ void main() {
     expect(roundTrip.rulesetId, 'aonw-standard');
     expect(roundTrip.fogEnabled, isTrue);
     expect(roundTrip.creatorPlayerId, 'player-1');
+
+    final command = GamePlayerCommandRequest(
+      matchId: 'match-1',
+      clientCommandId: 'command-1',
+      commandJson:
+          '{"type":"fortifyUnit","expectedRevision":3,"unitId":"unit-1"}',
+    );
+    final commandRoundTrip = Protocol().deserialize<GamePlayerCommandRequest>(
+      command.toJson(),
+    );
+    expect(commandRoundTrip.matchId, 'match-1');
+    expect(commandRoundTrip.clientCommandId, 'command-1');
+    expect(commandRoundTrip.commandJson, contains('fortifyUnit'));
   });
 }

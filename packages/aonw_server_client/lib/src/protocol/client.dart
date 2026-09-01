@@ -37,7 +37,9 @@ import 'package:aonw_server_client/src/protocol/game/models/game_command_outcome
     as _i13;
 import 'package:aonw_server_client/src/protocol/game/models/game_submit_turn_request.dart'
     as _i14;
-import 'protocol.dart' as _i15;
+import 'package:aonw_server_client/src/protocol/game/models/game_player_command_request.dart'
+    as _i15;
+import 'protocol.dart' as _i16;
 
 /// {@category Endpoint}
 class EndpointAppStatus extends _i1.EndpointRef {
@@ -338,6 +340,14 @@ class EndpointGame extends _i1.EndpointRef {
     {'request': request},
   );
 
+  _i2.Future<_i13.GameCommandOutcome> applyCommand(
+    _i15.GamePlayerCommandRequest request,
+  ) => caller.callServerEndpoint<_i13.GameCommandOutcome>(
+    'game',
+    'applyCommand',
+    {'request': request},
+  );
+
   _i2.Future<_i11.GameResync> resync(String matchId) =>
       caller.callServerEndpoint<_i11.GameResync>(
         'game',
@@ -377,7 +387,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i15.Protocol(),
+         _i16.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,

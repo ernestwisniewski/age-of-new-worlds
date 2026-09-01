@@ -28,10 +28,12 @@ import 'package:aonw_server/src/generated/game/models/game_join_match_request.da
     as _i13;
 import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
     as _i14;
-import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
+import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
     as _i15;
-import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _i16;
+import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+    as _i17;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -543,6 +545,24 @@ class Endpoints extends _i1.EndpointDispatch {
                 params['request'],
               ),
         ),
+        'applyCommand': _i1.MethodConnector(
+          name: 'applyCommand',
+          params: {
+            'request': _i1.ParameterDescription(
+              name: 'request',
+              type: _i1.getType<_i15.GamePlayerCommandRequest>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).applyCommand(
+                session,
+                params['request'],
+              ),
+        ),
         'resync': _i1.MethodConnector(
           name: 'resync',
           params: {
@@ -563,9 +583,9 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth_core'] = _i15.Endpoints()
+    modules['serverpod_auth_core'] = _i16.Endpoints()
       ..initializeEndpoints(server);
-    modules['serverpod_auth_idp'] = _i16.Endpoints()
+    modules['serverpod_auth_idp'] = _i17.Endpoints()
       ..initializeEndpoints(server);
   }
 }

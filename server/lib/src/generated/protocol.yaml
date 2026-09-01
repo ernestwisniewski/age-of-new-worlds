@@ -29,4 +29,5 @@ game:
   - joinMatch:
   - listMatches:
   - submitTurn:
+  - applyCommand:
   - resync:

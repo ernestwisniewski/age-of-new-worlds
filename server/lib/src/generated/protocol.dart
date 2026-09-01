@@ -35,11 +35,12 @@ import 'game/models/game_join_match_request.dart' as _i19;
 import 'game/models/game_match.dart' as _i20;
 import 'game/models/game_match_view.dart' as _i21;
 import 'game/models/game_participant.dart' as _i22;
-import 'game/models/game_recipient_snapshot.dart' as _i23;
-import 'game/models/game_resync.dart' as _i24;
-import 'game/models/game_submit_turn_request.dart' as _i25;
+import 'game/models/game_player_command_request.dart' as _i23;
+import 'game/models/game_recipient_snapshot.dart' as _i24;
+import 'game/models/game_resync.dart' as _i25;
+import 'game/models/game_submit_turn_request.dart' as _i26;
 import 'package:aonw_server/src/generated/game/models/game_match_view.dart'
-    as _i26;
+    as _i27;
 export 'auth/models/account.dart';
 export 'auth/models/account_auth_exception.dart';
 export 'auth/models/external_auth_poll_result.dart';
@@ -58,6 +59,7 @@ export 'game/models/game_join_match_request.dart';
 export 'game/models/game_match.dart';
 export 'game/models/game_match_view.dart';
 export 'game/models/game_participant.dart';
+export 'game/models/game_player_command_request.dart';
 export 'game/models/game_recipient_snapshot.dart';
 export 'game/models/game_resync.dart';
 export 'game/models/game_submit_turn_request.dart';
@@ -1274,14 +1276,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i22.GameParticipant) {
       return _i22.GameParticipant.fromJson(data) as T;
     }
-    if (t == _i23.GameRecipientSnapshot) {
-      return _i23.GameRecipientSnapshot.fromJson(data) as T;
+    if (t == _i23.GamePlayerCommandRequest) {
+      return _i23.GamePlayerCommandRequest.fromJson(data) as T;
     }
-    if (t == _i24.GameResync) {
-      return _i24.GameResync.fromJson(data) as T;
+    if (t == _i24.GameRecipientSnapshot) {
+      return _i24.GameRecipientSnapshot.fromJson(data) as T;
     }
-    if (t == _i25.GameSubmitTurnRequest) {
-      return _i25.GameSubmitTurnRequest.fromJson(data) as T;
+    if (t == _i25.GameResync) {
+      return _i25.GameResync.fromJson(data) as T;
+    }
+    if (t == _i26.GameSubmitTurnRequest) {
+      return _i26.GameSubmitTurnRequest.fromJson(data) as T;
     }
     if (t == _i1.getType<_i5.AonwAccount?>()) {
       return (data != null ? _i5.AonwAccount.fromJson(data) : null) as T;
@@ -1344,15 +1349,21 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i22.GameParticipant?>()) {
       return (data != null ? _i22.GameParticipant.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i23.GameRecipientSnapshot?>()) {
-      return (data != null ? _i23.GameRecipientSnapshot.fromJson(data) : null)
+    if (t == _i1.getType<_i23.GamePlayerCommandRequest?>()) {
+      return (data != null
+              ? _i23.GamePlayerCommandRequest.fromJson(data)
+              : null)
           as T;
     }
-    if (t == _i1.getType<_i24.GameResync?>()) {
-      return (data != null ? _i24.GameResync.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i24.GameRecipientSnapshot?>()) {
+      return (data != null ? _i24.GameRecipientSnapshot.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i25.GameSubmitTurnRequest?>()) {
-      return (data != null ? _i25.GameSubmitTurnRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i25.GameResync?>()) {
+      return (data != null ? _i25.GameResync.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i26.GameSubmitTurnRequest?>()) {
+      return (data != null ? _i26.GameSubmitTurnRequest.fromJson(data) : null)
           as T;
     }
     if (t == List<String>) {
@@ -1404,23 +1415,23 @@ class Protocol extends _i1.SerializationManagerServer {
               : null)
           as T;
     }
-    if (t == List<_i23.GameRecipientSnapshot>) {
+    if (t == List<_i24.GameRecipientSnapshot>) {
       return (data as List)
-              .map((e) => deserialize<_i23.GameRecipientSnapshot>(e))
+              .map((e) => deserialize<_i24.GameRecipientSnapshot>(e))
               .toList()
           as T;
     }
-    if (t == _i1.getType<List<_i23.GameRecipientSnapshot>?>()) {
+    if (t == _i1.getType<List<_i24.GameRecipientSnapshot>?>()) {
       return (data != null
               ? (data as List)
-                    .map((e) => deserialize<_i23.GameRecipientSnapshot>(e))
+                    .map((e) => deserialize<_i24.GameRecipientSnapshot>(e))
                     .toList()
               : null)
           as T;
     }
-    if (t == List<_i26.GameMatchView>) {
+    if (t == List<_i27.GameMatchView>) {
       return (data as List)
-              .map((e) => deserialize<_i26.GameMatchView>(e))
+              .map((e) => deserialize<_i27.GameMatchView>(e))
               .toList()
           as T;
     }
@@ -1456,9 +1467,10 @@ class Protocol extends _i1.SerializationManagerServer {
       _i20.GameMatch => 'GameMatch',
       _i21.GameMatchView => 'GameMatchView',
       _i22.GameParticipant => 'GameParticipant',
-      _i23.GameRecipientSnapshot => 'GameRecipientSnapshot',
-      _i24.GameResync => 'GameResync',
-      _i25.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
+      _i23.GamePlayerCommandRequest => 'GamePlayerCommandRequest',
+      _i24.GameRecipientSnapshot => 'GameRecipientSnapshot',
+      _i25.GameResync => 'GameResync',
+      _i26.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
       _ => null,
     };
   }
@@ -1509,11 +1521,13 @@ class Protocol extends _i1.SerializationManagerServer {
         return 'GameMatchView';
       case _i22.GameParticipant():
         return 'GameParticipant';
-      case _i23.GameRecipientSnapshot():
+      case _i23.GamePlayerCommandRequest():
+        return 'GamePlayerCommandRequest';
+      case _i24.GameRecipientSnapshot():
         return 'GameRecipientSnapshot';
-      case _i24.GameResync():
+      case _i25.GameResync():
         return 'GameResync';
-      case _i25.GameSubmitTurnRequest():
+      case _i26.GameSubmitTurnRequest():
         return 'GameSubmitTurnRequest';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -1591,14 +1605,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'GameParticipant') {
       return deserialize<_i22.GameParticipant>(data['data']);
     }
+    if (dataClassName == 'GamePlayerCommandRequest') {
+      return deserialize<_i23.GamePlayerCommandRequest>(data['data']);
+    }
     if (dataClassName == 'GameRecipientSnapshot') {
-      return deserialize<_i23.GameRecipientSnapshot>(data['data']);
+      return deserialize<_i24.GameRecipientSnapshot>(data['data']);
     }
     if (dataClassName == 'GameResync') {
-      return deserialize<_i24.GameResync>(data['data']);
+      return deserialize<_i25.GameResync>(data['data']);
     }
     if (dataClassName == 'GameSubmitTurnRequest') {
-      return deserialize<_i25.GameSubmitTurnRequest>(data['data']);
+      return deserialize<_i26.GameSubmitTurnRequest>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -1652,8 +1669,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i20.GameMatch.t;
       case _i22.GameParticipant:
         return _i22.GameParticipant.t;
-      case _i23.GameRecipientSnapshot:
-        return _i23.GameRecipientSnapshot.t;
+      case _i24.GameRecipientSnapshot:
+        return _i24.GameRecipientSnapshot.t;
     }
     return null;
   }

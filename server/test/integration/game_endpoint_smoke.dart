@@ -36,10 +36,82 @@ final class _GameEndpointJourney {
 
   Future<void> run() async {
     final joined = await _createAndJoin();
-    final ownerTurn = await _submitOwner(joined);
+    await _rejectInvalidCommand(joined);
+    final fortifiedRevision = await _fortifyOwner(joined);
+    final ownerTurn = await _submitOwner(joined, fortifiedRevision);
     final guestTurn = await _restartAndSubmitGuest(joined, ownerTurn);
     final persisted = await _verifyPersistedState(joined, guestTurn);
     await _verifyRollback(joined, persisted, guestTurn);
+  }
+
+  Future<void> _rejectInvalidCommand(_JoinedMatch joined) async {
+    await expectLater(
+      joined.endpoint.applyCommand(
+        ownerSession,
+        game.GamePlayerCommandRequest(
+          matchId: joined.created.matchId,
+          clientCommandId: 'owner-invalid-1',
+          commandJson: jsonEncode({
+            'type': 'fortifyUnit',
+            'expectedRevision': joined.created.revision,
+          }),
+        ),
+      ),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'invalid_request',
+        ),
+      ),
+    );
+    final ledgers = await game.GameCommandLedger.db.find(
+      databaseSession,
+      where: (table) => table.clientCommandId.equals('owner-invalid-1'),
+    );
+    expect(ledgers, isEmpty);
+    final resync = await joined.endpoint.resync(
+      ownerSession,
+      joined.created.matchId,
+    );
+    expect(resync.eventOffset, 0);
+    expect(
+      _list(
+        _object(jsonDecode(resync.snapshotJson))['units'],
+      ).map(_object).singleWhere((unit) => unit['id'] == 'unit-1')['posture'],
+      'active',
+    );
+  }
+
+  Future<int> _fortifyOwner(_JoinedMatch joined) async {
+    final request = game.GamePlayerCommandRequest(
+      matchId: joined.created.matchId,
+      clientCommandId: 'owner-fortify-1',
+      commandJson: jsonEncode({
+        'type': 'fortifyUnit',
+        'expectedRevision': joined.created.revision,
+        'unitId': 'unit-1',
+      }),
+    );
+    final accepted = await joined.endpoint.applyCommand(ownerSession, request);
+    final retry = await joined.endpoint.applyCommand(ownerSession, request);
+    expect(accepted.duplicate, isFalse);
+    expect(retry.duplicate, isTrue);
+    expect(retry.outcomeJson, accepted.outcomeJson);
+    final outcome = _object(jsonDecode(accepted.outcomeJson));
+    final recipient = _object(outcome['recipient']);
+    final snapshot = _object(recipient['snapshot']);
+    final unit = _list(
+      snapshot['units'],
+    ).map(_object).singleWhere((unit) => unit['id'] == 'unit-1');
+    expect(unit['posture'], 'fortified');
+    final ledger = await game.GameCommandLedger.db.findFirstRow(
+      databaseSession,
+      where: (table) => table.clientCommandId.equals('owner-fortify-1'),
+    );
+    expect(ledger, isNotNull);
+    expect(_object(jsonDecode(ledger!.requestJson!))['type'], 'fortifyUnit');
+    return _nonNegativeInt(_object(outcome['stamp'])['revision']);
   }
 
   Future<_JoinedMatch> _createAndJoin() async {
@@ -68,11 +140,14 @@ final class _GameEndpointJourney {
     return _JoinedMatch(endpoint: endpoint, created: created);
   }
 
-  Future<_OwnerTurn> _submitOwner(_JoinedMatch joined) async {
+  Future<_OwnerTurn> _submitOwner(
+    _JoinedMatch joined,
+    int expectedRevision,
+  ) async {
     final request = game.GameSubmitTurnRequest(
       matchId: joined.created.matchId,
       clientCommandId: 'owner-submit-1',
-      expectedRevision: joined.created.revision,
+      expectedRevision: expectedRevision,
     );
     final accepted = await joined.endpoint.submitTurn(ownerSession, request);
     final retry = await joined.endpoint.submitTurn(ownerSession, request);

@@ -28,6 +28,11 @@ final class GameEndpoint extends Endpoint {
     GameSubmitTurnRequest request,
   ) => _service.submitTurn(session, request);
 
+  Future<GameCommandOutcome> applyCommand(
+    Session session,
+    GamePlayerCommandRequest request,
+  ) => _service.applyCommand(session, request);
+
   Future<GameResync> resync(Session session, String matchId) =>
       _service.resync(session, matchId);
 }

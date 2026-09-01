@@ -13,7 +13,52 @@ Future<GameCommandOutcome> _submitTurn(
     matchId: _identifier(request.matchId, 'matchId'),
     clientCommandId: _identifier(request.clientCommandId, 'clientCommandId'),
     expectedRevision: request.expectedRevision,
+    command: {
+      'type': 'submitTurn',
+      'expectedRevision': request.expectedRevision,
+    },
   );
+  return _applyInput(service, session, input);
+}
+
+Future<GameCommandOutcome> _applyCommand(
+  GameMatchService service,
+  Session session,
+  GamePlayerCommandRequest request,
+) {
+  _document(
+    request.commandJson,
+    'commandJson',
+    maximumBytes: _maximumCommandDocumentBytes,
+  );
+  final (command, expectedRevision) = _translateNative(() {
+    final command = decodeGameObjectDocument(
+      request.commandJson,
+      r'$.commandJson',
+    );
+    return (
+      command,
+      _nonNegativeInt(
+        command['expectedRevision'],
+        r'$.commandJson.expectedRevision',
+      ),
+    );
+  });
+  final input = _CommandInput(
+    userIdentifier: _requireUser(session),
+    matchId: _identifier(request.matchId, 'matchId'),
+    clientCommandId: _identifier(request.clientCommandId, 'clientCommandId'),
+    expectedRevision: expectedRevision,
+    command: command,
+  );
+  return _applyInput(service, session, input);
+}
+
+Future<GameCommandOutcome> _applyInput(
+  GameMatchService service,
+  Session session,
+  _CommandInput input,
+) {
   return session.db.transaction(
     (transaction) => _submitTransaction(service, session, transaction, input),
   );
@@ -30,7 +75,7 @@ Future<GameCommandOutcome> _submitTransaction(
   if (duplicate != null) {
     return _ledgerOutcome(context.match.publicId, duplicate, duplicate: true);
   }
-  final applied = _executeTurn(service, context, input);
+  final applied = _executeCommand(service, context, input);
   return _persistAppliedTurn(session, transaction, context, input, applied);
 }
 
@@ -66,7 +111,7 @@ Future<_CommandContext> _loadCommandContext(
   );
 }
 
-_AppliedTurn _executeTurn(
+_AppliedTurn _executeCommand(
   GameMatchService service,
   _CommandContext context,
   _CommandInput input,
@@ -81,10 +126,10 @@ _AppliedTurn _executeTurn(
     ),
   );
   final result = _translateNative(
-    () => service._native.submitTurn(
+    () => service._native.applyPlayerCommand(
       content: content,
       authenticatedActorPlayerId: context.participant.playerId,
-      expectedRevision: input.expectedRevision,
+      command: input.command,
       initialEventOffset: context.match.eventOffset,
       canonicalState: state,
     ),
@@ -233,7 +278,7 @@ Future<GameCommandLedger> _insertLedger(
     expectedRevision: input.expectedRevision,
     initialEventOffset: applied.initialOffset,
     finalEventOffset: applied.finalOffset,
-    requestJson: jsonEncode({'expectedRevision': input.expectedRevision}),
+    requestJson: jsonEncode(input.command),
     recipientOutcomeJson: applied.safeOutcomeJson,
     createdAt: applied.now,
   ),
@@ -246,12 +291,14 @@ final class _CommandInput {
     required this.matchId,
     required this.clientCommandId,
     required this.expectedRevision,
+    required this.command,
   });
 
   final String userIdentifier;
   final String matchId;
   final String clientCommandId;
   final int expectedRevision;
+  final Map<String, Object?> command;
 }
 
 final class _CommandContext {
