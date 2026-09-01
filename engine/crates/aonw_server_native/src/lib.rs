@@ -5,14 +5,14 @@
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use aonw_contracts::server::{
-    CreateServerMatchRequestDto, MAX_SERVER_HOST_REQUEST_JSON_BYTES, PrepareServerWorldRequestDto,
-    ProjectServerStateRequestDto, SERVER_HOST_API_VERSION, ServerHostCodecError,
-    ServerHostErrorCodeDto, ServerHostErrorDto, ServerHostOutcomeDto, ServerHostResponseBodyDto,
-    ServerHostResponseDto, SubmitTurnServerRequestDto,
+    CreateServerMatchRequestDto, MAX_SERVER_HOST_REQUEST_JSON_BYTES, PlayerCommandServerRequestDto,
+    PrepareServerWorldRequestDto, ProjectServerStateRequestDto, SERVER_HOST_API_VERSION,
+    ServerHostCodecError, ServerHostErrorCodeDto, ServerHostErrorDto, ServerHostOutcomeDto,
+    ServerHostResponseBodyDto, ServerHostResponseDto, SubmitTurnServerRequestDto,
 };
 use aonw_server_runtime::{
-    PreparedServerWorld, ServerBoundaryError, apply_submit_turn_dto, create_server_match_dto,
-    prepare_server_world, project_server_state_dto,
+    PreparedServerWorld, ServerBoundaryError, apply_player_command_dto, apply_submit_turn_dto,
+    create_server_match_dto, prepare_server_world, project_server_state_dto,
 };
 
 static BUILD_IDENTITY: &[u8] = concat!("aonw_server_native/", env!("CARGO_PKG_VERSION")).as_bytes();
@@ -149,6 +149,43 @@ pub unsafe extern "C" fn aonw_server_native_submit_turn(
         let world = unsafe { &*world.cast::<PreparedServerWorld>() }.clone();
         let result =
             apply_submit_turn_dto(world, request).map_err(|error| boundary_error(&error))?;
+        let response = success(ServerHostResponseBodyDto::CommandApplied {
+            result: Box::new(result),
+        })?;
+        Ok(NativeResponse {
+            bytes: response.into_bytes().into_boxed_slice(),
+            world: None,
+        })
+    })
+}
+
+/// Executes one stateless authenticated player command against a prepared world.
+///
+/// # Safety
+///
+/// `world` must be a live prepared handle for the duration of the call.
+/// `request` follows the same rules as [`aonw_server_native_prepare_world`].
+#[allow(unsafe_code)]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn aonw_server_native_apply_player_command(
+    world: *const core::ffi::c_void,
+    request: *const u8,
+    request_len: usize,
+) -> *mut core::ffi::c_void {
+    contain(|| {
+        if world.is_null() {
+            return Err(failure(
+                ServerHostErrorCodeDto::InvalidFfiArgument,
+                "prepared world pointer is null",
+            ));
+        }
+        let input = unsafe { read_request(request, request_len) }?;
+        let request =
+            PlayerCommandServerRequestDto::from_json(input).map_err(|error| codec_error(&error))?;
+        // SAFETY: The caller keeps the immutable world alive for this call.
+        let world = unsafe { &*world.cast::<PreparedServerWorld>() }.clone();
+        let result =
+            apply_player_command_dto(world, request).map_err(|error| boundary_error(&error))?;
         let response = success(ServerHostResponseBodyDto::CommandApplied {
             result: Box::new(result),
         })?;
@@ -384,115 +421,4 @@ fn serialize_failure(response: &ServerHostResponseDto) -> Box<[u8]> {
 }
 
 #[cfg(test)]
-mod tests {
-    use aonw_contracts::server::{
-        SERVER_HOST_API_VERSION, ServerHostErrorCodeDto, ServerHostOutcomeDto,
-        ServerHostResponseDto,
-    };
-    use serde_json::json;
-
-    use super::{
-        aonw_server_native_api_version, aonw_server_native_build_identity_data,
-        aonw_server_native_build_identity_len, aonw_server_native_prepare_world,
-        aonw_server_native_response_data, aonw_server_native_response_free,
-        aonw_server_native_response_len, aonw_server_native_response_take_world,
-        aonw_server_native_world_free,
-    };
-
-    #[test]
-    #[allow(unsafe_code)]
-    fn identity_and_protocol_are_exact() {
-        assert_eq!(aonw_server_native_api_version(), SERVER_HOST_API_VERSION);
-        // SAFETY: Identity bytes have static lifetime.
-        let identity = unsafe {
-            core::slice::from_raw_parts(
-                aonw_server_native_build_identity_data(),
-                aonw_server_native_build_identity_len(),
-            )
-        };
-        assert_eq!(identity, b"aonw_server_native/0.1.0");
-    }
-
-    #[test]
-    #[allow(unsafe_code)]
-    fn invalid_request_returns_owned_contained_failure() {
-        // SAFETY: The request bytes remain alive for the duration of the call.
-        let response = unsafe { aonw_server_native_prepare_world(b"{}".as_ptr(), 2) };
-        assert!(!response.is_null());
-        // SAFETY: This test owns the live response until it is freed below.
-        let bytes = unsafe {
-            core::slice::from_raw_parts(
-                aonw_server_native_response_data(response),
-                aonw_server_native_response_len(response),
-            )
-        };
-        let decoded: ServerHostResponseDto =
-            serde_json::from_slice(bytes).expect("strict failure response");
-        assert!(matches!(
-            decoded.outcome,
-            ServerHostOutcomeDto::Failure { error }
-                if error.code == ServerHostErrorCodeDto::InvalidRequest
-        ));
-        // SAFETY: The test transfers its only live response handle.
-        unsafe { aonw_server_native_response_free(response) };
-    }
-
-    #[test]
-    #[allow(unsafe_code)]
-    fn prepare_response_transfers_one_reusable_world() {
-        let tiles = (0..5)
-            .flat_map(|row| {
-                (0..5).map(move |col| {
-                    json!({
-                        "col": col,
-                        "row": row,
-                        "terrainTags": ["plains"],
-                        "resources": [],
-                        "height": 0
-                    })
-                })
-            })
-            .collect::<Vec<_>>();
-        let map = json!({
-            "schemaVersion": 1,
-            "gridLayout": "oddQFlatTop",
-            "cols": 5,
-            "rows": 5,
-            "mapName": "native-server-test",
-            "defaultZoom": 1.0,
-            "objectives": [],
-            "tiles": tiles
-        });
-        let request = serde_json::to_vec(&json!({
-            "apiVersion": SERVER_HOST_API_VERSION,
-            "mapDocument": serde_json::to_string(&map).expect("map JSON"),
-            "rulesetId": "aonw-standard"
-        }))
-        .expect("request JSON");
-
-        // SAFETY: The request buffer is alive and readable during the call.
-        let response = unsafe { aonw_server_native_prepare_world(request.as_ptr(), request.len()) };
-        // SAFETY: The live response owns readable bytes until it is freed.
-        let decoded: ServerHostResponseDto = unsafe {
-            serde_json::from_slice(core::slice::from_raw_parts(
-                aonw_server_native_response_data(response),
-                aonw_server_native_response_len(response),
-            ))
-        }
-        .expect("prepare response");
-        assert!(
-            matches!(decoded.outcome, ServerHostOutcomeDto::Success { .. }),
-            "unexpected prepare response: {decoded:?}"
-        );
-        // SAFETY: The response is live and uniquely accessed.
-        let world = unsafe { aonw_server_native_response_take_world(response) };
-        assert!(!world.is_null());
-        // SAFETY: A second transfer from the same live response is defined to return null.
-        assert!(unsafe { aonw_server_native_response_take_world(response) }.is_null());
-        // SAFETY: This test transfers each owned handle exactly once.
-        unsafe {
-            aonw_server_native_response_free(response);
-            aonw_server_native_world_free(world);
-        }
-    }
-}
+mod tests;
