@@ -83,7 +83,7 @@ final class GamepadMapInputSource
   ) => switch (button) {
     GamepadButton.a => input.copyWith(activate: pressed),
     GamepadButton.b || GamepadButton.back => input.copyWith(cancel: pressed),
-    GamepadButton.y => input.copyWith(toggleReference: pressed),
+    GamepadButton.y => input.copyWith(toggleMapViewMode: pressed),
     _ => input,
   };
 

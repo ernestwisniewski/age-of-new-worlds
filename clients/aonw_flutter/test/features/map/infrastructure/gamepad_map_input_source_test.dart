@@ -20,7 +20,7 @@ void main() {
     expect(inputs.last.cancel, isTrue);
     events.add(_button(GamepadButton.back, 0));
     events.add(_button(GamepadButton.y, 1));
-    expect(inputs.last.toggleReference, isTrue);
+    expect(inputs.last.toggleMapViewMode, isTrue);
 
     await subscription.cancel();
     await source.close();

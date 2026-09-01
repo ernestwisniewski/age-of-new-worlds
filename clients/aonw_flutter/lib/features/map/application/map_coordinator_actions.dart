@@ -244,10 +244,14 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
-  void toggleReference() {
+  void toggleMapViewMode() {
     final current = _state;
     if (current is! GameSessionReady) return;
-    _setState(_toggleReferenceState(current));
+    if (current.interaction.viewMode == MapViewMode.tile &&
+        current.scene.reference.pages.isEmpty) {
+      return;
+    }
+    _setState(_toggleMapViewModeState(current));
   }
 
   void completeTurnPresentation() {

@@ -3,6 +3,7 @@ import 'package:aonw_flutter/features/map/presentation/camera/map_viewport_proje
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:aonw_flutter/game/map/fog_map_layer.dart';
@@ -55,6 +56,22 @@ void main() {
     );
   });
 
+  test('terrain surface follows explicit legacy graphic and tile modes', () {
+    final layer = MapTerrainLayerComponent();
+    final cache = MapStaticRenderCache.build(testMapScene().map);
+
+    layer.applyCache(cache);
+    expect(layer.debugViewMode, MapViewMode.graphic);
+    expect(layer.isVisible, isFalse);
+
+    expect(layer.setViewMode(MapViewMode.tile), isTrue);
+    expect(layer.isVisible, isTrue);
+    expect(layer.setViewMode(MapViewMode.tile), isFalse);
+
+    layer.setViewMode(MapViewMode.graphic);
+    expect(layer.isVisible, isFalse);
+  });
+
   testWithGame<AonwFlameGame>(
     'keeps four batched static layers before ordered gameplay layers',
     AonwFlameGame.new,
@@ -104,6 +121,7 @@ void main() {
         ),
       );
       expect(game.world.terrainLayer.debugCacheUpdateCount, 1);
+      expect(game.world.terrainLayer.debugViewMode, MapViewMode.tile);
       expect(game.world.referenceLayer.debugCacheUpdateCount, 1);
       expect(game.world.gridLayer.debugCacheUpdateCount, 1);
       expect(game.world.tileDetailsLayer.debugCacheUpdateCount, 1);
@@ -130,7 +148,7 @@ void main() {
       game.sceneSink.replaceScene(
         _snapshot(
           scene,
-          interaction: const MapInteractionState(referenceVisible: false),
+          interaction: const MapInteractionState(viewMode: MapViewMode.tile),
         ),
       );
 
@@ -142,7 +160,7 @@ void main() {
       expect(game.world.referenceLayer.debugCacheUpdateCount, 1);
       expect(game.world.gridLayer.debugCacheUpdateCount, 1);
       expect(game.world.tileDetailsLayer.debugCacheUpdateCount, 1);
-      expect(game.world.referenceLayer.debugVisibilityUpdateCount, 2);
+      expect(game.world.referenceLayer.debugVisibilityUpdateCount, 1);
       expect(game.world.referenceLayer.isVisible, isFalse);
 
       final replacement = testMapScene(cols: 7, rows: 7, contentHash: 'd' * 64);

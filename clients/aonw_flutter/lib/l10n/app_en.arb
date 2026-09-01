@@ -269,8 +269,9 @@
       "row": {"type": "int"}
     }
   },
-  "hideReferenceLayer": "Hide reference layer",
-  "showReferenceLayer": "Show reference layer",
+  "mapViewSwitchToTiles": "Switch to tile view",
+  "mapViewSwitchToGraphic": "Switch to graphic view",
+  "mapViewGraphicUnavailable": "Graphic view is unavailable for this map.",
   "hexLabel": "Hex {col}, {row}",
   "@hexLabel": {
     "placeholders": {

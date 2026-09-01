@@ -11,6 +11,7 @@ import '../../features/map/presentation/layers/map_canvas_paths.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_reference_bundle.dart';
 import '../../features/map/read_model/map_view.dart';
+import '../../features/map/read_model/map_view_mode.dart';
 
 typedef MapStaticRenderIdentity = ({
   String mapId,
@@ -104,6 +105,7 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
   var _elevationWallsVisible = false;
+  var _viewMode = MapViewMode.graphic;
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
@@ -114,9 +116,19 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   @visibleForTesting
   bool get debugElevationWallsVisible => _elevationWallsVisible;
 
+  @visibleForTesting
+  MapViewMode get debugViewMode => _viewMode;
+
   bool setElevationWallsVisible(bool visible) {
     if (_elevationWallsVisible == visible) return false;
     _elevationWallsVisible = visible;
+    return true;
+  }
+
+  bool setViewMode(MapViewMode mode) {
+    if (_viewMode == mode) return false;
+    _viewMode = mode;
+    _updateVisibility();
     return true;
   }
 
@@ -124,12 +136,16 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
     if (_cache?.identity == cache.identity) return;
     _cache = cache;
     _cacheUpdateCount += 1;
-    isVisible = true;
+    _updateVisibility();
   }
 
   void clearCache() {
     _cache = null;
     isVisible = false;
+  }
+
+  void _updateVisibility() {
+    isVisible = _cache != null && _viewMode.showsTerrain;
   }
 
   @override

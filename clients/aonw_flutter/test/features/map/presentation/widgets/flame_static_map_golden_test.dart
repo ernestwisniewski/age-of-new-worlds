@@ -4,6 +4,7 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -31,7 +32,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     game.sceneSink.replaceScene(
-      _staticSnapshot(map, reference, referenceVisible: false),
+      _staticSnapshot(map, reference, viewMode: MapViewMode.tile),
     );
     await tester.runAsync(
       game.world.tileDetailsLayer.debugPreloadVisibleFrames,
@@ -71,7 +72,7 @@ void main() {
     );
 
     game.sceneSink.replaceScene(
-      _staticSnapshot(map, reference, referenceVisible: true),
+      _staticSnapshot(map, reference, viewMode: MapViewMode.graphic),
     );
     await tester.pump();
     expect(game.world.terrainLayer.debugCacheUpdateCount, 1);
@@ -122,10 +123,10 @@ final class _OnePixelGoldenFileComparator extends LocalFileComparator {
 MapRenderSnapshot _staticSnapshot(
   MapView map,
   MapReferenceBundle reference, {
-  required bool referenceVisible,
+  required MapViewMode viewMode,
 }) => MapRenderSnapshot(
   map: map,
-  interaction: MapInteractionState(referenceVisible: referenceVisible),
+  interaction: MapInteractionState(viewMode: viewMode),
   reference: reference,
   player: _player(map),
 );
@@ -161,7 +162,7 @@ MapRenderSnapshot _gameplaySnapshot(
       origin: (col: 2, row: 1),
       target: (col: 3, row: 1),
     ),
-    referenceVisible: false,
+    viewMode: MapViewMode.tile,
   ),
   reference: reference,
   player: _player(

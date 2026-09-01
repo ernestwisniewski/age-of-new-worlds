@@ -38,6 +38,7 @@ import '../../workers/application/worker_workflow.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
+import '../read_model/map_view_mode.dart';
 import '../read_model/movement_view.dart';
 import '../read_model/player_map_view.dart';
 import 'game_session_capabilities.dart';
@@ -367,10 +368,10 @@ bool _shouldLoadResearch(GameSessionState previous, GameSessionState next) {
 
 void _ignoreDiagnostic(String code, Object error, StackTrace stackTrace) {}
 
-GameSessionReady _toggleReferenceState(GameSessionReady current) =>
+GameSessionReady _toggleMapViewModeState(GameSessionReady current) =>
     current.withInteraction(
       current.interaction.copyWith(
-        referenceVisible: !current.interaction.referenceVisible,
+        viewMode: current.interaction.viewMode.toggled,
       ),
     );
 

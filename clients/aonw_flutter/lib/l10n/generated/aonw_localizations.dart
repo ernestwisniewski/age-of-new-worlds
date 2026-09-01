@@ -1376,17 +1376,23 @@ abstract class AonwLocalizations {
   /// **'Selected hex {col}, {row}'**
   String selectedHex(int col, int row);
 
-  /// No description provided for @hideReferenceLayer.
+  /// No description provided for @mapViewSwitchToTiles.
   ///
   /// In en, this message translates to:
-  /// **'Hide reference layer'**
-  String get hideReferenceLayer;
+  /// **'Switch to tile view'**
+  String get mapViewSwitchToTiles;
 
-  /// No description provided for @showReferenceLayer.
+  /// No description provided for @mapViewSwitchToGraphic.
   ///
   /// In en, this message translates to:
-  /// **'Show reference layer'**
-  String get showReferenceLayer;
+  /// **'Switch to graphic view'**
+  String get mapViewSwitchToGraphic;
+
+  /// No description provided for @mapViewGraphicUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Graphic view is unavailable for this map.'**
+  String get mapViewGraphicUnavailable;
 
   /// No description provided for @hexLabel.
   ///

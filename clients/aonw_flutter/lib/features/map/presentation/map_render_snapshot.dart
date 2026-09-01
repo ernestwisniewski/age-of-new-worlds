@@ -1,6 +1,7 @@
 import '../application/map_interaction_state.dart';
 import '../read_model/map_reference_bundle.dart';
 import '../read_model/map_view.dart';
+import '../read_model/map_view_mode.dart';
 import '../read_model/player_map_view.dart';
 
 final class MapRenderSnapshot {
@@ -15,4 +16,8 @@ final class MapRenderSnapshot {
   final MapInteractionState interaction;
   final MapReferenceBundle reference;
   final PlayerMapView player;
+
+  MapViewMode get effectiveViewMode => interaction.viewMode.effectiveFor(
+    hasReference: reference.pages.isNotEmpty,
+  );
 }

@@ -1,5 +1,7 @@
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/flame_map_viewport.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -7,6 +9,40 @@ import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets('enables only available map view mode transitions', (
+    tester,
+  ) async {
+    var transitions = 0;
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: Scaffold(
+          body: MapViewModeToggle(
+            mode: MapViewMode.tile,
+            allowGraphicMode: false,
+            onPressed: () => transitions += 1,
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('map-view-mode-toggle')));
+    expect(transitions, 0);
+
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: Scaffold(
+          body: MapViewModeToggle(
+            mode: MapViewMode.tile,
+            allowGraphicMode: true,
+            onPressed: () => transitions += 1,
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.byKey(const ValueKey('map-view-mode-toggle')));
+    expect(transitions, 1);
+  });
+
   testWidgets('keeps every gameplay HUD control reachable on a narrow screen', (
     tester,
   ) async {
@@ -32,7 +68,7 @@ void main() {
 
     expect(find.byKey(const ValueKey('turn-hud')), findsOneWidget);
     expect(find.byKey(const ValueKey('open-settings')), findsOneWidget);
-    expect(find.byKey(const ValueKey('reference-toggle')), findsOneWidget);
+    expect(find.byKey(const ValueKey('map-view-mode-toggle')), findsOneWidget);
     expect(find.byKey(const ValueKey('save-game')), findsOneWidget);
     expect(find.byKey(const ValueKey('open-research')), findsOneWidget);
     expect(find.byKey(const ValueKey('open-diplomacy')), findsOneWidget);
@@ -67,7 +103,7 @@ void main() {
       const Offset(8, 292),
     );
     expect(
-      tester.getTopLeft(find.byKey(const ValueKey('reference-toggle'))),
+      tester.getTopLeft(find.byKey(const ValueKey('map-view-mode-toggle'))),
       const Offset(8, 340),
     );
     expect(tester.takeException(), isNull);

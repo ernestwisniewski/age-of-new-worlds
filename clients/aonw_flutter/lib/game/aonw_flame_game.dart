@@ -108,10 +108,11 @@ final class AonwWorld extends World implements FlameSceneSink {
         : MapStaticRenderCache.build(snapshot.map);
     _staticCache = cache;
     terrainLayer.applyCache(cache);
+    terrainLayer.setViewMode(snapshot.effectiveViewMode);
     referenceLayer.applyReference(
       cache: cache,
       reference: snapshot.reference,
-      visible: snapshot.interaction.referenceVisible,
+      visible: snapshot.effectiveViewMode.showsReference,
     );
     gridLayer.applyCache(cache);
     tileDetailsLayer.applyMap(snapshot.map, cache);

@@ -113,9 +113,12 @@ final class _ReadyMap extends StatelessWidget {
     Positioned(
       top: AonwHudSideMenuLayout.actionTop(context, 4),
       left: AonwHudSideMenuLayout.left(context),
-      child: MapReferenceToggle(
-        visible: interaction.referenceVisible,
-        onPressed: controller.toggleReference,
+      child: MapViewModeToggle(
+        mode: interaction.viewMode.effectiveFor(
+          hasReference: scene.reference.pages.isNotEmpty,
+        ),
+        allowGraphicMode: scene.reference.pages.isNotEmpty,
+        onPressed: controller.toggleMapViewMode,
       ),
     ),
   ];

@@ -7,7 +7,7 @@ enum MapInputCommand {
   cursorRight,
   activate,
   cancel,
-  toggleReference,
+  toggleMapViewMode,
 }
 
 abstract interface class MapInputSource {

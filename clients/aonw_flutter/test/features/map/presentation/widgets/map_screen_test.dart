@@ -6,6 +6,7 @@ import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_input.d
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -18,7 +19,7 @@ import '../../../../support/map_test_fixture.dart';
 import '../../../../support/test_map_input_source.dart';
 
 void main() {
-  testWidgets('supports selection, pan, zoom and reference toggle', (
+  testWidgets('supports selection, pan, zoom and map view fallback', (
     tester,
   ) async {
     final session = FakeGameSession.success(
@@ -84,11 +85,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(flameGame.mapCamera.debugTransform!.zoom, greaterThan(beforeZoom));
 
-    await tester.tap(find.byKey(const ValueKey('reference-toggle')));
+    await tester.tap(find.byKey(const ValueKey('map-view-mode-toggle')));
     await tester.pump();
     expect(
-      (controller.state as GameSessionReady).interaction.referenceVisible,
-      isFalse,
+      (controller.state as GameSessionReady).interaction.viewMode,
+      MapViewMode.graphic,
+      reason: 'the fallback tile mode cannot select unavailable graphic art',
     );
   });
 
@@ -397,11 +399,11 @@ void main() {
     expect(controller.cursor.value, (col: 1, row: 0));
     expect(interaction.selected, (col: 1, row: 0));
 
-    input.add(MapInputCommand.toggleReference);
+    input.add(MapInputCommand.toggleMapViewMode);
     await tester.pump();
     expect(
-      (controller.state as GameSessionReady).interaction.referenceVisible,
-      isFalse,
+      (controller.state as GameSessionReady).interaction.viewMode,
+      MapViewMode.tile,
     );
   });
 

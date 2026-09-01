@@ -289,8 +289,8 @@ final class _MapScreenState extends State<MapScreen>
       if (cursorStep != null) _handleInput(cursorStep);
       if (frame.activatePressed) _handleInput(MapInputCommand.activate);
       if (frame.cancelPressed) _handleInput(MapInputCommand.cancel);
-      if (frame.toggleReferencePressed) {
-        _handleInput(MapInputCommand.toggleReference);
+      if (frame.toggleMapViewModePressed) {
+        _handleInput(MapInputCommand.toggleMapViewMode);
       }
     }
     _synchronizeGamepadTicker();
@@ -351,8 +351,8 @@ final class _MapScreenState extends State<MapScreen>
       case MapInputCommand.cancel:
         widget.controller.hover(null);
         widget.controller.select(null);
-      case MapInputCommand.toggleReference:
-        widget.controller.toggleReference();
+      case MapInputCommand.toggleMapViewMode:
+        widget.controller.toggleMapViewMode();
       case MapInputCommand.cursorUp:
       case MapInputCommand.cursorDown:
       case MapInputCommand.cursorLeft:

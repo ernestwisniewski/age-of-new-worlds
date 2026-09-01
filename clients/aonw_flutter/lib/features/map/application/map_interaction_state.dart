@@ -6,6 +6,7 @@ import '../../production/application/production_state.dart';
 import '../../unit_actions/application/action_deck_state.dart';
 import '../../workers/application/worker_state.dart';
 import '../read_model/map_view.dart';
+import '../read_model/map_view_mode.dart';
 import '../read_model/movement_view.dart';
 
 enum MapMovementFailureViewCode {
@@ -41,7 +42,7 @@ final class MapInteractionState {
     this.worker,
     this.production,
     this.artifact,
-    this.referenceVisible = true,
+    this.viewMode = MapViewMode.graphic,
   });
 
   final MapHexCoordinate? selected;
@@ -58,7 +59,7 @@ final class MapInteractionState {
   final WorkerState? worker;
   final ProductionState? production;
   final ArtifactState? artifact;
-  final bool referenceVisible;
+  final MapViewMode viewMode;
 
   MapInteractionState copyWith({
     MapHexCoordinate? selected,
@@ -87,7 +88,7 @@ final class MapInteractionState {
     bool clearProduction = false,
     ArtifactState? artifact,
     bool clearArtifact = false,
-    bool? referenceVisible,
+    MapViewMode? viewMode,
   }) => MapInteractionState(
     selected: _replaceNullable(this.selected, selected, clearSelected),
     selectedUnitId: _replaceNullable(
@@ -115,7 +116,7 @@ final class MapInteractionState {
     worker: _replaceNullable(this.worker, worker, clearWorker),
     production: _replaceNullable(this.production, production, clearProduction),
     artifact: _replaceNullable(this.artifact, artifact, clearArtifact),
-    referenceVisible: referenceVisible ?? this.referenceVisible,
+    viewMode: viewMode ?? this.viewMode,
   );
 }
 

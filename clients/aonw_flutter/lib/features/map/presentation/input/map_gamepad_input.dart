@@ -16,7 +16,7 @@ final class MapGamepadInput {
     this.dpadRight = false,
     this.activate = false,
     this.cancel = false,
-    this.toggleReference = false,
+    this.toggleMapViewMode = false,
   });
 
   static const idle = MapGamepadInput();
@@ -33,7 +33,7 @@ final class MapGamepadInput {
   final bool dpadRight;
   final bool activate;
   final bool cancel;
-  final bool toggleReference;
+  final bool toggleMapViewMode;
 
   double get zoom => zoomIn - zoomOut;
 
@@ -52,7 +52,7 @@ final class MapGamepadInput {
     bool? dpadRight,
     bool? activate,
     bool? cancel,
-    bool? toggleReference,
+    bool? toggleMapViewMode,
   }) => MapGamepadInput(
     cursorX: cursorX ?? this.cursorX,
     cursorY: cursorY ?? this.cursorY,
@@ -66,7 +66,7 @@ final class MapGamepadInput {
     dpadRight: dpadRight ?? this.dpadRight,
     activate: activate ?? this.activate,
     cancel: cancel ?? this.cancel,
-    toggleReference: toggleReference ?? this.toggleReference,
+    toggleMapViewMode: toggleMapViewMode ?? this.toggleMapViewMode,
   );
 
   @override
@@ -89,7 +89,7 @@ final class MapGamepadInput {
     dpadRight,
     activate,
     cancel,
-    toggleReference,
+    toggleMapViewMode,
   );
 }
 
@@ -105,7 +105,7 @@ final class MapGamepadFrame {
     this.zoom = 0,
     this.activatePressed = false,
     this.cancelPressed = false,
-    this.toggleReferencePressed = false,
+    this.toggleMapViewModePressed = false,
   });
 
   static const idle = MapGamepadFrame();
@@ -116,7 +116,7 @@ final class MapGamepadFrame {
   final double zoom;
   final bool activatePressed;
   final bool cancelPressed;
-  final bool toggleReferencePressed;
+  final bool toggleMapViewModePressed;
 
   bool get isIdle =>
       cursorStep == null &&
@@ -125,7 +125,7 @@ final class MapGamepadFrame {
       zoom == 0 &&
       !activatePressed &&
       !cancelPressed &&
-      !toggleReferencePressed;
+      !toggleMapViewModePressed;
 }
 
 final class MapGamepadFrameController {
@@ -170,9 +170,9 @@ final class MapGamepadFrameController {
       zoom: _applyDeadzone(input.zoom),
       activatePressed: _pressed(input.activate, _previous.activate),
       cancelPressed: _pressed(input.cancel, _previous.cancel),
-      toggleReferencePressed: _pressed(
-        input.toggleReference,
-        _previous.toggleReference,
+      toggleMapViewModePressed: _pressed(
+        input.toggleMapViewMode,
+        _previous.toggleMapViewMode,
       ),
     );
     _previous = input;

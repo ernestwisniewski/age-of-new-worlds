@@ -69,6 +69,20 @@ void main() {
       isTrue,
     );
   });
+
+  test('dispatches the map view toggle only on the button edge', () {
+    final controller = MapGamepadFrameController();
+    const pressed = MapGamepadInput(toggleMapViewMode: true);
+
+    expect(
+      controller.advance(input: pressed, dt: 0).toggleMapViewModePressed,
+      isTrue,
+    );
+    expect(
+      controller.advance(input: pressed, dt: 0.1).toggleMapViewModePressed,
+      isFalse,
+    );
+  });
 }
 
 Matcher _matchesFrame({

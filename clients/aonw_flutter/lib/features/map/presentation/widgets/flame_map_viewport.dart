@@ -9,6 +9,7 @@ import '../../../../game/aonw_flame_game.dart';
 import '../../../../l10n/l10n.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
+import '../../read_model/map_view_mode.dart';
 import '../input/map_input.dart';
 
 final class FlameMapViewport extends StatefulWidget {
@@ -50,7 +51,7 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
     LogicalKeyboardKey.enter: MapInputCommand.activate,
     LogicalKeyboardKey.space: MapInputCommand.activate,
     LogicalKeyboardKey.escape: MapInputCommand.cancel,
-    LogicalKeyboardKey.keyR: MapInputCommand.toggleReference,
+    LogicalKeyboardKey.keyR: MapInputCommand.toggleMapViewMode,
   };
 
   final Set<LogicalKeyboardKey> _pressedPanKeys = {};
@@ -245,25 +246,34 @@ final class MapViewportGestureLayer extends StatelessWidget {
   static Vector2 _vector(Offset offset) => Vector2(offset.dx, offset.dy);
 }
 
-final class MapReferenceToggle extends StatelessWidget {
-  const MapReferenceToggle({
-    required this.visible,
+final class MapViewModeToggle extends StatelessWidget {
+  const MapViewModeToggle({
+    required this.mode,
+    required this.allowGraphicMode,
     required this.onPressed,
     super.key,
   });
 
-  final bool visible;
+  final MapViewMode mode;
+  final bool allowGraphicMode;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
+    final canToggle = mode == MapViewMode.graphic || allowGraphicMode;
     return AonwHudIconButton(
-      key: const ValueKey('reference-toggle'),
-      tooltip: visible ? l10n.hideReferenceLayer : l10n.showReferenceLayer,
-      onPressed: onPressed,
-      active: visible,
-      icon: Icon(visible ? Icons.layers : Icons.layers_clear),
+      key: const ValueKey('map-view-mode-toggle'),
+      tooltip: !canToggle
+          ? l10n.mapViewGraphicUnavailable
+          : mode == MapViewMode.graphic
+          ? l10n.mapViewSwitchToTiles
+          : l10n.mapViewSwitchToGraphic,
+      onPressed: canToggle ? onPressed : null,
+      active: mode == MapViewMode.graphic,
+      icon: Icon(
+        mode == MapViewMode.graphic ? Icons.map_outlined : Icons.grid_on,
+      ),
     );
   }
 }

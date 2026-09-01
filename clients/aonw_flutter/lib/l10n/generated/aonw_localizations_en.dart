@@ -914,10 +914,14 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
-  String get hideReferenceLayer => 'Hide reference layer';
+  String get mapViewSwitchToTiles => 'Switch to tile view';
 
   @override
-  String get showReferenceLayer => 'Show reference layer';
+  String get mapViewSwitchToGraphic => 'Switch to graphic view';
+
+  @override
+  String get mapViewGraphicUnavailable =>
+      'Graphic view is unavailable for this map.';
 
   @override
   String hexLabel(int col, int row) {

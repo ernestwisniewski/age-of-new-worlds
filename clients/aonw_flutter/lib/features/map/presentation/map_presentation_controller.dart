@@ -160,7 +160,7 @@ final class MapPresentationController extends ChangeNotifier {
 
   void retryLocalHandoff() => _coordinator.retryLocalHandoff();
 
-  void toggleReference() => _coordinator.toggleReference();
+  void toggleMapViewMode() => _coordinator.toggleMapViewMode();
 
   void completeTurnPresentation() => _coordinator.completeTurnPresentation();
 

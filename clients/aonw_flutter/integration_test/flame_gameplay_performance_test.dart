@@ -7,6 +7,7 @@ import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_g
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
@@ -211,7 +212,7 @@ MapRenderSnapshot _largeSnapshot() {
   );
   return MapRenderSnapshot(
     map: map,
-    interaction: const MapInteractionState(referenceVisible: false),
+    interaction: const MapInteractionState(viewMode: MapViewMode.tile),
     reference: MapReferenceBundle(
       mapId: map.mapId,
       mapContentHash: contentHash,

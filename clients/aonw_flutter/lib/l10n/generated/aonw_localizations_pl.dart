@@ -916,10 +916,14 @@ class AonwLocalizationsPl extends AonwLocalizations {
   }
 
   @override
-  String get hideReferenceLayer => 'Ukryj warstwę referencyjną';
+  String get mapViewSwitchToTiles => 'Przełącz na widok kafelkowy';
 
   @override
-  String get showReferenceLayer => 'Pokaż warstwę referencyjną';
+  String get mapViewSwitchToGraphic => 'Przełącz na widok graficzny';
+
+  @override
+  String get mapViewGraphicUnavailable =>
+      'Widok graficzny jest niedostępny dla tej mapy.';
 
   @override
   String hexLabel(int col, int row) {
