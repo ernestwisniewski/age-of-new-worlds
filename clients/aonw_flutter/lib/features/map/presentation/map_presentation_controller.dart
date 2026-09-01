@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../artifacts/read_model/artifact_view.dart';
+import '../../cities/application/city_state.dart';
 import '../../cities/read_model/city_view.dart';
 import '../../combat/read_model/combat_view.dart';
 import '../../diplomacy/read_model/diplomacy_view.dart';
@@ -157,6 +158,11 @@ final class MapPresentationController extends ChangeNotifier {
   void cancelCityFounding() => _coordinator.cancelCityFounding();
 
   void confirmCityFounding() => _coordinator.confirmCityFounding();
+
+  void startCityManagement(CityManagementMode mode) =>
+      _coordinator.startCityManagement(mode);
+
+  void cancelCityManagement() => _coordinator.cancelCityManagement();
 
   void executeCityAction(CityActionView action) =>
       _coordinator.executeCityAction(action);

@@ -169,6 +169,7 @@ CityExpansionOptionsView _expansion(
         coordinate: coordinate,
         score: candidate.score,
         distance: candidate.distance,
+        tileYield: _yieldValue(candidate.tileYield),
       ),
     );
   }

@@ -88,6 +88,27 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
+  void startCityManagement(CityManagementMode mode) {
+    if (!_gameplayActive()) return;
+    _cities.startManagement(
+      mode: mode,
+      readState: () => _state,
+      publish: _setState,
+    );
+  }
+
+  void cancelCityManagement() {
+    if (!_gameplayActive()) return;
+    _cities.cancelManagement(readState: () => _state, publish: _setState);
+  }
+
+  void selectCityManagementHex(MapHexCoordinate coordinate) {
+    final state = _state;
+    if (state is! GameSessionReady) return;
+    final action = _cityManagementAction(state.interaction.city, coordinate);
+    if (action != null) executeCityAction(action);
+  }
+
   void executeCityAction(CityActionView action) {
     if (!_gameplayActive()) return;
     _cities.execute(
@@ -272,3 +293,39 @@ extension MapCoordinatorActions on MapCoordinator {
     }
   }
 }
+
+CityActionView? _cityManagementAction(
+  CityState? city,
+  MapHexCoordinate coordinate,
+) {
+  final inspection = city?.inspection;
+  if (city == null || inspection == null || city.commandPending) return null;
+  return switch (city.managementMode) {
+    CityManagementMode.workedHexes => _workedHexAction(inspection, coordinate),
+    CityManagementMode.expansion => _expansionAction(inspection, coordinate),
+    null => null,
+  };
+}
+
+ToggleWorkedHexActionView? _workedHexAction(
+  CityInspectionView inspection,
+  MapHexCoordinate coordinate,
+) => inspection.workedHexes.availableHexes.contains(coordinate)
+    ? ToggleWorkedHexActionView(
+        cityId: inspection.workedHexes.cityId,
+        target: coordinate,
+      )
+    : null;
+
+SelectCityExpansionActionView? _expansionAction(
+  CityInspectionView inspection,
+  MapHexCoordinate coordinate,
+) =>
+    inspection.expansion.candidates.any(
+      (candidate) => candidate.coordinate == coordinate,
+    )
+    ? SelectCityExpansionActionView(
+        cityId: inspection.expansion.cityId,
+        target: coordinate,
+      )
+    : null;

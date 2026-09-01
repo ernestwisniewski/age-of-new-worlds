@@ -6,6 +6,7 @@ import '../../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../artifacts/presentation/artifact_panel.dart';
 import '../../../artifacts/read_model/artifact_view.dart';
+import '../../../cities/application/city_state.dart';
 import '../../../cities/presentation/city_copy.dart';
 import '../../../cities/presentation/city_panel.dart';
 import '../../../cities/read_model/city_view.dart';
@@ -75,7 +76,8 @@ final class MapSelectionOverlay extends StatelessWidget {
             onToggleCityFoundingHex: controller.toggleCityFoundingHex,
             onConfirmCityFounding: controller.confirmCityFounding,
             onCancelCityFounding: controller.cancelCityFounding,
-            onCityAction: controller.executeCityAction,
+            onStartCityManagement: controller.startCityManagement,
+            onCancelCityManagement: controller.cancelCityManagement,
             onProductionAction: controller.executeProductionAction,
             onArtifactAction: controller.executeArtifactAction,
           ),
@@ -103,7 +105,8 @@ final class _MapSelectionPanel extends StatelessWidget {
     required this.onToggleCityFoundingHex,
     required this.onConfirmCityFounding,
     required this.onCancelCityFounding,
-    required this.onCityAction,
+    required this.onStartCityManagement,
+    required this.onCancelCityManagement,
     required this.onProductionAction,
     required this.onArtifactAction,
   });
@@ -124,7 +127,8 @@ final class _MapSelectionPanel extends StatelessWidget {
   final ValueChanged<MapHexCoordinate> onToggleCityFoundingHex;
   final VoidCallback onConfirmCityFounding;
   final VoidCallback onCancelCityFounding;
-  final ValueChanged<CityActionView> onCityAction;
+  final ValueChanged<CityManagementMode> onStartCityManagement;
+  final VoidCallback onCancelCityManagement;
   final ValueChanged<ProductionActionView> onProductionAction;
   final ValueChanged<ArtifactActionView> onArtifactAction;
 
@@ -171,7 +175,8 @@ final class _MapSelectionPanel extends StatelessWidget {
                 onToggleCityFoundingHex: onToggleCityFoundingHex,
                 onConfirmCityFounding: onConfirmCityFounding,
                 onCancelCityFounding: onCancelCityFounding,
-                onCityAction: onCityAction,
+                onStartCityManagement: onStartCityManagement,
+                onCancelCityManagement: onCancelCityManagement,
                 onProductionAction: onProductionAction,
                 onArtifactAction: onArtifactAction,
               ),

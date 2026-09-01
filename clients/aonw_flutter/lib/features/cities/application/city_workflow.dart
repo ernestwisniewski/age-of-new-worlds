@@ -142,6 +142,53 @@ final class CityWorkflow {
     );
   }
 
+  void startManagement({
+    required CityManagementMode mode,
+    required CityStateReader readState,
+    required CityStatePublisher publish,
+  }) {
+    final state = readState();
+    final city = state is GameSessionReady ? state.interaction.city : null;
+    if (state is! GameSessionReady ||
+        city == null ||
+        city.cityId == null ||
+        city.inspection == null ||
+        city.loading ||
+        city.commandPending) {
+      return;
+    }
+    publish(
+      state.withInteraction(
+        state.interaction.copyWith(
+          city: city.copyWith(managementMode: mode, clearFailure: true),
+          clearRoute: true,
+          clearCombat: true,
+        ),
+      ),
+    );
+  }
+
+  void cancelManagement({
+    required CityStateReader readState,
+    required CityStatePublisher publish,
+  }) {
+    final state = readState();
+    final city = state is GameSessionReady ? state.interaction.city : null;
+    if (state is! GameSessionReady ||
+        city == null ||
+        city.managementMode == null ||
+        city.commandPending) {
+      return;
+    }
+    publish(
+      state.withInteraction(
+        state.interaction.copyWith(
+          city: city.copyWith(clearManagementMode: true, clearFailure: true),
+        ),
+      ),
+    );
+  }
+
   void execute({
     required CityActionView action,
     required CityStateReader readState,

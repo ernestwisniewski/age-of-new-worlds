@@ -154,6 +154,9 @@ pub(super) fn apply_city(
         Err(crate::city::CityRuleError::Technology(error)) => {
             return Err(CanonicalEngineError::Technology(error));
         }
+        Err(crate::city::CityRuleError::Economy(error)) => {
+            return Err(CanonicalEngineError::Economy(error.to_string().into()));
+        }
     };
     let next = match mutation {
         crate::city::CityMutation::Identity => state,

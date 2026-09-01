@@ -21,7 +21,11 @@ extension CityWorkflowLoading on CityWorkflow {
       publish(
         ready.withInteraction(
           ready.interaction.copyWith(
-            city: CityState(cityId: cityId, inspection: inspection),
+            city: CityState(
+              cityId: cityId,
+              inspection: inspection,
+              managementMode: ready.interaction.city?.managementMode,
+            ),
           ),
         ),
       );
@@ -124,6 +128,7 @@ extension CityWorkflowLoading on CityWorkflow {
           city: CityState(
             cityId: founding ? null : subjectId,
             founderUnitId: founding ? subjectId : null,
+            managementMode: ready.interaction.city?.managementMode,
             failure: CityFailureView(_failureCode(error.code)),
           ),
         ),
@@ -152,6 +157,7 @@ extension CityWorkflowLoading on CityWorkflow {
           city: CityState(
             cityId: founding ? null : subjectId,
             founderUnitId: founding ? subjectId : null,
+            managementMode: ready.interaction.city?.managementMode,
             failure: const CityFailureView(CityFailureCode.requestFailed),
           ),
         ),

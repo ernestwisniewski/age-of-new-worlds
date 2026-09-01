@@ -135,11 +135,13 @@ void main() {
                   'coordinate': {'col': 2, 'row': 2},
                   'score': -1,
                   'distance': 2,
+                  'tileYield': _yield,
                 },
               ],
             })
             as AonwCityExpansionOptionsResult;
     expect(expansion.candidates.single.score, -1);
+    expect(expansion.candidates.single.tileYield.production, 3);
 
     final cityYield =
         AonwQueryResult.fromJson({

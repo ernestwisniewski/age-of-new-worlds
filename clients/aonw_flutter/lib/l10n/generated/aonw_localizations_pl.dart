@@ -1348,7 +1348,12 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'gold': 'Złoto',
       'defense': 'Obrona',
       'workedHexes': 'Pola robocze',
+      'workedHexSelect': 'Zarządzaj polami roboczymi',
+      'workedHexHint': 'Wybierz podświetlone kontrolowane pole na mapie.',
       'expansion': 'Preferowana ekspansja',
+      'expansionSelect': 'Wybierz ekspansję',
+      'expansionHint': 'Wybierz podświetlone pole ekspansji na mapie.',
+      'managementCancel': 'Zakończ wybór na mapie',
       'foundingOpen': 'Zaplanuj miasto',
       'other': 'Miasto',
     });

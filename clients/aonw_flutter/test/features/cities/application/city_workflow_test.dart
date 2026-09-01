@@ -1,3 +1,4 @@
+import 'package:aonw_flutter/features/cities/application/city_state.dart';
 import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
@@ -107,6 +108,48 @@ void main() {
       expect(state.interaction.city, isNull);
       expect(state.interaction.selectedUnitId, unit.id);
       expect(session.cityCommandCalls, 0);
+    },
+  );
+
+  test(
+    'routes city management map taps into exact queried engine actions',
+    () async {
+      final city = testCityView();
+      final session = FakeGameSession.success(
+        testMapScene(cities: [city]),
+        cityInspection: testCityInspectionView(),
+        cityResult: CityCommandResultView.accepted(
+          player: _player(revision: 1, cities: [city]),
+        ),
+      );
+      final controller = _controller(session);
+      addTearDown(controller.dispose);
+
+      await controller.load();
+      controller.select(city.center);
+      await pumpEventQueue();
+
+      controller.startCityManagement(CityManagementMode.workedHexes);
+      var cityState = (controller.state as GameSessionReady).interaction.city!;
+      expect(cityState.managementMode, CityManagementMode.workedHexes);
+      expect(session.cityCommandCalls, 0);
+
+      controller.select(const (col: 1, row: 0));
+      await pumpEventQueue();
+
+      expect(session.cityCommandCalls, 1);
+      expect(session.lastCityAction, isA<ToggleWorkedHexActionView>());
+      final action = session.lastCityAction! as ToggleWorkedHexActionView;
+      expect(action.cityId, 'preview-city');
+      expect(action.target, const (col: 1, row: 0));
+      cityState = (controller.state as GameSessionReady).interaction.city!;
+      expect(cityState.managementMode, CityManagementMode.workedHexes);
+
+      controller.cancelCityManagement();
+      expect(
+        (controller.state as GameSessionReady).interaction.city?.managementMode,
+        isNull,
+      );
     },
   );
 }

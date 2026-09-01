@@ -5,6 +5,8 @@ use crate::{
     WonderTypeDto,
 };
 
+use super::YieldValueDto;
+
 /// Recipient-owned city-founding selection restored through save/reopen.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -75,4 +77,6 @@ pub struct CityExpansionCandidateDto {
     pub score: i32,
     /// Exact hex distance from the center.
     pub distance: u32,
+    /// Display-ready base yield of the candidate tile.
+    pub tile_yield: YieldValueDto,
 }

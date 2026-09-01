@@ -11,7 +11,10 @@ use super::model::{
     CityFoundingOptionsQuery, CityWorkedHexOptions, CityWorkedHexOptionsQuery, FoundCityCommand,
     SelectCityExpansionHexCommand, ToggleWorkedHexCommand,
 };
-use crate::{CommandRejectionCode, EngineContext, TechnologyQueryError, TechnologyUnlockQuery};
+use crate::{
+    CommandRejectionCode, EconomyQueryError, EngineContext, TechnologyQueryError,
+    TechnologyUnlockQuery,
+};
 
 mod founding;
 mod scoring;
@@ -23,11 +26,11 @@ use founding::{
 };
 use scoring::{expansion_score, worked_score};
 
-/// Corrupt content/state failure or a normal city command rejection.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum CityRuleError {
     Rejected(CommandRejectionCode),
     Technology(TechnologyQueryError),
+    Economy(EconomyQueryError),
 }
 
 impl From<CommandRejectionCode> for CityRuleError {
@@ -399,10 +402,14 @@ fn expansion_candidates(
                 .map()
                 .tile_at(target)
                 .expect("claimable expansion has map tile");
+            let tile_yield =
+                crate::economy::rules::tile_base_yield(tile, &context.ruleset().economy())
+                    .map_err(CityRuleError::Economy)?;
             candidates.push(CityExpansionCandidate::new(
                 target,
                 expansion_score(tile, &context.ruleset().economy()),
                 u32::try_from(city.center().distance_to(target)).unwrap_or(u32::MAX),
+                tile_yield,
             ));
         }
     }

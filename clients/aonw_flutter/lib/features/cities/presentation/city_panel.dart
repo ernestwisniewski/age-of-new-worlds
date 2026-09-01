@@ -14,7 +14,8 @@ final class CityPanel extends StatelessWidget {
     required this.onToggleFoundingHex,
     required this.onConfirmFounding,
     required this.onCancelFounding,
-    required this.onAction,
+    required this.onStartManagement,
+    required this.onCancelManagement,
     this.enabled = true,
     super.key,
   });
@@ -24,7 +25,8 @@ final class CityPanel extends StatelessWidget {
   final ValueChanged<MapHexCoordinate> onToggleFoundingHex;
   final VoidCallback onConfirmFounding;
   final VoidCallback onCancelFounding;
-  final ValueChanged<CityActionView> onAction;
+  final ValueChanged<CityManagementMode> onStartManagement;
+  final VoidCallback onCancelManagement;
   final bool enabled;
 
   @override
@@ -62,9 +64,11 @@ final class CityPanel extends StatelessWidget {
                 ),
               if (state.inspection case final inspection?)
                 _OwnedCityInspection(
+                  state: state,
                   inspection: inspection,
                   enabled: enabled && !state.commandPending,
-                  onAction: onAction,
+                  onStartManagement: onStartManagement,
+                  onCancelManagement: onCancelManagement,
                 ),
               if (state.commandPending)
                 AonwProgressIndicator(
@@ -186,14 +190,18 @@ final class _FoundingEditor extends StatelessWidget {
 
 final class _OwnedCityInspection extends StatelessWidget {
   const _OwnedCityInspection({
+    required this.state,
     required this.inspection,
     required this.enabled,
-    required this.onAction,
+    required this.onStartManagement,
+    required this.onCancelManagement,
   });
 
+  final CityState state;
   final CityInspectionView inspection;
   final bool enabled;
-  final ValueChanged<CityActionView> onAction;
+  final ValueChanged<CityManagementMode> onStartManagement;
+  final VoidCallback onCancelManagement;
 
   @override
   Widget build(BuildContext context) {
@@ -214,48 +222,73 @@ final class _OwnedCityInspection extends StatelessWidget {
           '${copy.text(CityText.workedHexes)}: '
           '${worked.selectedHexes.length}/${worked.limit}',
         ),
-        Wrap(
-          spacing: AonwSpacing.xs,
-          runSpacing: AonwSpacing.xs,
-          children: [
-            for (final coordinate in worked.availableHexes)
-              FilterChip(
-                label: Text('${coordinate.col}, ${coordinate.row}'),
-                selected: worked.selectedHexes.contains(coordinate),
-                onSelected: enabled
-                    ? (_) => onAction(
-                        ToggleWorkedHexActionView(
-                          cityId: worked.cityId,
-                          target: coordinate,
-                        ),
-                      )
-                    : null,
-              ),
-          ],
+        _CityManagementControls(
+          mode: state.managementMode,
+          expansionAvailable: inspection.expansion.candidates.isNotEmpty,
+          enabled: enabled,
+          onStart: onStartManagement,
+          onCancel: onCancelManagement,
         ),
-        Text(copy.text(CityText.expansion)),
-        Wrap(
-          spacing: AonwSpacing.xs,
-          runSpacing: AonwSpacing.xs,
-          children: [
-            for (final candidate in inspection.expansion.candidates)
-              ChoiceChip(
-                label: Text(
-                  '${candidate.coordinate.col}, ${candidate.coordinate.row} '
-                  '(${candidate.score})',
-                ),
-                selected:
-                    inspection.expansion.preferredHex == candidate.coordinate,
-                onSelected: enabled
-                    ? (_) => onAction(
-                        SelectCityExpansionActionView(
-                          cityId: inspection.expansion.cityId,
-                          target: candidate.coordinate,
-                        ),
-                      )
-                    : null,
-              ),
-          ],
+      ],
+    );
+  }
+}
+
+final class _CityManagementControls extends StatelessWidget {
+  const _CityManagementControls({
+    required this.mode,
+    required this.expansionAvailable,
+    required this.enabled,
+    required this.onStart,
+    required this.onCancel,
+  });
+
+  final CityManagementMode? mode;
+  final bool expansionAvailable;
+  final bool enabled;
+  final ValueChanged<CityManagementMode> onStart;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = CityCopy.of(context);
+    final activeMode = mode;
+    if (activeMode != null) {
+      final hint = activeMode == CityManagementMode.workedHexes
+          ? CityText.workedHexHint
+          : CityText.expansionHint;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(copy.text(hint)),
+          OutlinedButton.icon(
+            key: const ValueKey('cancel-city-management'),
+            onPressed: enabled ? onCancel : null,
+            icon: const Icon(Icons.close),
+            label: Text(copy.text(CityText.managementCancel)),
+          ),
+        ],
+      );
+    }
+    return Wrap(
+      spacing: AonwSpacing.xs,
+      runSpacing: AonwSpacing.xs,
+      children: [
+        FilledButton.icon(
+          key: const ValueKey('start-worked-hex-management'),
+          onPressed: enabled
+              ? () => onStart(CityManagementMode.workedHexes)
+              : null,
+          icon: const Icon(Icons.grid_view),
+          label: Text(copy.text(CityText.workedHexSelect)),
+        ),
+        OutlinedButton.icon(
+          key: const ValueKey('start-expansion-management'),
+          onPressed: enabled && expansionAvailable
+              ? () => onStart(CityManagementMode.expansion)
+              : null,
+          icon: const Icon(Icons.open_in_full),
+          label: Text(copy.text(CityText.expansionSelect)),
         ),
       ],
     );

@@ -48,10 +48,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     if (current == null) return;
     final next = _selectableCoordinate(current, coordinate);
     final generation = ++_interactionGeneration;
-    if (current.interaction.city?.foundingOptions != null) {
-      if (next != null) toggleCityFoundingHex(next);
-      return;
-    }
+    if (_routeCityMapSelection(current.interaction.city, next)) return;
     if (next == null) {
       _clearSelection(current);
       return;
@@ -92,6 +89,18 @@ extension MapCoordinatorSelection on MapCoordinator {
     }
 
     _selectPlainHex(current, next);
+  }
+
+  bool _routeCityMapSelection(CityState? city, MapHexCoordinate? coordinate) {
+    if (city?.foundingOptions != null) {
+      if (coordinate != null) toggleCityFoundingHex(coordinate);
+      return true;
+    }
+    if (city?.managementMode != null) {
+      if (coordinate != null) selectCityManagementHex(coordinate);
+      return true;
+    }
+    return false;
   }
 
   void _clearSelection(GameSessionReady current) {

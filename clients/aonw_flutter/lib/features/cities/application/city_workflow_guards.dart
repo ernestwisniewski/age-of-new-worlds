@@ -123,6 +123,7 @@ GameSessionReady _accepted(
     SelectCityExpansionActionView(:final cityId) => cityId,
     FoundCityActionView() => throw StateError('Handled above.'),
   };
+  final managementMode = current.interaction.city?.managementMode;
   final city = synchronized.recipient.controlledCityById(cityId);
   if (city == null) {
     return synchronized.withInteraction(
@@ -132,7 +133,7 @@ GameSessionReady _accepted(
   return synchronized.withInteraction(
     synchronized.interaction.copyWith(
       selected: city.center,
-      city: CityState.loadingCity(cityId),
+      city: CityState.loadingCity(cityId, managementMode: managementMode),
       clearProduction: true,
     ),
   );

@@ -133,11 +133,13 @@ final class CityExpansionCandidateView {
     required this.coordinate,
     required this.score,
     required this.distance,
+    required this.tileYield,
   });
 
   final MapHexCoordinate coordinate;
   final int score;
   final int distance;
+  final YieldValueView tileYield;
 }
 
 final class CityExpansionOptionsView {

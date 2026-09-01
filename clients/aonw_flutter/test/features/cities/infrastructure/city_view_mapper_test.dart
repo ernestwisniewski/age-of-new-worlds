@@ -1,5 +1,6 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/cities/infrastructure/city_view_mapper.dart';
+import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
@@ -52,6 +53,12 @@ void main() {
             coordinate: AonwCoordinate(col: 2, row: 1),
             score: -1,
             distance: 1,
+            tileYield: AonwYieldValue(
+              food: 1,
+              production: 2,
+              gold: 3,
+              defense: 4,
+            ),
           ),
         ],
       ),
@@ -78,6 +85,14 @@ void main() {
     );
 
     expect(inspection.expansion.candidates.single.score, -1);
+    expect(
+      inspection.expansion.candidates.single.tileYield,
+      isA<YieldValueView>()
+          .having((value) => value.food, 'food', 1)
+          .having((value) => value.production, 'production', 2)
+          .having((value) => value.gold, 'gold', 3)
+          .having((value) => value.defense, 'defense', 4),
+    );
     expect(inspection.cityYield.total.defense, -1);
     expect(inspection.workedHexes.effectiveHexes, const [(col: 1, row: 0)]);
   });

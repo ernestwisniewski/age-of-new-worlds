@@ -1811,7 +1811,7 @@ abstract class AonwLocalizations {
   /// No description provided for @cityText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{City} foundingTitle{Found a city} loading{Loading city details} owner{Owner} health{Health} population{Population} territory{Territory} foundingSelection{Initial territory} foundingConfirm{Confirm city founding} foundingCancel{Cancel founding} executing{Applying city action} cityYield{Yield} food{Food} production{Production} gold{Gold} defense{Defense} workedHexes{Worked hexes} expansion{Preferred expansion} foundingOpen{Plan a city} other{City}}'**
+  /// **'{key, select, title{City} foundingTitle{Found a city} loading{Loading city details} owner{Owner} health{Health} population{Population} territory{Territory} foundingSelection{Initial territory} foundingConfirm{Confirm city founding} foundingCancel{Cancel founding} executing{Applying city action} cityYield{Yield} food{Food} production{Production} gold{Gold} defense{Defense} workedHexes{Worked hexes} workedHexSelect{Manage worked hexes} workedHexHint{Select a highlighted controlled hex on the map.} expansion{Preferred expansion} expansionSelect{Choose expansion} expansionHint{Select a highlighted expansion hex on the map.} managementCancel{Finish map selection} foundingOpen{Plan a city} other{City}}'**
   String cityText(String key);
 
   /// No description provided for @cityFailure.

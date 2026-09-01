@@ -235,6 +235,7 @@ fn city_query_error(error: crate::city::CityRuleError) -> CanonicalQueryError {
     match error {
         crate::city::CityRuleError::Rejected(code) => CanonicalQueryError::City(code),
         crate::city::CityRuleError::Technology(error) => CanonicalQueryError::Technology(error),
+        crate::city::CityRuleError::Economy(error) => CanonicalQueryError::Economy(error),
     }
 }
 

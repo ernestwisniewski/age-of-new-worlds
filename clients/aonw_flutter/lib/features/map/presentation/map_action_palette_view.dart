@@ -57,7 +57,10 @@ MapActionPaletteView? buildMapActionPaletteView({
   required PlayerMapView player,
   required AonwLocalizations l10n,
 }) {
-  if (interaction.city?.founderUnitId != null) return null;
+  if (interaction.city?.founderUnitId != null ||
+      interaction.city?.managementMode != null) {
+    return null;
+  }
   final worker = _buildWorkerPalette(interaction, player, l10n);
   return worker ?? _buildMovePalette(interaction, l10n);
 }

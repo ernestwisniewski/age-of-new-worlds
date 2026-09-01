@@ -8,7 +8,7 @@ use aonw_domain::{
 use aonw_engine::{
     CityExpansionOptionsQuery, CityFoundingOptionsQuery, CityWorkedHexOptionsQuery,
     CommandRejectionCode, EngineContext, FoundCityCommand, GameEngine, GameQuery, PlayerCommand,
-    QueryResult, SelectCityExpansionHexCommand, ToggleWorkedHexCommand,
+    QueryResult, SelectCityExpansionHexCommand, ToggleWorkedHexCommand, YieldValue,
 };
 
 #[path = "city/manifest.rs"]
@@ -390,6 +390,12 @@ fn expansion_query_is_ranked_and_selection_is_atomic_and_idempotent() {
                 && (pair[0].distance(), pair[0].coordinate())
                     <= (pair[1].distance(), pair[1].coordinate())
     }));
+    assert!(
+        options
+            .candidates()
+            .iter()
+            .all(|candidate| candidate.tile_yield() == YieldValue::new(1, 1, 0, 0))
+    );
     let target = options.candidates()[0].coordinate();
 
     let selected = GameEngine::apply_player_owned(

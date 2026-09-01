@@ -1344,7 +1344,12 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'gold': 'Gold',
       'defense': 'Defense',
       'workedHexes': 'Worked hexes',
+      'workedHexSelect': 'Manage worked hexes',
+      'workedHexHint': 'Select a highlighted controlled hex on the map.',
       'expansion': 'Preferred expansion',
+      'expansionSelect': 'Choose expansion',
+      'expansionHint': 'Select a highlighted expansion hex on the map.',
+      'managementCancel': 'Finish map selection',
       'foundingOpen': 'Plan a city',
       'other': 'City',
     });

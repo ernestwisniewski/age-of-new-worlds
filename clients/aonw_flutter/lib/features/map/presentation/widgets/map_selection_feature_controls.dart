@@ -12,7 +12,8 @@ final class _SelectionFeatureControls extends StatelessWidget {
     required this.onToggleCityFoundingHex,
     required this.onConfirmCityFounding,
     required this.onCancelCityFounding,
-    required this.onCityAction,
+    required this.onStartCityManagement,
+    required this.onCancelCityManagement,
     required this.onProductionAction,
     required this.onArtifactAction,
   });
@@ -27,7 +28,8 @@ final class _SelectionFeatureControls extends StatelessWidget {
   final ValueChanged<MapHexCoordinate> onToggleCityFoundingHex;
   final VoidCallback onConfirmCityFounding;
   final VoidCallback onCancelCityFounding;
-  final ValueChanged<CityActionView> onCityAction;
+  final ValueChanged<CityManagementMode> onStartCityManagement;
+  final VoidCallback onCancelCityManagement;
   final ValueChanged<ProductionActionView> onProductionAction;
   final ValueChanged<ArtifactActionView> onArtifactAction;
 
@@ -63,7 +65,8 @@ final class _SelectionFeatureControls extends StatelessWidget {
       onToggleFoundingHex: onToggleCityFoundingHex,
       onConfirmFounding: onConfirmCityFounding,
       onCancelFounding: onCancelCityFounding,
-      onAction: onCityAction,
+      onStartManagement: onStartCityManagement,
+      onCancelManagement: onCancelCityManagement,
       enabled:
           !(interaction.production?.commandPending ?? false) &&
           !(interaction.artifact?.commandPending ?? false),
@@ -72,7 +75,9 @@ final class _SelectionFeatureControls extends StatelessWidget {
 
   Widget _productionPanel() {
     final production = interaction.production;
-    if (production == null) return const SizedBox.shrink();
+    if (production == null || interaction.city?.managementMode != null) {
+      return const SizedBox.shrink();
+    }
     return ProductionPanel(
       state: production,
       enabled:
@@ -85,7 +90,9 @@ final class _SelectionFeatureControls extends StatelessWidget {
 
   Widget _artifactPanel() {
     final artifact = interaction.artifact;
-    if (artifact == null) return const SizedBox.shrink();
+    if (artifact == null || interaction.city?.managementMode != null) {
+      return const SizedBox.shrink();
+    }
     return ArtifactPanel(
       state: artifact,
       player: player,

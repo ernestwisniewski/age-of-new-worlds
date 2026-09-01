@@ -1,6 +1,5 @@
 import 'package:aonw_flutter/features/cities/application/city_state.dart';
 import 'package:aonw_flutter/features/cities/presentation/city_panel.dart';
-import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,10 +7,10 @@ import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('shows exact city yield and dispatches one available action', (
+  testWidgets('shows exact city yield and opens map management mode', (
     tester,
   ) async {
-    CityActionView? action;
+    CityManagementMode? managementMode;
     await tester.pumpWidget(
       LocalizedTestApp(
         home: Scaffold(
@@ -26,7 +25,8 @@ void main() {
               onToggleFoundingHex: (_) {},
               onConfirmFounding: () {},
               onCancelFounding: () {},
-              onAction: (value) => action = value,
+              onStartManagement: (value) => managementMode = value,
+              onCancelManagement: () {},
             ),
           ),
         ),
@@ -35,8 +35,8 @@ void main() {
 
     expect(find.text('Preview City'), findsOneWidget);
     expect(find.textContaining('Food 2'), findsOneWidget);
-    await tester.tap(find.widgetWithText(FilterChip, '1, 0'));
-    expect(action, isA<ToggleWorkedHexActionView>());
+    await tester.tap(find.byKey(const ValueKey('start-worked-hex-management')));
+    expect(managementMode, CityManagementMode.workedHexes);
     expect(tester.takeException(), isNull);
   });
 
@@ -57,7 +57,8 @@ void main() {
             onToggleFoundingHex: (_) {},
             onConfirmFounding: () => confirms += 1,
             onCancelFounding: () => cancels += 1,
-            onAction: (_) {},
+            onStartManagement: (_) {},
+            onCancelManagement: () {},
           ),
         ),
       ),
@@ -87,7 +88,8 @@ void main() {
             onToggleFoundingHex: (_) {},
             onConfirmFounding: () {},
             onCancelFounding: () {},
-            onAction: (_) {},
+            onStartManagement: (_) {},
+            onCancelManagement: () {},
           ),
         ),
       ),

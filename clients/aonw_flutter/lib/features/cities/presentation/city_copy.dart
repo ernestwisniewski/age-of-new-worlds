@@ -21,7 +21,12 @@ enum CityText {
   gold,
   defense,
   workedHexes,
+  workedHexSelect,
+  workedHexHint,
   expansion,
+  expansionSelect,
+  expansionHint,
+  managementCancel,
   foundingOpen,
 }
 

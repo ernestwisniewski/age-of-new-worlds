@@ -7,6 +7,8 @@ enum CityFailureCode {
   rejected,
 }
 
+enum CityManagementMode { workedHexes, expansion }
+
 final class CityFailureView {
   const CityFailureView(this.code) : rejectionCode = null;
 
@@ -26,12 +28,15 @@ final class CityState {
     this.inspection,
     this.foundingOptions,
     this.foundingSelection = const [],
+    this.managementMode,
     this.inFlightAction,
     this.failure,
   });
 
-  const CityState.loadingCity(String cityId)
-    : this(cityId: cityId, loading: true);
+  const CityState.loadingCity(
+    String cityId, {
+    CityManagementMode? managementMode,
+  }) : this(cityId: cityId, loading: true, managementMode: managementMode);
 
   const CityState.loadingFounding(String founderUnitId)
     : this(founderUnitId: founderUnitId, loading: true);
@@ -43,6 +48,7 @@ final class CityState {
   final CityInspectionView? inspection;
   final CityFoundingOptionsView? foundingOptions;
   final List<({int col, int row})> foundingSelection;
+  final CityManagementMode? managementMode;
   final CityActionView? inFlightAction;
   final CityFailureView? failure;
 
@@ -56,6 +62,8 @@ final class CityState {
     CityFoundingOptionsView? foundingOptions,
     bool clearFoundingOptions = false,
     List<({int col, int row})>? foundingSelection,
+    CityManagementMode? managementMode,
+    bool clearManagementMode = false,
     CityActionView? inFlightAction,
     bool clearInFlightAction = false,
     CityFailureView? failure,
@@ -70,6 +78,9 @@ final class CityState {
         ? null
         : foundingOptions ?? this.foundingOptions,
     foundingSelection: foundingSelection ?? this.foundingSelection,
+    managementMode: clearManagementMode
+        ? null
+        : managementMode ?? this.managementMode,
     inFlightAction: clearInFlightAction
         ? null
         : inFlightAction ?? this.inFlightAction,

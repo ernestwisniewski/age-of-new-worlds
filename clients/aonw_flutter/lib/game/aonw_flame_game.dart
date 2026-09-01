@@ -17,6 +17,7 @@ import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
 import 'map/artifact_map_layer.dart';
 import 'map/city_founding_preview_layer.dart';
+import 'map/city_management_overlay_layer.dart';
 import 'map/city_map_layer.dart';
 import 'map/city_territory_layer.dart';
 import 'map/flame_map_camera.dart';

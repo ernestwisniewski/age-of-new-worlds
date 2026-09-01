@@ -1,5 +1,7 @@
 use aonw_domain::{CityId, HexCoord, UnitId};
 
+use crate::YieldValue;
+
 /// Revision-bound request to schedule one city-founding job.
 #[derive(Clone, Copy, Debug)]
 pub struct FoundCityCommand<'command> {
@@ -315,14 +317,21 @@ pub struct CityExpansionCandidate {
     coordinate: HexCoord,
     score: i32,
     distance: u32,
+    tile_yield: YieldValue,
 }
 
 impl CityExpansionCandidate {
-    pub(crate) const fn new(coordinate: HexCoord, score: i32, distance: u32) -> Self {
+    pub(crate) const fn new(
+        coordinate: HexCoord,
+        score: i32,
+        distance: u32,
+        tile_yield: YieldValue,
+    ) -> Self {
         Self {
             coordinate,
             score,
             distance,
+            tile_yield,
         }
     }
     /// Returns the candidate coordinate.
@@ -339,6 +348,11 @@ impl CityExpansionCandidate {
     #[must_use]
     pub const fn distance(self) -> u32 {
         self.distance
+    }
+    /// Returns the display-ready base yield of the candidate tile.
+    #[must_use]
+    pub const fn tile_yield(self) -> YieldValue {
+        self.tile_yield
     }
 }
 

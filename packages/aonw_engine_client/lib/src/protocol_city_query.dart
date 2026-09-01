@@ -175,6 +175,7 @@ final class AonwCityExpansionCandidate {
     required this.coordinate,
     required this.score,
     required this.distance,
+    required this.tileYield,
   });
 
   factory AonwCityExpansionCandidate.fromJson(Object? source) {
@@ -183,17 +184,20 @@ final class AonwCityExpansionCandidate {
       'coordinate',
       'score',
       'distance',
+      'tileYield',
     }, 'city expansion candidate');
     return AonwCityExpansionCandidate(
       coordinate: AonwCoordinate.fromJson(value['coordinate']),
       score: readInt(value['score'], 'city expansion score'),
       distance: readUnsigned(value['distance'], 'city expansion distance'),
+      tileYield: AonwYieldValue.fromJson(value['tileYield']),
     );
   }
 
   final AonwCoordinate coordinate;
   final int score;
   final int distance;
+  final AonwYieldValue tileYield;
 }
 
 final class AonwCityYieldResult extends AonwQueryResult {

@@ -16,6 +16,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     routeLayer = MapRouteLayerComponent();
     selectionLayer = MapSelectionLayerComponent();
     cityFoundingPreviewLayer = MapCityFoundingPreviewLayerComponent();
+    cityManagementOverlayLayer = MapCityManagementOverlayLayerComponent();
     actionPaletteLayer = MapActionPaletteLayerComponent();
     hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
@@ -33,6 +34,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       artifactLayer,
       unitLayer,
       cityFoundingPreviewLayer,
+      cityManagementOverlayLayer,
       selectionLayer,
       actionPaletteLayer,
       hexSelectionPaletteLayer,
@@ -54,6 +56,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapObjectiveLayerComponent objectiveLayer;
   late final MapSelectionLayerComponent selectionLayer;
   late final MapCityFoundingPreviewLayerComponent cityFoundingPreviewLayer;
+  late final MapCityManagementOverlayLayerComponent cityManagementOverlayLayer;
   late final MapActionPaletteLayerComponent actionPaletteLayer;
   late final MapHexSelectionPaletteLayerComponent hexSelectionPaletteLayer;
   late final MapEffectHostComponent effectHost;
@@ -118,6 +121,11 @@ final class AonwWorld extends World implements FlameSceneSink {
       snapshot.interaction.city,
       snapshot.player,
     );
+    cityManagementOverlayLayer.applyManagement(
+      cache,
+      snapshot.interaction.city,
+      snapshot.player,
+    );
     selectionLayer.applySelection(cache, snapshot.interaction, snapshot.player);
     selectionLayer.applyCursor(cache, _cursor);
     actionPaletteLayer.applyPalette(cache, snapshot.actionPalette);
@@ -153,6 +161,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     artifactLayer.clearLayer();
     unitLayer.clearLayer();
     cityFoundingPreviewLayer.clearLayer();
+    cityManagementOverlayLayer.clearLayer();
     selectionLayer.clearLayer();
     actionPaletteLayer.clearLayer();
     hexSelectionPaletteLayer.clearLayer();

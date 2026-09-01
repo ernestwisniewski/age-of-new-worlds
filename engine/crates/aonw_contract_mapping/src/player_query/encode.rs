@@ -366,6 +366,7 @@ fn city_expansion_options(
                 coordinate: coordinate(candidate.coordinate()),
                 score: candidate.score(),
                 distance: candidate.distance(),
+                tile_yield: yield_value(candidate.tile_yield()),
             })
             .collect(),
     }

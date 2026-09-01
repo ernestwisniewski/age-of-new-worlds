@@ -40,40 +40,37 @@ CityFoundingOptionsView testCityFoundingOptionsView({
   maximumRadius: 2,
 );
 
-CityInspectionView testCityInspectionView({String cityId = 'preview-city'}) =>
-    CityInspectionView(
-      workedHexes: CityWorkedHexOptionsView(
-        stamp: testSessionStamp(),
-        cityId: cityId,
-        center: const (col: 1, row: 1),
-        controlledHexes: const [(col: 1, row: 0)],
-        availableHexes: const [(col: 1, row: 0)],
-        selectedHexes: const [],
-        effectiveHexes: const [(col: 1, row: 0)],
-        limit: 1,
+CityInspectionView testCityInspectionView({
+  String cityId = 'preview-city',
+}) => CityInspectionView(
+  workedHexes: CityWorkedHexOptionsView(
+    stamp: testSessionStamp(),
+    cityId: cityId,
+    center: const (col: 1, row: 1),
+    controlledHexes: const [(col: 1, row: 0)],
+    availableHexes: const [(col: 1, row: 0)],
+    selectedHexes: const [],
+    effectiveHexes: const [(col: 1, row: 0)],
+    limit: 1,
+  ),
+  expansion: CityExpansionOptionsView(
+    stamp: testSessionStamp(),
+    cityId: cityId,
+    controlledHexes: const [(col: 1, row: 0)],
+    preferredHex: null,
+    candidates: const [
+      CityExpansionCandidateView(
+        coordinate: (col: 2, row: 1),
+        score: 3,
+        distance: 1,
+        tileYield: YieldValueView(food: 2, production: 1, gold: 0, defense: 0),
       ),
-      expansion: CityExpansionOptionsView(
-        stamp: testSessionStamp(),
-        cityId: cityId,
-        controlledHexes: const [(col: 1, row: 0)],
-        preferredHex: null,
-        candidates: const [
-          CityExpansionCandidateView(
-            coordinate: (col: 2, row: 1),
-            score: 3,
-            distance: 1,
-          ),
-        ],
-      ),
-      cityYield: CityYieldView(
-        stamp: testSessionStamp(),
-        cityId: cityId,
-        contributions: const [],
-        total: const YieldValueView(
-          food: 2,
-          production: 1,
-          gold: 1,
-          defense: 0,
-        ),
-      ),
-    );
+    ],
+  ),
+  cityYield: CityYieldView(
+    stamp: testSessionStamp(),
+    cityId: cityId,
+    contributions: const [],
+    total: const YieldValueView(food: 2, production: 1, gold: 1, defense: 0),
+  ),
+);

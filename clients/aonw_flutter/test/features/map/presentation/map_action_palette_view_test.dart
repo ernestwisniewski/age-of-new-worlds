@@ -98,4 +98,23 @@ void main() {
 
     expect(view, isNull);
   });
+
+  test('suppresses movement actions while city management owns the map', () {
+    final scene = testMapScene();
+
+    final view = buildMapActionPaletteView(
+      interaction: MapInteractionState(
+        route: testRoutePlanView(),
+        city: CityState(
+          cityId: 'preview-city',
+          inspection: testCityInspectionView(),
+          managementMode: CityManagementMode.expansion,
+        ),
+      ),
+      player: scene.player,
+      l10n: AonwLocalizationsEn(),
+    );
+
+    expect(view, isNull);
+  });
 }
