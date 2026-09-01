@@ -31,17 +31,17 @@ extension MapCoordinatorSelection on MapCoordinator {
 
     final selectedUnitId = current.interaction.selectedUnitId;
     if (selectedUnitId != null) {
-      if (current.interaction.reachable?.tileAt(next) != null) {
-        await _previewRoute(current, next, selectedUnitId, generation);
+      if (_hasVisibleForeignTarget(current.recipient, next)) {
+        _combat.preview(
+          attackerUnitId: selectedUnitId,
+          defender: next,
+          readState: () => _state,
+          publish: _setState,
+          isDisposed: () => _disposed,
+        );
         return;
       }
-      _combat.preview(
-        attackerUnitId: selectedUnitId,
-        defender: next,
-        readState: () => _state,
-        publish: _setState,
-        isDisposed: () => _disposed,
-      );
+      await _previewRoute(current, next, selectedUnitId, generation);
       return;
     }
 
@@ -272,3 +272,16 @@ MapHexCoordinate? _selectableCoordinate(
 ) => coordinate != null && current.scene.map.contains(coordinate)
     ? coordinate
     : null;
+
+bool _hasVisibleForeignTarget(
+  PlayerMapView player,
+  MapHexCoordinate coordinate,
+) {
+  if (player
+      .unitsAt(coordinate)
+      .any((unit) => unit.ownerPlayerId != player.actorPlayerId)) {
+    return true;
+  }
+  final city = player.cityAt(coordinate);
+  return city != null && city.ownerPlayerId != player.actorPlayerId;
+}

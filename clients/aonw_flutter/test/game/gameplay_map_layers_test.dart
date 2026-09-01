@@ -67,7 +67,6 @@ void main() {
       expect(game.world.unitLayer.debugCreatedCount, 2);
       expect(game.world.unitLayer.debugUpdatedCount, 1);
       expect(game.world.unitLayer.debugSharedPaintCount, 8);
-      expect(game.world.reachableLayer.debugPathBuildCount, 1);
       expect(game.world.routeLayer.debugPathBuildCount, 1);
       expect(game.world.selectionLayer.debugUpdateCount, 2);
     },
@@ -98,7 +97,7 @@ void main() {
         game.world.selectionLayer.debugCursorUpdateCount,
         cursorUpdates + 1,
       );
-      expect(game.world.selectionLayer.isVisible, isTrue);
+      expect(game.world.selectionLayer.isVisible, isFalse);
 
       game.replaceCursor((col: 1, row: 0));
       expect(
@@ -255,7 +254,7 @@ void main() {
       expect(game.world.unitLayer.children, hasLength(120));
       expect(game.world.unitLayer.debugCreatedCount, 120);
       expect(game.world.unitLayer.debugSharedPaintCount, 8);
-      expect(game.world.children, hasLength(15));
+      expect(game.world.children, hasLength(14));
     },
   );
 

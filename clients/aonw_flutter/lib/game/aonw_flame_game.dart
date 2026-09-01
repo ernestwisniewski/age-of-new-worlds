@@ -37,11 +37,10 @@ final class AonwWorld extends World implements FlameSceneSink {
     cityLayer = MapCityLayerComponent();
     artifactLayer = MapArtifactLayerComponent();
     objectiveLayer = MapObjectiveLayerComponent();
-    reachableLayer = MapReachableLayerComponent();
     workerInfrastructureLayer = MapWorkerInfrastructureLayerComponent();
     fogLayer = MapFogLayerComponent();
     routeLayer = MapRouteLayerComponent();
-    selectionLayer = MapSelectionLayerComponent(units: unitLayer);
+    selectionLayer = MapSelectionLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
     addAll([
       terrainLayer,
@@ -51,7 +50,6 @@ final class AonwWorld extends World implements FlameSceneSink {
       tileDetailsLayer,
       workerInfrastructureLayer,
       fogLayer,
-      reachableLayer,
       routeLayer,
       objectiveLayer,
       cityLayer,
@@ -66,7 +64,6 @@ final class AonwWorld extends World implements FlameSceneSink {
   final MapGridLayerComponent gridLayer;
   final MapCityTerritoryLayerComponent cityTerritoryLayer;
   final MapTileDetailsLayerComponent tileDetailsLayer;
-  late final MapReachableLayerComponent reachableLayer;
   late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
   late final MapFogLayerComponent fogLayer;
   late final MapRouteLayerComponent routeLayer;
@@ -122,13 +119,12 @@ final class AonwWorld extends World implements FlameSceneSink {
     tileDetailsLayer.applyMap(snapshot.map, cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
-    reachableLayer.applyReachable(cache, snapshot.interaction.reachable);
-    routeLayer.applyRoute(cache, snapshot.interaction.route);
+    routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
     objectiveLayer.applyMap(snapshot.map, cache);
     cityLayer.applyPatch(patch, cache);
     artifactLayer.applyPatch(patch, cache);
     unitLayer.applyPatch(patch, cache);
-    selectionLayer.applySelection(cache, snapshot.interaction);
+    selectionLayer.applySelection(cache, snapshot.interaction, snapshot.player);
     selectionLayer.applyCursor(cache, _cursor);
     effectHost.applyPatch(patch, cache);
   }
@@ -155,7 +151,6 @@ final class AonwWorld extends World implements FlameSceneSink {
     tileDetailsLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
-    reachableLayer.clearLayer();
     routeLayer.clearLayer();
     objectiveLayer.clearLayer();
     cityLayer.clearLayer();

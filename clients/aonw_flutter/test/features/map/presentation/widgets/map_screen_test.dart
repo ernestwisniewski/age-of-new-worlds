@@ -160,7 +160,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Unit preview-commander'), findsOneWidget);
-    expect(flameGame.world.reachableLayer.isVisible, isTrue);
+    expect(flameGame.world.selectionLayer.isVisible, isTrue);
     expect(flameGame.world.unitLayer.debugUnitCount, 1);
 
     controller.select((col: 1, row: 0));
@@ -238,7 +238,11 @@ void main() {
         flameGame.world.selectionLayer.debugCursorUpdateCount,
         cursorUpdates + 1,
       );
-      expect(flameGame.world.selectionLayer.isVisible, isTrue);
+      expect(
+        flameGame.world.selectionLayer.isVisible,
+        isFalse,
+        reason: 'legacy standard hover has no generic hex outline',
+      );
     },
   );
 
