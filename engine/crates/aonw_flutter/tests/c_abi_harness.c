@@ -5,7 +5,7 @@
 #include <string.h>
 
 static const uint8_t CAPABILITIES_REQUEST[] =
-    "{\"apiVersion\":8,\"request\":{\"type\":\"capabilities\"}}";
+    "{\"apiVersion\":9,\"request\":{\"type\":\"capabilities\"}}";
 
 static void require(int condition, const char *message) {
   if (!condition) {
@@ -29,7 +29,7 @@ static void require_response_contains(void *response, const char *expected) {
 
 static void lifecycle(void) {
   require(aonw_flutter_is_available() == 1, "adapter is unavailable");
-  require(aonw_flutter_client_api_version() == 8, "client API differs");
+  require(aonw_flutter_client_api_version() == 9, "client API differs");
   require(aonw_flutter_build_identity_len() > 0, "build identity is empty");
   require(
       aonw_flutter_build_identity_data() != NULL,

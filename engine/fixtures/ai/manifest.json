@@ -126,5 +126,5 @@
     "unitLogisticsOptions",
     "workerOptions"
   ],
-  "clientApiVersion": 8
+  "clientApiVersion": 9
 }

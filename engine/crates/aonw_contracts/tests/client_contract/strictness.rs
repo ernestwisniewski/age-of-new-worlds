@@ -1,18 +1,21 @@
-use aonw_contracts::client::{ClientRequestDto, ClientResponseDto};
+use aonw_contracts::client::{CLIENT_API_VERSION, ClientRequestDto, ClientResponseDto};
 
 #[test]
 fn malformed_unknown_duplicate_and_future_documents_fail_closed() {
-    let unknown = r#"{"apiVersion":8,"request":{"type":"snapshot"},"extra":true}"#;
-    let duplicate = r#"{"apiVersion":8,"apiVersion":8,"request":{"type":"snapshot"}}"#;
-    let future = r#"{"apiVersion":9,"request":{"type":"snapshot"}}"#;
-    let malformed_nested = r#"{"apiVersion":8,"request":{"type":"query","query":{"type":"reachable","expectedRevision":0,"unitId":"u","extra":true}}}"#;
-    let malformed_logistics = r#"{"apiVersion":8,"request":{"type":"dispatch","command":{"type":"autoExploreUnit","expectedRevision":0,"unitId":"u","unexpectedField":[]}}}"#;
-    let malformed_worker = r#"{"apiVersion":8,"request":{"type":"dispatch","command":{"type":"buildRoad","expectedRevision":0,"unitId":"u","unexpectedField":true}}}"#;
+    let unknown = r#"{"apiVersion":9,"request":{"type":"snapshot"},"extra":true}"#;
+    let duplicate = r#"{"apiVersion":9,"apiVersion":9,"request":{"type":"snapshot"}}"#;
+    let future = format!(
+        r#"{{"apiVersion":{},"request":{{"type":"snapshot"}}}}"#,
+        CLIENT_API_VERSION + 1
+    );
+    let malformed_nested = r#"{"apiVersion":9,"request":{"type":"query","query":{"type":"reachable","expectedRevision":0,"unitId":"u","extra":true}}}"#;
+    let malformed_logistics = r#"{"apiVersion":9,"request":{"type":"dispatch","command":{"type":"autoExploreUnit","expectedRevision":0,"unitId":"u","unexpectedField":[]}}}"#;
+    let malformed_worker = r#"{"apiVersion":9,"request":{"type":"dispatch","command":{"type":"buildRoad","expectedRevision":0,"unitId":"u","unexpectedField":true}}}"#;
 
     for invalid in [
         unknown,
         duplicate,
-        future,
+        &future,
         malformed_nested,
         malformed_logistics,
         malformed_worker,
@@ -20,12 +23,14 @@ fn malformed_unknown_duplicate_and_future_documents_fail_closed() {
         assert!(ClientRequestDto::from_json(invalid).is_err());
     }
 
-    let future_response =
-        r#"{"apiVersion":9,"outcome":{"status":"success","response":{"type":"sessionClosed"}}}"#;
-    let unknown_response = r#"{"apiVersion":8,"outcome":{"status":"failure","error":{"code":"failed","message":"failed","extra":true}}}"#;
-    let old_command_shape = r#"{"apiVersion":8,"outcome":{"status":"success","response":{"type":"command","result":{"stamp":{"revision":0,"stateDigest":"d","mapHash":"m","rulesetHash":"r"},"accepted":true,"rejection":null,"events":[],"evidence":null,"viewPatch":{"fromRevision":0,"toRevision":0,"upsertedUnits":[],"removedUnitIds":[],"pendingAction":null}}}}}"#;
-    let unknown_rejection = r#"{"apiVersion":8,"outcome":{"status":"success","response":{"type":"command","result":{"stamp":{"revision":0,"stateDigest":"d","mapHash":"m","rulesetHash":"r"},"outcome":{"status":"rejected","code":"future_rejection"},"events":[],"evidence":null,"viewPatch":{"fromRevision":0,"toRevision":0,"upsertedUnits":[],"removedUnitIds":[],"pendingAction":null}}}}}"#;
-    assert!(ClientResponseDto::from_json(future_response).is_err());
+    let future_response = format!(
+        r#"{{"apiVersion":{},"outcome":{{"status":"success","response":{{"type":"sessionClosed"}}}}}}"#,
+        CLIENT_API_VERSION + 1
+    );
+    let unknown_response = r#"{"apiVersion":9,"outcome":{"status":"failure","error":{"code":"failed","message":"failed","extra":true}}}"#;
+    let old_command_shape = r#"{"apiVersion":9,"outcome":{"status":"success","response":{"type":"command","result":{"stamp":{"revision":0,"stateDigest":"d","mapHash":"m","rulesetHash":"r"},"accepted":true,"rejection":null,"events":[],"evidence":null,"viewPatch":{"fromRevision":0,"toRevision":0,"upsertedUnits":[],"removedUnitIds":[],"pendingAction":null}}}}}"#;
+    let unknown_rejection = r#"{"apiVersion":9,"outcome":{"status":"success","response":{"type":"command","result":{"stamp":{"revision":0,"stateDigest":"d","mapHash":"m","rulesetHash":"r"},"outcome":{"status":"rejected","code":"future_rejection"},"events":[],"evidence":null,"viewPatch":{"fromRevision":0,"toRevision":0,"upsertedUnits":[],"removedUnitIds":[],"pendingAction":null}}}}}"#;
+    assert!(ClientResponseDto::from_json(&future_response).is_err());
     assert!(ClientResponseDto::from_json(unknown_response).is_err());
     assert!(ClientResponseDto::from_json(old_command_shape).is_err());
     assert!(ClientResponseDto::from_json(unknown_rejection).is_err());
