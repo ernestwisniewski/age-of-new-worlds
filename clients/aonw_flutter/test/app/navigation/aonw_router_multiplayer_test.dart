@@ -64,6 +64,46 @@ void main() {
     await tester.pump();
   });
 
+  testWidgets('offers sign-in after multiplayer access becomes current', (
+    tester,
+  ) async {
+    final mapController = MapPresentationController(
+      capabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+      ),
+    );
+    final multiplayerController = MultiplayerController(
+      MultiplayerCoordinator(
+        session: _MultiplayerSession(restoredAccount: null),
+        documents: const _MultiplayerDocuments(),
+      ),
+    );
+    final accessController = MultiplayerAccessController(
+      access: const _CurrentAccess(),
+    );
+
+    await tester.pumpWidget(
+      AonwApp(
+        mapController: mapController,
+        multiplayerAccessController: accessController,
+        multiplayerController: multiplayerController,
+        initialRoute: AonwRoute.loadGame,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('online-saves-signed-out')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('open-online-sign-in')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('multiplayer-email')), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
+
   testWidgets('opens an online match on the shared map route', (tester) async {
     final scene = testMapScene();
     final gameplay = FakeGameSession.success(scene);
@@ -111,6 +151,61 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
   });
+
+  testWidgets('resumes a listed online match from Load Game after resync', (
+    tester,
+  ) async {
+    final scene = testMapScene();
+    final network = _NetworkGameSession(scene);
+    final multiplayerSession = _MultiplayerSession(
+      matches: [
+        _routerLobby(ready: true, running: true).match,
+        _inactiveMatch('finished-match', MultiplayerMatchPhase.finished),
+        _inactiveMatch('abandoned-match', MultiplayerMatchPhase.abandoned),
+      ],
+    );
+    final mapController = MapPresentationController(
+      capabilities: testGameSessionCapabilities(
+        FakeGameSession.success(scene),
+      ).withNetworkGame(network),
+    );
+    final multiplayerController = MultiplayerController(
+      MultiplayerCoordinator(
+        session: multiplayerSession,
+        documents: const _MultiplayerDocuments(),
+      ),
+    );
+
+    await tester.pumpWidget(
+      AonwApp(
+        mapController: mapController,
+        multiplayerController: multiplayerController,
+        initialRoute: AonwRoute.loadGame,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Multiplayer · map-1'), findsOneWidget);
+    expect(find.text('Match: finished-match'), findsNothing);
+    expect(find.text('Match: abandoned-match'), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('continue-online-match-1')));
+    await tester.pumpAndSettle();
+
+    expect(multiplayerSession.resyncCalls, 1);
+    expect(network.setups.single.matchId, 'match-1');
+    expect(network.setups.single.playerId, 'player-1');
+    expect(find.byKey(const ValueKey('map-viewport')), findsOneWidget);
+
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('map-viewport'))),
+    ).pop();
+    await tester.pumpAndSettle();
+    expect(multiplayerSession.reconnectCalls, 1);
+    expect(multiplayerSession.resyncCalls, 2);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
 }
 
 final class _UpdateRequiredAccess implements MultiplayerAccessPort {
@@ -119,6 +214,14 @@ final class _UpdateRequiredAccess implements MultiplayerAccessPort {
   @override
   Future<MultiplayerAccessStatus> check() async =>
       MultiplayerAccessStatus.updateRequired;
+}
+
+final class _CurrentAccess implements MultiplayerAccessPort {
+  const _CurrentAccess();
+
+  @override
+  Future<MultiplayerAccessStatus> check() async =>
+      MultiplayerAccessStatus.current;
 }
 
 final class _NetworkGameSession implements NetworkGameSessionPort {
@@ -146,16 +249,22 @@ final class _NetworkGameSession implements NetworkGameSessionPort {
 }
 
 final class _MultiplayerSession implements MultiplayerSessionPort {
+  _MultiplayerSession({
+    this.matches = const [],
+    this.restoredAccount = const MultiplayerAccountView(userId: 'account-1'),
+  });
+
+  final List<MultiplayerMatchView> matches;
+  final MultiplayerAccountView? restoredAccount;
   var reconnectCalls = 0;
   var resyncCalls = 0;
   var lobbyView = _routerLobby();
 
   @override
-  Future<MultiplayerAccountView?> restoreAccount() async =>
-      const MultiplayerAccountView(userId: 'account-1');
+  Future<MultiplayerAccountView?> restoreAccount() async => restoredAccount;
 
   @override
-  Future<List<MultiplayerMatchView>> listMatches() async => const [];
+  Future<List<MultiplayerMatchView>> listMatches() async => matches;
 
   @override
   Future<MultiplayerMatchLobbyView> createMatch(
@@ -313,4 +422,20 @@ MultiplayerMatchLobbyView _routerLobby({
     ),
   ],
   canStart: !running && ready,
+);
+
+MultiplayerMatchView _inactiveMatch(
+  String matchId,
+  MultiplayerMatchPhase phase,
+) => MultiplayerMatchView(
+  matchId: matchId,
+  mapId: 'map-1',
+  mapHash: 'map-hash',
+  rulesetId: 'ruleset-1',
+  rulesetHash: 'ruleset-hash',
+  phase: phase,
+  hostPlayerId: 'player-1',
+  startedAt: DateTime.utc(2026),
+  revision: 7,
+  eventOffset: 10,
 );

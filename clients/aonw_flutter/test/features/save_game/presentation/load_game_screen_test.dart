@@ -93,4 +93,97 @@ void main() {
     expect(resumeCalls, 1);
     expect(resumedScenario, LocalGameScenarioView.dravonia);
   });
+
+  testWidgets(
+    'lists an active online match and keeps transfer actions honest',
+    (tester) async {
+      String? resumedMatchId;
+      await tester.pumpWidget(
+        LocalizedTestApp(
+          home: LoadGameScreen(
+            listLocalSaves: () async => const [],
+            resumeLocalGame: (_) async => const LocalResumeResultView.failed(
+              LocalResumeFailureViewCode.missing,
+            ),
+            onResumed: () {},
+            hasLocalReplay: (_) async => false,
+            openReplay: (_) async => const ReplayOpenResultView.failed(
+              ReplayFailureViewCode.missing,
+            ),
+            onReplayOpened: () {},
+            onStartSinglePlayer: () {},
+            onlineIndex: () => const OnlineSaveIndexView(
+              phase: OnlineSaveIndexPhaseView.ready,
+              saves: [
+                OnlineSaveSummaryView(
+                  matchId: 'online-1',
+                  mapId: 'dravonia',
+                  phase: OnlineSavePhaseView.running,
+                ),
+              ],
+            ),
+            resumeOnlineGame: (matchId) async {
+              resumedMatchId = matchId;
+              return true;
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Multiplayer · Dravonia'), findsOneWidget);
+      expect(find.text('Match: online-1'), findsOneWidget);
+      expect(find.text('Status: in progress'), findsOneWidget);
+      final disabledActions = tester.widgetList<OutlinedButton>(
+        find.descendant(
+          of: find.byKey(const ValueKey('online-save-online-1')),
+          matching: find.byType(OutlinedButton),
+        ),
+      );
+      expect(disabledActions, hasLength(2));
+      expect(
+        disabledActions.every((action) => action.onPressed == null),
+        isTrue,
+      );
+
+      await tester.tap(find.byKey(const ValueKey('continue-online-online-1')));
+      await tester.pump();
+      expect(resumedMatchId, 'online-1');
+    },
+  );
+
+  testWidgets('offers multiplayer sign-in without showing an empty-save CTA', (
+    tester,
+  ) async {
+    var openCalls = 0;
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: LoadGameScreen(
+          listLocalSaves: () async => const [],
+          resumeLocalGame: (_) async => const LocalResumeResultView.failed(
+            LocalResumeFailureViewCode.missing,
+          ),
+          onResumed: () {},
+          hasLocalReplay: (_) async => false,
+          openReplay: (_) async =>
+              const ReplayOpenResultView.failed(ReplayFailureViewCode.missing),
+          onReplayOpened: () {},
+          onStartSinglePlayer: () {},
+          onlineIndex: () => const OnlineSaveIndexView(
+            phase: OnlineSaveIndexPhaseView.signedOut,
+          ),
+          onOpenMultiplayer: () => openCalls += 1,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('No saved games were found.'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('online-saves-signed-out')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('open-online-sign-in')));
+    expect(openCalls, 1);
+  });
 }

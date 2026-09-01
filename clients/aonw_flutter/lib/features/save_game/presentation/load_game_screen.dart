@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
@@ -11,6 +13,7 @@ import '../application/local_save_state.dart';
 import '../application/local_save_summary.dart';
 
 part 'load_game_save_card.dart';
+part 'load_game_online_card.dart';
 
 typedef LocalSaveIndexReader = Future<List<LocalSaveSummaryView>> Function();
 typedef LocalGameResume =
@@ -22,6 +25,8 @@ typedef LocalReplayOpen =
 typedef LocalSaveExport = void Function(LocalGameScenarioView scenario);
 typedef LocalArchiveAction =
     Future<void> Function(LocalGameScenarioView scenario);
+typedef OnlineSaveIndexReader = OnlineSaveIndexView Function();
+typedef OnlineGameResume = Future<bool> Function(String matchId);
 
 final class LoadGameScreen extends StatefulWidget {
   const LoadGameScreen({
@@ -34,6 +39,11 @@ final class LoadGameScreen extends StatefulWidget {
     required this.onStartSinglePlayer,
     this.onImportSave,
     this.onExportSave,
+    this.onlineChanges,
+    this.initializeOnline,
+    this.onlineIndex = _unavailableOnlineIndex,
+    this.resumeOnlineGame = _unavailableOnlineResume,
+    this.onOpenMultiplayer,
     super.key,
   });
 
@@ -46,6 +56,11 @@ final class LoadGameScreen extends StatefulWidget {
   final VoidCallback onStartSinglePlayer;
   final VoidCallback? onImportSave;
   final LocalSaveExport? onExportSave;
+  final Listenable? onlineChanges;
+  final Future<void> Function()? initializeOnline;
+  final OnlineSaveIndexReader onlineIndex;
+  final OnlineGameResume resumeOnlineGame;
+  final VoidCallback? onOpenMultiplayer;
 
   @override
   State<LoadGameScreen> createState() => _LoadGameScreenState();
@@ -55,7 +70,10 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   late Future<_LoadAvailability> _availability;
   var _resuming = false;
   var _openingReplay = false;
+  var _resumingOnline = false;
   LocalGameScenarioView? _activeScenario;
+  String? _activeOnlineMatchId;
+  String? _onlineFailureCode;
   LocalResumeFailureViewCode? _resumeFailure;
   ReplayFailureViewCode? _replayFailure;
 
@@ -63,10 +81,22 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   void initState() {
     super.initState();
     _availability = _readAvailability();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(widget.initializeOnline?.call());
+    });
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    final onlineChanges = widget.onlineChanges;
+    if (onlineChanges == null) return _buildScaffold(context);
+    return ListenableBuilder(
+      listenable: onlineChanges,
+      builder: (context, child) => _buildScaffold(context),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text(context.aonwL10n.loadGameTitle)),
     body: AonwMenuBackdrop(
       child: SafeArea(
@@ -76,7 +106,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
           builder: (context, snapshot) => _LoadGameBody(
             availability: snapshot.data,
             loading: snapshot.connectionState != ConnectionState.done,
-            busy: _busy,
+            busy: _busy || _resumingOnline,
             resuming: _resuming,
             openingReplay: _openingReplay,
             activeScenario: _activeScenario,
@@ -87,6 +117,12 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             onStartSinglePlayer: widget.onStartSinglePlayer,
             onImportSave: widget.onImportSave,
             onExportSave: widget.onExportSave,
+            onlineIndex: widget.onlineIndex(),
+            resumingOnline: _resumingOnline,
+            activeOnlineMatchId: _activeOnlineMatchId,
+            onlineFailureCode: _onlineFailureCode,
+            onResumeOnline: _resumeOnline,
+            onOpenMultiplayer: widget.onOpenMultiplayer,
           ),
         ),
       ),
@@ -163,7 +199,29 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       _availability = _readAvailability();
     });
   }
+
+  Future<void> _resumeOnline(String matchId) async {
+    setState(() {
+      _resumingOnline = true;
+      _activeOnlineMatchId = matchId;
+      _onlineFailureCode = null;
+      _resumeFailure = null;
+      _replayFailure = null;
+    });
+    final opened = await widget.resumeOnlineGame(matchId);
+    if (!mounted) return;
+    setState(() {
+      _resumingOnline = false;
+      _activeOnlineMatchId = null;
+      if (!opened) _onlineFailureCode = 'multiplayer_match_open_failed';
+    });
+  }
 }
+
+OnlineSaveIndexView _unavailableOnlineIndex() =>
+    const OnlineSaveIndexView(phase: OnlineSaveIndexPhaseView.unavailable);
+
+Future<bool> _unavailableOnlineResume(String matchId) async => false;
 
 final class _LoadAvailability {
   _LoadAvailability(List<_LoadEntry> entries)
@@ -201,6 +259,12 @@ final class _LoadGameBody extends StatelessWidget {
     required this.onStartSinglePlayer,
     required this.onImportSave,
     required this.onExportSave,
+    required this.onlineIndex,
+    required this.resumingOnline,
+    required this.activeOnlineMatchId,
+    required this.onlineFailureCode,
+    required this.onResumeOnline,
+    required this.onOpenMultiplayer,
   });
 
   final _LoadAvailability? availability;
@@ -216,6 +280,12 @@ final class _LoadGameBody extends StatelessWidget {
   final VoidCallback onStartSinglePlayer;
   final VoidCallback? onImportSave;
   final LocalSaveExport? onExportSave;
+  final OnlineSaveIndexView onlineIndex;
+  final bool resumingOnline;
+  final String? activeOnlineMatchId;
+  final String? onlineFailureCode;
+  final Future<void> Function(String matchId) onResumeOnline;
+  final VoidCallback? onOpenMultiplayer;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -231,44 +301,139 @@ final class _LoadGameBody extends StatelessWidget {
             children: [
               _ImportAction(onPressed: onImportSave),
               const SizedBox(height: AonwSpacing.lg),
-              if (loading)
-                const Center(child: CircularProgressIndicator())
-              else if (availability?.hasContent != true)
-                _EmptySaves(onStartSinglePlayer: onStartSinglePlayer)
-              else
-                for (final entry in availability!.entries) ...[
-                  _LocalSaveCard(
-                    entry: entry,
-                    busy: busy,
-                    resuming: resuming && activeScenario == entry.scenario,
-                    openingReplay:
-                        openingReplay && activeScenario == entry.scenario,
-                    onResume: () => onResume(entry.scenario),
-                    onOpenReplay: () => onOpenReplay(entry.scenario),
-                    onExportSave: onExportSave == null
-                        ? null
-                        : () => onExportSave!(entry.scenario),
-                  ),
-                  const SizedBox(height: AonwSpacing.md),
-                ],
-              if (resumeFailure case final failure?) ...[
-                const SizedBox(height: AonwSpacing.md),
-                _FailureMessage(
-                  key: const ValueKey('resume-failure'),
-                  message: context.aonwL10n.resumeFailure(failure.name),
-                ),
-              ],
-              if (replayFailure case final failure?) ...[
-                const SizedBox(height: AonwSpacing.md),
-                _FailureMessage(
-                  key: const ValueKey('replay-failure'),
-                  message: context.aonwL10n.replayFailure(failure.name),
-                ),
-              ],
+              _LocalSaveSection(
+                availability: availability,
+                loading: loading,
+                hasOnlineContent: _hasOnlineContent,
+                busy: busy,
+                resuming: resuming,
+                openingReplay: openingReplay,
+                activeScenario: activeScenario,
+                onResume: onResume,
+                onOpenReplay: onOpenReplay,
+                onStartSinglePlayer: onStartSinglePlayer,
+                onExportSave: onExportSave,
+              ),
+              _OnlineSaveSection(
+                index: onlineIndex,
+                busy: busy,
+                resuming: resumingOnline,
+                activeMatchId: activeOnlineMatchId,
+                onResume: onResumeOnline,
+                onOpenMultiplayer: onOpenMultiplayer,
+              ),
+              _LoadFailureMessages(
+                onlineFailureCode: onlineFailureCode,
+                resumeFailure: resumeFailure,
+                replayFailure: replayFailure,
+              ),
             ],
           ),
         ),
       ),
+    ],
+  );
+
+  bool get _hasOnlineContent => switch (onlineIndex.phase) {
+    OnlineSaveIndexPhaseView.unavailable => false,
+    OnlineSaveIndexPhaseView.ready =>
+      onlineIndex.saves.isNotEmpty || onlineIndex.failureCode != null,
+    _ => true,
+  };
+}
+
+final class _LocalSaveSection extends StatelessWidget {
+  const _LocalSaveSection({
+    required this.availability,
+    required this.loading,
+    required this.hasOnlineContent,
+    required this.busy,
+    required this.resuming,
+    required this.openingReplay,
+    required this.activeScenario,
+    required this.onResume,
+    required this.onOpenReplay,
+    required this.onStartSinglePlayer,
+    required this.onExportSave,
+  });
+
+  final _LoadAvailability? availability;
+  final bool loading;
+  final bool hasOnlineContent;
+  final bool busy;
+  final bool resuming;
+  final bool openingReplay;
+  final LocalGameScenarioView? activeScenario;
+  final LocalArchiveAction onResume;
+  final LocalArchiveAction onOpenReplay;
+  final VoidCallback onStartSinglePlayer;
+  final LocalSaveExport? onExportSave;
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) return const Center(child: CircularProgressIndicator());
+    if (availability?.hasContent != true && !hasOnlineContent) {
+      return _EmptySaves(onStartSinglePlayer: onStartSinglePlayer);
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final entry in availability?.entries ?? const <_LoadEntry>[])
+          Padding(
+            padding: const EdgeInsets.only(bottom: AonwSpacing.md),
+            child: _LocalSaveCard(
+              entry: entry,
+              busy: busy,
+              resuming: resuming && activeScenario == entry.scenario,
+              openingReplay: openingReplay && activeScenario == entry.scenario,
+              onResume: () => onResume(entry.scenario),
+              onOpenReplay: () => onOpenReplay(entry.scenario),
+              onExportSave: onExportSave == null
+                  ? null
+                  : () => onExportSave!(entry.scenario),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+final class _LoadFailureMessages extends StatelessWidget {
+  const _LoadFailureMessages({
+    required this.onlineFailureCode,
+    required this.resumeFailure,
+    required this.replayFailure,
+  });
+
+  final String? onlineFailureCode;
+  final LocalResumeFailureViewCode? resumeFailure;
+  final ReplayFailureViewCode? replayFailure;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      if (onlineFailureCode case final code?) ...[
+        const SizedBox(height: AonwSpacing.md),
+        _FailureMessage(
+          key: const ValueKey('online-resume-failure'),
+          message: context.aonwL10n.multiplayerFailure(code),
+        ),
+      ],
+      if (resumeFailure case final failure?) ...[
+        const SizedBox(height: AonwSpacing.md),
+        _FailureMessage(
+          key: const ValueKey('resume-failure'),
+          message: context.aonwL10n.resumeFailure(failure.name),
+        ),
+      ],
+      if (replayFailure case final failure?) ...[
+        const SizedBox(height: AonwSpacing.md),
+        _FailureMessage(
+          key: const ValueKey('replay-failure'),
+          message: context.aonwL10n.replayFailure(failure.name),
+        ),
+      ],
     ],
   );
 }

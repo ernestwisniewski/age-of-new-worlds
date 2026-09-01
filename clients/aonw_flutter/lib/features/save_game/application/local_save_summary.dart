@@ -26,3 +26,31 @@ final class LocalSaveSummaryView {
   final bool recoveredFromBackup;
   final bool compatible;
 }
+
+enum OnlineSavePhaseView { lobby, running }
+
+final class OnlineSaveSummaryView {
+  const OnlineSaveSummaryView({
+    required this.matchId,
+    required this.mapId,
+    required this.phase,
+  });
+
+  final String matchId;
+  final String mapId;
+  final OnlineSavePhaseView phase;
+}
+
+enum OnlineSaveIndexPhaseView { unavailable, loading, signedOut, ready, failed }
+
+final class OnlineSaveIndexView {
+  const OnlineSaveIndexView({
+    required this.phase,
+    this.saves = const [],
+    this.failureCode,
+  });
+
+  final OnlineSaveIndexPhaseView phase;
+  final List<OnlineSaveSummaryView> saves;
+  final String? failureCode;
+}

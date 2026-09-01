@@ -15,16 +15,19 @@ import '../../features/multiplayer/application/multiplayer_state.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_screen.dart';
+import '../../features/multiplayer/read_model/multiplayer_view.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/replay/application/replay_state.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
 import '../../features/replay/presentation/replay_screen.dart';
+import '../../features/save_game/application/local_save_summary.dart';
 import '../../features/save_game/presentation/load_game_screen.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../game/aonw_flame_game.dart';
 import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
+import 'aonw_load_game_online.dart';
 import 'aonw_menu_navigation.dart';
 
 enum AonwRoute {
@@ -182,38 +185,83 @@ final class AonwRouter {
       ? const _UnavailableMultiplayer()
       : MultiplayerScreen(
           controller: multiplayerController!,
-          onOpenGame: (projection) async {
-            final opened = await mapController.startNetworkMatch(
-              NetworkMatchSetupView(
-                matchId: projection.matchId,
-                playerId: projection.playerId,
-              ),
-            );
-            if (opened && context.mounted) {
-              await Navigator.of(context).pushNamed(AonwRoute.map.location);
-              if (context.mounted) {
-                await multiplayerController!.reconnect();
-              }
-            }
-          },
+          onOpenGame: (projection) => _openNetworkGame(context, projection),
         );
 
-  Widget _loadGameScreen(BuildContext context) => LoadGameScreen(
-    listLocalSaves: mapController.listLocalSaves,
-    resumeLocalGame: mapController.resumeLocalGame,
-    onResumed: () =>
-        Navigator.of(context).pushReplacementNamed(AonwRoute.map.location),
-    hasLocalReplay: replayController?.hasReplayFor ?? (_) async => false,
-    openReplay:
-        replayController?.open ??
-        (_) async => const ReplayOpenResultView.failed(
-          ReplayFailureViewCode.unavailable,
-        ),
-    onReplayOpened: () =>
-        Navigator.of(context).pushNamed(AonwRoute.replay.location),
-    onStartSinglePlayer: () =>
-        Navigator.of(context).pushReplacementNamed(AonwRoute.newGame.location),
-  );
+  Widget _loadGameScreen(BuildContext context) {
+    final onlineController = multiplayerController;
+    final online = onlineController == null
+        ? null
+        : AonwLoadGameOnline(onlineController);
+    return LoadGameScreen(
+      listLocalSaves: mapController.listLocalSaves,
+      resumeLocalGame: mapController.resumeLocalGame,
+      onResumed: () =>
+          Navigator.of(context).pushReplacementNamed(AonwRoute.map.location),
+      hasLocalReplay: replayController?.hasReplayFor ?? (_) async => false,
+      openReplay:
+          replayController?.open ??
+          (_) async => const ReplayOpenResultView.failed(
+            ReplayFailureViewCode.unavailable,
+          ),
+      onReplayOpened: () =>
+          Navigator.of(context).pushNamed(AonwRoute.replay.location),
+      onStartSinglePlayer: () => Navigator.of(
+        context,
+      ).pushReplacementNamed(AonwRoute.newGame.location),
+      onlineChanges: onlineController == null
+          ? null
+          : Listenable.merge([onlineController, ?multiplayerAccessController]),
+      initializeOnline: onlineController == null
+          ? null
+          : () => _initializeMultiplayer(onlineController),
+      onlineIndex: online == null
+          ? () => const OnlineSaveIndexView(
+              phase: OnlineSaveIndexPhaseView.unavailable,
+            )
+          : () => online.index(available: _multiplayerAvailable()),
+      resumeOnlineGame: online == null
+          ? (_) async => false
+          : (matchId) => online.resume(
+              matchId: matchId,
+              available: _multiplayerAvailable(),
+              openGame: (projection) => _openNetworkGame(context, projection),
+              openWaitingRoom: () => Navigator.of(
+                context,
+              ).pushNamed(AonwRoute.multiplayer.location),
+            ),
+      onOpenMultiplayer: onlineController == null
+          ? null
+          : () {
+              if (_multiplayerAvailable()) {
+                Navigator.of(context).pushNamed(AonwRoute.multiplayer.location);
+              }
+            },
+    );
+  }
+
+  Future<void> _initializeMultiplayer(MultiplayerController controller) async {
+    await multiplayerAccessController?.initialize();
+    if (_multiplayerAvailable() && controller.state is MultiplayerStarting) {
+      await controller.initialize();
+    }
+  }
+
+  Future<bool> _openNetworkGame(
+    BuildContext context,
+    MultiplayerProjectionView projection,
+  ) async {
+    final opened = await mapController.startNetworkMatch(
+      NetworkMatchSetupView(
+        matchId: projection.matchId,
+        playerId: projection.playerId,
+      ),
+    );
+    if (!opened || !context.mounted) return false;
+    await Navigator.of(context).pushNamed(AonwRoute.map.location);
+    if (context.mounted) await multiplayerController?.reconnect();
+    return true;
+  }
 
   Widget _creditsScreen(BuildContext context) =>
       CreditsScreen(openExternalUri: openExternalUri);
