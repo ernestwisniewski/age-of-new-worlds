@@ -1,8 +1,9 @@
 # Age of New Worlds
 
-[![CI](https://github.com/ernestwisniewski/aonw/actions/workflows/ci.yml/badge.svg)](https://github.com/ernestwisniewski/aonw/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Made with Flutter](https://img.shields.io/badge/Made%20with-Flutter-02569B.svg)](https://flutter.dev)
+[![Made with Rust](https://img.shields.io/badge/Made%20with-Rust-DEA584.svg?logo=rust&logoColor=black)](https://www.rust-lang.org/)
+[![Made with Flutter](https://img.shields.io/badge/Made%20with-Flutter-02569B.svg?logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-478CBF.svg?logo=godotengine&logoColor=white)](https://godotengine.org/)
 
 Age of New Worlds is an open-source, turn-based 4X game built around a hex map.
 The authoritative engine is written in Rust, the presentation clients use
