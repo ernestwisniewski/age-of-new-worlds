@@ -8,6 +8,7 @@ import 'package:aonw_engine_client/src/protocol_outcome.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_player_economy.dart';
 import 'package:aonw_engine_client/src/protocol_player_research.dart';
+import 'package:aonw_engine_client/src/protocol_player_victory.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
 part 'protocol_player_details.dart';
@@ -165,6 +166,7 @@ final class AonwPlayerViewSnapshot {
     required this.fog,
     required this.economy,
     required this.research,
+    required this.victory,
     required this.outcome,
     required this.turnLifecycle,
     required this.pendingAction,
@@ -192,6 +194,7 @@ final class AonwPlayerViewSnapshot {
       fog: AonwPlayerFogView.fromJson(value['fog']),
       economy: AonwPlayerEconomyView.fromJson(value['economy']),
       research: AonwPlayerResearchView.fromJson(value['research']),
+      victory: AonwPlayerVictoryView.fromJson(value['victory']),
       outcome: AonwGameOutcome.fromJson(value['outcome']),
       turnLifecycle: AonwPlayerTurnLifecycle.fromJson(value['turnLifecycle']),
       pendingAction: value['pendingAction'] == null
@@ -232,6 +235,7 @@ final class AonwPlayerViewSnapshot {
   final AonwPlayerFogView fog;
   final AonwPlayerEconomyView economy;
   final AonwPlayerResearchView research;
+  final AonwPlayerVictoryView victory;
   final AonwGameOutcome outcome;
   final AonwPlayerTurnLifecycle turnLifecycle;
   final AonwPendingActionView? pendingAction;
@@ -253,6 +257,7 @@ void _requirePlayerViewSnapshotKeys(Map<String, Object?> value) {
     'fog',
     'economy',
     'research',
+    'victory',
     'outcome',
     'turnLifecycle',
     'pendingAction',
@@ -275,6 +280,7 @@ final class AonwPlayerViewPatch {
     this.fog,
     this.economy,
     this.research,
+    this.victory,
     required this.turnLifecycle,
     required this.outcome,
     required this.upsertedUnits,
@@ -305,6 +311,7 @@ final class AonwPlayerViewPatch {
       fog: _optional(value['fog'], AonwPlayerFogView.fromJson),
       economy: _optional(value['economy'], AonwPlayerEconomyView.fromJson),
       research: _optional(value['research'], AonwPlayerResearchView.fromJson),
+      victory: _optional(value['victory'], AonwPlayerVictoryView.fromJson),
       turnLifecycle: _optional(
         value['turnLifecycle'],
         AonwPlayerTurnLifecycle.fromJson,
@@ -343,6 +350,7 @@ final class AonwPlayerViewPatch {
   final AonwPlayerFogView? fog;
   final AonwPlayerEconomyView? economy;
   final AonwPlayerResearchView? research;
+  final AonwPlayerVictoryView? victory;
   final AonwPlayerTurnLifecycle? turnLifecycle;
   final AonwGameOutcome? outcome;
   final List<AonwPlayerUnitView> upsertedUnits;
@@ -425,6 +433,7 @@ void _requirePlayerViewPatchKeys(Map<String, Object?> value) {
     'fog',
     'economy',
     'research',
+    'victory',
     'turnLifecycle',
     'outcome',
     'upsertedUnits',

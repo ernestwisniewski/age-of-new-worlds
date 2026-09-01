@@ -11,9 +11,11 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 part 'player_map_view_mapper_fixture.dart';
+part 'player_victory_view_mapper_cases.dart';
 
 void main() {
   const mapper = PlayerMapViewMapper();
+  registerPlayerVictoryViewMapperCases(mapper);
 
   test('maps the complete recipient-safe unit snapshot', () {
     final map = testMapScene().map;
@@ -231,6 +233,7 @@ void main() {
       fog: snapshot.fog,
       economy: snapshot.economy,
       research: snapshot.research,
+      victory: snapshot.victory,
       outcome: snapshot.outcome,
       turnLifecycle: snapshot.turnLifecycle,
       pendingAction: snapshot.pendingAction,

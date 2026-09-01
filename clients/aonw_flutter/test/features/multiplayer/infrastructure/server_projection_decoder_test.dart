@@ -88,6 +88,7 @@ Map<String, Object?> _outcome() => {
       'fog': null,
       'economy': null,
       'research': null,
+      'victory': null,
       'turnLifecycle': {
         'ownState': 'active',
         'ownSubmitted': true,
@@ -162,6 +163,35 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
       'byCityId': <String, int>{},
       'sources': <Object?>[],
     },
+  },
+  'victory': {
+    'conquestEnabled': true,
+    'dominationEnabled': true,
+    'dominationRequiredControlPercent': 60,
+    'dominationRequiredHoldTurns': 5,
+    'culturalEnabled': true,
+    'culturalRequiredArtifacts': 6,
+    'culturalRequiredHoldTurns': 5,
+    'scoreFallbackEnabled': false,
+    'turnLimit': null,
+    'remainingTurns': null,
+    'scoreByPlayerId': {'player-1': 0, 'player-2': 0},
+    'domination': [
+      {
+        'playerId': 'player-1',
+        'controlledPassableHexes': 0,
+        'totalPassableHexes': 6,
+        'holdTurns': 0,
+      },
+      {
+        'playerId': 'player-2',
+        'controlledPassableHexes': 0,
+        'totalPassableHexes': 6,
+        'holdTurns': 0,
+      },
+    ],
+    'ownCultural': {'uniqueStoredArtifacts': 0, 'holdTurns': 0},
+    'mapObjectives': <Object?>[],
   },
   'outcome': {
     'condition': 'ongoing',

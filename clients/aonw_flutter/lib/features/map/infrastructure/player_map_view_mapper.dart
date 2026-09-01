@@ -9,6 +9,7 @@ import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'pending_action_view_mapper.dart';
+import 'player_victory_view_mapper.dart';
 import 'recipient_projection_validator.dart';
 
 final class PlayerMapViewMapper {
@@ -57,6 +58,7 @@ final class PlayerMapViewMapper {
       fog: _mapFog(wire.fog),
       economy: _mapEconomy(wire.economy),
       research: _mapResearch(wire.research),
+      victory: mapPlayerVictoryView(wire.victory),
       turnView: _mapTurnView(wire, pendingAction),
       diplomacy: _diplomacyMapper.fromWire(
         wire.diplomacy,

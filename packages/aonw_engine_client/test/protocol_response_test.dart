@@ -220,6 +220,11 @@ void main() {
     expect(snapshot.research.activeEffectiveCost, 20);
     expect(snapshot.research.scienceOverflow, 1);
     expect(snapshot.research.scienceYield.total, 0);
+    expect(snapshot.victory.dominationRequiredControlPercent, 60);
+    expect(snapshot.victory.remainingTurns, 19);
+    expect(snapshot.victory.scoreByPlayerId, {'player-1': 37});
+    expect(snapshot.victory.domination.single.controlledPassableHexes, 3);
+    expect(snapshot.victory.ownCultural.uniqueStoredArtifacts, 2);
 
     final leakedParticipant = <String, Object?>{
       ...(_snapshot['participants']! as List).single as Map<String, Object?>,
@@ -229,6 +234,14 @@ void main() {
       () => AonwPlayerViewSnapshot.fromJson({
         ..._snapshot,
         'participants': [leakedParticipant],
+      }),
+      throwsFormatException,
+    );
+
+    expect(
+      () => AonwPlayerViewSnapshot.fromJson({
+        ..._snapshot,
+        'victory': {..._victory, 'privateForeignCulturalProgress': 4},
       }),
       throwsFormatException,
     );

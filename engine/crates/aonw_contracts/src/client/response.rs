@@ -18,6 +18,7 @@ mod query;
 mod rejection;
 mod research;
 mod session;
+mod victory;
 mod worker;
 
 pub use artifact::{PlayerArtifactLocationViewDto, PlayerArtifactViewDto};
@@ -47,6 +48,10 @@ pub use research::{
     ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyUnlockDto,
 };
 pub use session::{ClientErrorDto, ClientReplayVerificationDto};
+pub use victory::{
+    CulturalVictoryProgressDto, DominationVictoryProgressDto, MapObjectiveProgressDto,
+    PlayerVictoryViewDto,
+};
 pub use worker::{
     FieldImprovementViewDto, RoadViewDto, WorkerAutomationActionDto, WorkerAutomationMetricsDto,
     WorkerAutomationOptionDto, WorkerImprovementOptionDto, WorkerJobCompletionDto,
@@ -294,6 +299,8 @@ pub struct PlayerViewSnapshotDto {
     pub economy: PlayerEconomyViewDto,
     /// Recipient-owned research progress and science forecast.
     pub research: PlayerResearchViewDto,
+    /// Recipient-safe victory pressure and live public scores.
+    pub victory: PlayerVictoryViewDto,
     /// Persisted authoritative match result.
     pub outcome: GameOutcomeDto,
     /// Recipient-owned lifecycle status and aggregate submission progress.
@@ -412,6 +419,8 @@ pub struct PlayerViewPatchDto {
     pub economy: Option<PlayerEconomyViewDto>,
     /// Replacement recipient research state when progress or science changed.
     pub research: Option<PlayerResearchViewDto>,
+    /// Replacement victory pressure and live scores when they changed.
+    pub victory: Option<PlayerVictoryViewDto>,
     /// Replacement lifecycle projection when turn/readiness changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleViewDto>,
     /// Replacement match result when it changed.

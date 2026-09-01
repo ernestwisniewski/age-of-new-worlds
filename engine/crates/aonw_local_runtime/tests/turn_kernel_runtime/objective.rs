@@ -5,14 +5,14 @@ use aonw_content::{
     TileDefinition,
 };
 use aonw_contracts::client::{
-    CLIENT_API_VERSION, ClientCommandDto, ClientEventDto, ClientOutcomeDto, ClientRequestBodyDto,
-    ClientRequestDto, ClientResponseBodyDto, ClientResponseDto,
+    CLIENT_API_VERSION, ClientCommandDto, ClientCommandResultDto, ClientEventDto, ClientOutcomeDto,
+    ClientRequestBodyDto, ClientRequestDto, ClientResponseBodyDto, ClientResponseDto,
 };
 use aonw_contracts::{ReplayEventDto, ReplayLogDto};
 use aonw_domain::{
-    City, CityId, EconomyState, GameMode, GameState, HexCoord, InitialResourceDistribution,
-    MapObjectiveHoldState, MatchIdentity, MatchLifecycle, MatchRules, ObjectiveState, PlayerId,
-    PlayerTurnState, StateRevision, TurnLifecycle,
+    City, CityId, EconomyState, FogOfWar, GameMode, GameState, HexCoord,
+    InitialResourceDistribution, MapObjectiveHoldState, MatchIdentity, MatchLifecycle, MatchRules,
+    ObjectiveState, PlayerFog, PlayerId, PlayerTurnState, StateRevision, TurnLifecycle,
 };
 use aonw_local_runtime::{ClientProtocol, LocalRuntime, OpenSession};
 
@@ -30,7 +30,8 @@ fn objective_events_are_recipient_safe_saved_and_exactly_replayed() {
             p2,
         ))
         .expect("open visible");
-    let events = dispatch_submit(&mut visible);
+    let result = dispatch_submit(&mut visible);
+    let events = &result.events;
     assert!(events.iter().any(|event| matches!(
         event,
         ClientEventDto::MapObjectiveSecured {
@@ -39,6 +40,15 @@ fn objective_events_are_recipient_safe_saved_and_exactly_replayed() {
             ..
         } if player_id == "player-2" && objective_id == "central-ruins"
     )));
+    let visible_snapshot = visible.snapshot().expect("visible snapshot");
+    let visible_victory = visible_snapshot.victory();
+    assert_eq!(
+        visible_victory.map_objectives()[0]
+            .controller_player_id()
+            .map(PlayerId::as_str),
+        Some("player-2")
+    );
+    assert!(result.view_patch.victory.is_some());
     assert!(events.iter().any(|event| matches!(
         event,
         ClientEventDto::DominationThresholdReached { player_id, .. }
@@ -56,7 +66,8 @@ fn objective_events_are_recipient_safe_saved_and_exactly_replayed() {
             p1,
         ))
         .expect("open foreign");
-    let events = dispatch_submit(&mut foreign);
+    let result = dispatch_submit(&mut foreign);
+    let events = &result.events;
     assert!(
         !events
             .iter()
@@ -67,6 +78,14 @@ fn objective_events_are_recipient_safe_saved_and_exactly_replayed() {
         ClientEventDto::DominationThresholdReached { player_id, .. }
             if player_id == "player-2"
     )));
+    let foreign_snapshot = foreign.snapshot().expect("foreign snapshot");
+    let foreign_victory = foreign_snapshot.victory();
+    assert_eq!(
+        foreign_victory.map_objectives()[0].controller_player_id(),
+        None
+    );
+    assert_eq!(foreign_victory.map_objectives()[0].hold_turns(), 0);
+    assert!(result.view_patch.victory.is_some());
     let replay = foreign.export_replay_json().expect("foreign replay");
     assert!(replay.contains("mapObjectiveSecured"));
     LocalRuntime::verify_replay_json(map, rules, &replay).expect("foreign replay verify");
@@ -108,7 +127,7 @@ fn assert_replay_and_save(runtime: &LocalRuntime, map: &MapDefinition, rules: &R
     assert_eq!(reopened.snapshot().expect("reopened"), expected);
 }
 
-fn dispatch_submit(runtime: &mut LocalRuntime) -> Vec<ClientEventDto> {
+fn dispatch_submit(runtime: &mut LocalRuntime) -> Box<ClientCommandResultDto> {
     let request = ClientRequestDto {
         api_version: CLIENT_API_VERSION,
         request: ClientRequestBodyDto::Dispatch {
@@ -127,7 +146,7 @@ fn dispatch_submit(runtime: &mut LocalRuntime) -> Vec<ClientEventDto> {
     let ClientResponseBodyDto::Command { result } = *response else {
         panic!("command response")
     };
-    result.events
+    result
 }
 
 fn fixture(
@@ -158,7 +177,7 @@ fn fixture(
         CityId::new("city-2").expect("city id"),
         p2.clone(),
         HexCoord::new(0, 0),
-        [HexCoord::new(1, 0)],
+        [HexCoord::new(1, 0), HexCoord::new(2, 0)],
     );
     let economy = EconomyState::try_new(
         &identity,
@@ -185,12 +204,19 @@ fn fixture(
         7,
         map.bounds(),
         rules.occupancy_policy(),
-        [unit("unit-1", &p1, 2), unit("unit-2", &p2, 0)],
+        [unit("unit-1", &p1, 4), unit("unit-2", &p2, 0)],
     )
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .with_cities([city])
     .with_economy(economy)
     .with_objectives(objectives)
+    .with_fog_of_war(
+        FogOfWar::try_new([
+            PlayerFog::new(p1.clone(), [], [HexCoord::new(4, 0)]),
+            PlayerFog::new(p2.clone(), [], [HexCoord::new(0, 0)]),
+        ])
+        .expect("fog"),
+    )
     .try_build()
     .expect("state");
     (map, rules, state, p1, p2)
@@ -235,9 +261,9 @@ fn objective_map() -> MapDefinition {
     MapDefinition::try_new(
         "runtime-objectives",
         GridLayout::OddQFlatTop,
-        3,
+        5,
         1,
-        (0..3)
+        (0..5)
             .map(|col| {
                 TileDefinition::try_new_for_simulation(
                     HexCoord::new(col, 0),

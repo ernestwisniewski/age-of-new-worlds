@@ -11,6 +11,7 @@ AonwPlayerViewSnapshot _snapshot(
   List<AonwRoadView> roads = const [],
   AonwPlayerEconomyView? economy,
   AonwPlayerResearchView? research,
+  AonwPlayerVictoryView? victory,
   AonwPlayerFogView fog = const AonwPlayerFogView(
     enabled: true,
     discoveredHexes: [
@@ -47,6 +48,7 @@ AonwPlayerViewSnapshot _snapshot(
   fog: fog,
   economy: economy ?? AonwPlayerEconomyView.empty(),
   research: research ?? AonwPlayerResearchView.empty(),
+  victory: victory ?? AonwPlayerVictoryView.empty(),
   outcome: AonwGameOutcome(
     condition: AonwGameOutcomeCondition.ongoing,
     winnerPlayerId: null,
@@ -66,6 +68,42 @@ AonwPlayerViewSnapshot _snapshot(
   artifacts: artifacts,
   fieldImprovements: fieldImprovements,
   roads: roads,
+);
+
+AonwPlayerVictoryView _victory({
+  Map<String, int> scoreByPlayerId = const {'player-1': 37, 'player-2': 21},
+  List<AonwMapObjectiveProgress> mapObjectives = const [],
+}) => AonwPlayerVictoryView(
+  conquestEnabled: true,
+  dominationEnabled: true,
+  dominationRequiredControlPercent: 60,
+  dominationRequiredHoldTurns: 5,
+  culturalEnabled: true,
+  culturalRequiredArtifacts: 6,
+  culturalRequiredHoldTurns: 5,
+  scoreFallbackEnabled: true,
+  turnLimit: 20,
+  remainingTurns: 13,
+  scoreByPlayerId: scoreByPlayerId,
+  domination: const [
+    AonwDominationVictoryProgress(
+      playerId: 'player-1',
+      controlledPassableHexes: 3,
+      totalPassableHexes: 6,
+      holdTurns: 0,
+    ),
+    AonwDominationVictoryProgress(
+      playerId: 'player-2',
+      controlledPassableHexes: 2,
+      totalPassableHexes: 6,
+      holdTurns: 0,
+    ),
+  ],
+  ownCultural: const AonwCulturalVictoryProgress(
+    uniqueStoredArtifacts: 2,
+    holdTurns: 1,
+  ),
+  mapObjectives: mapObjectives,
 );
 
 AonwPlayerCityView _city() => AonwPlayerCityView(

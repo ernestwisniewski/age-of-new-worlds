@@ -122,6 +122,9 @@ fn final_submit_returns_exact_offsets_and_every_recipient_projection() {
             Some(progress)
         );
         assert_eq!(recipient.snapshot.research().science_overflow(), overflow);
+        assert_eq!(recipient.snapshot.victory().score_by_player_id().len(), 2);
+        assert_eq!(recipient.snapshot.victory().domination().len(), 2);
+        assert_eq!(recipient.snapshot.victory().own_cultural().hold_turns(), 0);
     }
 }
 
@@ -253,6 +256,9 @@ fn strict_dto_maps_transactional_and_recipient_safe_output() {
         );
         assert_eq!(recipient.snapshot.research.active_progress, Some(progress));
         assert_eq!(recipient.snapshot.research.science_overflow, overflow);
+        assert_eq!(recipient.snapshot.victory.score_by_player_id.len(), 2);
+        assert_eq!(recipient.snapshot.victory.domination.len(), 2);
+        assert_eq!(recipient.snapshot.victory.own_cultural.hold_turns, 0);
     }
 }
 

@@ -97,6 +97,7 @@ final class RecipientProjectionCache {
       fog: patch.fog ?? before.fog,
       economy: patch.economy ?? before.economy,
       research: patch.research ?? before.research,
+      victory: patch.victory ?? before.victory,
       outcome: patch.outcome ?? before.outcome,
       turnLifecycle: patch.turnLifecycle ?? before.turnLifecycle,
       pendingAction: patch.pendingAction,
@@ -204,12 +205,16 @@ final class RecipientProjectionCache {
       patch.turnLifecycle != null ||
       patch.outcome != null ||
       patch.fog != null ||
-      patch.economy != null ||
-      patch.research != null ||
-      patch.diplomacy != null ||
+      _changesProjectedSummaries(patch) ||
       !_samePendingAction(patch.pendingAction, before.pendingAction) ||
       !_sameFoundingDraft(patch.cityFoundingDraft, before.cityFoundingDraft) ||
       _changesCollections(patch);
+
+  static bool _changesProjectedSummaries(AonwPlayerViewPatch patch) =>
+      patch.economy != null ||
+      patch.research != null ||
+      patch.victory != null ||
+      patch.diplomacy != null;
 
   static bool _changesCollections(AonwPlayerViewPatch patch) => <bool>[
     patch.upsertedUnits.isNotEmpty,

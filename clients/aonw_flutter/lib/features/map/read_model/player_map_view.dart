@@ -5,6 +5,7 @@ import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/read_model/worker_view.dart';
 import 'map_view.dart';
 import 'pending_action_view.dart';
+import 'player_victory_view.dart';
 
 enum VisibleUnitKind {
   commander,
@@ -296,6 +297,7 @@ final class PlayerMapView {
     required this.fog,
     required this.economy,
     required this.research,
+    required this.victory,
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
@@ -377,6 +379,7 @@ final class PlayerMapView {
     fog: MapFogView.disabled(),
     economy: PlayerEconomyView.empty(),
     research: PlayerResearchSummaryView.empty(),
+    victory: PlayerVictoryView.empty(),
     turnView: RecipientTurnView(
       number: turn,
       ownState: RecipientTurnStateView.active,
@@ -408,6 +411,7 @@ final class PlayerMapView {
   final MapFogView fog;
   final PlayerEconomyView economy;
   final PlayerResearchSummaryView research;
+  final PlayerVictoryView victory;
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;

@@ -19,6 +19,7 @@ mod economy;
 mod infrastructure;
 mod research;
 mod unit;
+mod victory;
 mod view_diff;
 
 pub(crate) use artifact::visible_artifacts;
@@ -39,6 +40,10 @@ pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
 pub use research::{PlayerResearchView, PlayerScienceYieldSourceView};
 pub(crate) use unit::visible_units;
 pub use unit::{OwnedUnitDetailsView, PlayerUnitView};
+pub use victory::{
+    PlayerCulturalVictoryProgressView, PlayerDominationVictoryProgressView,
+    PlayerMapObjectiveProgressView, PlayerVictoryView,
+};
 pub use view_diff::{PlayerViewPatch, ProjectedView, diff_view, unchanged_view};
 
 /// Identity metadata carried by every recipient projection.
@@ -194,6 +199,7 @@ pub struct PlayerViewSnapshot {
     fog: Arc<PlayerFogView>,
     economy: Arc<PlayerEconomyView>,
     research: Arc<PlayerResearchView>,
+    victory: Arc<PlayerVictoryView>,
     outcome: Arc<aonw_domain::GameOutcome>,
     turn_lifecycle: PlayerTurnLifecycleView,
     pending_action: Option<Arc<PendingActionView>>,
@@ -217,6 +223,7 @@ impl PlayerViewSnapshot {
         fog: Arc<PlayerFogView>,
         economy: Arc<PlayerEconomyView>,
         research: Arc<PlayerResearchView>,
+        victory: Arc<PlayerVictoryView>,
         turn_lifecycle: PlayerTurnLifecycleView,
         outcome: Arc<aonw_domain::GameOutcome>,
         pending_action: Option<Arc<PendingActionView>>,
@@ -237,6 +244,7 @@ impl PlayerViewSnapshot {
             fog,
             economy,
             research,
+            victory,
             outcome,
             turn_lifecycle,
             pending_action,
@@ -290,6 +298,11 @@ impl PlayerViewSnapshot {
     #[must_use]
     pub fn research(&self) -> &PlayerResearchView {
         &self.research
+    }
+    /// Returns recipient-safe victory pressure and live public scores.
+    #[must_use]
+    pub fn victory(&self) -> &PlayerVictoryView {
+        &self.victory
     }
     /// Returns the persisted authoritative match result.
     #[must_use]

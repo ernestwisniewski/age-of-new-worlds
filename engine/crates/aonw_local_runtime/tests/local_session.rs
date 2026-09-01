@@ -473,6 +473,6 @@ fn deterministic_replay_signature_is_stable() {
     assert!(!replay_json.contains("initialRngState"));
     assert_eq!(
         format!("{:x}", Sha256::digest(replay_json.as_bytes())),
-        "27944de8f0df2cd1af9c26086d54896348a7d451a04569de3d199d3d883d44e4"
+        "8c88e302d47c1557d1bbab4730df598900d186ffcedfe1342b0673f8ed2ec087"
     );
 }

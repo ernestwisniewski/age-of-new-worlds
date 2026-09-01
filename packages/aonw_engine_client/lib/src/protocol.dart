@@ -25,6 +25,7 @@ export 'protocol_outcome.dart';
 export 'protocol_pending_action.dart';
 export 'protocol_player_economy.dart';
 export 'protocol_player_research.dart';
+export 'protocol_player_victory.dart';
 export 'protocol_player_view.dart';
 export 'protocol_query.dart';
 export 'protocol_research_values.dart';

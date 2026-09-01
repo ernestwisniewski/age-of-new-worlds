@@ -7,6 +7,30 @@ const _stamp = {
   'rulesetHash': 'ruleset-hash',
 };
 
+const _victory = {
+  'conquestEnabled': true,
+  'dominationEnabled': true,
+  'dominationRequiredControlPercent': 60,
+  'dominationRequiredHoldTurns': 5,
+  'culturalEnabled': true,
+  'culturalRequiredArtifacts': 6,
+  'culturalRequiredHoldTurns': 5,
+  'scoreFallbackEnabled': true,
+  'turnLimit': 20,
+  'remainingTurns': 19,
+  'scoreByPlayerId': {'player-1': 37},
+  'domination': [
+    {
+      'playerId': 'player-1',
+      'controlledPassableHexes': 3,
+      'totalPassableHexes': 10,
+      'holdTurns': 0,
+    },
+  ],
+  'ownCultural': {'uniqueStoredArtifacts': 2, 'holdTurns': 0},
+  'mapObjectives': <Object?>[],
+};
+
 const _snapshot = {
   'stamp': _stamp,
   'turn': 1,
@@ -61,6 +85,7 @@ const _snapshot = {
       'sources': <Object?>[],
     },
   },
+  'victory': _victory,
   'outcome': {
     'condition': 'ongoing',
     'winnerPlayerId': null,
@@ -105,6 +130,7 @@ Map<String, Object?> _commandResult(Map<String, Object?> outcome) => {
     'fog': null,
     'economy': null,
     'research': null,
+    'victory': null,
     'turnLifecycle': null,
     'outcome': null,
     'upsertedUnits': <Object?>[],

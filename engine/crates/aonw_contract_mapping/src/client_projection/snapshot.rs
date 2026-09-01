@@ -1,7 +1,9 @@
 use aonw_contracts::client::{
-    ClientSessionStampDto, PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
-    PlayerResearchViewDto, PlayerViewSnapshotDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
-    ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
+    ClientSessionStampDto, CulturalVictoryProgressDto, DominationVictoryProgressDto,
+    MapObjectiveProgressDto, PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto,
+    PlayerResearchViewDto, PlayerVictoryViewDto, PlayerViewSnapshotDto, ScienceYieldBreakdownDto,
+    ScienceYieldSourceDto, ScienceYieldSourceKindDto, StrategicResourceAmountDto,
+    StrategicResourceSourceDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
@@ -33,6 +35,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
         fog: fog(value.fog()),
         economy: economy(value.economy()),
         research: research(value.research()),
+        victory: victory(value.victory()),
         outcome: crate::encode_game_outcome(value.outcome()),
         turn_lifecycle: encode_turn_lifecycle(*value.turn_lifecycle()),
         pending_action: value.pending_action().map(encode_pending_action),
@@ -48,6 +51,54 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
             .map(field_improvement)
             .collect(),
         roads: value.roads().iter().copied().map(road).collect(),
+    }
+}
+
+pub(super) fn victory(value: &aonw_projection::PlayerVictoryView) -> PlayerVictoryViewDto {
+    PlayerVictoryViewDto {
+        conquest_enabled: value.conquest_enabled(),
+        domination_enabled: value.domination_enabled(),
+        domination_required_control_percent: value
+            .domination_required_control_percent()
+            .parse()
+            .expect("validated domination percentage"),
+        domination_required_hold_turns: value.domination_required_hold_turns(),
+        cultural_enabled: value.cultural_enabled(),
+        cultural_required_artifacts: value.cultural_required_artifacts(),
+        cultural_required_hold_turns: value.cultural_required_hold_turns(),
+        score_fallback_enabled: value.score_fallback_enabled(),
+        turn_limit: value.turn_limit(),
+        remaining_turns: value.remaining_turns(),
+        score_by_player_id: value
+            .score_by_player_id()
+            .iter()
+            .map(|(player, score)| (player.as_str().to_owned(), *score))
+            .collect(),
+        domination: value
+            .domination()
+            .iter()
+            .map(|progress| DominationVictoryProgressDto {
+                player_id: progress.player_id().as_str().to_owned(),
+                controlled_passable_hexes: progress.controlled_passable_hexes(),
+                total_passable_hexes: progress.total_passable_hexes(),
+                hold_turns: progress.hold_turns(),
+            })
+            .collect(),
+        own_cultural: CulturalVictoryProgressDto {
+            unique_stored_artifacts: value.own_cultural().unique_stored_artifacts(),
+            hold_turns: value.own_cultural().hold_turns(),
+        },
+        map_objectives: value
+            .map_objectives()
+            .iter()
+            .map(|progress| MapObjectiveProgressDto {
+                objective_id: progress.objective_id().to_owned(),
+                controller_player_id: progress
+                    .controller_player_id()
+                    .map(|player| player.as_str().to_owned()),
+                hold_turns: progress.hold_turns(),
+            })
+            .collect(),
     }
 }
 

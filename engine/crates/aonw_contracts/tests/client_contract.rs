@@ -8,10 +8,11 @@ use aonw_contracts::client::{
     ClientEvidenceDto, ClientFeatureDto, ClientOutcomeDto, ClientParticipantControlDto,
     ClientQueryDto, ClientQueryResultDto, ClientReplayVerificationDto, ClientRequestBodyDto,
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, ClientSessionStampDto,
+    CulturalVictoryProgressDto, DominationVictoryProgressDto, MapObjectiveProgressDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
     PlayerEconomyViewDto, PlayerFogViewDto, PlayerParticipantViewDto, PlayerResearchViewDto,
-    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
-    ReachableTileViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerVictoryViewDto, PlayerViewPatchDto,
+    PlayerViewSnapshotDto, ReachableTileViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
     ScienceYieldSourceKindDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
 };
 use aonw_contracts::{
@@ -106,6 +107,37 @@ fn research() -> PlayerResearchViewDto {
     }
 }
 
+fn victory() -> PlayerVictoryViewDto {
+    PlayerVictoryViewDto {
+        conquest_enabled: true,
+        domination_enabled: true,
+        domination_required_control_percent: 60.into(),
+        domination_required_hold_turns: 5,
+        cultural_enabled: true,
+        cultural_required_artifacts: 6,
+        cultural_required_hold_turns: 5,
+        score_fallback_enabled: true,
+        turn_limit: Some(20),
+        remaining_turns: Some(13),
+        score_by_player_id: BTreeMap::from([("player-1".to_owned(), 37)]),
+        domination: vec![DominationVictoryProgressDto {
+            player_id: "player-1".to_owned(),
+            controlled_passable_hexes: 3,
+            total_passable_hexes: 10,
+            hold_turns: 0,
+        }],
+        own_cultural: CulturalVictoryProgressDto {
+            unique_stored_artifacts: 2,
+            hold_turns: 0,
+        },
+        map_objectives: vec![MapObjectiveProgressDto {
+            objective_id: "central-ruins".to_owned(),
+            controller_player_id: Some("player-1".to_owned()),
+            hold_turns: 2,
+        }],
+    }
+}
+
 fn player_snapshot() -> PlayerViewSnapshotDto {
     PlayerViewSnapshotDto {
         stamp: stamp(),
@@ -125,6 +157,7 @@ fn player_snapshot() -> PlayerViewSnapshotDto {
         },
         economy: economy(),
         research: research(),
+        victory: victory(),
         outcome: GameOutcomeDto {
             condition: GameOutcomeConditionDto::Ongoing,
             winner_player_id: None,
@@ -180,6 +213,7 @@ fn command_result() -> ClientCommandResultDto {
             }),
             economy: Some(economy()),
             research: Some(research()),
+            victory: Some(victory()),
             turn_lifecycle: None,
             outcome: None,
             upserted_units: vec![unit()],

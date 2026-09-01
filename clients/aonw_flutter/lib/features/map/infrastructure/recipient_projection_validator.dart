@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../read_model/map_view.dart';
 import 'recipient_economy_validator.dart';
 import 'recipient_research_validator.dart';
+import 'recipient_victory_validator.dart';
 
 final class RecipientProjectionValidator {
   const RecipientProjectionValidator(this.map);
@@ -39,6 +40,11 @@ final class RecipientProjectionValidator {
     const RecipientResearchValidator().validate(
       snapshot.research,
       snapshot.cities,
+    );
+    RecipientVictoryValidator(map).validate(
+      snapshot.victory,
+      turn: snapshot.turn,
+      participantIds: participantIds,
     );
     for (final artifact in snapshot.artifacts) {
       _validateArtifact(artifact);

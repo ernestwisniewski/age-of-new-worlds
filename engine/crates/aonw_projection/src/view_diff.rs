@@ -11,8 +11,9 @@ use crate::{
     CityFoundingDraftView, PendingActionView, PlayerArtifactView, PlayerCityView,
     PlayerDiplomacyView, PlayerEconomyView, PlayerFieldImprovementView, PlayerFogView,
     PlayerParticipantView, PlayerResearchView, PlayerRoadView, PlayerTurnLifecycleView,
-    PlayerUnitView, PlayerViewSnapshot, SessionStamp, city_founding_draft, diplomacy_view,
-    pending_action, visible_artifacts, visible_cities, visible_infrastructure, visible_units,
+    PlayerUnitView, PlayerVictoryView, PlayerViewSnapshot, SessionStamp, city_founding_draft,
+    diplomacy_view, pending_action, visible_artifacts, visible_cities, visible_infrastructure,
+    visible_units,
 };
 
 /// Recipient-safe view delta produced by one dispatch.
@@ -32,6 +33,8 @@ pub struct PlayerViewPatch {
     pub economy: Option<PlayerEconomyView>,
     /// Replacement recipient research state when progress or science changed.
     pub research: Option<PlayerResearchView>,
+    /// Replacement victory pressure and live scores when they changed.
+    pub victory: Option<PlayerVictoryView>,
     /// Replacement turn projection when lifecycle state changed.
     pub turn_lifecycle: Option<PlayerTurnLifecycleView>,
     /// Replacement authoritative match result when it changed.
@@ -74,6 +77,7 @@ pub struct ProjectedView {
     fog: Arc<PlayerFogView>,
     economy: Arc<PlayerEconomyView>,
     research: Arc<PlayerResearchView>,
+    victory: Arc<PlayerVictoryView>,
     turn: PlayerTurnLifecycleView,
     outcome: Arc<GameOutcome>,
     diplomacy: Arc<PlayerDiplomacyView>,
@@ -110,6 +114,7 @@ impl ProjectedView {
             }),
             economy: Arc::new(PlayerEconomyView::empty()),
             research: Arc::new(PlayerResearchView::default()),
+            victory: Arc::new(PlayerVictoryView::default()),
             turn,
             outcome: Arc::new(outcome),
             diplomacy: Arc::new(diplomacy),
@@ -151,11 +156,18 @@ impl ProjectedView {
         self
     }
 
+    #[cfg(test)]
+    fn with_live_score(mut self, amount: i64) -> Self {
+        self.victory = Arc::new(PlayerVictoryView::default().with_live_score(amount));
+        self
+    }
+
     /// Builds a complete recipient-safe projection from canonical state and content.
     ///
     /// # Errors
     ///
-    /// Returns an error when an authoritative economy or research projection cannot be computed.
+    /// Returns an error when an authoritative economy, research, or victory projection cannot be
+    /// computed.
     pub fn try_for_recipient(
         state: &GameState,
         actor: Arc<PlayerId>,
@@ -178,6 +190,9 @@ impl ProjectedView {
         let research = Arc::new(PlayerResearchView::try_for_recipient(
             state, recipient, map, ruleset,
         )?);
+        let victory = Arc::new(PlayerVictoryView::try_for_recipient(
+            state, recipient, map, ruleset,
+        )?);
         let participants = state
             .match_lifecycle()
             .identity()
@@ -194,6 +209,7 @@ impl ProjectedView {
             fog,
             economy,
             research,
+            victory,
             turn,
             outcome: Arc::new(state.outcome().clone()),
             diplomacy,
@@ -219,6 +235,7 @@ impl ProjectedView {
             self.fog.clone(),
             self.economy.clone(),
             self.research.clone(),
+            self.victory.clone(),
             self.turn,
             self.outcome.clone(),
             self.pending_action.clone(),
@@ -270,6 +287,7 @@ pub fn diff_view(
     let fog = (before.fog != after.fog).then(|| after.fog.as_ref().clone());
     let economy = (before.economy != after.economy).then(|| after.economy.as_ref().clone());
     let research = (before.research != after.research).then(|| after.research.as_ref().clone());
+    let victory = (before.victory != after.victory).then(|| after.victory.as_ref().clone());
     let mut before_units = before.units.iter().peekable();
     let mut after_units = after.units.iter().peekable();
     let mut upserted_units = Vec::new();
@@ -311,6 +329,7 @@ pub fn diff_view(
         fog,
         economy,
         research,
+        victory,
         turn_lifecycle: (before.turn != after.turn).then_some(after.turn),
         outcome,
         upserted_units: upserted_units.into_boxed_slice(),
@@ -340,6 +359,7 @@ pub fn unchanged_view(revision: u64, view: &ProjectedView) -> PlayerViewPatch {
         fog: None,
         economy: None,
         research: None,
+        victory: None,
         turn_lifecycle: None,
         outcome: None,
         upserted_units: Box::new([]),
@@ -500,6 +520,7 @@ mod tests {
         .with_turn_mode(TurnMode::Simultaneous)
         .with_gold(25)
         .with_science_per_turn(7)
+        .with_live_score(42)
         .with_fog(
             &[HexCoord::new(1, 0), HexCoord::new(2, 0)],
             &[HexCoord::new(2, 0)],
@@ -521,6 +542,15 @@ mod tests {
         assert_eq!(
             patch.research.expect("changed research").science_per_turn(),
             7
+        );
+        assert_eq!(
+            patch
+                .victory
+                .expect("changed victory")
+                .score_by_player_id()
+                .values()
+                .next(),
+            Some(&42)
         );
         assert_eq!(
             patch

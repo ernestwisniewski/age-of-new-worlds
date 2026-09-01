@@ -25,6 +25,7 @@
           "fog": null,
           "economy": null,
           "research": null,
+          "victory": null,
           "turnLifecycle": null,
           "outcome": null,
           "upsertedUnits": [],
