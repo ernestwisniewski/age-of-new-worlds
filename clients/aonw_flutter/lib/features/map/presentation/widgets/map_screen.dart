@@ -20,12 +20,15 @@ import '../../../turns/application/turn_action_state.dart';
 import '../../../turns/application/turn_presentation_queue.dart';
 import '../../../turns/presentation/turn_banner.dart';
 import '../../../turns/presentation/turn_hud.dart';
+import '../../../workers/read_model/worker_view.dart';
 import '../../application/game_session_state.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
+import '../input/map_action_palette_intent.dart';
 import '../input/map_gamepad_input.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
+import '../map_action_palette_view.dart';
 import '../map_presentation_controller.dart';
 import '../map_render_snapshot.dart';
 import 'flame_map_viewport.dart';
@@ -34,6 +37,7 @@ import 'map_selection_overlay.dart';
 import 'map_status.dart';
 import 'network_game_status_overlay.dart';
 
+part 'map_screen_action_palette.dart';
 part 'map_screen_ready.dart';
 
 final class MapScreen extends StatefulWidget {
@@ -72,6 +76,7 @@ final class _MapScreenState extends State<MapScreen>
   MapGamepadInput _gamepadInput = MapGamepadInput.idle;
   MapGamepadFrameController _gamepadFrames = MapGamepadFrameController();
   Duration? _lastGamepadElapsed;
+  AonwLocalizations? _localizations;
 
   @override
   void initState() {
@@ -83,6 +88,7 @@ final class _MapScreenState extends State<MapScreen>
     _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
+    _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
     widget.controller.addListener(_synchronizeFlameScene);
     widget.controller.cursor.addListener(_synchronizeFlameCursor);
     _listenToInput(widget.inputSource);
@@ -95,7 +101,9 @@ final class _MapScreenState extends State<MapScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _localizations = context.aonwL10n;
     _subscribeToRoute();
+    _synchronizeFlameScene();
   }
 
   @override
@@ -137,6 +145,7 @@ final class _MapScreenState extends State<MapScreen>
     unawaited(_continuousInputSubscription?.cancel());
     _gamepadTicker.dispose();
     _flameGame.setHexIntentSink(null);
+    _flameGame.setActionPaletteIntentSink(null);
     _flameFocusNode.dispose();
     super.dispose();
   }
@@ -306,6 +315,14 @@ final class _MapScreenState extends State<MapScreen>
             interaction: interaction,
             reference: scene.reference,
             player: scene.player,
+            actionPalette: switch (_localizations) {
+              final l10n? => buildMapActionPaletteView(
+                interaction: interaction,
+                player: scene.player,
+                l10n: l10n,
+              ),
+              null => null,
+            },
           ),
         );
       case GameSessionLoading() || GameSessionFailure():
@@ -319,8 +336,10 @@ final class _MapScreenState extends State<MapScreen>
 
   void _installFreshFlameGame() {
     _flameGame.setHexIntentSink(null);
+    _flameGame.setActionPaletteIntentSink(null);
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
+    _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
     _flameGeneration += 1;
     _synchronizeFlameCursor();
   }

@@ -71,6 +71,7 @@ final class MovementViewMapper {
       origin: unit.coordinate,
       destination: destination,
       totalCostUnits: wire.totalCostUnits,
+      estimatedTurns: wire.estimatedTurns,
     );
     return RoutePlanView(
       stamp: _stamp(wire.stamp),
@@ -80,6 +81,7 @@ final class MovementViewMapper {
       totalCostUnits: wire.totalCostUnits,
       availableMovementUnits: wire.availableMovementUnits,
       remainingMovementUnits: wire.remainingMovementUnits,
+      estimatedTurns: wire.estimatedTurns,
       steps: steps,
     );
   }
@@ -129,13 +131,16 @@ final class MovementViewMapper {
     required MapHexCoordinate origin,
     required MapHexCoordinate destination,
     required int totalCostUnits,
+    required int estimatedTurns,
   }) {
     if (steps.isEmpty ||
         steps.first.coordinate != origin ||
         steps.first.enterCostUnits != 0 ||
         steps.first.cumulativeCostUnits != 0 ||
         steps.last.coordinate != destination ||
-        steps.last.cumulativeCostUnits != totalCostUnits) {
+        steps.last.cumulativeCostUnits != totalCostUnits ||
+        estimatedTurns <= 0 ||
+        estimatedTurns >= steps.length) {
       throw const FormatException('Route result endpoints are inconsistent.');
     }
   }

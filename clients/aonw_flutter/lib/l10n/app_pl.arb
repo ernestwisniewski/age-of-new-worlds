@@ -229,6 +229,18 @@
   "unitLabel": "Jednostka {unitId}",
   "routeSummary": "Trasa: {totalCost} punktów ruchu · pozostało {remaining}",
   "confirmMove": "Potwierdź ruch",
+  "moveTurnCost": "{turns, plural, one{1 tura} few{{turns} tury} many{{turns} tur} other{{turns} tury}}",
+  "@moveTurnCost": {
+    "placeholders": {
+      "turns": {"type": "int"}
+    }
+  },
+  "confirmMoveWithCost": "Potwierdź · {turnCost}",
+  "@confirmMoveWithCost": {
+    "placeholders": {
+      "turnCost": {"type": "String"}
+    }
+  },
   "chooseHighlightedDestination": "Wybierz podświetlone pole docelowe.",
   "movingUnit": "Przemieszczanie jednostki",
   "unitActionLabel": "{label, select, title{Akcje jednostki} fortify{Ufortyfikuj} skip{Pomiń} cancel{Anuluj akcję} executing{Wykonywanie akcji jednostki} logisticsTitle{Logistyka} logisticsLoading{Ładowanie opcji logistycznych} logisticsEmpty{Brak dostępnych działań logistycznych.} autoExplore{Automatyczna eksploracja} merchantRoute{Przypisz szlak handlowy} merchantTravel{Przenieś do miasta} detachTroop{Odłącz oddział} other{Akcja jednostki}}",

@@ -262,6 +262,8 @@ pub enum ClientQueryResultDto {
         available_movement_units: u32,
         /// Movement remaining after the executable prefix.
         remaining_movement_units: u32,
+        /// Calendar turns needed by the complete route.
+        estimated_turns: u32,
         /// Ordered route including the origin.
         steps: Vec<MovementStepViewDto>,
     },

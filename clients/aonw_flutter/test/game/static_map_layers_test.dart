@@ -93,7 +93,7 @@ void main() {
       await game.ready();
 
       final layers = game.world.children.toList();
-      expect(layers, hasLength(14));
+      expect(layers, hasLength(15));
       expect(layers[0], same(game.world.terrainLayer));
       expect(layers[1], same(game.world.referenceLayer));
       expect(layers[2], same(game.world.gridLayer));
@@ -108,6 +108,7 @@ void main() {
       expect(layers[11], same(game.world.unitLayer));
       expect(layers[12], same(game.world.selectionLayer));
       expect(layers[13], same(game.world.effectHost));
+      expect(layers[14], same(game.world.actionPaletteLayer));
       expect(layers.map((component) => component.priority), [
         0,
         10,
@@ -123,6 +124,7 @@ void main() {
         50,
         60,
         70,
+        80,
       ]);
       expect(
         layers,

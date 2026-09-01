@@ -73,6 +73,7 @@ RoutePlanView _multiTurnRoute() => RoutePlanView(
   totalCostUnits: 20,
   availableMovementUnits: 12,
   remainingMovementUnits: 0,
+  estimatedTurns: 2,
   steps: const [
     MovementStepView(
       coordinate: (col: 0, row: 0),

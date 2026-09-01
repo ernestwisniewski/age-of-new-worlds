@@ -41,6 +41,7 @@ void main() {
         totalCostUnits: 4,
         availableMovementUnits: 12,
         remainingMovementUnits: 8,
+        estimatedTurns: 1,
         steps: const [
           AonwMovementStep(
             coordinate: AonwCoordinate(col: 0, row: 0),
@@ -64,6 +65,7 @@ void main() {
     expect(route.steps.first.coordinate, unit.coordinate);
     expect(route.steps.last.coordinate, route.destination);
     expect(route.remainingMovementUnits, 8);
+    expect(route.estimatedTurns, 1);
   });
 
   test('rejects stale identities and inconsistent routes', () {
@@ -94,6 +96,7 @@ void main() {
           totalCostUnits: 4,
           availableMovementUnits: 12,
           remainingMovementUnits: 8,
+          estimatedTurns: 1,
           steps: const [
             AonwMovementStep(
               coordinate: AonwCoordinate(col: 1, row: 0),

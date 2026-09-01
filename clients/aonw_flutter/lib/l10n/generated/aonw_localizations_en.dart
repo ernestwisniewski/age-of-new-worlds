@@ -945,6 +945,22 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get confirmMove => 'Confirm move';
 
   @override
+  String moveTurnCost(int turns) {
+    String _temp0 = intl.Intl.pluralLogic(
+      turns,
+      locale: localeName,
+      other: '$turns turns',
+      one: '1 turn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String confirmMoveWithCost(String turnCost) {
+    return 'Confirm · $turnCost';
+  }
+
+  @override
   String get chooseHighlightedDestination =>
       'Choose a highlighted destination.';
 

@@ -294,6 +294,18 @@
     }
   },
   "confirmMove": "Confirm move",
+  "moveTurnCost": "{turns, plural, one{1 turn} other{{turns} turns}}",
+  "@moveTurnCost": {
+    "placeholders": {
+      "turns": {"type": "int"}
+    }
+  },
+  "confirmMoveWithCost": "Confirm · {turnCost}",
+  "@confirmMoveWithCost": {
+    "placeholders": {
+      "turnCost": {"type": "String"}
+    }
+  },
   "chooseHighlightedDestination": "Choose a highlighted destination.",
   "movingUnit": "Moving unit",
   "unitActionLabel": "{label, select, title{Unit actions} fortify{Fortify} skip{Skip} cancel{Cancel action} executing{Executing unit action} logisticsTitle{Logistics} logisticsLoading{Loading logistics options} logisticsEmpty{No logistics actions are currently available.} autoExplore{Auto explore} merchantRoute{Assign trade route} merchantTravel{Move to city} detachTroop{Detach troop} other{Unit action}}",

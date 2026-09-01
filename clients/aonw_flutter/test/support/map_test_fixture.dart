@@ -188,7 +188,6 @@ ReachableView testReachableView({
   availableMovementUnits: 12,
   tiles: tiles,
 );
-
 RoutePlanView testRoutePlanView({
   String unitId = 'preview-commander',
   MapHexCoordinate origin = (col: 0, row: 0),
@@ -201,6 +200,7 @@ RoutePlanView testRoutePlanView({
   totalCostUnits: 4,
   availableMovementUnits: 12,
   remainingMovementUnits: 8,
+  estimatedTurns: 1,
   steps: [
     MovementStepView(
       coordinate: origin,

@@ -86,6 +86,9 @@ final class FlameMapCameraController {
     return cache.projection.hexAt(transform.screenToWorld(screenPoint));
   }
 
+  AonwPoint? worldAtScreen(AonwPoint screenPoint) =>
+      _transform?.screenToWorld(screenPoint);
+
   AonwPoint? screenForHex(MapHexCoordinate coordinate) {
     final cache = _cache;
     final transform = _transform;

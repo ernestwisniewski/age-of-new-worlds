@@ -126,6 +126,7 @@ fn route_reports_rough_cost_and_executable_turn_prefix() {
     assert_eq!(plan.total_cost(), MovementUnits::new(8));
     assert_eq!(plan.reachable_steps().len(), 2);
     assert_eq!(plan.remaining_movement(), MovementUnits::ZERO);
+    assert_eq!(plan.estimated_turns(), 2);
     assert!(!plan.target_reachable_this_turn());
 }
 

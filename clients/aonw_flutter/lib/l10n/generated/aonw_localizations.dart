@@ -1424,6 +1424,18 @@ abstract class AonwLocalizations {
   /// **'Confirm move'**
   String get confirmMove;
 
+  /// No description provided for @moveTurnCost.
+  ///
+  /// In en, this message translates to:
+  /// **'{turns, plural, one{1 turn} other{{turns} turns}}'**
+  String moveTurnCost(int turns);
+
+  /// No description provided for @confirmMoveWithCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm · {turnCost}'**
+  String confirmMoveWithCost(String turnCost);
+
   /// No description provided for @chooseHighlightedDestination.
   ///
   /// In en, this message translates to:

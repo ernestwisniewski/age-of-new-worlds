@@ -419,6 +419,7 @@ fn core_response_variants() -> Vec<ClientResponseBodyDto> {
                 total_cost_units: 2,
                 available_movement_units: 8,
                 remaining_movement_units: 6,
+                estimated_turns: 1,
                 steps: vec![MovementStepViewDto {
                     coordinate: coordinate(4, 4),
                     enter_cost_units: 2,

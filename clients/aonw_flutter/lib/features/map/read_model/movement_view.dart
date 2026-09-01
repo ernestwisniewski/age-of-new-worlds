@@ -55,6 +55,7 @@ final class RoutePlanView {
     required this.totalCostUnits,
     required this.availableMovementUnits,
     required this.remainingMovementUnits,
+    required this.estimatedTurns,
     required List<MovementStepView> steps,
   }) : steps = List.unmodifiable(steps);
 
@@ -65,6 +66,7 @@ final class RoutePlanView {
   final int totalCostUnits;
   final int availableMovementUnits;
   final int remainingMovementUnits;
+  final int estimatedTurns;
   final List<MovementStepView> steps;
 }
 

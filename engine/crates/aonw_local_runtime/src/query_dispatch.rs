@@ -178,6 +178,8 @@ pub struct RoutePlanResult {
     pub available_movement: MovementUnits,
     /// Current-turn movement remaining after the executable prefix.
     pub remaining_movement: MovementUnits,
+    /// Calendar turns needed by the complete route.
+    pub estimated_turns: u32,
     /// Ordered route including the origin.
     pub steps: Box<[MovementStepView]>,
 }
@@ -383,6 +385,7 @@ pub(crate) fn dispatch_query(
                 total_cost: result.total_cost(),
                 available_movement: result.available_movement(),
                 remaining_movement: result.remaining_movement(),
+                estimated_turns: result.estimated_turns(),
                 steps: result
                     .steps()
                     .iter()

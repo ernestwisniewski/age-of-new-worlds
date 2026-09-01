@@ -313,6 +313,7 @@ void main() {
           'totalCostUnits': 4,
           'availableMovementUnits': 4,
           'remainingMovementUnits': 0,
+          'estimatedTurns': 1,
           'steps': [
             {
               'coordinate': {'col': 3, 'row': 2},

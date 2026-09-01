@@ -82,6 +82,7 @@ pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
             total_cost_units: value.total_cost.get(),
             available_movement_units: value.available_movement.get(),
             remaining_movement_units: value.remaining_movement.get(),
+            estimated_turns: value.estimated_turns,
             steps: value
                 .steps
                 .iter()

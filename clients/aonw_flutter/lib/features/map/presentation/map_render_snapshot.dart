@@ -3,6 +3,7 @@ import '../read_model/map_reference_bundle.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
 import '../read_model/player_map_view.dart';
+import 'map_action_palette_view.dart';
 
 final class MapRenderSnapshot {
   const MapRenderSnapshot({
@@ -10,12 +11,14 @@ final class MapRenderSnapshot {
     required this.interaction,
     required this.reference,
     required this.player,
+    this.actionPalette,
   });
 
   final MapView map;
   final MapInteractionState interaction;
   final MapReferenceBundle reference;
   final PlayerMapView player;
+  final MapActionPaletteView? actionPalette;
 
   MapViewMode get effectiveViewMode => interaction.viewMode.effectiveFor(
     hasReference: reference.pages.isNotEmpty,

@@ -7,7 +7,7 @@ use aonw_flutter::{
 };
 use libfuzzer_sys::fuzz_target;
 
-const CAPABILITIES: &[u8] = br#"{"apiVersion":11,"request":{"type":"capabilities"}}"#;
+const CAPABILITIES: &[u8] = br#"{"apiVersion":12,"request":{"type":"capabilities"}}"#;
 
 fuzz_target!(|data: &[u8]| {
     let request = if data.is_empty() { CAPABILITIES } else { data };
