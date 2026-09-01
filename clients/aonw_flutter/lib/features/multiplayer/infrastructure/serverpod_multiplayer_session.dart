@@ -10,6 +10,7 @@ import '../read_model/multiplayer_view.dart';
 import 'auth_token_store.dart';
 import 'server_connection_config.dart';
 import 'server_projection_decoder.dart';
+import 'serverpod_game_transport.dart';
 
 final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
   ServerpodMultiplayerSession({
@@ -219,6 +220,17 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     }
   }
 
+  AonwEngineSession openGameTransport(String matchId) {
+    _ensureAuthenticated();
+    return ServerpodGameTransport(
+      matchId: matchId,
+      resync: (value) => _gameRequest(() => _client.game.resync(value)),
+      query: (value) => _gameRequest(() => _client.game.query(value)),
+      command: (value) => _gameRequest(() => _client.game.applyCommand(value)),
+      decoder: _decoder,
+    );
+  }
+
   @override
   Future<void> close() async {
     if (_closed) return;
@@ -284,6 +296,15 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
       );
     }
     return next;
+  }
+
+  Future<T> _gameRequest<T>(Future<T> Function() operation) async {
+    _ensureAuthenticated();
+    try {
+      return await operation();
+    } on Object catch (error, stackTrace) {
+      throw _translate(error, stackTrace);
+    }
   }
 
   MultiplayerAccountView _accountView(auth.AuthSuccess value) {

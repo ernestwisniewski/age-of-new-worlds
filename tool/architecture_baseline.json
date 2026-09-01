@@ -61,7 +61,6 @@
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
-        "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_projection_decoder.dart::class:ServerProjectionDecoder/method:command": 63,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 108,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_MatchPanel/method:build": 71,

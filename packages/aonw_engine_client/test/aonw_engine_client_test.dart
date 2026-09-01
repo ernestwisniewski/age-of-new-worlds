@@ -30,6 +30,24 @@ void main() {
     );
   });
 
+  test('player queries reuse the closed local query wire shape', () {
+    final request = AonwClientRequest.reachable(
+      expectedRevision: 7,
+      unitId: 'unit-1',
+    );
+
+    expect(jsonDecode(request.toPlayerQueryJson()), {
+      'type': 'reachable',
+      'expectedRevision': 7,
+      'unitId': 'unit-1',
+    });
+    expect(() => request.toPlayerCommandJson(), throwsStateError);
+    expect(
+      () => AonwClientRequest.endTurn(expectedRevision: 7).toPlayerQueryJson(),
+      throwsStateError,
+    );
+  });
+
   test('replay playback requests stay recipient-bound', () {
     expect(
       jsonDecode(

@@ -9,12 +9,7 @@ final class ServerProjectionDecoder {
   const ServerProjectionDecoder();
 
   MultiplayerProjectionView resync(server.GameResync value) {
-    _identifier(value.matchId, 'match id');
-    _identifier(value.playerId, 'player id');
-    _unsigned(value.eventOffset, 'event offset');
-    final snapshot = AonwPlayerViewSnapshot.fromJson(
-      jsonDecode(value.snapshotJson),
-    );
+    final snapshot = snapshotFromResync(value);
     return _projection(
       matchId: value.matchId,
       playerId: value.playerId,
@@ -23,38 +18,54 @@ final class ServerProjectionDecoder {
     );
   }
 
-  MultiplayerCommandView command(server.GameCommandOutcome value) {
+  AonwPlayerViewSnapshot snapshotFromResync(server.GameResync value) {
     _identifier(value.matchId, 'match id');
-    _identifier(value.clientCommandId, 'client command id');
-    _unsigned(value.initialEventOffset, 'initial event offset');
-    _unsigned(value.finalEventOffset, 'final event offset');
-    if (value.finalEventOffset < value.initialEventOffset) {
-      throw const FormatException('Command event offsets are reversed.');
-    }
+    _identifier(value.playerId, 'player id');
+    _unsigned(value.eventOffset, 'event offset');
+    return AonwPlayerViewSnapshot.fromJson(jsonDecode(value.snapshotJson));
+  }
 
-    final outcome = _object(jsonDecode(value.outcomeJson), 'command outcome');
-    _requireKeys(outcome, const {
-      'stamp',
-      'rejection',
-      'recipient',
-    }, 'command outcome');
-    final recipient = _object(outcome['recipient'], 'recipient outcome');
-    _requireKeys(recipient, const {
-      'recipientPlayerId',
-      'snapshot',
-      'patch',
-      'events',
-      'evidence',
-    }, 'recipient outcome');
-    final playerId = _identifier(
-      recipient['recipientPlayerId'],
-      'recipient player id',
-    );
-    final rejection = outcome['rejection'];
-    if (rejection != null && rejection is! String) {
-      throw const FormatException('Command rejection code must be a string.');
-    }
-    final command = AonwCommandResult.fromJson({
+  String snapshotResponseJson(server.GameResync value) {
+    snapshotFromResync(value);
+    return _successResponseJson({
+      'type': 'snapshot',
+      'snapshot': jsonDecode(value.snapshotJson),
+    });
+  }
+
+  AonwClientResponse snapshotResponse(server.GameResync value) =>
+      AonwClientResponse.parse(snapshotResponseJson(value));
+
+  String queryResponseJson(server.GamePlayerQueryOutcome value) {
+    _identifier(value.matchId, 'match id');
+    final outcome = _object(jsonDecode(value.outcomeJson), 'query outcome');
+    return switch (outcome['status']) {
+      'success' => _querySuccessJson(outcome),
+      'failure' => _queryFailureJson(outcome),
+      _ => throw const FormatException('Unknown query outcome status.'),
+    };
+  }
+
+  AonwClientResponse queryResponse(server.GamePlayerQueryOutcome value) =>
+      AonwClientResponse.parse(queryResponseJson(value));
+
+  MultiplayerCommandView command(server.GameCommandOutcome value) =>
+      _decodeCommand(value).view;
+
+  String commandResponseJson(server.GameCommandOutcome value) {
+    final decoded = _decodeCommand(value);
+    return _successResponseJson({'type': 'command', 'result': decoded.result});
+  }
+
+  AonwClientResponse commandResponse(server.GameCommandOutcome value) =>
+      AonwClientResponse.parse(commandResponseJson(value));
+
+  _DecodedServerCommand _decodeCommand(server.GameCommandOutcome value) {
+    final decoded = _commandEnvelope(value);
+    final outcome = decoded.outcome;
+    final recipient = decoded.recipient;
+    final rejection = decoded.rejection;
+    final commandResult = <String, Object?>{
       'stamp': outcome['stamp'],
       'outcome': rejection == null
           ? const {'status': 'accepted'}
@@ -62,7 +73,8 @@ final class ServerProjectionDecoder {
       'events': recipient['events'],
       'evidence': recipient['evidence'],
       'viewPatch': recipient['patch'],
-    });
+    };
+    final command = AonwCommandResult.fromJson(commandResult);
     final snapshot = AonwPlayerViewSnapshot.fromJson(recipient['snapshot']);
     if (!_sameStamp(command.stamp, snapshot.stamp) ||
         command.viewPatch.toRevision != snapshot.stamp.revision) {
@@ -72,18 +84,21 @@ final class ServerProjectionDecoder {
     }
     final projection = _projection(
       matchId: value.matchId,
-      playerId: playerId,
+      playerId: decoded.playerId,
       eventOffset: value.finalEventOffset,
       snapshot: snapshot,
     );
-    return MultiplayerCommandView(
-      clientCommandId: value.clientCommandId,
-      initialEventOffset: value.initialEventOffset,
-      finalEventOffset: value.finalEventOffset,
-      duplicate: value.duplicate,
-      accepted: command.accepted,
-      rejectionCode: command.rejection?.wireCode,
-      projection: projection,
+    return (
+      result: commandResult,
+      view: MultiplayerCommandView(
+        clientCommandId: value.clientCommandId,
+        initialEventOffset: value.initialEventOffset,
+        finalEventOffset: value.finalEventOffset,
+        duplicate: value.duplicate,
+        accepted: command.accepted,
+        rejectionCode: command.rejection?.wireCode,
+        projection: projection,
+      ),
     );
   }
 
@@ -124,6 +139,80 @@ final class ServerProjectionDecoder {
       winnerPlayerId: snapshot.outcome.winnerPlayerId,
     );
   }
+}
+
+typedef _DecodedServerCommand = ({
+  Map<String, Object?> result,
+  MultiplayerCommandView view,
+});
+
+typedef _ServerCommandEnvelope = ({
+  Map<String, Object?> outcome,
+  Map<String, Object?> recipient,
+  String playerId,
+  String? rejection,
+});
+
+_ServerCommandEnvelope _commandEnvelope(server.GameCommandOutcome value) {
+  _identifier(value.matchId, 'match id');
+  _identifier(value.clientCommandId, 'client command id');
+  _unsigned(value.initialEventOffset, 'initial event offset');
+  _unsigned(value.finalEventOffset, 'final event offset');
+  if (value.finalEventOffset < value.initialEventOffset) {
+    throw const FormatException('Command event offsets are reversed.');
+  }
+  final outcome = _object(jsonDecode(value.outcomeJson), 'command outcome');
+  _requireKeys(outcome, const {
+    'stamp',
+    'rejection',
+    'recipient',
+  }, 'command outcome');
+  final recipient = _object(outcome['recipient'], 'recipient outcome');
+  _requireKeys(recipient, const {
+    'recipientPlayerId',
+    'snapshot',
+    'patch',
+    'events',
+    'evidence',
+  }, 'recipient outcome');
+  final rejection = outcome['rejection'];
+  if (rejection != null && rejection is! String) {
+    throw const FormatException('Command rejection code must be a string.');
+  }
+  return (
+    outcome: outcome,
+    recipient: recipient,
+    playerId: _identifier(
+      recipient['recipientPlayerId'],
+      'recipient player id',
+    ),
+    rejection: rejection as String?,
+  );
+}
+
+String _querySuccessJson(Map<String, Object?> outcome) {
+  _requireKeys(outcome, const {'status', 'result'}, 'successful query outcome');
+  return _successResponseJson({
+    'type': 'query',
+    'result': _object(outcome['result'], 'query result'),
+  });
+}
+
+String _queryFailureJson(Map<String, Object?> outcome) {
+  _requireKeys(outcome, const {'status', 'error'}, 'failed query outcome');
+  return _clientResponseJson({'status': 'failure', 'error': outcome['error']});
+}
+
+String _successResponseJson(Map<String, Object?> response) =>
+    _clientResponseJson({'status': 'success', 'response': response});
+
+String _clientResponseJson(Map<String, Object?> outcome) {
+  final response = jsonEncode({
+    'apiVersion': aonwClientApiVersion,
+    'outcome': outcome,
+  });
+  AonwClientResponse.parse(response);
+  return response;
 }
 
 Map<String, Object?> _object(Object? value, String label) {

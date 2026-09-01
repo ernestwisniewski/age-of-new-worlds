@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/multiplayer/infrastructure/server_projection_decoder.dart';
 import 'package:aonw_server_client/aonw_server_client.dart' as server;
 import 'package:flutter_test/flutter_test.dart';
@@ -20,6 +21,16 @@ void main() {
     expect(projection.playerId, 'player-1');
     expect(projection.revision, 7);
     expect(projection.canSubmitTurn, isTrue);
+
+    final response = decoder.snapshotResponse(
+      server.GameResync(
+        matchId: 'match-1',
+        playerId: 'player-1',
+        eventOffset: 10,
+        snapshotJson: jsonEncode(_snapshot(7)),
+      ),
+    );
+    expect(response.require<AonwSnapshotResponse>().snapshot.stamp.revision, 7);
   });
 
   test('decodes a contiguous recipient-only command outcome', () {
@@ -37,7 +48,56 @@ void main() {
     expect(command.accepted, isTrue);
     expect(command.projection.revision, 8);
     expect(command.projection.eventOffset, 11);
+
+    final response = decoder.commandResponse(
+      server.GameCommandOutcome(
+        matchId: 'match-1',
+        clientCommandId: 'command-1',
+        initialEventOffset: 10,
+        finalEventOffset: 11,
+        duplicate: false,
+        outcomeJson: jsonEncode(_outcome()),
+      ),
+    );
+    expect(response.require<AonwCommandResponse>().result.accepted, isTrue);
   });
+
+  test(
+    'maps server query success and failure to the local client protocol',
+    () {
+      final success = decoder.queryResponse(
+        server.GamePlayerQueryOutcome(
+          matchId: 'match-1',
+          outcomeJson: jsonEncode({
+            'status': 'success',
+            'result': {
+              'type': 'reachable',
+              'stamp': _stamp(7),
+              'unitId': 'unit-1',
+              'availableMovementUnits': 2,
+              'tiles': <Object?>[],
+            },
+          }),
+        ),
+      );
+      expect(
+        success.require<AonwQueryResponse>().result,
+        isA<AonwReachableResult>(),
+      );
+
+      final failure = decoder.queryResponse(
+        server.GamePlayerQueryOutcome(
+          matchId: 'match-1',
+          outcomeJson: jsonEncode({
+            'status': 'failure',
+            'error': {'code': 'stale_revision', 'message': 'stale'},
+          }),
+        ),
+      );
+      expect(failure.isSuccess, isFalse);
+      expect(failure.error?.code, 'stale_revision');
+    },
+  );
 
   test('rejects an outcome that exposes a canonical field', () {
     final outcome = _outcome()..['state'] = const <String, Object?>{};

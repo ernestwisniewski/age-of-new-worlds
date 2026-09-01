@@ -310,6 +310,18 @@ final class AonwClientRequest {
     return jsonEncode(command);
   }
 
+  /// Encodes the closed player query carried by one query request.
+  ///
+  /// Server transports use this to send the exact query shape accepted by the
+  /// local runtime without copying query-specific wire mapping.
+  String toPlayerQueryJson() {
+    final query = request['query'];
+    if (request['type'] != 'query' || query is! Map<String, Object?>) {
+      throw StateError('The client request does not carry a player query.');
+    }
+    return jsonEncode(query);
+  }
+
   static Map<String, Object?> _unitCommand(
     String type,
     int expectedRevision,
