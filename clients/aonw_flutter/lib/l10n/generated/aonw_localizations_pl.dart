@@ -1340,6 +1340,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'territory': 'Terytorium',
       'foundingSelection': 'Terytorium początkowe',
       'foundingConfirm': 'Potwierdź założenie miasta',
+      'foundingCancel': 'Anuluj zakładanie',
       'executing': 'Wykonywanie akcji miasta',
       'cityYield': 'Dochód',
       'food': 'Żywność',

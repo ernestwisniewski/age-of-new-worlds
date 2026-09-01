@@ -16,6 +16,7 @@ void main() {
         center: const AonwCoordinate(col: 0, row: 0),
         selectedControlledHexes: const [],
         availableControlledHexes: const [AonwCoordinate(col: 1, row: 0)],
+        rankedAvailableControlledHexes: const [AonwCoordinate(col: 1, row: 0)],
         requiredControlledHexes: 1,
         maximumRadius: 2,
       ),
@@ -25,6 +26,7 @@ void main() {
     );
 
     expect(result.availableControlledHexes, const [(col: 1, row: 0)]);
+    expect(result.rankedAvailableControlledHexes, const [(col: 1, row: 0)]);
     expect(result.requiredControlledHexes, 1);
   });
 

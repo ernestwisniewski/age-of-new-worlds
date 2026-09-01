@@ -48,6 +48,10 @@ extension MapCoordinatorSelection on MapCoordinator {
     if (current == null) return;
     final next = _selectableCoordinate(current, coordinate);
     final generation = ++_interactionGeneration;
+    if (current.interaction.city?.foundingOptions != null) {
+      if (next != null) toggleCityFoundingHex(next);
+      return;
+    }
     if (next == null) {
       _clearSelection(current);
       return;

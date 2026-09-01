@@ -1,5 +1,4 @@
 //! Golden and strict-boundary tests for the shared client protocol.
-
 use std::collections::BTreeMap;
 
 use aonw_contracts::client::{

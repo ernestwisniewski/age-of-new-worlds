@@ -55,7 +55,6 @@
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
-        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
         "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
         "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
@@ -63,9 +62,7 @@
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
         "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77
       },
-      "nesting": {
-        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 4
-      },
+      "nesting": {},
       "cyclomaticComplexity": {
         "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::class:ArtifactWorkflow/method:_execute": 11,
         "clients/aonw_flutter/lib/features/artifacts/application/artifact_workflow.dart::function:_executable": 18,
@@ -83,7 +80,6 @@
         "clients/aonw_flutter/lib/features/map/application/unit_action_workflow.dart::function:_actionable": 13,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 23,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 16,
-        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 28,
         "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 13,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
@@ -104,7 +100,6 @@
         "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 17,
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 20,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 34,
-        "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 37,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 17,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 22,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 20

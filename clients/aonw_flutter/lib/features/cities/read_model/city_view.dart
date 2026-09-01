@@ -84,16 +84,21 @@ final class CityFoundingOptionsView {
     required this.center,
     required List<MapHexCoordinate> selectedControlledHexes,
     required List<MapHexCoordinate> availableControlledHexes,
+    required List<MapHexCoordinate> rankedAvailableControlledHexes,
     required this.requiredControlledHexes,
     required this.maximumRadius,
   }) : selectedControlledHexes = List.unmodifiable(selectedControlledHexes),
-       availableControlledHexes = List.unmodifiable(availableControlledHexes);
+       availableControlledHexes = List.unmodifiable(availableControlledHexes),
+       rankedAvailableControlledHexes = List.unmodifiable(
+         rankedAvailableControlledHexes,
+       );
 
   final SessionStampView stamp;
   final String founderUnitId;
   final MapHexCoordinate center;
   final List<MapHexCoordinate> selectedControlledHexes;
   final List<MapHexCoordinate> availableControlledHexes;
+  final List<MapHexCoordinate> rankedAvailableControlledHexes;
   final int requiredControlledHexes;
   final int maximumRadius;
 }

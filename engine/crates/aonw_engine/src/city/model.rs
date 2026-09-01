@@ -125,6 +125,7 @@ pub struct CityFoundingOptions {
     center: HexCoord,
     selected_controlled_hexes: Box<[HexCoord]>,
     available_controlled_hexes: Box<[HexCoord]>,
+    ranked_available_controlled_hexes: Box<[HexCoord]>,
     required_controlled_hexes: u32,
     maximum_radius: u32,
 }
@@ -135,6 +136,7 @@ impl CityFoundingOptions {
         center: HexCoord,
         selected_controlled_hexes: Vec<HexCoord>,
         available_controlled_hexes: Vec<HexCoord>,
+        ranked_available_controlled_hexes: Vec<HexCoord>,
         required_controlled_hexes: u32,
         maximum_radius: u32,
     ) -> Self {
@@ -143,6 +145,7 @@ impl CityFoundingOptions {
             center,
             selected_controlled_hexes: selected_controlled_hexes.into_boxed_slice(),
             available_controlled_hexes: available_controlled_hexes.into_boxed_slice(),
+            ranked_available_controlled_hexes: ranked_available_controlled_hexes.into_boxed_slice(),
             required_controlled_hexes,
             maximum_radius,
         }
@@ -166,6 +169,11 @@ impl CityFoundingOptions {
     #[must_use]
     pub const fn available_controlled_hexes(&self) -> &[HexCoord] {
         &self.available_controlled_hexes
+    }
+    /// Returns the same legal selections ranked by engine-owned city value.
+    #[must_use]
+    pub const fn ranked_available_controlled_hexes(&self) -> &[HexCoord] {
+        &self.ranked_available_controlled_hexes
     }
     /// Returns the exact required selection count.
     #[must_use]
@@ -391,6 +399,7 @@ mod tests {
         let founding = CityFoundingOptions::new(
             founder_id.clone(),
             HexCoord::new(1, 2),
+            Vec::new(),
             Vec::new(),
             Vec::new(),
             0,

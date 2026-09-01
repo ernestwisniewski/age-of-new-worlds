@@ -1336,6 +1336,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'territory': 'Territory',
       'foundingSelection': 'Initial territory',
       'foundingConfirm': 'Confirm city founding',
+      'foundingCancel': 'Cancel founding',
       'executing': 'Applying city action',
       'cityYield': 'Yield',
       'food': 'Food',

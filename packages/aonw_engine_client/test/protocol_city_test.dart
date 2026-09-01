@@ -88,12 +88,16 @@ void main() {
               'availableControlledHexes': [
                 {'col': 2, 'row': 1},
               ],
+              'rankedAvailableControlledHexes': [
+                {'col': 2, 'row': 1},
+              ],
               'requiredControlledHexes': 2,
               'maximumRadius': 3,
             })
             as AonwCityFoundingOptionsResult;
     expect(founding.requiredControlledHexes, 2);
     expect(founding.availableControlledHexes.single.col, 2);
+    expect(founding.rankedAvailableControlledHexes.single.col, 2);
 
     final worked =
         AonwQueryResult.fromJson({

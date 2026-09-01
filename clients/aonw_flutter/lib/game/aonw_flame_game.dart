@@ -16,6 +16,7 @@ import '../features/map/presentation/map_render_snapshot.dart';
 import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
 import 'map/artifact_map_layer.dart';
+import 'map/city_founding_preview_layer.dart';
 import 'map/city_map_layer.dart';
 import 'map/city_territory_layer.dart';
 import 'map/flame_map_camera.dart';
@@ -33,157 +34,7 @@ import 'presentation/flame_scene_patch.dart';
 import 'presentation/flame_scene_sink.dart';
 
 part 'aonw_flame_game_input.dart';
-
-final class AonwWorld extends World implements FlameSceneSink {
-  AonwWorld()
-    : terrainLayer = MapTerrainLayerComponent(),
-      referenceLayer = MapReferenceLayerComponent(),
-      gridLayer = MapGridLayerComponent(),
-      tileDetailsLayer = MapTileDetailsLayerComponent(),
-      cityTerritoryLayer = MapCityTerritoryLayerComponent() {
-    unitLayer = MapUnitLayerComponent();
-    cityLayer = MapCityLayerComponent();
-    artifactLayer = MapArtifactLayerComponent();
-    objectiveLayer = MapObjectiveLayerComponent();
-    workerInfrastructureLayer = MapWorkerInfrastructureLayerComponent();
-    fogLayer = MapFogLayerComponent();
-    routeLayer = MapRouteLayerComponent();
-    selectionLayer = MapSelectionLayerComponent();
-    actionPaletteLayer = MapActionPaletteLayerComponent();
-    hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
-    effectHost = MapEffectHostComponent(units: unitLayer);
-    addAll([
-      terrainLayer,
-      referenceLayer,
-      gridLayer,
-      cityTerritoryLayer,
-      tileDetailsLayer,
-      workerInfrastructureLayer,
-      fogLayer,
-      routeLayer,
-      objectiveLayer,
-      cityLayer,
-      artifactLayer,
-      unitLayer,
-      selectionLayer,
-      actionPaletteLayer,
-      hexSelectionPaletteLayer,
-      effectHost,
-    ]);
-  }
-  final MapTerrainLayerComponent terrainLayer;
-  final MapReferenceLayerComponent referenceLayer;
-  final MapGridLayerComponent gridLayer;
-  final MapCityTerritoryLayerComponent cityTerritoryLayer;
-  final MapTileDetailsLayerComponent tileDetailsLayer;
-  late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
-  late final MapFogLayerComponent fogLayer;
-  late final MapRouteLayerComponent routeLayer;
-  late final MapUnitLayerComponent unitLayer;
-  late final MapCityLayerComponent cityLayer;
-  late final MapArtifactLayerComponent artifactLayer;
-  late final MapObjectiveLayerComponent objectiveLayer;
-  late final MapSelectionLayerComponent selectionLayer;
-  late final MapActionPaletteLayerComponent actionPaletteLayer;
-  late final MapHexSelectionPaletteLayerComponent hexSelectionPaletteLayer;
-  late final MapEffectHostComponent effectHost;
-  MapRenderSnapshot? _scene;
-  MapStaticRenderCache? _staticCache;
-  MapHexCoordinate? _cursor;
-  var _sceneWriteCount = 0;
-  @visibleForTesting
-  MapRenderSnapshot? get debugScene => _scene;
-  @visibleForTesting
-  int get debugSceneWriteCount => _sceneWriteCount;
-  @visibleForTesting
-  MapStaticRenderCache? get debugStaticRenderCache => _staticCache;
-  MapStaticRenderCache? get _staticRenderCacheForGame => _staticCache;
-  bool applyMapDisplayOptions(MapDisplayOptions options) {
-    final gridChanged = gridLayer.setGridVisible(options.showGrid);
-    final wallsChanged = terrainLayer.setWalls(options.showElevationWalls);
-    final detailsChanged = tileDetailsLayer.setOptions(options);
-    return gridChanged || wallsChanged || detailsChanged;
-  }
-
-  @override
-  void replaceScene(MapRenderSnapshot snapshot) {
-    if (identical(_scene, snapshot)) return;
-    final patch = FlameScenePatch.between(_scene, snapshot);
-    _scene = snapshot;
-    _sceneWriteCount += 1;
-    final identity = (
-      mapId: snapshot.map.mapId,
-      contentHash: snapshot.map.contentHash,
-      cols: snapshot.map.cols,
-      rows: snapshot.map.rows,
-    );
-    final cache = _staticCache?.identity == identity
-        ? _staticCache!
-        : MapStaticRenderCache.build(snapshot.map);
-    _staticCache = cache;
-    terrainLayer.applyCache(cache);
-    terrainLayer.setViewMode(snapshot.effectiveViewMode);
-    referenceLayer.applyReference(
-      cache: cache,
-      reference: snapshot.reference,
-      visible: snapshot.effectiveViewMode.showsReference,
-    );
-    gridLayer.applyCache(cache);
-    cityTerritoryLayer.applySnapshot(snapshot, cache);
-    tileDetailsLayer.applyMap(snapshot.map, cache);
-    workerInfrastructureLayer.applyPatch(patch, cache);
-    fogLayer.applyFog(cache, snapshot.player.fog);
-    routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
-    objectiveLayer.applyMap(snapshot.map, cache);
-    cityLayer.applyPatch(patch, cache);
-    artifactLayer.applyPatch(patch, cache);
-    unitLayer.applyPatch(patch, cache);
-    selectionLayer.applySelection(cache, snapshot.interaction, snapshot.player);
-    selectionLayer.applyCursor(cache, _cursor);
-    actionPaletteLayer.applyPalette(cache, snapshot.actionPalette);
-    hexSelectionPaletteLayer.clearLayer();
-    effectHost.applyPatch(patch, cache);
-  }
-
-  @override
-  void replaceCursor(MapHexCoordinate? coordinate) {
-    if (_cursor == coordinate) return;
-    _cursor = coordinate;
-    final cache = _staticCache;
-    if (cache != null) selectionLayer.applyCursor(cache, coordinate);
-  }
-
-  @override
-  void clearScene() {
-    if (_scene == null) return;
-    _scene = null;
-    _staticCache = null;
-    _cursor = null;
-    _sceneWriteCount += 1;
-    terrainLayer.clearCache();
-    referenceLayer.clearCache();
-    gridLayer.clearCache();
-    cityTerritoryLayer.clearLayer();
-    tileDetailsLayer.clearLayer();
-    workerInfrastructureLayer.clearLayer();
-    fogLayer.clearLayer();
-    routeLayer.clearLayer();
-    objectiveLayer.clearLayer();
-    cityLayer.clearLayer();
-    artifactLayer.clearLayer();
-    unitLayer.clearLayer();
-    selectionLayer.clearLayer();
-    actionPaletteLayer.clearLayer();
-    hexSelectionPaletteLayer.clearLayer();
-    effectHost.clearEffects();
-  }
-
-  @override
-  void onRemove() {
-    clearScene();
-    super.onRemove();
-  }
-}
+part 'aonw_world.dart';
 
 base class AonwFlameGame extends FlameGame<AonwWorld>
     implements FlameSceneSink {
@@ -225,6 +76,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _viewportActive = false;
   var _continuousRendering = false;
   var _effectsActive = false;
+  var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
   var _keyboardPanX = 0.0;
   var _keyboardPanY = 0.0;
@@ -251,6 +103,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
     world.replaceScene(snapshot);
+    _setFoundingPreviewActive(world.cityFoundingPreviewLayer.isVisible);
     final cache = world._staticRenderCacheForGame;
     if (cache != null) {
       final mapChanged = mapCamera.replaceMap(
@@ -274,6 +127,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void clearScene() {
     world.clearScene();
+    _setFoundingPreviewActive(false);
     mapCamera.clear();
     _lastHoveredHex = null;
     _hasHoveredHex = false;
@@ -399,7 +253,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void _synchronizeGameLoop() {
     final keyboardActive = _keyboardPanX != 0 || _keyboardPanY != 0;
     if (_viewportActive &&
-        (_continuousRendering || _effectsActive || keyboardActive)) {
+        (_continuousRendering ||
+            _effectsActive ||
+            _foundingPreviewActive ||
+            keyboardActive)) {
       resumeEngine();
     } else {
       pauseEngine();
@@ -424,6 +281,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void _handleEffectActivity(bool active) {
     if (_disposed || _effectsActive == active) return;
     _effectsActive = active;
+    _synchronizeGameLoop();
+  }
+
+  void _setFoundingPreviewActive(bool active) {
+    if (_disposed || _foundingPreviewActive == active) return;
+    _foundingPreviewActive = active;
     _synchronizeGameLoop();
   }
 

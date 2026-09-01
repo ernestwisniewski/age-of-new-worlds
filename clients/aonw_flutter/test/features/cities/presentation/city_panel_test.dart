@@ -25,6 +25,7 @@ void main() {
               city: testCityView(),
               onToggleFoundingHex: (_) {},
               onConfirmFounding: () {},
+              onCancelFounding: () {},
               onAction: (value) => action = value,
             ),
           ),
@@ -41,6 +42,7 @@ void main() {
 
   testWidgets('keeps founding choices accessible and exact', (tester) async {
     var confirms = 0;
+    var cancels = 0;
     final options = testCityFoundingOptionsView();
     await tester.pumpWidget(
       LocalizedTestApp(
@@ -54,6 +56,7 @@ void main() {
             city: null,
             onToggleFoundingHex: (_) {},
             onConfirmFounding: () => confirms += 1,
+            onCancelFounding: () => cancels += 1,
             onAction: (_) {},
           ),
         ),
@@ -63,6 +66,8 @@ void main() {
     expect(find.text('Initial territory: 1/1'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('confirm-city-founding')));
     expect(confirms, 1);
+    await tester.tap(find.byKey(const ValueKey('cancel-city-founding')));
+    expect(cancels, 1);
     expect(tester.takeException(), isNull);
   });
 
@@ -81,6 +86,7 @@ void main() {
             city: testCityView(),
             onToggleFoundingHex: (_) {},
             onConfirmFounding: () {},
+            onCancelFounding: () {},
             onAction: (_) {},
           ),
         ),

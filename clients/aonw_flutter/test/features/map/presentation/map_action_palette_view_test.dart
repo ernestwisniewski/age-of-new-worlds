@@ -1,3 +1,4 @@
+import 'package:aonw_flutter/features/cities/application/city_state.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_action_palette_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
@@ -77,5 +78,24 @@ void main() {
     ]);
     expect(worker.previewedImprovement, FieldImprovementKind.mine);
     expect(worker.confirmLabel, 'Confirm improvement · Mine');
+  });
+
+  test('suppresses movement actions while a founding draft owns the map', () {
+    final scene = testMapScene();
+    final options = testCityFoundingOptionsView();
+
+    final view = buildMapActionPaletteView(
+      interaction: MapInteractionState(
+        route: testRoutePlanView(),
+        city: CityState(
+          founderUnitId: options.founderUnitId,
+          foundingOptions: options,
+        ),
+      ),
+      player: scene.player,
+      l10n: AonwLocalizationsEn(),
+    );
+
+    expect(view, isNull);
   });
 }

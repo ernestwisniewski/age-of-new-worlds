@@ -13,6 +13,7 @@ final class CityPanel extends StatelessWidget {
     required this.city,
     required this.onToggleFoundingHex,
     required this.onConfirmFounding,
+    required this.onCancelFounding,
     required this.onAction,
     this.enabled = true,
     super.key,
@@ -22,6 +23,7 @@ final class CityPanel extends StatelessWidget {
   final CityView? city;
   final ValueChanged<MapHexCoordinate> onToggleFoundingHex;
   final VoidCallback onConfirmFounding;
+  final VoidCallback onCancelFounding;
   final ValueChanged<CityActionView> onAction;
   final bool enabled;
 
@@ -56,6 +58,7 @@ final class CityPanel extends StatelessWidget {
                   options: options,
                   onToggle: onToggleFoundingHex,
                   onConfirm: onConfirmFounding,
+                  onCancel: onCancelFounding,
                 ),
               if (state.inspection case final inspection?)
                 _OwnedCityInspection(
@@ -115,12 +118,14 @@ final class _FoundingEditor extends StatelessWidget {
     required this.options,
     required this.onToggle,
     required this.onConfirm,
+    required this.onCancel,
   });
 
   final CityState state;
   final CityFoundingOptionsView options;
   final ValueChanged<MapHexCoordinate> onToggle;
   final VoidCallback onConfirm;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -151,16 +156,28 @@ final class _FoundingEditor extends StatelessWidget {
               ),
           ],
         ),
-        FilledButton.icon(
-          key: const ValueKey('confirm-city-founding'),
-          onPressed:
-              !state.commandPending &&
-                  state.foundingSelection.length ==
-                      options.requiredControlledHexes
-              ? onConfirm
-              : null,
-          icon: const Icon(Icons.location_city),
-          label: Text(copy.text(CityText.foundingConfirm)),
+        Wrap(
+          spacing: AonwSpacing.xs,
+          runSpacing: AonwSpacing.xs,
+          children: [
+            FilledButton.icon(
+              key: const ValueKey('confirm-city-founding'),
+              onPressed:
+                  !state.commandPending &&
+                      state.foundingSelection.length ==
+                          options.requiredControlledHexes
+                  ? onConfirm
+                  : null,
+              icon: const Icon(Icons.location_city),
+              label: Text(copy.text(CityText.foundingConfirm)),
+            ),
+            OutlinedButton.icon(
+              key: const ValueKey('cancel-city-founding'),
+              onPressed: state.commandPending ? null : onCancel,
+              icon: const Icon(Icons.close),
+              label: Text(copy.text(CityText.foundingCancel)),
+            ),
+          ],
         ),
       ],
     );

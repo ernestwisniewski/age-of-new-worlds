@@ -47,7 +47,7 @@ void main() {
   );
 
   test(
-    'keeps founding selection local and submits exact engine options once',
+    'routes map selection into founding and submits exact engine options once',
     () async {
       final unit = testVisibleUnit();
       final session = FakeGameSession.success(
@@ -68,7 +68,8 @@ void main() {
       await pumpEventQueue();
       expect(session.cityFoundingOptionCalls, 1);
 
-      controller.toggleCityFoundingHex(const (col: 1, row: 0));
+      controller.select(const (col: 1, row: 0));
+      await pumpEventQueue();
       controller.confirmCityFounding();
       controller.confirmCityFounding();
       await pumpEventQueue();
@@ -80,6 +81,32 @@ void main() {
         (controller.state as GameSessionReady).interaction.selected,
         isNull,
       );
+    },
+  );
+
+  test(
+    'cancels a founding draft without dropping the selected founder',
+    () async {
+      final unit = testVisibleUnit();
+      final session = FakeGameSession.success(
+        testMapScene(units: [unit]),
+        reachableResult: testReachableView(),
+        cityFoundingOptionsResult: testCityFoundingOptionsView(),
+      );
+      final controller = _controller(session);
+      addTearDown(controller.dispose);
+
+      await controller.load();
+      controller.select(unit.coordinate);
+      await pumpEventQueue();
+      controller.openCityFounding();
+      await pumpEventQueue();
+      controller.cancelCityFounding();
+
+      final state = controller.state as GameSessionReady;
+      expect(state.interaction.city, isNull);
+      expect(state.interaction.selectedUnitId, unit.id);
+      expect(session.cityCommandCalls, 0);
     },
   );
 }

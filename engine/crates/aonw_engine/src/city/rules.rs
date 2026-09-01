@@ -187,6 +187,7 @@ pub(crate) fn query_founding(
         balance.founding_controlled_hexes(),
         balance.founding_max_radius(),
     );
+    let ranked_available = ranked_founding_hexes(&available, context);
     if selected.is_empty()
         && !can_complete_founding(
             founder.position(),
@@ -204,9 +205,31 @@ pub(crate) fn query_founding(
         founder.position(),
         selected,
         available,
+        ranked_available,
         balance.founding_controlled_hexes(),
         balance.founding_max_radius(),
     ))
+}
+
+fn ranked_founding_hexes(
+    available: &[aonw_domain::HexCoord],
+    context: EngineContext<'_>,
+) -> Vec<aonw_domain::HexCoord> {
+    let mut ranked = available.to_vec();
+    ranked.sort_unstable_by(|left, right| {
+        let left_tile = context
+            .map()
+            .tile_at(*left)
+            .expect("legal founding candidate has map tile");
+        let right_tile = context
+            .map()
+            .tile_at(*right)
+            .expect("legal founding candidate has map tile");
+        expansion_score(right_tile, &context.ruleset().economy())
+            .cmp(&expansion_score(left_tile, &context.ruleset().economy()))
+            .then_with(|| left.cmp(right))
+    });
+    ranked
 }
 
 pub(crate) fn query_worked_hexes(

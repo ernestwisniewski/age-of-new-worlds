@@ -7,10 +7,14 @@ final class AonwCityFoundingOptionsResult extends AonwQueryResult {
     required this.center,
     required List<AonwCoordinate> selectedControlledHexes,
     required List<AonwCoordinate> availableControlledHexes,
+    required List<AonwCoordinate> rankedAvailableControlledHexes,
     required this.requiredControlledHexes,
     required this.maximumRadius,
   }) : selectedControlledHexes = List.unmodifiable(selectedControlledHexes),
-       availableControlledHexes = List.unmodifiable(availableControlledHexes);
+       availableControlledHexes = List.unmodifiable(availableControlledHexes),
+       rankedAvailableControlledHexes = List.unmodifiable(
+         rankedAvailableControlledHexes,
+       );
 
   factory AonwCityFoundingOptionsResult.fromJson(Map<String, Object?> value) {
     requireKeys(value, const {
@@ -20,6 +24,7 @@ final class AonwCityFoundingOptionsResult extends AonwQueryResult {
       'center',
       'selectedControlledHexes',
       'availableControlledHexes',
+      'rankedAvailableControlledHexes',
       'requiredControlledHexes',
       'maximumRadius',
     }, 'city founding options');
@@ -34,6 +39,10 @@ final class AonwCityFoundingOptionsResult extends AonwQueryResult {
       availableControlledHexes: _cityCoordinates(
         value['availableControlledHexes'],
         'available city founding hexes',
+      ),
+      rankedAvailableControlledHexes: _cityCoordinates(
+        value['rankedAvailableControlledHexes'],
+        'ranked available city founding hexes',
       ),
       requiredControlledHexes: readUnsigned(
         value['requiredControlledHexes'],
@@ -51,6 +60,7 @@ final class AonwCityFoundingOptionsResult extends AonwQueryResult {
   final AonwCoordinate center;
   final List<AonwCoordinate> selectedControlledHexes;
   final List<AonwCoordinate> availableControlledHexes;
+  final List<AonwCoordinate> rankedAvailableControlledHexes;
   final int requiredControlledHexes;
   final int maximumRadius;
 }

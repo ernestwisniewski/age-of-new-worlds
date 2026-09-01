@@ -28,10 +28,17 @@ final class CityViewMapper {
       map,
       'available city founding hex',
     );
+    final ranked = _coordinates(
+      wire.rankedAvailableControlledHexes,
+      map,
+      'ranked available city founding hex',
+    );
     if (wire.requiredControlledHexes == 0 ||
         selected.length > wire.requiredControlledHexes ||
         wire.maximumRadius == 0 ||
-        selected.any(available.contains)) {
+        selected.any(available.contains) ||
+        ranked.length != available.length ||
+        ranked.any((coordinate) => !available.contains(coordinate))) {
       throw const FormatException('City founding options are inconsistent.');
     }
     return CityFoundingOptionsView(
@@ -40,6 +47,7 @@ final class CityViewMapper {
       center: center,
       selectedControlledHexes: selected,
       availableControlledHexes: available,
+      rankedAvailableControlledHexes: ranked,
       requiredControlledHexes: wire.requiredControlledHexes,
       maximumRadius: wire.maximumRadius,
     );

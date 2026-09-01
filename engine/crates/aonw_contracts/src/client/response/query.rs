@@ -146,6 +146,8 @@ pub enum ClientQueryResultDto {
         selected_controlled_hexes: Vec<CoordinateDto>,
         /// Legal next selections owned by the engine.
         available_controlled_hexes: Vec<CoordinateDto>,
+        /// The same legal selections ranked by engine-owned city value.
+        ranked_available_controlled_hexes: Vec<CoordinateDto>,
         /// Required exact non-center territory count.
         required_controlled_hexes: u32,
         /// Maximum founding radius.

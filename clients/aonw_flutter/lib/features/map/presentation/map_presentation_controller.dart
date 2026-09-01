@@ -154,6 +154,8 @@ final class MapPresentationController extends ChangeNotifier {
   void toggleCityFoundingHex(MapHexCoordinate coordinate) =>
       _coordinator.toggleCityFoundingHex(coordinate);
 
+  void cancelCityFounding() => _coordinator.cancelCityFounding();
+
   void confirmCityFounding() => _coordinator.confirmCityFounding();
 
   void executeCityAction(CityActionView action) =>

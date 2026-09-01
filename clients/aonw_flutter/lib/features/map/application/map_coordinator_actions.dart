@@ -74,6 +74,11 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
+  void cancelCityFounding() {
+    if (!_gameplayActive()) return;
+    _cities.cancelFounding(readState: () => _state, publish: _setState);
+  }
+
   void confirmCityFounding() {
     if (!_gameplayActive()) return;
     _cities.confirmFounding(

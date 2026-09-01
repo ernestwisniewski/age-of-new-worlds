@@ -103,6 +103,19 @@ final class CityWorkflow {
     );
   }
 
+  void cancelFounding({
+    required CityStateReader readState,
+    required CityStatePublisher publish,
+  }) {
+    final state = readState();
+    if (state is! GameSessionReady ||
+        state.interaction.city?.founderUnitId == null ||
+        state.interaction.city?.commandPending == true) {
+      return;
+    }
+    publish(state.withInteraction(state.interaction.copyWith(clearCity: true)));
+  }
+
   void confirmFounding({
     required CityStateReader readState,
     required CityStatePublisher publish,

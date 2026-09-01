@@ -298,6 +298,12 @@ fn city_founding_options(
             .copied()
             .map(coordinate)
             .collect(),
+        ranked_available_controlled_hexes: options
+            .ranked_available_controlled_hexes()
+            .iter()
+            .copied()
+            .map(coordinate)
+            .collect(),
         required_controlled_hexes: options.required_controlled_hexes(),
         maximum_radius: options.maximum_radius(),
     }

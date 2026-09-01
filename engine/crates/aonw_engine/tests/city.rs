@@ -68,6 +68,18 @@ fn founding_query_owns_legal_next_choices_and_preserves_the_canonical_draft() {
             .iter()
             .all(|candidate| center.distance_to(*candidate) <= 2)
     );
+    assert_eq!(
+        options
+            .ranked_available_controlled_hexes()
+            .iter()
+            .copied()
+            .collect::<std::collections::BTreeSet<_>>(),
+        options
+            .available_controlled_hexes()
+            .iter()
+            .copied()
+            .collect()
+    );
 }
 
 #[test]

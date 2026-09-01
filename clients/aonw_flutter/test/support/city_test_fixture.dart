@@ -35,6 +35,7 @@ CityFoundingOptionsView testCityFoundingOptionsView({
   center: const (col: 0, row: 0),
   selectedControlledHexes: const [],
   availableControlledHexes: const [(col: 1, row: 0), (col: 0, row: 1)],
+  rankedAvailableControlledHexes: const [(col: 0, row: 1), (col: 1, row: 0)],
   requiredControlledHexes: 1,
   maximumRadius: 2,
 );

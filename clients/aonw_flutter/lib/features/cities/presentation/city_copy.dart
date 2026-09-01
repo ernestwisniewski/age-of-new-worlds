@@ -13,6 +13,7 @@ enum CityText {
   territory,
   foundingSelection,
   foundingConfirm,
+  foundingCancel,
   executing,
   cityYield,
   food,

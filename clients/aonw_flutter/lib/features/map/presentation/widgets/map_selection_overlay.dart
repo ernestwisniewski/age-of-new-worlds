@@ -26,6 +26,8 @@ import '../../read_model/player_map_view.dart';
 import '../map_presentation_controller.dart';
 import 'map_failure_messages.dart';
 
+part 'map_selection_feature_controls.dart';
+
 final class MapSelectionOverlay extends StatelessWidget {
   const MapSelectionOverlay({
     required this.scene,
@@ -72,6 +74,7 @@ final class MapSelectionOverlay extends StatelessWidget {
             onOpenCityFounding: controller.openCityFounding,
             onToggleCityFoundingHex: controller.toggleCityFoundingHex,
             onConfirmCityFounding: controller.confirmCityFounding,
+            onCancelCityFounding: controller.cancelCityFounding,
             onCityAction: controller.executeCityAction,
             onProductionAction: controller.executeProductionAction,
             onArtifactAction: controller.executeArtifactAction,
@@ -99,6 +102,7 @@ final class _MapSelectionPanel extends StatelessWidget {
     required this.onOpenCityFounding,
     required this.onToggleCityFoundingHex,
     required this.onConfirmCityFounding,
+    required this.onCancelCityFounding,
     required this.onCityAction,
     required this.onProductionAction,
     required this.onArtifactAction,
@@ -119,6 +123,7 @@ final class _MapSelectionPanel extends StatelessWidget {
   final VoidCallback onOpenCityFounding;
   final ValueChanged<MapHexCoordinate> onToggleCityFoundingHex;
   final VoidCallback onConfirmCityFounding;
+  final VoidCallback onCancelCityFounding;
   final ValueChanged<CityActionView> onCityAction;
   final ValueChanged<ProductionActionView> onProductionAction;
   final ValueChanged<ArtifactActionView> onArtifactAction;
@@ -143,102 +148,192 @@ final class _MapSelectionPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(l10n.hexLabel(coordinate.col, coordinate.row)),
-              if (interaction.selectedUnitId case final unitId?) ...[
-                const SizedBox(height: AonwSpacing.xs),
-                Text(l10n.unitLabel(unitId)),
-                if (unit case final unit?)
-                  Text(l10n.presentationName(unit.kind.name)),
-                if (interaction.combat == null)
-                  _MovementControls(
-                    interaction: interaction,
-                    onConfirmMove: onConfirmMove,
-                  ),
-                if (interaction.actionDeck case final actionDeck?)
-                  UnitActionDeck(
-                    state: actionDeck,
-                    logistics: interaction.unitLogistics,
-                    enabled:
-                        !interaction.movementPending &&
-                        !(interaction.worker?.commandPending ?? false) &&
-                        !(interaction.production?.commandPending ?? false) &&
-                        !(interaction.artifact?.commandPending ?? false),
-                    onAction: onUnitAction,
-                    onLogisticsAction: onUnitLogistics,
-                  ),
-                if (interaction.worker case final workerState?)
-                  if (unit case final unit?)
-                    WorkerPanel(
-                      state: workerState,
-                      unit: unit,
-                      pendingAction: pendingWorkerAction?.unitId == unit.id
-                          ? pendingWorkerAction
-                          : null,
-                      enabled:
-                          !interaction.movementPending &&
-                          !(interaction.actionDeck?.commandPending ?? false) &&
-                          !(interaction.unitLogistics?.commandPending ??
-                              false) &&
-                          !(interaction.production?.commandPending ?? false) &&
-                          !(interaction.artifact?.commandPending ?? false),
-                      onAction: onWorkerAction,
-                    ),
-                if (interaction.city?.founderUnitId == null)
-                  TextButton.icon(
-                    key: const ValueKey('open-city-founding'),
-                    onPressed: onOpenCityFounding,
-                    icon: const Icon(Icons.add_location_alt),
-                    label: Text(
-                      CityCopy.of(context).text(CityText.foundingOpen),
-                    ),
-                  ),
-              ],
-              if (interaction.combat case final combat?)
-                CombatPanel(
-                  state: combat,
-                  onConfirm: onConfirmCombat,
-                  onCityConquestAction: onCityConquestAction,
-                ),
-              if (interaction.city case final cityState?)
-                CityPanel(
-                  state: cityState,
-                  city: city,
-                  onToggleFoundingHex: onToggleCityFoundingHex,
-                  onConfirmFounding: onConfirmCityFounding,
-                  onAction: onCityAction,
-                  enabled:
-                      !(interaction.production?.commandPending ?? false) &&
-                      !(interaction.artifact?.commandPending ?? false),
-                ),
-              if (interaction.production case final productionState?)
-                ProductionPanel(
-                  state: productionState,
-                  enabled:
-                      !(interaction.city?.commandPending ?? false) &&
-                      !interaction.movementPending &&
-                      !(interaction.artifact?.commandPending ?? false),
-                  onAction: onProductionAction,
-                ),
-              if (interaction.artifact case final artifactState?)
-                ArtifactPanel(
-                  state: artifactState,
-                  player: player,
-                  coordinate: coordinate,
+              if (interaction.selectedUnitId case final unitId?)
+                _SelectedUnitControls(
+                  unitId: unitId,
+                  interaction: interaction,
                   unit: unit,
-                  city: city,
-                  enabled:
-                      !interaction.movementPending &&
-                      !(interaction.city?.commandPending ?? false) &&
-                      !(interaction.production?.commandPending ?? false) &&
-                      !(interaction.worker?.commandPending ?? false) &&
-                      !(interaction.actionDeck?.commandPending ?? false) &&
-                      !(interaction.unitLogistics?.commandPending ?? false),
-                  onAction: onArtifactAction,
+                  pendingWorkerAction: pendingWorkerAction,
+                  onConfirmMove: onConfirmMove,
+                  onUnitAction: onUnitAction,
+                  onUnitLogistics: onUnitLogistics,
+                  onWorkerAction: onWorkerAction,
+                  onOpenCityFounding: onOpenCityFounding,
                 ),
-              _MovementFeedback(interaction: interaction),
+              _SelectionFeatureControls(
+                coordinate: coordinate,
+                interaction: interaction,
+                unit: unit,
+                city: city,
+                player: player,
+                onConfirmCombat: onConfirmCombat,
+                onCityConquestAction: onCityConquestAction,
+                onToggleCityFoundingHex: onToggleCityFoundingHex,
+                onConfirmCityFounding: onConfirmCityFounding,
+                onCancelCityFounding: onCancelCityFounding,
+                onCityAction: onCityAction,
+                onProductionAction: onProductionAction,
+                onArtifactAction: onArtifactAction,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+final class _SelectedUnitControls extends StatelessWidget {
+  const _SelectedUnitControls({
+    required this.unitId,
+    required this.interaction,
+    required this.unit,
+    required this.pendingWorkerAction,
+    required this.onConfirmMove,
+    required this.onUnitAction,
+    required this.onUnitLogistics,
+    required this.onWorkerAction,
+    required this.onOpenCityFounding,
+  });
+
+  final String unitId;
+  final MapInteractionState interaction;
+  final VisibleUnitView? unit;
+  final PendingWorkerActionSelectionView? pendingWorkerAction;
+  final VoidCallback onConfirmMove;
+  final ValueChanged<UnitActionKindView> onUnitAction;
+  final ValueChanged<UnitLogisticsActionView> onUnitLogistics;
+  final ValueChanged<WorkerActionView> onWorkerAction;
+  final VoidCallback onOpenCityFounding;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.aonwL10n;
+    final foundingActive = interaction.city?.founderUnitId != null;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: AonwSpacing.xs),
+        Text(l10n.unitLabel(unitId)),
+        if (unit case final unit?) Text(l10n.presentationName(unit.kind.name)),
+        _SelectedUnitMovement(
+          interaction: interaction,
+          foundingActive: foundingActive,
+          onConfirmMove: onConfirmMove,
+        ),
+        _SelectedUnitActionDeck(
+          interaction: interaction,
+          foundingActive: foundingActive,
+          onAction: onUnitAction,
+          onLogisticsAction: onUnitLogistics,
+        ),
+        _SelectedWorkerControls(
+          interaction: interaction,
+          unit: unit,
+          pendingAction: pendingWorkerAction,
+          foundingActive: foundingActive,
+          onAction: onWorkerAction,
+        ),
+        if (!foundingActive && _canOfferCityFounding(unit))
+          TextButton.icon(
+            key: const ValueKey('open-city-founding'),
+            onPressed: onOpenCityFounding,
+            icon: const Icon(Icons.add_location_alt),
+            label: Text(CityCopy.of(context).text(CityText.foundingOpen)),
+          ),
+      ],
+    );
+  }
+}
+
+final class _SelectedUnitMovement extends StatelessWidget {
+  const _SelectedUnitMovement({
+    required this.interaction,
+    required this.foundingActive,
+    required this.onConfirmMove,
+  });
+
+  final MapInteractionState interaction;
+  final bool foundingActive;
+  final VoidCallback onConfirmMove;
+
+  @override
+  Widget build(BuildContext context) =>
+      foundingActive || interaction.combat != null
+      ? const SizedBox.shrink()
+      : _MovementControls(
+          interaction: interaction,
+          onConfirmMove: onConfirmMove,
+        );
+}
+
+final class _SelectedUnitActionDeck extends StatelessWidget {
+  const _SelectedUnitActionDeck({
+    required this.interaction,
+    required this.foundingActive,
+    required this.onAction,
+    required this.onLogisticsAction,
+  });
+
+  final MapInteractionState interaction;
+  final bool foundingActive;
+  final ValueChanged<UnitActionKindView> onAction;
+  final ValueChanged<UnitLogisticsActionView> onLogisticsAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final actionDeck = interaction.actionDeck;
+    if (foundingActive || actionDeck == null) return const SizedBox.shrink();
+    return UnitActionDeck(
+      state: actionDeck,
+      logistics: interaction.unitLogistics,
+      enabled:
+          !interaction.movementPending &&
+          !(interaction.worker?.commandPending ?? false) &&
+          !(interaction.production?.commandPending ?? false) &&
+          !(interaction.artifact?.commandPending ?? false),
+      onAction: onAction,
+      onLogisticsAction: onLogisticsAction,
+    );
+  }
+}
+
+final class _SelectedWorkerControls extends StatelessWidget {
+  const _SelectedWorkerControls({
+    required this.interaction,
+    required this.unit,
+    required this.pendingAction,
+    required this.foundingActive,
+    required this.onAction,
+  });
+
+  final MapInteractionState interaction;
+  final VisibleUnitView? unit;
+  final PendingWorkerActionSelectionView? pendingAction;
+  final bool foundingActive;
+  final ValueChanged<WorkerActionView> onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final worker = interaction.worker;
+    final selectedUnit = unit;
+    if (foundingActive || worker == null || selectedUnit == null) {
+      return const SizedBox.shrink();
+    }
+    return WorkerPanel(
+      state: worker,
+      unit: selectedUnit,
+      pendingAction: pendingAction?.unitId == selectedUnit.id
+          ? pendingAction
+          : null,
+      enabled:
+          !interaction.movementPending &&
+          !(interaction.actionDeck?.commandPending ?? false) &&
+          !(interaction.unitLogistics?.commandPending ?? false) &&
+          !(interaction.production?.commandPending ?? false) &&
+          !(interaction.artifact?.commandPending ?? false),
+      onAction: onAction,
     );
   }
 }
@@ -314,4 +409,11 @@ final class _MovementFeedback extends StatelessWidget {
       ],
     );
   }
+}
+
+bool _canOfferCityFounding(VisibleUnitView? unit) {
+  if (unit == null) return false;
+  if (unit.kind == VisibleUnitKind.settler) return true;
+  return unit.kind == VisibleUnitKind.commander &&
+      unit.army.any((troop) => troop.kind == 'settler' && troop.count > 0);
 }
