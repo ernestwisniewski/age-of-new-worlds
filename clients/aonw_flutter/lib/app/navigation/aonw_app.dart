@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../design_system/aonw_theme.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
+import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
@@ -22,6 +23,7 @@ final class AonwApp extends StatefulWidget {
     this.flameGameFactory = AonwFlameGame.new,
     this.settingsController,
     this.replayController,
+    this.multiplayerAccessController,
     this.multiplayerController,
     this.onExit,
     this.openExternalUri,
@@ -36,6 +38,7 @@ final class AonwApp extends StatefulWidget {
   final AonwFlameGameFactory flameGameFactory;
   final ClientSettingsController? settingsController;
   final ReplayPresentationController? replayController;
+  final MultiplayerAccessController? multiplayerAccessController;
   final MultiplayerController? multiplayerController;
   final AppExitRequest? onExit;
   final ExternalUriOpen? openExternalUri;
@@ -60,6 +63,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     widget.telemetry.record(ClientTelemetryEvent.appStarted);
     _installSettingsController();
+    unawaited(widget.multiplayerAccessController?.initialize());
     _synchronizeInputLifecycle();
   }
 
@@ -74,6 +78,11 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     }
     if (oldWidget.multiplayerController != widget.multiplayerController) {
       oldWidget.multiplayerController?.dispose();
+    }
+    if (oldWidget.multiplayerAccessController !=
+        widget.multiplayerAccessController) {
+      oldWidget.multiplayerAccessController?.dispose();
+      unawaited(widget.multiplayerAccessController?.initialize());
     }
     if (oldWidget.mapInputSource != widget.mapInputSource) {
       _setInputActive(oldWidget.mapInputSource, false);
@@ -92,6 +101,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     _setInputActive(widget.mapInputSource, false);
     widget.mapController.dispose();
     widget.replayController?.dispose();
+    widget.multiplayerAccessController?.dispose();
     widget.multiplayerController?.dispose();
     unawaited(widget.mapInputSource?.close());
     _settingsController.dispose();
@@ -122,6 +132,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       routeObserver: _routeObserver,
       settingsController: _settingsController,
       replayController: widget.replayController,
+      multiplayerAccessController: widget.multiplayerAccessController,
       multiplayerController: widget.multiplayerController,
       onExit: widget.onExit,
       openExternalUri: widget.openExternalUri,

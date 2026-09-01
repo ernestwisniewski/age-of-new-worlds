@@ -4,8 +4,10 @@ import 'package:aonw_flutter/features/map/application/game_session_capabilities.
 import 'package:aonw_flutter/features/map/application/network_game_session_port.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/multiplayer/application/multiplayer_access_port.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_coordinator.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_session_port.dart';
+import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_access_controller.dart';
 import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_controller.dart';
 import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,54 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets('checks multiplayer access before enabling the main menu', (
+    tester,
+  ) async {
+    final mapController = MapPresentationController(
+      capabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+      ),
+    );
+    final multiplayerController = MultiplayerController(
+      MultiplayerCoordinator(
+        session: _MultiplayerSession(),
+        documents: const _MultiplayerDocuments(),
+      ),
+    );
+    final accessController = MultiplayerAccessController(
+      access: const _UpdateRequiredAccess(),
+    );
+
+    await tester.pumpWidget(
+      AonwApp(
+        mapController: mapController,
+        multiplayerAccessController: accessController,
+        multiplayerController: multiplayerController,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('A newer version is ready'), findsAtLeast(1));
+    final multiplayer = tester.widget<InkWell>(
+      find.descendant(
+        of: find.byKey(const ValueKey('multiplayer')),
+        matching: find.byType(InkWell),
+      ),
+    );
+    expect(multiplayer.onTap, isNull);
+
+    final singlePlayer = tester.widget<InkWell>(
+      find.descendant(
+        of: find.byKey(const ValueKey('single-player')),
+        matching: find.byType(InkWell),
+      ),
+    );
+    expect(singlePlayer.onTap, isNotNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
+
   testWidgets('opens an online match on the shared map route', (tester) async {
     final scene = testMapScene();
     final gameplay = FakeGameSession.success(scene);
@@ -61,6 +111,14 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
   });
+}
+
+final class _UpdateRequiredAccess implements MultiplayerAccessPort {
+  const _UpdateRequiredAccess();
+
+  @override
+  Future<MultiplayerAccessStatus> check() async =>
+      MultiplayerAccessStatus.updateRequired;
 }
 
 final class _NetworkGameSession implements NetworkGameSessionPort {

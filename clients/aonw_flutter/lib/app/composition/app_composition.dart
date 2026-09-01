@@ -11,7 +11,9 @@ import '../../features/multiplayer/infrastructure/auth_token_store.dart';
 import '../../features/multiplayer/infrastructure/multiplayer_match_document_source.dart';
 import '../../features/multiplayer/infrastructure/server_connection_config.dart';
 import '../../features/multiplayer/infrastructure/serverpod_game_session_gateway.dart';
+import '../../features/multiplayer/infrastructure/serverpod_multiplayer_access.dart';
 import '../../features/multiplayer/infrastructure/serverpod_multiplayer_session.dart';
+import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/infrastructure/atomic_local_replay_store.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
@@ -35,6 +37,7 @@ final class AppComposition {
     ClientSettingsStore? settingsStore,
     AonwFlameGameFactory flameGameFactory = AonwFlameGame.new,
     ClientTelemetry telemetry = const NoOpClientTelemetry(),
+    MultiplayerAccessController? multiplayerAccessController,
     MultiplayerController? multiplayerController,
     AppExitRequest? onExit,
     ExternalUriOpen? openExternalUri,
@@ -48,6 +51,7 @@ final class AppComposition {
          mapInputSource: mapInputSource,
          flameGameFactory: flameGameFactory,
          telemetry: telemetry,
+         multiplayerAccessController: multiplayerAccessController,
          multiplayerController: multiplayerController,
          onExit: onExit,
          openExternalUri: openExternalUri,
@@ -62,13 +66,18 @@ final class AppComposition {
     ClientTelemetry telemetry = const DebugClientTelemetry(),
   }) {
     final gateway = EngineGameSessionGateway(assets: rootBundle);
+    final serverConfig = ServerConnectionConfig.production();
     final replayController = ReplayPresentationController(
       session: gateway.replaySession,
       store: AtomicLocalReplayStore.production(),
     );
     final multiplayerSession = ServerpodMultiplayerSession(
-      config: ServerConnectionConfig.production(),
+      config: serverConfig,
       tokenStore: const SecureAuthTokenStore(),
+    );
+    final multiplayerAccessController = MultiplayerAccessController(
+      access: ServerpodMultiplayerAccess(config: serverConfig),
+      timeout: serverConfig.requestTimeout,
     );
     final multiplayerController = MultiplayerController(
       MultiplayerCoordinator(
@@ -86,6 +95,7 @@ final class AppComposition {
       replayController: replayController,
       mapInputSource: GamepadMapInputSource(),
       settingsStore: SharedPreferencesClientSettingsStore(),
+      multiplayerAccessController: multiplayerAccessController,
       multiplayerController: multiplayerController,
       onExit: SystemNavigator.pop,
       openExternalUri: _openExternalUri,

@@ -11,6 +11,7 @@ import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/map/presentation/widgets/map_screen.dart';
 import '../../features/multiplayer/application/multiplayer_state.dart';
+import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
@@ -57,6 +58,7 @@ final class AonwRouter {
     required this.flameGameFactory,
     required this.routeObserver,
     this.replayController,
+    this.multiplayerAccessController,
     this.multiplayerController,
     this.mapInputSource,
     this.onExit,
@@ -69,6 +71,7 @@ final class AonwRouter {
   final AonwFlameGameFactory flameGameFactory;
   final RouteObserver<ModalRoute<void>> routeObserver;
   final ReplayPresentationController? replayController;
+  final MultiplayerAccessController? multiplayerAccessController;
   final MultiplayerController? multiplayerController;
   final MapInputSource? mapInputSource;
   final AppExitRequest? onExit;
@@ -100,27 +103,40 @@ final class AonwRouter {
     AonwRoute.settings: _settingsScreen,
   };
 
-  Widget _menuScreen(BuildContext context) => MainMenuScreen(
-    onOpenSinglePlayer: () =>
-        Navigator.of(context).pushNamed(AonwRoute.newGame.location),
-    onOpenMultiplayer: multiplayerController == null
-        ? null
-        : () => Navigator.of(context).pushNamed(AonwRoute.multiplayer.location),
-    onOpenHotseat: () =>
-        Navigator.of(context).pushNamed(AonwRoute.hotseat.location),
-    onOpenLoadGame: () =>
-        Navigator.of(context).pushNamed(AonwRoute.loadGame.location),
-    onOpenSettings: () =>
-        Navigator.of(context).pushNamed(AonwRoute.settings.location),
-    onOpenInstructions: () =>
-        Navigator.of(context).pushNamed(AonwRoute.help.location),
-    onOpenCredits: () =>
-        Navigator.of(context).pushNamed(AonwRoute.credits.location),
-    onOpenFeedback: () =>
-        Navigator.of(context).pushNamed(AonwRoute.feedback.location),
-    onExit: onExit,
-    serverUpdateRequired: _serverUpdateRequired(),
-  );
+  Widget _menuScreen(BuildContext context) {
+    Widget buildMenu() => MainMenuScreen(
+      onOpenSinglePlayer: () =>
+          Navigator.of(context).pushNamed(AonwRoute.newGame.location),
+      onOpenMultiplayer: _multiplayerAvailable()
+          ? () =>
+                Navigator.of(context).pushNamed(AonwRoute.multiplayer.location)
+          : null,
+      onOpenHotseat: () =>
+          Navigator.of(context).pushNamed(AonwRoute.hotseat.location),
+      onOpenLoadGame: () =>
+          Navigator.of(context).pushNamed(AonwRoute.loadGame.location),
+      onOpenSettings: () =>
+          Navigator.of(context).pushNamed(AonwRoute.settings.location),
+      onOpenInstructions: () =>
+          Navigator.of(context).pushNamed(AonwRoute.help.location),
+      onOpenCredits: () =>
+          Navigator.of(context).pushNamed(AonwRoute.credits.location),
+      onOpenFeedback: () =>
+          Navigator.of(context).pushNamed(AonwRoute.feedback.location),
+      onExit: onExit,
+      serverUpdateRequired: _serverUpdateRequired(),
+    );
+
+    final listenables = <Listenable>[
+      ?multiplayerAccessController,
+      ?multiplayerController,
+    ];
+    if (listenables.isEmpty) return buildMenu();
+    return ListenableBuilder(
+      listenable: Listenable.merge(listenables),
+      builder: (context, child) => buildMenu(),
+    );
+  }
 
   Widget _helpScreen(BuildContext context) => HelpScreen(
     onStartOnboarding: () => Navigator.of(
@@ -216,6 +232,7 @@ final class AonwRouter {
       SettingsScreen(controller: settingsController);
 
   bool _serverUpdateRequired() {
+    if (multiplayerAccessController?.updateRequired ?? false) return true;
     final state = multiplayerController?.state;
     final failure = switch (state) {
       MultiplayerSignedOut(:final failureCode) => failureCode,
@@ -224,6 +241,13 @@ final class AonwRouter {
       _ => null,
     };
     return failure == 'client_update_required';
+  }
+
+  bool _multiplayerAvailable() {
+    if (multiplayerController == null) return false;
+    final access = multiplayerAccessController;
+    if (access != null && !access.allowsConnection) return false;
+    return !_serverUpdateRequired();
   }
 }
 
