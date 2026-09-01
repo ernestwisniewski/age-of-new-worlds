@@ -274,6 +274,7 @@
   "mapViewModeGraphic": "Graphic",
   "mapViewModeTiles": "Tiles",
   "hexLabel": "Hex {col}, {row}",
+  "selectionTerrain": "Terrain",
   "@hexLabel": {
     "placeholders": {
       "col": {"type": "int"},

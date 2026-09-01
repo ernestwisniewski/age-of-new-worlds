@@ -1,15 +1,51 @@
 part of 'map_coordinator.dart';
 
 extension MapCoordinatorSelection on MapCoordinator {
-  Future<void> _select(MapHexCoordinate? coordinate) async {
+  Future<void> _selectUnitById(String unitId) async {
+    final current = _availableSelectionState();
+    if (current == null) return;
+    final unit = current.recipient.visibleUnitById(unitId);
+    if (unit == null) return;
+    final controlled = current.recipient.controlledUnitById(unitId);
+    if (controlled == null) {
+      _interactionGeneration += 1;
+      _selectPlainHex(current, unit.coordinate);
+      return;
+    }
+    final generation = ++_interactionGeneration;
+    await _selectControlledUnit(
+      current,
+      controlled.coordinate,
+      controlled,
+      current.recipient.cityAt(controlled.coordinate),
+      generation,
+    );
+  }
+
+  void _selectCityById(String cityId) {
+    final current = _availableSelectionState();
+    if (current == null) return;
+    final city = current.recipient.cityById(cityId);
+    if (city == null) return;
+    _interactionGeneration += 1;
+    _selectCity(current, city.center, city);
+  }
+
+  GameSessionReady? _availableSelectionState() {
     final current = _state;
     if (current is! GameSessionReady ||
         !_gameplayActive() ||
         current.research.commandPending ||
         current.diplomacy.commandPending ||
         _interactionBusy(current.interaction)) {
-      return;
+      return null;
     }
+    return current;
+  }
+
+  Future<void> _select(MapHexCoordinate? coordinate) async {
+    final current = _availableSelectionState();
+    if (current == null) return;
     final next = _selectableCoordinate(current, coordinate);
     final generation = ++_interactionGeneration;
     if (next == null) {

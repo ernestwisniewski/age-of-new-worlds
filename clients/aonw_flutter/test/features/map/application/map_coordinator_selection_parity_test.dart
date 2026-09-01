@@ -63,6 +63,31 @@ void main() {
     expect(session.lastCombatDefender, (col: 2, row: 0));
     expect(ready.interaction.route, isNull);
   });
+
+  test('selects an exact controlled unit from a stacked hex', () async {
+    final scene = testMapScene(
+      units: [
+        testVisibleUnit(id: 'first'),
+        testVisibleUnit(id: 'second'),
+      ],
+    );
+    final session = FakeGameSession.success(
+      scene,
+      reachableResult: testReachableView(unitId: 'second'),
+    );
+    final controller = MapCoordinator(
+      capabilities: testGameSessionCapabilities(session),
+    );
+    addTearDown(controller.dispose);
+
+    await controller.load();
+    controller.selectUnit('second');
+    await pumpEventQueue();
+
+    final ready = controller.state as GameSessionReady;
+    expect(ready.interaction.selectedUnitId, 'second');
+    expect(ready.interaction.selected, (col: 0, row: 0));
+  });
 }
 
 RoutePlanView _multiTurnRoute() => RoutePlanView(

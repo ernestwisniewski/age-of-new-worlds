@@ -264,6 +264,14 @@ final class MapCoordinator {
     unawaited(_select(coordinate));
   }
 
+  void selectUnit(String unitId) {
+    unawaited(_selectUnitById(unitId));
+  }
+
+  void selectCity(String cityId) {
+    _selectCityById(cityId);
+  }
+
   void confirmMove() {
     unawaited(_confirmMove());
   }

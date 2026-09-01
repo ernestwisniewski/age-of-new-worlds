@@ -80,7 +80,6 @@
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 28,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/method:_openSession": 11,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::function:_interactionBusy": 12,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_select": 11,
         "clients/aonw_flutter/lib/features/map/application/unit_action_workflow.dart::function:_actionable": 13,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 23,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 16,

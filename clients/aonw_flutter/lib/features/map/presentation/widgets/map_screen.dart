@@ -24,11 +24,15 @@ import '../../../workers/read_model/worker_view.dart';
 import '../../application/game_session_state.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
+import '../../read_model/map_view.dart';
+import '../geometry/odd_q_flat_top_geometry.dart';
 import '../input/map_action_palette_intent.dart';
 import '../input/map_gamepad_input.dart';
+import '../input/map_hex_selection_palette_intent.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
 import '../map_action_palette_view.dart';
+import '../map_hex_selection_palette_view.dart';
 import '../map_presentation_controller.dart';
 import '../map_render_snapshot.dart';
 import 'flame_map_viewport.dart';
@@ -38,6 +42,7 @@ import 'map_status.dart';
 import 'network_game_status_overlay.dart';
 
 part 'map_screen_action_palette.dart';
+part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_ready.dart';
 
 final class MapScreen extends StatefulWidget {
@@ -89,6 +94,9 @@ final class _MapScreenState extends State<MapScreen>
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
+    _flameGame.setHexSelectionPaletteIntentSink(
+      _handleHexSelectionPaletteIntent,
+    );
     widget.controller.addListener(_synchronizeFlameScene);
     widget.controller.cursor.addListener(_synchronizeFlameCursor);
     _listenToInput(widget.inputSource);
@@ -146,6 +154,7 @@ final class _MapScreenState extends State<MapScreen>
     _gamepadTicker.dispose();
     _flameGame.setHexIntentSink(null);
     _flameGame.setActionPaletteIntentSink(null);
+    _flameGame.setHexSelectionPaletteIntentSink(null);
     _flameFocusNode.dispose();
     super.dispose();
   }
@@ -337,9 +346,13 @@ final class _MapScreenState extends State<MapScreen>
   void _installFreshFlameGame() {
     _flameGame.setHexIntentSink(null);
     _flameGame.setActionPaletteIntentSink(null);
+    _flameGame.setHexSelectionPaletteIntentSink(null);
     _flameGame = widget.flameGameFactory();
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
+    _flameGame.setHexSelectionPaletteIntentSink(
+      _handleHexSelectionPaletteIntent,
+    );
     _flameGeneration += 1;
     _synchronizeFlameCursor();
   }
@@ -397,6 +410,8 @@ final class _MapScreenState extends State<MapScreen>
         widget.controller.hover(coordinate);
       case MapHexSelectIntent(:final coordinate):
         widget.controller.select(coordinate);
+      case MapHexLongPressIntent(:final coordinate, :final screenPosition):
+        _openHexSelectionPalette(coordinate, screenPosition);
     }
   }
 }

@@ -233,6 +233,12 @@ final class MapViewportGestureLayer extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTapUp: (details) =>
           game.handleViewportTap(_vector(details.localPosition)),
+      onLongPressStart: (details) =>
+          game.handleViewportLongPressStart(_vector(details.localPosition)),
+      onLongPressMoveUpdate: (details) => game
+          .handleViewportLongPressMoveUpdate(_vector(details.localPosition)),
+      onLongPressEnd: (_) => game.handleViewportLongPressEnd(),
+      onLongPressCancel: game.handleViewportLongPressCancel,
       child: result,
     );
     return MouseRegion(

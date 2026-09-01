@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -8,7 +9,9 @@ import 'package:flutter/scheduler.dart';
 import '../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../features/map/presentation/input/map_action_palette_intent.dart';
 import '../features/map/presentation/input/map_gamepad_input.dart';
+import '../features/map/presentation/input/map_hex_selection_palette_intent.dart';
 import '../features/map/presentation/input/map_viewport_intent.dart';
+import '../features/map/presentation/map_hex_selection_palette_view.dart';
 import '../features/map/presentation/map_render_snapshot.dart';
 import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
@@ -21,6 +24,7 @@ import 'map/gameplay_map_layers.dart';
 import 'map/map_action_palette_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
+import 'map/map_hex_selection_palette_layer.dart';
 import 'map/map_tile_details_layer.dart';
 import 'map/objective_map_layer.dart';
 import 'map/static_map_layers.dart';
@@ -46,6 +50,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     routeLayer = MapRouteLayerComponent();
     selectionLayer = MapSelectionLayerComponent();
     actionPaletteLayer = MapActionPaletteLayerComponent();
+    hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
     addAll([
       terrainLayer,
@@ -62,6 +67,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       unitLayer,
       selectionLayer,
       actionPaletteLayer,
+      hexSelectionPaletteLayer,
       effectHost,
     ]);
   }
@@ -79,6 +85,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapObjectiveLayerComponent objectiveLayer;
   late final MapSelectionLayerComponent selectionLayer;
   late final MapActionPaletteLayerComponent actionPaletteLayer;
+  late final MapHexSelectionPaletteLayerComponent hexSelectionPaletteLayer;
   late final MapEffectHostComponent effectHost;
   MapRenderSnapshot? _scene;
   MapStaticRenderCache? _staticCache;
@@ -134,6 +141,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     selectionLayer.applySelection(cache, snapshot.interaction, snapshot.player);
     selectionLayer.applyCursor(cache, _cursor);
     actionPaletteLayer.applyPalette(cache, snapshot.actionPalette);
+    hexSelectionPaletteLayer.clearLayer();
     effectHost.applyPatch(patch, cache);
   }
 
@@ -166,6 +174,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     unitLayer.clearLayer();
     selectionLayer.clearLayer();
     actionPaletteLayer.clearLayer();
+    hexSelectionPaletteLayer.clearLayer();
     effectHost.clearEffects();
   }
 
@@ -183,12 +192,14 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     CameraComponent? camera,
     MapHexIntentSink? onHexIntent,
     MapActionPaletteIntentSink? onActionPaletteIntent,
+    MapHexSelectionPaletteIntentSink? onHexSelectionPaletteIntent,
   }) : super(world: world ?? AonwWorld(), camera: camera ?? CameraComponent()) {
     // Route and application visibility are coordinated by the Flutter owner.
     pauseWhenBackgrounded = false;
     pauseEngine();
     _hexIntentSink = onHexIntent;
     _actionPaletteIntentSink = onActionPaletteIntent;
+    _hexSelectionPaletteIntentSink = onHexSelectionPaletteIntent;
     mapCamera = FlameMapCameraController(
       this.camera,
       onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
@@ -204,7 +215,9 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   late final FlameMapInputSurface inputSurface;
   MapHexIntentSink? _hexIntentSink;
   MapActionPaletteIntentSink? _actionPaletteIntentSink;
+  MapHexSelectionPaletteIntentSink? _hexSelectionPaletteIntentSink;
   MapHexCoordinate? _lastHoveredHex;
+  MapHexCoordinate? _longPressedHex;
   var _hasHoveredHex = false;
   var _mountCount = 0;
   var _removeCount = 0;
@@ -274,6 +287,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (!active) {
       _keyboardPanX = 0;
       _keyboardPanY = 0;
+      _longPressedHex = null;
+      world.hexSelectionPaletteLayer.clearLayer();
     }
     _synchronizeGameLoop();
   }

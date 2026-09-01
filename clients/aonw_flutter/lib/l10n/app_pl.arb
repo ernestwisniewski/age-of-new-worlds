@@ -226,6 +226,7 @@
   "mapViewModeGraphic": "Graficzna",
   "mapViewModeTiles": "Kafelki",
   "hexLabel": "Heks {col}, {row}",
+  "selectionTerrain": "Teren",
   "unitLabel": "Jednostka {unitId}",
   "routeSummary": "Trasa: {totalCost} punktów ruchu · pozostało {remaining}",
   "confirmMove": "Potwierdź ruch",

@@ -46,6 +46,8 @@ final class FlameMapInputSurface extends PositionComponent {
   @visibleForTesting
   bool get debugIsDragging => _isDragging;
 
+  bool get isDragging => _isDragging;
+
   bool get isEnabled => _enabled;
 
   void setCameraSensitivity(double sensitivity) {
@@ -90,6 +92,10 @@ final class FlameMapInputSurface extends PositionComponent {
       return;
     }
     _onIntent(MapSelectIntent((x: screenPosition.x, y: screenPosition.y)));
+  }
+
+  void suppressNextSelect() {
+    if (_enabled) _suppressNextSelect = true;
   }
 
   void submitPan(Vector2 screenDelta) {

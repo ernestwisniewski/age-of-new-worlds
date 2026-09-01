@@ -932,6 +932,9 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
+  String get selectionTerrain => 'Terrain';
+
+  @override
   String unitLabel(String unitId) {
     return 'Unit $unitId';
   }

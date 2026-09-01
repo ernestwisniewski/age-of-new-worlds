@@ -112,6 +112,10 @@ final class MapPresentationController extends ChangeNotifier {
 
   void select(MapHexCoordinate? coordinate) => _coordinator.select(coordinate);
 
+  void selectUnit(String unitId) => _coordinator.selectUnit(unitId);
+
+  void selectCity(String cityId) => _coordinator.selectCity(cityId);
+
   void confirmMove() => _coordinator.confirmMove();
 
   void executeUnitAction(UnitActionKindView action) =>

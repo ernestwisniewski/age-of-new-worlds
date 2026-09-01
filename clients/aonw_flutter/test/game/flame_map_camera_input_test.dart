@@ -176,8 +176,18 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(intents, hasLength(1));
-    expect((intents.single as MapHexSelectIntent).coordinate, (col: 3, row: 3));
+    final select = intents.whereType<MapHexSelectIntent>().single;
+    expect(select.coordinate, (col: 3, row: 3));
+
+    intents.clear();
+    await tester.longPressAt(
+      tester.getTopLeft(gameWidget) + Offset(screen.x, screen.y),
+    );
+    await tester.pump();
+    final longPress = intents.whereType<MapHexLongPressIntent>().single;
+    expect(longPress.coordinate, (col: 3, row: 3));
+    expect(longPress.screenPosition.x, closeTo(screen.x, 1e-3));
+    expect(longPress.screenPosition.y, closeTo(screen.y, 1e-3));
 
     final beforeDrag = game.mapCamera.debugTransformUpdateCount;
     await tester.drag(gameWidget, const Offset(36, 24));

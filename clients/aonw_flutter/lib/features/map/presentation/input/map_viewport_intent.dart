@@ -63,5 +63,11 @@ final class MapHexSelectIntent extends MapHexIntent {
   const MapHexSelectIntent(super.coordinate);
 }
 
+final class MapHexLongPressIntent extends MapHexIntent {
+  const MapHexLongPressIntent(super.coordinate, {required this.screenPosition});
+
+  final AonwPoint screenPosition;
+}
+
 typedef MapViewportIntentSink = void Function(MapViewportIntent intent);
 typedef MapHexIntentSink = void Function(MapHexIntent intent);

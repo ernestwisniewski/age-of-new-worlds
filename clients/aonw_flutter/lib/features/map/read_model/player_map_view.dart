@@ -393,6 +393,13 @@ final class PlayerMapView {
   VisibleUnitView? controlledUnitById(String unitId) =>
       _controlledUnitsById[unitId];
 
+  VisibleUnitView? visibleUnitById(String unitId) {
+    for (final unit in units) {
+      if (unit.id == unitId) return unit;
+    }
+    return null;
+  }
+
   CityView? cityAt(MapHexCoordinate coordinate) =>
       _citiesByCoordinate[coordinate];
 

@@ -1406,6 +1406,12 @@ abstract class AonwLocalizations {
   /// **'Hex {col}, {row}'**
   String hexLabel(int col, int row);
 
+  /// No description provided for @selectionTerrain.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrain'**
+  String get selectionTerrain;
+
   /// No description provided for @unitLabel.
   ///
   /// In en, this message translates to:
