@@ -1,5 +1,6 @@
 mod diplomacy;
 mod economy;
+mod lifecycle;
 mod objective;
 
 use aonw_contract_mapping::{
@@ -235,16 +236,9 @@ pub(super) fn encode_event(event: &DomainEvent) -> ReplayEventDto {
                 .map(|player| player.as_str().to_owned())
                 .collect(),
         },
-        DomainEvent::PlayerTimedOut(event) => ReplayEventDto::PlayerTimedOut {
-            turn: event.turn(),
-            player_id: event.player_id().as_str().to_owned(),
-        },
-        DomainEvent::PlayerKicked(event) => ReplayEventDto::PlayerKicked {
-            turn: event.turn(),
-            player_id: event.player_id().as_str().to_owned(),
-            reason: event.reason().to_owned(),
-            timeout_streak: event.timeout_streak(),
-        },
+        DomainEvent::PlayerTimedOut(event) => lifecycle::timed_out(event),
+        DomainEvent::PlayerKicked(event) => lifecycle::kicked(event),
+        DomainEvent::PlayerResigned(event) => lifecycle::resigned(event),
         DomainEvent::WorkerCompletedJob(event) => ReplayEventDto::WorkerCompletedJob {
             unit_id: event.unit_id().as_str().to_owned(),
             target: coordinate(event.target()),

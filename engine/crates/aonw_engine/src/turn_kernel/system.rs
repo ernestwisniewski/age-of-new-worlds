@@ -6,7 +6,7 @@ use crate::{
 };
 
 use super::support::{reject, system_content_hashes};
-use super::{apply_kick, apply_timeout_finalization};
+use super::{apply_kick, apply_resignation, apply_timeout_finalization};
 
 impl GameEngine {
     /// Applies one host-owned lifecycle command through a boundary that has no player identity.
@@ -34,6 +34,9 @@ impl GameEngine {
             }
             SystemCommand::KickParticipant(command) => {
                 apply_kick(state, command, hashes.0, hashes.1)
+            }
+            SystemCommand::ResignParticipant(command) => {
+                apply_resignation(state, command, hashes.0, hashes.1)
             }
         }
     }

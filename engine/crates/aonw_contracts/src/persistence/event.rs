@@ -417,6 +417,13 @@ pub enum ReplayEventDto {
         /// Timeout streak observed by the host.
         timeout_streak: i64,
     },
+    /// Voluntary participant resignation fact.
+    PlayerResigned {
+        /// Current turn.
+        turn: u32,
+        /// Resigning participant.
+        player_id: String,
+    },
     /// One worker job completed successfully.
     WorkerCompletedJob {
         /// Worker identity before charge consumption.

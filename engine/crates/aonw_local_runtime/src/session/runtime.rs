@@ -256,7 +256,7 @@ impl LocalRuntime {
         self.session.as_ref().ok_or(RuntimeError::SessionNotOpen)
     }
 
-    fn session_mut(&mut self) -> Result<&mut Session, RuntimeError> {
+    pub(super) fn session_mut(&mut self) -> Result<&mut Session, RuntimeError> {
         self.ensure_healthy()?;
         self.session.as_mut().ok_or(RuntimeError::SessionNotOpen)
     }
@@ -539,7 +539,7 @@ impl LocalRuntime {
         self.complete_dispatch(result)
     }
 
-    fn complete_dispatch(
+    pub(super) fn complete_dispatch(
         &mut self,
         result: Result<CommandResult, RuntimeError>,
     ) -> Result<CommandResult, RuntimeError> {

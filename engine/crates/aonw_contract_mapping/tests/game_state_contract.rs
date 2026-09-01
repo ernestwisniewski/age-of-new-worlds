@@ -434,6 +434,7 @@ fn turn_lifecycle() -> TurnLifecycleDto {
         ]),
         afk_player_ids: vec!["player-2".to_owned()],
         kicked_player_ids: vec!["player-2".to_owned()],
+        resigned_player_ids: Vec::new(),
         turn_started_at: Some("2026-08-23T12:34:56.123456Z".to_owned()),
     }
 }

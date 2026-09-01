@@ -256,6 +256,10 @@ pub(super) fn encode_event(event: &DomainEvent) -> ReplayEventDto {
             reason: event.reason().to_owned(),
             timeout_streak: event.timeout_streak(),
         },
+        DomainEvent::PlayerResigned(event) => ReplayEventDto::PlayerResigned {
+            turn: event.turn(),
+            player_id: event.player_id().as_str().to_owned(),
+        },
         DomainEvent::WorkerCompletedJob(event) => ReplayEventDto::WorkerCompletedJob {
             unit_id: event.unit_id().as_str().to_owned(),
             target: coordinate(event.target()),

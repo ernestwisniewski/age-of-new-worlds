@@ -130,6 +130,10 @@ fn hash_turn(writer: &mut DigestWriter, turn: &TurnLifecycle) {
     for player in turn.kicked_player_ids() {
         writer.text(player.as_str());
     }
+    writer.usize(turn.resigned_player_ids().len());
+    for player in turn.resigned_player_ids() {
+        writer.text(player.as_str());
+    }
     writer.optional_text(
         turn.turn_started_at()
             .map(aonw_domain::UtcTimestamp::as_str),

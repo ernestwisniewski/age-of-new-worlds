@@ -38,6 +38,9 @@ pub struct TurnLifecycleDto {
     pub timeout_streaks_by_player_id: BTreeMap<String, i64>,
     pub afk_player_ids: Vec<String>,
     pub kicked_player_ids: Vec<String>,
+    /// Voluntary removals. Defaults empty for pre-resignation canonical documents.
+    #[serde(default)]
+    pub resigned_player_ids: Vec<String>,
     pub turn_started_at: Option<String>,
 }
 

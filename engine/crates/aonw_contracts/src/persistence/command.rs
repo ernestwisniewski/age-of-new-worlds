@@ -37,4 +37,11 @@ pub enum ReplaySystemCommandDto {
         /// Timeout streak observed by the host.
         timeout_streak: i64,
     },
+    /// Records a voluntary resignation bound to an authenticated participant.
+    ResignParticipant {
+        /// Expected canonical revision.
+        expected_revision: u64,
+        /// Authenticated resigning participant.
+        player_id: String,
+    },
 }

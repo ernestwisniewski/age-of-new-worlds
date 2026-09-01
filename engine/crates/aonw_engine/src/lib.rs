@@ -37,11 +37,12 @@ pub use application::{
     DomainTransitionParts, DominationThresholdReachedEvent, EventBudget, ExecutionEvidence,
     FinalizeTimedOutTurnCommand, GameQuery, KickParticipantCommand, LogisticsExecution,
     MapObjectiveSecuredEvent, MatchEndedEvent, MerchantRouteAssignedEvent,
-    MerchantTravelQueuedEvent, PlayerCommand, PlayerKickedEvent, PlayerTimedOutEvent,
-    ProcessorRequirement, QueryResult, ResearchPointsGainedEvent, StabilityBand,
-    StabilityBandChangedEvent, SystemCommand, TechnologyResearchedEvent, TroopDetachedEvent,
-    TurnCommand, TurnEndedEvent, TurnKernelCapabilities, TurnKernelExecution, TurnProcessor,
-    WonderProductionRefundedEvent, WorkerCompletedJobEvent, WorkerJobCompletion,
+    MerchantTravelQueuedEvent, PlayerCommand, PlayerKickedEvent, PlayerResignedEvent,
+    PlayerTimedOutEvent, ProcessorRequirement, QueryResult, ResearchPointsGainedEvent,
+    ResignParticipantCommand, StabilityBand, StabilityBandChangedEvent, SystemCommand,
+    TechnologyResearchedEvent, TroopDetachedEvent, TurnCommand, TurnEndedEvent,
+    TurnKernelCapabilities, TurnKernelExecution, TurnProcessor, WonderProductionRefundedEvent,
+    WorkerCompletedJobEvent, WorkerJobCompletion,
 };
 pub use artifact::{
     ArtifactError, StartArtifactExcavationCommand, StoreArtifactInCityCommand, TradeArtifactCommand,

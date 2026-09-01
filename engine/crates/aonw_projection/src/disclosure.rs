@@ -171,7 +171,8 @@ impl RecipientDisclosure {
             | DomainEvent::TurnEnded(_)
             | DomainEvent::AllPlayersSubmitted(_)
             | DomainEvent::PlayerTimedOut(_)
-            | DomainEvent::PlayerKicked(_) => true,
+            | DomainEvent::PlayerKicked(_)
+            | DomainEvent::PlayerResigned(_) => true,
         }
     }
 

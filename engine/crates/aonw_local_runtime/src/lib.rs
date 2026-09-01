@@ -45,4 +45,7 @@ pub use session::{
     MAX_AI_TURN_COMMAND_BUDGET, OpenSession, OpenSessionError, ReplayFrame, RuntimeCapabilities,
     RuntimeError, SessionStamp,
 };
-pub use turn_dispatch::{FinalizeTimedOutTurnRequest, KickParticipantRequest, TurnCommandRequest};
+pub use turn_dispatch::{
+    FinalizeTimedOutTurnRequest, KickParticipantRequest, ResignParticipantRequest,
+    TurnCommandRequest,
+};

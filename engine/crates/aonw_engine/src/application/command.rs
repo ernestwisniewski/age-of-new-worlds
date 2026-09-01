@@ -392,7 +392,7 @@ fn player_action_lifecycle_rejection(
     }
     let turn = lifecycle.turn();
     if !identity.contains(actor_player_id)
-        || turn.kicked_player_ids().contains(actor_player_id)
+        || turn.is_removed(actor_player_id)
         || turn.submitted_player_ids().contains(actor_player_id)
         || turn.turn_states_by_player_id().get(actor_player_id) != Some(&PlayerTurnState::Active)
     {

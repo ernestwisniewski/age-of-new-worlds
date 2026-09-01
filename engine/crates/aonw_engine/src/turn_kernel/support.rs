@@ -32,6 +32,10 @@ pub(super) fn validate_player_command(
             .contains(command.player_id())
         || lifecycle
             .turn()
+            .resigned_player_ids()
+            .contains(command.player_id())
+        || lifecycle
+            .turn()
             .turn_states_by_player_id()
             .get(command.player_id())
             == Some(&PlayerTurnState::Finished)
@@ -56,6 +60,7 @@ pub(super) fn ordered_submission_scope(state: &GameState) -> Vec<PlayerId> {
         .map(aonw_domain::Participant::id)
         .filter(|player| {
             !lifecycle.kicked_player_ids().contains(*player)
+                && !lifecycle.resigned_player_ids().contains(*player)
                 && (required.is_empty() || required.contains(*player))
         })
         .cloned()
@@ -75,6 +80,9 @@ pub(super) fn simultaneous_lifecycle(
         states.insert(player.clone(), PlayerTurnState::Active);
     }
     for player in current.kicked_player_ids() {
+        states.insert(player.clone(), PlayerTurnState::Finished);
+    }
+    for player in current.resigned_player_ids() {
         states.insert(player.clone(), PlayerTurnState::Finished);
     }
     let timeouts = if track_timeout_streaks {
@@ -100,19 +108,22 @@ pub(super) fn simultaneous_lifecycle(
         timeouts,
         current.afk_player_ids().clone(),
         current.kicked_player_ids().clone(),
+        current.resigned_player_ids().clone(),
         next_turn_started_at.or_else(|| current.turn_started_at().cloned()),
     )
 }
 
 pub(super) fn ordered_active_scope(state: &GameState) -> Vec<PlayerId> {
-    let kicked = state.match_lifecycle().turn().kicked_player_ids();
+    let turn = state.match_lifecycle().turn();
+    let kicked = turn.kicked_player_ids();
+    let resigned = turn.resigned_player_ids();
     state
         .match_lifecycle()
         .identity()
         .participants()
         .iter()
         .map(aonw_domain::Participant::id)
-        .filter(|player| !kicked.contains(*player))
+        .filter(|player| !kicked.contains(*player) && !resigned.contains(*player))
         .cloned()
         .collect()
 }
@@ -306,6 +317,11 @@ pub(super) fn valid_system_scope(
                     .turn()
                     .kicked_player_ids()
                     .contains(player)
+                && !state
+                    .match_lifecycle()
+                    .turn()
+                    .resigned_player_ids()
+                    .contains(player)
         })
         && skipped.iter().all(|player| unique_scope.contains(player))
 }
@@ -319,11 +335,12 @@ pub(super) fn rebuild_lifecycle(
     timeouts: BTreeMap<PlayerId, i64>,
     afk: BTreeSet<PlayerId>,
     kicked: BTreeSet<PlayerId>,
+    resigned: BTreeSet<PlayerId>,
     started: Option<UtcTimestamp>,
 ) -> Result<MatchLifecycle, CanonicalEngineError> {
     let identity = state.match_lifecycle().identity().clone();
-    let turn = TurnLifecycle::try_new(
-        &identity, states, required, submitted, timeouts, afk, kicked, started,
+    let turn = TurnLifecycle::try_new_with_resigned(
+        &identity, states, required, submitted, timeouts, afk, kicked, resigned, started,
     )
     .map_err(CanonicalEngineError::TurnLifecycle)?;
     Ok(MatchLifecycle::new(identity, turn))

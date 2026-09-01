@@ -332,6 +332,7 @@ fn complete_turn_lifecycle() -> TurnLifecycleDto {
         timeout_streaks_by_player_id: BTreeMap::from([("player-2".to_owned(), 2)]),
         afk_player_ids: vec!["player-2".to_owned()],
         kicked_player_ids: Vec::new(),
+        resigned_player_ids: Vec::new(),
         turn_started_at: Some("2026-08-23T12:34:56.123456Z".to_owned()),
     }
 }

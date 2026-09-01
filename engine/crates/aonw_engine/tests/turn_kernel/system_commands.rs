@@ -1,11 +1,16 @@
+use std::collections::BTreeMap;
+
 use aonw_content::{MapDefinition, RulesetDefinition};
-use aonw_domain::{GameMode, GameState, PlayerId, StateRevision, UtcTimestamp};
+use aonw_domain::{
+    GameMode, GameOutcomeCondition, GameState, MatchIdentity, MatchLifecycle, MatchRules, PlayerId,
+    PlayerTurnState, StateRevision, TurnLifecycle, UnitOccupancyPolicy, UtcTimestamp,
+};
 use aonw_engine::{
     CommandRejectionCode, DomainEvent, FinalizeTimedOutTurnCommand, GameEngine,
-    KickParticipantCommand, SystemCommand, SystemContext,
+    KickParticipantCommand, ResignParticipantCommand, SystemCommand, SystemContext,
 };
 
-use super::{map, player, state};
+use super::{map, participant, player, state};
 
 #[test]
 fn trusted_timeout_and_kick_have_no_player_context() {
@@ -101,6 +106,121 @@ fn trusted_timeout_and_kick_have_no_player_context() {
     assert!(repeated_kick.is_accepted());
     assert_eq!(repeated_kick.revision(), StateRevision::new(9));
     assert!(repeated_kick.events().is_empty());
+}
+
+#[test]
+fn authenticated_resignation_ends_a_two_player_match_canonically() {
+    let map = map();
+    let rules = RulesetDefinition::standard();
+    let resigning = player("player-1");
+    let winner = player("player-2");
+    let initial = state(GameMode::Multiplayer, [], None);
+    let command = SystemCommand::ResignParticipant(ResignParticipantCommand::new(7, &resigning));
+    assert_eq!(command.event_budget(&initial).maximum(), 2);
+
+    let transition =
+        GameEngine::apply_system_owned(initial, SystemContext::canonical(&map, rules), command)
+            .expect("resignation");
+
+    assert!(transition.is_accepted());
+    assert_eq!(transition.revision(), StateRevision::new(8));
+    assert!(matches!(
+        transition.events(),
+        [DomainEvent::PlayerResigned(_), DomainEvent::MatchEnded(_)]
+    ));
+    let lifecycle = transition.state().match_lifecycle().turn();
+    assert!(lifecycle.resigned_player_ids().contains(&resigning));
+    assert!(!lifecycle.kicked_player_ids().contains(&resigning));
+    assert_eq!(
+        lifecycle.turn_states_by_player_id().get(&resigning),
+        Some(&PlayerTurnState::Finished)
+    );
+    assert_eq!(
+        transition.state().outcome().condition(),
+        GameOutcomeCondition::Resignation
+    );
+    assert_eq!(
+        transition.state().outcome().winner_player_id(),
+        Some(&winner)
+    );
+}
+
+#[test]
+fn resignation_waits_for_one_remaining_participant() {
+    let map = map();
+    let rules = RulesetDefinition::standard();
+    let p1 = player("player-1");
+    let p2 = player("player-2");
+    let p3 = player("player-3");
+    let initial = three_player_state(&[p1.clone(), p2.clone(), p3.clone()]);
+
+    let first = GameEngine::apply_system_owned(
+        initial,
+        SystemContext::canonical(&map, rules),
+        SystemCommand::ResignParticipant(ResignParticipantCommand::new(7, &p1)),
+    )
+    .expect("first resignation");
+    assert!(first.is_accepted());
+    assert_eq!(
+        first.state().outcome().condition(),
+        GameOutcomeCondition::Ongoing
+    );
+    assert!(matches!(first.events(), [DomainEvent::PlayerResigned(_)]));
+
+    let second = GameEngine::apply_system_owned(
+        first.state().clone(),
+        SystemContext::canonical(&map, rules),
+        SystemCommand::ResignParticipant(ResignParticipantCommand::new(8, &p2)),
+    )
+    .expect("second resignation");
+    assert!(second.is_accepted());
+    assert_eq!(
+        second.state().outcome().condition(),
+        GameOutcomeCondition::Resignation
+    );
+    assert_eq!(second.state().outcome().winner_player_id(), Some(&p3));
+    assert!(matches!(
+        second.events(),
+        [DomainEvent::PlayerResigned(_), DomainEvent::MatchEnded(_)]
+    ));
+}
+
+fn three_player_state(players: &[PlayerId; 3]) -> GameState {
+    let identity = MatchIdentity::try_new(
+        MatchRules::default(),
+        [
+            participant(players[0].clone(), "One"),
+            participant(players[1].clone(), "Two"),
+            participant(players[2].clone(), "Three"),
+        ],
+        GameMode::Multiplayer,
+    )
+    .expect("identity");
+    let lifecycle = TurnLifecycle::try_new(
+        &identity,
+        BTreeMap::from([
+            (players[0].clone(), PlayerTurnState::Active),
+            (players[1].clone(), PlayerTurnState::Active),
+            (players[2].clone(), PlayerTurnState::Active),
+        ]),
+        players.clone(),
+        [],
+        BTreeMap::new(),
+        [],
+        [],
+        None,
+    )
+    .expect("turn lifecycle");
+    GameState::builder(
+        StateRevision::new(7),
+        7,
+        map().bounds(),
+        UnitOccupancyPolicy::Exclusive,
+        [],
+    )
+    .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
+    .try_build()
+    .expect("state")
 }
 
 fn assert_system_command_rejections(

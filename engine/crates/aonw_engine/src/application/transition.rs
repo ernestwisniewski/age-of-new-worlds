@@ -22,8 +22,8 @@ pub use domain_transition::{DomainRejection, DomainTransition, DomainTransitionP
 pub use economy_events::{CityClaimedHexEvent, StabilityBand, StabilityBandChangedEvent};
 pub use events::{
     AllPlayersSubmittedEvent, CityFoundedEvent, CombatEvent, DiplomaticScoreChangedEvent,
-    PlayerKickedEvent, PlayerTimedOutEvent, TurnEndedEvent, WorkerCompletedJobEvent,
-    WorkerJobCompletion,
+    PlayerKickedEvent, PlayerResignedEvent, PlayerTimedOutEvent, TurnEndedEvent,
+    WorkerCompletedJobEvent, WorkerJobCompletion,
 };
 pub use objective_events::{DominationThresholdReachedEvent, MapObjectiveSecuredEvent};
 pub use outcome::{DomainEvent, ExecutionEvidence};

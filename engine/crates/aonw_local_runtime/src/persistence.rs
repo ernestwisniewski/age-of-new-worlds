@@ -15,9 +15,9 @@ use crate::{
     ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest, CommandResult,
     DetachTroopRequest, DiplomacyRequest, FinalizeTimedOutTurnRequest, FoundCityRequest,
     KickParticipantRequest, LocalRuntime, MerchantCityRequest, MoveUnitRequest, OpenSession,
-    ProductionCommandRequest, SelectCityExpansionHexRequest, SelectTechnologyRequest, SessionStamp,
-    ToggleWorkedHexRequest, TurnCommandRequest, UnitActionRequest, WorkerImprovementRequest,
-    WorkerUnitRequest,
+    ProductionCommandRequest, ResignParticipantRequest, SelectCityExpansionHexRequest,
+    SelectTechnologyRequest, SessionStamp, ToggleWorkedHexRequest, TurnCommandRequest,
+    UnitActionRequest, WorkerImprovementRequest, WorkerUnitRequest,
 };
 
 mod evidence;
@@ -323,6 +323,7 @@ enum ReplayRuntimeCommand {
     SubmitTurn(TurnCommandRequest),
     FinalizeTimedOutTurn(FinalizeTimedOutTurnRequest),
     KickParticipant(KickParticipantRequest),
+    ResignParticipant(ResignParticipantRequest),
 }
 
 fn decode_record(record: &ReplayRecordDto) -> Result<ReplayRuntimeCommand, PersistenceError> {
@@ -405,6 +406,16 @@ fn decode_system_command(
                     .map_err(PersistenceError::InvalidActor)?,
                 reason: reason.clone().into_boxed_str(),
                 timeout_streak: *timeout_streak,
+            },
+        )),
+        ReplaySystemCommandDto::ResignParticipant {
+            expected_revision,
+            player_id,
+        } => Ok(ReplayRuntimeCommand::ResignParticipant(
+            ResignParticipantRequest {
+                expected_revision: *expected_revision,
+                player_id: PlayerId::new(player_id.clone())
+                    .map_err(PersistenceError::InvalidActor)?,
             },
         )),
     }

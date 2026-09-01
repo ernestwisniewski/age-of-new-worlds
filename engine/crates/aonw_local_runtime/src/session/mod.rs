@@ -2,6 +2,7 @@ mod capabilities;
 mod error;
 mod handoff;
 mod open;
+mod resignation;
 mod runtime;
 mod state;
 

@@ -252,14 +252,16 @@ pub fn calculate_victory_progress(
 }
 
 fn active_players(state: &GameState) -> Vec<&PlayerId> {
-    let kicked = state.match_lifecycle().turn().kicked_player_ids();
+    let turn = state.match_lifecycle().turn();
+    let kicked = turn.kicked_player_ids();
+    let resigned = turn.resigned_player_ids();
     state
         .match_lifecycle()
         .identity()
         .participants()
         .iter()
         .map(aonw_domain::Participant::id)
-        .filter(|player| !kicked.contains(*player))
+        .filter(|player| !kicked.contains(*player) && !resigned.contains(*player))
         .collect()
 }
 

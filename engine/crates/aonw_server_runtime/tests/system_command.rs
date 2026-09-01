@@ -91,6 +91,41 @@ fn strict_timeout_dto_advances_the_same_canonical_turn() {
 }
 
 #[test]
+fn strict_resignation_dto_returns_terminal_recipient_safe_results() {
+    let fixture = fixture([]);
+    let request = SystemCommandServerRequestDto {
+        api_version: SERVER_HOST_API_VERSION,
+        command: ReplaySystemCommandDto::ResignParticipant {
+            expected_revision: 7,
+            player_id: "player-1".to_owned(),
+        },
+        initial_event_offset: 51,
+        map_hash: fixture.world.map_hash().to_string(),
+        ruleset_hash: fixture.world.ruleset_hash().to_string(),
+        state: encode_game_state(&fixture.state),
+    };
+    let result = apply_system_command_dto(fixture.world, request).expect("resignation");
+
+    assert_eq!(result.rejection, None);
+    assert_eq!(result.stamp.revision, 8);
+    assert_eq!(result.final_event_offset, 53);
+    assert_eq!(result.events.len(), 2);
+    assert_eq!(
+        result.state.outcome.condition,
+        aonw_contracts::GameOutcomeConditionDto::Resignation
+    );
+    assert_eq!(
+        result.state.outcome.winner_player_id.as_deref(),
+        Some("player-2")
+    );
+    assert_eq!(result.recipients.len(), 2);
+    assert!(result.recipients.iter().all(|recipient| {
+        recipient.snapshot.outcome.condition == aonw_contracts::GameOutcomeConditionDto::Resignation
+            && recipient.events.len() == 2
+    }));
+}
+
+#[test]
 fn strict_system_dto_rejects_invalid_host_values_before_execution() {
     let fixture = fixture([]);
     let request = SystemCommandServerRequestDto {

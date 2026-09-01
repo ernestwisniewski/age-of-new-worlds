@@ -190,6 +190,7 @@ fn dispatch_replay(
             runtime.finalize_timed_out_turn(&value)
         }
         ReplayRuntimeCommand::KickParticipant(value) => runtime.kick_participant(&value),
+        ReplayRuntimeCommand::ResignParticipant(value) => runtime.resign_participant(&value),
     }
     .map_err(PersistenceError::Runtime)
 }

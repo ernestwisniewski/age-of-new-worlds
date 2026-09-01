@@ -6,6 +6,7 @@ mod final_phases;
 mod objective_phase;
 mod preparation;
 mod processor_order;
+mod resignation;
 mod support;
 mod system;
 mod worker_phase;
@@ -35,6 +36,7 @@ use preparation::{
     advance_turn_preparation,
 };
 use processor_order::{SEQUENTIAL_TURN_PROCESSORS, SIMULTANEOUS_TURN_PROCESSORS};
+use resignation::apply_resignation;
 
 pub(crate) use support::processor_is_required;
 
@@ -71,6 +73,7 @@ pub(crate) fn apply_submit_turn(
             turn.timeout_streaks_by_player_id().clone(),
             turn.afk_player_ids().clone(),
             turn.kicked_player_ids().clone(),
+            turn.resigned_player_ids().clone(),
             turn.turn_started_at().cloned(),
         )?;
         return apply_update(
@@ -177,6 +180,7 @@ fn finish_sequential_turn(
         lifecycle.timeout_streaks_by_player_id().clone(),
         lifecycle.afk_player_ids().clone(),
         lifecycle.kicked_player_ids().clone(),
+        lifecycle.resigned_player_ids().clone(),
         lifecycle.turn_started_at().cloned(),
     )?;
     let TurnMovementUpdate {
@@ -339,6 +343,7 @@ fn apply_kick(
         turn.timeout_streaks_by_player_id().clone(),
         afk,
         kicked,
+        turn.resigned_player_ids().clone(),
         turn.turn_started_at().cloned(),
     )?;
     let event = DomainEvent::PlayerKicked(PlayerKickedEvent::new(

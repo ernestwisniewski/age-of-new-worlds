@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use aonw_contracts::{
     AiDifficultyDto, AiPersonaDto, AiPlayerDto, AiStrategyIdDto, GameLengthConfigDto,
@@ -290,12 +290,14 @@ fn decode_turn(
         .collect::<Result<BTreeMap<_, _>, GameStateMappingError>>()?;
     let afk = decode_player_list(dto.afk_player_ids, "$.turnLifecycle.afkPlayerIds")?;
     let kicked = decode_player_list(dto.kicked_player_ids, "$.turnLifecycle.kickedPlayerIds")?;
+    let resigned =
+        decode_player_list(dto.resigned_player_ids, "$.turnLifecycle.resignedPlayerIds")?;
     let started = dto
         .turn_started_at
         .map(UtcTimestamp::new)
         .transpose()
         .map_err(|error| GameStateMappingError::new("$.turnLifecycle.turnStartedAt", error))?;
-    TurnLifecycle::try_new(
+    TurnLifecycle::try_new_with_resigned(
         identity,
         turn_states,
         required,
@@ -303,6 +305,7 @@ fn decode_turn(
         timeout_streaks,
         afk,
         kicked,
+        resigned,
         started,
     )
     .map_err(|error| GameStateMappingError::new("$.turnLifecycle", error.to_string()))
@@ -315,33 +318,25 @@ fn encode_turn(value: &TurnLifecycle) -> TurnLifecycleDto {
             .iter()
             .map(|(player, state)| (player.as_str().to_owned(), encode_turn_state(*state)))
             .collect(),
-        required_submission_player_ids: value
-            .required_submission_player_ids()
-            .iter()
-            .map(|player| player.as_str().to_owned())
-            .collect(),
-        submitted_player_ids: value
-            .submitted_player_ids()
-            .iter()
-            .map(|player| player.as_str().to_owned())
-            .collect(),
+        required_submission_player_ids: encode_player_set(value.required_submission_player_ids()),
+        submitted_player_ids: encode_player_set(value.submitted_player_ids()),
         timeout_streaks_by_player_id: value
             .timeout_streaks_by_player_id()
             .iter()
             .map(|(player, streak)| (player.as_str().to_owned(), *streak))
             .collect(),
-        afk_player_ids: value
-            .afk_player_ids()
-            .iter()
-            .map(|player| player.as_str().to_owned())
-            .collect(),
-        kicked_player_ids: value
-            .kicked_player_ids()
-            .iter()
-            .map(|player| player.as_str().to_owned())
-            .collect(),
+        afk_player_ids: encode_player_set(value.afk_player_ids()),
+        kicked_player_ids: encode_player_set(value.kicked_player_ids()),
+        resigned_player_ids: encode_player_set(value.resigned_player_ids()),
         turn_started_at: value.turn_started_at().map(|time| time.as_str().to_owned()),
     }
+}
+
+fn encode_player_set(values: &BTreeSet<PlayerId>) -> Vec<String> {
+    values
+        .iter()
+        .map(|player| player.as_str().to_owned())
+        .collect()
 }
 
 fn decode_player_list(

@@ -253,6 +253,10 @@ pub fn encode_client_event(value: &DomainEvent) -> ClientEventDto {
             reason: value.reason().to_owned(),
             timeout_streak: value.timeout_streak(),
         },
+        DomainEvent::PlayerResigned(value) => ClientEventDto::PlayerResigned {
+            turn: value.turn(),
+            player_id: value.player_id().as_str().to_owned(),
+        },
         DomainEvent::WorkerCompletedJob(value) => ClientEventDto::WorkerCompletedJob {
             unit_id: value.unit_id().as_str().to_owned(),
             target: coordinate(value.target()),

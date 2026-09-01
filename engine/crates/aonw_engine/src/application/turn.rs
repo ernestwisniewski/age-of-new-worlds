@@ -86,6 +86,32 @@ pub struct KickParticipantCommand<'command> {
     timeout_streak: i64,
 }
 
+/// Trusted transition requested by one authenticated resigning participant.
+#[derive(Clone, Copy, Debug)]
+pub struct ResignParticipantCommand<'command> {
+    expected_revision: u64,
+    player_id: &'command PlayerId,
+}
+
+impl<'command> ResignParticipantCommand<'command> {
+    /// Constructs a resignation bound by the host to the authenticated participant.
+    #[must_use]
+    pub const fn new(expected_revision: u64, player_id: &'command PlayerId) -> Self {
+        Self {
+            expected_revision,
+            player_id,
+        }
+    }
+
+    pub(crate) const fn expected_revision(self) -> u64 {
+        self.expected_revision
+    }
+
+    pub(crate) const fn player_id(self) -> &'command PlayerId {
+        self.player_id
+    }
+}
+
 impl<'command> KickParticipantCommand<'command> {
     /// Constructs a trusted kick transition.
     #[must_use]
@@ -127,6 +153,8 @@ pub enum SystemCommand<'command> {
     FinalizeTimedOutTurn(FinalizeTimedOutTurnCommand<'command>),
     /// Marks one participant unavailable and removes it from submission scope.
     KickParticipant(KickParticipantCommand<'command>),
+    /// Records one authenticated participant's voluntary resignation.
+    ResignParticipant(ResignParticipantCommand<'command>),
 }
 
 impl SystemCommand<'_> {
@@ -172,6 +200,7 @@ impl SystemCommand<'_> {
                 )
             }
             Self::KickParticipant(_) => EventBudget::new(1),
+            Self::ResignParticipant(_) => EventBudget::new(2),
         }
     }
 }

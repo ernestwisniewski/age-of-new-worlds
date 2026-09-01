@@ -2,7 +2,9 @@ use aonw_contract_mapping::decode_game_state;
 use aonw_contracts::ReplaySystemCommandDto;
 use aonw_contracts::server::{ServerCommandResultDto, SystemCommandServerRequestDto};
 use aonw_domain::{PlayerId, UtcTimestamp};
-use aonw_engine::{FinalizeTimedOutTurnCommand, KickParticipantCommand, SystemCommand};
+use aonw_engine::{
+    FinalizeTimedOutTurnCommand, KickParticipantCommand, ResignParticipantCommand, SystemCommand,
+};
 
 use crate::{
     PreparedServerWorld, ServerBoundaryError, SystemCommandRequest, apply_system_command,
@@ -65,6 +67,21 @@ pub fn apply_system_command_dto(
                     &player_id,
                     &reason,
                     timeout_streak,
+                )),
+                initial_event_offset,
+            })
+        }
+        ReplaySystemCommandDto::ResignParticipant {
+            expected_revision,
+            player_id,
+        } => {
+            let player_id = decode_player_id(player_id)?;
+            apply_system_command(SystemCommandRequest {
+                state,
+                world,
+                command: SystemCommand::ResignParticipant(ResignParticipantCommand::new(
+                    expected_revision,
+                    &player_id,
                 )),
                 initial_event_offset,
             })

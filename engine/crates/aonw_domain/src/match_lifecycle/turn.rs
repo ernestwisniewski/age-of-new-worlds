@@ -58,6 +58,12 @@ pub enum TurnLifecycleBuildError {
     KickedPlayerNotFinished(PlayerId),
     /// A kicked participant remains in the required submission scope.
     KickedPlayerStillRequired(PlayerId),
+    /// A resigned participant is not marked finished.
+    ResignedPlayerNotFinished(PlayerId),
+    /// A resigned participant remains in the required submission scope.
+    ResignedPlayerStillRequired(PlayerId),
+    /// A participant cannot be both kicked and resigned.
+    ParticipantRemovedTwice(PlayerId),
 }
 
 impl core::fmt::Display for TurnLifecycleBuildError {
@@ -90,6 +96,21 @@ impl core::fmt::Display for TurnLifecycleBuildError {
             Self::KickedPlayerStillRequired(player) => {
                 write!(formatter, "kicked participant is still required: {player}")
             }
+            Self::ResignedPlayerNotFinished(player) => {
+                write!(formatter, "resigned participant is not finished: {player}")
+            }
+            Self::ResignedPlayerStillRequired(player) => {
+                write!(
+                    formatter,
+                    "resigned participant is still required: {player}"
+                )
+            }
+            Self::ParticipantRemovedTwice(player) => {
+                write!(
+                    formatter,
+                    "participant is both kicked and resigned: {player}"
+                )
+            }
         }
     }
 }
@@ -105,6 +126,7 @@ pub struct TurnLifecycle {
     timeout_streaks_by_player_id: BTreeMap<PlayerId, i64>,
     afk_player_ids: BTreeSet<PlayerId>,
     kicked_player_ids: BTreeSet<PlayerId>,
+    resigned_player_ids: BTreeSet<PlayerId>,
     turn_started_at: Option<UtcTimestamp>,
 }
 
@@ -125,10 +147,41 @@ impl TurnLifecycle {
         kicked_player_ids: impl IntoIterator<Item = PlayerId>,
         turn_started_at: Option<UtcTimestamp>,
     ) -> Result<Self, TurnLifecycleBuildError> {
+        Self::try_new_with_resigned(
+            identity,
+            turn_states_by_player_id,
+            required_submission_player_ids,
+            submitted_player_ids,
+            timeout_streaks_by_player_id,
+            afk_player_ids,
+            kicked_player_ids,
+            std::iter::empty(),
+            turn_started_at,
+        )
+    }
+
+    /// Validates participant references and owns lifecycle removal reasons.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for invalid references, states, or overlapping removal reasons.
+    #[allow(clippy::too_many_arguments)]
+    pub fn try_new_with_resigned(
+        identity: &MatchIdentity,
+        turn_states_by_player_id: BTreeMap<PlayerId, PlayerTurnState>,
+        required_submission_player_ids: impl IntoIterator<Item = PlayerId>,
+        submitted_player_ids: impl IntoIterator<Item = PlayerId>,
+        timeout_streaks_by_player_id: BTreeMap<PlayerId, i64>,
+        afk_player_ids: impl IntoIterator<Item = PlayerId>,
+        kicked_player_ids: impl IntoIterator<Item = PlayerId>,
+        resigned_player_ids: impl IntoIterator<Item = PlayerId>,
+        turn_started_at: Option<UtcTimestamp>,
+    ) -> Result<Self, TurnLifecycleBuildError> {
         let required_submission_player_ids = collect_set(required_submission_player_ids)?;
         let submitted_player_ids = collect_set(submitted_player_ids)?;
         let afk_player_ids = collect_set(afk_player_ids)?;
         let kicked_player_ids = collect_set(kicked_player_ids)?;
+        let resigned_player_ids = collect_set(resigned_player_ids)?;
         for player in turn_states_by_player_id
             .keys()
             .chain(required_submission_player_ids.iter())
@@ -136,6 +189,7 @@ impl TurnLifecycle {
             .chain(timeout_streaks_by_player_id.keys())
             .chain(afk_player_ids.iter())
             .chain(kicked_player_ids.iter())
+            .chain(resigned_player_ids.iter())
         {
             if !identity.contains(player) {
                 return Err(TurnLifecycleBuildError::UnknownPlayer(player.clone()));
@@ -180,6 +234,23 @@ impl TurnLifecycle {
                 ));
             }
         }
+        for player in &resigned_player_ids {
+            if kicked_player_ids.contains(player) {
+                return Err(TurnLifecycleBuildError::ParticipantRemovedTwice(
+                    player.clone(),
+                ));
+            }
+            if turn_states_by_player_id.get(player) != Some(&PlayerTurnState::Finished) {
+                return Err(TurnLifecycleBuildError::ResignedPlayerNotFinished(
+                    player.clone(),
+                ));
+            }
+            if required_submission_player_ids.contains(player) {
+                return Err(TurnLifecycleBuildError::ResignedPlayerStillRequired(
+                    player.clone(),
+                ));
+            }
+        }
         Ok(Self {
             turn_states_by_player_id,
             required_submission_player_ids,
@@ -187,6 +258,7 @@ impl TurnLifecycle {
             timeout_streaks_by_player_id,
             afk_player_ids,
             kicked_player_ids,
+            resigned_player_ids,
             turn_started_at,
         })
     }
@@ -220,6 +292,16 @@ impl TurnLifecycle {
     #[must_use]
     pub const fn kicked_player_ids(&self) -> &BTreeSet<PlayerId> {
         &self.kicked_player_ids
+    }
+    /// Returns voluntarily resigned identities sorted by identifier.
+    #[must_use]
+    pub const fn resigned_player_ids(&self) -> &BTreeSet<PlayerId> {
+        &self.resigned_player_ids
+    }
+    /// Returns whether a participant no longer belongs to active play.
+    #[must_use]
+    pub fn is_removed(&self, player_id: &PlayerId) -> bool {
+        self.kicked_player_ids.contains(player_id) || self.resigned_player_ids.contains(player_id)
     }
     /// Returns the explicit host-provided turn start.
     #[must_use]

@@ -78,12 +78,14 @@ fn resolve_game_outcome_from(
     turn: u32,
 ) -> Result<GameOutcome, OutcomeResolutionError> {
     let identity = state.match_lifecycle().identity();
-    let kicked = state.match_lifecycle().turn().kicked_player_ids();
+    let turn_lifecycle = state.match_lifecycle().turn();
+    let kicked = turn_lifecycle.kicked_player_ids();
+    let resigned = turn_lifecycle.resigned_player_ids();
     let players = identity
         .participants()
         .iter()
         .map(aonw_domain::Participant::id)
-        .filter(|player| !kicked.contains(*player))
+        .filter(|player| !kicked.contains(*player) && !resigned.contains(*player))
         .collect::<Vec<_>>();
     if players.len() <= 1 {
         return Ok(GameOutcome::ongoing());
@@ -247,6 +249,13 @@ fn winner_outcome(
 ) -> Result<GameOutcome, OutcomeResolutionError> {
     GameOutcome::try_new(identity, condition, Some(winner), BTreeMap::new())
         .map_err(|error| OutcomeResolutionError::new(error.to_string()))
+}
+
+pub(crate) fn resignation_outcome(
+    identity: &aonw_domain::MatchIdentity,
+    winner: PlayerId,
+) -> Result<GameOutcome, OutcomeResolutionError> {
+    winner_outcome(identity, GameOutcomeCondition::Resignation, winner)
 }
 
 const fn artifact_type_bit(value: WorldArtifactType) -> u8 {

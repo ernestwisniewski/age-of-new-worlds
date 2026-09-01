@@ -418,6 +418,13 @@ pub enum ClientEventDto {
         /// Timeout streak observed by the host.
         timeout_streak: i64,
     },
+    /// Voluntary participant resignation notification.
+    PlayerResigned {
+        /// Turn during which the participant resigned.
+        turn: u32,
+        /// Resigning participant.
+        player_id: String,
+    },
     /// One worker job completed successfully.
     WorkerCompletedJob {
         /// Worker identity before charge consumption.

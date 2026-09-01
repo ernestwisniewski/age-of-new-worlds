@@ -15,14 +15,16 @@ pub fn calculate_empire_scores(
     map: &MapDefinition,
     ruleset: &RulesetDefinition,
 ) -> Result<BTreeMap<PlayerId, i64>, OutcomeResolutionError> {
-    let kicked = state.match_lifecycle().turn().kicked_player_ids();
+    let turn = state.match_lifecycle().turn();
+    let kicked = turn.kicked_player_ids();
+    let resigned = turn.resigned_player_ids();
     let players = state
         .match_lifecycle()
         .identity()
         .participants()
         .iter()
         .map(aonw_domain::Participant::id)
-        .filter(|player| !kicked.contains(*player))
+        .filter(|player| !kicked.contains(*player) && !resigned.contains(*player))
         .collect::<Vec<_>>();
     calculate_empire_scores_from(
         state,

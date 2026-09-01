@@ -1,8 +1,8 @@
 use aonw_contracts::{ReplayCommandDto, ReplayRecordDto, ReplaySystemCommandDto};
 use aonw_domain::{PlayerId, UtcTimestamp};
 use aonw_engine::{
-    FinalizeTimedOutTurnCommand, GameEngine, KickParticipantCommand, PlayerCommand, SystemCommand,
-    TurnCommand,
+    FinalizeTimedOutTurnCommand, GameEngine, KickParticipantCommand, PlayerCommand,
+    ResignParticipantCommand, SystemCommand, TurnCommand,
 };
 
 use crate::RuntimeError;
@@ -43,6 +43,15 @@ pub struct KickParticipantRequest {
     pub reason: Box<str>,
     /// Timeout streak observed by the host.
     pub timeout_streak: i64,
+}
+
+/// Authenticated voluntary resignation replayed through the trusted lifecycle boundary.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ResignParticipantRequest {
+    /// Expected canonical revision.
+    pub expected_revision: u64,
+    /// Participant bound by the host to the authenticated caller.
+    pub player_id: PlayerId,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -122,6 +131,21 @@ pub(crate) fn dispatch_kick(
             player_id: request.player_id.as_str().to_owned(),
             reason: request.reason.to_string(),
             timeout_streak: request.timeout_streak,
+        },
+    )
+}
+
+pub(crate) fn dispatch_resignation(
+    session: &mut Session,
+    request: &ResignParticipantRequest,
+) -> Result<CommandResult, RuntimeError> {
+    let command = ResignParticipantCommand::new(request.expected_revision, &request.player_id);
+    dispatch_system(
+        session,
+        SystemCommand::ResignParticipant(command),
+        ReplaySystemCommandDto::ResignParticipant {
+            expected_revision: request.expected_revision,
+            player_id: request.player_id.as_str().to_owned(),
         },
     )
 }

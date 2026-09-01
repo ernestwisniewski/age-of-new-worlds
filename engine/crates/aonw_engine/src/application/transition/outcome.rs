@@ -3,9 +3,9 @@ use crate::{
     ArtifactStoredEvent, AutoExplorePlannedEvent, CityBuiltBuildingEvent, CityBuiltWonderEvent,
     CityClaimedHexEvent, CityFoundedEvent, CityProducedUnitEvent, CombatEvent, CombatExecution,
     DiplomaticScoreChangedEvent, LogisticsExecution, MerchantRouteAssignedEvent,
-    MerchantTravelQueuedEvent, PlayerKickedEvent, PlayerTimedOutEvent, ResearchPointsGainedEvent,
-    TechnologyResearchedEvent, TroopDetachedEvent, TurnEndedEvent, TurnKernelExecution,
-    UnitMovedEvent, UnitMovementExecution, WonderProductionRefundedEvent,
+    MerchantTravelQueuedEvent, PlayerKickedEvent, PlayerResignedEvent, PlayerTimedOutEvent,
+    ResearchPointsGainedEvent, TechnologyResearchedEvent, TroopDetachedEvent, TurnEndedEvent,
+    TurnKernelExecution, UnitMovedEvent, UnitMovementExecution, WonderProductionRefundedEvent,
     WorkerAutomationExecution, WorkerCompletedJobEvent,
 };
 use crate::{
@@ -66,6 +66,8 @@ pub enum DomainEvent {
     PlayerTimedOut(PlayerTimedOutEvent),
     /// The trusted host removed one participant from active lifecycle.
     PlayerKicked(PlayerKickedEvent),
+    /// One authenticated participant voluntarily left active play.
+    PlayerResigned(PlayerResignedEvent),
     /// A visible attacker engaged a visible target.
     UnitAttacked(CombatEvent),
     /// A visible attacker engaged a visible city.

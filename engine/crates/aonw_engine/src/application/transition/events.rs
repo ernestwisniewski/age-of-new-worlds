@@ -258,6 +258,31 @@ pub struct PlayerKickedEvent {
     timeout_streak: i64,
 }
 
+/// Accepted voluntary participant resignation fact.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PlayerResignedEvent {
+    turn: u32,
+    player_id: PlayerId,
+}
+
+impl PlayerResignedEvent {
+    pub(crate) const fn new(turn: u32, player_id: PlayerId) -> Self {
+        Self { turn, player_id }
+    }
+
+    /// Returns the turn during which the participant resigned.
+    #[must_use]
+    pub const fn turn(&self) -> u32 {
+        self.turn
+    }
+
+    /// Returns the participant who resigned.
+    #[must_use]
+    pub const fn player_id(&self) -> &PlayerId {
+        &self.player_id
+    }
+}
+
 impl PlayerKickedEvent {
     pub(crate) fn new(
         turn: u32,
