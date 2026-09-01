@@ -4,71 +4,30 @@
 
 use std::sync::Arc;
 
-use aonw_content::{MapDefinition, MapDocument, RulesetDefinition, ScenarioDefinition};
+use aonw_content::{MapDocument, RulesetDefinition, ScenarioDefinition};
 use aonw_contract_mapping::{
-    decode_game_state, decode_match_identity, encode_client_event, encode_client_evidence,
-    encode_client_stamp, encode_command_rejection, encode_game_state, encode_player_view_patch,
-    encode_player_view_snapshot, encode_recipient_evidence,
+    decode_client_player_command, decode_game_state, decode_match_identity, encode_client_event,
+    encode_client_evidence, encode_client_stamp, encode_command_rejection, encode_game_state,
+    encode_player_view_patch, encode_player_view_snapshot, encode_recipient_evidence,
 };
 use aonw_contracts::server::{
-    CreateServerMatchRequestDto, PrepareServerWorldRequestDto, ProjectServerStateRequestDto,
-    SERVER_HOST_API_VERSION, ServerCommandResultDto, ServerCreatedMatchDto, ServerHostErrorCodeDto,
-    ServerProjectionResultDto, ServerRecipientOutcomeDto, ServerRecipientSnapshotDto,
-    SubmitTurnServerRequestDto,
+    CreateServerMatchRequestDto, PlayerCommandServerRequestDto, PrepareServerWorldRequestDto,
+    ProjectServerStateRequestDto, SERVER_HOST_API_VERSION, ServerCommandResultDto,
+    ServerCreatedMatchDto, ServerHostErrorCodeDto, ServerProjectionResultDto,
+    ServerRecipientOutcomeDto, ServerRecipientSnapshotDto, SubmitTurnServerRequestDto,
 };
 use aonw_domain::{GameMode, GameState, PlayerId, TurnMode};
-use aonw_engine::{
-    CanonicalEngineError, CanonicalQueryError, CommandRejectionCode, CompiledMovementMap,
-    CompiledMovementMapError, DomainEvent, ExecutionEvidence, GameEngine, start_match,
-};
-use aonw_projection::{
-    PlayerViewPatch, PlayerViewSnapshot, ProjectedView, RecipientDisclosure, SessionStamp,
-};
+use aonw_engine::{GameEngine, start_match};
+use aonw_projection::{ProjectedView, SessionStamp};
 
 mod host;
+mod model;
 
 pub use host::{PlayerCommandRequest, apply_player_command, apply_submit_turn};
-
-/// Immutable map and rules compiled once and shared across server commands.
-///
-/// This value contains no match state. A Serverpod host may safely cache it by
-/// map/ruleset identity and clone the handle for concurrent transactions.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct PreparedServerWorld {
-    compiled: Arc<CompiledMovementMap>,
-}
-
-impl PreparedServerWorld {
-    /// Validates immutable content and prepares all reusable movement data.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error when immutable content identity cannot be computed.
-    pub fn try_new(
-        map: MapDefinition,
-        ruleset: RulesetDefinition,
-    ) -> Result<Self, CompiledMovementMapError> {
-        CompiledMovementMap::compile_owned(map, ruleset).map(|compiled| Self {
-            compiled: Arc::new(compiled),
-        })
-    }
-
-    /// Returns the exact immutable map identity.
-    #[must_use]
-    pub fn map_hash(&self) -> aonw_content::ContentHash {
-        self.compiled.map_hash()
-    }
-
-    /// Returns the exact immutable ruleset identity.
-    #[must_use]
-    pub fn ruleset_hash(&self) -> aonw_content::ContentHash {
-        self.compiled.ruleset_hash()
-    }
-
-    fn compiled(&self) -> &CompiledMovementMap {
-        &self.compiled
-    }
-}
+pub(crate) use model::validate_state;
+pub use model::{
+    PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError, SubmitTurnRequest,
+};
 
 /// Failure while validating or mapping the strict current server DTO boundary.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -96,6 +55,8 @@ pub enum ServerBoundaryError {
     InvalidCanonicalState(String),
     /// The authenticated actor identifier was invalid.
     InvalidAuthenticatedActor(String),
+    /// One opaque identity inside the player command was invalid.
+    InvalidPlayerCommand(String),
     /// Stateless authoritative execution failed before persistence.
     Host(ServerHostError),
 }
@@ -115,6 +76,7 @@ impl ServerBoundaryError {
             Self::ContentIdentityMismatch => ServerHostErrorCodeDto::ContentIdentityMismatch,
             Self::InvalidCanonicalState(_) => ServerHostErrorCodeDto::InvalidCanonicalState,
             Self::InvalidAuthenticatedActor(_) => ServerHostErrorCodeDto::InvalidAuthenticatedActor,
+            Self::InvalidPlayerCommand(_) => ServerHostErrorCodeDto::InvalidRequest,
             Self::Host(error) => match error {
                 ServerHostError::EmptyParticipants => ServerHostErrorCodeDto::EmptyParticipants,
                 ServerHostError::UnknownAuthenticatedActor(_) => {
@@ -168,6 +130,9 @@ impl core::fmt::Display for ServerBoundaryError {
             Self::InvalidAuthenticatedActor(message) => {
                 write!(formatter, "invalid authenticated actor: {message}")
             }
+            Self::InvalidPlayerCommand(message) => {
+                write!(formatter, "invalid player command: {message}")
+            }
             Self::Host(source) => source.fmt(formatter),
         }
     }
@@ -218,6 +183,37 @@ pub fn apply_submit_turn_dto(
         expected_revision: request.expected_revision,
         initial_event_offset: request.initial_event_offset,
     })
+    .map_err(ServerBoundaryError::Host)?;
+    Ok(encode_server_command_result(&outcome))
+}
+
+/// Applies one strict current player-command DTO and maps the transactional result.
+///
+/// # Errors
+///
+/// Returns an error before persistence for invalid identity, command values,
+/// canonical state, authenticated ownership, offset capacity, or engine failure.
+pub fn apply_player_command_dto(
+    world: PreparedServerWorld,
+    request: PlayerCommandServerRequestDto,
+) -> Result<ServerCommandResultDto, ServerBoundaryError> {
+    require_api_version(request.api_version)?;
+    validate_content_identity(&world, &request.map_hash, &request.ruleset_hash)?;
+    let actor = PlayerId::new(request.authenticated_actor_player_id)
+        .map_err(|error| ServerBoundaryError::InvalidAuthenticatedActor(error.to_string()))?;
+    let state = decode_game_state(request.state)
+        .map_err(|error| ServerBoundaryError::InvalidCanonicalState(error.to_string()))?;
+    let request_actor = actor.clone();
+    let outcome = decode_client_player_command(request.command, &actor, move |command| {
+        apply_player_command(PlayerCommandRequest {
+            state,
+            world,
+            authenticated_actor: request_actor,
+            command,
+            initial_event_offset: request.initial_event_offset,
+        })
+    })
+    .map_err(|error| ServerBoundaryError::InvalidPlayerCommand(error.to_string()))?
     .map_err(ServerBoundaryError::Host)?;
     Ok(encode_server_command_result(&outcome))
 }
@@ -363,126 +359,4 @@ fn encode_server_command_result(outcome: &ServerCommandOutcome) -> ServerCommand
             })
             .collect(),
     }
-}
-
-/// Complete trusted input for one authenticated simultaneous-turn submission.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SubmitTurnRequest {
-    /// Canonical state locked by the server transaction.
-    pub state: GameState,
-    /// Immutable map and rules prepared outside the match transaction.
-    pub world: PreparedServerWorld,
-    /// Player identity derived from the authenticated server session.
-    pub authenticated_actor: PlayerId,
-    /// Revision supplied by the remote command.
-    pub expected_revision: u64,
-    /// Durable offset immediately before this command.
-    pub initial_event_offset: u64,
-}
-
-/// Recipient-safe output ready for persistence and delivery by the server.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct RecipientOutcome {
-    /// Recipient derived from canonical match participants.
-    pub recipient_player_id: PlayerId,
-    /// Complete post-command view used by reconnect and resynchronization.
-    pub snapshot: PlayerViewSnapshot,
-    /// Delta from the request state to the returned state.
-    pub patch: PlayerViewPatch,
-    /// Ordered events safe to disclose to this recipient.
-    pub events: Box<[DomainEvent]>,
-    disclosure: RecipientDisclosure,
-}
-
-/// All-or-nothing result returned to the transactional Serverpod boundary.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ServerCommandOutcome {
-    /// Unchanged rejected state or accepted next canonical state.
-    pub state: GameState,
-    /// Stable player-facing rejection, absent for an accepted command.
-    pub rejection: Option<CommandRejectionCode>,
-    /// Full authoritative events for server-side persistence.
-    pub events: Box<[DomainEvent]>,
-    /// Full execution evidence for server-side persistence and diagnostics.
-    pub evidence: Option<ExecutionEvidence>,
-    /// Canonical identity and immutable-content hashes.
-    pub stamp: SessionStamp,
-    /// Durable offset immediately before the command.
-    pub initial_event_offset: u64,
-    /// Durable offset immediately after the command.
-    pub final_event_offset: u64,
-    /// Projection, patch, and filtered events for every canonical participant.
-    pub recipients: Box<[RecipientOutcome]>,
-}
-
-/// Failure before an outcome can be safely persisted.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum ServerHostError {
-    /// Canonical multiplayer state has no participants.
-    EmptyParticipants,
-    /// The authenticated account does not own a participant in this match.
-    UnknownAuthenticatedActor(PlayerId),
-    /// Canonical state bounds do not match immutable map content.
-    MapBoundsMismatch,
-    /// Canonical occupancy policy does not match immutable rules.
-    OccupancyPolicyMismatch,
-    /// The maximum possible event range cannot fit in the durable offset.
-    EventOffsetOverflow,
-    /// The engine emitted more events than the reviewed command budget permits.
-    EventBudgetExceeded {
-        /// Reviewed maximum for this command and state.
-        maximum: u64,
-        /// Actual event count returned by the engine.
-        actual: u64,
-    },
-    /// Immutable movement content could not be prepared.
-    CompiledMovementMap(CompiledMovementMapError),
-    /// Recipient economy projection could not be computed.
-    Projection(CanonicalQueryError),
-    /// The engine encountered corrupt canonical state or content.
-    Engine(CanonicalEngineError),
-}
-
-impl core::fmt::Display for ServerHostError {
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self {
-            Self::EmptyParticipants => formatter.write_str("match has no participants"),
-            Self::UnknownAuthenticatedActor(actor) => {
-                write!(
-                    formatter,
-                    "authenticated actor `{actor}` is not a participant"
-                )
-            }
-            Self::MapBoundsMismatch => {
-                formatter.write_str("canonical state and map bounds do not match")
-            }
-            Self::OccupancyPolicyMismatch => {
-                formatter.write_str("canonical state and rules occupancy do not match")
-            }
-            Self::EventOffsetOverflow => formatter.write_str("event offset overflow"),
-            Self::EventBudgetExceeded { maximum, actual } => write!(
-                formatter,
-                "event budget exceeded: maximum {maximum}, actual {actual}"
-            ),
-            Self::CompiledMovementMap(source) => source.fmt(formatter),
-            Self::Projection(source) => write!(formatter, "recipient projection failed: {source}"),
-            Self::Engine(source) => source.fmt(formatter),
-        }
-    }
-}
-
-impl std::error::Error for ServerHostError {}
-
-/// Validates canonical state against immutable content before host execution.
-fn validate_state(state: &GameState, world: &PreparedServerWorld) -> Result<(), ServerHostError> {
-    if state.match_lifecycle().identity().participants().is_empty() {
-        return Err(ServerHostError::EmptyParticipants);
-    }
-    if state.bounds() != world.compiled().bounds() {
-        return Err(ServerHostError::MapBoundsMismatch);
-    }
-    if state.occupancy_policy() != world.compiled().ruleset().occupancy_policy() {
-        return Err(ServerHostError::OccupancyPolicyMismatch);
-    }
-    Ok(())
 }

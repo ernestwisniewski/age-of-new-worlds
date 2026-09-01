@@ -3,8 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::client::{
-    ClientCommandRejectionCodeDto, ClientEventDto, ClientEvidenceDto, ClientSessionStampDto,
-    PlayerViewPatchDto, PlayerViewSnapshotDto,
+    ClientCommandDto, ClientCommandRejectionCodeDto, ClientEventDto, ClientEvidenceDto,
+    ClientSessionStampDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
 };
 use crate::{GameStateDto, MatchIdentityDto};
 
@@ -69,6 +69,26 @@ pub struct SubmitTurnServerRequestDto {
     pub authenticated_actor_player_id: String,
     /// Revision supplied by the remote command.
     pub expected_revision: u64,
+    /// Durable event offset immediately before this command.
+    pub initial_event_offset: u64,
+    /// Exact map identity stored with the match row.
+    pub map_hash: String,
+    /// Exact ruleset identity stored with the match row.
+    pub ruleset_hash: String,
+    /// Canonical state locked by the Serverpod transaction.
+    pub state: GameStateDto,
+}
+
+/// Strict request for one authenticated player command.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerCommandServerRequestDto {
+    /// Independently deployed server-host protocol version.
+    pub api_version: u16,
+    /// Actor derived by Serverpod from its authenticated session.
+    pub authenticated_actor_player_id: String,
+    /// Closed player command shared with local clients and replay.
+    pub command: ClientCommandDto,
     /// Durable event offset immediately before this command.
     pub initial_event_offset: u64,
     /// Exact map identity stored with the match row.
@@ -283,6 +303,17 @@ impl PrepareServerWorldRequestDto {
 }
 
 impl SubmitTurnServerRequestDto {
+    /// Parses one bounded strict request.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for oversized or structurally invalid JSON.
+    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
+        parse_bounded(input)
+    }
+}
+
+impl PlayerCommandServerRequestDto {
     /// Parses one bounded strict request.
     ///
     /// # Errors
