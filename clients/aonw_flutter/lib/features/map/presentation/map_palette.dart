@@ -19,6 +19,18 @@ abstract final class MapPalette {
   static const artifactOutline = Color(0xFF291B3A);
   static const fogHidden = Color(0xFF000000);
   static const fogDiscovered = Color(0x80000000);
+  static const elevationWallBottom = Color(0xFF111820);
+  static const elevationWallHighlight = Color(0xFFF8F2E4);
+  static final elevationWallRight = Color.lerp(
+    elevationWallBottom,
+    elevationWallHighlight,
+    0.10,
+  )!;
+  static final elevationWallLeft = Color.lerp(
+    elevationWallBottom,
+    elevationWallHighlight,
+    0.20,
+  )!;
   static const objectiveRuins = Color(0xFFB8A58A);
   static const objectiveStrategicPass = Color(0xFFE76F51);
   static const objectiveHolySite = Color(0xFFE8D272);

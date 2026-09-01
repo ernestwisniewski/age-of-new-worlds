@@ -2,6 +2,7 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/camera/map_viewport_projection.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:aonw_flutter/game/map/fog_map_layer.dart';
@@ -37,6 +38,21 @@ void main() {
       ),
     );
     expect(cache.clipPath.getBounds(), cache.gridPath.getBounds());
+  });
+
+  test('cache matches legacy neighbor-aware elevation walls', () {
+    final source = testMapScene(cols: 2, rows: 2).map;
+    final cache = MapStaticRenderCache.build(
+      _withHeight(source, coordinate: (col: 0, row: 0), height: 2),
+    );
+
+    expect(cache.elevationWallPaths.right.computeMetrics(), hasLength(1));
+    expect(cache.elevationWallPaths.bottom.computeMetrics(), hasLength(1));
+    expect(cache.elevationWallPaths.left.computeMetrics(), hasLength(1));
+    expect(
+      cache.elevationWallPaths.bottom.getBounds().height,
+      closeTo(7 * MapViewportProjection.perspectiveY, 1e-5),
+    );
   });
 
   testWithGame<AonwFlameGame>(
@@ -174,4 +190,30 @@ MapRenderSnapshot _snapshot(
   interaction: interaction,
   reference: scene.reference,
   player: scene.player,
+);
+
+MapView _withHeight(
+  MapView source, {
+  required MapHexCoordinate coordinate,
+  required int height,
+}) => MapView(
+  mapId: source.mapId,
+  contentHash: source.contentHash,
+  gridLayout: source.gridLayout,
+  cols: source.cols,
+  rows: source.rows,
+  defaultZoom: source.defaultZoom,
+  tiles: [
+    for (final tile in source.tiles)
+      MapTileView(
+        coordinate: tile.coordinate,
+        displayTerrain: tile.displayTerrain,
+        yieldTerrain: tile.yieldTerrain,
+        movementTerrains: tile.movementTerrains,
+        terrainTags: tile.terrainTags,
+        resources: tile.resources,
+        height: tile.coordinate == coordinate ? height : tile.height,
+      ),
+  ],
+  objectives: source.objectives,
 );

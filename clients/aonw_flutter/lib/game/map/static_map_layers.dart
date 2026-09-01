@@ -19,12 +19,15 @@ typedef MapStaticRenderIdentity = ({
   int rows,
 });
 
+typedef MapElevationWallPaths = ({ui.Path right, ui.Path bottom, ui.Path left});
+
 final class MapStaticRenderCache {
   MapStaticRenderCache._({
     required this.identity,
     required this.geometry,
     required this.projection,
     required this.tilePaths,
+    required this.elevationWallPaths,
     required this.terrainPaths,
     required this.gridPath,
     required this.clipPath,
@@ -41,6 +44,7 @@ final class MapStaticRenderCache {
     final projection = MapViewportProjection(geometry);
     final terrainPaths = <MapTerrain, ui.Path>{};
     final tilePaths = <MapHexCoordinate, ui.Path>{};
+    final elevationWallPaths = _buildElevationWallPaths(map, projection);
     final gridPath = ui.Path();
     for (final tile in map.tiles) {
       final hex = aonwProjectedHexPath(projection, tile.coordinate);
@@ -60,6 +64,7 @@ final class MapStaticRenderCache {
       geometry: geometry,
       projection: projection,
       tilePaths: Map.unmodifiable(tilePaths),
+      elevationWallPaths: elevationWallPaths,
       terrainPaths: Map.unmodifiable(terrainPaths),
       gridPath: gridPath,
       clipPath: aonwProjectedMapClipPath(map, projection),
@@ -74,6 +79,7 @@ final class MapStaticRenderCache {
   final AonwOddQFlatTopGeometry geometry;
   final MapViewportProjection projection;
   final Map<MapHexCoordinate, ui.Path> tilePaths;
+  final MapElevationWallPaths elevationWallPaths;
   final Map<MapTerrain, ui.Path> terrainPaths;
   final ui.Path gridPath;
   final ui.Path clipPath;
@@ -89,6 +95,12 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
     for (final terrain in MapTerrain.values)
       terrain: ui.Paint()..color = MapPalette.terrain(terrain),
   };
+  final _elevationWallRightPaint = ui.Paint()
+    ..color = MapPalette.elevationWallRight;
+  final _elevationWallBottomPaint = ui.Paint()
+    ..color = MapPalette.elevationWallBottom;
+  final _elevationWallLeftPaint = ui.Paint()
+    ..color = MapPalette.elevationWallLeft;
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
 
@@ -114,6 +126,9 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   void render(ui.Canvas canvas) {
     final cache = _cache;
     if (cache == null) return;
+    canvas.drawPath(cache.elevationWallPaths.right, _elevationWallRightPaint);
+    canvas.drawPath(cache.elevationWallPaths.bottom, _elevationWallBottomPaint);
+    canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
     for (final entry in cache.terrainPaths.entries) {
       canvas.drawPath(entry.value, _paints[entry.key]!);
     }
@@ -308,4 +323,61 @@ Future<ui.Image> _decodeImage(Uint8List bytes) async {
   } finally {
     codec.dispose();
   }
+}
+
+MapElevationWallPaths _buildElevationWallPaths(
+  MapView map,
+  MapViewportProjection projection,
+) {
+  final paths = (right: ui.Path(), bottom: ui.Path(), left: ui.Path());
+  final heights = {for (final tile in map.tiles) tile.coordinate: tile.height};
+  for (final tile in map.tiles) {
+    final coordinate = tile.coordinate;
+    final bottomRight = coordinate.col.isOdd
+        ? (col: coordinate.col + 1, row: coordinate.row + 1)
+        : (col: coordinate.col + 1, row: coordinate.row);
+    final bottom = (col: coordinate.col, row: coordinate.row + 1);
+    final bottomLeft = coordinate.col.isOdd
+        ? (col: coordinate.col - 1, row: coordinate.row + 1)
+        : (col: coordinate.col - 1, row: coordinate.row);
+    final corners = [
+      for (var corner = 0; corner < 4; corner += 1)
+        projection.hexCorner(coordinate, corner),
+    ];
+    _addElevationWall(
+      paths.right,
+      from: corners[0],
+      to: corners[1],
+      heightDelta: tile.height - (heights[bottomRight] ?? 0),
+    );
+    _addElevationWall(
+      paths.bottom,
+      from: corners[1],
+      to: corners[2],
+      heightDelta: tile.height - (heights[bottom] ?? 0),
+    );
+    _addElevationWall(
+      paths.left,
+      from: corners[2],
+      to: corners[3],
+      heightDelta: tile.height - (heights[bottomLeft] ?? 0),
+    );
+  }
+  return paths;
+}
+
+void _addElevationWall(
+  ui.Path target, {
+  required AonwPoint from,
+  required AonwPoint to,
+  required int heightDelta,
+}) {
+  if (heightDelta <= 0) return;
+  final depth = (3 + heightDelta * 2) * MapViewportProjection.perspectiveY;
+  target
+    ..moveTo(from.x, from.y)
+    ..lineTo(to.x, to.y)
+    ..lineTo(to.x, to.y + depth)
+    ..lineTo(from.x, from.y + depth)
+    ..close();
 }
