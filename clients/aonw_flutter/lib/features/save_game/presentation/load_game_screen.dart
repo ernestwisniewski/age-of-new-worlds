@@ -4,18 +4,28 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_menu_backdrop.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../local_game/application/local_game_catalog.dart';
 import '../../replay/application/replay_state.dart';
 import '../../replay/presentation/replay_presentation_controller.dart';
 import '../application/local_save_state.dart';
+import '../application/local_save_summary.dart';
 
-typedef LocalSaveAvailabilityReader = Future<bool> Function();
-typedef LocalGameResume = Future<LocalResumeResultView> Function();
-typedef LocalReplayAvailabilityReader = Future<bool> Function();
-typedef LocalReplayOpen = Future<ReplayOpenResultView> Function();
+part 'load_game_save_card.dart';
+
+typedef LocalSaveIndexReader = Future<List<LocalSaveSummaryView>> Function();
+typedef LocalGameResume =
+    Future<LocalResumeResultView> Function(LocalGameScenarioView scenario);
+typedef LocalReplayAvailabilityReader =
+    Future<bool> Function(LocalGameScenarioView scenario);
+typedef LocalReplayOpen =
+    Future<ReplayOpenResultView> Function(LocalGameScenarioView scenario);
+typedef LocalSaveExport = void Function(LocalGameScenarioView scenario);
+typedef LocalArchiveAction =
+    Future<void> Function(LocalGameScenarioView scenario);
 
 final class LoadGameScreen extends StatefulWidget {
   const LoadGameScreen({
-    required this.hasLocalSave,
+    required this.listLocalSaves,
     required this.resumeLocalGame,
     required this.onResumed,
     required this.hasLocalReplay,
@@ -27,7 +37,7 @@ final class LoadGameScreen extends StatefulWidget {
     super.key,
   });
 
-  final LocalSaveAvailabilityReader hasLocalSave;
+  final LocalSaveIndexReader listLocalSaves;
   final LocalGameResume resumeLocalGame;
   final VoidCallback onResumed;
   final LocalReplayAvailabilityReader hasLocalReplay;
@@ -35,7 +45,7 @@ final class LoadGameScreen extends StatefulWidget {
   final VoidCallback onReplayOpened;
   final VoidCallback onStartSinglePlayer;
   final VoidCallback? onImportSave;
-  final VoidCallback? onExportSave;
+  final LocalSaveExport? onExportSave;
 
   @override
   State<LoadGameScreen> createState() => _LoadGameScreenState();
@@ -45,6 +55,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   late Future<_LoadAvailability> _availability;
   var _resuming = false;
   var _openingReplay = false;
+  LocalGameScenarioView? _activeScenario;
   LocalResumeFailureViewCode? _resumeFailure;
   ReplayFailureViewCode? _replayFailure;
 
@@ -68,6 +79,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             busy: _busy,
             resuming: _resuming,
             openingReplay: _openingReplay,
+            activeScenario: _activeScenario,
             resumeFailure: _resumeFailure,
             replayFailure: _replayFailure,
             onResume: _resume,
@@ -84,48 +96,69 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   bool get _busy => _resuming || _openingReplay;
 
   Future<_LoadAvailability> _readAvailability() async {
-    final values = await Future.wait([
-      widget.hasLocalSave(),
-      widget.hasLocalReplay(),
+    final saves = await widget.listLocalSaves();
+    final savesByScenario = {for (final save in saves) save.scenario: save};
+    final replayAvailability = await Future.wait([
+      for (final entry in LocalGameCatalog.entries)
+        widget.hasLocalReplay(entry.id),
     ]);
-    return _LoadAvailability(hasSave: values[0], hasReplay: values[1]);
+    return _LoadAvailability([
+      for (var index = 0; index < LocalGameCatalog.entries.length; index += 1)
+        if (savesByScenario[LocalGameCatalog.entries[index].id] != null ||
+            replayAvailability[index])
+          _LoadEntry(
+            scenario: LocalGameCatalog.entries[index].id,
+            save: savesByScenario[LocalGameCatalog.entries[index].id],
+            hasReplay: replayAvailability[index],
+          ),
+    ]);
   }
 
-  Future<void> _resume() async {
+  Future<void> _resume(LocalGameScenarioView scenario) async {
     setState(() {
       _resuming = true;
+      _activeScenario = scenario;
       _resumeFailure = null;
       _replayFailure = null;
     });
-    final result = await widget.resumeLocalGame();
+    final result = await widget.resumeLocalGame(scenario);
     if (!mounted) return;
     if (result.started) {
-      setState(() => _resuming = false);
+      setState(() {
+        _resuming = false;
+        _activeScenario = null;
+      });
       widget.onResumed();
       return;
     }
     setState(() {
       _resuming = false;
+      _activeScenario = null;
       _resumeFailure = result.failure;
       _availability = _readAvailability();
     });
   }
 
-  Future<void> _openReplay() async {
+  Future<void> _openReplay(LocalGameScenarioView scenario) async {
     setState(() {
       _openingReplay = true;
+      _activeScenario = scenario;
       _resumeFailure = null;
       _replayFailure = null;
     });
-    final result = await widget.openReplay();
+    final result = await widget.openReplay(scenario);
     if (!mounted) return;
     if (result.started) {
       widget.onReplayOpened();
-      setState(() => _openingReplay = false);
+      setState(() {
+        _openingReplay = false;
+        _activeScenario = null;
+      });
       return;
     }
     setState(() {
       _openingReplay = false;
+      _activeScenario = null;
       _replayFailure = result.failure;
       _availability = _readAvailability();
     });
@@ -133,12 +166,24 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
 }
 
 final class _LoadAvailability {
-  const _LoadAvailability({required this.hasSave, required this.hasReplay});
+  _LoadAvailability(List<_LoadEntry> entries)
+    : entries = List.unmodifiable(entries);
 
-  final bool hasSave;
+  final List<_LoadEntry> entries;
+
+  bool get hasContent => entries.isNotEmpty;
+}
+
+final class _LoadEntry {
+  const _LoadEntry({
+    required this.scenario,
+    required this.save,
+    required this.hasReplay,
+  });
+
+  final LocalGameScenarioView scenario;
+  final LocalSaveSummaryView? save;
   final bool hasReplay;
-
-  bool get hasContent => hasSave || hasReplay;
 }
 
 final class _LoadGameBody extends StatelessWidget {
@@ -148,6 +193,7 @@ final class _LoadGameBody extends StatelessWidget {
     required this.busy,
     required this.resuming,
     required this.openingReplay,
+    required this.activeScenario,
     required this.resumeFailure,
     required this.replayFailure,
     required this.onResume,
@@ -162,13 +208,14 @@ final class _LoadGameBody extends StatelessWidget {
   final bool busy;
   final bool resuming;
   final bool openingReplay;
+  final LocalGameScenarioView? activeScenario;
   final LocalResumeFailureViewCode? resumeFailure;
   final ReplayFailureViewCode? replayFailure;
-  final VoidCallback onResume;
-  final VoidCallback onOpenReplay;
+  final LocalArchiveAction onResume;
+  final LocalArchiveAction onOpenReplay;
   final VoidCallback onStartSinglePlayer;
   final VoidCallback? onImportSave;
-  final VoidCallback? onExportSave;
+  final LocalSaveExport? onExportSave;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -189,15 +236,21 @@ final class _LoadGameBody extends StatelessWidget {
               else if (availability?.hasContent != true)
                 _EmptySaves(onStartSinglePlayer: onStartSinglePlayer)
               else
-                _LocalSaveCard(
-                  availability: availability!,
-                  busy: busy,
-                  resuming: resuming,
-                  openingReplay: openingReplay,
-                  onResume: onResume,
-                  onOpenReplay: onOpenReplay,
-                  onExportSave: onExportSave,
-                ),
+                for (final entry in availability!.entries) ...[
+                  _LocalSaveCard(
+                    entry: entry,
+                    busy: busy,
+                    resuming: resuming && activeScenario == entry.scenario,
+                    openingReplay:
+                        openingReplay && activeScenario == entry.scenario,
+                    onResume: () => onResume(entry.scenario),
+                    onOpenReplay: () => onOpenReplay(entry.scenario),
+                    onExportSave: onExportSave == null
+                        ? null
+                        : () => onExportSave!(entry.scenario),
+                  ),
+                  const SizedBox(height: AonwSpacing.md),
+                ],
               if (resumeFailure case final failure?) ...[
                 const SizedBox(height: AonwSpacing.md),
                 _FailureMessage(
@@ -257,102 +310,6 @@ final class _EmptySaves extends StatelessWidget {
       ),
     ],
   );
-}
-
-final class _LocalSaveCard extends StatelessWidget {
-  const _LocalSaveCard({
-    required this.availability,
-    required this.busy,
-    required this.resuming,
-    required this.openingReplay,
-    required this.onResume,
-    required this.onOpenReplay,
-    required this.onExportSave,
-  });
-
-  final _LoadAvailability availability;
-  final bool busy;
-  final bool resuming;
-  final bool openingReplay;
-  final VoidCallback onResume;
-  final VoidCallback onOpenReplay;
-  final VoidCallback? onExportSave;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AonwSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.loadGameSingleLabel(l10n.localScenarioName('starterDuel')),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: AonwSpacing.md),
-            Wrap(
-              spacing: AonwSpacing.sm,
-              runSpacing: AonwSpacing.sm,
-              children: [
-                FilledButton.icon(
-                  key: const ValueKey('continue-game'),
-                  onPressed: availability.hasSave && !busy ? onResume : null,
-                  icon: _ProgressIcon(
-                    active: resuming,
-                    fallback: Icons.play_arrow,
-                  ),
-                  label: Text(resuming ? l10n.resumingGame : l10n.continueGame),
-                ),
-                OutlinedButton.icon(
-                  key: const ValueKey('open-replay'),
-                  onPressed: availability.hasReplay && !busy
-                      ? onOpenReplay
-                      : null,
-                  icon: _ProgressIcon(
-                    active: openingReplay,
-                    fallback: Icons.movie_filter_outlined,
-                  ),
-                  label: Text(
-                    openingReplay ? l10n.loadingReplay : l10n.replayTitle,
-                  ),
-                ),
-                Tooltip(
-                  message: onExportSave == null
-                      ? l10n.saveTransferUnavailable
-                      : '',
-                  child: OutlinedButton.icon(
-                    key: const ValueKey('export-save'),
-                    onPressed: availability.hasSave && !busy
-                        ? onExportSave
-                        : null,
-                    icon: const Icon(Icons.file_download_outlined),
-                    label: Text(l10n.exportSave),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-final class _ProgressIcon extends StatelessWidget {
-  const _ProgressIcon({required this.active, required this.fallback});
-
-  final bool active;
-  final IconData fallback;
-
-  @override
-  Widget build(BuildContext context) => active
-      ? const SizedBox.square(
-          dimension: AonwSizes.compactProgress,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        )
-      : Icon(fallback);
 }
 
 final class _FailureMessage extends StatelessWidget {

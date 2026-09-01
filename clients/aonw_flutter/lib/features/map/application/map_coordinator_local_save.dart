@@ -3,7 +3,19 @@ part of 'map_coordinator.dart';
 extension MapCoordinatorLocalSave on MapCoordinator {
   Future<bool> hasLocalSave() => _saveWorkflow.hasSave();
 
-  Future<LocalResumeResultView> resumeLatestLocalGame() async {
+  Future<List<LocalSaveSummaryView>> listLocalSaves() =>
+      _saveWorkflow.listSaves();
+
+  Future<LocalResumeResultView> resumeLocalGame(
+    LocalGameScenarioView scenario,
+  ) => _resumeLocalGame(() => _saveWorkflow.resume(scenario));
+
+  Future<LocalResumeResultView> resumeLatestLocalGame() =>
+      _resumeLocalGame(_saveWorkflow.resumeLatest);
+
+  Future<LocalResumeResultView> _resumeLocalGame(
+    Future<LocalResumeAttemptView> Function() resume,
+  ) async {
     if (_disposed) {
       return const LocalResumeResultView.failed(
         LocalResumeFailureViewCode.unavailable,
@@ -14,7 +26,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     _interactionGeneration += 1;
     _setCursor(null);
     _setState(const GameSessionLoading());
-    final attempt = await _saveWorkflow.resumeLatest();
+    final attempt = await resume();
     if (!_isCurrent(generation)) {
       return const LocalResumeResultView.failed(
         LocalResumeFailureViewCode.unavailable,

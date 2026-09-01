@@ -59,6 +59,31 @@ void main() {
     expect(session.openedDocuments, ['corrupt', 'valid']);
     expect(controller.state, isA<ReplayReady>());
   });
+
+  test('opens only the replay selected by its scenario', () async {
+    final session = _ReplaySession();
+    final store = _ReplayStore(
+      primary: 'dravonia-replay',
+      scenario: LocalGameScenarioView.dravonia,
+    );
+    final controller = ReplayPresentationController(
+      session: session,
+      store: store,
+      diagnosticReporter: (_, _, _) {},
+    );
+    addTearDown(controller.dispose);
+
+    expect(
+      (await controller.open(LocalGameScenarioView.starterDuel)).failure,
+      ReplayFailureViewCode.missing,
+    );
+    expect(session.openedDocuments, isEmpty);
+    expect(
+      (await controller.open(LocalGameScenarioView.dravonia)).started,
+      isTrue,
+    );
+    expect(session.openedDocuments, ['dravonia-replay']);
+  });
 }
 
 final class _ReplaySession implements ReplaySessionPort {
@@ -97,23 +122,31 @@ final class _ReplaySession implements ReplaySessionPort {
 }
 
 final class _ReplayStore implements LocalReplayStore {
-  _ReplayStore({String? primary, this.backup}) : document = primary;
+  _ReplayStore({
+    String? primary,
+    this.backup,
+    this.scenario = LocalGameScenarioView.starterDuel,
+  }) : document = primary;
 
   String? document;
   final String? backup;
+  final LocalGameScenarioView scenario;
 
   @override
   Future<bool> contains(LocalGameScenarioView scenario) async =>
-      document != null || backup != null;
+      scenario == this.scenario && (document != null || backup != null);
 
   @override
   Future<String?> read(
     LocalGameScenarioView scenario,
     LocalReplayCopyView copy,
-  ) async => switch (copy) {
-    LocalReplayCopyView.primary => document,
-    LocalReplayCopyView.backup => backup,
-  };
+  ) async {
+    if (scenario != this.scenario) return null;
+    return switch (copy) {
+      LocalReplayCopyView.primary => document,
+      LocalReplayCopyView.backup => backup,
+    };
+  }
 
   @override
   Future<void> write(LocalGameScenarioView scenario, String document) async {

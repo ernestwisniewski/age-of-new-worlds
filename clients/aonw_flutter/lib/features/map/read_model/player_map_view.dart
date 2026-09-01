@@ -288,6 +288,7 @@ final class PlayerMapView {
     required int turn,
     required PendingActionView? pendingAction,
     required List<VisibleUnitView> units,
+    MatchTurnModeView turnMode = MatchTurnModeView.sequential,
     GameOutcomeView? outcome,
     DiplomacyView diplomacy = const DiplomacyView.empty(),
     List<CityView> cities = const [],
@@ -298,7 +299,7 @@ final class PlayerMapView {
   }) => PlayerMapView(
     actorPlayerId: actorPlayerId,
     stamp: stamp,
-    turnMode: MatchTurnModeView.sequential,
+    turnMode: turnMode,
     participants: [
       MatchParticipantView(
         id: actorPlayerId,

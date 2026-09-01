@@ -56,6 +56,7 @@ part 'engine_game_artifact_session.dart';
 part 'engine_game_city_session.dart';
 part 'engine_game_production_session.dart';
 part 'engine_game_replay_session.dart';
+part 'engine_game_save_session.dart';
 part 'engine_game_remote_session.dart';
 part 'engine_game_session_gateway_support.dart';
 part 'engine_game_worker_session.dart';
@@ -70,8 +71,7 @@ final class EngineGameSessionGateway
         DiplomacySessionPort,
         TurnSessionPort,
         UnitActionSessionPort,
-        LocalGameSessionPort,
-        GameSaveSessionPort {
+        LocalGameSessionPort {
   EngineGameSessionGateway({
     required AssetBundle assets,
     EngineSessionFactory sessionFactory = createAonwEngineSession,
@@ -117,6 +117,7 @@ final class EngineGameSessionGateway
     productionSession = _EngineGameProductionSession(this);
     artifactSession = _EngineGameArtifactSession(this);
     replaySession = _EngineGameReplaySession(this);
+    saveSession = _EngineGameSaveSession(this);
   }
 
   final EngineGameSessionLoader _loader;
@@ -138,6 +139,7 @@ final class EngineGameSessionGateway
   late final ProductionSessionPort productionSession;
   late final ArtifactSessionPort artifactSession;
   late final ReplaySessionPort replaySession;
+  late final GameSaveSessionPort saveSession;
 
   GameSessionCapabilities get capabilities => GameSessionCapabilities(
     map: this,
@@ -153,7 +155,7 @@ final class EngineGameSessionGateway
     unitActions: this,
     turns: this,
     localGame: this,
-    save: this,
+    save: saveSession,
   );
   AonwEngineSession? _session;
   MapScene? _scene;
@@ -195,83 +197,6 @@ final class EngineGameSessionGateway
       return prepared.scene;
     } finally {
       if (!retained) await prepared.session.close();
-    }
-  }
-
-  @override
-  Future<String> exportSaveDocument() => _serialize(() async {
-    final context = _context();
-    try {
-      final response = await context.session.send(
-        AonwClientRequest.exportSave(),
-      );
-      _ensureCurrentSession(context);
-      if (!response.isSuccess) {
-        final error = response.error!;
-        throw GameSaveSessionException(
-          code: error.code,
-          message: 'The current game could not be exported.',
-          diagnosticCause: error,
-          diagnosticStackTrace: StackTrace.current,
-        );
-      }
-      return response.require<AonwSaveExportedResponse>().document;
-    } on GameSaveSessionException {
-      rethrow;
-    } on Object catch (error, stackTrace) {
-      throw GameSaveSessionException(
-        code: 'save_export_failed',
-        message: 'The current game could not be exported.',
-        diagnosticCause: error,
-        diagnosticStackTrace: stackTrace,
-      );
-    }
-  });
-
-  @override
-  Future<OpenedGameSaveView> openSaveDocument({
-    required MapAssetPaths assets,
-    required String document,
-  }) async {
-    final generation = ++_loadGeneration;
-    try {
-      final prepared = await _loader.prepareSave(
-        assets,
-        saveDocument: document,
-      );
-      var retained = false;
-      try {
-        await _activate(
-          prepared,
-          prepared.scene.player.actorPlayerId,
-          generation,
-        );
-        retained = true;
-        return OpenedGameSaveView(
-          scene: prepared.scene,
-          controlPlan: _localMatchMapper.restoredControlPlan(
-            prepared.restoredParticipants,
-          ),
-        );
-      } finally {
-        if (!retained) await prepared.session.close();
-      }
-    } on MapLoadException catch (error, stackTrace) {
-      throw GameSaveSessionException(
-        code: error.code,
-        message: 'The saved game could not be opened.',
-        diagnosticCause: error.diagnosticCause ?? error,
-        diagnosticStackTrace: error.diagnosticStackTrace ?? stackTrace,
-      );
-    } on GameSaveSessionException {
-      rethrow;
-    } on Object catch (error, stackTrace) {
-      throw GameSaveSessionException(
-        code: 'save_open_failed',
-        message: 'The saved game could not be opened.',
-        diagnosticCause: error,
-        diagnosticStackTrace: stackTrace,
-      );
     }
   }
 

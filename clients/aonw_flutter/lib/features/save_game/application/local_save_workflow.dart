@@ -4,6 +4,7 @@ import '../../map/read_model/map_scene.dart';
 import 'game_save_session_port.dart';
 import 'local_save_state.dart';
 import 'local_save_store.dart';
+import 'local_save_summary.dart';
 
 typedef LocalSaveDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -55,6 +56,17 @@ final class LocalSaveWorkflow {
     }
   }
 
+  Future<List<LocalSaveSummaryView>> listSaves() async {
+    final store = _store;
+    if (store == null) return const [];
+    final summaries = <LocalSaveSummaryView>[];
+    for (final entry in LocalGameCatalog.entries) {
+      final summary = await _inspectEntry(store, entry);
+      if (summary != null) summaries.add(summary);
+    }
+    return List.unmodifiable(summaries);
+  }
+
   Future<LocalSaveFailureViewCode?> save(
     LocalGameCatalogEntryView entry,
   ) async {
@@ -85,7 +97,17 @@ final class LocalSaveWorkflow {
     }
   }
 
-  Future<LocalResumeAttemptView> resumeLatest() async {
+  Future<LocalResumeAttemptView> resume(LocalGameScenarioView scenario) =>
+      _resumeEntries([
+        LocalGameCatalog.entries.singleWhere((entry) => entry.id == scenario),
+      ]);
+
+  Future<LocalResumeAttemptView> resumeLatest() =>
+      _resumeEntries(LocalGameCatalog.entries);
+
+  Future<LocalResumeAttemptView> _resumeEntries(
+    Iterable<LocalGameCatalogEntryView> entries,
+  ) async {
     final session = _session;
     final store = _store;
     if (session == null || store == null) {
@@ -95,43 +117,19 @@ final class LocalSaveWorkflow {
     }
     var foundDocument = false;
     var readFailed = false;
-    for (final entry in LocalGameCatalog.entries) {
+    for (final entry in entries) {
       for (final copy in LocalSaveCopyView.values) {
-        String? document;
-        try {
-          document = await store.read(entry.id, copy);
-        } on LocalSaveStoreException catch (error, stackTrace) {
-          readFailed = true;
-          _reportStoreFailure(error, stackTrace);
-          continue;
-        } on Object catch (error, stackTrace) {
-          readFailed = true;
-          _diagnosticReporter(
-            'unexpected_save_read_failure',
-            error,
-            stackTrace,
-          );
-          continue;
-        }
+        final read = await _readSaveDocument(store, entry.id, copy);
+        readFailed = readFailed || read.failed;
+        final document = read.document;
         if (document == null) continue;
         foundDocument = true;
-        try {
-          final opened = await session.openSaveDocument(
-            assets: entry.assets,
-            document: document,
-          );
+        final opened = await _openSave(session, entry, document);
+        if (opened != null) {
           return LocalResumeAttemptView.started(
             entry: entry,
             scene: opened.scene,
             controlPlan: opened.controlPlan,
-          );
-        } on GameSaveSessionException catch (error, stackTrace) {
-          _reportSessionFailure(error, stackTrace);
-        } on Object catch (error, stackTrace) {
-          _diagnosticReporter(
-            'unexpected_save_open_failure',
-            error,
-            stackTrace,
           );
         }
       }
@@ -143,6 +141,87 @@ final class LocalSaveWorkflow {
           ? LocalResumeFailureViewCode.unreadable
           : LocalResumeFailureViewCode.missing,
     );
+  }
+
+  Future<OpenedGameSaveView?> _openSave(
+    GameSaveSessionPort session,
+    LocalGameCatalogEntryView entry,
+    String document,
+  ) async {
+    try {
+      return await session.openSaveDocument(
+        assets: entry.assets,
+        document: document,
+      );
+    } on GameSaveSessionException catch (error, stackTrace) {
+      _reportSessionFailure(error, stackTrace);
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('unexpected_save_open_failure', error, stackTrace);
+    }
+    return null;
+  }
+
+  Future<LocalSaveSummaryView?> _inspectEntry(
+    LocalSaveStore store,
+    LocalGameCatalogEntryView entry,
+  ) async {
+    try {
+      if (!await store.contains(entry.id)) return null;
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('save_lookup_failed', error, stackTrace);
+      return null;
+    }
+    final session = _session;
+    if (session == null) {
+      return LocalSaveSummaryView.incompatible(scenario: entry.id);
+    }
+    for (final copy in LocalSaveCopyView.values) {
+      final document = (await _readSaveDocument(
+        store,
+        entry.id,
+        copy,
+      )).document;
+      if (document == null) continue;
+      try {
+        final inspected = await session.inspectSaveDocument(
+          assets: entry.assets,
+          document: document,
+        );
+        return LocalSaveSummaryView.ready(
+          scenario: entry.id,
+          gameMode: inspected.controlPlan.requiresPrivateHandoff
+              ? LocalSaveGameModeView.hotseat
+              : LocalSaveGameModeView.singlePlayer,
+          turnMode: inspected.player.turnMode,
+          turn: inspected.player.turn,
+          recoveredFromBackup: copy == LocalSaveCopyView.backup,
+        );
+      } on GameSaveSessionException catch (error, stackTrace) {
+        _reportSessionFailure(error, stackTrace);
+      } on Object catch (error, stackTrace) {
+        _diagnosticReporter(
+          'unexpected_save_inspection_failure',
+          error,
+          stackTrace,
+        );
+      }
+    }
+    return LocalSaveSummaryView.incompatible(scenario: entry.id);
+  }
+
+  Future<({String? document, bool failed})> _readSaveDocument(
+    LocalSaveStore store,
+    LocalGameScenarioView scenario,
+    LocalSaveCopyView copy,
+  ) async {
+    try {
+      return (document: await store.read(scenario, copy), failed: false);
+    } on LocalSaveStoreException catch (error, stackTrace) {
+      _reportStoreFailure(error, stackTrace);
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('unexpected_save_read_failure', error, stackTrace);
+    }
+    return (document: null, failed: true);
   }
 
   void _reportSessionFailure(

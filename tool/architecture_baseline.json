@@ -46,7 +46,6 @@
     "flutter_client_lib": {
       "files": {},
       "declarations": {
-        "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 417,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 359
       },
       "callableLines": {
@@ -64,7 +63,6 @@
         "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
         "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
-        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 70,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
         "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77
       },
@@ -94,13 +92,11 @@
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_guards.dart::function:_executableProduction": 11,
-        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 13,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 19,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 11,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::function:_interactionCommandPending": 12,
         "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::class:ResearchViewMapper/method:options": 12,
         "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::function:_option": 12,
-        "clients/aonw_flutter/lib/features/save_game/application/local_save_workflow.dart::class:LocalSaveWorkflow/method:resumeLatest": 12,
         "clients/aonw_flutter/lib/features/turns/application/turn_workflow.dart::class:TurnWorkflow/method:_execute": 14,
         "clients/aonw_flutter/lib/features/workers/application/worker_workflow_commands.dart::extension:WorkerWorkflowCommands/method:_execute": 11,
         "clients/aonw_flutter/lib/features/workers/application/worker_workflow_guards.dart::function:_containsWorkerAction": 13,
@@ -114,9 +110,7 @@
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 34,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 37,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 17,
-        "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 26,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 22,
-        "clients/aonw_flutter/lib/features/save_game/application/local_save_workflow.dart::class:LocalSaveWorkflow/method:resumeLatest": 23,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 20
       }
     },

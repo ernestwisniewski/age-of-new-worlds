@@ -15,6 +15,11 @@ final class OpenedGameSaveView {
 abstract interface class GameSaveSessionPort {
   Future<String> exportSaveDocument();
 
+  Future<OpenedGameSaveView> inspectSaveDocument({
+    required MapAssetPaths assets,
+    required String document,
+  });
+
   Future<OpenedGameSaveView> openSaveDocument({
     required MapAssetPaths assets,
     required String document,

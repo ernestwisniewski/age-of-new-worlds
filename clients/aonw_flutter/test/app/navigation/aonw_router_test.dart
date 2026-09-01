@@ -213,11 +213,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('load-game')));
     await tester.pumpAndSettle();
     final continueButton = tester.widget<FilledButton>(
-      find.byKey(const ValueKey('continue-game')),
+      find.byKey(const ValueKey('continue-game-starterDuel')),
     );
     expect(continueButton.onPressed, isNotNull);
 
-    await tester.tap(find.byKey(const ValueKey('continue-game')));
+    await tester.tap(find.byKey(const ValueKey('continue-game-starterDuel')));
     await tester.pumpAndSettle();
 
     expect(persistence.openedDocuments, ['engine-save']);
@@ -302,11 +302,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('load-game')));
     await tester.pumpAndSettle();
     final replayButton = tester.widget<OutlinedButton>(
-      find.byKey(const ValueKey('open-replay')),
+      find.byKey(const ValueKey('open-replay-starterDuel')),
     );
     expect(replayButton.onPressed, isNotNull);
 
-    await tester.tap(find.byKey(const ValueKey('open-replay')));
+    await tester.tap(find.byKey(const ValueKey('open-replay-starterDuel')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('replay-viewport')), findsOneWidget);
     expect(find.text('0 of 3'), findsOneWidget);
@@ -330,7 +330,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('pause-replay')));
     await tester.tap(find.byKey(const ValueKey('close-replay')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('open-replay')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('open-replay-starterDuel')),
+      findsOneWidget,
+    );
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -348,22 +351,30 @@ final class _ResumeSession implements GameSaveSessionPort {
   Future<String> exportSaveDocument() async => 'engine-save';
 
   @override
+  Future<OpenedGameSaveView> inspectSaveDocument({
+    required MapAssetPaths assets,
+    required String document,
+  }) async => _opened();
+
+  @override
   Future<OpenedGameSaveView> openSaveDocument({
     required MapAssetPaths assets,
     required String document,
   }) async {
     openedDocuments.add(document);
-    return OpenedGameSaveView(
-      scene: scene,
-      controlPlan: LocalMatchControlPlanView([
-        LocalParticipantControlView(
-          id: scene.player.actorPlayerId,
-          name: 'Player',
-          control: LocalPlayerControlView.human,
-        ),
-      ]),
-    );
+    return _opened();
   }
+
+  OpenedGameSaveView _opened() => OpenedGameSaveView(
+    scene: scene,
+    controlPlan: LocalMatchControlPlanView([
+      LocalParticipantControlView(
+        id: scene.player.actorPlayerId,
+        name: 'Player',
+        control: LocalPlayerControlView.human,
+      ),
+    ]),
+  );
 }
 
 final class _SingleSaveStore implements LocalSaveStore {
@@ -373,13 +384,17 @@ final class _SingleSaveStore implements LocalSaveStore {
 
   @override
   Future<bool> contains(LocalGameScenarioView scenario) async =>
-      document != null;
+      scenario == LocalGameScenarioView.starterDuel && document != null;
 
   @override
   Future<String?> read(
     LocalGameScenarioView scenario,
     LocalSaveCopyView copy,
-  ) async => copy == LocalSaveCopyView.primary ? document : null;
+  ) async =>
+      scenario == LocalGameScenarioView.starterDuel &&
+          copy == LocalSaveCopyView.primary
+      ? document
+      : null;
 
   @override
   Future<void> write(LocalGameScenarioView scenario, String document) async {
@@ -413,13 +428,17 @@ final class _SingleReplayStore implements LocalReplayStore {
 
   @override
   Future<bool> contains(LocalGameScenarioView scenario) async =>
-      document != null;
+      scenario == LocalGameScenarioView.starterDuel && document != null;
 
   @override
   Future<String?> read(
     LocalGameScenarioView scenario,
     LocalReplayCopyView copy,
-  ) async => copy == LocalReplayCopyView.primary ? document : null;
+  ) async =>
+      scenario == LocalGameScenarioView.starterDuel &&
+          copy == LocalReplayCopyView.primary
+      ? document
+      : null;
 
   @override
   Future<void> write(LocalGameScenarioView scenario, String document) async {}

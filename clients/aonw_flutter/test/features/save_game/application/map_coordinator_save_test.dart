@@ -10,6 +10,7 @@ import 'package:aonw_flutter/features/replay/application/replay_capture.dart';
 import 'package:aonw_flutter/features/save_game/application/game_save_session_port.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_state.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_store.dart';
+import 'package:aonw_flutter/features/save_game/application/local_save_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
@@ -68,6 +69,45 @@ void main() {
     },
   );
 
+  test('indexes a validated save without replacing the open game', () async {
+    final original = testMapScene();
+    final inspected = testMapScene().withPlayer(
+      PlayerMapView.preview(
+        actorPlayerId: 'player-1',
+        stamp: testSessionStamp(revision: 6),
+        turnMode: MatchTurnModeView.simultaneous,
+        turn: 9,
+        pendingAction: null,
+        units: const [],
+      ),
+    );
+    final saveSession = _FakeSaveSession(
+      exported: '{}',
+      opened: inspected,
+      validDocument: 'valid-save',
+    );
+    final coordinator = _coordinator(
+      FakeGameSession.success(original),
+      saveSession,
+      _MemorySaveStore(
+        primary: 'valid-save',
+        scenario: LocalGameScenarioView.starterDuel,
+      ),
+    );
+    addTearDown(coordinator.dispose);
+    await coordinator.startLocalMatch(_entry, _setup());
+
+    final summaries = await coordinator.listLocalSaves();
+
+    expect(summaries, hasLength(1));
+    expect(summaries.single.scenario, LocalGameScenarioView.starterDuel);
+    expect(summaries.single.gameMode, LocalSaveGameModeView.singlePlayer);
+    expect(summaries.single.turnMode, MatchTurnModeView.simultaneous);
+    expect(summaries.single.turn, 9);
+    expect(saveSession.inspectedDocuments, ['valid-save']);
+    expect((coordinator.state as GameSessionReady).scene, same(original));
+  });
+
   test('keeps the open game when every save candidate is rejected', () async {
     final original = testMapScene();
     final gameplay = FakeGameSession.success(original);
@@ -86,6 +126,32 @@ void main() {
     expect(result.started, isFalse);
     expect(result.failure, LocalResumeFailureViewCode.incompatible);
     expect(coordinator.state, same(before));
+  });
+
+  test('resumes only the explicitly selected scenario slot', () async {
+    final restored = testMapScene(mapId: 'dravonia');
+    final saveSession = _FakeSaveSession(
+      exported: '{}',
+      opened: restored,
+      validDocument: 'dravonia-save',
+    );
+    final coordinator = _coordinator(
+      FakeGameSession.success(testMapScene()),
+      saveSession,
+      _MemorySaveStore(
+        primary: 'dravonia-save',
+        scenario: LocalGameScenarioView.dravonia,
+      ),
+    );
+    addTearDown(coordinator.dispose);
+
+    final result = await coordinator.resumeLocalGame(
+      LocalGameScenarioView.dravonia,
+    );
+
+    expect(result.started, isTrue);
+    expect(saveSession.openedDocuments, ['dravonia-save']);
+    expect((coordinator.state as GameSessionReady).scene, same(restored));
   });
 
   test('keeps a restored hotseat recipient behind a privacy gate', () async {
@@ -197,6 +263,7 @@ final class _FakeSaveSession implements GameSaveSessionPort {
   final String? validDocument;
   final LocalMatchControlPlanView? controlPlan;
   final openedDocuments = <String>[];
+  final inspectedDocuments = <String>[];
   var exportCalls = 0;
 
   @override
@@ -206,11 +273,24 @@ final class _FakeSaveSession implements GameSaveSessionPort {
   }
 
   @override
+  Future<OpenedGameSaveView> inspectSaveDocument({
+    required MapAssetPaths assets,
+    required String document,
+  }) {
+    inspectedDocuments.add(document);
+    return _open(document);
+  }
+
+  @override
   Future<OpenedGameSaveView> openSaveDocument({
     required MapAssetPaths assets,
     required String document,
   }) async {
     openedDocuments.add(document);
+    return _open(document);
+  }
+
+  Future<OpenedGameSaveView> _open(String document) async {
     if (document != validDocument || opened == null) {
       throw const GameSaveSessionException(
         code: 'invalid_save',
@@ -225,23 +305,31 @@ final class _FakeSaveSession implements GameSaveSessionPort {
 }
 
 final class _MemorySaveStore implements LocalSaveStore {
-  _MemorySaveStore({this.primary, this.backup});
+  _MemorySaveStore({
+    this.primary,
+    this.backup,
+    this.scenario = LocalGameScenarioView.starterDuel,
+  });
 
   String? primary;
   String? backup;
+  final LocalGameScenarioView scenario;
 
   @override
   Future<bool> contains(LocalGameScenarioView scenario) async =>
-      primary != null || backup != null;
+      scenario == this.scenario && (primary != null || backup != null);
 
   @override
   Future<String?> read(
     LocalGameScenarioView scenario,
     LocalSaveCopyView copy,
-  ) async => switch (copy) {
-    LocalSaveCopyView.primary => primary,
-    LocalSaveCopyView.backup => backup,
-  };
+  ) async {
+    if (scenario != this.scenario) return null;
+    return switch (copy) {
+      LocalSaveCopyView.primary => primary,
+      LocalSaveCopyView.backup => backup,
+    };
+  }
 
   @override
   Future<void> write(LocalGameScenarioView scenario, String document) async {

@@ -14,6 +14,7 @@ import '../../replay/application/replay_capture.dart';
 import '../../research/read_model/research_view.dart';
 import '../../save_game/application/local_save_state.dart';
 import '../../save_game/application/local_save_store.dart';
+import '../../save_game/application/local_save_summary.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../application/game_session_capabilities.dart';
@@ -83,6 +84,13 @@ final class MapPresentationController extends ChangeNotifier {
   Future<bool> reconnectNetworkMatch() => _coordinator.reconnectNetworkMatch();
 
   Future<bool> hasLocalSave() => _coordinator.hasLocalSave();
+
+  Future<List<LocalSaveSummaryView>> listLocalSaves() =>
+      _coordinator.listLocalSaves();
+
+  Future<LocalResumeResultView> resumeLocalGame(
+    LocalGameScenarioView scenario,
+  ) => _coordinator.resumeLocalGame(scenario);
 
   Future<LocalResumeResultView> resumeLatestLocalGame() =>
       _coordinator.resumeLatestLocalGame();

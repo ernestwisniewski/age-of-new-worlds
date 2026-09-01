@@ -199,14 +199,14 @@ final class AonwRouter {
         );
 
   Widget _loadGameScreen(BuildContext context) => LoadGameScreen(
-    hasLocalSave: mapController.hasLocalSave,
-    resumeLocalGame: mapController.resumeLatestLocalGame,
+    listLocalSaves: mapController.listLocalSaves,
+    resumeLocalGame: mapController.resumeLocalGame,
     onResumed: () =>
         Navigator.of(context).pushReplacementNamed(AonwRoute.map.location),
-    hasLocalReplay: replayController?.hasReplay ?? () async => false,
+    hasLocalReplay: replayController?.hasReplayFor ?? (_) async => false,
     openReplay:
-        replayController?.openLatest ??
-        () async => const ReplayOpenResultView.failed(
+        replayController?.open ??
+        (_) async => const ReplayOpenResultView.failed(
           ReplayFailureViewCode.unavailable,
         ),
     onReplayOpened: () =>

@@ -14,24 +14,35 @@ void main() {
     () async {
       final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(gateway.close);
+      final saveSession = gateway.saveSession;
       final assets = LocalGameCatalog.entries.first.assets;
       final initial = await gateway.startLocalMatch(_setup());
-      final save = await gateway.exportSaveDocument();
+      final save = await saveSession.exportSaveDocument();
       final mismatch = jsonDecode(save) as Map<String, dynamic>;
       mismatch['mapHash'] = 'f' * 64;
+
+      final inspected = await saveSession.inspectSaveDocument(
+        assets: assets,
+        document: save,
+      );
+      expect(
+        inspected.player.stamp.stateDigest,
+        initial.player.stamp.stateDigest,
+      );
+      expect(await saveSession.exportSaveDocument(), save);
 
       for (final rejected in [
         save.substring(0, save.length ~/ 2),
         jsonEncode(mismatch),
       ]) {
         await expectLater(
-          gateway.openSaveDocument(assets: assets, document: rejected),
+          saveSession.openSaveDocument(assets: assets, document: rejected),
           throwsA(isA<GameSaveSessionException>()),
         );
-        expect(await gateway.exportSaveDocument(), save);
+        expect(await saveSession.exportSaveDocument(), save);
       }
 
-      final restored = await gateway.openSaveDocument(
+      final restored = await saveSession.openSaveDocument(
         assets: assets,
         document: save,
       );
@@ -45,7 +56,7 @@ void main() {
         restored.player.stamp.rulesetHash,
         initial.player.stamp.rulesetHash,
       );
-      expect(await gateway.exportSaveDocument(), save);
+      expect(await saveSession.exportSaveDocument(), save);
     },
   );
 
@@ -64,13 +75,13 @@ void main() {
           humanPlayerId: 'player-1',
         ),
       );
-      final document = await first.exportSaveDocument();
+      final document = await first.saveSession.exportSaveDocument();
       final expected = aiTurn.player.stamp;
       await first.close();
 
       final reopened = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(reopened.close);
-      final restored = await reopened.openSaveDocument(
+      final restored = await reopened.saveSession.openSaveDocument(
         assets: LocalGameCatalog.entries.first.assets,
         document: document,
       );
@@ -79,7 +90,7 @@ void main() {
       expect(restored.player.stamp.stateDigest, expected.stateDigest);
       expect(restored.player.stamp.mapHash, expected.mapHash);
       expect(restored.player.stamp.rulesetHash, expected.rulesetHash);
-      expect(await reopened.exportSaveDocument(), document);
+      expect(await reopened.saveSession.exportSaveDocument(), document);
     },
   );
 }

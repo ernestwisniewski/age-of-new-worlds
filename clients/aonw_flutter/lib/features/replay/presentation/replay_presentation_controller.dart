@@ -41,17 +41,25 @@ final class ReplayPresentationController extends ChangeNotifier
 
   ReplayState get state => _state;
 
+  Future<bool> hasReplayFor(LocalGameScenarioView scenario) =>
+      _containsReplay(scenario);
+
   Future<bool> hasReplay() async {
+    for (final entry in LocalGameCatalog.entries) {
+      if (await _containsReplay(entry.id)) return true;
+    }
+    return false;
+  }
+
+  Future<bool> _containsReplay(LocalGameScenarioView scenario) async {
     final store = _store;
     if (store == null) return false;
     try {
-      for (final entry in LocalGameCatalog.entries) {
-        if (await store.contains(entry.id)) return true;
-      }
+      return await store.contains(scenario);
     } on Object catch (error, stackTrace) {
       _diagnosticReporter('replay_lookup_failed', error, stackTrace);
+      return false;
     }
-    return false;
   }
 
   @override
@@ -75,7 +83,17 @@ final class ReplayPresentationController extends ChangeNotifier
     }
   }
 
-  Future<ReplayOpenResultView> openLatest() async {
+  Future<ReplayOpenResultView> open(LocalGameScenarioView scenario) =>
+      _openEntries([
+        LocalGameCatalog.entries.singleWhere((entry) => entry.id == scenario),
+      ]);
+
+  Future<ReplayOpenResultView> openLatest() =>
+      _openEntries(LocalGameCatalog.entries);
+
+  Future<ReplayOpenResultView> _openEntries(
+    Iterable<LocalGameCatalogEntryView> entries,
+  ) async {
     pause();
     final generation = ++_generation;
     _setState(const ReplayLoading());
@@ -86,54 +104,20 @@ final class ReplayPresentationController extends ChangeNotifier
     }
     var readFailed = false;
     var found = false;
-    for (final entry in LocalGameCatalog.entries) {
+    for (final entry in entries) {
       for (final copy in LocalReplayCopyView.values) {
-        String? document;
-        try {
-          document = await store.read(entry.id, copy);
-        } on LocalReplayStoreException catch (error, stackTrace) {
-          readFailed = true;
-          _reportStore(error, stackTrace);
-          continue;
-        } on Object catch (error, stackTrace) {
-          readFailed = true;
-          _diagnosticReporter(
-            'unexpected_replay_read_failure',
-            error,
-            stackTrace,
-          );
-          continue;
-        }
+        final read = await _readReplay(store, entry.id, copy);
+        readFailed = readFailed || read.failed;
+        final document = read.document;
         if (document == null) continue;
         found = true;
-        try {
-          final frame = await session.openReplayDocument(
-            assets: entry.assets,
-            document: document,
-          );
-          if (!_isCurrent(generation)) {
-            return const ReplayOpenResultView.failed(
-              ReplayFailureViewCode.unavailable,
-            );
-          }
-          _setState(
-            ReplayReady(
-              frame: frame,
-              speed: ReplaySpeedView.normal,
-              isPlaying: false,
-              isSeeking: false,
-            ),
-          );
-          return const ReplayOpenResultView.started();
-        } on ReplaySessionException catch (error, stackTrace) {
-          _reportSession(error, stackTrace);
-        } on Object catch (error, stackTrace) {
-          _diagnosticReporter(
-            'unexpected_replay_open_failure',
-            error,
-            stackTrace,
-          );
-        }
+        final opened = await _tryOpenReplay(
+          session,
+          entry,
+          document,
+          generation,
+        );
+        if (opened != null) return opened;
       }
     }
     return _failOpen(
@@ -144,6 +128,54 @@ final class ReplayPresentationController extends ChangeNotifier
           ? ReplayFailureViewCode.unreadable
           : ReplayFailureViewCode.missing,
     );
+  }
+
+  Future<({String? document, bool failed})> _readReplay(
+    LocalReplayStore store,
+    LocalGameScenarioView scenario,
+    LocalReplayCopyView copy,
+  ) async {
+    try {
+      return (document: await store.read(scenario, copy), failed: false);
+    } on LocalReplayStoreException catch (error, stackTrace) {
+      _reportStore(error, stackTrace);
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('unexpected_replay_read_failure', error, stackTrace);
+    }
+    return (document: null, failed: true);
+  }
+
+  Future<ReplayOpenResultView?> _tryOpenReplay(
+    ReplaySessionPort session,
+    LocalGameCatalogEntryView entry,
+    String document,
+    int generation,
+  ) async {
+    try {
+      final frame = await session.openReplayDocument(
+        assets: entry.assets,
+        document: document,
+      );
+      if (!_isCurrent(generation)) {
+        return const ReplayOpenResultView.failed(
+          ReplayFailureViewCode.unavailable,
+        );
+      }
+      _setState(
+        ReplayReady(
+          frame: frame,
+          speed: ReplaySpeedView.normal,
+          isPlaying: false,
+          isSeeking: false,
+        ),
+      );
+      return const ReplayOpenResultView.started();
+    } on ReplaySessionException catch (error, stackTrace) {
+      _reportSession(error, stackTrace);
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('unexpected_replay_open_failure', error, stackTrace);
+    }
+    return null;
   }
 
   void play() {
