@@ -16,7 +16,9 @@ import 'map/city_map_layer.dart';
 import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
+import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
+import 'map/map_tile_details_layer.dart';
 import 'map/objective_map_layer.dart';
 import 'map/static_map_layers.dart';
 import 'map/worker_infrastructure_layer.dart';
@@ -27,7 +29,8 @@ final class AonwWorld extends World implements FlameSceneSink {
   AonwWorld()
     : terrainLayer = MapTerrainLayerComponent(),
       referenceLayer = MapReferenceLayerComponent(),
-      gridLayer = MapGridLayerComponent() {
+      gridLayer = MapGridLayerComponent(),
+      tileDetailsLayer = MapTileDetailsLayerComponent() {
     unitLayer = MapUnitLayerComponent();
     cityLayer = MapCityLayerComponent();
     artifactLayer = MapArtifactLayerComponent();
@@ -42,6 +45,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       terrainLayer,
       referenceLayer,
       gridLayer,
+      tileDetailsLayer,
       workerInfrastructureLayer,
       fogLayer,
       reachableLayer,
@@ -54,10 +58,10 @@ final class AonwWorld extends World implements FlameSceneSink {
       effectHost,
     ]);
   }
-
   final MapTerrainLayerComponent terrainLayer;
   final MapReferenceLayerComponent referenceLayer;
   final MapGridLayerComponent gridLayer;
+  final MapTileDetailsLayerComponent tileDetailsLayer;
   late final MapReachableLayerComponent reachableLayer;
   late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
   late final MapFogLayerComponent fogLayer;
@@ -72,17 +76,20 @@ final class AonwWorld extends World implements FlameSceneSink {
   MapStaticRenderCache? _staticCache;
   MapHexCoordinate? _cursor;
   var _sceneWriteCount = 0;
-
   @visibleForTesting
   MapRenderSnapshot? get debugScene => _scene;
-
   @visibleForTesting
   int get debugSceneWriteCount => _sceneWriteCount;
-
   @visibleForTesting
   MapStaticRenderCache? get debugStaticRenderCache => _staticCache;
-
   MapStaticRenderCache? get _staticRenderCacheForGame => _staticCache;
+  bool applyMapDisplayOptions(MapDisplayOptions options) {
+    final terrainChanged = terrainLayer.setElevationWallsVisible(
+      options.showElevationWalls,
+    );
+    final detailsChanged = tileDetailsLayer.setOptions(options);
+    return terrainChanged || detailsChanged;
+  }
 
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
@@ -107,6 +114,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       visible: snapshot.interaction.referenceVisible,
     );
     gridLayer.applyCache(cache);
+    tileDetailsLayer.applyMap(snapshot.map, cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
     reachableLayer.applyReachable(cache, snapshot.interaction.reachable);
@@ -138,6 +146,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     terrainLayer.clearCache();
     referenceLayer.clearCache();
     gridLayer.clearCache();
+    tileDetailsLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
     reachableLayer.clearLayer();
@@ -176,7 +185,6 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
   }
-
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
   MapHexIntentSink? _hexIntentSink;
@@ -191,28 +199,20 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _inputFrameScheduled = false;
   var _keyboardPanX = 0.0;
   var _keyboardPanY = 0.0;
-
   static const _keyboardPanSpeed = 200.0;
   static const _gamepadPanSpeed = 520.0;
   static const _gamepadZoomSpeed = 1.35;
-
   FlameSceneSink get sceneSink => this;
-
   @visibleForTesting
   int get debugMountCount => _mountCount;
-
   @visibleForTesting
   int get debugRemoveCount => _removeCount;
-
   @visibleForTesting
   bool get debugDisposed => _disposed;
-
   @visibleForTesting
   bool get debugViewportActive => _viewportActive;
-
   @visibleForTesting
   bool get debugEffectsActive => _effectsActive;
-
   @visibleForTesting
   MapHexCoordinate? debugHexAtScreen(AonwPoint screenPoint) =>
       mapCamera.hexAtScreen(screenPoint);
@@ -280,8 +280,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     inputSurface.setCameraSensitivity(sensitivity);
   }
 
-  void setMapElevationWallsVisible(bool visible) {
-    if (!_disposed && world.terrainLayer.setElevationWallsVisible(visible)) {
+  void setMapDisplayOptions(MapDisplayOptions options) {
+    if (!_disposed && world.applyMapDisplayOptions(options)) {
       _requestInputFrame();
     }
   }

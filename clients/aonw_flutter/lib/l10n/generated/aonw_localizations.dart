@@ -1604,6 +1604,42 @@ abstract class AonwLocalizations {
   /// **'Map'**
   String get mapSettings;
 
+  /// No description provided for @mapResourceIcons.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource icons'**
+  String get mapResourceIcons;
+
+  /// No description provided for @mapResourceIconsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show resources available on map hexes.'**
+  String get mapResourceIconsDescription;
+
+  /// No description provided for @mapTerrainIcons.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrain icons'**
+  String get mapTerrainIcons;
+
+  /// No description provided for @mapTerrainIconsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the terrain tags assigned to each hex.'**
+  String get mapTerrainIconsDescription;
+
+  /// No description provided for @mapHeightBadges.
+  ///
+  /// In en, this message translates to:
+  /// **'Height labels'**
+  String get mapHeightBadges;
+
+  /// No description provided for @mapHeightBadgesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the authored height of raised hexes.'**
+  String get mapHeightBadgesDescription;
+
   /// No description provided for @mapElevationWalls.
   ///
   /// In en, this message translates to:

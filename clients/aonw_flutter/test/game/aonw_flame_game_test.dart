@@ -1,6 +1,7 @@
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/map_display_options.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,7 +58,7 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
-    'applies elevation wall settings without replacing the scene',
+    'applies map display settings without replacing the scene',
     AonwFlameGame.new,
     (game) async {
       final scene = testMapScene();
@@ -71,9 +72,26 @@ void main() {
       await game.ready();
 
       expect(game.world.terrainLayer.debugElevationWallsVisible, isFalse);
-      game.setMapElevationWallsVisible(true);
+      expect(
+        game.world.tileDetailsLayer.debugOptions.showResourceIcons,
+        isTrue,
+      );
+      game.setMapDisplayOptions(
+        const MapDisplayOptions(
+          showElevationWalls: true,
+          showTerrainIcons: true,
+          showResourceIcons: false,
+          showHeightBadges: true,
+        ),
+      );
 
       expect(game.world.terrainLayer.debugElevationWallsVisible, isTrue);
+      expect(game.world.tileDetailsLayer.debugOptions.showTerrainIcons, isTrue);
+      expect(
+        game.world.tileDetailsLayer.debugOptions.showResourceIcons,
+        isFalse,
+      );
+      expect(game.world.tileDetailsLayer.debugOptions.showHeightBadges, isTrue);
       expect(game.world.debugScene, same(snapshot));
       expect(game.world.debugSceneWriteCount, 1);
     },

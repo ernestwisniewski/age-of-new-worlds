@@ -7,6 +7,7 @@ import '../../../../design_system/aonw_tokens.dart';
 import '../../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../../design_system/widgets/aonw_panel.dart';
 import '../../../../game/aonw_flame_game.dart';
+import '../../../../game/map/map_display_options.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../local_game/application/local_ai_turn_state.dart';
@@ -169,7 +170,14 @@ final class _MapScreenState extends State<MapScreen>
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
-    _flameGame.setMapElevationWallsVisible(settings.showMapElevationWalls);
+    _flameGame.setMapDisplayOptions(
+      MapDisplayOptions(
+        showElevationWalls: settings.showMapElevationWalls,
+        showTerrainIcons: settings.showMapTerrainIcons,
+        showResourceIcons: settings.showMapResourceIcons,
+        showHeightBadges: settings.showMapHeightBadges,
+      ),
+    );
     _synchronizeGamepadSettings(settings.cameraSensitivity);
     return switch (state) {
       GameSessionLoading() => const LoadingMap(),

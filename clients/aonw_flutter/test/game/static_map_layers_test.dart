@@ -56,7 +56,7 @@ void main() {
   });
 
   testWithGame<AonwFlameGame>(
-    'keeps three batched static layers before ordered gameplay layers',
+    'keeps four batched static layers before ordered gameplay layers',
     AonwFlameGame.new,
     (game) async {
       final scene = testMapScene(cols: 7, rows: 7);
@@ -64,24 +64,26 @@ void main() {
       await game.ready();
 
       final layers = game.world.children.toList();
-      expect(layers, hasLength(13));
+      expect(layers, hasLength(14));
       expect(layers[0], same(game.world.terrainLayer));
       expect(layers[1], same(game.world.referenceLayer));
       expect(layers[2], same(game.world.gridLayer));
-      expect(layers[3], same(game.world.workerInfrastructureLayer));
-      expect(layers[4], same(game.world.fogLayer));
-      expect(layers[5], same(game.world.reachableLayer));
-      expect(layers[6], same(game.world.routeLayer));
-      expect(layers[7], same(game.world.objectiveLayer));
-      expect(layers[8], same(game.world.cityLayer));
-      expect(layers[9], same(game.world.artifactLayer));
-      expect(layers[10], same(game.world.unitLayer));
-      expect(layers[11], same(game.world.selectionLayer));
-      expect(layers[12], same(game.world.effectHost));
+      expect(layers[3], same(game.world.tileDetailsLayer));
+      expect(layers[4], same(game.world.workerInfrastructureLayer));
+      expect(layers[5], same(game.world.fogLayer));
+      expect(layers[6], same(game.world.reachableLayer));
+      expect(layers[7], same(game.world.routeLayer));
+      expect(layers[8], same(game.world.objectiveLayer));
+      expect(layers[9], same(game.world.cityLayer));
+      expect(layers[10], same(game.world.artifactLayer));
+      expect(layers[11], same(game.world.unitLayer));
+      expect(layers[12], same(game.world.selectionLayer));
+      expect(layers[13], same(game.world.effectHost));
       expect(layers.map((component) => component.priority), [
         0,
         10,
         20,
+        23,
         25,
         27,
         30,
@@ -104,6 +106,7 @@ void main() {
       expect(game.world.terrainLayer.debugCacheUpdateCount, 1);
       expect(game.world.referenceLayer.debugCacheUpdateCount, 1);
       expect(game.world.gridLayer.debugCacheUpdateCount, 1);
+      expect(game.world.tileDetailsLayer.debugCacheUpdateCount, 1);
       expect(game.world.fogLayer.isVisible, isFalse);
     },
   );
@@ -118,6 +121,7 @@ void main() {
       final terrainIdentity = game.world.terrainLayer.debugIdentity;
       final referenceIdentity = game.world.referenceLayer.debugIdentity;
       final gridIdentity = game.world.gridLayer.debugIdentity;
+      final detailsIdentity = game.world.tileDetailsLayer.debugIdentity;
 
       for (var frame = 0; frame < 120; frame++) {
         game.update(1 / 60);
@@ -133,9 +137,11 @@ void main() {
       expect(game.world.terrainLayer.debugIdentity, same(terrainIdentity));
       expect(game.world.referenceLayer.debugIdentity, same(referenceIdentity));
       expect(game.world.gridLayer.debugIdentity, same(gridIdentity));
+      expect(game.world.tileDetailsLayer.debugIdentity, same(detailsIdentity));
       expect(game.world.terrainLayer.debugCacheUpdateCount, 1);
       expect(game.world.referenceLayer.debugCacheUpdateCount, 1);
       expect(game.world.gridLayer.debugCacheUpdateCount, 1);
+      expect(game.world.tileDetailsLayer.debugCacheUpdateCount, 1);
       expect(game.world.referenceLayer.debugVisibilityUpdateCount, 2);
       expect(game.world.referenceLayer.isVisible, isFalse);
 

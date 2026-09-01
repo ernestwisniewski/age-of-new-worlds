@@ -49,14 +49,26 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('map-elevation-walls-setting')));
-    await tester.pumpAndSettle();
+    for (final key in const [
+      'map-resource-icons-setting',
+      'map-terrain-icons-setting',
+      'map-height-badges-setting',
+      'map-elevation-walls-setting',
+    ]) {
+      final setting = find.byKey(ValueKey(key));
+      await tester.ensureVisible(setting);
+      await tester.tap(setting);
+      await tester.pumpAndSettle();
+    }
 
     expect(store.settings.masterVolume, 0.25);
     expect(store.settings.cameraSensitivity, 1.5);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapElevationWalls, isTrue);
+    expect(store.settings.showMapTerrainIcons, isTrue);
+    expect(store.settings.showMapResourceIcons, isFalse);
+    expect(store.settings.showMapHeightBadges, isTrue);
 
     await tester.tap(find.byKey(const ValueKey('reset-settings')));
     await tester.pumpAndSettle();

@@ -21,6 +21,9 @@ abstract final class MapPalette {
   static const fogDiscovered = Color(0x80000000);
   static const elevationWallBottom = Color(0xFF111820);
   static const elevationWallHighlight = Color(0xFFF8F2E4);
+  static const mapIconFallback = Color(0xB4F0DCAE);
+  static const heightBadge = Color(0xFFFFFFFF);
+  static const heightBadgeOutline = Color(0xFF000000);
   static final elevationWallRight = Color.lerp(
     elevationWallBottom,
     elevationWallHighlight,

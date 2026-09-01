@@ -1190,6 +1190,27 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get mapSettings => 'Mapa';
 
   @override
+  String get mapResourceIcons => 'Ikony zasobów';
+
+  @override
+  String get mapResourceIconsDescription =>
+      'Pokazuj zasoby dostępne na heksach mapy.';
+
+  @override
+  String get mapTerrainIcons => 'Ikony terenu';
+
+  @override
+  String get mapTerrainIconsDescription =>
+      'Pokazuj typy terenu przypisane do każdego heksu.';
+
+  @override
+  String get mapHeightBadges => 'Etykiety wysokości';
+
+  @override
+  String get mapHeightBadgesDescription =>
+      'Pokazuj zapisaną wysokość wyniesionych heksów.';
+
+  @override
   String get mapElevationWalls => 'Ściany wysokości';
 
   @override

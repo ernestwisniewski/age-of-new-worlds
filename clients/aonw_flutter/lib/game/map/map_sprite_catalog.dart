@@ -1,4 +1,5 @@
 import '../../design_system/assets/sprite_frame_id.dart';
+import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/pending_action_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 
@@ -70,4 +71,10 @@ abstract final class MapSpriteCatalog {
     final column = era.clamp(0, improvementEraCount - 1);
     return SpriteFrameId('improvement.${kind.name}.$column');
   }
+
+  static SpriteFrameId terrainFrame(MapTerrain terrain) =>
+      SpriteFrameId('map.terrain.${terrain.name}');
+
+  static SpriteFrameId resourceFrame(MapResource resource) =>
+      SpriteFrameId('map.resource.${resource.name}');
 }

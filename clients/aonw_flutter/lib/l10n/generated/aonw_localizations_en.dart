@@ -1187,6 +1187,27 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get mapSettings => 'Map';
 
   @override
+  String get mapResourceIcons => 'Resource icons';
+
+  @override
+  String get mapResourceIconsDescription =>
+      'Show resources available on map hexes.';
+
+  @override
+  String get mapTerrainIcons => 'Terrain icons';
+
+  @override
+  String get mapTerrainIconsDescription =>
+      'Show the terrain tags assigned to each hex.';
+
+  @override
+  String get mapHeightBadges => 'Height labels';
+
+  @override
+  String get mapHeightBadgesDescription =>
+      'Show the authored height of raised hexes.';
+
+  @override
   String get mapElevationWalls => 'Elevation walls';
 
   @override

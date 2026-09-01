@@ -33,6 +33,9 @@ void main() {
     game.sceneSink.replaceScene(
       _staticSnapshot(map, reference, referenceVisible: false),
     );
+    await tester.runAsync(
+      game.world.tileDetailsLayer.debugPreloadVisibleFrames,
+    );
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,

@@ -14,6 +14,9 @@ final class SharedPreferencesClientSettingsStore
   static const _highContrastKey = 'aonw.settings.highContrast';
   static const _showMapElevationWallsKey =
       'aonw.settings.showMapElevationWalls';
+  static const _showMapTerrainIconsKey = 'aonw.settings.showMapTerrainIcons';
+  static const _showMapResourceIconsKey = 'aonw.settings.showMapResourceIcons';
+  static const _showMapHeightBadgesKey = 'aonw.settings.showMapHeightBadges';
 
   final SharedPreferencesAsync _preferences;
 
@@ -27,6 +30,15 @@ final class SharedPreferencesClientSettingsStore
     final highContrast = await _preferences.getBool(_highContrastKey);
     final showMapElevationWalls = await _preferences.getBool(
       _showMapElevationWallsKey,
+    );
+    final showMapTerrainIcons = await _preferences.getBool(
+      _showMapTerrainIconsKey,
+    );
+    final showMapResourceIcons = await _preferences.getBool(
+      _showMapResourceIconsKey,
+    );
+    final showMapHeightBadges = await _preferences.getBool(
+      _showMapHeightBadgesKey,
     );
     return ClientSettings(
       masterVolume: _bounded(
@@ -46,6 +58,12 @@ final class SharedPreferencesClientSettingsStore
       showMapElevationWalls:
           showMapElevationWalls ??
           ClientSettings.defaults.showMapElevationWalls,
+      showMapTerrainIcons:
+          showMapTerrainIcons ?? ClientSettings.defaults.showMapTerrainIcons,
+      showMapResourceIcons:
+          showMapResourceIcons ?? ClientSettings.defaults.showMapResourceIcons,
+      showMapHeightBadges:
+          showMapHeightBadges ?? ClientSettings.defaults.showMapHeightBadges,
     );
   }
 
@@ -61,6 +79,18 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(
       _showMapElevationWallsKey,
       settings.showMapElevationWalls,
+    );
+    await _preferences.setBool(
+      _showMapTerrainIconsKey,
+      settings.showMapTerrainIcons,
+    );
+    await _preferences.setBool(
+      _showMapResourceIconsKey,
+      settings.showMapResourceIcons,
+    );
+    await _preferences.setBool(
+      _showMapHeightBadgesKey,
+      settings.showMapHeightBadges,
     );
   }
 }

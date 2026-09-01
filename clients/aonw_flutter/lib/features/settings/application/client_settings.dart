@@ -5,6 +5,9 @@ final class ClientSettings {
     required this.reducedMotion,
     required this.highContrast,
     required this.showMapElevationWalls,
+    required this.showMapTerrainIcons,
+    required this.showMapResourceIcons,
+    required this.showMapHeightBadges,
   }) : assert(masterVolume >= 0 && masterVolume <= 1),
        assert(cameraSensitivity >= 0.5 && cameraSensitivity <= 2);
 
@@ -14,6 +17,9 @@ final class ClientSettings {
     reducedMotion: false,
     highContrast: false,
     showMapElevationWalls: false,
+    showMapTerrainIcons: false,
+    showMapResourceIcons: true,
+    showMapHeightBadges: false,
   );
 
   final double masterVolume;
@@ -21,6 +27,9 @@ final class ClientSettings {
   final bool reducedMotion;
   final bool highContrast;
   final bool showMapElevationWalls;
+  final bool showMapTerrainIcons;
+  final bool showMapResourceIcons;
+  final bool showMapHeightBadges;
 
   ClientSettings copyWith({
     double? masterVolume,
@@ -28,12 +37,18 @@ final class ClientSettings {
     bool? reducedMotion,
     bool? highContrast,
     bool? showMapElevationWalls,
+    bool? showMapTerrainIcons,
+    bool? showMapResourceIcons,
+    bool? showMapHeightBadges,
   }) => ClientSettings(
     masterVolume: masterVolume ?? this.masterVolume,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     reducedMotion: reducedMotion ?? this.reducedMotion,
     highContrast: highContrast ?? this.highContrast,
     showMapElevationWalls: showMapElevationWalls ?? this.showMapElevationWalls,
+    showMapTerrainIcons: showMapTerrainIcons ?? this.showMapTerrainIcons,
+    showMapResourceIcons: showMapResourceIcons ?? this.showMapResourceIcons,
+    showMapHeightBadges: showMapHeightBadges ?? this.showMapHeightBadges,
   );
 
   @override
@@ -43,7 +58,10 @@ final class ClientSettings {
       other.cameraSensitivity == cameraSensitivity &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
-      other.showMapElevationWalls == showMapElevationWalls;
+      other.showMapElevationWalls == showMapElevationWalls &&
+      other.showMapTerrainIcons == showMapTerrainIcons &&
+      other.showMapResourceIcons == showMapResourceIcons &&
+      other.showMapHeightBadges == showMapHeightBadges;
 
   @override
   int get hashCode => Object.hash(
@@ -52,5 +70,8 @@ final class ClientSettings {
     reducedMotion,
     highContrast,
     showMapElevationWalls,
+    showMapTerrainIcons,
+    showMapResourceIcons,
+    showMapHeightBadges,
   );
 }

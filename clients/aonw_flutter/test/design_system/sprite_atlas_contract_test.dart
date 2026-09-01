@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:aonw_flutter/design_system/assets/sprite_frame_id.dart';
 import 'package:aonw_flutter/design_system/assets/texture_packer_sprite_frame_repository.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/map/map_sprite_catalog.dart';
@@ -73,6 +74,12 @@ void main() {
         );
       }
     }
+    for (final terrain in MapTerrain.values) {
+      expect(frames, contains(MapSpriteCatalog.terrainFrame(terrain).value));
+    }
+    for (final resource in MapResource.values) {
+      expect(frames, contains(MapSpriteCatalog.resourceFrame(resource).value));
+    }
   });
 
   testWidgets('repository decodes and caches representative atlas frames', (
@@ -87,6 +94,8 @@ void main() {
         repository.load(const SpriteFrameId('unit.warrior.idle.0')),
         repository.load(const SpriteFrameId('city.growthCivic.0')),
         repository.load(const SpriteFrameId('improvement.farm.0')),
+        repository.load(const SpriteFrameId('map.resource.wheat')),
+        repository.load(const SpriteFrameId('map.terrain.plains')),
       ]),
     );
 
@@ -97,6 +106,8 @@ void main() {
     expect(loads[2].originalSize.width, 512);
     expect(loads[2].originalSize.height, 320);
     expect(loads[3].source.isEmpty, isFalse);
+    expect(loads[4].source.isEmpty, isFalse);
+    expect(loads[5].source.isEmpty, isFalse);
   });
 }
 
