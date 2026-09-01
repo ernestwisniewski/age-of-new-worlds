@@ -103,6 +103,13 @@ final class _WaitingRoomActions extends StatelessWidget {
         ),
         _HostStartAction(controller: controller, state: state),
         const SizedBox(height: AonwSpacing.sm),
+        OutlinedButton.icon(
+          key: const ValueKey('multiplayer-leave-lobby'),
+          onPressed: state.busy ? null : controller.leaveWaitingRoom,
+          icon: const Icon(Icons.exit_to_app),
+          label: Text(l10n.leaveMultiplayerMatch),
+        ),
+        const SizedBox(height: AonwSpacing.sm),
         _WaitingRoomNavigation(controller: controller, busy: state.busy),
       ],
     );

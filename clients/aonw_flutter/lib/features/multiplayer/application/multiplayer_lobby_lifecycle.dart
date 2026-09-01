@@ -190,6 +190,31 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
     }
   }
 
+  Future<void> leaveWaitingRoom() async {
+    final current = _state;
+    if (current is! MultiplayerWaitingRoom || current.busy) return;
+    final generation = ++_generation;
+    _setState(current.copyWith(busy: true, clearFailure: true));
+    try {
+      final match = await _session.leaveLobby(current.lobby.match.matchId);
+      if (match.matchId != current.lobby.match.matchId) {
+        throw const MultiplayerSessionException(
+          code: 'invalid_match_lifecycle',
+          message: 'The leave response belongs to another match.',
+        );
+      }
+      await _openLobby(current.account, generation);
+    } on Object catch (error, stackTrace) {
+      _waitingRoomFailure(
+        current,
+        generation,
+        'multiplayer_match_leave_failed',
+        error,
+        stackTrace,
+      );
+    }
+  }
+
   Future<void> _openWaitingMatch(
     MultiplayerLobby current,
     String matchId,

@@ -364,6 +364,13 @@ class EndpointGame extends _i1.EndpointRef {
         {'matchId': matchId},
       );
 
+  _i2.Future<_i9.GameMatchView> leaveLobby(String matchId) =>
+      caller.callServerEndpoint<_i9.GameMatchView>(
+        'game',
+        'leaveLobby',
+        {'matchId': matchId},
+      );
+
   _i2.Future<_i14.GameCommandOutcome> submitTurn(
     _i15.GameSubmitTurnRequest request,
   ) => caller.callServerEndpoint<_i14.GameCommandOutcome>(

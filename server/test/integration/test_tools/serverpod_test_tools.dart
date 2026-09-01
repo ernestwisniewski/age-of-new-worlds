@@ -1067,6 +1067,37 @@ class _GameEndpoint {
     });
   }
 
+  _i3.Future<_i9.GameMatchView> leaveLobby(
+    _i1.TestSessionBuilder sessionBuilder,
+    String matchId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'game',
+            method: 'leaveLobby',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'game',
+          methodName: 'leaveLobby',
+          parameters: _i1.testObjectToJson({'matchId': matchId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _i3.Future<_i9.GameMatchView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _i3.Future<_i14.GameCommandOutcome> submitTurn(
     _i1.TestSessionBuilder sessionBuilder,
     _i15.GameSubmitTurnRequest request,

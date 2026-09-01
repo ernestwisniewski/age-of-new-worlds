@@ -524,6 +524,12 @@ abstract class AonwLocalizations {
   /// **'Refresh match'**
   String get refreshMatch;
 
+  /// No description provided for @leaveMultiplayerMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave match'**
+  String get leaveMultiplayerMatch;
+
   /// No description provided for @multiplayerMatchTitle.
   ///
   /// In en, this message translates to:

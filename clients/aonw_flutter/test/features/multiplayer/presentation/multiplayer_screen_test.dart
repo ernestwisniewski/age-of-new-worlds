@@ -118,6 +118,9 @@ final class _Session implements MultiplayerSessionPort {
   }
 
   @override
+  Future<MultiplayerMatchView> leaveLobby(String matchId) async => _lobby.match;
+
+  @override
   Future<void> reconnect() => throw UnsupportedError('Not used by this test.');
 
   @override

@@ -164,6 +164,10 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
       _startRemoteMatch(this, matchId);
 
   @override
+  Future<MultiplayerMatchView> leaveLobby(String matchId) =>
+      _leaveRemoteLobby(this, matchId);
+
+  @override
   Future<MultiplayerProjectionView> resync(String matchId) async {
     _ensureAuthenticated();
     try {

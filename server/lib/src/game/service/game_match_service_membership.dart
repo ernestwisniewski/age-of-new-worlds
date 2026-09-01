@@ -30,7 +30,8 @@ Future<GameResync> _joinTransaction(
     lock: true,
   );
   _assertUserCanClaim(existingUser, claim.playerId);
-  if (match.state != _matchStateLobby && existingUser == null) {
+  if (match.state != _matchStateLobby &&
+      (existingUser == null || !_isActiveParticipant(existingUser))) {
     throw _error(
       'match_already_started',
       'New participant seats cannot be claimed after the match starts.',
@@ -51,10 +52,13 @@ Future<GameResync> _joinTransaction(
     transaction: transaction,
     lock: true,
   );
-  _assertPlayerCanBeClaimed(existingPlayer, claim.userIdentifier);
-  if (existingUser == null) {
-    await _insertParticipant(session, transaction, match.id!, claim);
-  }
+  await _claimParticipant(
+    session,
+    transaction,
+    match.id!,
+    claim,
+    existingPlayer,
+  );
   return _resyncView(match.publicId, claim.playerId, snapshot);
 }
 
@@ -67,16 +71,41 @@ void _assertUserCanClaim(GameParticipant? existing, String playerId) {
   }
 }
 
-void _assertPlayerCanBeClaimed(
+Future<void> _claimParticipant(
+  Session session,
+  Transaction transaction,
+  int matchId,
+  _ParticipantClaim claim,
   GameParticipant? existing,
-  String userIdentifier,
-) {
-  if (existing != null && existing.userIdentifier != userIdentifier) {
+) async {
+  if (existing == null) {
+    await _insertParticipant(session, transaction, matchId, claim);
+    return;
+  }
+  if (_isActiveParticipant(existing) &&
+      existing.userIdentifier != claim.userIdentifier) {
     throw _error(
       'participant_claimed',
       'This match participant already belongs to another account.',
     );
   }
+  if (existing.userIdentifier == claim.userIdentifier &&
+      _isActiveParticipant(existing)) {
+    return;
+  }
+  await GameParticipant.db.updateRow(
+    session,
+    existing.copyWith(
+      userIdentifier: claim.userIdentifier,
+      joinedAt: DateTime.now().toUtc(),
+      readyAt: null,
+      leftAt: null,
+      resignedAt: null,
+      kickedAt: null,
+      kickReason: null,
+    ),
+    transaction: transaction,
+  );
 }
 
 Future<void> _insertParticipant(
@@ -109,7 +138,7 @@ Future<List<GameMatchView>> _listMatches(Session session) async {
     orderDescending: true,
   );
   final matches = <GameMatchView>[];
-  for (final participant in participants) {
+  for (final participant in participants.where(_isActiveParticipant)) {
     final match = await GameMatch.db.findById(session, participant.matchId);
     if (match != null) matches.add(_view(match));
   }

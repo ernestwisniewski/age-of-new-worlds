@@ -45,6 +45,9 @@ final class GameMatchService {
   Future<GameLobbyView> startMatch(Session session, String matchId) =>
       _startMatch(session, matchId);
 
+  Future<GameMatchView> leaveLobby(Session session, String matchId) =>
+      _leaveLobby(session, matchId);
+
   Future<GameCommandOutcome> submitTurn(
     Session session,
     GameSubmitTurnRequest request,

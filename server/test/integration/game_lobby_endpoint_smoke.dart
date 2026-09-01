@@ -43,11 +43,95 @@ void main() {
           ),
         );
       });
+
+      test(
+        'releases seats, transfers host, and abandons an empty lobby',
+        () async {
+          addTearDown(shutdownAonwGameNativeHost);
+          final owner = _authenticated(sessionBuilder, 'lobby-owner').build();
+          final guest = _authenticated(sessionBuilder, 'lobby-guest').build();
+          final successor = _authenticated(
+            sessionBuilder,
+            'lobby-successor',
+          ).build();
+          final endpoint = GameEndpoint();
+          final created = await endpoint.createMatch(
+            owner,
+            game.GameCreateMatchRequest(
+              mapId: 'postgres-ai-owner-map',
+              mapDocument: _mapDocument(),
+              scenarioDocument: _scenarioDocument(),
+              rulesetId: 'aonw-standard',
+              matchIdentityJson: _matchIdentityDocument(aiOwner: false),
+              fogEnabled: true,
+              creatorPlayerId: 'player-1',
+            ),
+          );
+          await endpoint.joinMatch(
+            guest,
+            game.GameJoinMatchRequest(
+              matchId: created.matchId,
+              playerId: 'player-2',
+            ),
+          );
+
+          final guestLeft = await endpoint.leaveLobby(guest, created.matchId);
+          expect(guestLeft.state, 'lobby');
+          expect(guestLeft.hostPlayerId, 'player-1');
+          expect(await endpoint.listMatches(guest), isEmpty);
+          final ownerLobby = await endpoint.lobby(owner, created.matchId);
+          expect(
+            ownerLobby.participants
+                .singleWhere((value) => value.playerId == 'player-2')
+                .isClaimed,
+            isFalse,
+          );
+
+          await endpoint.joinMatch(
+            successor,
+            game.GameJoinMatchRequest(
+              matchId: created.matchId,
+              playerId: 'player-2',
+            ),
+          );
+          final ownerLeft = await endpoint.leaveLobby(owner, created.matchId);
+          expect(ownerLeft.state, 'lobby');
+          expect(ownerLeft.hostPlayerId, 'player-2');
+          final successorLobby = await endpoint.lobby(
+            successor,
+            created.matchId,
+          );
+          expect(
+            successorLobby.participants
+                .singleWhere((participant) => participant.isCurrentUser)
+                .isHost,
+            isTrue,
+          );
+
+          final abandoned = await endpoint.leaveLobby(
+            successor,
+            created.matchId,
+          );
+          expect(abandoned.state, 'abandoned');
+          expect(abandoned.hostPlayerId, isNull);
+          expect(await endpoint.listMatches(successor), isEmpty);
+        },
+      );
     },
     rollbackDatabase: RollbackDatabase.afterEach,
     testServerOutputMode: TestServerOutputMode.normal,
   );
 }
+
+TestSessionBuilder _authenticated(
+  TestSessionBuilder sessionBuilder,
+  String userIdentifier,
+) => sessionBuilder.copyWith(
+  authentication: AuthenticationOverride.authenticationInfo(
+    userIdentifier,
+    const {},
+  ),
+);
 
 String _mapDocument() => jsonEncode({
   'schemaVersion': 1,
@@ -95,7 +179,7 @@ String _scenarioDocument() => jsonEncode({
   ],
 });
 
-String _matchIdentityDocument() => jsonEncode({
+String _matchIdentityDocument({bool aiOwner = true}) => jsonEncode({
   'matchRules': {
     'gameLength': {
       'kind': 'unlimited',
@@ -124,13 +208,15 @@ String _matchIdentityDocument() => jsonEncode({
       'name': 'Computer host',
       'colorValue': 0xff0000ff,
       'country': 'poland',
-      'kind': 'ai',
-      'ai': {
-        'strategyId': 'mcts',
-        'difficulty': 'normal',
-        'persona': 'balanced',
-        'seed': 7,
-      },
+      'kind': aiOwner ? 'ai' : 'human',
+      'ai': aiOwner
+          ? {
+              'strategyId': 'mcts',
+              'difficulty': 'normal',
+              'persona': 'balanced',
+              'seed': 7,
+            }
+          : null,
     },
     {
       'id': 'player-2',

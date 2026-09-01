@@ -248,6 +248,9 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get refreshMatch => 'Refresh match';
 
   @override
+  String get leaveMultiplayerMatch => 'Leave match';
+
+  @override
   String get multiplayerMatchTitle => 'Online match';
 
   @override

@@ -52,6 +52,8 @@ final class MultiplayerController extends ChangeNotifier {
 
   Future<void> closeWaitingRoom() => _coordinator.closeWaitingRoom();
 
+  Future<void> leaveWaitingRoom() => _coordinator.leaveWaitingRoom();
+
   Future<void> submitTurn() => _coordinator.submitTurn();
 
   Future<void> reconnect() => _coordinator.reconnect();

@@ -32,6 +32,9 @@ final class GameEndpoint extends Endpoint {
   Future<GameLobbyView> startMatch(Session session, String matchId) =>
       _service.startMatch(session, matchId);
 
+  Future<GameMatchView> leaveLobby(Session session, String matchId) =>
+      _service.leaveLobby(session, matchId);
+
   Future<GameCommandOutcome> submitTurn(
     Session session,
     GameSubmitTurnRequest request,

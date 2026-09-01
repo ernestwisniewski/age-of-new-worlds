@@ -92,6 +92,24 @@ void _validateCreatedLobby(
   );
 }
 
+Future<MultiplayerMatchView> _leaveRemoteLobby(
+  ServerpodMultiplayerSession session,
+  String matchId,
+) async {
+  session._ensureAuthenticated();
+  try {
+    final match = _decodeMatch(await session._client.game.leaveLobby(matchId));
+    if (match.matchId != matchId) {
+      throw const FormatException(
+        'Leaving the lobby returned an inconsistent match.',
+      );
+    }
+    return match;
+  } on Object catch (error, stackTrace) {
+    throw _translate(error, stackTrace);
+  }
+}
+
 void _validateJoinedLobby(
   server.GameResync joined,
   MultiplayerMatchLobbyView lobby,
@@ -154,6 +172,7 @@ void _validateMatchLifecycle(
     throw const FormatException('The server returned an invalid match.');
   }
   if (!waiting && value.startedAt == null) {
+    if (phase == MultiplayerMatchPhase.abandoned) return;
     throw const FormatException('The server returned an invalid match.');
   }
 }

@@ -250,6 +250,9 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get refreshMatch => 'Odśwież rozgrywkę';
 
   @override
+  String get leaveMultiplayerMatch => 'Opuść rozgrywkę';
+
+  @override
   String get multiplayerMatchTitle => 'Rozgrywka online';
 
   @override

@@ -91,6 +91,73 @@ Future<GameLobbyView> _startMatch(Session session, String rawMatchId) {
   });
 }
 
+Future<GameMatchView> _leaveLobby(Session session, String rawMatchId) {
+  final userIdentifier = _requireUser(session);
+  final matchId = _identifier(rawMatchId, 'matchId');
+  return session.db.transaction((transaction) async {
+    final match = await _matchByPublicId(
+      session,
+      matchId,
+      transaction: transaction,
+      lock: true,
+    );
+    _requireLobby(match);
+    final participant = await _participant(
+      session,
+      match.id!,
+      userIdentifier,
+      transaction: transaction,
+    );
+    final now = DateTime.now().toUtc();
+    await GameParticipant.db.updateRow(
+      session,
+      participant.copyWith(readyAt: null, leftAt: now),
+      transaction: transaction,
+    );
+    final claims = await _matchParticipants(
+      session,
+      match.id!,
+      transaction: transaction,
+      lock: true,
+    );
+    final active = claims.where(_isActiveParticipant).toList()
+      ..sort(_compareParticipantJoinOrder);
+    final updated = await GameMatch.db.updateRow(
+      session,
+      _matchAfterLobbyLeave(match, participant, active, now),
+      transaction: transaction,
+    );
+    return _view(updated);
+  });
+}
+
+GameMatch _matchAfterLobbyLeave(
+  GameMatch match,
+  GameParticipant leaving,
+  List<GameParticipant> active,
+  DateTime now,
+) {
+  if (active.isEmpty) {
+    return match.copyWith(
+      state: _matchStateAbandoned,
+      hostPlayerId: null,
+      endedAt: now,
+      updatedAt: now,
+    );
+  }
+  return match.copyWith(
+    hostPlayerId: leaving.playerId == match.hostPlayerId
+        ? active.first.playerId
+        : match.hostPlayerId,
+    updatedAt: now,
+  );
+}
+
+int _compareParticipantJoinOrder(GameParticipant left, GameParticipant right) {
+  final joined = left.joinedAt.compareTo(right.joinedAt);
+  return joined == 0 ? left.playerId.compareTo(right.playerId) : joined;
+}
+
 Future<List<GameParticipant>> _matchParticipants(
   Session session,
   int matchId, {
@@ -123,7 +190,10 @@ GameLobbyView _lobbyView(
     throw StateError('Lobby host identity is unavailable.');
   }
   final canonical = _canonicalParticipants(match);
-  final claimsByPlayer = {for (final claim in claims) claim.playerId: claim};
+  final claimsByPlayer = {
+    for (final claim in claims.where(_isActiveParticipant))
+      claim.playerId: claim,
+  };
   final participants = <GameLobbyParticipantView>[];
   var everyHumanReady = true;
   for (final (index, value) in canonical.indexed) {

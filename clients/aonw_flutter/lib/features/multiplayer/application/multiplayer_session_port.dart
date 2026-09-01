@@ -38,6 +38,8 @@ abstract interface class MultiplayerSessionPort {
 
   Future<MultiplayerMatchLobbyView> startMatch(String matchId);
 
+  Future<MultiplayerMatchView> leaveLobby(String matchId);
+
   Future<MultiplayerProjectionView> resync(String matchId);
 
   Future<MultiplayerCommandView> submitTurn({

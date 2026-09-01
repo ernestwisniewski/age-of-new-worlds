@@ -19,6 +19,7 @@ const _publicNativeErrorCodes = {
 const _matchStateLobby = 'lobby';
 const _matchStateRunning = 'running';
 const _matchStateFinished = 'finished';
+const _matchStateAbandoned = 'abandoned';
 
 void _requireRunningMatch(GameMatch match) {
   if (match.state != _matchStateRunning) {
@@ -65,8 +66,16 @@ Future<GameParticipant> _participant(
   if (participant == null) {
     throw _error('not_participant', 'The account is not a match participant.');
   }
+  if (!_isActiveParticipant(participant)) {
+    throw _error('not_participant', 'The account is not a match participant.');
+  }
   return participant;
 }
+
+bool _isActiveParticipant(GameParticipant participant) =>
+    participant.leftAt == null &&
+    participant.resignedAt == null &&
+    participant.kickedAt == null;
 
 Future<GameParticipant?> _participantForUser(
   Session session,

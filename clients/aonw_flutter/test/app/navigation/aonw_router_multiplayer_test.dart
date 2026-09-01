@@ -142,6 +142,10 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
   }
 
   @override
+  Future<MultiplayerMatchView> leaveLobby(String matchId) async =>
+      lobbyView.match;
+
+  @override
   Future<MultiplayerProjectionView> resync(String matchId) async {
     resyncCalls += 1;
     return _projection;

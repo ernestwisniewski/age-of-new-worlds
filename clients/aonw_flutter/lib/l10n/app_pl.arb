@@ -73,6 +73,7 @@
   "markNotReady": "Wycofaj gotowość",
   "waitingForPlayers": "Każde miejsce człowieka musi być zajęte, a wszyscy gracze gotowi przed startem.",
   "refreshMatch": "Odśwież rozgrywkę",
+  "leaveMultiplayerMatch": "Opuść rozgrywkę",
   "multiplayerMatchTitle": "Rozgrywka online",
   "matchIdentifier": "Rozgrywka: {matchId}",
   "playerIdentifier": "Gracz: {playerId}",

@@ -589,6 +589,24 @@ class Endpoints extends _i1.EndpointDispatch {
                 params['matchId'],
               ),
         ),
+        'leaveLobby': _i1.MethodConnector(
+          name: 'leaveLobby',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).leaveLobby(
+                session,
+                params['matchId'],
+              ),
+        ),
         'submitTurn': _i1.MethodConnector(
           name: 'submitTurn',
           params: {

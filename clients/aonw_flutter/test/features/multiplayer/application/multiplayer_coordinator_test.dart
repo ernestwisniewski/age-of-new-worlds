@@ -60,6 +60,20 @@ void main() {
     expect(session.resyncCount, 1);
   });
 
+  test('leaves a waiting room and removes it from joined matches', () async {
+    final session = _Session()..restored = _account;
+    final coordinator = _coordinator(session);
+    addTearDown(coordinator.close);
+    await coordinator.initialize();
+    await coordinator.createMatch();
+
+    await coordinator.leaveWaitingRoom();
+
+    final lobby = coordinator.state as MultiplayerLobby;
+    expect(lobby.matches, isEmpty);
+    expect(session.leaveLobbyCount, 1);
+  });
+
   test(
     'keeps one command identity across reconnect and durable retry',
     () async {
@@ -173,6 +187,8 @@ final class _Session implements MultiplayerSessionPort {
   var commandRevisionIncrement = 1;
   var reconnectCount = 0;
   var resyncCount = 0;
+  var leaveLobbyCount = 0;
+  var leftLobby = false;
   Object? listFailure;
   final commandIds = <String>[];
   List<MultiplayerMatchView> get matches => [
@@ -218,7 +234,7 @@ final class _Session implements MultiplayerSessionPort {
   @override
   Future<List<MultiplayerMatchView>> listMatches() async {
     if (listFailure case final error?) throw error;
-    return matches;
+    return leftLobby ? const [] : matches;
   }
 
   @override
@@ -248,6 +264,13 @@ final class _Session implements MultiplayerSessionPort {
   Future<MultiplayerMatchLobbyView> startMatch(String matchId) async {
     lobbyView = _lobbyView(phase: MultiplayerMatchPhase.running, ready: true);
     return lobbyView;
+  }
+
+  @override
+  Future<MultiplayerMatchView> leaveLobby(String matchId) async {
+    leaveLobbyCount += 1;
+    leftLobby = true;
+    return lobbyView.match;
   }
 
   @override
