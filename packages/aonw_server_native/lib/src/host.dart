@@ -152,6 +152,26 @@ final class AonwServerNativeHost {
     }
   }
 
+  AonwServerHostResponse queryPlayerJson(
+    AonwPreparedServerWorld world,
+    String request,
+  ) {
+    if (world.isClosed) {
+      throw StateError('Prepared server world is closed.');
+    }
+    final native = _invoke(
+      request,
+      (input, length) =>
+          bindings.aonwServerNativeQueryPlayer(world._handle, input, length),
+    );
+    try {
+      native.response.requireSuccess('playerQueryExecuted');
+      return native.response;
+    } finally {
+      native.close();
+    }
+  }
+
   AonwServerHostResponse projectStateJson(
     AonwPreparedServerWorld world,
     String request,

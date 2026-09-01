@@ -6,13 +6,14 @@ use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use aonw_contracts::server::{
     CreateServerMatchRequestDto, MAX_SERVER_HOST_REQUEST_JSON_BYTES, PlayerCommandServerRequestDto,
-    PrepareServerWorldRequestDto, ProjectServerStateRequestDto, SERVER_HOST_API_VERSION,
-    ServerHostCodecError, ServerHostErrorCodeDto, ServerHostErrorDto, ServerHostOutcomeDto,
-    ServerHostResponseBodyDto, ServerHostResponseDto, SubmitTurnServerRequestDto,
+    PlayerQueryServerRequestDto, PrepareServerWorldRequestDto, ProjectServerStateRequestDto,
+    SERVER_HOST_API_VERSION, ServerHostCodecError, ServerHostErrorCodeDto, ServerHostErrorDto,
+    ServerHostOutcomeDto, ServerHostResponseBodyDto, ServerHostResponseDto,
+    SubmitTurnServerRequestDto,
 };
 use aonw_server_runtime::{
     PreparedServerWorld, ServerBoundaryError, apply_player_command_dto, apply_submit_turn_dto,
-    create_server_match_dto, prepare_server_world, project_server_state_dto,
+    create_server_match_dto, prepare_server_world, project_server_state_dto, query_player_dto,
 };
 
 static BUILD_IDENTITY: &[u8] = concat!("aonw_server_native/", env!("CARGO_PKG_VERSION")).as_bytes();
@@ -187,6 +188,42 @@ pub unsafe extern "C" fn aonw_server_native_apply_player_command(
         let result =
             apply_player_command_dto(world, request).map_err(|error| boundary_error(&error))?;
         let response = success(ServerHostResponseBodyDto::CommandApplied {
+            result: Box::new(result),
+        })?;
+        Ok(NativeResponse {
+            bytes: response.into_bytes().into_boxed_slice(),
+            world: None,
+        })
+    })
+}
+
+/// Executes one stateless authenticated, recipient-safe player query.
+///
+/// # Safety
+///
+/// `world` must be a live prepared handle for the duration of the call.
+/// `request` follows the same rules as [`aonw_server_native_prepare_world`].
+#[allow(unsafe_code)]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn aonw_server_native_query_player(
+    world: *const core::ffi::c_void,
+    request: *const u8,
+    request_len: usize,
+) -> *mut core::ffi::c_void {
+    contain(|| {
+        if world.is_null() {
+            return Err(failure(
+                ServerHostErrorCodeDto::InvalidFfiArgument,
+                "prepared world pointer is null",
+            ));
+        }
+        let input = unsafe { read_request(request, request_len) }?;
+        let request =
+            PlayerQueryServerRequestDto::from_json(input).map_err(|error| codec_error(&error))?;
+        // SAFETY: The caller keeps the immutable world alive for this call.
+        let world = unsafe { &*world.cast::<PreparedServerWorld>() }.clone();
+        let result = query_player_dto(world, request).map_err(|error| boundary_error(&error))?;
+        let response = success(ServerHostResponseBodyDto::PlayerQueryExecuted {
             result: Box::new(result),
         })?;
         Ok(NativeResponse {

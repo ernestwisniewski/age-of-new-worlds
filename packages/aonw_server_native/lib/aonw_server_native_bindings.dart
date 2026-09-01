@@ -100,6 +100,19 @@ external ffi.Pointer<ffi.Void> aonwServerNativeApplyPlayerCommand(
   int requestLength,
 );
 
+@ffi.Native<
+  ffi.Pointer<ffi.Void> Function(
+    ffi.Pointer<ffi.Void>,
+    ffi.Pointer<ffi.Uint8>,
+    ffi.UintPtr,
+  )
+>(symbol: 'aonw_server_native_query_player', assetId: _assetId)
+external ffi.Pointer<ffi.Void> aonwServerNativeQueryPlayer(
+  ffi.Pointer<ffi.Void> world,
+  ffi.Pointer<ffi.Uint8> request,
+  int requestLength,
+);
+
 @ffi.Native<ffi.UintPtr Function(ffi.Pointer<ffi.Void>)>(
   symbol: 'aonw_server_native_response_len',
   assetId: _assetId,
