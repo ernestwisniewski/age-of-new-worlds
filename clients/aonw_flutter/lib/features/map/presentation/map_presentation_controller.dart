@@ -20,6 +20,7 @@ import '../application/game_session_capabilities.dart';
 import '../application/game_session_state.dart';
 import '../application/map_coordinator.dart';
 import '../application/map_session_port.dart';
+import '../application/network_game_session_port.dart';
 import '../read_model/map_view.dart';
 
 final class MapPresentationController extends ChangeNotifier {
@@ -63,6 +64,9 @@ final class MapPresentationController extends ChangeNotifier {
     LocalGameCatalogEntryView entry,
     LocalMatchSetupView setup,
   ) => _coordinator.startLocalMatch(entry, setup);
+
+  Future<bool> startNetworkMatch(NetworkMatchSetupView setup) =>
+      _coordinator.startNetworkMatch(setup);
 
   Future<bool> hasLocalSave() => _coordinator.hasLocalSave();
 

@@ -10,6 +10,7 @@ import '../../features/multiplayer/application/multiplayer_coordinator.dart';
 import '../../features/multiplayer/infrastructure/auth_token_store.dart';
 import '../../features/multiplayer/infrastructure/multiplayer_match_document_source.dart';
 import '../../features/multiplayer/infrastructure/server_connection_config.dart';
+import '../../features/multiplayer/infrastructure/serverpod_game_session_gateway.dart';
 import '../../features/multiplayer/infrastructure/serverpod_multiplayer_session.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/infrastructure/atomic_local_replay_store.dart';
@@ -65,17 +66,22 @@ final class AppComposition {
       session: gateway.replaySession,
       store: AtomicLocalReplayStore.production(),
     );
+    final multiplayerSession = ServerpodMultiplayerSession(
+      config: ServerConnectionConfig.production(),
+      tokenStore: const SecureAuthTokenStore(),
+    );
     final multiplayerController = MultiplayerController(
       MultiplayerCoordinator(
-        session: ServerpodMultiplayerSession(
-          config: ServerConnectionConfig.production(),
-          tokenStore: const SecureAuthTokenStore(),
-        ),
+        session: multiplayerSession,
         documents: AssetMultiplayerMatchDocumentSource(assets: rootBundle),
       ),
     );
+    final networkGame = ServerpodGameSessionGateway(
+      gameplay: gateway,
+      multiplayer: multiplayerSession,
+    );
     return AppComposition(
-      capabilities: gateway.capabilities,
+      capabilities: gateway.capabilities.withNetworkGame(networkGame),
       saveStore: AtomicLocalSaveStore.production(),
       replayController: replayController,
       mapInputSource: GamepadMapInputSource(),

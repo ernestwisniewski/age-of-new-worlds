@@ -43,11 +43,13 @@ import 'game_session_state.dart';
 import 'map_interaction_state.dart';
 import 'map_session_port.dart';
 import 'movement_command_runner.dart';
+import 'network_game_session_port.dart';
 import 'unit_action_workflow.dart';
 
 part 'map_coordinator_actions.dart';
 part 'map_coordinator_local_save.dart';
 part 'map_coordinator_local_turns.dart';
+part 'map_coordinator_network.dart';
 part 'map_coordinator_selection.dart';
 
 typedef MapDiagnosticReporter =
@@ -107,7 +109,7 @@ final class MapCoordinator {
          session: capabilities.turns,
          diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
        ),
-       _localGame = capabilities.localGame,
+       _capabilities = capabilities,
        _saveWorkflow = LocalSaveWorkflow(
          session: capabilities.save,
          store: saveStore,
@@ -130,7 +132,7 @@ final class MapCoordinator {
   final DiplomacyWorkflow _diplomacy;
   final UnitActionWorkflow _unitActions;
   final TurnWorkflow _turns;
-  final LocalGameSessionPort? _localGame;
+  final GameSessionCapabilities _capabilities;
   final LocalSaveWorkflow _saveWorkflow;
   final ReplayCapture? _replayCapture;
   final MapDiagnosticReporter _diagnosticReporter;
@@ -168,7 +170,7 @@ final class MapCoordinator {
     _validateCatalogSetup(entry, setup);
     return _openSession(
       () {
-        final localGame = _localGame;
+        final localGame = _capabilities.localGame;
         if (localGame == null) {
           throw const LocalGameSessionException(
             code: 'local_game_unavailable',

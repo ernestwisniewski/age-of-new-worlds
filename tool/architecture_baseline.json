@@ -63,7 +63,6 @@
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 108,
-        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_MatchPanel/method:build": 71,
         "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
         "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,

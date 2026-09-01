@@ -3,7 +3,7 @@ part of 'map_coordinator.dart';
 extension MapCoordinatorLocalTurns on MapCoordinator {
   Future<void> _advanceLocalTurns(GameSessionReady afterActor) async {
     final plan = _localControlPlan;
-    final localGame = _localGame;
+    final localGame = _capabilities.localGame;
     if (plan == null || localGame == null) return;
     final generation = _loadGeneration;
     final actorPlayerId = afterActor.recipient.actorPlayerId;
@@ -137,7 +137,7 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
     LocalParticipantControlView participant,
     int generation,
   ) async {
-    final localGame = _localGame;
+    final localGame = _capabilities.localGame;
     if (localGame == null) return;
     _setState(
       current

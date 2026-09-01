@@ -12,6 +12,7 @@ import '../../unit_actions/application/unit_action_session_port.dart';
 import '../../workers/application/worker_session_port.dart';
 import 'map_session_port.dart';
 import 'movement_session_port.dart';
+import 'network_game_session_port.dart';
 
 /// Complete compile-time session wiring required by the gameplay application.
 final class GameSessionCapabilities {
@@ -29,6 +30,7 @@ final class GameSessionCapabilities {
     required this.unitActions,
     required this.turns,
     this.localGame,
+    this.networkGame,
     this.save,
   });
 
@@ -45,5 +47,27 @@ final class GameSessionCapabilities {
   final UnitActionSessionPort unitActions;
   final TurnSessionPort turns;
   final LocalGameSessionPort? localGame;
+  final NetworkGameSessionPort? networkGame;
   final GameSaveSessionPort? save;
+}
+
+extension NetworkGameSessionCapabilities on GameSessionCapabilities {
+  GameSessionCapabilities withNetworkGame(NetworkGameSessionPort value) =>
+      GameSessionCapabilities(
+        map: map,
+        movement: movement,
+        combat: combat,
+        cities: cities,
+        logistics: logistics,
+        workers: workers,
+        production: production,
+        artifacts: artifacts,
+        research: research,
+        diplomacy: diplomacy,
+        unitActions: unitActions,
+        turns: turns,
+        localGame: localGame,
+        networkGame: value,
+        save: save,
+      );
 }

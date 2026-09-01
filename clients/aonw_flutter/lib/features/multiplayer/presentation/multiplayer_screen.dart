@@ -8,16 +8,25 @@ import '../application/multiplayer_state.dart';
 import '../read_model/multiplayer_view.dart';
 import 'multiplayer_controller.dart';
 
+part 'multiplayer_match_actions.dart';
+
 final class MultiplayerScreen extends StatefulWidget {
-  const MultiplayerScreen({required this.controller, super.key});
+  const MultiplayerScreen({
+    required this.controller,
+    this.onOpenGame,
+    super.key,
+  });
 
   final MultiplayerController controller;
+  final Future<void> Function(MultiplayerProjectionView projection)? onOpenGame;
 
   @override
   State<MultiplayerScreen> createState() => _MultiplayerScreenState();
 }
 
 final class _MultiplayerScreenState extends State<MultiplayerScreen> {
+  var _openingGame = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,11 +58,26 @@ final class _MultiplayerScreenState extends State<MultiplayerScreen> {
           final MultiplayerInMatch state => _MatchPanel(
             controller: widget.controller,
             state: state,
+            openingGame: _openingGame,
+            onOpenGame: widget.onOpenGame == null
+                ? null
+                : () => _openGame(state.projection),
           ),
         },
       ),
     ),
   );
+
+  Future<void> _openGame(MultiplayerProjectionView projection) async {
+    final openGame = widget.onOpenGame;
+    if (_openingGame || openGame == null) return;
+    setState(() => _openingGame = true);
+    try {
+      await openGame(projection);
+    } finally {
+      if (mounted) setState(() => _openingGame = false);
+    }
+  }
 }
 
 final class _AuthPanel extends StatefulWidget {
@@ -332,16 +356,22 @@ final class _LobbyPanelState extends State<_LobbyPanel> {
 }
 
 final class _MatchPanel extends StatelessWidget {
-  const _MatchPanel({required this.controller, required this.state});
+  const _MatchPanel({
+    required this.controller,
+    required this.state,
+    required this.openingGame,
+    this.onOpenGame,
+  });
 
   final MultiplayerController controller;
   final MultiplayerInMatch state;
+  final bool openingGame;
+  final VoidCallback? onOpenGame;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
     final projection = state.projection;
-    final ready = state.phase == NetworkSessionPhase.ready;
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(AonwSpacing.lg),
@@ -373,34 +403,11 @@ final class _MatchPanel extends StatelessWidget {
                 _FailureText(code: code),
               ],
               const SizedBox(height: AonwSpacing.lg),
-              FilledButton.icon(
-                key: const ValueKey('multiplayer-submit-turn'),
-                onPressed:
-                    ready && !state.commandPending && projection.canSubmitTurn
-                    ? controller.submitTurn
-                    : null,
-                icon: state.commandPending
-                    ? const SizedBox.square(
-                        dimension: AonwSizes.compactProgress,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.done_all),
-                label: Text(l10n.submitTurn),
-              ),
-              if (state.phase == NetworkSessionPhase.failed) ...[
-                const SizedBox(height: AonwSpacing.sm),
-                OutlinedButton.icon(
-                  key: const ValueKey('multiplayer-reconnect'),
-                  onPressed: controller.reconnect,
-                  icon: const Icon(Icons.sync),
-                  label: Text(l10n.reconnect),
-                ),
-              ],
-              const SizedBox(height: AonwSpacing.sm),
-              TextButton(
-                key: const ValueKey('multiplayer-leave-match'),
-                onPressed: state.commandPending ? null : controller.leaveMatch,
-                child: Text(l10n.backToLobby),
+              _MatchActions(
+                controller: controller,
+                state: state,
+                openingGame: openingGame,
+                onOpenGame: onOpenGame,
               ),
             ],
           ),

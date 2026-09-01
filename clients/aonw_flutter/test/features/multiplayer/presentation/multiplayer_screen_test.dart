@@ -14,6 +14,7 @@ void main() {
   testWidgets('creates a match and exposes an accessible turn action', (
     tester,
   ) async {
+    MultiplayerProjectionView? openedProjection;
     final coordinator = MultiplayerCoordinator(
       session: _Session(),
       documents: const _Documents(),
@@ -23,7 +24,12 @@ void main() {
     await controller.initialize();
 
     await tester.pumpWidget(
-      LocalizedTestApp(home: MultiplayerScreen(controller: controller)),
+      LocalizedTestApp(
+        home: MultiplayerScreen(
+          controller: controller,
+          onOpenGame: (projection) async => openedProjection = projection,
+        ),
+      ),
     );
     await tester.tap(find.byKey(const ValueKey('multiplayer-create-match')));
     await tester.pumpAndSettle();
@@ -33,6 +39,10 @@ void main() {
     final semantics = tester.getSemantics(submit);
     expect(semantics.flagsCollection.isButton, isTrue);
     expect(semantics.flagsCollection.isEnabled, ui.Tristate.isTrue);
+
+    await tester.tap(find.byKey(const ValueKey('multiplayer-open-game')));
+    await tester.pump();
+    expect(openedProjection, same(_projection));
   });
 }
 

@@ -6,6 +6,7 @@ import '../../features/local_game/presentation/local_game_launch_mode.dart';
 import '../../features/local_game/presentation/new_game_screen.dart';
 import '../../features/main_menu/presentation/main_menu_screen.dart';
 import '../../features/main_menu/presentation/main_menu_support_screens.dart';
+import '../../features/map/application/network_game_session_port.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/map/presentation/widgets/map_screen.dart';
@@ -149,7 +150,20 @@ final class AonwRouter {
   Widget _multiplayerScreen(BuildContext context) =>
       multiplayerController == null
       ? const _UnavailableMultiplayer()
-      : MultiplayerScreen(controller: multiplayerController!);
+      : MultiplayerScreen(
+          controller: multiplayerController!,
+          onOpenGame: (projection) async {
+            final opened = await mapController.startNetworkMatch(
+              NetworkMatchSetupView(
+                matchId: projection.matchId,
+                playerId: projection.playerId,
+              ),
+            );
+            if (opened && context.mounted) {
+              await Navigator.of(context).pushNamed(AonwRoute.map.location);
+            }
+          },
+        );
 
   Widget _loadGameScreen(BuildContext context) => LoadGameScreen(
     hasLocalSave: mapController.hasLocalSave,
