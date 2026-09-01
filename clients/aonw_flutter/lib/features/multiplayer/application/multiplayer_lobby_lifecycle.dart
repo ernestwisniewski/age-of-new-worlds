@@ -232,13 +232,17 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
     String matchId,
     int generation,
   ) async {
+    final lobby = await _session.lobby(matchId);
+    _validateLobby(lobby, matchId: matchId);
     final projection = await _session.resync(matchId);
+    _validateStartedProjection(lobby, projection);
     if (_isCurrent(generation)) {
       _setState(
         MultiplayerInMatch(
           account: current.account,
           phase: NetworkSessionPhase.ready,
           projection: projection,
+          lobby: lobby,
         ),
       );
     }
@@ -257,6 +261,7 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
           account: account,
           phase: NetworkSessionPhase.ready,
           projection: projection,
+          lobby: lobby,
         ),
       );
     }

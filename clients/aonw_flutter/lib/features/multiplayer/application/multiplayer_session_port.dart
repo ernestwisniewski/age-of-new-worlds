@@ -48,6 +48,13 @@ abstract interface class MultiplayerSessionPort {
     required int expectedRevision,
   });
 
+  Future<MultiplayerCommandView> kickParticipant({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+    required String targetPlayerId,
+  });
+
   Future<void> close();
 }
 

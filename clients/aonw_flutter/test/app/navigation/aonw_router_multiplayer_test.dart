@@ -166,6 +166,14 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
     required String clientCommandId,
     required int expectedRevision,
   }) => throw UnsupportedError('Not used by this test.');
+
+  @override
+  Future<MultiplayerCommandView> kickParticipant({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+    required String targetPlayerId,
+  }) => throw UnsupportedError('Not used by this test.');
 }
 
 final class _MultiplayerDocuments implements MultiplayerMatchDocumentSource {

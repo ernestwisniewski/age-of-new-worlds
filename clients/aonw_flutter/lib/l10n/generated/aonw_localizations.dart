@@ -536,6 +536,36 @@ abstract class AonwLocalizations {
   /// **'Online match'**
   String get multiplayerMatchTitle;
 
+  /// No description provided for @multiplayerParticipants.
+  ///
+  /// In en, this message translates to:
+  /// **'Participants'**
+  String get multiplayerParticipants;
+
+  /// No description provided for @multiplayerRemoveParticipant.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get multiplayerRemoveParticipant;
+
+  /// No description provided for @multiplayerRemoveParticipantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove participant?'**
+  String get multiplayerRemoveParticipantTitle;
+
+  /// No description provided for @multiplayerRemoveParticipantBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name} from this match? They will no longer be able to reconnect.'**
+  String multiplayerRemoveParticipantBody(String name);
+
+  /// No description provided for @cancelDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelDialog;
+
   /// No description provided for @matchIdentifier.
   ///
   /// In en, this message translates to:
@@ -593,7 +623,7 @@ abstract class AonwLocalizations {
   /// No description provided for @multiplayerFailure.
   ///
   /// In en, this message translates to:
-  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} invalid_match_lifecycle{The match lifecycle response was inconsistent.} match_not_found{The match was not found.} match_not_started{The match has not been started by its host.} match_already_started{The match has already started.} host_required{Only the host can start this match.} lobby_not_ready{Every human player must join and be ready.} participant_not_claimable{Computer-controlled seats cannot be claimed.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
+  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} invalid_match_lifecycle{The match lifecycle response was inconsistent.} match_not_found{The match was not found.} match_not_started{The match has not been started by its host.} match_already_started{The match has already started.} host_required{Only the host can perform this action.} lobby_not_ready{Every human player must join and be ready.} participant_not_claimable{Computer-controlled seats cannot be claimed.} participant_not_active{That participant is no longer active.} invalid_kick_target{The host cannot remove itself.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
   String multiplayerFailure(String code);
 
   /// No description provided for @helpTitle.

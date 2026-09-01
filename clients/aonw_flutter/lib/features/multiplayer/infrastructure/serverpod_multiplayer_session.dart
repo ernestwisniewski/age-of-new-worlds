@@ -201,6 +201,30 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     }
   }
 
+  @override
+  Future<MultiplayerCommandView> kickParticipant({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+    required String targetPlayerId,
+  }) async {
+    _ensureAuthenticated();
+    try {
+      return _decoder.command(
+        await _client.game.kickParticipant(
+          server.GameKickParticipantRequest(
+            matchId: matchId,
+            clientCommandId: clientCommandId,
+            expectedRevision: expectedRevision,
+            targetPlayerId: targetPlayerId,
+          ),
+        ),
+      );
+    } on Object catch (error, stackTrace) {
+      throw _translate(error, stackTrace);
+    }
+  }
+
   ServerpodGameTransport openGameTransport(
     String matchId, {
     void Function()? onReconnecting,

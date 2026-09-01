@@ -256,6 +256,23 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get multiplayerMatchTitle => 'Rozgrywka online';
 
   @override
+  String get multiplayerParticipants => 'Uczestnicy';
+
+  @override
+  String get multiplayerRemoveParticipant => 'Usuń';
+
+  @override
+  String get multiplayerRemoveParticipantTitle => 'Usunąć uczestnika?';
+
+  @override
+  String multiplayerRemoveParticipantBody(String name) {
+    return 'Usunąć gracza $name z tej rozgrywki? Nie będzie mógł ponownie się połączyć.';
+  }
+
+  @override
+  String get cancelDialog => 'Anuluj';
+
+  @override
   String matchIdentifier(String matchId) {
     return 'Rozgrywka: $matchId';
   }
@@ -322,11 +339,13 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'match_not_found': 'Nie znaleziono rozgrywki.',
       'match_not_started': 'Host nie rozpoczął jeszcze rozgrywki.',
       'match_already_started': 'Rozgrywka została już rozpoczęta.',
-      'host_required': 'Tylko host może rozpocząć tę rozgrywkę.',
+      'host_required': 'Tylko host może wykonać tę akcję.',
       'lobby_not_ready':
           'Każdy gracz-człowiek musi dołączyć i zgłosić gotowość.',
       'participant_not_claimable':
           'Nie można zająć miejsca sterowanego przez komputer.',
+      'participant_not_active': 'Ten uczestnik nie jest już aktywny.',
+      'invalid_kick_target': 'Host nie może usunąć samego siebie.',
       'player_seat_taken': 'To miejsce gracza jest już zajęte.',
       'other': 'Nie udało się wykonać żądania gry wieloosobowej.',
     });

@@ -98,6 +98,41 @@ void main() {
     },
   );
 
+  test(
+    'host kick keeps one identity and refreshes the active roster',
+    () async {
+      final session = _Session()
+        ..restored = _account
+        ..kickFailures = 1
+        ..lobbyView = _lobbyView(
+          phase: MultiplayerMatchPhase.running,
+          ready: true,
+          guestKind: 'human',
+          guestClaimed: true,
+        );
+      final coordinator = _coordinator(session);
+      addTearDown(coordinator.close);
+      await coordinator.initialize();
+      await coordinator.openMatch(session.matches.single);
+
+      await coordinator.kickParticipant('player-2');
+
+      final state = coordinator.state as MultiplayerInMatch;
+      expect(state.phase, NetworkSessionPhase.ready);
+      expect(state.projection.revision, 8);
+      expect(state.projection.eventOffset, 11);
+      expect(
+        state.lobby.participants
+            .singleWhere((participant) => participant.playerId == 'player-2')
+            .isClaimed,
+        isFalse,
+      );
+      expect(session.reconnectCount, 1);
+      expect(session.kickCommandIds, hasLength(2));
+      expect(session.kickCommandIds.toSet(), hasLength(1));
+    },
+  );
+
   test('fails closed when a command skips a revision', () async {
     final session = _Session()
       ..restored = _account
@@ -184,6 +219,7 @@ final class _Session implements MultiplayerSessionPort {
   MultiplayerAccountView? restored;
   var projection = _projection();
   var submitFailures = 0;
+  var kickFailures = 0;
   var commandRevisionIncrement = 1;
   var reconnectCount = 0;
   var resyncCount = 0;
@@ -191,6 +227,7 @@ final class _Session implements MultiplayerSessionPort {
   var leftLobby = false;
   Object? listFailure;
   final commandIds = <String>[];
+  final kickCommandIds = <String>[];
   List<MultiplayerMatchView> get matches => [
     MultiplayerMatchView(
       matchId: 'match-1',
@@ -205,7 +242,7 @@ final class _Session implements MultiplayerSessionPort {
       eventOffset: 10,
     ),
   ];
-  var lobbyView = _lobbyView();
+  var lobbyView = _lobbyView(phase: MultiplayerMatchPhase.running, ready: true);
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async => restored;
@@ -240,7 +277,7 @@ final class _Session implements MultiplayerSessionPort {
   @override
   Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
-  ) async => lobbyView;
+  ) async => lobbyView = _lobbyView();
 
   @override
   Future<MultiplayerMatchLobbyView> joinMatch({
@@ -299,11 +336,53 @@ final class _Session implements MultiplayerSessionPort {
       eventOffset: 11,
       submitted: true,
     );
+    lobbyView = _lobbyView(
+      phase: MultiplayerMatchPhase.running,
+      ready: true,
+      revision: projection.revision,
+      eventOffset: projection.eventOffset,
+    );
     return MultiplayerCommandView(
       clientCommandId: clientCommandId,
       initialEventOffset: 10,
       finalEventOffset: 11,
       duplicate: commandIds.length > 1,
+      accepted: true,
+      rejectionCode: null,
+      projection: projection,
+    );
+  }
+
+  @override
+  Future<MultiplayerCommandView> kickParticipant({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+    required String targetPlayerId,
+  }) async {
+    kickCommandIds.add(clientCommandId);
+    if (kickFailures > 0) {
+      kickFailures -= 1;
+      throw const MultiplayerSessionException(
+        code: 'connection_interrupted',
+        message: 'Connection interrupted.',
+        retryable: true,
+      );
+    }
+    projection = _projection(revision: expectedRevision + 1, eventOffset: 11);
+    lobbyView = _lobbyView(
+      phase: MultiplayerMatchPhase.running,
+      ready: true,
+      revision: projection.revision,
+      eventOffset: projection.eventOffset,
+      guestKind: 'human',
+      guestClaimed: false,
+    );
+    return MultiplayerCommandView(
+      clientCommandId: clientCommandId,
+      initialEventOffset: 10,
+      finalEventOffset: 11,
+      duplicate: kickCommandIds.length > 1,
       accepted: true,
       rejectionCode: null,
       projection: projection,
@@ -318,6 +397,10 @@ MultiplayerMatchLobbyView _lobbyView({
   MultiplayerMatchPhase phase = MultiplayerMatchPhase.lobby,
   bool ready = false,
   String currentPlayerId = 'player-1',
+  int revision = 7,
+  int eventOffset = 10,
+  String guestKind = 'ai',
+  bool guestClaimed = false,
 }) => MultiplayerMatchLobbyView(
   match: MultiplayerMatchView(
     matchId: 'match-1',
@@ -328,8 +411,8 @@ MultiplayerMatchLobbyView _lobbyView({
     phase: phase,
     hostPlayerId: 'player-1',
     startedAt: phase == MultiplayerMatchPhase.lobby ? null : DateTime.utc(2026),
-    revision: 7,
-    eventOffset: 10,
+    revision: revision,
+    eventOffset: eventOffset,
   ),
   participants: [
     MultiplayerLobbyParticipantView(
@@ -343,10 +426,10 @@ MultiplayerMatchLobbyView _lobbyView({
     ),
     MultiplayerLobbyParticipantView(
       playerId: 'player-2',
-      name: 'Computer',
-      kind: 'ai',
+      name: guestKind == 'ai' ? 'Computer' : 'Player two',
+      kind: guestKind,
       isHost: false,
-      isClaimed: false,
+      isClaimed: guestClaimed,
       isReady: true,
       isCurrentUser: currentPlayerId == 'player-2',
     ),

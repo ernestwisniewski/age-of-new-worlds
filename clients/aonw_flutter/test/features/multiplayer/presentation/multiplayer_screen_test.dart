@@ -15,8 +15,9 @@ void main() {
     tester,
   ) async {
     MultiplayerProjectionView? openedProjection;
+    final session = _Session();
     final coordinator = MultiplayerCoordinator(
-      session: _Session(),
+      session: session,
       documents: const _Documents(),
     );
     final controller = MultiplayerController(coordinator);
@@ -52,6 +53,22 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('multiplayer-open-game')));
     await tester.pump();
     expect(openedProjection, same(_projection));
+
+    await tester.tap(
+      find.byKey(const ValueKey(('multiplayer-kick', 'player-2'))),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('multiplayer-confirm-kick')), findsOne);
+    await tester.tap(find.byKey(const ValueKey('multiplayer-confirm-kick')));
+    await tester.pumpAndSettle();
+
+    expect(session.kickCount, 1);
+    expect(
+      find.byKey(
+        const ValueKey(('multiplayer-active-participant', 'player-2')),
+      ),
+      findsNothing,
+    );
   });
 }
 
@@ -71,8 +88,25 @@ const _projection = MultiplayerProjectionView(
   winnerPlayerId: null,
 );
 
+const _kickedProjection = MultiplayerProjectionView(
+  matchId: 'match-1',
+  playerId: 'player-1',
+  revision: 8,
+  stateDigest: 'digest-8',
+  eventOffset: 11,
+  turn: 1,
+  ownTurnState: MultiplayerTurnStateView.active,
+  ownSubmitted: false,
+  requiredSubmissionCount: 1,
+  submittedCount: 0,
+  visibleUnitCount: 1,
+  outcomeCondition: 'ongoing',
+  winnerPlayerId: null,
+);
+
 final class _Session implements MultiplayerSessionPort {
   var _lobby = _matchLobby();
+  var kickCount = 0;
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async =>
@@ -143,12 +177,41 @@ final class _Session implements MultiplayerSessionPort {
   }) => throw UnsupportedError('Not used by this test.');
 
   @override
+  Future<MultiplayerCommandView> kickParticipant({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+    required String targetPlayerId,
+  }) async {
+    kickCount += 1;
+    _lobby = _matchLobby(
+      ready: true,
+      running: true,
+      guestClaimed: false,
+      revision: 8,
+      eventOffset: 11,
+    );
+    return MultiplayerCommandView(
+      clientCommandId: clientCommandId,
+      initialEventOffset: 10,
+      finalEventOffset: 11,
+      duplicate: false,
+      accepted: true,
+      rejectionCode: null,
+      projection: _kickedProjection,
+    );
+  }
+
+  @override
   Future<void> close() async {}
 }
 
 MultiplayerMatchLobbyView _matchLobby({
   bool ready = false,
   bool running = false,
+  bool guestClaimed = true,
+  int revision = 7,
+  int eventOffset = 10,
 }) => MultiplayerMatchLobbyView(
   match: MultiplayerMatchView(
     matchId: 'match-1',
@@ -161,8 +224,8 @@ MultiplayerMatchLobbyView _matchLobby({
         : MultiplayerMatchPhase.lobby,
     hostPlayerId: 'player-1',
     startedAt: running ? DateTime.utc(2026) : null,
-    revision: 7,
-    eventOffset: 10,
+    revision: revision,
+    eventOffset: eventOffset,
   ),
   participants: [
     MultiplayerLobbyParticipantView(
@@ -174,17 +237,17 @@ MultiplayerMatchLobbyView _matchLobby({
       isReady: ready,
       isCurrentUser: true,
     ),
-    const MultiplayerLobbyParticipantView(
+    MultiplayerLobbyParticipantView(
       playerId: 'player-2',
-      name: 'Computer',
-      kind: 'ai',
+      name: 'Player two',
+      kind: 'human',
       isHost: false,
-      isClaimed: false,
+      isClaimed: guestClaimed,
       isReady: true,
       isCurrentUser: false,
     ),
   ],
-  canStart: !running && ready,
+  canStart: !running && ready && guestClaimed,
 );
 
 final class _Documents implements MultiplayerMatchDocumentSource {

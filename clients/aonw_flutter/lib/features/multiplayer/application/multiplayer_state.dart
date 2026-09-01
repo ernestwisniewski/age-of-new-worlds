@@ -49,6 +49,7 @@ final class MultiplayerInMatch extends MultiplayerState {
     required this.account,
     required this.phase,
     required this.projection,
+    required this.lobby,
     this.commandPending = false,
     this.failureCode,
   });
@@ -56,12 +57,14 @@ final class MultiplayerInMatch extends MultiplayerState {
   final MultiplayerAccountView account;
   final NetworkSessionPhase phase;
   final MultiplayerProjectionView projection;
+  final MultiplayerMatchLobbyView lobby;
   final bool commandPending;
   final String? failureCode;
 
   MultiplayerInMatch copyWith({
     NetworkSessionPhase? phase,
     MultiplayerProjectionView? projection,
+    MultiplayerMatchLobbyView? lobby,
     bool? commandPending,
     String? failureCode,
     bool clearFailure = false,
@@ -69,6 +72,7 @@ final class MultiplayerInMatch extends MultiplayerState {
     account: account,
     phase: phase ?? this.phase,
     projection: projection ?? this.projection,
+    lobby: lobby ?? this.lobby,
     commandPending: commandPending ?? this.commandPending,
     failureCode: clearFailure ? null : failureCode ?? this.failureCode,
   );

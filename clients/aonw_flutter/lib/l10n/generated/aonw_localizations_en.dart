@@ -254,6 +254,23 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get multiplayerMatchTitle => 'Online match';
 
   @override
+  String get multiplayerParticipants => 'Participants';
+
+  @override
+  String get multiplayerRemoveParticipant => 'Remove';
+
+  @override
+  String get multiplayerRemoveParticipantTitle => 'Remove participant?';
+
+  @override
+  String multiplayerRemoveParticipantBody(String name) {
+    return 'Remove $name from this match? They will no longer be able to reconnect.';
+  }
+
+  @override
+  String get cancelDialog => 'Cancel';
+
+  @override
   String matchIdentifier(String matchId) {
     return 'Match: $matchId';
   }
@@ -320,10 +337,12 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'match_not_found': 'The match was not found.',
       'match_not_started': 'The match has not been started by its host.',
       'match_already_started': 'The match has already started.',
-      'host_required': 'Only the host can start this match.',
+      'host_required': 'Only the host can perform this action.',
       'lobby_not_ready': 'Every human player must join and be ready.',
       'participant_not_claimable':
           'Computer-controlled seats cannot be claimed.',
+      'participant_not_active': 'That participant is no longer active.',
+      'invalid_kick_target': 'The host cannot remove itself.',
       'player_seat_taken': 'That player seat is already occupied.',
       'other': 'The multiplayer request could not be completed.',
     });

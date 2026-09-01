@@ -6,6 +6,7 @@ import 'multiplayer_session_port.dart';
 import 'multiplayer_state.dart';
 
 part 'multiplayer_lobby_lifecycle.dart';
+part 'multiplayer_match_lifecycle.dart';
 
 typedef MultiplayerDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -195,11 +196,13 @@ final class MultiplayerCoordinator {
       );
       final synchronized = await _session.resync(base.matchId);
       _validateResync(base, synchronized);
+      final lobby = await _synchronizedLobby(current, synchronized);
       if (_isCurrent(generation)) {
         _setState(
           current.copyWith(
             phase: NetworkSessionPhase.ready,
             projection: synchronized,
+            lobby: lobby,
             commandPending: false,
             clearFailure: true,
           ),
