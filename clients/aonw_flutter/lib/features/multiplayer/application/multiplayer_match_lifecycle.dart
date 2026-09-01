@@ -42,6 +42,114 @@ extension MultiplayerMatchLifecycle on MultiplayerCoordinator {
     }
   }
 
+  Future<void> resignMatch() async {
+    final current = _state;
+    if (current is! MultiplayerInMatch ||
+        current.phase != NetworkSessionPhase.ready ||
+        current.commandPending ||
+        current.lobby.match.phase != MultiplayerMatchPhase.running) {
+      return;
+    }
+    final generation = ++_generation;
+    final commandId = _commandId();
+    _setState(current.copyWith(commandPending: true, clearFailure: true));
+    try {
+      await _applyResignation(current, commandId, generation);
+    } on Object catch (error, stackTrace) {
+      _report('multiplayer_resignation_failed', error, stackTrace);
+      if (!_isCurrent(generation)) return;
+      if (error case MultiplayerSessionException(retryable: true)) {
+        await _recoverResignation(current, commandId, generation);
+        return;
+      }
+      _setState(
+        current.copyWith(
+          phase: NetworkSessionPhase.failed,
+          commandPending: false,
+          failureCode: _failureCode(error),
+        ),
+      );
+    }
+  }
+
+  Future<void> _recoverResignation(
+    MultiplayerInMatch current,
+    String commandId,
+    int generation,
+  ) async {
+    _setState(
+      current.copyWith(
+        phase: NetworkSessionPhase.reconnecting,
+        commandPending: true,
+        clearFailure: true,
+      ),
+    );
+    try {
+      await _session.reconnect();
+      if (_isCurrent(generation)) {
+        await _applyResignation(current, commandId, generation);
+      }
+    } on Object catch (error, stackTrace) {
+      _report('multiplayer_resignation_reconnect_failed', error, stackTrace);
+      if (_isCurrent(generation)) {
+        _setState(
+          current.copyWith(
+            phase: NetworkSessionPhase.failed,
+            commandPending: false,
+            failureCode: _failureCode(error),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _applyResignation(
+    MultiplayerInMatch current,
+    String commandId,
+    int generation,
+  ) async {
+    final outcome = await _session.resignMatch(
+      matchId: current.projection.matchId,
+      clientCommandId: commandId,
+      expectedRevision: current.projection.revision,
+    );
+    MultiplayerCoordinator._validateCommand(
+      current.projection,
+      outcome,
+      commandId,
+    );
+    if (!_isCurrent(generation)) return;
+    if (!outcome.accepted) {
+      _setState(
+        current.copyWith(
+          phase: NetworkSessionPhase.ready,
+          projection: outcome.projection,
+          commandPending: false,
+          failureCode: outcome.rejectionCode,
+        ),
+      );
+      return;
+    }
+    try {
+      await _openLobby(current.account, generation);
+    } on Object catch (error, stackTrace) {
+      _report(
+        'multiplayer_lobby_open_after_resignation_failed',
+        error,
+        stackTrace,
+      );
+      if (_isCurrent(generation)) {
+        _setState(
+          MultiplayerLobby(
+            account: current.account,
+            matches: const [],
+            failureCode: _failureCode(error),
+          ),
+        );
+      }
+    }
+  }
+
   Future<void> _recoverKick(
     MultiplayerInMatch current,
     String targetPlayerId,

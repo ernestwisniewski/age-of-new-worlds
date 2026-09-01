@@ -251,6 +251,16 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get leaveMultiplayerMatch => 'Leave match';
 
   @override
+  String get multiplayerResignTitle => 'Resign from this match?';
+
+  @override
+  String get multiplayerResignBody =>
+      'Your participation will end immediately and this action cannot be undone.';
+
+  @override
+  String get multiplayerResignConfirm => 'Resign';
+
+  @override
   String get multiplayerMatchTitle => 'Online match';
 
   @override

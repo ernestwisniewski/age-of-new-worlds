@@ -55,6 +55,12 @@ abstract interface class MultiplayerSessionPort {
     required String targetPlayerId,
   });
 
+  Future<MultiplayerCommandView> resignMatch({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+  });
+
   Future<void> close();
 }
 

@@ -54,6 +54,50 @@ Future<GameCommandOutcome> _resignTransaction(
   Transaction transaction,
   _CommandInput input,
 ) async {
+  final context = await _loadResignContext(session, transaction, input);
+  final duplicate = context.duplicate;
+  if (duplicate != null) {
+    return _ledgerOutcome(context.match.publicId, duplicate, duplicate: true);
+  }
+  _requireRunningMatch(context.match);
+  if (!_isActiveParticipant(context.participant)) {
+    throw _error('not_participant', 'The account is not a match participant.');
+  }
+  final command = {
+    'type': 'resignParticipant',
+    'expectedRevision': input.expectedRevision,
+    'playerId': context.participant.playerId,
+  };
+  final boundInput = _CommandInput(
+    userIdentifier: input.userIdentifier,
+    matchId: input.matchId,
+    clientCommandId: input.clientCommandId,
+    expectedRevision: input.expectedRevision,
+    command: command,
+  );
+  final applied = _executeSystemCommand(service, context, command);
+  final outcome = await _persistAppliedTurn(
+    session,
+    transaction,
+    context,
+    boundInput,
+    applied,
+  );
+  if (applied.rejection == null) {
+    await GameParticipant.db.updateRow(
+      session,
+      context.participant.copyWith(readyAt: null, resignedAt: applied.now),
+      transaction: transaction,
+    );
+  }
+  return outcome;
+}
+
+Future<_CommandContext> _loadResignContext(
+  Session session,
+  Transaction transaction,
+  _CommandInput input,
+) async {
   final match = await _matchByPublicId(
     session,
     input.matchId,
@@ -77,46 +121,11 @@ Future<GameCommandOutcome> _resignTransaction(
     participant.playerId,
     input.clientCommandId,
   );
-  if (duplicate != null) {
-    return _ledgerOutcome(match.publicId, duplicate, duplicate: true);
-  }
-  _requireRunningMatch(match);
-  if (!_isActiveParticipant(participant)) {
-    throw _error('not_participant', 'The account is not a match participant.');
-  }
-  final command = {
-    'type': 'resignParticipant',
-    'expectedRevision': input.expectedRevision,
-    'playerId': participant.playerId,
-  };
-  final boundInput = _CommandInput(
-    userIdentifier: input.userIdentifier,
-    matchId: input.matchId,
-    clientCommandId: input.clientCommandId,
-    expectedRevision: input.expectedRevision,
-    command: command,
-  );
-  final context = _CommandContext(
+  return _CommandContext(
     match: match,
     participant: participant,
-    duplicate: null,
+    duplicate: duplicate,
   );
-  final applied = _executeSystemCommand(service, context, command);
-  final outcome = await _persistAppliedTurn(
-    session,
-    transaction,
-    context,
-    boundInput,
-    applied,
-  );
-  if (applied.rejection == null) {
-    await GameParticipant.db.updateRow(
-      session,
-      participant.copyWith(readyAt: null, resignedAt: applied.now),
-      transaction: transaction,
-    );
-  }
-  return outcome;
 }
 
 Future<GameCommandLedger?> _commandLedger(

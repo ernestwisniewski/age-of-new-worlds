@@ -207,23 +207,25 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     required String clientCommandId,
     required int expectedRevision,
     required String targetPlayerId,
-  }) async {
-    _ensureAuthenticated();
-    try {
-      return _decoder.command(
-        await _client.game.kickParticipant(
-          server.GameKickParticipantRequest(
-            matchId: matchId,
-            clientCommandId: clientCommandId,
-            expectedRevision: expectedRevision,
-            targetPlayerId: targetPlayerId,
-          ),
-        ),
-      );
-    } on Object catch (error, stackTrace) {
-      throw _translate(error, stackTrace);
-    }
-  }
+  }) => _kickRemoteParticipant(
+    this,
+    matchId: matchId,
+    clientCommandId: clientCommandId,
+    expectedRevision: expectedRevision,
+    targetPlayerId: targetPlayerId,
+  );
+
+  @override
+  Future<MultiplayerCommandView> resignMatch({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+  }) => _resignRemoteMatch(
+    this,
+    matchId: matchId,
+    clientCommandId: clientCommandId,
+    expectedRevision: expectedRevision,
+  );
 
   ServerpodGameTransport openGameTransport(
     String matchId, {

@@ -70,6 +70,44 @@ void main() {
       findsNothing,
     );
   });
+
+  testWidgets('confirms an authoritative resignation before leaving a match', (
+    tester,
+  ) async {
+    final session = _Session();
+    final coordinator = MultiplayerCoordinator(
+      session: session,
+      documents: const _Documents(),
+    );
+    final controller = MultiplayerController(coordinator);
+    addTearDown(controller.dispose);
+    await controller.initialize();
+    await coordinator.createMatch();
+    await coordinator.setReady(true);
+    await coordinator.startMatch();
+
+    await tester.pumpWidget(
+      LocalizedTestApp(home: MultiplayerScreen(controller: controller)),
+    );
+    await tester.tap(find.byKey(const ValueKey('multiplayer-leave-match')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('multiplayer-confirm-resignation')),
+      findsOneWidget,
+    );
+    expect(session.resignCount, 0);
+    await tester.tap(
+      find.byKey(const ValueKey('multiplayer-confirm-resignation')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(session.resignCount, 1);
+    expect(
+      find.byKey(const ValueKey('multiplayer-create-match')),
+      findsOneWidget,
+    );
+  });
 }
 
 const _projection = MultiplayerProjectionView(
@@ -104,9 +142,26 @@ const _kickedProjection = MultiplayerProjectionView(
   winnerPlayerId: null,
 );
 
+const _resignedProjection = MultiplayerProjectionView(
+  matchId: 'match-1',
+  playerId: 'player-1',
+  revision: 8,
+  stateDigest: 'digest-8-resigned',
+  eventOffset: 12,
+  turn: 1,
+  ownTurnState: MultiplayerTurnStateView.finished,
+  ownSubmitted: false,
+  requiredSubmissionCount: 1,
+  submittedCount: 0,
+  visibleUnitCount: 1,
+  outcomeCondition: 'resignation',
+  winnerPlayerId: 'player-2',
+);
+
 final class _Session implements MultiplayerSessionPort {
   var _lobby = _matchLobby();
   var kickCount = 0;
+  var resignCount = 0;
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async =>
@@ -199,6 +254,24 @@ final class _Session implements MultiplayerSessionPort {
       accepted: true,
       rejectionCode: null,
       projection: _kickedProjection,
+    );
+  }
+
+  @override
+  Future<MultiplayerCommandView> resignMatch({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+  }) async {
+    resignCount += 1;
+    return MultiplayerCommandView(
+      clientCommandId: clientCommandId,
+      initialEventOffset: 10,
+      finalEventOffset: 12,
+      duplicate: false,
+      accepted: true,
+      rejectionCode: null,
+      projection: _resignedProjection,
     );
   }
 

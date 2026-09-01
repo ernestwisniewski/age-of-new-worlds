@@ -6,6 +6,8 @@ import 'package:aonw_flutter/features/multiplayer/application/multiplayer_state.
 import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+part 'multiplayer_coordinator_fixture.dart';
+
 void main() {
   test('restores an authenticated account into its match lobby', () async {
     final session = _Session()..restored = _account;
@@ -133,6 +135,27 @@ void main() {
     },
   );
 
+  test(
+    'resignation keeps one identity across reconnect and returns to lobby',
+    () async {
+      final session = _Session()
+        ..restored = _account
+        ..resignFailures = 1;
+      final coordinator = _coordinator(session);
+      addTearDown(coordinator.close);
+      await coordinator.initialize();
+      await coordinator.openMatch(session.matches.single);
+
+      await coordinator.resignMatch();
+
+      final state = coordinator.state as MultiplayerLobby;
+      expect(state.matches, isEmpty);
+      expect(session.reconnectCount, 1);
+      expect(session.resignCommandIds, hasLength(2));
+      expect(session.resignCommandIds.toSet(), hasLength(1));
+    },
+  );
+
   test('fails closed when a command skips a revision', () async {
     final session = _Session()
       ..restored = _account
@@ -187,18 +210,12 @@ void main() {
   });
 }
 
-MultiplayerCoordinator _coordinator(_Session session) => MultiplayerCoordinator(
-  session: session,
-  documents: const _Documents(),
-  secureRandom: Random(7),
-);
-
-const _account = MultiplayerAccountView(userId: 'account-1');
-
 MultiplayerProjectionView _projection({
   int revision = 7,
   int eventOffset = 10,
   bool submitted = false,
+  String outcomeCondition = 'ongoing',
+  String? winnerPlayerId,
 }) => MultiplayerProjectionView(
   matchId: 'match-1',
   playerId: 'player-1',
@@ -211,8 +228,8 @@ MultiplayerProjectionView _projection({
   requiredSubmissionCount: 2,
   submittedCount: submitted ? 1 : 0,
   visibleUnitCount: 1,
-  outcomeCondition: 'ongoing',
-  winnerPlayerId: null,
+  outcomeCondition: outcomeCondition,
+  winnerPlayerId: winnerPlayerId,
 );
 
 final class _Session implements MultiplayerSessionPort {
@@ -220,6 +237,7 @@ final class _Session implements MultiplayerSessionPort {
   var projection = _projection();
   var submitFailures = 0;
   var kickFailures = 0;
+  var resignFailures = 0;
   var commandRevisionIncrement = 1;
   var reconnectCount = 0;
   var resyncCount = 0;
@@ -228,6 +246,7 @@ final class _Session implements MultiplayerSessionPort {
   Object? listFailure;
   final commandIds = <String>[];
   final kickCommandIds = <String>[];
+  final resignCommandIds = <String>[];
   List<MultiplayerMatchView> get matches => [
     MultiplayerMatchView(
       matchId: 'match-1',
@@ -390,6 +409,39 @@ final class _Session implements MultiplayerSessionPort {
   }
 
   @override
+  Future<MultiplayerCommandView> resignMatch({
+    required String matchId,
+    required String clientCommandId,
+    required int expectedRevision,
+  }) async {
+    resignCommandIds.add(clientCommandId);
+    if (resignFailures > 0) {
+      resignFailures -= 1;
+      throw const MultiplayerSessionException(
+        code: 'connection_interrupted',
+        message: 'Connection interrupted.',
+        retryable: true,
+      );
+    }
+    projection = _projection(
+      revision: expectedRevision + 1,
+      eventOffset: 12,
+      outcomeCondition: 'resignation',
+      winnerPlayerId: 'player-2',
+    );
+    leftLobby = true;
+    return MultiplayerCommandView(
+      clientCommandId: clientCommandId,
+      initialEventOffset: 10,
+      finalEventOffset: 12,
+      duplicate: resignCommandIds.length > 1,
+      accepted: true,
+      rejectionCode: null,
+      projection: projection,
+    );
+  }
+
+  @override
   Future<void> close() async {}
 }
 
@@ -439,19 +491,3 @@ MultiplayerMatchLobbyView _lobbyView({
       currentPlayerId == 'player-1' &&
       ready,
 );
-
-final class _Documents implements MultiplayerMatchDocumentSource {
-  const _Documents();
-
-  @override
-  Future<MultiplayerMatchDocuments> load() async =>
-      const MultiplayerMatchDocuments(
-        mapId: 'map-1',
-        mapDocument: '{}',
-        scenarioDocument: '{}',
-        rulesetId: 'ruleset-1',
-        matchIdentityDocument: '{}',
-        fogEnabled: true,
-        creatorPlayerId: 'player-1',
-      );
-}

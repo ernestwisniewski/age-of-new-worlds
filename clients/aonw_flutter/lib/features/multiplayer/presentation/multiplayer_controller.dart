@@ -59,6 +59,8 @@ final class MultiplayerController extends ChangeNotifier {
   Future<void> kickParticipant(String targetPlayerId) =>
       _coordinator.kickParticipant(targetPlayerId);
 
+  Future<void> resignMatch() => _coordinator.resignMatch();
+
   Future<void> reconnect() => _coordinator.reconnect();
 
   Future<void> leaveMatch() => _coordinator.leaveMatch();

@@ -110,6 +110,52 @@ Future<MultiplayerMatchView> _leaveRemoteLobby(
   }
 }
 
+Future<MultiplayerCommandView> _resignRemoteMatch(
+  ServerpodMultiplayerSession session, {
+  required String matchId,
+  required String clientCommandId,
+  required int expectedRevision,
+}) async {
+  session._ensureAuthenticated();
+  try {
+    return session._decoder.command(
+      await session._client.game.resignMatch(
+        server.GameResignMatchRequest(
+          matchId: matchId,
+          clientCommandId: clientCommandId,
+          expectedRevision: expectedRevision,
+        ),
+      ),
+    );
+  } on Object catch (error, stackTrace) {
+    throw _translate(error, stackTrace);
+  }
+}
+
+Future<MultiplayerCommandView> _kickRemoteParticipant(
+  ServerpodMultiplayerSession session, {
+  required String matchId,
+  required String clientCommandId,
+  required int expectedRevision,
+  required String targetPlayerId,
+}) async {
+  session._ensureAuthenticated();
+  try {
+    return session._decoder.command(
+      await session._client.game.kickParticipant(
+        server.GameKickParticipantRequest(
+          matchId: matchId,
+          clientCommandId: clientCommandId,
+          expectedRevision: expectedRevision,
+          targetPlayerId: targetPlayerId,
+        ),
+      ),
+    );
+  } on Object catch (error, stackTrace) {
+    throw _translate(error, stackTrace);
+  }
+}
+
 void _validateJoinedLobby(
   server.GameResync joined,
   MultiplayerMatchLobbyView lobby,

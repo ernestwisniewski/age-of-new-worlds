@@ -44,11 +44,46 @@ final class _MatchActions extends StatelessWidget {
         const SizedBox(height: AonwSpacing.sm),
         TextButton(
           key: const ValueKey('multiplayer-leave-match'),
-          onPressed: state.commandPending ? null : controller.leaveMatch,
-          child: Text(context.aonwL10n.backToLobby),
+          onPressed: state.commandPending
+              ? null
+              : () => _leaveOrResign(context),
+          child: Text(
+            state.lobby.match.phase == MultiplayerMatchPhase.running
+                ? context.aonwL10n.leaveMultiplayerMatch
+                : context.aonwL10n.backToLobby,
+          ),
         ),
       ],
     );
+  }
+
+  Future<void> _leaveOrResign(BuildContext context) async {
+    if (state.lobby.match.phase != MultiplayerMatchPhase.running) {
+      await controller.leaveMatch();
+      return;
+    }
+    final l10n = context.aonwL10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.multiplayerResignTitle),
+        content: Text(l10n.multiplayerResignBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancelDialog),
+          ),
+          FilledButton(
+            key: const ValueKey('multiplayer-confirm-resignation'),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.multiplayerResignConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && context.mounted) {
+      await controller.resignMatch();
+    }
   }
 }
 

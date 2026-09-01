@@ -253,6 +253,16 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get leaveMultiplayerMatch => 'Opuść rozgrywkę';
 
   @override
+  String get multiplayerResignTitle => 'Poddać tę rozgrywkę?';
+
+  @override
+  String get multiplayerResignBody =>
+      'Twój udział zakończy się natychmiast i tej operacji nie można cofnąć.';
+
+  @override
+  String get multiplayerResignConfirm => 'Poddaj rozgrywkę';
+
+  @override
   String get multiplayerMatchTitle => 'Rozgrywka online';
 
   @override

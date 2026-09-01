@@ -530,6 +530,24 @@ abstract class AonwLocalizations {
   /// **'Leave match'**
   String get leaveMultiplayerMatch;
 
+  /// No description provided for @multiplayerResignTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Resign from this match?'**
+  String get multiplayerResignTitle;
+
+  /// No description provided for @multiplayerResignBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your participation will end immediately and this action cannot be undone.'**
+  String get multiplayerResignBody;
+
+  /// No description provided for @multiplayerResignConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Resign'**
+  String get multiplayerResignConfirm;
+
   /// No description provided for @multiplayerMatchTitle.
   ///
   /// In en, this message translates to:
