@@ -76,7 +76,7 @@ final class FlameScenePatch {
       ],
       fieldImprovementUpserts: [
         for (final improvement in next.player.fieldImprovements)
-          if (!_sameImprovement(
+          if (!_sameFlameImprovement(
             previousImprovements[improvement.coordinate],
             improvement,
           ))
@@ -295,11 +295,6 @@ final class FlameScenePatch {
   static bool _sameCity(CityView? left, CityView right) =>
       sameFlameCity(left, right);
 
-  static bool _sameImprovement(
-    FieldImprovementView? left,
-    FieldImprovementView right,
-  ) => left != null && left.improvement == right.improvement;
-
   static bool _sameRoad(RoadView? left, RoadView right) =>
       left != null && left.condition == right.condition;
 
@@ -364,6 +359,13 @@ final class FlameScenePatch {
     };
   }
 }
+
+bool _sameFlameImprovement(
+  FieldImprovementView? left,
+  FieldImprovementView right,
+) =>
+    left != null &&
+    (left.improvement, left.eraColumn) == (right.improvement, right.eraColumn);
 
 final class FlameCombatTransition {
   const FlameCombatTransition({

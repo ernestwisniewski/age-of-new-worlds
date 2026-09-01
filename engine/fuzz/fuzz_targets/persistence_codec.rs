@@ -55,7 +55,7 @@ fuzz_target!(|data: &[u8]| {
     );
 
     let input = if data.is_empty() {
-        br#"{"apiVersion":9,"request":{"type":"capabilities"}}"#.as_slice()
+        br#"{"apiVersion":10,"request":{"type":"capabilities"}}"#.as_slice()
     } else {
         data
     };

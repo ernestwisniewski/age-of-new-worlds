@@ -58,6 +58,25 @@ void main() {
     );
   });
 
+  test('field improvement parser requires its coarse visual era band', () {
+    final improvement = AonwFieldImprovementView.fromJson({
+      'coordinate': {'col': 1, 'row': 2},
+      'improvement': 'mine',
+      'eraColumn': 2,
+    });
+
+    expect(improvement.coordinate.col, 1);
+    expect(improvement.improvement, AonwFieldImprovementKind.mine);
+    expect(improvement.eraColumn, 2);
+    expect(
+      () => AonwFieldImprovementView.fromJson({
+        'coordinate': {'col': 1, 'row': 2},
+        'improvement': 'mine',
+      }),
+      throwsFormatException,
+    );
+  });
+
   test(
     'diplomacy parser keeps the complete recipient-safe projection typed',
     () {

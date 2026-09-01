@@ -45,9 +45,7 @@
     },
     "flutter_client_lib": {
       "files": {},
-      "declarations": {
-        "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 353
-      },
+      "declarations": {},
       "callableLines": {
         "clients/aonw_flutter/lib/features/artifacts/presentation/artifact_panel.dart::class:ArtifactPanel/method:build": 78,
         "clients/aonw_flutter/lib/features/combat/application/combat_workflow.dart::class:CombatWorkflow/method:_attack": 65,

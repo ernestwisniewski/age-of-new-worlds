@@ -29,6 +29,13 @@ final class RecipientProjectionValidator {
       (improvement) => improvement.coordinate,
       'field improvement',
     );
+    if (snapshot.fieldImprovements.any(
+      (improvement) => improvement.eraColumn >= 4,
+    )) {
+      throw const FormatException(
+        'Recipient field improvement era is invalid.',
+      );
+    }
     validateOrderedCoordinates(
       snapshot.roads,
       (road) => road.coordinate,

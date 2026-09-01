@@ -3,7 +3,9 @@ import 'package:aonw_flutter/features/combat/application/combat_state.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/game/presentation/flame_scene_patch.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -138,6 +140,30 @@ void main() {
     expect(patch.cityUpserts, [same(added)]);
     expect(patch.removedCityIds, ['removed-city']);
   });
+
+  test('upserts a stable improvement when its public era band changes', () {
+    const early = FieldImprovementView(
+      coordinate: (col: 1, row: 0),
+      improvement: FieldImprovementKind.mine,
+    );
+    const industrial = FieldImprovementView(
+      coordinate: (col: 1, row: 0),
+      improvement: FieldImprovementKind.mine,
+      eraColumn: 2,
+    );
+    final scene = testMapScene(fieldImprovements: const [early]);
+
+    final patch = FlameScenePatch.between(
+      _snapshot(scene, player: scene.player),
+      _snapshot(
+        scene,
+        player: _player(units: const [], fieldImprovements: const [industrial]),
+      ),
+    );
+
+    expect(patch.fieldImprovementUpserts, [same(industrial)]);
+    expect(patch.removedFieldImprovementCoordinates, isEmpty);
+  });
 }
 
 extension on CombatState {
@@ -165,6 +191,7 @@ PlayerMapView _player({
   String? digest,
   required List<VisibleUnitView> units,
   List<CityView> cities = const [],
+  List<FieldImprovementView> fieldImprovements = const [],
 }) => PlayerMapView.preview(
   actorPlayerId: 'preview-player',
   stamp: SessionStampView(
@@ -177,4 +204,5 @@ PlayerMapView _player({
   pendingAction: null,
   units: units,
   cities: cities,
+  fieldImprovements: fieldImprovements,
 );

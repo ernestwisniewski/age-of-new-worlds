@@ -295,6 +295,7 @@ void main() {
           AonwFieldImprovementView(
             coordinate: AonwCoordinate(col: 1, row: 0),
             improvement: AonwFieldImprovementKind.mine,
+            eraColumn: 2,
           ),
         ],
         roads: const [
@@ -317,6 +318,7 @@ void main() {
       player.fieldImprovementAt((col: 1, row: 0))?.improvement,
       FieldImprovementKind.mine,
     );
+    expect(player.fieldImprovementAt((col: 1, row: 0))?.eraColumn, 2);
     expect(
       player.roadAt((col: 2, row: 1))?.condition,
       TransportConditionView.pillaged,

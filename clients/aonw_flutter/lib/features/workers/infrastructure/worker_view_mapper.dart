@@ -64,10 +64,16 @@ final class WorkerViewMapper {
   FieldImprovementView fieldImprovement(
     AonwFieldImprovementView wire,
     MapView map,
-  ) => FieldImprovementView(
-    coordinate: _coordinate(wire.coordinate, map),
-    improvement: _improvement(wire.improvement),
-  );
+  ) {
+    if (wire.eraColumn >= 4) {
+      throw const FormatException('Field improvement era is invalid.');
+    }
+    return FieldImprovementView(
+      coordinate: _coordinate(wire.coordinate, map),
+      improvement: _improvement(wire.improvement),
+      eraColumn: wire.eraColumn,
+    );
+  }
 
   RoadView road(AonwRoadView wire, MapView map) => RoadView(
     coordinate: _coordinate(wire.coordinate, map),

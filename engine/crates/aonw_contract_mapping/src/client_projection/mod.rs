@@ -220,6 +220,7 @@ fn field_improvement(value: PlayerFieldImprovementView) -> FieldImprovementViewD
     FieldImprovementViewDto {
         coordinate: coordinate(value.coordinate()),
         improvement: encode_improvement(value.improvement()),
+        era_column: value.era_column(),
     }
 }
 

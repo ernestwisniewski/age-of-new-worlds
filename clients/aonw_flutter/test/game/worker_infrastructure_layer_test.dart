@@ -1,6 +1,7 @@
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -49,6 +50,7 @@ void main() {
       const improvement = FieldImprovementView(
         coordinate: (col: 0, row: 0),
         improvement: FieldImprovementKind.farm,
+        eraColumn: 2,
       );
       const roadCoordinate = (col: 1, row: 0);
       final initial = testMapScene(
@@ -60,7 +62,7 @@ void main() {
           ),
         ],
       );
-      game.replaceScene(_snapshot(initial));
+      game.replaceScene(_snapshot(initial, selected: improvement.coordinate));
       await game.ready();
       final layer = game.world.workerInfrastructureLayer;
       final stableImprovement = layer.debugImprovementAt(
@@ -69,9 +71,17 @@ void main() {
       expect(layer.debugOperationalRoadCount, 1);
       expect(layer.debugRoadPathMetricCount, 1);
       expect(layer.children, hasLength(1), reason: 'roads are batched');
+      expect(stableImprovement?.debugEraColumn, 2);
+      expect(stableImprovement?.debugSelected, isTrue);
+
+      const modern = FieldImprovementView(
+        coordinate: (col: 0, row: 0),
+        improvement: FieldImprovementKind.farm,
+        eraColumn: 3,
+      );
 
       final pillaged = testMapScene(
-        fieldImprovements: const [improvement],
+        fieldImprovements: const [modern],
         roads: const [
           RoadView(
             coordinate: roadCoordinate,
@@ -85,6 +95,8 @@ void main() {
         layer.debugImprovementAt(improvement.coordinate),
         same(stableImprovement),
       );
+      expect(stableImprovement?.debugEraColumn, 3);
+      expect(stableImprovement?.debugSelected, isFalse);
       expect(
         layer.debugRoadAt(roadCoordinate)?.condition,
         TransportConditionView.pillaged,
@@ -92,21 +104,26 @@ void main() {
       expect(layer.debugOperationalRoadCount, 0);
       expect(layer.debugRoadPathMetricCount, 0);
       expect(layer.debugCreatedCount, 2);
-      expect(layer.debugUpdatedCount, 1);
-      expect(layer.debugSharedPaintCount, 7);
+      expect(layer.debugUpdatedCount, 2);
+      expect(layer.debugSharedPaintCount, 9);
 
       game.replaceScene(
-        _snapshot(testMapScene(fieldImprovements: const [improvement])),
+        _snapshot(
+          testMapScene(fieldImprovements: const [modern]),
+          selected: modern.coordinate,
+        ),
       );
       expect(layer.debugRoadCount, 0);
       expect(layer.debugRemovedCount, 1);
+      expect(stableImprovement?.debugSelected, isTrue);
     },
   );
 }
 
-MapRenderSnapshot _snapshot(MapScene scene) => MapRenderSnapshot(
-  map: scene.map,
-  interaction: const MapInteractionState(),
-  reference: scene.reference,
-  player: scene.player,
-);
+MapRenderSnapshot _snapshot(MapScene scene, {MapHexCoordinate? selected}) =>
+    MapRenderSnapshot(
+      map: scene.map,
+      interaction: MapInteractionState(selected: selected),
+      reference: scene.reference,
+      player: scene.player,
+    );

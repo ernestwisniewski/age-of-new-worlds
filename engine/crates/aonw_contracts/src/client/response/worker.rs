@@ -10,6 +10,8 @@ pub struct FieldImprovementViewDto {
     pub coordinate: CoordinateDto,
     /// Improvement identity.
     pub improvement: FieldImprovementKindDto,
+    /// Coarse public visual era band used by the four-column sprite atlas.
+    pub era_column: u8,
 }
 
 /// Recipient-safe dynamic road segment.

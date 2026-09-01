@@ -114,10 +114,12 @@ final class FieldImprovementView {
   const FieldImprovementView({
     required this.coordinate,
     required this.improvement,
+    this.eraColumn = 0,
   });
 
   final MapHexCoordinate coordinate;
   final FieldImprovementKind improvement;
+  final int eraColumn;
 }
 
 final class RoadView {

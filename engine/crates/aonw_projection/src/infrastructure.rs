@@ -1,5 +1,7 @@
+use aonw_content::{RulesetDefinition, TechnologyEra};
 use aonw_domain::{
-    FieldImprovementKind, FogVisibility, GameState, HexCoord, PlayerId, TransportCondition,
+    FieldImprovementKind, FogVisibility, GameState, HexCoord, PlayerId, PlayerResearchState,
+    TransportCondition,
 };
 
 /// Recipient-safe current field improvement.
@@ -7,6 +9,7 @@ use aonw_domain::{
 pub struct PlayerFieldImprovementView {
     coordinate: HexCoord,
     improvement: FieldImprovementKind,
+    era_column: u8,
 }
 
 impl PlayerFieldImprovementView {
@@ -20,6 +23,12 @@ impl PlayerFieldImprovementView {
     #[must_use]
     pub const fn improvement(self) -> FieldImprovementKind {
         self.improvement
+    }
+
+    /// Returns the deliberately coarse public visual era band (0 through 3).
+    #[must_use]
+    pub const fn era_column(self) -> u8 {
+        self.era_column
     }
 }
 
@@ -47,6 +56,7 @@ impl PlayerRoadView {
 pub(crate) fn visible_infrastructure(
     state: &GameState,
     actor: &PlayerId,
+    ruleset: &RulesetDefinition,
 ) -> (Vec<PlayerFieldImprovementView>, Vec<PlayerRoadView>) {
     let improvements = state
         .field_improvements()
@@ -62,6 +72,12 @@ pub(crate) fn visible_infrastructure(
         .map(|improvement| PlayerFieldImprovementView {
             coordinate: improvement.coordinate(),
             improvement: improvement.kind(),
+            era_column: improvement_owner(
+                state,
+                improvement.coordinate(),
+                improvement.built_by_city_id(),
+            )
+            .map_or(0, |owner| visual_era_column(state, owner, ruleset)),
         })
         .collect::<Vec<_>>();
 
@@ -81,6 +97,81 @@ pub(crate) fn visible_infrastructure(
     (improvements, roads)
 }
 
+fn improvement_owner<'state>(
+    state: &'state GameState,
+    coordinate: HexCoord,
+    built_by_city_id: Option<&aonw_domain::CityId>,
+) -> Option<&'state PlayerId> {
+    built_by_city_id
+        .and_then(|city_id| state.city(city_id))
+        .or_else(|| {
+            state
+                .cities()
+                .iter()
+                .find(|city| city.controlled_hexes().contains(&coordinate))
+        })
+        .map(aonw_domain::City::owner_player_id)
+}
+
+fn visual_era_column(state: &GameState, owner: &PlayerId, ruleset: &RulesetDefinition) -> u8 {
+    state
+        .research()
+        .players()
+        .get(owner)
+        .map_or(0, |research| era_column_for_research(research, ruleset))
+}
+
+fn era_column_for_research(research: &PlayerResearchState, ruleset: &RulesetDefinition) -> u8 {
+    research
+        .unlocked_technology_ids()
+        .iter()
+        .filter_map(|id| ruleset.technology(*id))
+        .map(|definition| match definition.era() {
+            TechnologyEra::Foundation | TechnologyEra::Settlement => 0,
+            TechnologyEra::Expansion | TechnologyEra::Specialization => 1,
+            TechnologyEra::Industry => 2,
+            TechnologyEra::Strategy => 3,
+        })
+        .max()
+        .unwrap_or(0)
+}
+
 fn known_coordinate(state: &GameState, actor: &PlayerId, coordinate: HexCoord) -> bool {
     state.fog_of_war().visibility(actor, coordinate) != FogVisibility::Hidden
+}
+
+#[cfg(test)]
+mod tests {
+    use aonw_content::RulesetDefinition;
+    use aonw_domain::{PlayerResearchState, TechnologyId};
+
+    use super::era_column_for_research;
+
+    #[test]
+    fn visual_era_uses_the_highest_unlocked_technology_band() {
+        let ruleset = RulesetDefinition::standard();
+        let cases = [
+            (TechnologyId::Agriculture, 0),
+            (TechnologyId::AdvancedTrade, 1),
+            (TechnologyId::CoalMining, 2),
+            (TechnologyId::Strategy, 3),
+        ];
+
+        for (technology, expected) in cases {
+            let research = PlayerResearchState::try_new([technology], None, [], 0)
+                .expect("valid research state");
+            assert_eq!(era_column_for_research(&research, ruleset), expected);
+        }
+    }
+
+    #[test]
+    fn visual_era_defaults_to_the_early_asset_band() {
+        assert_eq!(
+            era_column_for_research(
+                &PlayerResearchState::default(),
+                RulesetDefinition::standard(),
+            ),
+            0,
+        );
+    }
 }

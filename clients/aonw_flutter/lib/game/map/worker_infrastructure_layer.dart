@@ -25,6 +25,7 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   final _improvements = <MapHexCoordinate, MapFieldImprovementComponent>{};
   final _roads = <MapHexCoordinate, RoadView>{};
   Set<MapHexCoordinate> _cityCenters = const {};
+  MapHexCoordinate? _selectedCoordinate;
   ui.Path _roadPath = ui.Path();
   ui.Path _markingPath = ui.Path();
   var _operationalRoadCount = 0;
@@ -92,25 +93,7 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   RoadView? debugRoadAt(MapHexCoordinate coordinate) => _roads[coordinate];
 
   void applyPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
-    for (final coordinate in patch.removedFieldImprovementCoordinates) {
-      _remove(_improvements.remove(coordinate));
-    }
-    for (final improvement in patch.fieldImprovementUpserts) {
-      final center = _center(cache, improvement.coordinate);
-      final existing = _improvements[improvement.coordinate];
-      if (existing == null) {
-        final component = MapFieldImprovementComponent(
-          improvement: improvement,
-          center: center,
-        );
-        _improvements[improvement.coordinate] = component;
-        add(component);
-        _createdCount += 1;
-      } else {
-        existing.applyImprovement(improvement, center);
-        _updatedCount += 1;
-      }
-    }
+    _applyImprovementPatch(patch, cache);
     var roadsChanged = false;
     for (final coordinate in patch.removedRoadCoordinates) {
       if (_roads.remove(coordinate) != null) {
@@ -139,6 +122,40 @@ final class MapWorkerInfrastructureLayerComponent extends Component
     isVisible = _improvements.isNotEmpty || _operationalRoadCount > 0;
   }
 
+  void _applyImprovementPatch(
+    FlameScenePatch patch,
+    MapStaticRenderCache cache,
+  ) {
+    for (final coordinate in patch.removedFieldImprovementCoordinates) {
+      _remove(_improvements.remove(coordinate));
+    }
+    for (final improvement in patch.fieldImprovementUpserts) {
+      final center = _center(cache, improvement.coordinate);
+      final existing = _improvements[improvement.coordinate];
+      if (existing == null) {
+        final component = MapFieldImprovementComponent(
+          improvement: improvement,
+          center: center,
+          selected:
+              improvement.coordinate == patch.snapshot.interaction.selected,
+        );
+        _improvements[improvement.coordinate] = component;
+        add(component);
+        _createdCount += 1;
+      } else {
+        existing.applyImprovement(improvement, center);
+        _updatedCount += 1;
+      }
+    }
+    final selectedCoordinate = patch.snapshot.interaction.selected;
+    if (_selectedCoordinate != selectedCoordinate) {
+      _selectedCoordinate = selectedCoordinate;
+      for (final entry in _improvements.entries) {
+        entry.value.setSelected(entry.key == selectedCoordinate);
+      }
+    }
+  }
+
   void _remove(Component? component) {
     if (component == null) return;
     component.removeFromParent();
@@ -152,6 +169,7 @@ final class MapWorkerInfrastructureLayerComponent extends Component
     _improvements.clear();
     _roads.clear();
     _cityCenters = const {};
+    _selectedCoordinate = null;
     _roadPath = ui.Path();
     _markingPath = ui.Path();
     _operationalRoadCount = 0;
@@ -273,7 +291,9 @@ final class MapFieldImprovementComponent extends PositionComponent
   MapFieldImprovementComponent({
     required FieldImprovementView improvement,
     required ui.Offset center,
+    required bool selected,
   }) : _improvement = improvement,
+       _selected = selected,
        super(
          position: Vector2(center.dx, center.dy),
          size: Vector2(_width, _height),
@@ -282,20 +302,32 @@ final class MapFieldImprovementComponent extends PositionComponent
 
   static const _width = 84.0;
   static final _height = 60 * math.sqrt(3) * 0.62 * 0.70;
-  static final ui.Paint _fill = ui.Paint()..color = MapPalette.reachable;
-  static final ui.Paint _outline = ui.Paint()
-    ..color = MapPalette.cityOutline
-    ..style = ui.PaintingStyle.stroke
-    ..strokeWidth = 2;
   static final ui.Paint _spriteSurfacePaint = ui.Paint()
-    ..color = const ui.Color(0x2615171A);
+    ..color = MapPalette.improvementSurface;
   static final ui.Paint _spriteRimPaint = ui.Paint()
-    ..color = const ui.Color(0xF5C8CCD2)
+    ..color = MapPalette.improvementRim
     ..style = ui.PaintingStyle.stroke
     ..strokeWidth = 1.5;
-  static const sharedPaintCount = 4;
+  static final ui.Paint _selectedRimPaint = ui.Paint()
+    ..color = MapPalette.improvementSelectedRim
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 1.5;
+  static final ui.Paint _selectedShadowStrongPaint = ui.Paint()
+    ..color = MapPalette.improvementSelectedShadowStrong
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 7
+    ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 4);
+  static final ui.Paint _selectedShadowSoftPaint = ui.Paint()
+    ..color = MapPalette.improvementSelectedShadowSoft
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 5
+    ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 2.6);
+  static final ui.Paint _fallbackPaint = ui.Paint()
+    ..color = MapPalette.mapIconFallback;
+  static const sharedPaintCount = 6;
 
   FieldImprovementView _improvement;
+  bool _selected;
   SpriteFrame? _frame;
   var _loadGeneration = 0;
 
@@ -305,6 +337,16 @@ final class MapFieldImprovementComponent extends PositionComponent
   @visibleForTesting
   SpriteFrame? get debugSpriteFrame => _frame;
 
+  @visibleForTesting
+  bool get debugSelected => _selected;
+
+  @visibleForTesting
+  int get debugEraColumn => _improvement.eraColumn;
+
+  @visibleForTesting
+  ui.Color get debugEffectiveRimColor =>
+      _selected ? _selectedRimPaint.color : _spriteRimPaint.color;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -312,25 +354,35 @@ final class MapFieldImprovementComponent extends PositionComponent
   }
 
   void applyImprovement(FieldImprovementView value, ui.Offset center) {
-    final typeChanged = _improvement.improvement != value.improvement;
+    final frameChanged =
+        _improvement.improvement != value.improvement ||
+        _improvement.eraColumn != value.eraColumn;
     _improvement = value;
     position.setValues(center.dx, center.dy);
-    if (typeChanged) _reloadFrame();
+    if (frameChanged) _reloadFrame();
   }
+
+  void setSelected(bool value) => _selected = value;
 
   @override
   void render(ui.Canvas canvas) {
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);
     final frame = _frame;
+    canvas.drawPath(path, _spriteSurfacePaint);
     if (frame != null) {
-      canvas.drawPath(path, _spriteSurfacePaint);
       MapSpritePainter.paint(canvas, frame, destination: bounds, clip: path);
-      canvas.drawPath(path, _spriteRimPaint);
-      return;
+    } else {
+      canvas.drawCircle(bounds.center, 10, _fallbackPaint);
     }
-    canvas.drawPath(path, _fill);
-    canvas.drawPath(path, _outline);
+    if (_selected) {
+      canvas
+        ..drawPath(path, _selectedShadowStrongPaint)
+        ..drawPath(path, _selectedShadowSoftPaint)
+        ..drawPath(path, _selectedRimPaint);
+    } else {
+      canvas.drawPath(path, _spriteRimPaint);
+    }
   }
 
   void _reloadFrame() {
@@ -342,13 +394,18 @@ final class MapFieldImprovementComponent extends PositionComponent
   Future<void> _loadFrame() async {
     final generation = ++_loadGeneration;
     final kind = _improvement.improvement;
+    final era = _improvement.eraColumn;
     final SpriteFrame frame;
     try {
-      frame = await SpriteFrames.load(MapSpriteCatalog.improvementFrame(kind));
+      frame = await SpriteFrames.load(
+        MapSpriteCatalog.improvementFrame(kind, era: era),
+      );
     } on Object {
       return;
     }
-    if (generation != _loadGeneration || _improvement.improvement != kind) {
+    if (generation != _loadGeneration ||
+        _improvement.improvement != kind ||
+        _improvement.eraColumn != era) {
       return;
     }
     _frame = frame;

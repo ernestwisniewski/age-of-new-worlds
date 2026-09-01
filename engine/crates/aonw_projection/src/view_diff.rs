@@ -175,7 +175,7 @@ impl ProjectedView {
         ruleset: &RulesetDefinition,
     ) -> Result<Self, CanonicalQueryError> {
         let recipient = actor.as_ref();
-        let (field_improvements, roads) = visible_infrastructure(state, recipient);
+        let (field_improvements, roads) = visible_infrastructure(state, recipient, ruleset);
         let turn = PlayerTurnLifecycleView::new(state, recipient);
         let diplomacy = Arc::new(diplomacy_view(state, recipient));
         let units = visible_units(state, recipient).into();

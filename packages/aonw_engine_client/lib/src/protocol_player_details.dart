@@ -66,6 +66,7 @@ final class AonwFieldImprovementView {
   const AonwFieldImprovementView({
     required this.coordinate,
     required this.improvement,
+    required this.eraColumn,
   });
 
   factory AonwFieldImprovementView.fromJson(Object? source) {
@@ -73,15 +74,21 @@ final class AonwFieldImprovementView {
     requireKeys(value, const {
       'coordinate',
       'improvement',
+      'eraColumn',
     }, 'field improvement view');
     return AonwFieldImprovementView(
       coordinate: AonwCoordinate.fromJson(value['coordinate']),
       improvement: AonwFieldImprovementKind.fromJson(value['improvement']),
+      eraColumn: readUnsigned(
+        value['eraColumn'],
+        'field improvement era column',
+      ),
     );
   }
 
   final AonwCoordinate coordinate;
   final AonwFieldImprovementKind improvement;
+  final int eraColumn;
 }
 
 final class AonwRoadView {

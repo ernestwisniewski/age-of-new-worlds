@@ -27,6 +27,11 @@ abstract final class MapPalette {
   static const roadEdge = Color(0xFF000000);
   static const roadAsphalt = Color(0xFF24262A);
   static const roadMarking = Color(0xFFFFFFFF);
+  static const improvementSurface = Color(0x1E101620);
+  static const improvementRim = Color(0xDCC8CCD2);
+  static const improvementSelectedRim = Color(0xDCF1F4F8);
+  static const improvementSelectedShadowStrong = Color(0x829AA2AE);
+  static const improvementSelectedShadowSoft = Color(0x5A9AA2AE);
   static final elevationWallRight = Color.lerp(
     elevationWallBottom,
     elevationWallHighlight,
