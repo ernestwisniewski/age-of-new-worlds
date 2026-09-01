@@ -25,15 +25,18 @@ use aonw_projection::{ProjectedView, SessionStamp};
 
 mod host;
 mod model;
+mod system;
 
 pub use host::{
-    PlayerCommandRequest, PlayerQueryRequest, apply_player_command, apply_submit_turn, query_player,
+    PlayerCommandRequest, PlayerQueryRequest, apply_player_command, apply_submit_turn,
+    apply_system_command, query_player,
 };
 pub(crate) use model::validate_state;
 pub use model::{
     PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError,
-    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest,
+    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest, SystemCommandRequest,
 };
+pub use system::apply_system_command_dto;
 
 /// Failure while validating or mapping the strict current server DTO boundary.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -63,6 +66,8 @@ pub enum ServerBoundaryError {
     InvalidAuthenticatedActor(String),
     /// One opaque identity inside the player command was invalid.
     InvalidPlayerCommand(String),
+    /// One trusted lifecycle command value was invalid.
+    InvalidSystemCommand(String),
     /// Stateless authoritative execution failed before persistence.
     Host(ServerHostError),
 }
@@ -82,7 +87,9 @@ impl ServerBoundaryError {
             Self::ContentIdentityMismatch => ServerHostErrorCodeDto::ContentIdentityMismatch,
             Self::InvalidCanonicalState(_) => ServerHostErrorCodeDto::InvalidCanonicalState,
             Self::InvalidAuthenticatedActor(_) => ServerHostErrorCodeDto::InvalidAuthenticatedActor,
-            Self::InvalidPlayerCommand(_) => ServerHostErrorCodeDto::InvalidRequest,
+            Self::InvalidPlayerCommand(_) | Self::InvalidSystemCommand(_) => {
+                ServerHostErrorCodeDto::InvalidRequest
+            }
             Self::Host(error) => match error {
                 ServerHostError::EmptyParticipants => ServerHostErrorCodeDto::EmptyParticipants,
                 ServerHostError::UnknownAuthenticatedActor(_) => {
@@ -138,6 +145,9 @@ impl core::fmt::Display for ServerBoundaryError {
             }
             Self::InvalidPlayerCommand(message) => {
                 write!(formatter, "invalid player command: {message}")
+            }
+            Self::InvalidSystemCommand(message) => {
+                write!(formatter, "invalid system command: {message}")
             }
             Self::Host(source) => source.fmt(formatter),
         }

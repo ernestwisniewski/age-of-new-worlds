@@ -11,7 +11,7 @@ void main() {
     expect(identity.buildIdentity, aonwExpectedServerNativeBuildIdentity);
   });
 
-  test('native host exposes one recipient-safe player query response', () {
+  test('native host exposes player queries and trusted lifecycle commands', () {
     final host = AonwServerNativeHost();
     final world = host.prepareWorld(
       mapDocument: jsonEncode(_mapDocument()),
@@ -56,6 +56,32 @@ void main() {
     expect(outcome['status'], 'success');
     expect(result['type'], 'reachable');
     expect(result['unitId'], 'unit-1');
+
+    final applied = host.applySystemCommandJson(
+      world,
+      jsonEncode({
+        'apiVersion': aonwServerHostApiVersion,
+        'command': {
+          'type': 'kickParticipant',
+          'expectedRevision': state['revision'],
+          'playerId': 'player-2',
+          'reason': 'timeout',
+          'timeoutStreak': 3,
+        },
+        'initialEventOffset': 0,
+        'mapHash': world.mapHash,
+        'rulesetHash': world.rulesetHash,
+        'state': state,
+      }),
+    );
+    final command = _object(applied.requireSuccess('commandApplied')['result']);
+    final nextState = _object(command['state']);
+    final lifecycle = _object(nextState['turnLifecycle']);
+
+    expect(command['rejection'], isNull);
+    expect(command['finalEventOffset'], 1);
+    expect(lifecycle['kickedPlayerIds'], ['player-2']);
+    expect((command['recipients'] as List<Object?>), hasLength(2));
   });
 }
 

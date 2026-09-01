@@ -7,7 +7,7 @@ use crate::client::{
     ClientEvidenceDto, ClientQueryDto, ClientQueryResultDto, ClientSessionStampDto,
     PlayerViewPatchDto, PlayerViewSnapshotDto,
 };
-use crate::{GameStateDto, MatchIdentityDto};
+use crate::{GameStateDto, MatchIdentityDto, ReplaySystemCommandDto};
 
 /// The only stateless server-host protocol version accepted by this build.
 pub const SERVER_HOST_API_VERSION: u16 = 1;
@@ -97,6 +97,24 @@ pub struct PlayerCommandServerRequestDto {
     /// Exact ruleset identity stored with the match row.
     pub ruleset_hash: String,
     /// Canonical state locked by the Serverpod transaction.
+    pub state: GameStateDto,
+}
+
+/// Strict request for one trusted host-owned lifecycle command.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SystemCommandServerRequestDto {
+    /// Independently deployed server-host protocol version.
+    pub api_version: u16,
+    /// Closed system command unavailable through the player protocol.
+    pub command: ReplaySystemCommandDto,
+    /// Durable event offset immediately before this command.
+    pub initial_event_offset: u64,
+    /// Exact map identity stored with the match row.
+    pub map_hash: String,
+    /// Exact ruleset identity stored with the match row.
+    pub ruleset_hash: String,
+    /// Canonical state locked by the trusted server transaction.
     pub state: GameStateDto,
 }
 
@@ -369,6 +387,17 @@ impl PlayerCommandServerRequestDto {
     }
 }
 
+impl SystemCommandServerRequestDto {
+    /// Parses one bounded strict request.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for oversized or structurally invalid JSON.
+    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
+        parse_bounded(input)
+    }
+}
+
 impl PlayerQueryServerRequestDto {
     /// Parses one bounded strict request.
     ///
@@ -458,18 +487,4 @@ impl core::fmt::Display for ServerHostCodecError {
 impl std::error::Error for ServerHostCodecError {}
 
 #[cfg(test)]
-mod tests {
-    use super::{PrepareServerWorldRequestDto, SERVER_HOST_API_VERSION};
-
-    #[test]
-    fn prepare_request_requires_exact_identity_and_shape() {
-        let valid = format!(
-            r#"{{"apiVersion":{SERVER_HOST_API_VERSION},"mapDocument":"{{}}","rulesetId":"standard"}}"#
-        );
-        assert!(PrepareServerWorldRequestDto::from_json(&valid).is_ok());
-        assert!(
-            PrepareServerWorldRequestDto::from_json(&valid.replace('}', ",\"extra\":true}"))
-                .is_err()
-        );
-    }
-}
+mod tests;

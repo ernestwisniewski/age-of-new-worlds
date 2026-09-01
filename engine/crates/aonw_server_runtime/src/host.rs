@@ -3,7 +3,7 @@ use std::sync::Arc;
 use aonw_domain::{GameState, PlayerId};
 use aonw_engine::{
     DomainEvent, EngineContext, ExecutionEvidence, GameEngine, GameQuery, MovementVisibility,
-    PlayerCommand, TurnCommand,
+    PlayerCommand, SystemContext, TurnCommand,
 };
 use aonw_projection::{
     ProjectedView, RecipientDisclosure, SessionStamp, diff_view, unchanged_view,
@@ -11,7 +11,8 @@ use aonw_projection::{
 
 use crate::{
     PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError,
-    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest, validate_state,
+    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest, SystemCommandRequest,
+    validate_state,
 };
 
 /// Complete trusted input for one authenticated player command.
@@ -128,6 +129,96 @@ pub fn apply_player_command(
             .with_compiled_movement_map(compiled)
             .with_movement_visibility(&visibility);
     let parts = GameEngine::apply_player_owned(state, context, command)
+        .map_err(ServerHostError::Engine)?
+        .into_parts();
+    let final_event_offset =
+        checked_final_event_offset(initial_event_offset, budget, parts.events.len())?;
+    let rejection = parts.rejection.map(aonw_engine::DomainRejection::code);
+    let accepted = rejection.is_none();
+    let state_digest = parts.digest.unwrap_or(before_digest);
+    let stamp = SessionStamp {
+        revision: parts.state.revision(),
+        state_digest,
+        map_hash: parts.map_hash,
+        ruleset_hash: parts.ruleset_hash,
+    };
+    let recipients = before_views
+        .into_iter()
+        .map(|(recipient, before)| {
+            recipient_outcome(
+                recipient,
+                &before,
+                &parts.state,
+                &parts.events,
+                parts.evidence.as_ref(),
+                accepted,
+                before_revision,
+                stamp,
+                &world,
+            )
+        })
+        .collect::<Result<Vec<_>, ServerHostError>>()?
+        .into_boxed_slice();
+
+    Ok(ServerCommandOutcome {
+        state: parts.state,
+        rejection,
+        events: parts.events,
+        evidence: parts.evidence,
+        stamp,
+        initial_event_offset,
+        final_event_offset,
+        recipients,
+    })
+}
+
+/// Applies one trusted host-owned lifecycle command without process-local state.
+///
+/// The caller must hold the match transaction and persist the returned state,
+/// offsets, events, and recipient projections atomically. System commands have
+/// no authenticated player and cannot cross the player-command protocol.
+///
+/// # Errors
+///
+/// Returns an error for inconsistent trusted inputs, offset overflow, invalid
+/// immutable content, or an internal engine failure.
+pub fn apply_system_command(
+    request: SystemCommandRequest<'_>,
+) -> Result<ServerCommandOutcome, ServerHostError> {
+    validate_state(&request.state, &request.world)?;
+    let SystemCommandRequest {
+        state,
+        world,
+        command,
+        initial_event_offset,
+    } = request;
+    let budget = command.event_budget(&state);
+    initial_event_offset
+        .checked_add(budget.maximum())
+        .ok_or(ServerHostError::EventOffsetOverflow)?;
+
+    let compiled = world.compiled();
+    let before_digest = GameEngine::state_digest(&state);
+    let before_revision = state.revision().get();
+    let before_views = state
+        .match_lifecycle()
+        .identity()
+        .participants()
+        .iter()
+        .map(|participant| {
+            let recipient = Arc::new(participant.id().clone());
+            let view = ProjectedView::try_for_recipient(
+                &state,
+                recipient,
+                compiled.map(),
+                compiled.ruleset(),
+            )
+            .map_err(ServerHostError::Projection)?;
+            Ok((participant.id().clone(), view))
+        })
+        .collect::<Result<Vec<_>, ServerHostError>>()?;
+    let context = SystemContext::canonical(compiled.map(), compiled.ruleset());
+    let parts = GameEngine::apply_system_owned(state, context, command)
         .map_err(ServerHostError::Engine)?
         .into_parts();
     let final_event_offset =

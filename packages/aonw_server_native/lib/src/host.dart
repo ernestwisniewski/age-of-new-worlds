@@ -152,6 +152,29 @@ final class AonwServerNativeHost {
     }
   }
 
+  AonwServerHostResponse applySystemCommandJson(
+    AonwPreparedServerWorld world,
+    String request,
+  ) {
+    if (world.isClosed) {
+      throw StateError('Prepared server world is closed.');
+    }
+    final native = _invoke(
+      request,
+      (input, length) => bindings.aonwServerNativeApplySystemCommand(
+        world._handle,
+        input,
+        length,
+      ),
+    );
+    try {
+      native.response.requireSuccess('commandApplied');
+      return native.response;
+    } finally {
+      native.close();
+    }
+  }
+
   AonwServerHostResponse queryPlayerJson(
     AonwPreparedServerWorld world,
     String request,

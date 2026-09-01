@@ -8,11 +8,12 @@ use serde_json::json;
 
 use super::{
     aonw_server_native_api_version, aonw_server_native_apply_player_command,
-    aonw_server_native_build_identity_data, aonw_server_native_build_identity_len,
-    aonw_server_native_create_match, aonw_server_native_prepare_world,
-    aonw_server_native_query_player, aonw_server_native_response_data,
-    aonw_server_native_response_free, aonw_server_native_response_len,
-    aonw_server_native_response_take_world, aonw_server_native_world_free,
+    aonw_server_native_apply_system_command, aonw_server_native_build_identity_data,
+    aonw_server_native_build_identity_len, aonw_server_native_create_match,
+    aonw_server_native_prepare_world, aonw_server_native_query_player,
+    aonw_server_native_response_data, aonw_server_native_response_free,
+    aonw_server_native_response_len, aonw_server_native_response_take_world,
+    aonw_server_native_world_free,
 };
 
 #[test]
@@ -52,6 +53,23 @@ fn player_command_requires_a_live_prepared_world() {
     // SAFETY: Null is deliberately tested and the request buffer stays alive.
     let response =
         unsafe { aonw_server_native_apply_player_command(core::ptr::null(), b"{}".as_ptr(), 2) };
+    // SAFETY: This test owns the live response until it is freed below.
+    let decoded = unsafe { decode_response(response) };
+    assert!(matches!(
+        decoded.outcome,
+        ServerHostOutcomeDto::Failure { error }
+            if error.code == ServerHostErrorCodeDto::InvalidFfiArgument
+    ));
+    // SAFETY: The test transfers its only live response handle.
+    unsafe { aonw_server_native_response_free(response) };
+}
+
+#[test]
+#[allow(unsafe_code)]
+fn system_command_requires_a_live_prepared_world() {
+    // SAFETY: Null is deliberately tested and the request buffer stays alive.
+    let response =
+        unsafe { aonw_server_native_apply_system_command(core::ptr::null(), b"{}".as_ptr(), 2) };
     // SAFETY: This test owns the live response until it is freed below.
     let decoded = unsafe { decode_response(response) };
     assert!(matches!(

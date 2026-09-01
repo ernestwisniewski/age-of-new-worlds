@@ -129,6 +129,35 @@ final class GameNativeRuntime {
     }
   }
 
+  Map<String, Object?> applySystemCommand({
+    required PreparedGameContent content,
+    required Map<String, Object?> command,
+    required int initialEventOffset,
+    required Map<String, Object?> canonicalState,
+  }) {
+    try {
+      final response = _host.applySystemCommandJson(
+        content._world,
+        jsonEncode({
+          'apiVersion': aonwServerHostApiVersion,
+          'command': command,
+          'initialEventOffset': initialEventOffset,
+          'mapHash': content.mapHash,
+          'rulesetHash': content.rulesetHash,
+          'state': canonicalState,
+        }),
+      );
+      return _result(response, 'commandApplied');
+    } on AonwServerNativeException catch (error) {
+      if (error.code != 'invalid_request') rethrow;
+      _rethrowInvalidRequest(
+        error: error,
+        content: content,
+        canonicalState: canonicalState,
+      );
+    }
+  }
+
   Map<String, Object?> queryPlayer({
     required PreparedGameContent content,
     required String authenticatedActorPlayerId,

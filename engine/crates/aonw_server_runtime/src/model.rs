@@ -4,7 +4,7 @@ use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{GameState, PlayerId};
 use aonw_engine::{
     CanonicalEngineError, CanonicalQueryError, CommandRejectionCode, CompiledMovementMap,
-    CompiledMovementMapError, DomainEvent, ExecutionEvidence, QueryResult,
+    CompiledMovementMapError, DomainEvent, ExecutionEvidence, QueryResult, SystemCommand,
 };
 use aonw_projection::{PlayerViewPatch, PlayerViewSnapshot, RecipientDisclosure, SessionStamp};
 
@@ -60,6 +60,19 @@ pub struct SubmitTurnRequest {
     pub authenticated_actor: PlayerId,
     /// Revision supplied by the remote command.
     pub expected_revision: u64,
+    /// Durable offset immediately before this command.
+    pub initial_event_offset: u64,
+}
+
+/// Complete trusted input for one host-owned lifecycle command.
+#[derive(Clone, Debug)]
+pub struct SystemCommandRequest<'command> {
+    /// Canonical state locked by the server transaction.
+    pub state: GameState,
+    /// Immutable map and rules prepared outside the match transaction.
+    pub world: PreparedServerWorld,
+    /// Closed system command constructed only by trusted server code.
+    pub command: SystemCommand<'command>,
     /// Durable offset immediately before this command.
     pub initial_event_offset: u64,
 }
