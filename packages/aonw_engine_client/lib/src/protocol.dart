@@ -298,6 +298,18 @@ final class AonwClientRequest {
   String toJson() =>
       jsonEncode({'apiVersion': aonwClientApiVersion, 'request': request});
 
+  /// Encodes the closed player command carried by one dispatch request.
+  ///
+  /// Server transports use this to send the exact command shape accepted by
+  /// the local runtime without copying command-specific wire mapping.
+  String toPlayerCommandJson() {
+    final command = request['command'];
+    if (request['type'] != 'dispatch' || command is! Map<String, Object?>) {
+      throw StateError('The client request does not carry a player command.');
+    }
+    return jsonEncode(command);
+  }
+
   static Map<String, Object?> _unitCommand(
     String type,
     int expectedRevision,

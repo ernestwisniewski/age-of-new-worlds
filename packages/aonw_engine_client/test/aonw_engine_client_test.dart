@@ -6,15 +6,27 @@ import 'package:test/test.dart';
 
 void main() {
   test('end-turn request stays revision-bound', () {
-    expect(
-      jsonDecode(AonwClientRequest.endTurn(expectedRevision: 7).toJson()),
-      {
-        'apiVersion': aonwClientApiVersion,
-        'request': {
-          'type': 'dispatch',
-          'command': {'type': 'endTurn', 'expectedRevision': 7},
-        },
+    final request = AonwClientRequest.endTurn(expectedRevision: 7);
+    expect(jsonDecode(request.toJson()), {
+      'apiVersion': aonwClientApiVersion,
+      'request': {
+        'type': 'dispatch',
+        'command': {'type': 'endTurn', 'expectedRevision': 7},
       },
+    });
+    expect(jsonDecode(request.toPlayerCommandJson()), {
+      'type': 'endTurn',
+      'expectedRevision': 7,
+    });
+  });
+
+  test('queries cannot be encoded as player commands', () {
+    expect(
+      () => AonwClientRequest.reachable(
+        expectedRevision: 7,
+        unitId: 'unit-1',
+      ).toPlayerCommandJson(),
+      throwsStateError,
     );
   });
 

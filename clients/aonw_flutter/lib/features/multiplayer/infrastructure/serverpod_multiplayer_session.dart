@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_server_client/aonw_server_client.dart' as server;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as auth;
@@ -203,11 +204,13 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     _ensureAuthenticated();
     try {
       return _decoder.command(
-        await _client.game.submitTurn(
-          server.GameSubmitTurnRequest(
+        await _client.game.applyCommand(
+          server.GamePlayerCommandRequest(
             matchId: matchId,
             clientCommandId: clientCommandId,
-            expectedRevision: expectedRevision,
+            commandJson: AonwClientRequest.endTurn(
+              expectedRevision: expectedRevision,
+            ).toPlayerCommandJson(),
           ),
         ),
       );
