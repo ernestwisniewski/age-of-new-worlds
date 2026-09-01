@@ -1,0 +1,6 @@
+class: GameKickParticipantRequest
+fields:
+  matchId: String
+  clientCommandId: String
+  expectedRevision: int
+  targetPlayerId: String

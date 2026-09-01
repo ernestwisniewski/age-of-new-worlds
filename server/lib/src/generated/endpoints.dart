@@ -30,12 +30,14 @@ import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.d
     as _i14;
 import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
     as _i15;
-import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
     as _i16;
-import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
+import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
     as _i17;
-import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _i18;
+import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+    as _i19;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -643,12 +645,31 @@ class Endpoints extends _i1.EndpointDispatch {
                 params['request'],
               ),
         ),
+        'kickParticipant': _i1.MethodConnector(
+          name: 'kickParticipant',
+          params: {
+            'request': _i1.ParameterDescription(
+              name: 'request',
+              type: _i1.getType<_i16.GameKickParticipantRequest>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['game'] as _i11.GameEndpoint).kickParticipant(
+                    session,
+                    params['request'],
+                  ),
+        ),
         'query': _i1.MethodConnector(
           name: 'query',
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i16.GamePlayerQueryRequest>(),
+              type: _i1.getType<_i17.GamePlayerQueryRequest>(),
               nullable: false,
             ),
           },
@@ -681,9 +702,9 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth_core'] = _i17.Endpoints()
+    modules['serverpod_auth_core'] = _i18.Endpoints()
       ..initializeEndpoints(server);
-    modules['serverpod_auth_idp'] = _i18.Endpoints()
+    modules['serverpod_auth_idp'] = _i19.Endpoints()
       ..initializeEndpoints(server);
   }
 }

@@ -39,10 +39,12 @@ import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.d
     as _i15;
 import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
     as _i16;
-import 'package:aonw_server/src/generated/game/models/game_player_query_outcome.dart'
+import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
     as _i17;
-import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+import 'package:aonw_server/src/generated/game/models/game_player_query_outcome.dart'
     as _i18;
+import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+    as _i19;
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:aonw_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -1160,9 +1162,40 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i17.GamePlayerQueryOutcome> query(
+  _i3.Future<_i14.GameCommandOutcome> kickParticipant(
     _i1.TestSessionBuilder sessionBuilder,
-    _i18.GamePlayerQueryRequest request,
+    _i17.GameKickParticipantRequest request,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'game',
+            method: 'kickParticipant',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'game',
+          methodName: 'kickParticipant',
+          parameters: _i1.testObjectToJson({'request': request}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _i3.Future<_i14.GameCommandOutcome>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i18.GamePlayerQueryOutcome> query(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i19.GamePlayerQueryRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1183,7 +1216,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i17.GamePlayerQueryOutcome>);
+                as _i3.Future<_i18.GamePlayerQueryOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

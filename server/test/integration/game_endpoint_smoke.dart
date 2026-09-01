@@ -43,7 +43,8 @@ final class _GameEndpointJourney {
     final ownerTurn = await _submitOwner(joined, fortifiedRevision);
     final guestTurn = await _restartAndSubmitGuest(joined, ownerTurn);
     final persisted = await _verifyPersistedState(joined, guestTurn);
-    await _verifyRollback(joined, persisted, guestTurn);
+    final kicked = await _verifyKick(joined, persisted);
+    await _verifyRollback(joined, kicked.persisted, kicked.outcome);
   }
 
   Future<void> _rejectInvalidCommand(_JoinedMatch joined) async {
@@ -340,6 +341,13 @@ final class _PersistedMatch {
 
   final game.GameMatch row;
   final Map<String, String> snapshots;
+}
+
+final class _KickResult {
+  const _KickResult({required this.persisted, required this.outcome});
+
+  final _PersistedMatch persisted;
+  final game.GameCommandOutcome outcome;
 }
 
 TestSessionBuilder _authenticated(

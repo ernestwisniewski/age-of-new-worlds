@@ -11,6 +11,7 @@ part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
 part 'game_match_service_support.dart';
+part 'game_match_service_system.dart';
 
 const _maximumIdentifierLength = 128;
 const _maximumContentDocumentBytes = 16 * 1024 * 1024;
@@ -57,6 +58,11 @@ final class GameMatchService {
     Session session,
     GamePlayerCommandRequest request,
   ) => _applyCommand(this, session, request);
+
+  Future<GameCommandOutcome> kickParticipant(
+    Session session,
+    GameKickParticipantRequest request,
+  ) => _kickParticipant(this, session, request);
 
   Future<GamePlayerQueryOutcome> query(
     Session session,

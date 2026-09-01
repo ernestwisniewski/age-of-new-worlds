@@ -44,5 +44,18 @@ void main() {
     );
     expect(queryRoundTrip.matchId, 'match-1');
     expect(queryRoundTrip.queryJson, contains('reachable'));
+
+    final kick = GameKickParticipantRequest(
+      matchId: 'match-1',
+      clientCommandId: 'kick-1',
+      expectedRevision: 4,
+      targetPlayerId: 'player-2',
+    );
+    final kickRoundTrip = Protocol().deserialize<GameKickParticipantRequest>(
+      kick.toJson(),
+    );
+    expect(kickRoundTrip.clientCommandId, 'kick-1');
+    expect(kickRoundTrip.expectedRevision, 4);
+    expect(kickRoundTrip.targetPlayerId, 'player-2');
   });
 }

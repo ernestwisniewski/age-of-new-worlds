@@ -34,5 +34,6 @@ game:
   - leaveLobby:
   - submitTurn:
   - applyCommand:
+  - kickParticipant:
   - query:
   - resync:

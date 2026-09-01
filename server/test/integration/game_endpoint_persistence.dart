@@ -56,6 +56,101 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
     expect(stats.totals.matchesStarted, greaterThanOrEqualTo(1));
   }
 
+  Future<_KickResult> _verifyKick(
+    _JoinedMatch joined,
+    _PersistedMatch persisted,
+  ) async {
+    final request = game.GameKickParticipantRequest(
+      matchId: joined.created.matchId,
+      clientCommandId: 'owner-kick-guest-1',
+      expectedRevision: persisted.row.revision,
+      targetPlayerId: 'player-2',
+    );
+    await expectLater(
+      joined.endpoint.kickParticipant(
+        guestSession,
+        game.GameKickParticipantRequest(
+          matchId: joined.created.matchId,
+          clientCommandId: 'guest-kick-owner-1',
+          expectedRevision: persisted.row.revision,
+          targetPlayerId: 'player-1',
+        ),
+      ),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'host_required',
+        ),
+      ),
+    );
+
+    final accepted = await joined.endpoint.kickParticipant(
+      ownerSession,
+      request,
+    );
+    final retry = await joined.endpoint.kickParticipant(ownerSession, request);
+    expect(accepted.duplicate, isFalse);
+    expect(retry.duplicate, isTrue);
+    expect(retry.outcomeJson, accepted.outcomeJson);
+    expect(accepted.finalEventOffset, persisted.row.eventOffset + 1);
+    final safeOutcome = _object(jsonDecode(accepted.outcomeJson));
+    expect(_object(safeOutcome['recipient'])['recipientPlayerId'], 'player-1');
+
+    final match = await game.GameMatch.db.findFirstRow(
+      databaseSession,
+      where: (table) => table.publicId.equals(joined.created.matchId),
+    );
+    expect(match, isNotNull);
+    final current = match!;
+    expect(current.eventOffset, accepted.finalEventOffset);
+    expect(current.revision, persisted.row.revision + 1);
+    final canonical = _object(jsonDecode(current.canonicalStateJson!));
+    final lifecycle = _object(canonical['turnLifecycle']);
+    expect(lifecycle['kickedPlayerIds'], ['player-2']);
+
+    final target = await game.GameParticipant.db.findFirstRow(
+      databaseSession,
+      where: (table) =>
+          (table.matchId.equals(current.id!)) &
+          (table.playerId.equals('player-2')),
+    );
+    expect(target, isNotNull);
+    expect(target!.kickedAt, isNotNull);
+    expect(target.kickReason, 'host_removed');
+    expect(await joined.endpoint.listMatches(guestSession), isEmpty);
+    await expectLater(
+      joined.endpoint.resync(guestSession, joined.created.matchId),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'not_participant',
+        ),
+      ),
+    );
+
+    final snapshots = await game.GameRecipientSnapshot.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+    );
+    expect(snapshots, hasLength(2));
+    expect(snapshots.map((snapshot) => snapshot.eventOffset).toSet(), {
+      accepted.finalEventOffset,
+    });
+    await _expectEvents(current.id!, accepted.finalEventOffset);
+    return _KickResult(
+      persisted: _PersistedMatch(
+        row: current,
+        snapshots: {
+          for (final snapshot in snapshots)
+            snapshot.playerId: snapshot.snapshotJson,
+        },
+      ),
+      outcome: accepted,
+    );
+  }
+
   Future<void> _verifyRollback(
     _JoinedMatch joined,
     _PersistedMatch persisted,
