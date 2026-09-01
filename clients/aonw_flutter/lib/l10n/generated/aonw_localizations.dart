@@ -821,7 +821,7 @@ abstract class AonwLocalizations {
   /// No description provided for @singlePlayerSetupIntro.
   ///
   /// In en, this message translates to:
-  /// **'Choose your civilization and tune the authoritative local duel.'**
+  /// **'Choose your civilization and configure an authoritative local match.'**
   String get singlePlayerSetupIntro;
 
   /// No description provided for @hotseatSetupTitle.
@@ -884,6 +884,12 @@ abstract class AonwLocalizations {
   /// **'Opponent control'**
   String get opponentControlLabel;
 
+  /// No description provided for @opponentNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponent {number}'**
+  String opponentNumberLabel(int number);
+
   /// No description provided for @humanOpponent.
   ///
   /// In en, this message translates to:
@@ -907,6 +913,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'A compact authored 7 × 7 map for a focused two-civilization match.'**
   String get mapSetupBody;
+
+  /// No description provided for @mapSetupDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'{mapName} · {columns} × {rows} · {players} civilizations'**
+  String mapSetupDetails(String mapName, int columns, int rows, int players);
 
   /// No description provided for @victoryPathsTitle.
   ///
@@ -1022,16 +1034,28 @@ abstract class AonwLocalizations {
   /// **'Player 2'**
   String get defaultSecondPlayerName;
 
+  /// No description provided for @defaultNumberedPlayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Player {number}'**
+  String defaultNumberedPlayerName(int number);
+
+  /// No description provided for @defaultNumberedAiName.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer {number}'**
+  String defaultNumberedAiName(int number);
+
   /// No description provided for @scenarioLabel.
   ///
   /// In en, this message translates to:
-  /// **'Scenario'**
+  /// **'Map'**
   String get scenarioLabel;
 
   /// No description provided for @localScenarioName.
   ///
   /// In en, this message translates to:
-  /// **'{value, select, starterDuel{Starter duel} other{Local scenario}}'**
+  /// **'{value, select, starterDuel{Starter} dravonia{Dravonia} myranth{Myranth} terenos{Terenos} verdantia{Verdantia} other{Local map}}'**
   String localScenarioName(String value);
 
   /// No description provided for @humanCountryLabel.

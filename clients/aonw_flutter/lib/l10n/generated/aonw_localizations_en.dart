@@ -460,7 +460,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get singlePlayerSetupIntro =>
-      'Choose your civilization and tune the authoritative local duel.';
+      'Choose your civilization and configure an authoritative local match.';
 
   @override
   String get hotseatSetupTitle => 'Play in hotseat mode';
@@ -503,6 +503,11 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get opponentControlLabel => 'Opponent control';
 
   @override
+  String opponentNumberLabel(int number) {
+    return 'Opponent $number';
+  }
+
+  @override
   String get humanOpponent => 'Human player';
 
   @override
@@ -514,6 +519,11 @@ class AonwLocalizationsEn extends AonwLocalizations {
   @override
   String get mapSetupBody =>
       'A compact authored 7 × 7 map for a focused two-civilization match.';
+
+  @override
+  String mapSetupDetails(String mapName, int columns, int rows, int players) {
+    return '$mapName · $columns × $rows · $players civilizations';
+  }
 
   @override
   String get victoryPathsTitle => 'Victory paths';
@@ -597,13 +607,27 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get defaultSecondPlayerName => 'Player 2';
 
   @override
-  String get scenarioLabel => 'Scenario';
+  String defaultNumberedPlayerName(int number) {
+    return 'Player $number';
+  }
+
+  @override
+  String defaultNumberedAiName(int number) {
+    return 'Computer $number';
+  }
+
+  @override
+  String get scenarioLabel => 'Map';
 
   @override
   String localScenarioName(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'starterDuel': 'Starter duel',
-      'other': 'Local scenario',
+      'starterDuel': 'Starter',
+      'dravonia': 'Dravonia',
+      'myranth': 'Myranth',
+      'terenos': 'Terenos',
+      'verdantia': 'Verdantia',
+      'other': 'Local map',
     });
     return '$_temp0';
   }

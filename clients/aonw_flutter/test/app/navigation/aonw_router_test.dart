@@ -102,7 +102,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('single-player')));
     await tester.pumpAndSettle();
     expect(find.text('Play with the computer'), findsOneWidget);
-    expect(find.text('Starter duel'), findsOneWidget);
+    expect(find.text('Starter'), findsOneWidget);
     final turnMode = tester.widget<SegmentedButton<LocalTurnModeView>>(
       find.byKey(const ValueKey('turn-mode-selector')),
     );

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "verdantia_local",
+  "mapId": "verdantia",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "player-1-commander",
+      "ownerPlayerId": "player-1",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 7,
+      "row": 4
+    },
+    {
+      "id": "player-2-commander",
+      "ownerPlayerId": "player-2",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 22,
+      "row": 15
+    },
+    {
+      "id": "player-3-commander",
+      "ownerPlayerId": "player-3",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 22,
+      "row": 5
+    },
+    {
+      "id": "player-4-commander",
+      "ownerPlayerId": "player-4",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 7,
+      "row": 15
+    }
+  ]
+}

@@ -290,6 +290,11 @@ LocalMatchSetupView _localSetup({
 
 const _localEntry = LocalGameCatalogEntryView(
   id: LocalGameScenarioView.starterDuel,
+  mapId: 'map',
+  rulesetId: 'ruleset',
+  columns: 7,
+  rows: 7,
+  maximumPlayers: 2,
   assets: MapAssetPaths(
     document: 'map',
     bundleManifest: 'manifest',
@@ -301,6 +306,11 @@ const _localEntry = LocalGameCatalogEntryView(
 
 const _threePlayerEntry = LocalGameCatalogEntryView(
   id: LocalGameScenarioView.starterDuel,
+  mapId: 'map',
+  rulesetId: 'ruleset',
+  columns: 7,
+  rows: 7,
+  maximumPlayers: 3,
   assets: MapAssetPaths(
     document: 'map',
     bundleManifest: 'manifest',

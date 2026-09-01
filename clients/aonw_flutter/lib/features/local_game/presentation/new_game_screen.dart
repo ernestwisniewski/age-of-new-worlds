@@ -7,8 +7,17 @@ import '../../map/presentation/map_presentation_controller.dart';
 import '../application/local_game_catalog.dart';
 import '../application/local_game_session_port.dart';
 import 'local_game_launch_mode.dart';
+import 'new_game_opponent_setup.dart';
 import 'new_game_review_step.dart';
 import 'new_game_setup_step.dart';
+
+const _participantColors = [0xff3d5a80, 0xffee6c4d, 0xff4f772d, 0xfff4d35e];
+
+const _defaultOpponentCountries = [
+  LocalPlayerCountryView.japan,
+  LocalPlayerCountryView.germany,
+  LocalPlayerCountryView.france,
+];
 
 final class NewGameScreen extends StatefulWidget {
   const NewGameScreen({
@@ -27,14 +36,11 @@ final class NewGameScreen extends StatefulWidget {
 }
 
 final class _NewGameScreenState extends State<NewGameScreen> {
-  var _scenario = LocalGameCatalog.entries.first;
+  late LocalGameCatalogEntryView _scenario;
   var _humanCountry = LocalPlayerCountryView.poland;
-  var _opponentCountry = LocalPlayerCountryView.japan;
-  var _difficulty = LocalAiDifficultyView.normal;
-  var _persona = LocalAiPersonaView.balanced;
+  var _opponents = <NewGameOpponentView>[];
   var _fogEnabled = true;
   var _turnMode = LocalTurnModeView.sequential;
-  var _opponentControl = LocalPlayerControlView.ai;
   var _reviewing = false;
   var _starting = false;
   var _failed = false;
@@ -42,13 +48,16 @@ final class _NewGameScreenState extends State<NewGameScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialMode == LocalGameLaunchModeView.hotseat) {
-      _opponentControl = LocalPlayerControlView.human;
-    }
+    _scenario = widget.initialMode == LocalGameLaunchModeView.hotseat
+        ? LocalGameCatalog.hotseatEntries.first
+        : LocalGameCatalog.entries.first;
+    _opponents = _initialOpponents(_scenario.opponentCount);
   }
 
   LocalGameLaunchModeView get _actualMode =>
-      _opponentControl == LocalPlayerControlView.human
+      _opponents.any(
+        (opponent) => opponent.control == LocalPlayerControlView.human,
+      )
       ? LocalGameLaunchModeView.hotseat
       : LocalGameLaunchModeView.singlePlayer;
 
@@ -87,21 +96,20 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     launchMode: widget.initialMode,
     scenario: _scenario,
     humanCountry: _humanCountry,
-    opponentCountry: _opponentCountry,
-    opponentControl: _opponentControl,
-    difficulty: _difficulty,
-    persona: _persona,
+    opponents: _opponents,
     fogEnabled: _fogEnabled,
     turnMode: _turnMode,
-    onScenarioChanged: (value) => setState(() => _scenario = value),
+    onScenarioChanged: _changeScenario,
     onHumanCountryChanged: _changeHumanCountry,
     onOpponentCountryChanged: _changeOpponentCountry,
-    onOpponentControlChanged: (value) => setState(() {
-      _opponentControl = value;
-      _failed = false;
-    }),
-    onDifficultyChanged: (value) => setState(() => _difficulty = value),
-    onPersonaChanged: (value) => setState(() => _persona = value),
+    onOpponentControlChanged: (index, value) =>
+        _updateOpponent(index, (opponent) => opponent.copyWith(control: value)),
+    onOpponentDifficultyChanged: (index, value) => _updateOpponent(
+      index,
+      (opponent) => opponent.copyWith(difficulty: value),
+    ),
+    onOpponentPersonaChanged: (index, value) =>
+        _updateOpponent(index, (opponent) => opponent.copyWith(persona: value)),
     onFogChanged: (value) => setState(() => _fogEnabled = value),
     onTurnModeChanged: (value) => setState(() => _turnMode = value),
     onContinue: () => setState(() {
@@ -114,10 +122,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
     actualMode: _actualMode,
     scenario: _scenario,
     humanCountry: _humanCountry,
-    opponentCountry: _opponentCountry,
-    opponentControl: _opponentControl,
-    difficulty: _difficulty,
-    persona: _persona,
+    opponents: _opponents,
     fogEnabled: _fogEnabled,
     turnMode: widget.initialMode == LocalGameLaunchModeView.hotseat
         ? LocalTurnModeView.sequential
@@ -133,19 +138,50 @@ final class _NewGameScreenState extends State<NewGameScreen> {
 
   void _changeHumanCountry(LocalPlayerCountryView value) {
     setState(() {
-      if (value == _opponentCountry) {
-        _opponentCountry = _humanCountry;
+      final previous = _humanCountry;
+      final conflict = _opponents.indexWhere(
+        (opponent) => opponent.country == value,
+      );
+      if (conflict >= 0) {
+        _opponents[conflict] = _opponents[conflict].copyWith(country: previous);
       }
       _humanCountry = value;
     });
   }
 
-  void _changeOpponentCountry(LocalPlayerCountryView value) {
+  void _changeOpponentCountry(int index, LocalPlayerCountryView value) {
     setState(() {
       if (value == _humanCountry) {
-        _humanCountry = _opponentCountry;
+        _humanCountry = _opponents[index].country;
+      } else {
+        final conflict = _opponents.indexWhere(
+          (opponent) => opponent.country == value,
+        );
+        if (conflict >= 0 && conflict != index) {
+          _opponents[conflict] = _opponents[conflict].copyWith(
+            country: _opponents[index].country,
+          );
+        }
       }
-      _opponentCountry = value;
+      _opponents[index] = _opponents[index].copyWith(country: value);
+    });
+  }
+
+  void _changeScenario(LocalGameCatalogEntryView value) {
+    setState(() {
+      _scenario = value;
+      _opponents = _resizedOpponents(value.opponentCount);
+      _failed = false;
+    });
+  }
+
+  void _updateOpponent(
+    int index,
+    NewGameOpponentView Function(NewGameOpponentView opponent) update,
+  ) {
+    setState(() {
+      _opponents[index] = update(_opponents[index]);
+      _failed = false;
     });
   }
 
@@ -155,7 +191,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
       _failed = false;
     });
     final l10n = context.aonwL10n;
-    final opponentIsAi = _opponentControl == LocalPlayerControlView.ai;
+    final seed = DateTime.now().microsecondsSinceEpoch;
     final started = await widget.mapController.startLocalMatch(
       _scenario,
       LocalMatchSetupView(
@@ -164,26 +200,12 @@ final class _NewGameScreenState extends State<NewGameScreen> {
           LocalParticipantSetupView(
             id: 'player-1',
             name: l10n.defaultPlayerName,
-            colorValue: 0xff3d5a80,
+            colorValue: _participantColors.first,
             country: _humanCountry,
             control: LocalPlayerControlView.human,
           ),
-          LocalParticipantSetupView(
-            id: 'player-2',
-            name: opponentIsAi
-                ? l10n.defaultAiName
-                : l10n.defaultSecondPlayerName,
-            colorValue: 0xffee6c4d,
-            country: _opponentCountry,
-            control: _opponentControl,
-            ai: opponentIsAi
-                ? LocalAiProfileView(
-                    difficulty: _difficulty,
-                    persona: _persona,
-                    seed: DateTime.now().microsecondsSinceEpoch,
-                  )
-                : null,
-          ),
+          for (var index = 0; index < _opponents.length; index++)
+            _participant(l10n, index, _opponents[index], seed),
         ],
         fogEnabled: _fogEnabled,
         turnMode: widget.initialMode == LocalGameLaunchModeView.hotseat
@@ -200,5 +222,69 @@ final class _NewGameScreenState extends State<NewGameScreen> {
       _starting = false;
       _failed = true;
     });
+  }
+
+  LocalParticipantSetupView _participant(
+    AonwLocalizations l10n,
+    int opponentIndex,
+    NewGameOpponentView opponent,
+    int seed,
+  ) {
+    final participantIndex = opponentIndex + 1;
+    final playerNumber = participantIndex + 1;
+    final isAi = opponent.control == LocalPlayerControlView.ai;
+    return LocalParticipantSetupView(
+      id: _scenario.participantIds[participantIndex],
+      name: isAi
+          ? l10n.defaultNumberedAiName(playerNumber)
+          : l10n.defaultNumberedPlayerName(playerNumber),
+      colorValue: _participantColors[participantIndex],
+      country: opponent.country,
+      control: opponent.control,
+      ai: isAi
+          ? LocalAiProfileView(
+              difficulty: opponent.difficulty,
+              persona: opponent.persona,
+              seed: seed + participantIndex,
+            )
+          : null,
+    );
+  }
+
+  List<NewGameOpponentView> _initialOpponents(int count) => [
+    for (var index = 0; index < count; index++)
+      NewGameOpponentView(
+        country: _defaultOpponentCountries[index],
+        control:
+            widget.initialMode == LocalGameLaunchModeView.hotseat && index == 0
+            ? LocalPlayerControlView.human
+            : LocalPlayerControlView.ai,
+        difficulty: LocalAiDifficultyView.normal,
+        persona: LocalAiPersonaView.balanced,
+      ),
+  ];
+
+  List<NewGameOpponentView> _resizedOpponents(int count) {
+    final resized = _opponents.take(count).toList();
+    while (resized.length < count) {
+      final used = {_humanCountry, ...resized.map((item) => item.country)};
+      final country = LocalPlayerCountryView.values.firstWhere(
+        (candidate) => !used.contains(candidate),
+      );
+      final index = resized.length;
+      resized.add(
+        NewGameOpponentView(
+          country: country,
+          control:
+              widget.initialMode == LocalGameLaunchModeView.hotseat &&
+                  index == 0
+              ? LocalPlayerControlView.human
+              : LocalPlayerControlView.ai,
+          difficulty: LocalAiDifficultyView.normal,
+          persona: LocalAiPersonaView.balanced,
+        ),
+      );
+    }
+    return resized;
   }
 }

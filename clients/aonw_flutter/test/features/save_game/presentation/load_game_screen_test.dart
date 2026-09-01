@@ -61,7 +61,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Single player · Starter duel'), findsOneWidget);
+    expect(find.text('Single player · Starter'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('continue-game')));
     await tester.pump();
     expect(resumeCalls, 1);

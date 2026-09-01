@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "dravonia_local",
+  "mapId": "dravonia",
+  "rulesetId": "aonw-standard",
+  "initialUnits": [
+    {
+      "id": "player-1-commander",
+      "ownerPlayerId": "player-1",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 10,
+      "row": 7
+    },
+    {
+      "id": "player-2-commander",
+      "ownerPlayerId": "player-2",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 30,
+      "row": 22
+    },
+    {
+      "id": "player-3-commander",
+      "ownerPlayerId": "player-3",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 30,
+      "row": 7
+    },
+    {
+      "id": "player-4-commander",
+      "ownerPlayerId": "player-4",
+      "kind": "commander",
+      "name": "Commander",
+      "col": 10,
+      "row": 22
+    }
+  ]
+}

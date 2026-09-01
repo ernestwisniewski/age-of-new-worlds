@@ -154,6 +154,11 @@ const _assets = MapAssetPaths(
 const _entry = LocalGameCatalogEntryView(
   id: LocalGameScenarioView.starterDuel,
   assets: _assets,
+  mapId: 'map',
+  rulesetId: 'ruleset',
+  columns: 7,
+  rows: 7,
+  maximumPlayers: 2,
   participantIds: ['player-1', 'player-2'],
 );
 

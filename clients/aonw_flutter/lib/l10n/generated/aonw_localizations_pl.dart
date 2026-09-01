@@ -463,7 +463,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get singlePlayerSetupIntro =>
-      'Wybierz cywilizację i skonfiguruj autorytatywny pojedynek lokalny.';
+      'Wybierz cywilizację i skonfiguruj autorytatywną rozgrywkę lokalną.';
 
   @override
   String get hotseatSetupTitle => 'Graj w trybie hotseat';
@@ -506,6 +506,11 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get opponentControlLabel => 'Sterowanie przeciwnikiem';
 
   @override
+  String opponentNumberLabel(int number) {
+    return 'Przeciwnik $number';
+  }
+
+  @override
   String get humanOpponent => 'Żywy gracz';
 
   @override
@@ -517,6 +522,11 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get mapSetupBody =>
       'Kompaktowa, ręcznie przygotowana mapa 7 × 7 do skupionego pojedynku dwóch cywilizacji.';
+
+  @override
+  String mapSetupDetails(String mapName, int columns, int rows, int players) {
+    return '$mapName · $columns × $rows · $players cywilizacje';
+  }
 
   @override
   String get victoryPathsTitle => 'Drogi do zwycięstwa';
@@ -600,13 +610,27 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get defaultSecondPlayerName => 'Gracz 2';
 
   @override
-  String get scenarioLabel => 'Scenariusz';
+  String defaultNumberedPlayerName(int number) {
+    return 'Gracz $number';
+  }
+
+  @override
+  String defaultNumberedAiName(int number) {
+    return 'Komputer $number';
+  }
+
+  @override
+  String get scenarioLabel => 'Mapa';
 
   @override
   String localScenarioName(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'starterDuel': 'Pojedynek startowy',
-      'other': 'Scenariusz lokalny',
+      'starterDuel': 'Startowa',
+      'dravonia': 'Dravonia',
+      'myranth': 'Myranth',
+      'terenos': 'Terenos',
+      'verdantia': 'Verdantia',
+      'other': 'Mapa lokalna',
     });
     return '$_temp0';
   }

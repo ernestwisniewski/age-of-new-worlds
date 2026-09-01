@@ -5,6 +5,7 @@ import '../../../l10n/l10n.dart';
 import '../application/local_game_catalog.dart';
 import '../application/local_game_session_port.dart';
 import 'local_game_launch_mode.dart';
+import 'new_game_opponent_setup.dart';
 import 'new_game_widgets.dart';
 
 final class NewGameReviewStep extends StatelessWidget {
@@ -12,10 +13,7 @@ final class NewGameReviewStep extends StatelessWidget {
     required this.actualMode,
     required this.scenario,
     required this.humanCountry,
-    required this.opponentCountry,
-    required this.opponentControl,
-    required this.difficulty,
-    required this.persona,
+    required this.opponents,
     required this.fogEnabled,
     required this.turnMode,
     required this.starting,
@@ -28,10 +26,7 @@ final class NewGameReviewStep extends StatelessWidget {
   final LocalGameLaunchModeView actualMode;
   final LocalGameCatalogEntryView scenario;
   final LocalPlayerCountryView humanCountry;
-  final LocalPlayerCountryView opponentCountry;
-  final LocalPlayerControlView opponentControl;
-  final LocalAiDifficultyView difficulty;
-  final LocalAiPersonaView persona;
+  final List<NewGameOpponentView> opponents;
   final bool fogEnabled;
   final LocalTurnModeView turnMode;
   final bool starting;
@@ -94,10 +89,6 @@ final class NewGameReviewStep extends StatelessWidget {
 
   Widget _summary(AonwLocalizations l10n) {
     final country = l10n.countryName(humanCountry.name);
-    final opponentCountryName = l10n.countryName(opponentCountry.name);
-    final opponentName = opponentControl == LocalPlayerControlView.ai
-        ? l10n.defaultAiName
-        : l10n.defaultSecondPlayerName;
     return NewGameSection(
       keyName: 'game-summary',
       title: l10n.gameSummaryTitle,
@@ -116,12 +107,8 @@ final class NewGameReviewStep extends StatelessWidget {
             label: l10n.summaryCivilizationLabel,
             value: '${l10n.defaultPlayerName} · $country',
           ),
-          NewGameSummaryRow(
-            label: l10n.summaryOpponentLabel,
-            value:
-                '$opponentName · $opponentCountryName · '
-                '${l10n.participantControlName(opponentControl.name)}',
-          ),
+          for (var index = 0; index < opponents.length; index++)
+            _opponentRow(l10n, index, opponents[index]),
           NewGameSummaryRow(
             label: l10n.summaryMapLabel,
             value: l10n.localScenarioName(scenario.id.name),
@@ -130,15 +117,29 @@ final class NewGameReviewStep extends StatelessWidget {
             label: l10n.summaryFogLabel,
             value: l10n.fogSettingName(fogEnabled ? 'enabled' : 'disabled'),
           ),
-          if (opponentControl == LocalPlayerControlView.ai)
-            NewGameSummaryRow(
-              label: l10n.summaryAiLabel,
-              value:
-                  '${l10n.aiDifficultyName(difficulty.name)} · '
-                  '${l10n.aiPersonaName(persona.name)}',
-            ),
         ],
       ),
+    );
+  }
+
+  NewGameSummaryRow _opponentRow(
+    AonwLocalizations l10n,
+    int index,
+    NewGameOpponentView opponent,
+  ) {
+    final number = index + 2;
+    final name = opponent.control == LocalPlayerControlView.ai
+        ? l10n.defaultNumberedAiName(number)
+        : l10n.defaultNumberedPlayerName(number);
+    final profile = opponent.control == LocalPlayerControlView.ai
+        ? ' · ${l10n.aiDifficultyName(opponent.difficulty.name)}'
+              ' · ${l10n.aiPersonaName(opponent.persona.name)}'
+        : '';
+    return NewGameSummaryRow(
+      label: l10n.opponentNumberLabel(index + 1),
+      value:
+          '$name · ${l10n.countryName(opponent.country.name)} · '
+          '${l10n.participantControlName(opponent.control.name)}$profile',
     );
   }
 }
