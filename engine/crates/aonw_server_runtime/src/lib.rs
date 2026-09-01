@@ -27,7 +27,7 @@ use aonw_projection::{
 
 mod host;
 
-pub use host::apply_submit_turn;
+pub use host::{PlayerCommandRequest, apply_player_command, apply_submit_turn};
 
 /// Immutable map and rules compiled once and shared across server commands.
 ///

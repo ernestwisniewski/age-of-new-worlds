@@ -1,27 +1,16 @@
 //! Transaction and privacy contract for the first remote multiplayer command.
 
-use std::collections::{BTreeMap, BTreeSet};
-
-use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
+use aonw_content::RulesetDefinition;
 use aonw_contract_mapping::encode_game_state;
 use aonw_contracts::server::{
     CreateServerMatchRequestDto, SERVER_HOST_API_VERSION, SubmitTurnServerRequestDto,
 };
-use aonw_contracts::{
-    GameModeDto, MatchIdentityDto, MatchRulesDto, ParticipantDto, PlayerCountryDto, PlayerKindDto,
-    TurnModeDto,
-};
-use aonw_domain::{
-    EconomyState, FogOfWar, GameMode, GameState, HexCoord, InitialResourceDistribution,
-    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
-    PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
-    ResearchState, ResourceType, StateRevision, StrategicResourceStockpile, TechnologyId,
-    TurnLifecycle, Unit, UnitId, UnitKind, WonderRegistry,
-};
+use aonw_contracts::{GameModeDto, TurnModeDto};
+use aonw_domain::{GameState, StateRevision};
 use aonw_engine::{CommandRejectionCode, DomainEvent, GameEngine};
 use aonw_server_runtime::{
-    PreparedServerWorld, RecipientOutcome, ServerBoundaryError, ServerHostError, SubmitTurnRequest,
-    apply_submit_turn, apply_submit_turn_dto, create_server_match_dto,
+    PreparedServerWorld, RecipientOutcome, ServerBoundaryError, ServerHostError, apply_submit_turn,
+    apply_submit_turn_dto, create_server_match_dto,
 };
 
 #[test]

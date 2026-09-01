@@ -10,8 +10,28 @@ use aonw_projection::{
 };
 
 use crate::{
-    RecipientOutcome, ServerCommandOutcome, ServerHostError, SubmitTurnRequest, validate_state,
+    PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError,
+    SubmitTurnRequest, validate_state,
 };
+
+/// Complete trusted input for one authenticated player command.
+///
+/// The authoritative actor comes from the server session. For turn commands,
+/// the host replaces any embedded player identifier with this actor before
+/// entering the engine.
+#[derive(Clone, Debug)]
+pub struct PlayerCommandRequest<'command> {
+    /// Canonical state locked by the server transaction.
+    pub state: GameState,
+    /// Immutable map and rules prepared outside the match transaction.
+    pub world: PreparedServerWorld,
+    /// Player identity derived from the authenticated server session.
+    pub authenticated_actor: PlayerId,
+    /// Strict command decoded by the trusted server boundary.
+    pub command: PlayerCommand<'command>,
+    /// Durable offset immediately before this command.
+    pub initial_event_offset: u64,
+}
 
 /// Applies one authenticated `SubmitTurn` without retaining process-local session state.
 ///
@@ -25,7 +45,6 @@ use crate::{
 pub fn apply_submit_turn(
     request: SubmitTurnRequest,
 ) -> Result<ServerCommandOutcome, ServerHostError> {
-    validate_request(&request)?;
     let SubmitTurnRequest {
         state,
         world,
@@ -33,8 +52,37 @@ pub fn apply_submit_turn(
         expected_revision,
         initial_event_offset,
     } = request;
-    let command =
-        PlayerCommand::SubmitTurn(TurnCommand::new(expected_revision, &authenticated_actor));
+    let command_actor = authenticated_actor.clone();
+    apply_player_command(PlayerCommandRequest {
+        state,
+        world,
+        authenticated_actor,
+        command: PlayerCommand::SubmitTurn(TurnCommand::new(expected_revision, &command_actor)),
+        initial_event_offset,
+    })
+}
+
+/// Applies one authenticated player command without retaining process-local session state.
+///
+/// The caller must hold the match transaction and persist the returned state, offsets,
+/// and recipient outputs atomically. An error means that nothing may be persisted.
+///
+/// # Errors
+///
+/// Returns an error for inconsistent trusted inputs, offset overflow, invalid immutable
+/// content, or an internal engine failure.
+pub fn apply_player_command(
+    request: PlayerCommandRequest<'_>,
+) -> Result<ServerCommandOutcome, ServerHostError> {
+    validate_request(&request)?;
+    let PlayerCommandRequest {
+        state,
+        world,
+        authenticated_actor,
+        command,
+        initial_event_offset,
+    } = request;
+    let command = bind_authenticated_actor(command, &authenticated_actor);
     let budget = command.event_budget(&state);
     initial_event_offset
         .checked_add(budget.maximum())
@@ -110,7 +158,24 @@ pub fn apply_submit_turn(
     })
 }
 
-fn validate_request(request: &SubmitTurnRequest) -> Result<(), ServerHostError> {
+fn bind_authenticated_actor<'command>(
+    command: PlayerCommand<'command>,
+    authenticated_actor: &'command PlayerId,
+) -> PlayerCommand<'command> {
+    match command {
+        PlayerCommand::EndTurn(command) => PlayerCommand::EndTurn(TurnCommand::new(
+            command.expected_revision(),
+            authenticated_actor,
+        )),
+        PlayerCommand::SubmitTurn(command) => PlayerCommand::SubmitTurn(TurnCommand::new(
+            command.expected_revision(),
+            authenticated_actor,
+        )),
+        command => command,
+    }
+}
+
+fn validate_request(request: &PlayerCommandRequest<'_>) -> Result<(), ServerHostError> {
     validate_state(&request.state, &request.world)?;
     let identity = request.state.match_lifecycle().identity();
     if !identity.contains(&request.authenticated_actor) {
