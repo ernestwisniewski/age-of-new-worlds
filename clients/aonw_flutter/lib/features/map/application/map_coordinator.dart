@@ -368,12 +368,10 @@ bool _shouldLoadResearch(GameSessionState previous, GameSessionState next) {
 
 void _ignoreDiagnostic(String code, Object error, StackTrace stackTrace) {}
 
-GameSessionReady _toggleMapViewModeState(GameSessionReady current) =>
-    current.withInteraction(
-      current.interaction.copyWith(
-        viewMode: current.interaction.viewMode.toggled,
-      ),
-    );
+GameSessionReady _setMapViewModeState(
+  GameSessionReady current,
+  MapViewMode mode,
+) => current.withInteraction(current.interaction.copyWith(viewMode: mode));
 
 GameSessionReady _moveResultState(
   GameSessionReady current,

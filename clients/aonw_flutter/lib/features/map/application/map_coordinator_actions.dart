@@ -247,11 +247,18 @@ extension MapCoordinatorActions on MapCoordinator {
   void toggleMapViewMode() {
     final current = _state;
     if (current is! GameSessionReady) return;
-    if (current.interaction.viewMode == MapViewMode.tile &&
-        current.scene.reference.pages.isEmpty) {
+    setMapViewMode(current.interaction.viewMode.toggled);
+  }
+
+  void setMapViewMode(MapViewMode mode) {
+    final current = _state;
+    if (current is! GameSessionReady || current.interaction.viewMode == mode) {
       return;
     }
-    _setState(_toggleMapViewModeState(current));
+    if (mode == MapViewMode.graphic && current.scene.reference.pages.isEmpty) {
+      return;
+    }
+    _setState(_setMapViewModeState(current, mode));
   }
 
   void completeTurnPresentation() {

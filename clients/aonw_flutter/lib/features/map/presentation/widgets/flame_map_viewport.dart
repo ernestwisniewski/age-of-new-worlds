@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../design_system/widgets/aonw_hud_surface.dart';
+import '../../../../design_system/aonw_tokens.dart';
 import '../../../../design_system/widgets/aonw_panel.dart';
 import '../../../../game/aonw_flame_game.dart';
 import '../../../../l10n/l10n.dart';
@@ -248,31 +248,71 @@ final class MapViewportGestureLayer extends StatelessWidget {
 
 final class MapViewModeToggle extends StatelessWidget {
   const MapViewModeToggle({
-    required this.mode,
+    required this.value,
     required this.allowGraphicMode,
-    required this.onPressed,
+    required this.onChanged,
     super.key,
   });
 
-  final MapViewMode mode;
+  final MapViewMode value;
   final bool allowGraphicMode;
-  final VoidCallback onPressed;
+  final ValueChanged<MapViewMode> onChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
-    final canToggle = mode == MapViewMode.graphic || allowGraphicMode;
-    return AonwHudIconButton(
+    return Tooltip(
       key: const ValueKey('map-view-mode-toggle'),
-      tooltip: !canToggle
-          ? l10n.mapViewGraphicUnavailable
-          : mode == MapViewMode.graphic
-          ? l10n.mapViewSwitchToTiles
-          : l10n.mapViewSwitchToGraphic,
-      onPressed: canToggle ? onPressed : null,
-      active: mode == MapViewMode.graphic,
-      icon: Icon(
-        mode == MapViewMode.graphic ? Icons.map_outlined : Icons.grid_on,
+      message: allowGraphicMode
+          ? l10n.mapViewModeTooltip
+          : l10n.mapViewGraphicUnavailable,
+      child: SegmentedButton<MapViewMode>(
+        showSelectedIcon: false,
+        segments: [
+          ButtonSegment(
+            value: MapViewMode.graphic,
+            enabled: allowGraphicMode,
+            label: Text(l10n.mapViewModeGraphic),
+          ),
+          ButtonSegment(
+            value: MapViewMode.tile,
+            label: Text(l10n.mapViewModeTiles),
+          ),
+        ],
+        selected: {value},
+        style: ButtonStyle(
+          visualDensity: VisualDensity.compact,
+          minimumSize: WidgetStateProperty.all(const Size(0, 30)),
+          padding: WidgetStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 10),
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return AonwColorTokens.textTertiary;
+            }
+            if (states.contains(WidgetState.selected)) {
+              return AonwColorTokens.background;
+            }
+            return AonwColorTokens.textSecondary;
+          }),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return AonwColorTokens.textPrimary;
+            }
+            return AonwColorTokens.background.withAlpha(205);
+          }),
+          side: WidgetStateProperty.resolveWith((states) {
+            final color = states.contains(WidgetState.disabled)
+                ? AonwColorTokens.textTertiary
+                : AonwColorTokens.textSecondary;
+            return BorderSide(color: color);
+          }),
+          textStyle: WidgetStateProperty.all(AonwTextStyles.labelSmall),
+        ),
+        onSelectionChanged: (selection) {
+          final selected = selection.single;
+          if (selected != value) onChanged(selected);
+        },
       ),
     );
   }

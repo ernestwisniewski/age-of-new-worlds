@@ -914,14 +914,17 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
-  String get mapViewSwitchToTiles => 'Switch to tile view';
-
-  @override
-  String get mapViewSwitchToGraphic => 'Switch to graphic view';
+  String get mapViewModeTooltip => 'Change map view mode';
 
   @override
   String get mapViewGraphicUnavailable =>
       'Graphic view is unavailable for this map.';
+
+  @override
+  String get mapViewModeGraphic => 'Graphic';
+
+  @override
+  String get mapViewModeTiles => 'Tiles';
 
   @override
   String hexLabel(int col, int row) {

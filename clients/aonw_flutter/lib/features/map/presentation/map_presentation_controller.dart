@@ -24,6 +24,7 @@ import '../application/map_coordinator.dart';
 import '../application/map_session_port.dart';
 import '../application/network_game_session_port.dart';
 import '../read_model/map_view.dart';
+import '../read_model/map_view_mode.dart';
 
 final class MapPresentationController extends ChangeNotifier {
   MapPresentationController({
@@ -161,6 +162,8 @@ final class MapPresentationController extends ChangeNotifier {
   void retryLocalHandoff() => _coordinator.retryLocalHandoff();
 
   void toggleMapViewMode() => _coordinator.toggleMapViewMode();
+
+  void setMapViewMode(MapViewMode mode) => _coordinator.setMapViewMode(mode);
 
   void completeTurnPresentation() => _coordinator.completeTurnPresentation();
 

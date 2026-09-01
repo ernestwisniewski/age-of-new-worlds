@@ -17,29 +17,29 @@ void main() {
       LocalizedTestApp(
         home: Scaffold(
           body: MapViewModeToggle(
-            mode: MapViewMode.tile,
+            value: MapViewMode.tile,
             allowGraphicMode: false,
-            onPressed: () => transitions += 1,
+            onChanged: (_) => transitions += 1,
           ),
         ),
       ),
     );
 
-    await tester.tap(find.byKey(const ValueKey('map-view-mode-toggle')));
+    await tester.tap(find.text('Graphic'));
     expect(transitions, 0);
 
     await tester.pumpWidget(
       LocalizedTestApp(
         home: Scaffold(
           body: MapViewModeToggle(
-            mode: MapViewMode.tile,
+            value: MapViewMode.tile,
             allowGraphicMode: true,
-            onPressed: () => transitions += 1,
+            onChanged: (_) => transitions += 1,
           ),
         ),
       ),
     );
-    await tester.tap(find.byKey(const ValueKey('map-view-mode-toggle')));
+    await tester.tap(find.text('Graphic'));
     expect(transitions, 1);
   });
 

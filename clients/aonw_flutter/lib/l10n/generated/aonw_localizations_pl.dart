@@ -916,14 +916,17 @@ class AonwLocalizationsPl extends AonwLocalizations {
   }
 
   @override
-  String get mapViewSwitchToTiles => 'Przełącz na widok kafelkowy';
-
-  @override
-  String get mapViewSwitchToGraphic => 'Przełącz na widok graficzny';
+  String get mapViewModeTooltip => 'Zmień tryb widoku mapy';
 
   @override
   String get mapViewGraphicUnavailable =>
       'Widok graficzny jest niedostępny dla tej mapy.';
+
+  @override
+  String get mapViewModeGraphic => 'Graficzna';
+
+  @override
+  String get mapViewModeTiles => 'Kafelki';
 
   @override
   String hexLabel(int col, int row) {

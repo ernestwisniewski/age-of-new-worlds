@@ -1376,23 +1376,29 @@ abstract class AonwLocalizations {
   /// **'Selected hex {col}, {row}'**
   String selectedHex(int col, int row);
 
-  /// No description provided for @mapViewSwitchToTiles.
+  /// No description provided for @mapViewModeTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Switch to tile view'**
-  String get mapViewSwitchToTiles;
-
-  /// No description provided for @mapViewSwitchToGraphic.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch to graphic view'**
-  String get mapViewSwitchToGraphic;
+  /// **'Change map view mode'**
+  String get mapViewModeTooltip;
 
   /// No description provided for @mapViewGraphicUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Graphic view is unavailable for this map.'**
   String get mapViewGraphicUnavailable;
+
+  /// No description provided for @mapViewModeGraphic.
+  ///
+  /// In en, this message translates to:
+  /// **'Graphic'**
+  String get mapViewModeGraphic;
+
+  /// No description provided for @mapViewModeTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles'**
+  String get mapViewModeTiles;
 
   /// No description provided for @hexLabel.
   ///

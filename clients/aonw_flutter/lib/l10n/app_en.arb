@@ -269,9 +269,10 @@
       "row": {"type": "int"}
     }
   },
-  "mapViewSwitchToTiles": "Switch to tile view",
-  "mapViewSwitchToGraphic": "Switch to graphic view",
+  "mapViewModeTooltip": "Change map view mode",
   "mapViewGraphicUnavailable": "Graphic view is unavailable for this map.",
+  "mapViewModeGraphic": "Graphic",
+  "mapViewModeTiles": "Tiles",
   "hexLabel": "Hex {col}, {row}",
   "@hexLabel": {
     "placeholders": {
