@@ -26,6 +26,43 @@ pub(crate) struct ResearchProjectScience {
     pub(crate) amount: i64,
 }
 
+/// One city-owned gold contribution produced by a continuous wealth project.
+pub(crate) struct WealthProjectGold {
+    pub(crate) city_id: CityId,
+    pub(crate) amount: i64,
+}
+
+/// Calculates current continuous wealth-project output without mutating state.
+pub(crate) fn selected_wealth_project_gold(
+    state: &GameState,
+    context: EngineContext<'_>,
+    player: &PlayerId,
+) -> Result<Vec<WealthProjectGold>, ProductionError> {
+    let divisor = context.ruleset().production().project_divisor(false);
+    state
+        .cities()
+        .iter()
+        .filter(|city| city.owner_player_id() == player)
+        .filter(|city| {
+            city.production_queue().is_some_and(|queue| {
+                queue.target() == CityProductionTarget::Project(CityProjectType::Wealth)
+            })
+        })
+        .map(|city| {
+            let production = production_per_turn(
+                state,
+                context,
+                city,
+                CityProductionTarget::Project(CityProjectType::Wealth),
+            )?;
+            Ok(WealthProjectGold {
+                city_id: city.id().clone(),
+                amount: project_output(production, divisor)?,
+            })
+        })
+        .collect()
+}
+
 /// Calculates current continuous research-project output without mutating state.
 pub(crate) fn selected_research_project_science(
     state: &GameState,

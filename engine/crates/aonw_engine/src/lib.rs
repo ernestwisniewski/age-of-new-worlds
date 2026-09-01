@@ -67,9 +67,10 @@ pub use diplomacy_policy::{
     DiplomacyPolicyQuery,
 };
 pub use economy::{
-    CityYieldBreakdown, CityYieldContribution, CityYieldContributionKind, CityYieldQuery,
-    EconomyQueryError, StrategicResourceProjection, StrategicResourceProjectionQuery,
-    StrategicResourceSource, YieldValue,
+    CityGoldIncomeSource, CityYieldBreakdown, CityYieldContribution, CityYieldContributionKind,
+    CityYieldQuery, EconomyForecast, EconomyForecastQuery, EconomyQueryError, StabilityBreakdown,
+    StrategicResourceProjection, StrategicResourceProjectionQuery, StrategicResourceSource,
+    UnitUpkeepBreakdown, UnitUpkeepSource, WealthProjectGoldIncomeSource, YieldValue,
 };
 pub use match_start::{MatchStartError, start_match};
 pub use movement::{

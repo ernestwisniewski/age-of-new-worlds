@@ -3,12 +3,12 @@ use aonw_domain::GameState;
 use crate::{
     CityExpansionOptions, CityExpansionOptionsQuery, CityFoundingOptions, CityFoundingOptionsQuery,
     CityWorkedHexOptions, CityWorkedHexOptionsQuery, CityYieldBreakdown, CityYieldQuery,
-    CombatPreview, CombatPreviewQuery, EngineContext, GameEngine, MovementSearchWorkspace,
-    ProductionOptions, ProductionOptionsQuery, ReachableMovement, ReachableMovementQuery,
-    ResearchOptions, ResearchOptionsQuery, StrategicResourceProjection,
-    StrategicResourceProjectionQuery, TerrainMovementPlan, TerrainMovementQuery,
-    TerrainMovementQueryError, UnitLogisticsOptions, UnitLogisticsOptionsQuery, WorkerOptions,
-    WorkerOptionsQuery,
+    CombatPreview, CombatPreviewQuery, EconomyForecast, EconomyForecastQuery, EngineContext,
+    GameEngine, MovementSearchWorkspace, ProductionOptions, ProductionOptionsQuery,
+    ReachableMovement, ReachableMovementQuery, ResearchOptions, ResearchOptionsQuery,
+    StrategicResourceProjection, StrategicResourceProjectionQuery, TerrainMovementPlan,
+    TerrainMovementQuery, TerrainMovementQueryError, UnitLogisticsOptions,
+    UnitLogisticsOptionsQuery, WorkerOptions, WorkerOptionsQuery,
 };
 
 /// Read-only game query family.
@@ -22,6 +22,8 @@ pub enum GameQuery<'query> {
     CityExpansionOptions(CityExpansionOptionsQuery<'query>),
     /// Returns a display-ready breakdown of tile-level city yield.
     CityYield(CityYieldQuery<'query>),
+    /// Returns actor-owned gold, upkeep, and stability forecast evidence.
+    EconomyForecast(EconomyForecastQuery),
     /// Returns actor-owned strategic resource extraction after technology gates.
     StrategicResourceProjection(StrategicResourceProjectionQuery),
     /// Returns complete production and specialization availability for one city.
@@ -51,6 +53,8 @@ pub enum QueryResult {
     CityExpansionOptions(CityExpansionOptions),
     /// Checked tile-level city yield contributions.
     CityYield(CityYieldBreakdown),
+    /// Complete actor-owned next-settlement economy forecast.
+    EconomyForecast(EconomyForecast),
     /// Checked strategic resource output and sources.
     StrategicResourceProjection(StrategicResourceProjection),
     /// Complete city production choices and blockers.
@@ -178,6 +182,11 @@ impl GameEngine {
             GameQuery::CityYield(query) => crate::economy::query_city_yield(state, context, query)
                 .map(QueryResult::CityYield)
                 .map_err(CanonicalQueryError::Economy),
+            GameQuery::EconomyForecast(query) => {
+                crate::economy::query_economy_forecast(state, context, query)
+                    .map(QueryResult::EconomyForecast)
+                    .map_err(CanonicalQueryError::Economy)
+            }
             GameQuery::StrategicResourceProjection(query) => {
                 crate::economy::query_strategic_resource_projection(state, context, query)
                     .map(QueryResult::StrategicResourceProjection)

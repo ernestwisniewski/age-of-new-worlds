@@ -7,6 +7,8 @@ use aonw_domain::{
 
 use crate::{MovementCost, StabilityBand, terrain_entry_cost};
 
+use crate::economy::StabilityBreakdown;
+
 use super::EconomyTurnError;
 
 #[derive(Clone, Copy)]
@@ -36,14 +38,14 @@ impl StabilityFactors {
     }
 }
 
-pub(super) fn stability_net(
+pub(super) fn stability_breakdown(
     state: &GameState,
     map: &MapDefinition,
     ruleset: &RulesetDefinition,
     player: &PlayerId,
     war_weariness: i64,
     factors: StabilityFactors,
-) -> Result<i64, EconomyTurnError> {
+) -> Result<StabilityBreakdown, EconomyTurnError> {
     let StabilityFactors {
         player_count,
         values,
@@ -60,56 +62,85 @@ pub(super) fn stability_net(
         .saturating_sub(1)
         .checked_mul(values.cost_per_city)
         .ok_or_else(|| EconomyTurnError::new("city stability cost overflow"))?;
+    let building_sources = required(
+        checked_mul(metrics.order_buildings, values.stability_per_order_building),
+        "order building stability overflow",
+    )?;
+    let luxury_sources = required(
+        checked_mul_usize(metrics.luxury_count, values.stability_per_luxury_resource),
+        "luxury stability overflow",
+    )?;
+    let technology_sources = required(
+        order_technology_source(state, ruleset, player, values),
+        "technology stability overflow",
+    )?;
+    let artifact_sources = required(
+        artifact_source(state, player, values),
+        "artifact stability overflow",
+    )?;
+    let wonder_sources = required(
+        wonder_source(state, ruleset, player),
+        "wonder stability overflow",
+    )?;
     let sources = checked_sum(
         [
             values.base_order,
-            required(
-                checked_mul(metrics.order_buildings, values.stability_per_order_building),
-                "order building stability overflow",
-            )?,
-            required(
-                checked_mul_usize(metrics.luxury_count, values.stability_per_luxury_resource),
-                "luxury stability overflow",
-            )?,
-            required(
-                order_technology_source(state, ruleset, player, values),
-                "technology stability overflow",
-            )?,
-            required(
-                artifact_source(state, player, values),
-                "artifact stability overflow",
-            )?,
-            required(
-                wonder_source(state, ruleset, player),
-                "wonder stability overflow",
-            )?,
+            building_sources,
+            luxury_sources,
+            technology_sources,
+            artifact_sources,
+            wonder_sources,
         ],
         "stability source overflow",
     )?;
+    let population_cost = required(
+        checked_mul(metrics.population_over, values.cost_per_population),
+        "population stability cost overflow",
+    )?;
+    let conquered_city_cost = required(
+        checked_mul(metrics.conquered, values.conquered_city_cost),
+        "conquered city stability cost overflow",
+    )?;
+    let hegemony_tax = hegemony_tax(territory, player_count, values)?;
     let costs = checked_sum(
         [
             city_cost,
-            required(
-                checked_mul(metrics.population_over, values.cost_per_population),
-                "population stability cost overflow",
-            )?,
+            population_cost,
             metrics.cohesion_cost,
-            required(
-                checked_mul(metrics.conquered, values.conquered_city_cost),
-                "conquered city stability cost overflow",
-            )?,
+            conquered_city_cost,
             war_weariness,
-            hegemony_tax(territory, player_count, values)?,
+            hegemony_tax,
         ],
         "stability cost overflow",
     )?;
     let base_net = sources
         .checked_sub(costs)
         .ok_or_else(|| EconomyTurnError::new("stability net overflow"))?;
-    let standing = relative_standing_shift(territory, player_count, values)?;
-    base_net
-        .checked_sub(standing)
-        .ok_or_else(|| EconomyTurnError::new("effective stability overflow"))
+    let standing_adjustment = relative_standing_shift(territory, player_count, values)?
+        .checked_neg()
+        .ok_or_else(|| EconomyTurnError::new("relative standing adjustment overflow"))?;
+    let effective_net = base_net
+        .checked_add(standing_adjustment)
+        .ok_or_else(|| EconomyTurnError::new("effective stability overflow"))?;
+    Ok(StabilityBreakdown::new(
+        values.base_order,
+        building_sources,
+        luxury_sources,
+        technology_sources,
+        artifact_sources,
+        wonder_sources,
+        city_cost,
+        population_cost,
+        metrics.cohesion_cost,
+        conquered_city_cost,
+        war_weariness,
+        hegemony_tax,
+        sources,
+        costs,
+        standing_adjustment,
+        effective_net,
+        stability_band(ruleset, effective_net),
+    ))
 }
 
 struct CityStabilityMetrics {

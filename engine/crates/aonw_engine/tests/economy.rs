@@ -10,14 +10,15 @@ use aonw_content::{
     TileDefinition,
 };
 use aonw_domain::{
-    ArtifactId, City, FieldImprovement, FieldImprovementKind, HexCoord, InfrastructureState,
-    InitialResourceDistribution, InitialResourcePlacement, InteractionState, PlayerResearchState,
-    ResearchState, ResourceType, TechnologyId, TransportNetwork, UnitKind, WorldArtifact,
+    ArtifactId, City, CityProductionQueue, CityProductionTarget, CityProjectType, FieldImprovement,
+    FieldImprovementKind, HexCoord, InfrastructureState, InitialResourceDistribution,
+    InitialResourcePlacement, InteractionState, PlayerResearchState, ResearchState, ResourceType,
+    StrategicResourceStockpile, TechnologyId, TransportNetwork, UnitKind, WorldArtifact,
     WorldArtifactLocation, WorldArtifactType,
 };
 use aonw_engine::{
-    CityYieldContributionKind, CityYieldQuery, EngineContext, GameEngine, GameQuery, QueryResult,
-    StrategicResourceProjectionQuery, YieldValue,
+    CityYieldContributionKind, CityYieldQuery, EconomyForecastQuery, EngineContext, GameEngine,
+    GameQuery, QueryResult, StabilityBand, StrategicResourceProjectionQuery, YieldValue,
 };
 
 #[path = "city/support.rs"]
@@ -127,6 +128,102 @@ fn city_scoring_and_yield_use_the_same_content_balance() {
     assert_eq!(balance.stability_modifier(-1).gold_basis_points(), 9_000);
     assert!(balance.stability_modifier(-4).halts_growth());
     assert_eq!(balance.stability_modifier(4).food_bonus(), 1);
+}
+
+#[test]
+fn economy_forecast_reuses_turn_income_upkeep_and_stability_rules() {
+    let map = forecast_map();
+    let actor = player("player-1");
+    let city_id = city_id("city-1");
+    let queue = CityProductionQueue::try_new(
+        CityProductionTarget::Project(CityProjectType::Wealth),
+        0,
+        StrategicResourceStockpile::default(),
+    )
+    .expect("wealth queue");
+    let city = City::builder(
+        city_id.clone(),
+        actor.clone(),
+        "Capital",
+        HexCoord::new(0, 0),
+    )
+    .with_production(Some(queue), 0)
+    .build()
+    .expect("city");
+    let units = [
+        UnitKind::Tank,
+        UnitKind::Cavalry,
+        UnitKind::Settler,
+        UnitKind::Warrior,
+        UnitKind::Worker,
+        UnitKind::Worker,
+        UnitKind::Worker,
+    ]
+    .into_iter()
+    .enumerate()
+    .map(|(index, kind)| {
+        unit(
+            &format!("unit-{index}"),
+            &actor,
+            kind,
+            HexCoord::new(i32::try_from(index + 1).expect("position"), 0),
+        )
+    })
+    .collect();
+    let artifact = WorldArtifact::new(
+        ArtifactId::new("artifact-1").expect("artifact id"),
+        WorldArtifactType::MerchantsSeal,
+        WorldArtifactLocation::Stored(city_id.clone()),
+    );
+    let state = state_with_economy_parts(
+        &map,
+        units,
+        vec![city],
+        InteractionState::default(),
+        InfrastructureState::default(),
+        vec![artifact],
+    );
+    let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
+
+    let QueryResult::EconomyForecast(forecast) = GameEngine::query(
+        &state,
+        context,
+        GameQuery::EconomyForecast(EconomyForecastQuery::new(9)),
+    )
+    .expect("economy forecast") else {
+        panic!("economy forecast result")
+    };
+
+    assert_eq!(forecast.player_id(), &actor);
+    assert_eq!(forecast.treasury(), 0);
+    assert_eq!(forecast.city_income(), 2);
+    assert_eq!(forecast.project_income(), 1);
+    assert_eq!(forecast.gross_income(), 3);
+    assert_eq!(forecast.net_per_turn(), -3);
+    assert_eq!(forecast.city_sources()[0].city_id(), &city_id);
+    assert_eq!(forecast.city_sources()[0].amount(), 2);
+    assert_eq!(forecast.project_sources()[0].city_id(), &city_id);
+    assert_eq!(forecast.project_sources()[0].amount(), 1);
+
+    let upkeep = forecast.upkeep();
+    assert_eq!(upkeep.upkeep_bearing_unit_count(), 7);
+    assert_eq!(upkeep.free_unit_count(), 4);
+    assert_eq!(upkeep.paid_unit_count(), 3);
+    assert_eq!(upkeep.total(), 6);
+    assert_eq!(upkeep.next_worker_upkeep(), 4);
+    assert_eq!(upkeep.sources().len(), 1);
+    assert_eq!(upkeep.sources()[0].kind(), UnitKind::Worker);
+    assert_eq!(upkeep.sources()[0].paid_unit_count(), 3);
+    assert_eq!(upkeep.sources()[0].amount(), 6);
+
+    let stability = forecast.stability();
+    assert_eq!(stability.base_order(), 6);
+    assert_eq!(stability.artifact_sources(), 1);
+    assert_eq!(stability.source_total(), 7);
+    assert_eq!(stability.cost_total(), 0);
+    assert_eq!(stability.relative_standing_adjustment(), 3);
+    assert_eq!(stability.effective_net(), 10);
+    assert_eq!(stability.band(), StabilityBand::Content);
 }
 
 #[test]
@@ -327,6 +424,28 @@ fn resource_map() -> MapDefinition {
         Vec::new(),
     )
     .expect("map")
+}
+
+fn forecast_map() -> MapDefinition {
+    MapDefinition::try_new(
+        "forecast-test",
+        GridLayout::OddQFlatTop,
+        8,
+        1,
+        (0..8)
+            .map(|column| {
+                TileDefinition::try_new_for_simulation(
+                    HexCoord::new(column, 0),
+                    vec![TerrainType::Plains],
+                    Vec::new(),
+                    0,
+                )
+                .expect("forecast tile")
+            })
+            .collect(),
+        Vec::new(),
+    )
+    .expect("forecast map")
 }
 
 fn all_map_resources() -> Vec<MapResourceType> {

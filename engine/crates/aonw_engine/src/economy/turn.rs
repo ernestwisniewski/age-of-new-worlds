@@ -11,9 +11,12 @@ use aonw_domain::{
 
 use crate::{CityClaimedHexEvent, DomainEvent, EngineContext};
 
+use super::{UnitUpkeepBreakdown, UnitUpkeepSource};
+
 pub(crate) use city_output::city_turn_output;
 pub(crate) use stability::{
     CombatEconomyOwnerIndex, WarWearinessEventCounts, advance_turn_stability,
+    current_stability_breakdown,
 };
 
 pub(crate) struct PreparedEconomyTurn {
@@ -121,7 +124,7 @@ pub(crate) fn settle_turn_income_and_upkeep(
     let mut changes = Vec::new();
     for player in scope {
         let income = gold_by_player.get(player).copied().unwrap_or_default();
-        let upkeep = unit_upkeep(&state, ruleset, player)?;
+        let upkeep = unit_upkeep_breakdown(&state, ruleset, player)?.total();
         let current = state
             .economy()
             .player_gold()
@@ -229,21 +232,21 @@ fn grow_city(
     Ok((grown, claimed))
 }
 
-fn unit_upkeep(
+pub(crate) fn unit_upkeep_breakdown(
     state: &GameState,
     ruleset: &RulesetDefinition,
     player: &PlayerId,
-) -> Result<i64, EconomyTurnError> {
+) -> Result<UnitUpkeepBreakdown, EconomyTurnError> {
     let city_count = state
         .cities()
         .iter()
         .filter(|city| city.owner_player_id() == player)
         .count();
-    let free = ruleset
+    let free_unit_count = ruleset
         .economy()
         .free_unit_count(city_count)
         .ok_or_else(|| EconomyTurnError::new("free unit count overflow"))?;
-    let free = usize::try_from(free).map_err(EconomyTurnError::new)?;
+    let free = usize::try_from(free_unit_count).map_err(EconomyTurnError::new)?;
     let mut units = state
         .units()
         .iter()
@@ -262,8 +265,11 @@ fn unit_upkeep(
             .then_with(|| left.kind().cmp(&right.kind()))
             .then_with(|| left.id().cmp(right.id()))
     });
+    let upkeep_bearing_unit_count = i64::try_from(units.len()).map_err(EconomyTurnError::new)?;
     let mut total = 0_i64;
+    let mut paid_unit_count = 0_i64;
     let mut paid_workers = 0_i64;
+    let mut by_kind = BTreeMap::<UnitKind, (i64, i64)>::new();
     for (unit, base) in units.into_iter().skip(free) {
         let cost = if unit.kind() == UnitKind::Worker {
             paid_workers = paid_workers
@@ -276,8 +282,38 @@ fn unit_upkeep(
         total = total
             .checked_add(cost)
             .ok_or_else(|| EconomyTurnError::new("unit upkeep overflow"))?;
+        paid_unit_count = paid_unit_count
+            .checked_add(1)
+            .ok_or_else(|| EconomyTurnError::new("paid unit count overflow"))?;
+        let group = by_kind.entry(unit.kind()).or_default();
+        group.0 = group
+            .0
+            .checked_add(1)
+            .ok_or_else(|| EconomyTurnError::new("paid unit type count overflow"))?;
+        group.1 = group
+            .1
+            .checked_add(cost)
+            .ok_or_else(|| EconomyTurnError::new("unit type upkeep overflow"))?;
     }
-    Ok(total)
+    let next_worker_upkeep = if upkeep_bearing_unit_count < free_unit_count {
+        0
+    } else {
+        paid_workers
+            .checked_add(1)
+            .ok_or_else(|| EconomyTurnError::new("next worker upkeep overflow"))?
+    };
+    let sources = by_kind
+        .into_iter()
+        .map(|(kind, (count, amount))| UnitUpkeepSource::new(kind, count, amount))
+        .collect();
+    Ok(UnitUpkeepBreakdown::new(
+        upkeep_bearing_unit_count,
+        free_unit_count,
+        paid_unit_count,
+        total,
+        next_worker_upkeep,
+        sources,
+    ))
 }
 
 fn replace_production_sections(

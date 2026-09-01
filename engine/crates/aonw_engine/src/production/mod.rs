@@ -25,4 +25,5 @@ pub(crate) use rules::query_options;
 pub(crate) use rush::apply_rush;
 pub(crate) use turn::{
     ResearchProjectScience, advance_turn_production, selected_research_project_science,
+    selected_wealth_project_gold,
 };

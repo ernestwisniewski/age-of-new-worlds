@@ -11,7 +11,7 @@ use super::EconomyTurnError;
 
 mod calculation;
 
-use calculation::{StabilityFactors, stability_band, stability_net, territory_shares};
+use calculation::{StabilityFactors, stability_band, stability_breakdown, territory_shares};
 
 /// Ownership retained before simultaneous combat mutates or removes entities.
 pub(crate) struct CombatEconomyOwnerIndex {
@@ -121,7 +121,7 @@ pub(crate) fn advance_turn_stability(
     let mut stability = BTreeMap::new();
     let mut events = Vec::new();
     for player in &players {
-        let net = stability_net(
+        let net = stability_breakdown(
             state,
             map,
             ruleset,
@@ -134,7 +134,8 @@ pub(crate) fn advance_turn_stability(
                     .get(player)
                     .expect("territory shares cover every participant"),
             ),
-        )?;
+        )?
+        .effective_net();
         stability.insert(player.clone(), net);
         let Some(previous) = economy.player_stability_net().get(player).copied() else {
             continue;
@@ -158,6 +159,39 @@ pub(crate) fn advance_turn_stability(
     )
     .map_err(EconomyTurnError::new)?;
     Ok(StabilityTurnPhase { economy, events })
+}
+
+pub(crate) fn current_stability_breakdown(
+    state: &GameState,
+    map: &MapDefinition,
+    ruleset: &RulesetDefinition,
+    player: &PlayerId,
+) -> Result<crate::economy::StabilityBreakdown, EconomyTurnError> {
+    let players = state
+        .match_lifecycle()
+        .identity()
+        .participants()
+        .iter()
+        .map(|participant| participant.id().clone())
+        .collect::<BTreeSet<_>>();
+    let territory = territory_shares(state, map, &players)?;
+    let share = territory
+        .get(player)
+        .copied()
+        .ok_or_else(|| EconomyTurnError::new("stability player is not a participant"))?;
+    stability_breakdown(
+        state,
+        map,
+        ruleset,
+        player,
+        state
+            .economy()
+            .player_war_weariness()
+            .get(player)
+            .copied()
+            .unwrap_or_default(),
+        StabilityFactors::new(players.len(), ruleset.economy().stability_values(), share),
+    )
 }
 
 fn advance_war_weariness(
