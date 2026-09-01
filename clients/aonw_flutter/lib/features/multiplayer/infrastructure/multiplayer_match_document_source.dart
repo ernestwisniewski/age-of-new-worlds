@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:flutter/services.dart';
 
+import '../../local_game/application/local_game_catalog.dart';
 import '../application/multiplayer_session_port.dart';
 import '../read_model/multiplayer_view.dart';
 
@@ -10,104 +12,114 @@ final class AssetMultiplayerMatchDocumentSource
   const AssetMultiplayerMatchDocumentSource({required AssetBundle assets})
     : _assets = assets;
 
-  static const _mapPath = 'assets/maps/aonw2_starter/map.json';
-
   final AssetBundle _assets;
 
   @override
-  Future<MultiplayerMatchDocuments> load() async {
-    final mapDocument = await _assets.loadString(_mapPath);
-    return documentsFor(mapDocument);
-  }
-
-  static MultiplayerMatchDocuments documentsFor(String mapDocument) {
-    _validateMapDocument(mapDocument);
-    return MultiplayerMatchDocuments(
-      mapId: 'aonw2_starter',
-      mapDocument: mapDocument,
-      scenarioDocument: jsonEncode(_scenario),
-      rulesetId: 'aonw-standard',
-      matchIdentityDocument: jsonEncode(_matchIdentity),
-      fogEnabled: true,
-      creatorPlayerId: 'player-1',
+  Future<MultiplayerMatchDocuments> load(
+    MultiplayerMatchSetupView setup,
+  ) async {
+    final entry = _catalogEntry(setup.mapId);
+    final mapDocument = await _assets.loadString(entry.assets.document);
+    final scenarioDocument = await _assets.loadString(
+      entry.assets.scenarioDocument,
     );
-  }
-
-  static void _validateMapDocument(String document) {
-    final value = jsonDecode(document);
-    if (value is! Map<String, Object?> ||
-        value['schemaVersion'] != 1 ||
-        value['mapName'] != 'aonw2_starter') {
-      throw const FormatException('The packaged multiplayer map is invalid.');
-    }
+    _validateMapDocument(mapDocument, entry);
+    _validateScenarioDocument(scenarioDocument, entry);
+    return MultiplayerMatchDocuments(
+      mapId: entry.mapId,
+      mapDocument: mapDocument,
+      scenarioDocument: scenarioDocument,
+      rulesetId: entry.rulesetId,
+      matchIdentityDocument: jsonEncode(_matchIdentity(entry, setup)),
+      fogEnabled: setup.fogEnabled,
+      creatorPlayerId: entry.assets.actorPlayerId,
+    );
   }
 }
 
-const _scenario = <String, Object?>{
-  'schemaVersion': 1,
-  'scenarioId': 'aonw2_starter_multiplayer',
-  'mapId': 'aonw2_starter',
-  'rulesetId': 'aonw-standard',
-  'initialUnits': [
-    {
-      'id': 'player-1-commander',
-      'ownerPlayerId': 'player-1',
-      'kind': 'commander',
-      'name': 'First Commander',
-      'col': 2,
-      'row': 1,
-    },
-    {
-      'id': 'player-2-commander',
-      'ownerPlayerId': 'player-2',
-      'kind': 'commander',
-      'name': 'Second Commander',
-      'col': 4,
-      'row': 4,
-    },
-  ],
-};
+LocalGameCatalogEntryView _catalogEntry(String mapId) {
+  for (final entry in LocalGameCatalog.entries) {
+    if (entry.mapId == mapId) return entry;
+  }
+  throw const FormatException('The selected multiplayer map is invalid.');
+}
 
-const _matchIdentity = <String, Object?>{
-  'matchRules': {
-    'gameLength': {
-      'kind': 'unlimited',
-      'targetMinutes': null,
-      'turnLimit': null,
-      'paceProfile': 'unlimited',
-      'scoreFallbackEnabled': false,
-    },
-    'victory': {
-      'conquestEnabled': true,
-      'dominationEnabled': true,
-      'dominationControlPercent': 60,
-      'dominationHoldTurns': 5,
-      'scoreFallbackEnabled': false,
-      'turnLimit': null,
-      'hardTimeLimitMinutes': null,
-      'culturalEnabled': true,
-      'culturalRequiredArtifacts': 6,
-      'culturalHoldTurns': 5,
-    },
-    'balance': <String, Object?>{},
-  },
-  'participants': [
-    {
-      'id': 'player-1',
-      'name': 'Player One',
-      'colorValue': 4278190335,
-      'country': 'poland',
-      'kind': 'human',
-      'ai': null,
-    },
-    {
-      'id': 'player-2',
-      'name': 'Player Two',
-      'colorValue': 16711935,
-      'country': 'germany',
-      'kind': 'human',
-      'ai': null,
-    },
-  ],
-  'gameMode': 'multiplayer',
-};
+void _validateMapDocument(String document, LocalGameCatalogEntryView entry) {
+  final value = _object(jsonDecode(document), 'map');
+  if (value['schemaVersion'] != 1 ||
+      value['mapName'] != entry.mapId ||
+      value['cols'] != entry.columns ||
+      value['rows'] != entry.rows) {
+    throw const FormatException('The packaged multiplayer map is invalid.');
+  }
+}
+
+void _validateScenarioDocument(
+  String document,
+  LocalGameCatalogEntryView entry,
+) {
+  final value = _object(jsonDecode(document), 'scenario');
+  final units = _list(value['initialUnits'], 'scenario.initialUnits');
+  final owners = <String>{};
+  for (final rawUnit in units) {
+    final unit = _object(rawUnit, 'scenario.initialUnits[]');
+    final owner = unit['ownerPlayerId'];
+    if (owner is! String || !entry.participantIds.contains(owner)) {
+      throw const FormatException(
+        'The packaged multiplayer scenario roster is invalid.',
+      );
+    }
+    owners.add(owner);
+  }
+  if (value['schemaVersion'] != 1 ||
+      value['mapId'] != entry.mapId ||
+      value['rulesetId'] != entry.rulesetId ||
+      owners.length != entry.maximumPlayers ||
+      !owners.containsAll(entry.participantIds)) {
+    throw const FormatException(
+      'The packaged multiplayer scenario is invalid.',
+    );
+  }
+}
+
+Map<String, Object?> _matchIdentity(
+  LocalGameCatalogEntryView entry,
+  MultiplayerMatchSetupView setup,
+) {
+  final countries = _participantCountries(setup.creatorCountry);
+  return AonwMatchIdentity(
+    participants: [
+      for (var index = 0; index < entry.maximumPlayers; index++)
+        AonwParticipant(
+          id: entry.participantIds[index],
+          name: 'Player ${index + 1}',
+          colorValue: _participantColors[index],
+          country: countries[index],
+          kind: AonwPlayerKind.human,
+        ),
+    ],
+    gameMode: AonwGameMode.multiplayer,
+    turnMode: AonwTurnMode.simultaneous,
+  ).toJson();
+}
+
+List<AonwPlayerCountry> _participantCountries(String creatorCountry) {
+  final creator = AonwPlayerCountry.fromJson(creatorCountry);
+  return [
+    creator,
+    for (final country in AonwPlayerCountry.values)
+      if (country != creator) country,
+  ];
+}
+
+Map<String, Object?> _object(Object? value, String path) {
+  if (value is Map<String, Object?>) return value;
+  throw FormatException('$path must be an object.');
+}
+
+List<Object?> _list(Object? value, String path) {
+  if (value is List<Object?>) return value;
+  throw FormatException('$path must be an array.');
+}
+
+const _participantColors = [0xff3d5a80, 0xffee6c4d, 0xff4f772d, 0xfff4d35e];

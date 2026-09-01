@@ -36,7 +36,9 @@ final class MultiplayerController extends ChangeNotifier {
 
   Future<void> refreshLobby() => _coordinator.refreshLobby();
 
-  Future<void> createMatch() => _coordinator.createMatch();
+  Future<void> createMatch([
+    MultiplayerMatchSetupView setup = MultiplayerMatchSetupView.defaults,
+  ]) => _coordinator.createMatch(setup);
 
   Future<void> joinMatch({required String matchId, required String playerId}) =>
       _coordinator.joinMatch(matchId: matchId, playerId: playerId);

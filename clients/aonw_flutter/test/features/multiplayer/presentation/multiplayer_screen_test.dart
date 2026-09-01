@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_coordinator.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_session_port.dart';
 import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_controller.dart';
@@ -11,14 +12,15 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 void main() {
-  testWidgets('creates a match and exposes an accessible turn action', (
+  testWidgets('configures a match and exposes an accessible turn action', (
     tester,
   ) async {
     MultiplayerProjectionView? openedProjection;
     final session = _Session();
+    final documents = _Documents();
     final coordinator = MultiplayerCoordinator(
       session: session,
-      documents: const _Documents(),
+      documents: documents,
     );
     final controller = MultiplayerController(coordinator);
     addTearDown(controller.dispose);
@@ -32,8 +34,38 @@ void main() {
         ),
       ),
     );
-    await tester.tap(find.byKey(const ValueKey('multiplayer-create-match')));
+    expect(find.text('Simultaneous'), findsOneWidget);
+    expect(find.text('Victory paths'), findsOneWidget);
+    expect(find.text('From settlement to empire'), findsOneWidget);
+    expect(find.byKey(const ValueKey('multiplayer-turn-mode')), findsOneWidget);
+
+    final scenario = find.byKey(
+      const ValueKey((
+        'multiplayer-scenario',
+        LocalGameScenarioView.starterDuel,
+      )),
+    );
+    await tester.ensureVisible(scenario);
+    await tester.tap(scenario);
     await tester.pumpAndSettle();
+    await tester.tap(find.text('Dravonia').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('multiplayer-fog-of-war')));
+    await tester.pumpAndSettle();
+
+    final createMatch = find.byKey(const ValueKey('multiplayer-create-match'));
+    await tester.scrollUntilVisible(
+      createMatch,
+      260,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(createMatch);
+    await tester.pumpAndSettle();
+
+    expect(documents.lastSetup?.mapId, 'dravonia');
+    expect(documents.lastSetup?.creatorCountry, 'poland');
+    expect(documents.lastSetup?.fogEnabled, isFalse);
 
     expect(
       find.byKey(const ValueKey('multiplayer-start-match')),
@@ -77,7 +109,7 @@ void main() {
     final session = _Session();
     final coordinator = MultiplayerCoordinator(
       session: session,
-      documents: const _Documents(),
+      documents: _Documents(),
     );
     final controller = MultiplayerController(coordinator);
     addTearDown(controller.dispose);
@@ -324,17 +356,21 @@ MultiplayerMatchLobbyView _matchLobby({
 );
 
 final class _Documents implements MultiplayerMatchDocumentSource {
-  const _Documents();
+  MultiplayerMatchSetupView? lastSetup;
 
   @override
-  Future<MultiplayerMatchDocuments> load() async =>
-      const MultiplayerMatchDocuments(
-        mapId: 'map-1',
-        mapDocument: '{}',
-        scenarioDocument: '{}',
-        rulesetId: 'ruleset-1',
-        matchIdentityDocument: '{}',
-        fogEnabled: true,
-        creatorPlayerId: 'player-1',
-      );
+  Future<MultiplayerMatchDocuments> load(
+    MultiplayerMatchSetupView setup,
+  ) async {
+    lastSetup = setup;
+    return const MultiplayerMatchDocuments(
+      mapId: 'map-1',
+      mapDocument: '{}',
+      scenarioDocument: '{}',
+      rulesetId: 'ruleset-1',
+      matchIdentityDocument: '{}',
+      fogEnabled: true,
+      creatorPlayerId: 'player-1',
+    );
+  }
 }

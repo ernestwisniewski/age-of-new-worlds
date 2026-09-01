@@ -4,6 +4,8 @@ import 'package:aonw_flutter/features/multiplayer/infrastructure/auth_token_stor
 import 'package:aonw_flutter/features/multiplayer/infrastructure/multiplayer_match_document_source.dart';
 import 'package:aonw_flutter/features/multiplayer/infrastructure/server_connection_config.dart';
 import 'package:aonw_flutter/features/multiplayer/infrastructure/serverpod_multiplayer_session.dart';
+import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -48,9 +50,9 @@ void main() {
       expect(ownerTokens.value, isNotEmpty);
       expect(guestTokens.value, isNotEmpty);
 
-      final documents = AssetMultiplayerMatchDocumentSource.documentsFor(
-        await File('assets/maps/aonw2_starter/map.json').readAsString(),
-      );
+      final documents = await AssetMultiplayerMatchDocumentSource(
+        assets: _FileAssetBundle(),
+      ).load(MultiplayerMatchSetupView.defaults);
       final ownerLobby = await owner.createMatch(documents);
       final guestLobby = await guest.joinMatch(
         matchId: ownerLobby.match.matchId,
@@ -113,6 +115,14 @@ void main() {
       );
     },
   );
+}
+
+final class _FileAssetBundle extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async {
+    final bytes = await File(key).readAsBytes();
+    return ByteData.sublistView(Uint8List.fromList(bytes));
+  }
 }
 
 final class _MemoryTokenStore implements AuthTokenStore {

@@ -128,6 +128,24 @@ final class MultiplayerCommandView {
   final MultiplayerProjectionView projection;
 }
 
+final class MultiplayerMatchSetupView {
+  const MultiplayerMatchSetupView({
+    required this.mapId,
+    required this.creatorCountry,
+    required this.fogEnabled,
+  });
+
+  static const defaults = MultiplayerMatchSetupView(
+    mapId: 'aonw2_starter',
+    creatorCountry: 'poland',
+    fogEnabled: true,
+  );
+
+  final String mapId;
+  final String creatorCountry;
+  final bool fogEnabled;
+}
+
 final class MultiplayerMatchDocuments {
   const MultiplayerMatchDocuments({
     required this.mapId,

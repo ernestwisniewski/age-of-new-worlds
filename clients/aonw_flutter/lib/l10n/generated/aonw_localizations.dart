@@ -386,6 +386,30 @@ abstract class AonwLocalizations {
   /// **'Account: {userId}'**
   String signedInAccount(String userId);
 
+  /// No description provided for @multiplayerSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create online game'**
+  String get multiplayerSetupTitle;
+
+  /// No description provided for @multiplayerSetupIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your civilization and map before opening the authoritative waiting room.'**
+  String get multiplayerSetupIntro;
+
+  /// No description provided for @multiplayerTurnModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'All players act during one shared turn. The engine resolves it after every required submission or the authoritative timeout.'**
+  String get multiplayerTurnModeDescription;
+
+  /// No description provided for @continueToLobby.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to lobby'**
+  String get continueToLobby;
+
   /// No description provided for @createMultiplayerMatch.
   ///
   /// In en, this message translates to:
@@ -421,6 +445,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Player two'**
   String get playerSeatTwo;
+
+  /// No description provided for @playerSeatNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Player {number}'**
+  String playerSeatNumber(int number);
 
   /// No description provided for @refreshMatches.
   ///

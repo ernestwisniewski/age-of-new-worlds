@@ -37,6 +37,7 @@ final class LocalGameCatalogEntryView {
 
 abstract final class LocalGameCatalog {
   static const minimumHotseatOpponents = 2;
+  static const maximumCivilizations = 4;
 
   static const entries = <LocalGameCatalogEntryView>[
     LocalGameCatalogEntryView(

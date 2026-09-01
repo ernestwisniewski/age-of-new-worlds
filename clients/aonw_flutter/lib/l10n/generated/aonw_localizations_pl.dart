@@ -168,6 +168,20 @@ class AonwLocalizationsPl extends AonwLocalizations {
   }
 
   @override
+  String get multiplayerSetupTitle => 'Utwórz grę online';
+
+  @override
+  String get multiplayerSetupIntro =>
+      'Wybierz cywilizację i mapę przed otwarciem autorytatywnej poczekalni.';
+
+  @override
+  String get multiplayerTurnModeDescription =>
+      'Wszyscy gracze działają w ramach jednej wspólnej tury. Silnik rozlicza ją po zatwierdzeniu przez wymaganych graczy albo po autorytatywnym limicie czasu.';
+
+  @override
+  String get continueToLobby => 'Przejdź do poczekalni';
+
+  @override
   String get createMultiplayerMatch => 'Utwórz rozgrywkę';
 
   @override
@@ -184,6 +198,11 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get playerSeatTwo => 'Gracz drugi';
+
+  @override
+  String playerSeatNumber(int number) {
+    return 'Gracz $number';
+  }
 
   @override
   String get refreshMatches => 'Odśwież rozgrywki';

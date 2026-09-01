@@ -245,16 +245,17 @@ final class _MultiplayerDocuments implements MultiplayerMatchDocumentSource {
   const _MultiplayerDocuments();
 
   @override
-  Future<MultiplayerMatchDocuments> load() async =>
-      const MultiplayerMatchDocuments(
-        mapId: 'map-1',
-        mapDocument: '{}',
-        scenarioDocument: '{}',
-        rulesetId: 'ruleset-1',
-        matchIdentityDocument: '{}',
-        fogEnabled: true,
-        creatorPlayerId: 'player-1',
-      );
+  Future<MultiplayerMatchDocuments> load(
+    MultiplayerMatchSetupView setup,
+  ) async => const MultiplayerMatchDocuments(
+    mapId: 'map-1',
+    mapDocument: '{}',
+    scenarioDocument: '{}',
+    rulesetId: 'ruleset-1',
+    matchIdentityDocument: '{}',
+    fogEnabled: true,
+    creatorPlayerId: 'player-1',
+  );
 }
 
 const _projection = MultiplayerProjectionView(

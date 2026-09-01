@@ -84,5 +84,5 @@ final class MultiplayerSessionException implements Exception {
 }
 
 abstract interface class MultiplayerMatchDocumentSource {
-  Future<MultiplayerMatchDocuments> load();
+  Future<MultiplayerMatchDocuments> load(MultiplayerMatchSetupView setup);
 }

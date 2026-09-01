@@ -4,10 +4,14 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../l10n/l10n.dart';
+import '../../local_game/application/local_game_catalog.dart';
+import '../../local_game/application/local_game_session_port.dart';
+import '../../local_game/presentation/new_game_widgets.dart';
 import '../application/multiplayer_state.dart';
 import '../read_model/multiplayer_view.dart';
 import 'multiplayer_controller.dart';
 
+part 'multiplayer_lobby.dart';
 part 'multiplayer_match_actions.dart';
 part 'multiplayer_waiting_room.dart';
 
@@ -219,135 +223,6 @@ final class _AuthPanelState extends State<_AuthPanel> {
     await widget.controller.signIn(
       email: _email.text,
       password: _password.text,
-    );
-  }
-}
-
-final class _LobbyPanel extends StatefulWidget {
-  const _LobbyPanel({required this.controller, required this.state});
-
-  final MultiplayerController controller;
-  final MultiplayerLobby state;
-
-  @override
-  State<_LobbyPanel> createState() => _LobbyPanelState();
-}
-
-final class _LobbyPanelState extends State<_LobbyPanel> {
-  final _matchId = TextEditingController();
-  var _playerId = 'player-2';
-
-  @override
-  void dispose() {
-    _matchId.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    final state = widget.state;
-    return ListView(
-      padding: const EdgeInsets.all(AonwSpacing.lg),
-      children: [
-        AonwPanel(
-          semanticLabel: l10n.multiplayerLobbyTitle,
-          maxWidth: 760,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.multiplayerLobbyTitle,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: AonwSpacing.xs),
-              SelectableText(l10n.signedInAccount(state.account.userId)),
-              const SizedBox(height: AonwSpacing.md),
-              FilledButton.icon(
-                key: const ValueKey('multiplayer-create-match'),
-                onPressed: state.busy ? null : widget.controller.createMatch,
-                icon: const Icon(Icons.add),
-                label: Text(l10n.createMultiplayerMatch),
-              ),
-              const SizedBox(height: AonwSpacing.md),
-              TextField(
-                key: const ValueKey('multiplayer-match-id'),
-                controller: _matchId,
-                decoration: InputDecoration(labelText: l10n.matchIdLabel),
-                onChanged: (_) => setState(() {}),
-              ),
-              const SizedBox(height: AonwSpacing.sm),
-              DropdownButtonFormField<String>(
-                key: ValueKey(('multiplayer-player-id', _playerId)),
-                initialValue: _playerId,
-                decoration: InputDecoration(labelText: l10n.playerSeatLabel),
-                items: [
-                  DropdownMenuItem(
-                    value: 'player-1',
-                    child: Text(l10n.playerSeatOne),
-                  ),
-                  DropdownMenuItem(
-                    value: 'player-2',
-                    child: Text(l10n.playerSeatTwo),
-                  ),
-                ],
-                onChanged: state.busy
-                    ? null
-                    : (value) => setState(() => _playerId = value!),
-              ),
-              const SizedBox(height: AonwSpacing.sm),
-              OutlinedButton.icon(
-                key: const ValueKey('multiplayer-join-match'),
-                onPressed: state.busy || _matchId.text.trim().isEmpty
-                    ? null
-                    : () => widget.controller.joinMatch(
-                        matchId: _matchId.text,
-                        playerId: _playerId,
-                      ),
-                icon: const Icon(Icons.login),
-                label: Text(l10n.joinMultiplayerMatch),
-              ),
-              if (state.failureCode case final code?) ...[
-                const SizedBox(height: AonwSpacing.sm),
-                _FailureText(code: code),
-              ],
-              if (state.busy) ...[
-                const SizedBox(height: AonwSpacing.md),
-                AonwProgressIndicator(semanticLabel: l10n.loadingMultiplayer),
-              ],
-              const SizedBox(height: AonwSpacing.lg),
-              Row(
-                children: [
-                  TextButton.icon(
-                    onPressed: state.busy
-                        ? null
-                        : widget.controller.refreshLobby,
-                    icon: const Icon(Icons.refresh),
-                    label: Text(l10n.refreshMatches),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: state.busy ? null : widget.controller.signOut,
-                    child: Text(l10n.signOut),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AonwSpacing.lg),
-        Text(l10n.yourMatches, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: AonwSpacing.sm),
-        if (state.matches.isEmpty)
-          Text(l10n.noMultiplayerMatches)
-        else
-          for (final match in state.matches)
-            _LobbyMatchCard(
-              controller: widget.controller,
-              match: match,
-              busy: state.busy,
-            ),
-      ],
     );
   }
 }

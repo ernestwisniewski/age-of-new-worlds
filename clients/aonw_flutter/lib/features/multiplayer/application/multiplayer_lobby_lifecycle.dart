@@ -17,13 +17,15 @@ void _validateLobby(
 }
 
 extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
-  Future<void> createMatch() async {
+  Future<void> createMatch([
+    MultiplayerMatchSetupView setup = MultiplayerMatchSetupView.defaults,
+  ]) async {
     final current = _state;
     if (current is! MultiplayerLobby || current.busy) return;
     final generation = _generation;
     _setState(current.copyWith(busy: true, clearFailure: true));
     try {
-      final documents = await _documents.load();
+      final documents = await _documents.load(setup);
       final lobby = await _session.createMatch(documents);
       _validateLobby(
         lobby,

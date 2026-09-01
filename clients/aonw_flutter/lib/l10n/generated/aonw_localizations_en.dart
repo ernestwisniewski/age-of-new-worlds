@@ -167,6 +167,20 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
+  String get multiplayerSetupTitle => 'Create online game';
+
+  @override
+  String get multiplayerSetupIntro =>
+      'Choose your civilization and map before opening the authoritative waiting room.';
+
+  @override
+  String get multiplayerTurnModeDescription =>
+      'All players act during one shared turn. The engine resolves it after every required submission or the authoritative timeout.';
+
+  @override
+  String get continueToLobby => 'Continue to lobby';
+
+  @override
   String get createMultiplayerMatch => 'Create match';
 
   @override
@@ -183,6 +197,11 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get playerSeatTwo => 'Player two';
+
+  @override
+  String playerSeatNumber(int number) {
+    return 'Player $number';
+  }
 
   @override
   String get refreshMatches => 'Refresh matches';
