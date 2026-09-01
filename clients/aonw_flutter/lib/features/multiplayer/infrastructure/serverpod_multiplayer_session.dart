@@ -227,6 +227,7 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
       resync: (value) => _gameRequest(() => _client.game.resync(value)),
       query: (value) => _gameRequest(() => _client.game.query(value)),
       command: (value) => _gameRequest(() => _client.game.applyCommand(value)),
+      reconnect: reconnect,
       decoder: _decoder,
     );
   }

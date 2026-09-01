@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aonw_engine_client/aonw_engine_client.dart';
+import 'package:aonw_flutter/features/multiplayer/application/multiplayer_session_port.dart';
 import 'package:aonw_flutter/features/multiplayer/infrastructure/serverpod_game_transport.dart';
 import 'package:aonw_server_client/aonw_server_client.dart' as server;
 import 'package:flutter_test/flutter_test.dart';
@@ -22,6 +23,7 @@ void main() {
         );
       },
       command: (_) => throw UnimplementedError(),
+      reconnect: () => throw UnimplementedError(),
       commandIdFactory: () => 'command-1',
     );
     addTearDown(transport.close);
@@ -50,6 +52,7 @@ void main() {
         captured = request;
         throw failure;
       },
+      reconnect: () => throw UnimplementedError(),
       commandIdFactory: () => 'command-1',
     );
     addTearDown(transport.close);
@@ -73,6 +76,7 @@ void main() {
       resync: (_) => throw UnimplementedError(),
       query: (_) => throw UnimplementedError(),
       command: (_) => throw UnimplementedError(),
+      reconnect: () => throw UnimplementedError(),
       commandIdFactory: () => 'command-1',
     );
 
@@ -85,5 +89,38 @@ void main() {
       transport.send(AonwClientRequest.snapshot()),
       throwsStateError,
     );
+  });
+
+  test('retries an interrupted command with the same identity', () async {
+    final commandIds = <String>[];
+    var reconnectCalls = 0;
+    final retryFailure = StateError('retry reached');
+    final transport = ServerpodGameTransport(
+      matchId: 'match-1',
+      resync: (_) => throw UnimplementedError(),
+      query: (_) => throw UnimplementedError(),
+      command: (request) async {
+        commandIds.add(request.clientCommandId);
+        if (commandIds.length == 1) {
+          throw const MultiplayerSessionException(
+            code: 'connection_interrupted',
+            message: 'Connection interrupted.',
+            retryable: true,
+          );
+        }
+        throw retryFailure;
+      },
+      reconnect: () async => reconnectCalls += 1,
+      commandIdFactory: () => 'command-1',
+    );
+    addTearDown(transport.close);
+
+    await expectLater(
+      transport.send(AonwClientRequest.endTurn(expectedRevision: 7)),
+      throwsA(same(retryFailure)),
+    );
+
+    expect(reconnectCalls, 1);
+    expect(commandIds, ['command-1', 'command-1']);
   });
 }

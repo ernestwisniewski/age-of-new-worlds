@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_server_client/aonw_server_client.dart' as server;
 
+import '../application/multiplayer_session_port.dart';
 import 'server_projection_decoder.dart';
 
 typedef ServerpodGameResync =
@@ -16,6 +17,7 @@ typedef ServerpodGameCommand =
     Future<server.GameCommandOutcome> Function(
       server.GamePlayerCommandRequest request,
     );
+typedef ServerpodGameReconnect = Future<void> Function();
 typedef ServerpodCommandIdFactory = String Function();
 
 /// Adapts authenticated Serverpod gameplay to the shared local client protocol.
@@ -25,6 +27,7 @@ final class ServerpodGameTransport implements AonwEngineSession {
     required ServerpodGameResync resync,
     required ServerpodGameQuery query,
     required ServerpodGameCommand command,
+    required ServerpodGameReconnect reconnect,
     ServerProjectionDecoder decoder = const ServerProjectionDecoder(),
     ServerpodCommandIdFactory? commandIdFactory,
     Random? secureRandom,
@@ -32,6 +35,7 @@ final class ServerpodGameTransport implements AonwEngineSession {
        _resync = resync,
        _query = query,
        _command = command,
+       _reconnect = reconnect,
        _decoder = decoder,
        _commandIdFactory =
            commandIdFactory ??
@@ -43,6 +47,7 @@ final class ServerpodGameTransport implements AonwEngineSession {
   final ServerpodGameResync _resync;
   final ServerpodGameQuery _query;
   final ServerpodGameCommand _command;
+  final ServerpodGameReconnect _reconnect;
   final ServerProjectionDecoder _decoder;
   final ServerpodCommandIdFactory _commandIdFactory;
   var _closed = false;
@@ -71,19 +76,18 @@ final class ServerpodGameTransport implements AonwEngineSession {
 
   Future<String> _snapshot(Map<String, Object?> request) async {
     _expectKeys(request, const {'type'}, 'snapshot request');
-    final response = await _resync(_matchId);
+    final response = await _withReconnect(() => _resync(_matchId));
     _requireMatch(response.matchId);
     return _decoder.snapshotResponseJson(response);
   }
 
   Future<String> _executeQuery(Map<String, Object?> request) async {
     _expectKeys(request, const {'type', 'query'}, 'query request');
-    final response = await _query(
-      server.GamePlayerQueryRequest(
-        matchId: _matchId,
-        queryJson: jsonEncode(_object(request['query'], 'player query')),
-      ),
+    final query = server.GamePlayerQueryRequest(
+      matchId: _matchId,
+      queryJson: jsonEncode(_object(request['query'], 'player query')),
     );
+    final response = await _withReconnect(() => _query(query));
     _requireMatch(response.matchId);
     return _decoder.queryResponseJson(response);
   }
@@ -91,13 +95,12 @@ final class ServerpodGameTransport implements AonwEngineSession {
   Future<String> _executeCommand(Map<String, Object?> request) async {
     _expectKeys(request, const {'type', 'command'}, 'dispatch request');
     final commandId = _identifier(_commandIdFactory(), 'client command id');
-    final response = await _command(
-      server.GamePlayerCommandRequest(
-        matchId: _matchId,
-        clientCommandId: commandId,
-        commandJson: jsonEncode(_object(request['command'], 'player command')),
-      ),
+    final command = server.GamePlayerCommandRequest(
+      matchId: _matchId,
+      clientCommandId: commandId,
+      commandJson: jsonEncode(_object(request['command'], 'player command')),
     );
+    final response = await _withReconnect(() => _command(command));
     _requireMatch(response.matchId);
     if (response.clientCommandId != commandId) {
       throw const FormatException(
@@ -105,6 +108,19 @@ final class ServerpodGameTransport implements AonwEngineSession {
       );
     }
     return _decoder.commandResponseJson(response);
+  }
+
+  Future<T> _withReconnect<T>(Future<T> Function() request) async {
+    try {
+      return await request();
+    } on MultiplayerSessionException catch (error) {
+      if (!error.retryable) rethrow;
+      await _reconnect();
+      if (_closed) {
+        throw StateError('The Serverpod game transport is closed.');
+      }
+      return request();
+    }
   }
 
   void _requireMatch(String value) {
