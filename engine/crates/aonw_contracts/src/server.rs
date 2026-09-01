@@ -3,8 +3,9 @@
 use serde::{Deserialize, Serialize};
 
 use crate::client::{
-    ClientCommandDto, ClientCommandRejectionCodeDto, ClientEventDto, ClientEvidenceDto,
-    ClientSessionStampDto, PlayerViewPatchDto, PlayerViewSnapshotDto,
+    ClientCommandDto, ClientCommandRejectionCodeDto, ClientErrorDto, ClientEventDto,
+    ClientEvidenceDto, ClientQueryDto, ClientQueryResultDto, ClientSessionStampDto,
+    PlayerViewPatchDto, PlayerViewSnapshotDto,
 };
 use crate::{GameStateDto, MatchIdentityDto};
 
@@ -96,6 +97,24 @@ pub struct PlayerCommandServerRequestDto {
     /// Exact ruleset identity stored with the match row.
     pub ruleset_hash: String,
     /// Canonical state locked by the Serverpod transaction.
+    pub state: GameStateDto,
+}
+
+/// Strict request for one authenticated recipient-safe player query.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PlayerQueryServerRequestDto {
+    /// Independently deployed server-host protocol version.
+    pub api_version: u16,
+    /// Actor derived by Serverpod from its authenticated session.
+    pub authenticated_actor_player_id: String,
+    /// Closed query shared with local clients.
+    pub query: ClientQueryDto,
+    /// Exact map identity stored with the match row.
+    pub map_hash: String,
+    /// Exact ruleset identity stored with the match row.
+    pub ruleset_hash: String,
+    /// Canonical state loaded by the Serverpod request.
     pub state: GameStateDto,
 }
 
@@ -227,6 +246,27 @@ pub struct ServerCommandResultDto {
     pub recipients: Vec<ServerRecipientOutcomeDto>,
 }
 
+/// Recipient-safe result or stable game rejection from one player query.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(
+    tag = "status",
+    rename_all = "camelCase",
+    rename_all_fields = "camelCase",
+    deny_unknown_fields
+)]
+pub enum ServerPlayerQueryOutcomeDto {
+    /// Query completed against the authenticated recipient context.
+    Success {
+        /// Exact result shape shared with local clients.
+        result: Box<ClientQueryResultDto>,
+    },
+    /// Query was invalid or rejected without mutating canonical state.
+    Failure {
+        /// Stable client-facing code and diagnostic.
+        error: ClientErrorDto,
+    },
+}
+
 /// Successful stateless native host result.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(
@@ -257,6 +297,11 @@ pub enum ServerHostResponseBodyDto {
     CommandApplied {
         /// Transactional command result.
         result: Box<ServerCommandResultDto>,
+    },
+    /// One read-only authenticated query completed without retaining state.
+    PlayerQueryExecuted {
+        /// Recipient-safe result or stable query rejection.
+        result: Box<ServerPlayerQueryOutcomeDto>,
     },
 }
 
@@ -314,6 +359,17 @@ impl SubmitTurnServerRequestDto {
 }
 
 impl PlayerCommandServerRequestDto {
+    /// Parses one bounded strict request.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for oversized or structurally invalid JSON.
+    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
+        parse_bounded(input)
+    }
+}
+
+impl PlayerQueryServerRequestDto {
     /// Parses one bounded strict request.
     ///
     /// # Errors

@@ -4,7 +4,7 @@ use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{GameState, PlayerId};
 use aonw_engine::{
     CanonicalEngineError, CanonicalQueryError, CommandRejectionCode, CompiledMovementMap,
-    CompiledMovementMapError, DomainEvent, ExecutionEvidence,
+    CompiledMovementMapError, DomainEvent, ExecutionEvidence, QueryResult,
 };
 use aonw_projection::{PlayerViewPatch, PlayerViewSnapshot, RecipientDisclosure, SessionStamp};
 
@@ -98,6 +98,35 @@ pub struct ServerCommandOutcome {
     /// Projection, patch, and filtered events for every canonical participant.
     pub recipients: Box<[RecipientOutcome]>,
 }
+
+/// Recipient-safe result from one stateless authenticated query.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ServerPlayerQueryOutcome {
+    /// Canonical identity used by the query result.
+    pub stamp: SessionStamp,
+    /// Engine-owned query result before strict client encoding.
+    pub result: QueryResult,
+}
+
+/// Failure while executing a stateless authenticated query.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ServerPlayerQueryError {
+    /// Canonical state, content, or actor failed host validation.
+    Host(ServerHostError),
+    /// Deterministic game rules rejected the read-only query.
+    Query(CanonicalQueryError),
+}
+
+impl core::fmt::Display for ServerPlayerQueryError {
+    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Self::Host(source) => source.fmt(formatter),
+            Self::Query(source) => source.fmt(formatter),
+        }
+    }
+}
+
+impl std::error::Error for ServerPlayerQueryError {}
 
 /// Failure before an outcome can be safely persisted.
 #[derive(Clone, Debug, Eq, PartialEq)]

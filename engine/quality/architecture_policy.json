@@ -80,6 +80,7 @@
       "normal:aonw_server_runtime"
     ],
     "aonw_server_runtime": [
+      "dev:aonw_local_runtime",
       "normal:aonw_content",
       "normal:aonw_contract_mapping",
       "normal:aonw_contracts",

@@ -10,6 +10,7 @@ mod client_projection;
 mod client_rejection;
 mod game_state_mapping;
 mod player_command;
+mod player_query;
 
 pub use client_projection::{
     encode_client_event, encode_client_evidence, encode_client_stamp, encode_combat_preview,
@@ -18,6 +19,9 @@ pub use client_projection::{
 };
 pub use client_rejection::encode_command_rejection;
 pub use player_command::{PlayerCommandMappingError, decode_client_player_command};
+pub use player_query::{
+    PlayerQueryMappingError, decode_client_player_query, encode_client_query_result,
+};
 
 pub use game_state_mapping::{
     GameStateMappingError, canonicalize_game_state, decode_city_building, decode_city_project,

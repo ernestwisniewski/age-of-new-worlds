@@ -179,6 +179,7 @@ dependencies = [
  "aonw_contracts",
  "aonw_domain",
  "aonw_engine",
+ "aonw_local_runtime",
  "aonw_projection",
  "serde_json",
 ]

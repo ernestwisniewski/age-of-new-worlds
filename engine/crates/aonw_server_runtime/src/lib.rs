@@ -6,15 +6,18 @@ use std::sync::Arc;
 
 use aonw_content::{MapDocument, RulesetDefinition, ScenarioDefinition};
 use aonw_contract_mapping::{
-    decode_client_player_command, decode_game_state, decode_match_identity, encode_client_event,
-    encode_client_evidence, encode_client_stamp, encode_command_rejection, encode_game_state,
-    encode_player_view_patch, encode_player_view_snapshot, encode_recipient_evidence,
+    decode_client_player_command, decode_client_player_query, decode_game_state,
+    decode_match_identity, encode_client_event, encode_client_evidence, encode_client_query_result,
+    encode_client_stamp, encode_command_rejection, encode_game_state, encode_player_view_patch,
+    encode_player_view_snapshot, encode_recipient_evidence,
 };
+use aonw_contracts::client::ClientErrorDto;
 use aonw_contracts::server::{
-    CreateServerMatchRequestDto, PlayerCommandServerRequestDto, PrepareServerWorldRequestDto,
-    ProjectServerStateRequestDto, SERVER_HOST_API_VERSION, ServerCommandResultDto,
-    ServerCreatedMatchDto, ServerHostErrorCodeDto, ServerProjectionResultDto,
-    ServerRecipientOutcomeDto, ServerRecipientSnapshotDto, SubmitTurnServerRequestDto,
+    CreateServerMatchRequestDto, PlayerCommandServerRequestDto, PlayerQueryServerRequestDto,
+    PrepareServerWorldRequestDto, ProjectServerStateRequestDto, SERVER_HOST_API_VERSION,
+    ServerCommandResultDto, ServerCreatedMatchDto, ServerHostErrorCodeDto,
+    ServerPlayerQueryOutcomeDto, ServerProjectionResultDto, ServerRecipientOutcomeDto,
+    ServerRecipientSnapshotDto, SubmitTurnServerRequestDto,
 };
 use aonw_domain::{GameMode, GameState, PlayerId, TurnMode};
 use aonw_engine::{GameEngine, start_match};
@@ -23,10 +26,13 @@ use aonw_projection::{ProjectedView, SessionStamp};
 mod host;
 mod model;
 
-pub use host::{PlayerCommandRequest, apply_player_command, apply_submit_turn};
+pub use host::{
+    PlayerCommandRequest, PlayerQueryRequest, apply_player_command, apply_submit_turn, query_player,
+};
 pub(crate) use model::validate_state;
 pub use model::{
-    PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError, SubmitTurnRequest,
+    PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError,
+    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest,
 };
 
 /// Failure while validating or mapping the strict current server DTO boundary.
@@ -218,6 +224,44 @@ pub fn apply_player_command_dto(
     Ok(encode_server_command_result(&outcome))
 }
 
+/// Executes one strict current player-query DTO in recipient context.
+///
+/// Query validation and deterministic rule rejections are returned as a
+/// client-facing failure value. Boundary, identity, and canonical-state errors
+/// remain host failures.
+///
+/// # Errors
+///
+/// Returns an error for another API version, mismatched immutable content,
+/// invalid canonical state, or an unauthenticated participant identity.
+pub fn query_player_dto(
+    world: PreparedServerWorld,
+    request: PlayerQueryServerRequestDto,
+) -> Result<ServerPlayerQueryOutcomeDto, ServerBoundaryError> {
+    require_api_version(request.api_version)?;
+    validate_content_identity(&world, &request.map_hash, &request.ruleset_hash)?;
+    let actor = PlayerId::new(request.authenticated_actor_player_id)
+        .map_err(|error| ServerBoundaryError::InvalidAuthenticatedActor(error.to_string()))?;
+    let state = decode_game_state(request.state)
+        .map_err(|error| ServerBoundaryError::InvalidCanonicalState(error.to_string()))?;
+    let request_actor = actor.clone();
+    match decode_client_player_query(request.query, move |query| {
+        query_player(PlayerQueryRequest {
+            state,
+            world,
+            authenticated_actor: request_actor,
+            query,
+        })
+    }) {
+        Err(error) => Ok(query_failure(error.code(), error)),
+        Ok(Err(ServerPlayerQueryError::Query(error))) => Ok(query_failure(error.code(), error)),
+        Ok(Err(ServerPlayerQueryError::Host(error))) => Err(ServerBoundaryError::Host(error)),
+        Ok(Ok(outcome)) => Ok(ServerPlayerQueryOutcomeDto::Success {
+            result: Box::new(encode_client_query_result(outcome.stamp, &outcome.result)),
+        }),
+    }
+}
+
 /// Validates and projects a strict current canonical state for every participant.
 ///
 /// This is used when a match is created so the database can store only
@@ -358,5 +402,14 @@ fn encode_server_command_result(outcome: &ServerCommandOutcome) -> ServerCommand
                 }),
             })
             .collect(),
+    }
+}
+
+fn query_failure(code: &str, error: impl core::fmt::Display) -> ServerPlayerQueryOutcomeDto {
+    ServerPlayerQueryOutcomeDto::Failure {
+        error: ClientErrorDto {
+            code: code.to_owned(),
+            message: error.to_string(),
+        },
     }
 }

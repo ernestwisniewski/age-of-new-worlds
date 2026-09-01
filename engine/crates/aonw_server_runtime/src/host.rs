@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use aonw_domain::{GameState, PlayerId};
 use aonw_engine::{
-    DomainEvent, EngineContext, ExecutionEvidence, GameEngine, MovementVisibility, PlayerCommand,
-    TurnCommand,
+    DomainEvent, EngineContext, ExecutionEvidence, GameEngine, GameQuery, MovementVisibility,
+    PlayerCommand, TurnCommand,
 };
 use aonw_projection::{
     ProjectedView, RecipientDisclosure, SessionStamp, diff_view, unchanged_view,
@@ -11,7 +11,7 @@ use aonw_projection::{
 
 use crate::{
     PreparedServerWorld, RecipientOutcome, ServerCommandOutcome, ServerHostError,
-    SubmitTurnRequest, validate_state,
+    ServerPlayerQueryError, ServerPlayerQueryOutcome, SubmitTurnRequest, validate_state,
 };
 
 /// Complete trusted input for one authenticated player command.
@@ -31,6 +31,19 @@ pub struct PlayerCommandRequest<'command> {
     pub command: PlayerCommand<'command>,
     /// Durable offset immediately before this command.
     pub initial_event_offset: u64,
+}
+
+/// Complete trusted input for one authenticated player query.
+#[derive(Clone, Debug)]
+pub struct PlayerQueryRequest<'query> {
+    /// Canonical state loaded by the server request.
+    pub state: GameState,
+    /// Immutable map and rules prepared outside the request.
+    pub world: PreparedServerWorld,
+    /// Player identity derived from the authenticated server session.
+    pub authenticated_actor: PlayerId,
+    /// Strict read-only query decoded by the trusted boundary.
+    pub query: GameQuery<'query>,
 }
 
 /// Applies one authenticated `SubmitTurn` without retaining process-local session state.
@@ -155,6 +168,52 @@ pub fn apply_player_command(
         initial_event_offset,
         final_event_offset,
         recipients,
+    })
+}
+
+/// Executes one authenticated player query without retaining match state.
+///
+/// # Errors
+///
+/// Returns a host error for invalid state/content/actor invariants or a stable
+/// canonical query rejection. No canonical state can be mutated by this call.
+pub fn query_player(
+    request: PlayerQueryRequest<'_>,
+) -> Result<ServerPlayerQueryOutcome, ServerPlayerQueryError> {
+    validate_state(&request.state, &request.world).map_err(ServerPlayerQueryError::Host)?;
+    if !request
+        .state
+        .match_lifecycle()
+        .identity()
+        .contains(&request.authenticated_actor)
+    {
+        return Err(ServerPlayerQueryError::Host(
+            ServerHostError::UnknownAuthenticatedActor(request.authenticated_actor),
+        ));
+    }
+    let compiled = request.world.compiled();
+    let visibility = MovementVisibility::for_player(
+        &request.state,
+        compiled.map(),
+        &request.authenticated_actor,
+    );
+    let context = EngineContext::canonical(
+        &request.authenticated_actor,
+        compiled.map(),
+        compiled.ruleset(),
+    )
+    .with_compiled_movement_map(compiled)
+    .with_movement_visibility(&visibility);
+    let result = GameEngine::query(&request.state, context, request.query)
+        .map_err(ServerPlayerQueryError::Query)?;
+    Ok(ServerPlayerQueryOutcome {
+        stamp: SessionStamp {
+            revision: request.state.revision(),
+            state_digest: GameEngine::state_digest(&request.state),
+            map_hash: request.world.map_hash(),
+            ruleset_hash: request.world.ruleset_hash(),
+        },
+        result,
     })
 }
 
