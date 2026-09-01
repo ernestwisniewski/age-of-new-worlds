@@ -56,6 +56,7 @@ part 'engine_game_artifact_session.dart';
 part 'engine_game_city_session.dart';
 part 'engine_game_production_session.dart';
 part 'engine_game_replay_session.dart';
+part 'engine_game_remote_session.dart';
 part 'engine_game_session_gateway_support.dart';
 part 'engine_game_worker_session.dart';
 

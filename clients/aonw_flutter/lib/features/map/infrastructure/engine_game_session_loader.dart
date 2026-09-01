@@ -10,6 +10,8 @@ import 'map_view_mapper.dart';
 import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';
 
+part 'engine_game_session_loader_remote.dart';
+
 typedef EngineSessionFactory = Future<AonwEngineSession?> Function();
 
 final class PreparedEngineGameSession {
