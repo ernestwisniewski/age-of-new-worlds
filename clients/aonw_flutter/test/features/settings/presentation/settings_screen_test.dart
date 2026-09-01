@@ -50,6 +50,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
     await tester.pumpAndSettle();
     for (final key in const [
+      'map-grid-setting',
       'map-resource-icons-setting',
       'map-terrain-icons-setting',
       'map-height-badges-setting',
@@ -65,6 +66,7 @@ void main() {
     expect(store.settings.cameraSensitivity, 1.5);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
+    expect(store.settings.showMapGrid, isTrue);
     expect(store.settings.showMapElevationWalls, isTrue);
     expect(store.settings.showMapTerrainIcons, isTrue);
     expect(store.settings.showMapResourceIcons, isFalse);

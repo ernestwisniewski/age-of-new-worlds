@@ -1194,6 +1194,12 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get mapSettings => 'Map';
 
   @override
+  String get mapGrid => 'Hex borders';
+
+  @override
+  String get mapGridDescription => 'Show black borders around map hexes.';
+
+  @override
   String get mapResourceIcons => 'Resource icons';
 
   @override

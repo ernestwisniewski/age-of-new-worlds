@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../read_model/map_view.dart';
 
 abstract final class MapPalette {
-  static const grid = Color(0x00000000);
+  static const grid = Color(0xFF000000);
   static const hover = Color(0xFFE7F1F6);
   static const selection = Color(0xFFFFC857);
   static const reachable = Color(0x5534D6C7);

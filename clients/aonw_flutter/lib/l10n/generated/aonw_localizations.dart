@@ -1616,6 +1616,18 @@ abstract class AonwLocalizations {
   /// **'Map'**
   String get mapSettings;
 
+  /// No description provided for @mapGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Hex borders'**
+  String get mapGrid;
+
+  /// No description provided for @mapGridDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show black borders around map hexes.'**
+  String get mapGridDescription;
+
   /// No description provided for @mapResourceIcons.
   ///
   /// In en, this message translates to:

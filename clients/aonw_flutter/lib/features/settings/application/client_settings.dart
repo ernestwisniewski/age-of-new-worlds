@@ -4,6 +4,7 @@ final class ClientSettings {
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
+    required this.showMapGrid,
     required this.showMapElevationWalls,
     required this.showMapTerrainIcons,
     required this.showMapResourceIcons,
@@ -16,6 +17,7 @@ final class ClientSettings {
     cameraSensitivity: 1,
     reducedMotion: false,
     highContrast: false,
+    showMapGrid: false,
     showMapElevationWalls: false,
     showMapTerrainIcons: false,
     showMapResourceIcons: true,
@@ -26,6 +28,7 @@ final class ClientSettings {
   final double cameraSensitivity;
   final bool reducedMotion;
   final bool highContrast;
+  final bool showMapGrid;
   final bool showMapElevationWalls;
   final bool showMapTerrainIcons;
   final bool showMapResourceIcons;
@@ -36,6 +39,7 @@ final class ClientSettings {
     double? cameraSensitivity,
     bool? reducedMotion,
     bool? highContrast,
+    bool? showMapGrid,
     bool? showMapElevationWalls,
     bool? showMapTerrainIcons,
     bool? showMapResourceIcons,
@@ -45,6 +49,7 @@ final class ClientSettings {
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     reducedMotion: reducedMotion ?? this.reducedMotion,
     highContrast: highContrast ?? this.highContrast,
+    showMapGrid: showMapGrid ?? this.showMapGrid,
     showMapElevationWalls: showMapElevationWalls ?? this.showMapElevationWalls,
     showMapTerrainIcons: showMapTerrainIcons ?? this.showMapTerrainIcons,
     showMapResourceIcons: showMapResourceIcons ?? this.showMapResourceIcons,
@@ -58,6 +63,7 @@ final class ClientSettings {
       other.cameraSensitivity == cameraSensitivity &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
+      other.showMapGrid == showMapGrid &&
       other.showMapElevationWalls == showMapElevationWalls &&
       other.showMapTerrainIcons == showMapTerrainIcons &&
       other.showMapResourceIcons == showMapResourceIcons &&
@@ -69,6 +75,7 @@ final class ClientSettings {
     cameraSensitivity,
     reducedMotion,
     highContrast,
+    showMapGrid,
     showMapElevationWalls,
     showMapTerrainIcons,
     showMapResourceIcons,

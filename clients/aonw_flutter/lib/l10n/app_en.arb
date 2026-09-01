@@ -354,6 +354,8 @@
   "cameraSettings": "Camera",
   "cameraSensitivity": "Zoom sensitivity",
   "mapSettings": "Map",
+  "mapGrid": "Hex borders",
+  "mapGridDescription": "Show black borders around map hexes.",
   "mapResourceIcons": "Resource icons",
   "mapResourceIconsDescription": "Show resources available on map hexes.",
   "mapTerrainIcons": "Terrain icons",

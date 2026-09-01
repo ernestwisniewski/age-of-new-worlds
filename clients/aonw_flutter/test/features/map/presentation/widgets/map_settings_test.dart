@@ -10,7 +10,7 @@ import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('applies camera client preference', (tester) async {
+  testWidgets('applies live camera and map client preferences', (tester) async {
     final settings = ClientSettingsController.ephemeral();
     await settings.update(
       ClientSettings.defaults.copyWith(cameraSensitivity: 2),
@@ -37,5 +37,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(flameGame.inputSurface.debugCameraSensitivity, 2);
+    expect(flameGame.world.gridLayer.isVisible, isFalse);
+    final sceneWrites = flameGame.world.debugSceneWriteCount;
+
+    await settings.update(settings.settings.copyWith(showMapGrid: true));
+    await tester.pump();
+
+    expect(flameGame.world.gridLayer.debugGridVisible, isTrue);
+    expect(flameGame.world.gridLayer.isVisible, isTrue);
+    expect(flameGame.world.debugSceneWriteCount, sceneWrites);
   });
 }

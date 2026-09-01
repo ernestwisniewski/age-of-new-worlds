@@ -172,6 +172,7 @@ final class _MapScreenState extends State<MapScreen>
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
     _flameGame.setMapDisplayOptions(
       MapDisplayOptions(
+        showGrid: settings.showMapGrid,
         showElevationWalls: settings.showMapElevationWalls,
         showTerrainIcons: settings.showMapTerrainIcons,
         showResourceIcons: settings.showMapResourceIcons,

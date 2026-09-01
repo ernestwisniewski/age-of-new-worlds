@@ -119,7 +119,7 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   @visibleForTesting
   MapViewMode get debugViewMode => _viewMode;
 
-  bool setElevationWallsVisible(bool visible) {
+  bool setWalls(bool visible) {
     if (_elevationWallsVisible == visible) return false;
     _elevationWallsVisible = visible;
     return true;
@@ -313,23 +313,38 @@ final class MapGridLayerComponent extends Component with HasVisibility {
     ..strokeWidth = 1.2;
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
+  var _gridVisible = false;
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
 
   @visibleForTesting
+  bool get debugGridVisible => _gridVisible;
+
+  @visibleForTesting
   MapStaticRenderIdentity? get debugIdentity => _cache?.identity;
+
+  bool setGridVisible(bool visible) {
+    if (_gridVisible == visible) return false;
+    _gridVisible = visible;
+    _updateVisibility();
+    return true;
+  }
 
   void applyCache(MapStaticRenderCache cache) {
     if (_cache?.identity == cache.identity) return;
     _cache = cache;
     _cacheUpdateCount += 1;
-    isVisible = true;
+    _updateVisibility();
   }
 
   void clearCache() {
     _cache = null;
     isVisible = false;
+  }
+
+  void _updateVisibility() {
+    isVisible = _cache != null && _gridVisible;
   }
 
   @override

@@ -261,6 +261,8 @@
   "cameraSettings": "Kamera",
   "cameraSensitivity": "Czułość przybliżenia",
   "mapSettings": "Mapa",
+  "mapGrid": "Obramowanie heksów",
+  "mapGridDescription": "Pokazuj czarne obramowanie heksów mapy.",
   "mapResourceIcons": "Ikony zasobów",
   "mapResourceIconsDescription": "Pokazuj zasoby dostępne na heksach mapy.",
   "mapTerrainIcons": "Ikony terenu",

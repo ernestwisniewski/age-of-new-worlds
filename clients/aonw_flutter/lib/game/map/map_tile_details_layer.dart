@@ -207,7 +207,11 @@ final class MapTileDetailsLayerComponent extends Component
   Future<void> debugPreloadVisibleFrames() => _preloadVisibleFrames();
 
   bool setOptions(MapDisplayOptions options) {
-    if (_options == options) return false;
+    if (_options.showTerrainIcons == options.showTerrainIcons &&
+        _options.showResourceIcons == options.showResourceIcons &&
+        _options.showHeightBadges == options.showHeightBadges) {
+      return false;
+    }
     _options = options;
     _updateVisibility();
     if (isLoaded) unawaited(_preloadVisibleFrames());

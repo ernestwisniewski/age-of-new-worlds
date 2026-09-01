@@ -71,6 +71,7 @@ void main() {
       game.sceneSink.replaceScene(snapshot);
       await game.ready();
 
+      expect(game.world.gridLayer.debugGridVisible, isFalse);
       expect(game.world.terrainLayer.debugElevationWallsVisible, isFalse);
       expect(
         game.world.tileDetailsLayer.debugOptions.showResourceIcons,
@@ -78,6 +79,7 @@ void main() {
       );
       game.setMapDisplayOptions(
         const MapDisplayOptions(
+          showGrid: true,
           showElevationWalls: true,
           showTerrainIcons: true,
           showResourceIcons: false,
@@ -85,6 +87,8 @@ void main() {
         ),
       );
 
+      expect(game.world.gridLayer.debugGridVisible, isTrue);
+      expect(game.world.gridLayer.isVisible, isTrue);
       expect(game.world.terrainLayer.debugElevationWallsVisible, isTrue);
       expect(game.world.tileDetailsLayer.debugOptions.showTerrainIcons, isTrue);
       expect(

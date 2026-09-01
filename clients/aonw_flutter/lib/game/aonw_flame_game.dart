@@ -84,11 +84,10 @@ final class AonwWorld extends World implements FlameSceneSink {
   MapStaticRenderCache? get debugStaticRenderCache => _staticCache;
   MapStaticRenderCache? get _staticRenderCacheForGame => _staticCache;
   bool applyMapDisplayOptions(MapDisplayOptions options) {
-    final terrainChanged = terrainLayer.setElevationWallsVisible(
-      options.showElevationWalls,
-    );
+    final gridChanged = gridLayer.setGridVisible(options.showGrid);
+    final wallsChanged = terrainLayer.setWalls(options.showElevationWalls);
     final detailsChanged = tileDetailsLayer.setOptions(options);
-    return terrainChanged || detailsChanged;
+    return gridChanged || wallsChanged || detailsChanged;
   }
 
   @override

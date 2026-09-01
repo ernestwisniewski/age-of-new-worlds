@@ -1197,6 +1197,12 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get mapSettings => 'Mapa';
 
   @override
+  String get mapGrid => 'Obramowanie heksów';
+
+  @override
+  String get mapGridDescription => 'Pokazuj czarne obramowanie heksów mapy.';
+
+  @override
   String get mapResourceIcons => 'Ikony zasobów';
 
   @override

@@ -72,6 +72,18 @@ void main() {
     expect(layer.isVisible, isFalse);
   });
 
+  test('grid follows the explicit legacy hex border option', () {
+    final layer = MapGridLayerComponent();
+    layer.applyCache(MapStaticRenderCache.build(testMapScene().map));
+
+    expect(layer.debugGridVisible, isFalse);
+    expect(layer.isVisible, isFalse);
+    expect(layer.setGridVisible(true), isTrue);
+    expect(layer.isVisible, isTrue);
+    expect(layer.setGridVisible(true), isFalse);
+    expect(layer.debugCacheUpdateCount, 1);
+  });
+
   testWithGame<AonwFlameGame>(
     'keeps four batched static layers before ordered gameplay layers',
     AonwFlameGame.new,

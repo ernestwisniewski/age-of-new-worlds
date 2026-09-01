@@ -66,6 +66,11 @@ void main() {
     layer.applyMap(map, cache);
     expect(layer.debugCacheUpdateCount, 1);
 
+    expect(
+      layer.setOptions(const MapDisplayOptions(showGrid: true)),
+      isFalse,
+      reason: 'grid visibility does not invalidate tile details',
+    );
     layer.setOptions(const MapDisplayOptions(showResourceIcons: false));
     expect(layer.isVisible, isFalse);
   });

@@ -110,6 +110,14 @@ final class _MapSettings extends StatelessWidget {
     return Column(
       children: [
         _MapSetting(
+          key: const ValueKey('map-grid-setting'),
+          title: l10n.mapGrid,
+          description: l10n.mapGridDescription,
+          value: settings.showMapGrid,
+          onChanged: (value) =>
+              onChanged(settings.copyWith(showMapGrid: value)),
+        ),
+        _MapSetting(
           key: const ValueKey('map-resource-icons-setting'),
           title: l10n.mapResourceIcons,
           description: l10n.mapResourceIconsDescription,

@@ -12,6 +12,7 @@ final class SharedPreferencesClientSettingsStore
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
   static const _reducedMotionKey = 'aonw.settings.reducedMotion';
   static const _highContrastKey = 'aonw.settings.highContrast';
+  static const _showMapGridKey = 'aonw.settings.showMapGrid';
   static const _showMapElevationWallsKey =
       'aonw.settings.showMapElevationWalls';
   static const _showMapTerrainIconsKey = 'aonw.settings.showMapTerrainIcons';
@@ -28,6 +29,7 @@ final class SharedPreferencesClientSettingsStore
     );
     final reducedMotion = await _preferences.getBool(_reducedMotionKey);
     final highContrast = await _preferences.getBool(_highContrastKey);
+    final showMapGrid = await _preferences.getBool(_showMapGridKey);
     final showMapElevationWalls = await _preferences.getBool(
       _showMapElevationWallsKey,
     );
@@ -55,6 +57,7 @@ final class SharedPreferencesClientSettingsStore
       ),
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
+      showMapGrid: showMapGrid ?? ClientSettings.defaults.showMapGrid,
       showMapElevationWalls:
           showMapElevationWalls ??
           ClientSettings.defaults.showMapElevationWalls,
@@ -76,6 +79,7 @@ final class SharedPreferencesClientSettingsStore
     );
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
     await _preferences.setBool(_highContrastKey, settings.highContrast);
+    await _preferences.setBool(_showMapGridKey, settings.showMapGrid);
     await _preferences.setBool(
       _showMapElevationWallsKey,
       settings.showMapElevationWalls,
