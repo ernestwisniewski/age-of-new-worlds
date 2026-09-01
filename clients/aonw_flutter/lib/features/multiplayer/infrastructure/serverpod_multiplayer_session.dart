@@ -12,6 +12,8 @@ import 'server_connection_config.dart';
 import 'server_projection_decoder.dart';
 import 'serverpod_game_transport.dart';
 
+part 'serverpod_multiplayer_lifecycle.dart';
+
 final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
   ServerpodMultiplayerSession({
     required ServerConnectionConfig config,
@@ -130,61 +132,36 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     _ensureAuthenticated();
     try {
       final matches = await _client.game.listMatches();
-      return [for (final match in matches) _match(match)];
+      return [for (final match in matches) _decodeMatch(match)];
     } on Object catch (error, stackTrace) {
       throw _translate(error, stackTrace);
     }
   }
 
   @override
-  Future<MultiplayerProjectionView> createMatch(
+  Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
-  ) async {
-    _ensureAuthenticated();
-    try {
-      final created = await _client.game.createMatch(
-        server.GameCreateMatchRequest(
-          mapId: documents.mapId,
-          mapDocument: documents.mapDocument,
-          scenarioDocument: documents.scenarioDocument,
-          rulesetId: documents.rulesetId,
-          matchIdentityJson: documents.matchIdentityDocument,
-          fogEnabled: documents.fogEnabled,
-          creatorPlayerId: documents.creatorPlayerId,
-        ),
-      );
-      final projection = _decoder.resync(
-        await _client.game.resync(created.matchId),
-      );
-      if (projection.revision != created.revision ||
-          projection.eventOffset != created.eventOffset ||
-          projection.playerId != documents.creatorPlayerId) {
-        throw const FormatException(
-          'Created match and initial projection do not agree.',
-        );
-      }
-      return projection;
-    } on Object catch (error, stackTrace) {
-      throw _translate(error, stackTrace);
-    }
-  }
+  ) => _createRemoteMatch(this, documents);
 
   @override
-  Future<MultiplayerProjectionView> joinMatch({
+  Future<MultiplayerMatchLobbyView> joinMatch({
     required String matchId,
     required String playerId,
-  }) async {
-    _ensureAuthenticated();
-    try {
-      return _decoder.resync(
-        await _client.game.joinMatch(
-          server.GameJoinMatchRequest(matchId: matchId, playerId: playerId),
-        ),
-      );
-    } on Object catch (error, stackTrace) {
-      throw _translate(error, stackTrace);
-    }
-  }
+  }) => _joinRemoteMatch(this, matchId: matchId, playerId: playerId);
+
+  @override
+  Future<MultiplayerMatchLobbyView> lobby(String matchId) =>
+      _loadRemoteLobby(this, matchId);
+
+  @override
+  Future<MultiplayerMatchLobbyView> setReady({
+    required String matchId,
+    required bool ready,
+  }) => _setRemoteReady(this, matchId: matchId, ready: ready);
+
+  @override
+  Future<MultiplayerMatchLobbyView> startMatch(String matchId) =>
+      _startRemoteMatch(this, matchId);
 
   @override
   Future<MultiplayerProjectionView> resync(String matchId) async {
@@ -362,27 +339,6 @@ final class _MutableAuthProvider implements server.ClientAuthKeyProvider {
     final value = token;
     return value == null ? null : server.wrapAsBearerAuthHeaderValue(value);
   }
-}
-
-MultiplayerMatchView _match(server.GameMatchView value) {
-  if (value.matchId.isEmpty ||
-      value.mapId.isEmpty ||
-      value.mapHash.isEmpty ||
-      value.rulesetId.isEmpty ||
-      value.rulesetHash.isEmpty ||
-      value.revision < 0 ||
-      value.eventOffset < 0) {
-    throw const FormatException('The server returned an invalid match.');
-  }
-  return MultiplayerMatchView(
-    matchId: value.matchId,
-    mapId: value.mapId,
-    mapHash: value.mapHash,
-    rulesetId: value.rulesetId,
-    rulesetHash: value.rulesetHash,
-    revision: value.revision,
-    eventOffset: value.eventOffset,
-  );
 }
 
 MultiplayerSessionException _translate(Object error, StackTrace stackTrace) {

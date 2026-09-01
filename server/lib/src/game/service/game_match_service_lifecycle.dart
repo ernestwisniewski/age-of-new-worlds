@@ -164,7 +164,22 @@ GameLobbyView _lobbyView(
 }
 
 void _requireHumanSeat(GameMatch match, String playerId) {
-  final participant = _canonicalParticipants(match)
+  _requireHumanParticipant(_canonicalParticipants(match), playerId);
+}
+
+void _requireHumanParticipantState(
+  Map<String, Object?> state,
+  String playerId,
+) {
+  final identity = _object(state['matchIdentity'], r'$.state.matchIdentity');
+  _requireHumanParticipant(
+    _list(identity['participants'], r'$.state.matchIdentity.participants'),
+    playerId,
+  );
+}
+
+void _requireHumanParticipant(List<Object?> participants, String playerId) {
+  final participant = participants
       .map((value) => _object(value, r'$.state.matchIdentity.participant'))
       .where((value) => _string(value['id'], r'$.participant.id') == playerId)
       .firstOrNull;

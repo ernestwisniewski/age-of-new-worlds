@@ -20,14 +20,23 @@ abstract interface class MultiplayerSessionPort {
 
   Future<List<MultiplayerMatchView>> listMatches();
 
-  Future<MultiplayerProjectionView> createMatch(
+  Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
   );
 
-  Future<MultiplayerProjectionView> joinMatch({
+  Future<MultiplayerMatchLobbyView> joinMatch({
     required String matchId,
     required String playerId,
   });
+
+  Future<MultiplayerMatchLobbyView> lobby(String matchId);
+
+  Future<MultiplayerMatchLobbyView> setReady({
+    required String matchId,
+    required bool ready,
+  });
+
+  Future<MultiplayerMatchLobbyView> startMatch(String matchId);
 
   Future<MultiplayerProjectionView> resync(String matchId);
 

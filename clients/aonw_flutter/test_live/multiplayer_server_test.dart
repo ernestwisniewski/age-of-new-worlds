@@ -51,11 +51,21 @@ void main() {
       final documents = AssetMultiplayerMatchDocumentSource.documentsFor(
         await File('assets/maps/aonw2_starter/map.json').readAsString(),
       );
-      final ownerInitial = await owner.createMatch(documents);
-      final guestInitial = await guest.joinMatch(
-        matchId: ownerInitial.matchId,
+      final ownerLobby = await owner.createMatch(documents);
+      final guestLobby = await guest.joinMatch(
+        matchId: ownerLobby.match.matchId,
         playerId: 'player-2',
       );
+      expect(ownerLobby.currentParticipant.playerId, 'player-1');
+      expect(guestLobby.currentParticipant.playerId, 'player-2');
+      await owner.setReady(matchId: ownerLobby.match.matchId, ready: true);
+      await guest.setReady(matchId: ownerLobby.match.matchId, ready: true);
+      final readyLobby = await owner.lobby(ownerLobby.match.matchId);
+      expect(readyLobby.canStart, isTrue);
+      final startedLobby = await owner.startMatch(ownerLobby.match.matchId);
+      expect(startedLobby.match.phase.name, 'running');
+      final ownerInitial = await owner.resync(ownerLobby.match.matchId);
+      final guestInitial = await guest.resync(ownerLobby.match.matchId);
       expect(ownerInitial.playerId, 'player-1');
       expect(guestInitial.playerId, 'player-2');
       expect(ownerInitial.visibleUnitCount, greaterThan(0));

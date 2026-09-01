@@ -73,3 +73,29 @@ final class MultiplayerInMatch extends MultiplayerState {
     failureCode: clearFailure ? null : failureCode ?? this.failureCode,
   );
 }
+
+final class MultiplayerWaitingRoom extends MultiplayerState {
+  const MultiplayerWaitingRoom({
+    required this.account,
+    required this.lobby,
+    this.busy = false,
+    this.failureCode,
+  });
+
+  final MultiplayerAccountView account;
+  final MultiplayerMatchLobbyView lobby;
+  final bool busy;
+  final String? failureCode;
+
+  MultiplayerWaitingRoom copyWith({
+    MultiplayerMatchLobbyView? lobby,
+    bool? busy,
+    String? failureCode,
+    bool clearFailure = false,
+  }) => MultiplayerWaitingRoom(
+    account: account,
+    lobby: lobby ?? this.lobby,
+    busy: busy ?? this.busy,
+    failureCode: clearFailure ? null : failureCode ?? this.failureCode,
+  );
+}

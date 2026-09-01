@@ -32,6 +32,8 @@ void main() {
     );
     await multiplayerController.initialize();
     await multiplayerController.createMatch();
+    await multiplayerController.setReady(true);
+    await multiplayerController.startMatch();
 
     await tester.pumpWidget(
       AonwApp(
@@ -54,7 +56,7 @@ void main() {
     ).pop();
     await tester.pumpAndSettle();
     expect(multiplayerSession.reconnectCalls, 1);
-    expect(multiplayerSession.resyncCalls, 1);
+    expect(multiplayerSession.resyncCalls, 2);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -88,6 +90,7 @@ final class _NetworkGameSession implements NetworkGameSessionPort {
 final class _MultiplayerSession implements MultiplayerSessionPort {
   var reconnectCalls = 0;
   var resyncCalls = 0;
+  var lobbyView = _routerLobby();
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async =>
@@ -97,9 +100,9 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
   Future<List<MultiplayerMatchView>> listMatches() async => const [];
 
   @override
-  Future<MultiplayerProjectionView> createMatch(
+  Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
-  ) async => _projection;
+  ) async => lobbyView;
 
   @override
   Future<void> close() async {}
@@ -115,10 +118,28 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
   }) => throw UnsupportedError('Not used by this test.');
 
   @override
-  Future<MultiplayerProjectionView> joinMatch({
+  Future<MultiplayerMatchLobbyView> joinMatch({
     required String matchId,
     required String playerId,
   }) => throw UnsupportedError('Not used by this test.');
+
+  @override
+  Future<MultiplayerMatchLobbyView> lobby(String matchId) async => lobbyView;
+
+  @override
+  Future<MultiplayerMatchLobbyView> setReady({
+    required String matchId,
+    required bool ready,
+  }) async {
+    lobbyView = _routerLobby(ready: ready);
+    return lobbyView;
+  }
+
+  @override
+  Future<MultiplayerMatchLobbyView> startMatch(String matchId) async {
+    lobbyView = _routerLobby(ready: true, running: true);
+    return lobbyView;
+  }
 
   @override
   Future<MultiplayerProjectionView> resync(String matchId) async {
@@ -173,4 +194,45 @@ const _projection = MultiplayerProjectionView(
   visibleUnitCount: 1,
   outcomeCondition: 'ongoing',
   winnerPlayerId: null,
+);
+
+MultiplayerMatchLobbyView _routerLobby({
+  bool ready = false,
+  bool running = false,
+}) => MultiplayerMatchLobbyView(
+  match: MultiplayerMatchView(
+    matchId: 'match-1',
+    mapId: 'map-1',
+    mapHash: 'map-hash',
+    rulesetId: 'ruleset-1',
+    rulesetHash: 'ruleset-hash',
+    phase: running
+        ? MultiplayerMatchPhase.running
+        : MultiplayerMatchPhase.lobby,
+    hostPlayerId: 'player-1',
+    startedAt: running ? DateTime.utc(2026) : null,
+    revision: 7,
+    eventOffset: 10,
+  ),
+  participants: [
+    MultiplayerLobbyParticipantView(
+      playerId: 'player-1',
+      name: 'Player one',
+      kind: 'human',
+      isHost: true,
+      isClaimed: true,
+      isReady: ready,
+      isCurrentUser: true,
+    ),
+    const MultiplayerLobbyParticipantView(
+      playerId: 'player-2',
+      name: 'Computer',
+      kind: 'ai',
+      isHost: false,
+      isClaimed: false,
+      isReady: true,
+      isCurrentUser: false,
+    ),
+  ],
+  canStart: !running && ready,
 );

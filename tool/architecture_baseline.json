@@ -47,7 +47,6 @@
       "files": {},
       "declarations": {
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_gateway.dart::class:EngineGameSessionGateway": 417,
-        "clients/aonw_flutter/lib/features/multiplayer/application/multiplayer_coordinator.dart::class:MultiplayerCoordinator": 402,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch": 359
       },
       "callableLines": {
@@ -62,7 +61,7 @@
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 118,
         "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
-        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 108,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 101,
         "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
         "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
@@ -94,7 +93,7 @@
         "clients/aonw_flutter/lib/features/map/presentation/widgets/map_selection_overlay.dart::class:_MapSelectionPanel/method:build": 28,
         "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 13,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
-        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 12,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_LobbyPanelState/method:build": 11,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_guards.dart::function:_executableProduction": 11,
         "clients/aonw_flutter/lib/features/replay/presentation/replay_presentation_controller.dart::class:ReplayPresentationController/method:openLatest": 13,

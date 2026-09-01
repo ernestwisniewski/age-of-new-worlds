@@ -34,6 +34,15 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('multiplayer-create-match')));
     await tester.pumpAndSettle();
 
+    expect(
+      find.byKey(const ValueKey('multiplayer-start-match')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('multiplayer-ready')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('multiplayer-start-match')));
+    await tester.pumpAndSettle();
+
     final submit = find.byKey(const ValueKey('multiplayer-submit-turn'));
     expect(submit, findsOneWidget);
     final semantics = tester.getSemantics(submit);
@@ -63,6 +72,8 @@ const _projection = MultiplayerProjectionView(
 );
 
 final class _Session implements MultiplayerSessionPort {
+  var _lobby = _matchLobby();
+
   @override
   Future<MultiplayerAccountView?> restoreAccount() async =>
       const MultiplayerAccountView(userId: 'account-1');
@@ -71,9 +82,9 @@ final class _Session implements MultiplayerSessionPort {
   Future<List<MultiplayerMatchView>> listMatches() async => const [];
 
   @override
-  Future<MultiplayerProjectionView> createMatch(
+  Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
-  ) async => _projection;
+  ) async => _lobby;
 
   @override
   Future<MultiplayerAccountView> createAccount({
@@ -83,17 +94,34 @@ final class _Session implements MultiplayerSessionPort {
   }) => throw UnsupportedError('Not used by this test.');
 
   @override
-  Future<MultiplayerProjectionView> joinMatch({
+  Future<MultiplayerMatchLobbyView> joinMatch({
     required String matchId,
     required String playerId,
   }) => throw UnsupportedError('Not used by this test.');
 
   @override
+  Future<MultiplayerMatchLobbyView> lobby(String matchId) async => _lobby;
+
+  @override
+  Future<MultiplayerMatchLobbyView> setReady({
+    required String matchId,
+    required bool ready,
+  }) async {
+    _lobby = _matchLobby(ready: ready);
+    return _lobby;
+  }
+
+  @override
+  Future<MultiplayerMatchLobbyView> startMatch(String matchId) async {
+    _lobby = _matchLobby(ready: true, running: true);
+    return _lobby;
+  }
+
+  @override
   Future<void> reconnect() => throw UnsupportedError('Not used by this test.');
 
   @override
-  Future<MultiplayerProjectionView> resync(String matchId) =>
-      throw UnsupportedError('Not used by this test.');
+  Future<MultiplayerProjectionView> resync(String matchId) async => _projection;
 
   @override
   Future<void> signOut() async {}
@@ -114,6 +142,47 @@ final class _Session implements MultiplayerSessionPort {
   @override
   Future<void> close() async {}
 }
+
+MultiplayerMatchLobbyView _matchLobby({
+  bool ready = false,
+  bool running = false,
+}) => MultiplayerMatchLobbyView(
+  match: MultiplayerMatchView(
+    matchId: 'match-1',
+    mapId: 'map-1',
+    mapHash: 'map-hash',
+    rulesetId: 'ruleset-1',
+    rulesetHash: 'ruleset-hash',
+    phase: running
+        ? MultiplayerMatchPhase.running
+        : MultiplayerMatchPhase.lobby,
+    hostPlayerId: 'player-1',
+    startedAt: running ? DateTime.utc(2026) : null,
+    revision: 7,
+    eventOffset: 10,
+  ),
+  participants: [
+    MultiplayerLobbyParticipantView(
+      playerId: 'player-1',
+      name: 'Player one',
+      kind: 'human',
+      isHost: true,
+      isClaimed: true,
+      isReady: ready,
+      isCurrentUser: true,
+    ),
+    const MultiplayerLobbyParticipantView(
+      playerId: 'player-2',
+      name: 'Computer',
+      kind: 'ai',
+      isHost: false,
+      isClaimed: false,
+      isReady: true,
+      isCurrentUser: false,
+    ),
+  ],
+  canStart: !running && ready,
+);
 
 final class _Documents implements MultiplayerMatchDocumentSource {
   const _Documents();

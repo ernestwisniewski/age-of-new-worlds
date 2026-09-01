@@ -5,6 +5,8 @@ import '../read_model/multiplayer_view.dart';
 import 'multiplayer_session_port.dart';
 import 'multiplayer_state.dart';
 
+part 'multiplayer_lobby_lifecycle.dart';
+
 typedef MultiplayerDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
 
@@ -98,90 +100,6 @@ final class MultiplayerCoordinator {
       }
     } on Object catch (error, stackTrace) {
       _report('multiplayer_lobby_refresh_failed', error, stackTrace);
-      if (_isCurrent(generation)) {
-        _setState(
-          current.copyWith(busy: false, failureCode: _failureCode(error)),
-        );
-      }
-    }
-  }
-
-  Future<void> createMatch() async {
-    final current = _state;
-    if (current is! MultiplayerLobby || current.busy) return;
-    final generation = _generation;
-    _setState(current.copyWith(busy: true, clearFailure: true));
-    try {
-      final projection = await _session.createMatch(await _documents.load());
-      if (_isCurrent(generation)) {
-        _setState(
-          MultiplayerInMatch(
-            account: current.account,
-            phase: NetworkSessionPhase.ready,
-            projection: projection,
-          ),
-        );
-      }
-    } on Object catch (error, stackTrace) {
-      _report('multiplayer_match_create_failed', error, stackTrace);
-      if (_isCurrent(generation)) {
-        _setState(
-          current.copyWith(busy: false, failureCode: _failureCode(error)),
-        );
-      }
-    }
-  }
-
-  Future<void> joinMatch({required String matchId, required String playerId}) =>
-      _joinMatch(matchId.trim(), playerId.trim());
-
-  Future<void> _joinMatch(String matchId, String playerId) async {
-    final current = _state;
-    if (current is! MultiplayerLobby || current.busy) return;
-    final generation = _generation;
-    _setState(current.copyWith(busy: true, clearFailure: true));
-    try {
-      final projection = await _session.joinMatch(
-        matchId: matchId,
-        playerId: playerId,
-      );
-      if (_isCurrent(generation)) {
-        _setState(
-          MultiplayerInMatch(
-            account: current.account,
-            phase: NetworkSessionPhase.ready,
-            projection: projection,
-          ),
-        );
-      }
-    } on Object catch (error, stackTrace) {
-      _report('multiplayer_match_join_failed', error, stackTrace);
-      if (_isCurrent(generation)) {
-        _setState(
-          current.copyWith(busy: false, failureCode: _failureCode(error)),
-        );
-      }
-    }
-  }
-
-  Future<void> openMatch(MultiplayerMatchView match) async {
-    final current = _state;
-    if (current is! MultiplayerLobby || current.busy) return;
-    final generation = _generation;
-    _setState(current.copyWith(busy: true, clearFailure: true));
-    try {
-      final projection = await _session.resync(match.matchId);
-      if (_isCurrent(generation)) {
-        _setState(
-          MultiplayerInMatch(
-            account: current.account,
-            phase: NetworkSessionPhase.ready,
-            projection: projection,
-          ),
-        );
-      }
-    } on Object catch (error, stackTrace) {
-      _report('multiplayer_match_open_failed', error, stackTrace);
       if (_isCurrent(generation)) {
         _setState(
           current.copyWith(busy: false, failureCode: _failureCode(error)),

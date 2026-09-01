@@ -201,6 +201,55 @@ class AonwLocalizationsPl extends AonwLocalizations {
   }
 
   @override
+  String multiplayerMatchPhase(String phase) {
+    String _temp0 = intl.Intl.selectLogic(phase, {
+      'lobby': 'poczekalnia',
+      'running': 'w toku',
+      'finished': 'zakończona',
+      'abandoned': 'porzucona',
+      'other': 'nieznany',
+    });
+    return 'Status: $_temp0';
+  }
+
+  @override
+  String get multiplayerWaitingRoomTitle => 'Poczekalnia rozgrywki';
+
+  @override
+  String get multiplayerReady => 'Gotowy';
+
+  @override
+  String get multiplayerNotReady => 'Niegotowy';
+
+  @override
+  String get multiplayerSeatOpen => 'Wolne miejsce gracza';
+
+  @override
+  String get multiplayerHumanSeat => 'Człowiek';
+
+  @override
+  String get multiplayerAiSeat => 'Komputer';
+
+  @override
+  String get multiplayerHost => 'Host';
+
+  @override
+  String get multiplayerCurrentPlayer => 'Ty';
+
+  @override
+  String get markReady => 'Zgłoś gotowość';
+
+  @override
+  String get markNotReady => 'Wycofaj gotowość';
+
+  @override
+  String get waitingForPlayers =>
+      'Każde miejsce człowieka musi być zajęte, a wszyscy gracze gotowi przed startem.';
+
+  @override
+  String get refreshMatch => 'Odśwież rozgrywkę';
+
+  @override
   String get multiplayerMatchTitle => 'Rozgrywka online';
 
   @override
@@ -265,7 +314,16 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'invalid_server_response': 'Odpowiedź serwera nie przeszła walidacji.',
       'invalid_command_sequence': 'Sekwencja polecenia nie była ciągła.',
       'invalid_resync_sequence': 'Zsynchronizowany stan cofnął rozgrywkę.',
+      'invalid_match_lifecycle':
+          'Odpowiedź cyklu życia rozgrywki była niespójna.',
       'match_not_found': 'Nie znaleziono rozgrywki.',
+      'match_not_started': 'Host nie rozpoczął jeszcze rozgrywki.',
+      'match_already_started': 'Rozgrywka została już rozpoczęta.',
+      'host_required': 'Tylko host może rozpocząć tę rozgrywkę.',
+      'lobby_not_ready':
+          'Każdy gracz-człowiek musi dołączyć i zgłosić gotowość.',
+      'participant_not_claimable':
+          'Nie można zająć miejsca sterowanego przez komputer.',
       'player_seat_taken': 'To miejsce gracza jest już zajęte.',
       'other': 'Nie udało się wykonać żądania gry wieloosobowej.',
     });

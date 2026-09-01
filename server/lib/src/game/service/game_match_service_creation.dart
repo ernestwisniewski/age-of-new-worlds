@@ -74,6 +74,7 @@ _PreparedCreation _preparedCreation({
       'The creator player is not present in the validated match identity.',
     );
   }
+  _requireHumanParticipantState(state, creatorPlayerId);
   return _PreparedCreation(
     mapId: mapId,
     rulesetId: rulesetId,

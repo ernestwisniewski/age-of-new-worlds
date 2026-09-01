@@ -44,6 +44,14 @@ final class MultiplayerController extends ChangeNotifier {
   Future<void> openMatch(MultiplayerMatchView match) =>
       _coordinator.openMatch(match);
 
+  Future<void> refreshMatchLobby() => _coordinator.refreshMatchLobby();
+
+  Future<void> setReady(bool ready) => _coordinator.setReady(ready);
+
+  Future<void> startMatch() => _coordinator.startMatch();
+
+  Future<void> closeWaitingRoom() => _coordinator.closeWaitingRoom();
+
   Future<void> submitTurn() => _coordinator.submitTurn();
 
   Future<void> reconnect() => _coordinator.reconnect();

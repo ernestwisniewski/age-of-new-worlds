@@ -19,6 +19,47 @@ void main() {
     expect(state.matches.single.matchId, 'match-1');
   });
 
+  test('enters the map only after ready, start, and fresh resync', () async {
+    final session = _Session()..restored = _account;
+    final coordinator = _coordinator(session);
+    addTearDown(coordinator.close);
+    await coordinator.initialize();
+
+    await coordinator.createMatch();
+    var waiting = coordinator.state as MultiplayerWaitingRoom;
+    expect(waiting.lobby.match.phase, MultiplayerMatchPhase.lobby);
+    expect(waiting.lobby.canStart, isFalse);
+    expect(session.resyncCount, 0);
+
+    await coordinator.setReady(true);
+    waiting = coordinator.state as MultiplayerWaitingRoom;
+    expect(waiting.lobby.currentParticipant.isReady, isTrue);
+    expect(waiting.lobby.canStart, isTrue);
+
+    await coordinator.startMatch();
+    final started = coordinator.state as MultiplayerInMatch;
+    expect(started.projection.matchId, 'match-1');
+    expect(session.resyncCount, 1);
+  });
+
+  test('refresh enters a match started by the host', () async {
+    final session = _Session()..restored = _account;
+    final coordinator = _coordinator(session);
+    addTearDown(coordinator.close);
+    await coordinator.initialize();
+    await coordinator.createMatch();
+    session.lobbyView = _lobbyView(
+      phase: MultiplayerMatchPhase.running,
+      ready: true,
+    );
+
+    await coordinator.refreshMatchLobby();
+
+    final started = coordinator.state as MultiplayerInMatch;
+    expect(started.projection.playerId, 'player-1');
+    expect(session.resyncCount, 1);
+  });
+
   test(
     'keeps one command identity across reconnect and durable retry',
     () async {
@@ -134,17 +175,21 @@ final class _Session implements MultiplayerSessionPort {
   var resyncCount = 0;
   Object? listFailure;
   final commandIds = <String>[];
-  final matches = const [
+  List<MultiplayerMatchView> get matches => [
     MultiplayerMatchView(
       matchId: 'match-1',
       mapId: 'map-1',
       mapHash: 'map-hash',
       rulesetId: 'ruleset-1',
       rulesetHash: 'ruleset-hash',
+      phase: MultiplayerMatchPhase.running,
+      hostPlayerId: 'player-1',
+      startedAt: DateTime.utc(2026),
       revision: 7,
       eventOffset: 10,
     ),
   ];
+  var lobbyView = _lobbyView();
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async => restored;
@@ -177,15 +222,33 @@ final class _Session implements MultiplayerSessionPort {
   }
 
   @override
-  Future<MultiplayerProjectionView> createMatch(
+  Future<MultiplayerMatchLobbyView> createMatch(
     MultiplayerMatchDocuments documents,
-  ) async => projection;
+  ) async => lobbyView;
 
   @override
-  Future<MultiplayerProjectionView> joinMatch({
+  Future<MultiplayerMatchLobbyView> joinMatch({
     required String matchId,
     required String playerId,
-  }) async => projection;
+  }) async => _lobbyView(currentPlayerId: playerId);
+
+  @override
+  Future<MultiplayerMatchLobbyView> lobby(String matchId) async => lobbyView;
+
+  @override
+  Future<MultiplayerMatchLobbyView> setReady({
+    required String matchId,
+    required bool ready,
+  }) async {
+    lobbyView = _lobbyView(ready: ready);
+    return lobbyView;
+  }
+
+  @override
+  Future<MultiplayerMatchLobbyView> startMatch(String matchId) async {
+    lobbyView = _lobbyView(phase: MultiplayerMatchPhase.running, ready: true);
+    return lobbyView;
+  }
 
   @override
   Future<MultiplayerProjectionView> resync(String matchId) async {
@@ -227,6 +290,49 @@ final class _Session implements MultiplayerSessionPort {
   @override
   Future<void> close() async {}
 }
+
+MultiplayerMatchLobbyView _lobbyView({
+  MultiplayerMatchPhase phase = MultiplayerMatchPhase.lobby,
+  bool ready = false,
+  String currentPlayerId = 'player-1',
+}) => MultiplayerMatchLobbyView(
+  match: MultiplayerMatchView(
+    matchId: 'match-1',
+    mapId: 'map-1',
+    mapHash: 'map-hash',
+    rulesetId: 'ruleset-1',
+    rulesetHash: 'ruleset-hash',
+    phase: phase,
+    hostPlayerId: 'player-1',
+    startedAt: phase == MultiplayerMatchPhase.lobby ? null : DateTime.utc(2026),
+    revision: 7,
+    eventOffset: 10,
+  ),
+  participants: [
+    MultiplayerLobbyParticipantView(
+      playerId: 'player-1',
+      name: 'Player one',
+      kind: 'human',
+      isHost: true,
+      isClaimed: true,
+      isReady: ready,
+      isCurrentUser: currentPlayerId == 'player-1',
+    ),
+    MultiplayerLobbyParticipantView(
+      playerId: 'player-2',
+      name: 'Computer',
+      kind: 'ai',
+      isHost: false,
+      isClaimed: false,
+      isReady: true,
+      isCurrentUser: currentPlayerId == 'player-2',
+    ),
+  ],
+  canStart:
+      phase == MultiplayerMatchPhase.lobby &&
+      currentPlayerId == 'player-1' &&
+      ready,
+);
 
 final class _Documents implements MultiplayerMatchDocumentSource {
   const _Documents();

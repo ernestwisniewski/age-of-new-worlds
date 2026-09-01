@@ -6,6 +6,8 @@ final class MultiplayerAccountView {
   final String userId;
 }
 
+enum MultiplayerMatchPhase { lobby, running, finished, abandoned }
+
 final class MultiplayerMatchView {
   const MultiplayerMatchView({
     required this.matchId,
@@ -13,6 +15,9 @@ final class MultiplayerMatchView {
     required this.mapHash,
     required this.rulesetId,
     required this.rulesetHash,
+    required this.phase,
+    required this.hostPlayerId,
+    required this.startedAt,
     required this.revision,
     required this.eventOffset,
   });
@@ -22,8 +27,46 @@ final class MultiplayerMatchView {
   final String mapHash;
   final String rulesetId;
   final String rulesetHash;
+  final MultiplayerMatchPhase phase;
+  final String? hostPlayerId;
+  final DateTime? startedAt;
   final int revision;
   final int eventOffset;
+}
+
+final class MultiplayerLobbyParticipantView {
+  const MultiplayerLobbyParticipantView({
+    required this.playerId,
+    required this.name,
+    required this.kind,
+    required this.isHost,
+    required this.isClaimed,
+    required this.isReady,
+    required this.isCurrentUser,
+  });
+
+  final String playerId;
+  final String name;
+  final String kind;
+  final bool isHost;
+  final bool isClaimed;
+  final bool isReady;
+  final bool isCurrentUser;
+}
+
+final class MultiplayerMatchLobbyView {
+  const MultiplayerMatchLobbyView({
+    required this.match,
+    required this.participants,
+    required this.canStart,
+  });
+
+  final MultiplayerMatchView match;
+  final List<MultiplayerLobbyParticipantView> participants;
+  final bool canStart;
+
+  MultiplayerLobbyParticipantView get currentParticipant =>
+      participants.singleWhere((participant) => participant.isCurrentUser);
 }
 
 enum MultiplayerTurnStateView { active, finished }

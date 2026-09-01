@@ -446,6 +446,84 @@ abstract class AonwLocalizations {
   /// **'Revision {revision} · event offset {eventOffset}'**
   String matchRevision(int revision, int eventOffset);
 
+  /// No description provided for @multiplayerMatchPhase.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: {phase, select, lobby{waiting room} running{in progress} finished{finished} abandoned{abandoned} other{unknown}}'**
+  String multiplayerMatchPhase(String phase);
+
+  /// No description provided for @multiplayerWaitingRoomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match waiting room'**
+  String get multiplayerWaitingRoomTitle;
+
+  /// No description provided for @multiplayerReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get multiplayerReady;
+
+  /// No description provided for @multiplayerNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Not ready'**
+  String get multiplayerNotReady;
+
+  /// No description provided for @multiplayerSeatOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open player seat'**
+  String get multiplayerSeatOpen;
+
+  /// No description provided for @multiplayerHumanSeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Human'**
+  String get multiplayerHumanSeat;
+
+  /// No description provided for @multiplayerAiSeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer'**
+  String get multiplayerAiSeat;
+
+  /// No description provided for @multiplayerHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Host'**
+  String get multiplayerHost;
+
+  /// No description provided for @multiplayerCurrentPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get multiplayerCurrentPlayer;
+
+  /// No description provided for @markReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark ready'**
+  String get markReady;
+
+  /// No description provided for @markNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw readiness'**
+  String get markNotReady;
+
+  /// No description provided for @waitingForPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Every human seat must be claimed and ready before the match starts.'**
+  String get waitingForPlayers;
+
+  /// No description provided for @refreshMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh match'**
+  String get refreshMatch;
+
   /// No description provided for @multiplayerMatchTitle.
   ///
   /// In en, this message translates to:
@@ -509,7 +587,7 @@ abstract class AonwLocalizations {
   /// No description provided for @multiplayerFailure.
   ///
   /// In en, this message translates to:
-  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} match_not_found{The match was not found.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
+  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} invalid_match_lifecycle{The match lifecycle response was inconsistent.} match_not_found{The match was not found.} match_not_started{The match has not been started by its host.} match_already_started{The match has already started.} host_required{Only the host can start this match.} lobby_not_ready{Every human player must join and be ready.} participant_not_claimable{Computer-controlled seats cannot be claimed.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
   String multiplayerFailure(String code);
 
   /// No description provided for @helpTitle.

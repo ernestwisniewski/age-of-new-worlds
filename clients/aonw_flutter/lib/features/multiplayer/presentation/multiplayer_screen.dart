@@ -9,6 +9,7 @@ import '../read_model/multiplayer_view.dart';
 import 'multiplayer_controller.dart';
 
 part 'multiplayer_match_actions.dart';
+part 'multiplayer_waiting_room.dart';
 
 final class MultiplayerScreen extends StatefulWidget {
   const MultiplayerScreen({
@@ -52,6 +53,10 @@ final class _MultiplayerScreenState extends State<MultiplayerScreen> {
             failureCode: state.failureCode,
           ),
           final MultiplayerLobby state => _LobbyPanel(
+            controller: widget.controller,
+            state: state,
+          ),
+          final MultiplayerWaitingRoom state => _WaitingRoomPanel(
             controller: widget.controller,
             state: state,
           ),
@@ -337,18 +342,10 @@ final class _LobbyPanelState extends State<_LobbyPanel> {
           Text(l10n.noMultiplayerMatches)
         else
           for (final match in state.matches)
-            Card(
-              child: ListTile(
-                key: ValueKey(('multiplayer-match', match.matchId)),
-                title: Text(match.mapId),
-                subtitle: Text(
-                  l10n.matchRevision(match.revision, match.eventOffset),
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: state.busy
-                    ? null
-                    : () => widget.controller.openMatch(match),
-              ),
+            _LobbyMatchCard(
+              controller: widget.controller,
+              match: match,
+              busy: state.busy,
             ),
       ],
     );

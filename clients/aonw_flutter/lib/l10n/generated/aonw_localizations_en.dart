@@ -199,6 +199,55 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
+  String multiplayerMatchPhase(String phase) {
+    String _temp0 = intl.Intl.selectLogic(phase, {
+      'lobby': 'waiting room',
+      'running': 'in progress',
+      'finished': 'finished',
+      'abandoned': 'abandoned',
+      'other': 'unknown',
+    });
+    return 'Status: $_temp0';
+  }
+
+  @override
+  String get multiplayerWaitingRoomTitle => 'Match waiting room';
+
+  @override
+  String get multiplayerReady => 'Ready';
+
+  @override
+  String get multiplayerNotReady => 'Not ready';
+
+  @override
+  String get multiplayerSeatOpen => 'Open player seat';
+
+  @override
+  String get multiplayerHumanSeat => 'Human';
+
+  @override
+  String get multiplayerAiSeat => 'Computer';
+
+  @override
+  String get multiplayerHost => 'Host';
+
+  @override
+  String get multiplayerCurrentPlayer => 'You';
+
+  @override
+  String get markReady => 'Mark ready';
+
+  @override
+  String get markNotReady => 'Withdraw readiness';
+
+  @override
+  String get waitingForPlayers =>
+      'Every human seat must be claimed and ready before the match starts.';
+
+  @override
+  String get refreshMatch => 'Refresh match';
+
+  @override
   String get multiplayerMatchTitle => 'Online match';
 
   @override
@@ -263,7 +312,15 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'invalid_server_response': 'The server response failed validation.',
       'invalid_command_sequence': 'The command sequence was not contiguous.',
       'invalid_resync_sequence': 'The synchronized state moved backwards.',
+      'invalid_match_lifecycle':
+          'The match lifecycle response was inconsistent.',
       'match_not_found': 'The match was not found.',
+      'match_not_started': 'The match has not been started by its host.',
+      'match_already_started': 'The match has already started.',
+      'host_required': 'Only the host can start this match.',
+      'lobby_not_ready': 'Every human player must join and be ready.',
+      'participant_not_claimable':
+          'Computer-controlled seats cannot be claimed.',
       'player_seat_taken': 'That player seat is already occupied.',
       'other': 'The multiplayer request could not be completed.',
     });
