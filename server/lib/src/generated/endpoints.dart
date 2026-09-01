@@ -32,12 +32,14 @@ import 'package:aonw_server/src/generated/game/models/game_player_command_reques
     as _i15;
 import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
     as _i16;
-import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+import 'package:aonw_server/src/generated/game/models/game_resign_match_request.dart'
     as _i17;
-import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
+import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
     as _i18;
-import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _i19;
+import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+    as _i20;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -664,12 +666,30 @@ class Endpoints extends _i1.EndpointDispatch {
                     params['request'],
                   ),
         ),
+        'resignMatch': _i1.MethodConnector(
+          name: 'resignMatch',
+          params: {
+            'request': _i1.ParameterDescription(
+              name: 'request',
+              type: _i1.getType<_i17.GameResignMatchRequest>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).resignMatch(
+                session,
+                params['request'],
+              ),
+        ),
         'query': _i1.MethodConnector(
           name: 'query',
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i17.GamePlayerQueryRequest>(),
+              type: _i1.getType<_i18.GamePlayerQueryRequest>(),
               nullable: false,
             ),
           },
@@ -702,9 +722,9 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth_core'] = _i18.Endpoints()
+    modules['serverpod_auth_core'] = _i19.Endpoints()
       ..initializeEndpoints(server);
-    modules['serverpod_auth_idp'] = _i19.Endpoints()
+    modules['serverpod_auth_idp'] = _i20.Endpoints()
       ..initializeEndpoints(server);
   }
 }

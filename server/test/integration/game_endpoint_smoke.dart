@@ -20,6 +20,10 @@ void main() {
         addTearDown(shutdownAonwGameNativeHost);
         await _GameEndpointJourney(sessionBuilder).run();
       });
+      test('persists resignation once and finishes the match', () async {
+        addTearDown(shutdownAonwGameNativeHost);
+        await _GameEndpointJourney(sessionBuilder).runResignation();
+      });
     },
     rollbackDatabase: RollbackDatabase.afterEach,
     testServerOutputMode: TestServerOutputMode.normal,
@@ -45,6 +49,11 @@ final class _GameEndpointJourney {
     final persisted = await _verifyPersistedState(joined, guestTurn);
     final kicked = await _verifyKick(joined, persisted);
     await _verifyRollback(joined, kicked.persisted, kicked.outcome);
+  }
+
+  Future<void> runResignation() async {
+    final joined = await _createAndJoin();
+    await _verifyResignation(joined);
   }
 
   Future<void> _rejectInvalidCommand(_JoinedMatch joined) async {

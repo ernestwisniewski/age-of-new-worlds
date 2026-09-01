@@ -1,0 +1,5 @@
+class: GameResignMatchRequest
+fields:
+  matchId: String
+  clientCommandId: String
+  expectedRevision: int

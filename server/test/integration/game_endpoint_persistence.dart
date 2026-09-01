@@ -1,6 +1,86 @@
 part of 'game_endpoint_smoke.dart';
 
 extension _GameEndpointPersistence on _GameEndpointJourney {
+  Future<void> _verifyResignation(_JoinedMatch joined) async {
+    final request = game.GameResignMatchRequest(
+      matchId: joined.created.matchId,
+      clientCommandId: 'owner-resign-1',
+      expectedRevision: joined.created.revision,
+    );
+    final accepted = await joined.endpoint.resignMatch(ownerSession, request);
+    final retry = await joined.endpoint.resignMatch(ownerSession, request);
+    expect(accepted.duplicate, isFalse);
+    expect(retry.duplicate, isTrue);
+    expect(retry.outcomeJson, accepted.outcomeJson);
+    expect(accepted.initialEventOffset, 0);
+    expect(accepted.finalEventOffset, 2);
+
+    final match = await game.GameMatch.db.findFirstRow(
+      databaseSession,
+      where: (table) => table.publicId.equals(joined.created.matchId),
+    );
+    expect(match, isNotNull);
+    final current = match!;
+    expect(current.state, 'finished');
+    expect(current.endedAt, isNotNull);
+    expect(current.outcomeCondition, 'resignation');
+    expect(current.winnerPlayerId, 'player-2');
+    expect(current.revision, joined.created.revision + 1);
+    expect(current.eventOffset, 2);
+    final canonical = _object(jsonDecode(current.canonicalStateJson!));
+    final lifecycle = _object(canonical['turnLifecycle']);
+    expect(lifecycle['resignedPlayerIds'], ['player-1']);
+    expect(lifecycle['kickedPlayerIds'], isEmpty);
+
+    final resigning = await game.GameParticipant.db.findFirstRow(
+      databaseSession,
+      where: (table) =>
+          (table.matchId.equals(current.id!)) &
+          (table.playerId.equals('player-1')),
+    );
+    expect(resigning, isNotNull);
+    expect(resigning!.resignedAt, isNotNull);
+    expect(resigning.kickedAt, isNull);
+    expect(resigning.leftAt, isNull);
+    expect(await joined.endpoint.listMatches(ownerSession), isEmpty);
+    await expectLater(
+      joined.endpoint.resync(ownerSession, joined.created.matchId),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'not_participant',
+        ),
+      ),
+    );
+
+    final guest = await joined.endpoint.resync(
+      guestSession,
+      joined.created.matchId,
+    );
+    expect(guest.eventOffset, 2);
+    expect(_object(jsonDecode(guest.snapshotJson))['outcome'], {
+      'condition': 'resignation',
+      'winnerPlayerId': 'player-2',
+      'scoreByPlayerId': <String, Object?>{},
+    });
+    final snapshots = await game.GameRecipientSnapshot.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+    );
+    expect(snapshots, hasLength(2));
+    expect(snapshots.map((snapshot) => snapshot.eventOffset).toSet(), {2});
+    final events = await game.GameEvent.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+      orderBy: (table) => table.offset,
+    );
+    expect(
+      events.map((event) => _object(jsonDecode(event.eventJson!))['type']),
+      ['playerResigned', 'matchEnded'],
+    );
+  }
+
   Future<_PersistedMatch> _verifyPersistedState(
     _JoinedMatch joined,
     game.GameCommandOutcome guestTurn,

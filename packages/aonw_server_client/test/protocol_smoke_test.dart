@@ -57,5 +57,17 @@ void main() {
     expect(kickRoundTrip.clientCommandId, 'kick-1');
     expect(kickRoundTrip.expectedRevision, 4);
     expect(kickRoundTrip.targetPlayerId, 'player-2');
+
+    final resignation = GameResignMatchRequest(
+      matchId: 'match-1',
+      clientCommandId: 'resign-1',
+      expectedRevision: 5,
+    );
+    final resignationRoundTrip = Protocol().deserialize<GameResignMatchRequest>(
+      resignation.toJson(),
+    );
+    expect(resignationRoundTrip.matchId, 'match-1');
+    expect(resignationRoundTrip.clientCommandId, 'resign-1');
+    expect(resignationRoundTrip.expectedRevision, 5);
   });
 }

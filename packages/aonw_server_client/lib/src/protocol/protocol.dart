@@ -33,14 +33,15 @@ import 'game/models/game_player_command_request.dart' as _i19;
 import 'game/models/game_player_query_outcome.dart' as _i20;
 import 'game/models/game_player_query_request.dart' as _i21;
 import 'game/models/game_recipient_snapshot.dart' as _i22;
-import 'game/models/game_resync.dart' as _i23;
-import 'game/models/game_submit_turn_request.dart' as _i24;
+import 'game/models/game_resign_match_request.dart' as _i23;
+import 'game/models/game_resync.dart' as _i24;
+import 'game/models/game_submit_turn_request.dart' as _i25;
 import 'package:aonw_server_client/src/protocol/game/models/game_match_view.dart'
-    as _i25;
-import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i26;
-import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i27;
+import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+    as _i28;
 export 'auth/models/account_auth_exception.dart';
 export 'auth/models/external_auth_poll_result.dart';
 export 'auth/models/external_auth_start.dart';
@@ -62,6 +63,7 @@ export 'game/models/game_player_command_request.dart';
 export 'game/models/game_player_query_outcome.dart';
 export 'game/models/game_player_query_request.dart';
 export 'game/models/game_recipient_snapshot.dart';
+export 'game/models/game_resign_match_request.dart';
 export 'game/models/game_resync.dart';
 export 'game/models/game_submit_turn_request.dart';
 export 'client.dart';
@@ -163,11 +165,14 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i22.GameRecipientSnapshot) {
       return _i22.GameRecipientSnapshot.fromJson(data) as T;
     }
-    if (t == _i23.GameResync) {
-      return _i23.GameResync.fromJson(data) as T;
+    if (t == _i23.GameResignMatchRequest) {
+      return _i23.GameResignMatchRequest.fromJson(data) as T;
     }
-    if (t == _i24.GameSubmitTurnRequest) {
-      return _i24.GameSubmitTurnRequest.fromJson(data) as T;
+    if (t == _i24.GameResync) {
+      return _i24.GameResync.fromJson(data) as T;
+    }
+    if (t == _i25.GameSubmitTurnRequest) {
+      return _i25.GameSubmitTurnRequest.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.AccountAuthException?>()) {
       return (data != null ? _i2.AccountAuthException.fromJson(data) : null)
@@ -249,11 +254,15 @@ class Protocol extends _i1.SerializationManager {
       return (data != null ? _i22.GameRecipientSnapshot.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i23.GameResync?>()) {
-      return (data != null ? _i23.GameResync.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i23.GameResignMatchRequest?>()) {
+      return (data != null ? _i23.GameResignMatchRequest.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i24.GameSubmitTurnRequest?>()) {
-      return (data != null ? _i24.GameSubmitTurnRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i24.GameResync?>()) {
+      return (data != null ? _i24.GameResync.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i25.GameSubmitTurnRequest?>()) {
+      return (data != null ? _i25.GameSubmitTurnRequest.fromJson(data) : null)
           as T;
     }
     if (t == List<_i14.GameLobbyParticipantView>) {
@@ -262,17 +271,17 @@ class Protocol extends _i1.SerializationManager {
               .toList()
           as T;
     }
-    if (t == List<_i25.GameMatchView>) {
+    if (t == List<_i26.GameMatchView>) {
       return (data as List)
-              .map((e) => deserialize<_i25.GameMatchView>(e))
+              .map((e) => deserialize<_i26.GameMatchView>(e))
               .toList()
           as T;
     }
     try {
-      return _i26.Protocol().deserialize<T>(data, t);
+      return _i27.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     try {
-      return _i27.Protocol().deserialize<T>(data, t);
+      return _i28.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -300,8 +309,9 @@ class Protocol extends _i1.SerializationManager {
       _i20.GamePlayerQueryOutcome => 'GamePlayerQueryOutcome',
       _i21.GamePlayerQueryRequest => 'GamePlayerQueryRequest',
       _i22.GameRecipientSnapshot => 'GameRecipientSnapshot',
-      _i23.GameResync => 'GameResync',
-      _i24.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
+      _i23.GameResignMatchRequest => 'GameResignMatchRequest',
+      _i24.GameResync => 'GameResync',
+      _i25.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
       _ => null,
     };
   }
@@ -358,16 +368,18 @@ class Protocol extends _i1.SerializationManager {
         return 'GamePlayerQueryRequest';
       case _i22.GameRecipientSnapshot():
         return 'GameRecipientSnapshot';
-      case _i23.GameResync():
+      case _i23.GameResignMatchRequest():
+        return 'GameResignMatchRequest';
+      case _i24.GameResync():
         return 'GameResync';
-      case _i24.GameSubmitTurnRequest():
+      case _i25.GameSubmitTurnRequest():
         return 'GameSubmitTurnRequest';
     }
-    className = _i26.Protocol().getClassNameForObject(data);
+    className = _i27.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth_core.$className';
     }
-    className = _i27.Protocol().getClassNameForObject(data);
+    className = _i28.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth_idp.$className';
     }
@@ -443,19 +455,22 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'GameRecipientSnapshot') {
       return deserialize<_i22.GameRecipientSnapshot>(data['data']);
     }
+    if (dataClassName == 'GameResignMatchRequest') {
+      return deserialize<_i23.GameResignMatchRequest>(data['data']);
+    }
     if (dataClassName == 'GameResync') {
-      return deserialize<_i23.GameResync>(data['data']);
+      return deserialize<_i24.GameResync>(data['data']);
     }
     if (dataClassName == 'GameSubmitTurnRequest') {
-      return deserialize<_i24.GameSubmitTurnRequest>(data['data']);
+      return deserialize<_i25.GameSubmitTurnRequest>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_core.')) {
       data['className'] = dataClassName.substring(20);
-      return _i26.Protocol().deserializeByClassName(data);
+      return _i27.Protocol().deserializeByClassName(data);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
-      return _i27.Protocol().deserializeByClassName(data);
+      return _i28.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
@@ -470,10 +485,10 @@ class Protocol extends _i1.SerializationManager {
       return null;
     }
     try {
-      return _i26.Protocol().mapRecordToJson(record);
+      return _i27.Protocol().mapRecordToJson(record);
     } catch (_) {}
     try {
-      return _i27.Protocol().mapRecordToJson(record);
+      return _i28.Protocol().mapRecordToJson(record);
     } catch (_) {}
     throw Exception('Unsupported record type ${record.runtimeType}');
   }

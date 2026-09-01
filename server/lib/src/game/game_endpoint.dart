@@ -50,6 +50,11 @@ final class GameEndpoint extends Endpoint {
     GameKickParticipantRequest request,
   ) => _service.kickParticipant(session, request);
 
+  Future<GameCommandOutcome> resignMatch(
+    Session session,
+    GameResignMatchRequest request,
+  ) => _service.resignMatch(session, request);
+
   Future<GamePlayerQueryOutcome> query(
     Session session,
     GamePlayerQueryRequest request,

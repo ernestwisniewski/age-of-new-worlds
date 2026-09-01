@@ -28,6 +28,112 @@ Future<GameCommandOutcome> _kickParticipant(
   );
 }
 
+Future<GameCommandOutcome> _resignMatch(
+  GameMatchService service,
+  Session session,
+  GameResignMatchRequest request,
+) {
+  if (request.expectedRevision < 0) {
+    throw _error('invalid_revision', 'expectedRevision must be non-negative.');
+  }
+  final input = _CommandInput(
+    userIdentifier: _requireUser(session),
+    matchId: _identifier(request.matchId, 'matchId'),
+    clientCommandId: _identifier(request.clientCommandId, 'clientCommandId'),
+    expectedRevision: request.expectedRevision,
+    command: const {},
+  );
+  return session.db.transaction(
+    (transaction) => _resignTransaction(service, session, transaction, input),
+  );
+}
+
+Future<GameCommandOutcome> _resignTransaction(
+  GameMatchService service,
+  Session session,
+  Transaction transaction,
+  _CommandInput input,
+) async {
+  final match = await _matchByPublicId(
+    session,
+    input.matchId,
+    transaction: transaction,
+    lock: true,
+  );
+  final participant = await _participantForUser(
+    session,
+    match.id!,
+    input.userIdentifier,
+    transaction: transaction,
+    lock: true,
+  );
+  if (participant == null) {
+    throw _error('not_participant', 'The account is not a match participant.');
+  }
+  final duplicate = await _commandLedger(
+    session,
+    transaction,
+    match.id!,
+    participant.playerId,
+    input.clientCommandId,
+  );
+  if (duplicate != null) {
+    return _ledgerOutcome(match.publicId, duplicate, duplicate: true);
+  }
+  _requireRunningMatch(match);
+  if (!_isActiveParticipant(participant)) {
+    throw _error('not_participant', 'The account is not a match participant.');
+  }
+  final command = {
+    'type': 'resignParticipant',
+    'expectedRevision': input.expectedRevision,
+    'playerId': participant.playerId,
+  };
+  final boundInput = _CommandInput(
+    userIdentifier: input.userIdentifier,
+    matchId: input.matchId,
+    clientCommandId: input.clientCommandId,
+    expectedRevision: input.expectedRevision,
+    command: command,
+  );
+  final context = _CommandContext(
+    match: match,
+    participant: participant,
+    duplicate: null,
+  );
+  final applied = _executeSystemCommand(service, context, command);
+  final outcome = await _persistAppliedTurn(
+    session,
+    transaction,
+    context,
+    boundInput,
+    applied,
+  );
+  if (applied.rejection == null) {
+    await GameParticipant.db.updateRow(
+      session,
+      participant.copyWith(readyAt: null, resignedAt: applied.now),
+      transaction: transaction,
+    );
+  }
+  return outcome;
+}
+
+Future<GameCommandLedger?> _commandLedger(
+  Session session,
+  Transaction transaction,
+  int matchId,
+  String playerId,
+  String clientCommandId,
+) => GameCommandLedger.db.findFirstRow(
+  session,
+  where: (table) =>
+      (table.matchId.equals(matchId)) &
+      (table.playerId.equals(playerId)) &
+      (table.clientCommandId.equals(clientCommandId)),
+  transaction: transaction,
+);
+
 Future<GameCommandOutcome> _kickTransaction(
   GameMatchService service,
   Session session,

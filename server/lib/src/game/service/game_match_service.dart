@@ -64,6 +64,11 @@ final class GameMatchService {
     GameKickParticipantRequest request,
   ) => _kickParticipant(this, session, request);
 
+  Future<GameCommandOutcome> resignMatch(
+    Session session,
+    GameResignMatchRequest request,
+  ) => _resignMatch(this, session, request);
+
   Future<GamePlayerQueryOutcome> query(
     Session session,
     GamePlayerQueryRequest request,

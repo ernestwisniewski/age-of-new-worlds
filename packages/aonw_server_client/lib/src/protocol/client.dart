@@ -43,11 +43,13 @@ import 'package:aonw_server_client/src/protocol/game/models/game_player_command_
     as _i16;
 import 'package:aonw_server_client/src/protocol/game/models/game_kick_participant_request.dart'
     as _i17;
-import 'package:aonw_server_client/src/protocol/game/models/game_player_query_outcome.dart'
+import 'package:aonw_server_client/src/protocol/game/models/game_resign_match_request.dart'
     as _i18;
-import 'package:aonw_server_client/src/protocol/game/models/game_player_query_request.dart'
+import 'package:aonw_server_client/src/protocol/game/models/game_player_query_outcome.dart'
     as _i19;
-import 'protocol.dart' as _i20;
+import 'package:aonw_server_client/src/protocol/game/models/game_player_query_request.dart'
+    as _i20;
+import 'protocol.dart' as _i21;
 
 /// {@category Endpoint}
 class EndpointAppStatus extends _i1.EndpointRef {
@@ -397,9 +399,17 @@ class EndpointGame extends _i1.EndpointRef {
     {'request': request},
   );
 
-  _i2.Future<_i18.GamePlayerQueryOutcome> query(
-    _i19.GamePlayerQueryRequest request,
-  ) => caller.callServerEndpoint<_i18.GamePlayerQueryOutcome>(
+  _i2.Future<_i14.GameCommandOutcome> resignMatch(
+    _i18.GameResignMatchRequest request,
+  ) => caller.callServerEndpoint<_i14.GameCommandOutcome>(
+    'game',
+    'resignMatch',
+    {'request': request},
+  );
+
+  _i2.Future<_i19.GamePlayerQueryOutcome> query(
+    _i20.GamePlayerQueryRequest request,
+  ) => caller.callServerEndpoint<_i19.GamePlayerQueryOutcome>(
     'game',
     'query',
     {'request': request},
@@ -444,7 +454,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i20.Protocol(),
+         _i21.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,

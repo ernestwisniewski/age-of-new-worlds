@@ -35,5 +35,6 @@ game:
   - submitTurn:
   - applyCommand:
   - kickParticipant:
+  - resignMatch:
   - query:
   - resync:
