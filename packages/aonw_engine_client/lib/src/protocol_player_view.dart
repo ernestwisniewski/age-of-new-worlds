@@ -25,6 +25,7 @@ final class AonwPlayerUnitView {
     required this.workerBuildCharges,
     required this.workerJob,
     required this.workerAssignment,
+    this.threatenedHexes = const [],
     this.hitPoints,
     this.maximumHitPoints,
     this.carriedArtifactId,
@@ -44,6 +45,7 @@ final class AonwPlayerUnitView {
       'hitPoints',
       'maximumHitPoints',
       'carriedArtifactId',
+      'threatenedHexes',
       'ownedDetails',
     }, 'player unit view');
     final ownedDetails = value['ownedDetails'] == null
@@ -70,6 +72,11 @@ final class AonwPlayerUnitView {
         value['carriedArtifactId'],
         'carried artifact id',
       ),
+      threatenedHexes: readList(
+        value['threatenedHexes'],
+        'unit threatened hexes',
+        (item, _) => AonwCoordinate.fromJson(item),
+      ),
       ownedDetails: ownedDetails,
     );
   }
@@ -87,6 +94,7 @@ final class AonwPlayerUnitView {
   final int? hitPoints;
   final int? maximumHitPoints;
   final String? carriedArtifactId;
+  final List<AonwCoordinate> threatenedHexes;
   final AonwOwnedUnitDetails? ownedDetails;
 }
 

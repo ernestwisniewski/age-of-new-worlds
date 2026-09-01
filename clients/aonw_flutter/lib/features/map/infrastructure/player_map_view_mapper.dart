@@ -124,6 +124,10 @@ final class PlayerMapViewMapper {
         posture: _posture(unit.posture),
         hitPoints: unit.hitPoints,
         maximumHitPoints: unit.maximumHitPoints,
+        threatenedHexes: [
+          for (final coordinate in unit.threatenedHexes)
+            (col: coordinate.col, row: coordinate.row),
+        ],
         army: [
           for (final troop
               in unit.ownedDetails?.army ?? const <AonwArmyTroop>[])

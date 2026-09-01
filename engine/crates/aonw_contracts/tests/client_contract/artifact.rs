@@ -28,6 +28,6 @@ pub(super) fn requests() -> [ClientRequestBodyDto; 3] {
 
 #[test]
 fn artifact_commands_reject_actor_fields() {
-    let request_with_actor = r#"{"apiVersion":14,"request":{"type":"dispatch","command":{"type":"tradeArtifact","expectedRevision":10,"actorPlayerId":"player-1","targetPlayerId":"player-2","offeredArtifactId":"artifact-1","offeredGold":0,"requestedGold":4}}}"#;
+    let request_with_actor = r#"{"apiVersion":15,"request":{"type":"dispatch","command":{"type":"tradeArtifact","expectedRevision":10,"actorPlayerId":"player-1","targetPlayerId":"player-2","offeredArtifactId":"artifact-1","offeredGold":0,"requestedGold":4}}}"#;
     assert!(aonw_contracts::client::ClientRequestDto::from_json(request_with_actor).is_err());
 }

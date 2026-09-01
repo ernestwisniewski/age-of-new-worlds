@@ -96,7 +96,7 @@ final class FlameScenePatch {
           if (!nextRoads.containsKey(road.coordinate)) road.coordinate,
       ],
       movements: _movementBetween(previous, next, previousUnits, nextUnits),
-      combats: _combatBetween(previous, next),
+      combats: _combatBetween(previous, next, previousUnits, nextUnits),
     );
   }
 
@@ -254,6 +254,8 @@ final class FlameScenePatch {
   static List<FlameCombatTransition> _combatBetween(
     MapRenderSnapshot previous,
     MapRenderSnapshot next,
+    Map<String, VisibleUnitView> previousUnits,
+    Map<String, VisibleUnitView> nextUnits,
   ) {
     final execution = next.interaction.combat?.lastExecution;
     if (execution == null ||
@@ -263,8 +265,12 @@ final class FlameScenePatch {
         !_isAuthoritativeAdvance(previous, next)) {
       return const [];
     }
+    final attackerId = execution.preview.attackerUnitId;
+    final attacker = previousUnits[attackerId] ?? nextUnits[attackerId];
+    if (attacker == null) return const [];
     return [
       FlameCombatTransition(
+        attacker: attacker.coordinate,
         defender: execution.preview.defenderCoordinate,
         revision: execution.revision,
         eventCount: execution.events.length,
@@ -409,11 +415,13 @@ bool _sameFlameImprovement(
 
 final class FlameCombatTransition {
   const FlameCombatTransition({
+    required this.attacker,
     required this.defender,
     required this.revision,
     required this.eventCount,
   });
 
+  final MapHexCoordinate attacker;
   final MapHexCoordinate defender;
   final int revision;
   final int eventCount;

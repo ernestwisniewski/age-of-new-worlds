@@ -38,6 +38,7 @@ pub(super) fn unit() -> PlayerUnitViewDto {
         hit_points: Some(7),
         maximum_hit_points: Some(10),
         carried_artifact_id: None,
+        threatened_hexes: vec![coordinate(4, 4)],
         owned_details: None,
     }
 }

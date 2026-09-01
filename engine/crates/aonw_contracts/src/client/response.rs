@@ -359,6 +359,8 @@ pub struct PlayerUnitViewDto {
     pub maximum_hit_points: Option<u32>,
     /// Publicly visible carried artifact, when present.
     pub carried_artifact_id: Option<String>,
+    /// Exact recipient-inspectable coordinates currently threatened by this unit.
+    pub threatened_hexes: Vec<CoordinateDto>,
     /// Complete private command and progression state for a recipient-owned unit.
     pub owned_details: Option<OwnedUnitDetailsViewDto>,
 }

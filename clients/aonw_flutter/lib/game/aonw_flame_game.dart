@@ -27,6 +27,7 @@ import 'map/map_action_palette_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
 import 'map/map_hex_selection_palette_layer.dart';
+import 'map/map_threat_overlay_layer.dart';
 import 'map/map_tile_details_layer.dart';
 import 'map/objective_map_layer.dart';
 import 'map/static_map_layers.dart';

@@ -1,6 +1,7 @@
+use aonw_content::MapDefinition;
 use aonw_domain::{
-    ArmyTroop, ArtifactId, FogVisibility, GameState, MerchantTradeRoute, PlayerId, QueuedMovePath,
-    Unit, UnitActivity, UnitId, UnitKind, UnitPosture,
+    ArmyTroop, ArtifactId, FogVisibility, GameState, HexCoord, MerchantTradeRoute, PlayerId,
+    QueuedMovePath, Unit, UnitActivity, UnitId, UnitKind, UnitPosture,
 };
 
 /// Complete unit state disclosed only to the owning recipient.
@@ -61,6 +62,7 @@ pub struct PlayerUnitView {
     hit_points: Option<u32>,
     maximum_hit_points: Option<u32>,
     carried_artifact_id: Option<ArtifactId>,
+    threatened_hexes: Box<[HexCoord]>,
     owned_details: Option<OwnedUnitDetailsView>,
 }
 
@@ -86,6 +88,7 @@ impl PlayerUnitView {
             hit_points: unit.hit_points(),
             maximum_hit_points,
             carried_artifact_id: unit.carried_artifact_id().cloned(),
+            threatened_hexes: Box::default(),
             owned_details: disclose_worker.then(|| OwnedUnitDetailsView {
                 army: unit.army().to_vec().into_boxed_slice(),
                 queued_path: unit.queued_path().cloned(),
@@ -152,6 +155,11 @@ impl PlayerUnitView {
     pub const fn carried_artifact_id(&self) -> Option<&ArtifactId> {
         self.carried_artifact_id.as_ref()
     }
+    /// Returns exact recipient-inspectable coordinates threatened by this unit.
+    #[must_use]
+    pub const fn threatened_hexes(&self) -> &[HexCoord] {
+        &self.threatened_hexes
+    }
     /// Returns complete private state only for a recipient-owned unit.
     #[must_use]
     pub const fn owned_details(&self) -> Option<&OwnedUnitDetailsView> {
@@ -162,6 +170,7 @@ impl PlayerUnitView {
 pub(crate) fn visible_units(
     state: &GameState,
     actor: &PlayerId,
+    map: &MapDefinition,
     ruleset: &aonw_content::RulesetDefinition,
 ) -> Vec<PlayerUnitView> {
     state
@@ -172,14 +181,18 @@ pub(crate) fn visible_units(
                 || state.fog_of_war().visibility(actor, unit.position()) == FogVisibility::Visible
         })
         .map(|unit| {
-            PlayerUnitView::from_unit(state, ruleset, unit, unit.owner_player_id() == actor)
+            let disclose_worker = unit.owner_player_id() == actor;
+            let mut view = PlayerUnitView::from_unit(state, ruleset, unit, disclose_worker);
+            view.threatened_hexes =
+                aonw_engine::unit_threatened_hexes(state, map, ruleset, unit, actor);
+            view
         })
         .collect()
 }
 
 #[cfg(test)]
 mod tests {
-    use aonw_content::RulesetDefinition;
+    use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
     use aonw_domain::{
         FogOfWar, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFog, PlayerId,
         StateRevision, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
@@ -202,7 +215,8 @@ mod tests {
         )
         .expect("state");
 
-        let identifiers = visible_units(&state, &actor, RulesetDefinition::standard())
+        let map = map(5, 5);
+        let identifiers = visible_units(&state, &actor, &map, RulesetDefinition::standard())
             .into_iter()
             .map(|unit| unit.id().as_str().to_owned())
             .collect::<Vec<_>>();
@@ -235,11 +249,18 @@ mod tests {
         .try_build()
         .expect("state");
 
-        let identifiers = visible_units(&state, &actor, RulesetDefinition::standard())
-            .into_iter()
+        let map = map(6, 4);
+        let views = visible_units(&state, &actor, &map, RulesetDefinition::standard());
+        let identifiers = views
+            .iter()
             .map(|unit| unit.id().as_str().to_owned())
             .collect::<Vec<_>>();
         assert_eq!(identifiers, ["foreign-visible", "owned-hidden"]);
+        assert_eq!(
+            views[0].threatened_hexes(),
+            [HexCoord::new(2, 1), HexCoord::new(3, 1)]
+        );
+        assert!(views[1].threatened_hexes().is_empty());
     }
 
     #[test]
@@ -265,7 +286,8 @@ mod tests {
         )
         .expect("state");
 
-        let view = visible_units(&state, &actor, RulesetDefinition::standard())
+        let map = map(3, 3);
+        let view = visible_units(&state, &actor, &map, RulesetDefinition::standard())
             .into_iter()
             .next()
             .expect("visible unit");
@@ -284,5 +306,30 @@ mod tests {
         )
         .build()
         .expect("unit")
+    }
+
+    fn map(cols: u16, rows: u16) -> MapDefinition {
+        let tiles = (0..rows)
+            .flat_map(|row| {
+                (0..cols).map(move |col| {
+                    TileDefinition::try_new_for_simulation(
+                        HexCoord::new(i32::from(col), i32::from(row)),
+                        vec![TerrainType::Plains],
+                        Vec::new(),
+                        0,
+                    )
+                    .expect("tile")
+                })
+            })
+            .collect();
+        MapDefinition::try_new(
+            "test-map",
+            GridLayout::OddQFlatTop,
+            cols,
+            rows,
+            tiles,
+            Vec::new(),
+        )
+        .expect("map")
     }
 }

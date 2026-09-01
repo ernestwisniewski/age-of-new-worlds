@@ -106,6 +106,12 @@ fn unit(value: &PlayerUnitView) -> PlayerUnitViewDto {
         hit_points: value.hit_points(),
         maximum_hit_points: value.maximum_hit_points(),
         carried_artifact_id: value.carried_artifact_id().map(|id| id.as_str().to_owned()),
+        threatened_hexes: value
+            .threatened_hexes()
+            .iter()
+            .copied()
+            .map(coordinate)
+            .collect(),
         owned_details: value.owned_details().map(|details| {
             let activity = details.activity();
             OwnedUnitDetailsViewDto {

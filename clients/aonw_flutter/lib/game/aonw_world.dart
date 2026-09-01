@@ -14,6 +14,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     workerInfrastructureLayer = MapWorkerInfrastructureLayerComponent();
     fogLayer = MapFogLayerComponent();
     routeLayer = MapRouteLayerComponent();
+    threatOverlayLayer = MapThreatOverlayLayerComponent();
     selectionLayer = MapSelectionLayerComponent();
     cityFoundingPreviewLayer = MapCityFoundingPreviewLayerComponent();
     cityManagementOverlayLayer = MapCityManagementOverlayLayerComponent();
@@ -28,6 +29,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       tileDetailsLayer,
       workerInfrastructureLayer,
       fogLayer,
+      threatOverlayLayer,
       routeLayer,
       objectiveLayer,
       cityLayer,
@@ -50,6 +52,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
   late final MapFogLayerComponent fogLayer;
   late final MapRouteLayerComponent routeLayer;
+  late final MapThreatOverlayLayerComponent threatOverlayLayer;
   late final MapUnitLayerComponent unitLayer;
   late final MapCityLayerComponent cityLayer;
   late final MapArtifactLayerComponent artifactLayer;
@@ -112,6 +115,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
     routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
+    threatOverlayLayer.applyThreats(cache, snapshot.interaction, snapshot.player);
     objectiveLayer.applyMap(snapshot.map, cache);
     cityLayer.applyPatch(patch, cache);
     artifactLayer.applyPatch(patch, cache);
@@ -156,6 +160,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
     routeLayer.clearLayer();
+    threatOverlayLayer.clearLayer();
     objectiveLayer.clearLayer();
     cityLayer.clearLayer();
     artifactLayer.clearLayer();

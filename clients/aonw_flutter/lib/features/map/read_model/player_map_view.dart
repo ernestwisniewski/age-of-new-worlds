@@ -197,7 +197,9 @@ final class VisibleUnitView {
     this.cityFoundingRemainingTurns,
     this.carriedArtifactId,
     this.excavatingArtifactId,
-  }) : army = List.unmodifiable(army);
+    List<MapHexCoordinate> threatenedHexes = const [],
+  }) : army = List.unmodifiable(army),
+       threatenedHexes = List.unmodifiable(threatenedHexes);
 
   final String id;
   final String ownerPlayerId;
@@ -217,6 +219,7 @@ final class VisibleUnitView {
   final int? cityFoundingRemainingTurns;
   final String? carriedArtifactId;
   final String? excavatingArtifactId;
+  final List<MapHexCoordinate> threatenedHexes;
 }
 
 final class VisibleArmyTroopView {
