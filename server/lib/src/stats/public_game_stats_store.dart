@@ -168,13 +168,13 @@ const _publicGameStatsQuery = '''
 WITH overview AS (
   SELECT
     COUNT(*) FILTER (WHERE "state" = 'running') AS "activeSessions",
-    0::bigint AS "openLobbies",
-    COUNT(*) AS "matchesStarted",
+    COUNT(*) FILTER (WHERE "state" = 'lobby') AS "openLobbies",
+    COUNT(*) FILTER (WHERE "startedAt" IS NOT NULL) AS "matchesStarted",
     COUNT(*) FILTER (WHERE "state" = 'finished') AS "matchesCompleted",
     COUNT(*) FILTER (WHERE "state" = 'abandoned') AS "matchesAbandoned",
     COALESCE(AVG("turn") FILTER (WHERE "state" = 'finished'), 0)::double precision AS "averageCompletedTurns",
     COALESCE(MAX("turn") FILTER (WHERE "state" = 'finished'), 0)::bigint AS "longestCompletedTurns",
-    COALESCE(SUM(GREATEST("turn", 0)), 0)::bigint AS "totalPlayedTurns",
+    COALESCE(SUM(GREATEST("turn", 0)) FILTER (WHERE "startedAt" IS NOT NULL), 0)::bigint AS "totalPlayedTurns",
     COUNT(*) FILTER (WHERE "state" = 'finished' AND "turn" BETWEEN 1 AND 10) AS "turns1To10",
     COUNT(*) FILTER (WHERE "state" = 'finished' AND "turn" BETWEEN 11 AND 25) AS "turns11To25",
     COUNT(*) FILTER (WHERE "state" = 'finished' AND "turn" BETWEEN 26 AND 50) AS "turns26To50",

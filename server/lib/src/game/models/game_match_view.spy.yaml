@@ -5,5 +5,8 @@ fields:
   mapHash: String
   rulesetId: String
   rulesetHash: String
+  state: String
+  hostPlayerId: String?
+  startedAt: DateTime?
   revision: int
   eventOffset: int

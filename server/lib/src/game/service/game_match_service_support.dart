@@ -16,6 +16,21 @@ const _publicNativeErrorCodes = {
   'occupancy_policy_mismatch',
 };
 
+const _matchStateLobby = 'lobby';
+const _matchStateRunning = 'running';
+const _matchStateFinished = 'finished';
+
+void _requireRunningMatch(GameMatch match) {
+  if (match.state != _matchStateRunning) {
+    throw _error(
+      match.state == _matchStateLobby ? 'match_not_started' : 'match_finished',
+      match.state == _matchStateLobby
+          ? 'The match has not started.'
+          : 'The match is no longer running.',
+    );
+  }
+}
+
 Future<GameMatch> _matchByPublicId(
   Session session,
   String publicId, {
@@ -201,6 +216,9 @@ GameMatchView _view(GameMatch match) => GameMatchView(
   mapHash: match.mapHash,
   rulesetId: match.rulesetId,
   rulesetHash: match.rulesetHash,
+  state: match.state,
+  hostPlayerId: match.hostPlayerId,
+  startedAt: match.startedAt,
   revision: match.revision,
   eventOffset: match.eventOffset,
 );
@@ -302,5 +320,5 @@ final class _MatchFacts {
   final String? winnerPlayerId;
 
   bool get finished => outcomeCondition != null;
-  String get state => finished ? 'finished' : 'running';
+  String get state => finished ? _matchStateFinished : _matchStateRunning;
 }

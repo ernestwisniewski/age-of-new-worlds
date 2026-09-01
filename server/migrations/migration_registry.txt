@@ -5,3 +5,4 @@
 ### the conflict by removing and recreating the conflicting migration.
 
 20260829235223419-initial-schema
+20260901030823593-lobby-lifecycle

@@ -5,6 +5,11 @@ fields:
   userIdentifier: String
   playerId: String
   joinedAt: DateTime
+  readyAt: DateTime?
+  leftAt: DateTime?
+  resignedAt: DateTime?
+  kickedAt: DateTime?
+  kickReason: String?
 indexes:
   aonw_game_participant_match_user_idx:
     fields: matchId, userIdentifier

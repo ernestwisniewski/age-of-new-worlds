@@ -30,8 +30,9 @@ abstract class GameMatch
     this.mapDocument,
     this.canonicalStateJson,
     required this.state,
+    this.hostPlayerId,
     required this.turn,
-    required this.startedAt,
+    this.startedAt,
     this.endedAt,
     this.outcomeCondition,
     this.winnerPlayerId,
@@ -55,8 +56,9 @@ abstract class GameMatch
     String? mapDocument,
     String? canonicalStateJson,
     required String state,
+    String? hostPlayerId,
     required int turn,
-    required DateTime startedAt,
+    DateTime? startedAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -81,10 +83,11 @@ abstract class GameMatch
       mapDocument: jsonSerialization['mapDocument'] as String?,
       canonicalStateJson: jsonSerialization['canonicalStateJson'] as String?,
       state: jsonSerialization['state'] as String,
+      hostPlayerId: jsonSerialization['hostPlayerId'] as String?,
       turn: jsonSerialization['turn'] as int,
-      startedAt: _i1.DateTimeJsonExtension.fromJson(
-        jsonSerialization['startedAt'],
-      ),
+      startedAt: jsonSerialization['startedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
       endedAt: jsonSerialization['endedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
@@ -144,9 +147,11 @@ abstract class GameMatch
 
   String state;
 
+  String? hostPlayerId;
+
   int turn;
 
-  DateTime startedAt;
+  DateTime? startedAt;
 
   DateTime? endedAt;
 
@@ -186,6 +191,7 @@ abstract class GameMatch
     String? mapDocument,
     String? canonicalStateJson,
     String? state,
+    String? hostPlayerId,
     int? turn,
     DateTime? startedAt,
     DateTime? endedAt,
@@ -213,8 +219,9 @@ abstract class GameMatch
       if (mapDocument != null) 'mapDocument': mapDocument,
       if (canonicalStateJson != null) 'canonicalStateJson': canonicalStateJson,
       'state': state,
+      if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
       'turn': turn,
-      'startedAt': startedAt.toJson(),
+      if (startedAt != null) 'startedAt': startedAt?.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (outcomeCondition != null) 'outcomeCondition': outcomeCondition,
       if (winnerPlayerId != null) 'winnerPlayerId': winnerPlayerId,
@@ -246,8 +253,9 @@ abstract class GameMatch
       'rulesetId': rulesetId,
       'rulesetHash': rulesetHash,
       'state': state,
+      if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
       'turn': turn,
-      'startedAt': startedAt.toJson(),
+      if (startedAt != null) 'startedAt': startedAt?.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (outcomeCondition != null) 'outcomeCondition': outcomeCondition,
       if (winnerPlayerId != null) 'winnerPlayerId': winnerPlayerId,
@@ -311,8 +319,9 @@ class _GameMatchImpl extends GameMatch {
     String? mapDocument,
     String? canonicalStateJson,
     required String state,
+    String? hostPlayerId,
     required int turn,
-    required DateTime startedAt,
+    DateTime? startedAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -334,6 +343,7 @@ class _GameMatchImpl extends GameMatch {
          mapDocument: mapDocument,
          canonicalStateJson: canonicalStateJson,
          state: state,
+         hostPlayerId: hostPlayerId,
          turn: turn,
          startedAt: startedAt,
          endedAt: endedAt,
@@ -363,8 +373,9 @@ class _GameMatchImpl extends GameMatch {
     Object? mapDocument = _Undefined,
     Object? canonicalStateJson = _Undefined,
     String? state,
+    Object? hostPlayerId = _Undefined,
     int? turn,
-    DateTime? startedAt,
+    Object? startedAt = _Undefined,
     Object? endedAt = _Undefined,
     Object? outcomeCondition = _Undefined,
     Object? winnerPlayerId = _Undefined,
@@ -389,8 +400,9 @@ class _GameMatchImpl extends GameMatch {
           ? canonicalStateJson
           : this.canonicalStateJson,
       state: state ?? this.state,
+      hostPlayerId: hostPlayerId is String? ? hostPlayerId : this.hostPlayerId,
       turn: turn ?? this.turn,
-      startedAt: startedAt ?? this.startedAt,
+      startedAt: startedAt is DateTime? ? startedAt : this.startedAt,
       endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
       outcomeCondition: outcomeCondition is String?
           ? outcomeCondition
@@ -462,12 +474,18 @@ class GameMatchUpdateTable extends _i1.UpdateTable<GameMatchTable> {
     value,
   );
 
+  _i1.ColumnValue<String, String> hostPlayerId(String? value) =>
+      _i1.ColumnValue(
+        table.hostPlayerId,
+        value,
+      );
+
   _i1.ColumnValue<int, int> turn(int value) => _i1.ColumnValue(
     table.turn,
     value,
   );
 
-  _i1.ColumnValue<DateTime, DateTime> startedAt(DateTime value) =>
+  _i1.ColumnValue<DateTime, DateTime> startedAt(DateTime? value) =>
       _i1.ColumnValue(
         table.startedAt,
         value,
@@ -549,6 +567,10 @@ class GameMatchTable extends _i1.Table<int?> {
       'state',
       this,
     );
+    hostPlayerId = _i1.ColumnString(
+      'hostPlayerId',
+      this,
+    );
     turn = _i1.ColumnInt(
       'turn',
       this,
@@ -604,6 +626,8 @@ class GameMatchTable extends _i1.Table<int?> {
   late final _i1.ColumnString canonicalStateJson;
 
   late final _i1.ColumnString state;
+
+  late final _i1.ColumnString hostPlayerId;
 
   late final _i1.ColumnInt turn;
 
@@ -778,6 +802,7 @@ class GameMatchTable extends _i1.Table<int?> {
     mapDocument,
     canonicalStateJson,
     state,
+    hostPlayerId,
     turn,
     startedAt,
     endedAt,

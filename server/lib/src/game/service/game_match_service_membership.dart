@@ -30,6 +30,13 @@ Future<GameResync> _joinTransaction(
     lock: true,
   );
   _assertUserCanClaim(existingUser, claim.playerId);
+  if (match.state != _matchStateLobby && existingUser == null) {
+    throw _error(
+      'match_already_started',
+      'New participant seats cannot be claimed after the match starts.',
+    );
+  }
+  _requireHumanSeat(match, claim.playerId);
   final snapshot = await _snapshot(
     session,
     match.id!,
@@ -84,6 +91,11 @@ Future<void> _insertParticipant(
     userIdentifier: claim.userIdentifier,
     playerId: claim.playerId,
     joinedAt: DateTime.now().toUtc(),
+    readyAt: null,
+    leftAt: null,
+    resignedAt: null,
+    kickedAt: null,
+    kickReason: null,
   ),
   transaction: transaction,
 );

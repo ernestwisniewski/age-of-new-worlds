@@ -9,8 +9,9 @@ fields:
   mapDocument: String?, scope=serverOnly
   canonicalStateJson: String?, scope=serverOnly
   state: String
+  hostPlayerId: String?
   turn: int
-  startedAt: DateTime
+  startedAt: DateTime?
   endedAt: DateTime?
   outcomeCondition: String?
   winnerPlayerId: String?

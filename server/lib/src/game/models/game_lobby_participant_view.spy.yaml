@@ -1,0 +1,9 @@
+class: GameLobbyParticipantView
+fields:
+  playerId: String
+  name: String
+  kind: String
+  isHost: bool
+  isClaimed: bool
+  isReady: bool
+  isCurrentUser: bool

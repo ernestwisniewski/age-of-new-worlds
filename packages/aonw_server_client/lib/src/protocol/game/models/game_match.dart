@@ -22,8 +22,9 @@ abstract class GameMatch implements _i1.SerializableModel {
     required this.rulesetId,
     required this.rulesetHash,
     required this.state,
+    this.hostPlayerId,
     required this.turn,
-    required this.startedAt,
+    this.startedAt,
     this.endedAt,
     this.outcomeCondition,
     this.winnerPlayerId,
@@ -41,8 +42,9 @@ abstract class GameMatch implements _i1.SerializableModel {
     required String rulesetId,
     required String rulesetHash,
     required String state,
+    String? hostPlayerId,
     required int turn,
-    required DateTime startedAt,
+    DateTime? startedAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -61,10 +63,11 @@ abstract class GameMatch implements _i1.SerializableModel {
       rulesetId: jsonSerialization['rulesetId'] as String,
       rulesetHash: jsonSerialization['rulesetHash'] as String,
       state: jsonSerialization['state'] as String,
+      hostPlayerId: jsonSerialization['hostPlayerId'] as String?,
       turn: jsonSerialization['turn'] as int,
-      startedAt: _i1.DateTimeJsonExtension.fromJson(
-        jsonSerialization['startedAt'],
-      ),
+      startedAt: jsonSerialization['startedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
       endedAt: jsonSerialization['endedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
@@ -98,9 +101,11 @@ abstract class GameMatch implements _i1.SerializableModel {
 
   String state;
 
+  String? hostPlayerId;
+
   int turn;
 
-  DateTime startedAt;
+  DateTime? startedAt;
 
   DateTime? endedAt;
 
@@ -127,6 +132,7 @@ abstract class GameMatch implements _i1.SerializableModel {
     String? rulesetId,
     String? rulesetHash,
     String? state,
+    String? hostPlayerId,
     int? turn,
     DateTime? startedAt,
     DateTime? endedAt,
@@ -148,8 +154,9 @@ abstract class GameMatch implements _i1.SerializableModel {
       'rulesetId': rulesetId,
       'rulesetHash': rulesetHash,
       'state': state,
+      if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
       'turn': turn,
-      'startedAt': startedAt.toJson(),
+      if (startedAt != null) 'startedAt': startedAt?.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (outcomeCondition != null) 'outcomeCondition': outcomeCondition,
       if (winnerPlayerId != null) 'winnerPlayerId': winnerPlayerId,
@@ -177,8 +184,9 @@ class _GameMatchImpl extends GameMatch {
     required String rulesetId,
     required String rulesetHash,
     required String state,
+    String? hostPlayerId,
     required int turn,
-    required DateTime startedAt,
+    DateTime? startedAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -194,6 +202,7 @@ class _GameMatchImpl extends GameMatch {
          rulesetId: rulesetId,
          rulesetHash: rulesetHash,
          state: state,
+         hostPlayerId: hostPlayerId,
          turn: turn,
          startedAt: startedAt,
          endedAt: endedAt,
@@ -217,8 +226,9 @@ class _GameMatchImpl extends GameMatch {
     String? rulesetId,
     String? rulesetHash,
     String? state,
+    Object? hostPlayerId = _Undefined,
     int? turn,
-    DateTime? startedAt,
+    Object? startedAt = _Undefined,
     Object? endedAt = _Undefined,
     Object? outcomeCondition = _Undefined,
     Object? winnerPlayerId = _Undefined,
@@ -235,8 +245,9 @@ class _GameMatchImpl extends GameMatch {
       rulesetId: rulesetId ?? this.rulesetId,
       rulesetHash: rulesetHash ?? this.rulesetHash,
       state: state ?? this.state,
+      hostPlayerId: hostPlayerId is String? ? hostPlayerId : this.hostPlayerId,
       turn: turn ?? this.turn,
-      startedAt: startedAt ?? this.startedAt,
+      startedAt: startedAt is DateTime? ? startedAt : this.startedAt,
       endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
       outcomeCondition: outcomeCondition is String?
           ? outcomeCondition

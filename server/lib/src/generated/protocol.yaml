@@ -28,6 +28,9 @@ game:
   - createMatch:
   - joinMatch:
   - listMatches:
+  - lobby:
+  - setReady:
+  - startMatch:
   - submitTurn:
   - applyCommand:
   - query:

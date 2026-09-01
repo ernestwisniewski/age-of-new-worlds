@@ -3,16 +3,17 @@ import 'dart:io';
 import 'package:test/test.dart';
 
 void main() {
-  test('repository contains one complete initial database schema', () {
+  test('repository contains a complete ordered database migration chain', () {
     final registry = File('migrations/migration_registry.txt');
     final versions = registry
         .readAsLinesSync()
         .map((line) => line.trim())
         .where((line) => line.isNotEmpty && !line.startsWith('#'))
         .toList();
-    expect(versions, hasLength(1));
-    expect(versions.single, endsWith('-initial-schema'));
-    final migrationDirectory = Directory('migrations/${versions.single}');
+    expect(versions, isNotEmpty);
+    expect(versions.toSet(), hasLength(versions.length));
+    expect(versions.first, endsWith('-initial-schema'));
+    final migrationDirectory = Directory('migrations/${versions.first}');
     final definition = File(
       '${migrationDirectory.path}/definition.sql',
     ).readAsStringSync();
@@ -38,6 +39,19 @@ void main() {
       'aonw_steam_auth_request',
     ]) {
       expect(definition, contains('CREATE TABLE "$table"'));
+    }
+    for (final version in versions.skip(1)) {
+      final directory = Directory('migrations/$version');
+      expect(directory.existsSync(), isTrue, reason: version);
+      for (final file in [
+        'definition.json',
+        'definition.sql',
+        'definition_project.json',
+        'migration.json',
+        'migration.sql',
+      ]) {
+        expect(File('${directory.path}/$file').existsSync(), isTrue);
+      }
     }
   });
 }

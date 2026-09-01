@@ -529,6 +529,66 @@ class Endpoints extends _i1.EndpointDispatch {
               ) async =>
                   (endpoints['game'] as _i11.GameEndpoint).listMatches(session),
         ),
+        'lobby': _i1.MethodConnector(
+          name: 'lobby',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).lobby(
+                session,
+                params['matchId'],
+              ),
+        ),
+        'setReady': _i1.MethodConnector(
+          name: 'setReady',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'ready': _i1.ParameterDescription(
+              name: 'ready',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).setReady(
+                session,
+                params['matchId'],
+                params['ready'],
+              ),
+        ),
+        'startMatch': _i1.MethodConnector(
+          name: 'startMatch',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).startMatch(
+                session,
+                params['matchId'],
+              ),
+        ),
         'submitTurn': _i1.MethodConnector(
           name: 'submitTurn',
           params: {

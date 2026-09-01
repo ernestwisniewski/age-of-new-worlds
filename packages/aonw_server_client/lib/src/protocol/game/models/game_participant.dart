@@ -23,6 +23,11 @@ abstract class GameParticipant implements _i1.SerializableModel {
     required this.userIdentifier,
     required this.playerId,
     required this.joinedAt,
+    this.readyAt,
+    this.leftAt,
+    this.resignedAt,
+    this.kickedAt,
+    this.kickReason,
   });
 
   factory GameParticipant({
@@ -32,6 +37,11 @@ abstract class GameParticipant implements _i1.SerializableModel {
     required String userIdentifier,
     required String playerId,
     required DateTime joinedAt,
+    DateTime? readyAt,
+    DateTime? leftAt,
+    DateTime? resignedAt,
+    DateTime? kickedAt,
+    String? kickReason,
   }) = _GameParticipantImpl;
 
   factory GameParticipant.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,6 +58,19 @@ abstract class GameParticipant implements _i1.SerializableModel {
       joinedAt: _i1.DateTimeJsonExtension.fromJson(
         jsonSerialization['joinedAt'],
       ),
+      readyAt: jsonSerialization['readyAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['readyAt']),
+      leftAt: jsonSerialization['leftAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['leftAt']),
+      resignedAt: jsonSerialization['resignedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['resignedAt']),
+      kickedAt: jsonSerialization['kickedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['kickedAt']),
+      kickReason: jsonSerialization['kickReason'] as String?,
     );
   }
 
@@ -66,6 +89,16 @@ abstract class GameParticipant implements _i1.SerializableModel {
 
   DateTime joinedAt;
 
+  DateTime? readyAt;
+
+  DateTime? leftAt;
+
+  DateTime? resignedAt;
+
+  DateTime? kickedAt;
+
+  String? kickReason;
+
   /// Returns a shallow copy of this [GameParticipant]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -76,6 +109,11 @@ abstract class GameParticipant implements _i1.SerializableModel {
     String? userIdentifier,
     String? playerId,
     DateTime? joinedAt,
+    DateTime? readyAt,
+    DateTime? leftAt,
+    DateTime? resignedAt,
+    DateTime? kickedAt,
+    String? kickReason,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -87,6 +125,11 @@ abstract class GameParticipant implements _i1.SerializableModel {
       'userIdentifier': userIdentifier,
       'playerId': playerId,
       'joinedAt': joinedAt.toJson(),
+      if (readyAt != null) 'readyAt': readyAt?.toJson(),
+      if (leftAt != null) 'leftAt': leftAt?.toJson(),
+      if (resignedAt != null) 'resignedAt': resignedAt?.toJson(),
+      if (kickedAt != null) 'kickedAt': kickedAt?.toJson(),
+      if (kickReason != null) 'kickReason': kickReason,
     };
   }
 
@@ -106,6 +149,11 @@ class _GameParticipantImpl extends GameParticipant {
     required String userIdentifier,
     required String playerId,
     required DateTime joinedAt,
+    DateTime? readyAt,
+    DateTime? leftAt,
+    DateTime? resignedAt,
+    DateTime? kickedAt,
+    String? kickReason,
   }) : super._(
          id: id,
          matchId: matchId,
@@ -113,6 +161,11 @@ class _GameParticipantImpl extends GameParticipant {
          userIdentifier: userIdentifier,
          playerId: playerId,
          joinedAt: joinedAt,
+         readyAt: readyAt,
+         leftAt: leftAt,
+         resignedAt: resignedAt,
+         kickedAt: kickedAt,
+         kickReason: kickReason,
        );
 
   /// Returns a shallow copy of this [GameParticipant]
@@ -126,6 +179,11 @@ class _GameParticipantImpl extends GameParticipant {
     String? userIdentifier,
     String? playerId,
     DateTime? joinedAt,
+    Object? readyAt = _Undefined,
+    Object? leftAt = _Undefined,
+    Object? resignedAt = _Undefined,
+    Object? kickedAt = _Undefined,
+    Object? kickReason = _Undefined,
   }) {
     return GameParticipant(
       id: id is int? ? id : this.id,
@@ -134,6 +192,11 @@ class _GameParticipantImpl extends GameParticipant {
       userIdentifier: userIdentifier ?? this.userIdentifier,
       playerId: playerId ?? this.playerId,
       joinedAt: joinedAt ?? this.joinedAt,
+      readyAt: readyAt is DateTime? ? readyAt : this.readyAt,
+      leftAt: leftAt is DateTime? ? leftAt : this.leftAt,
+      resignedAt: resignedAt is DateTime? ? resignedAt : this.resignedAt,
+      kickedAt: kickedAt is DateTime? ? kickedAt : this.kickedAt,
+      kickReason: kickReason is String? ? kickReason : this.kickReason,
     );
   }
 }

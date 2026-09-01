@@ -21,6 +21,9 @@ abstract class GameMatchView
     required this.mapHash,
     required this.rulesetId,
     required this.rulesetHash,
+    required this.state,
+    this.hostPlayerId,
+    this.startedAt,
     required this.revision,
     required this.eventOffset,
   });
@@ -31,6 +34,9 @@ abstract class GameMatchView
     required String mapHash,
     required String rulesetId,
     required String rulesetHash,
+    required String state,
+    String? hostPlayerId,
+    DateTime? startedAt,
     required int revision,
     required int eventOffset,
   }) = _GameMatchViewImpl;
@@ -42,6 +48,11 @@ abstract class GameMatchView
       mapHash: jsonSerialization['mapHash'] as String,
       rulesetId: jsonSerialization['rulesetId'] as String,
       rulesetHash: jsonSerialization['rulesetHash'] as String,
+      state: jsonSerialization['state'] as String,
+      hostPlayerId: jsonSerialization['hostPlayerId'] as String?,
+      startedAt: jsonSerialization['startedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
       revision: jsonSerialization['revision'] as int,
       eventOffset: jsonSerialization['eventOffset'] as int,
     );
@@ -57,6 +68,12 @@ abstract class GameMatchView
 
   String rulesetHash;
 
+  String state;
+
+  String? hostPlayerId;
+
+  DateTime? startedAt;
+
   int revision;
 
   int eventOffset;
@@ -70,6 +87,9 @@ abstract class GameMatchView
     String? mapHash,
     String? rulesetId,
     String? rulesetHash,
+    String? state,
+    String? hostPlayerId,
+    DateTime? startedAt,
     int? revision,
     int? eventOffset,
   });
@@ -82,6 +102,9 @@ abstract class GameMatchView
       'mapHash': mapHash,
       'rulesetId': rulesetId,
       'rulesetHash': rulesetHash,
+      'state': state,
+      if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
+      if (startedAt != null) 'startedAt': startedAt?.toJson(),
       'revision': revision,
       'eventOffset': eventOffset,
     };
@@ -96,6 +119,9 @@ abstract class GameMatchView
       'mapHash': mapHash,
       'rulesetId': rulesetId,
       'rulesetHash': rulesetHash,
+      'state': state,
+      if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
+      if (startedAt != null) 'startedAt': startedAt?.toJson(),
       'revision': revision,
       'eventOffset': eventOffset,
     };
@@ -107,6 +133,8 @@ abstract class GameMatchView
   }
 }
 
+class _Undefined {}
+
 class _GameMatchViewImpl extends GameMatchView {
   _GameMatchViewImpl({
     required String matchId,
@@ -114,6 +142,9 @@ class _GameMatchViewImpl extends GameMatchView {
     required String mapHash,
     required String rulesetId,
     required String rulesetHash,
+    required String state,
+    String? hostPlayerId,
+    DateTime? startedAt,
     required int revision,
     required int eventOffset,
   }) : super._(
@@ -122,6 +153,9 @@ class _GameMatchViewImpl extends GameMatchView {
          mapHash: mapHash,
          rulesetId: rulesetId,
          rulesetHash: rulesetHash,
+         state: state,
+         hostPlayerId: hostPlayerId,
+         startedAt: startedAt,
          revision: revision,
          eventOffset: eventOffset,
        );
@@ -136,6 +170,9 @@ class _GameMatchViewImpl extends GameMatchView {
     String? mapHash,
     String? rulesetId,
     String? rulesetHash,
+    String? state,
+    Object? hostPlayerId = _Undefined,
+    Object? startedAt = _Undefined,
     int? revision,
     int? eventOffset,
   }) {
@@ -145,6 +182,9 @@ class _GameMatchViewImpl extends GameMatchView {
       mapHash: mapHash ?? this.mapHash,
       rulesetId: rulesetId ?? this.rulesetId,
       rulesetHash: rulesetHash ?? this.rulesetHash,
+      state: state ?? this.state,
+      hostPlayerId: hostPlayerId is String? ? hostPlayerId : this.hostPlayerId,
+      startedAt: startedAt is DateTime? ? startedAt : this.startedAt,
       revision: revision ?? this.revision,
       eventOffset: eventOffset ?? this.eventOffset,
     );

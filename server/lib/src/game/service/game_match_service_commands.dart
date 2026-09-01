@@ -90,6 +90,7 @@ Future<_CommandContext> _loadCommandContext(
     transaction: transaction,
     lock: true,
   );
+  _requireRunningMatch(match);
   final participant = await _participant(
     session,
     match.id!,

@@ -7,6 +7,7 @@ import 'package:serverpod/serverpod.dart';
 
 part 'game_match_service_commands.dart';
 part 'game_match_service_creation.dart';
+part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
 part 'game_match_service_support.dart';
@@ -34,6 +35,15 @@ final class GameMatchService {
 
   Future<List<GameMatchView>> listMatches(Session session) =>
       _listMatches(session);
+
+  Future<GameLobbyView> lobby(Session session, String matchId) =>
+      _lobby(session, matchId);
+
+  Future<GameLobbyView> setReady(Session session, String matchId, bool ready) =>
+      _setReady(session, matchId, ready);
+
+  Future<GameLobbyView> startMatch(Session session, String matchId) =>
+      _startMatch(session, matchId);
 
   Future<GameCommandOutcome> submitTurn(
     Session session,

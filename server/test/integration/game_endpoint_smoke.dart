@@ -128,6 +128,9 @@ final class _GameEndpointJourney {
         creatorPlayerId: 'player-1',
       ),
     );
+    expect(created.state, 'lobby');
+    expect(created.hostPlayerId, 'player-1');
+    expect(created.startedAt, isNull);
     final ownerInitial = await endpoint.resync(ownerSession, created.matchId);
     final guestInitial = await endpoint.joinMatch(
       guestSession,
@@ -137,7 +140,122 @@ final class _GameEndpointJourney {
     expect(guestInitial.playerId, 'player-2');
     _expectPrivateSnapshot(ownerInitial.snapshotJson, 'player-1');
     _expectPrivateSnapshot(guestInitial.snapshotJson, 'player-2');
+    await _verifyLobbyLifecycle(endpoint, created);
     return _JoinedMatch(endpoint: endpoint, created: created);
+  }
+
+  Future<void> _verifyLobbyLifecycle(
+    GameEndpoint endpoint,
+    game.GameMatchView created,
+  ) async {
+    final lobbyStats = await PublicGameStatsService(
+      cacheTtl: Duration.zero,
+    ).snapshot(ServerpodPublicGameStatsStore(databaseSession));
+    expect(lobbyStats.totals.openLobbies, 1);
+    expect(lobbyStats.totals.matchesStarted, 0);
+    await expectLater(
+      endpoint.applyCommand(
+        ownerSession,
+        game.GamePlayerCommandRequest(
+          matchId: created.matchId,
+          clientCommandId: 'owner-before-start',
+          commandJson: jsonEncode({
+            'type': 'fortifyUnit',
+            'expectedRevision': created.revision,
+            'unitId': 'unit-1',
+          }),
+        ),
+      ),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'match_not_started',
+        ),
+      ),
+    );
+    await expectLater(
+      endpoint.query(
+        ownerSession,
+        game.GamePlayerQueryRequest(
+          matchId: created.matchId,
+          queryJson: jsonEncode({
+            'type': 'researchOptions',
+            'expectedRevision': created.revision,
+          }),
+        ),
+      ),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'match_not_started',
+        ),
+      ),
+    );
+
+    final guestReady = await endpoint.setReady(
+      guestSession,
+      created.matchId,
+      true,
+    );
+    expect(guestReady.canStart, isFalse);
+    expect(
+      guestReady.participants
+          .singleWhere((participant) => participant.playerId == 'player-2')
+          .isReady,
+      isTrue,
+    );
+    await expectLater(
+      endpoint.startMatch(ownerSession, created.matchId),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'lobby_not_ready',
+        ),
+      ),
+    );
+    await expectLater(
+      endpoint.startMatch(guestSession, created.matchId),
+      throwsA(
+        isA<game.GameException>().having(
+          (error) => error.code,
+          'code',
+          'host_required',
+        ),
+      ),
+    );
+
+    final ownerReady = await endpoint.setReady(
+      ownerSession,
+      created.matchId,
+      true,
+    );
+    expect(ownerReady.canStart, isTrue);
+    expect(ownerReady.participants, hasLength(2));
+    expect(
+      ownerReady.participants
+          .singleWhere((participant) => participant.isCurrentUser)
+          .playerId,
+      'player-1',
+    );
+    final started = await endpoint.startMatch(ownerSession, created.matchId);
+    expect(started.match.state, 'running');
+    expect(started.match.startedAt, isNotNull);
+    expect(started.canStart, isFalse);
+
+    final startedStats = await PublicGameStatsService(
+      cacheTtl: Duration.zero,
+    ).snapshot(ServerpodPublicGameStatsStore(databaseSession));
+    expect(startedStats.totals.openLobbies, 0);
+    expect(startedStats.totals.matchesStarted, 1);
+
+    final preStartLedgers = await game.GameCommandLedger.db.find(
+      databaseSession,
+      where: (table) => table.clientCommandId.equals('owner-before-start'),
+    );
+    expect(preStartLedgers, isEmpty);
   }
 
   Future<_OwnerTurn> _submitOwner(
@@ -212,6 +330,7 @@ final class _GameEndpointJourney {
     final persisted = match!;
     expect(persisted.eventOffset, guestTurn.finalEventOffset);
     expect(persisted.state, 'running');
+    expect(persisted.startedAt, isNotNull);
     expect(persisted.turn, greaterThanOrEqualTo(0));
     expect(persisted.endedAt, isNull);
     expect(persisted.outcomeCondition, isNull);

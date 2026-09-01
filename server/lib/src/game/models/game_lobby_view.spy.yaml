@@ -1,0 +1,5 @@
+class: GameLobbyView
+fields:
+  match: GameMatchView
+  participants: List<GameLobbyParticipantView>
+  canStart: bool

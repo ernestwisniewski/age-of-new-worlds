@@ -23,6 +23,15 @@ final class GameEndpoint extends Endpoint {
   Future<List<GameMatchView>> listMatches(Session session) =>
       _service.listMatches(session);
 
+  Future<GameLobbyView> lobby(Session session, String matchId) =>
+      _service.lobby(session, matchId);
+
+  Future<GameLobbyView> setReady(Session session, String matchId, bool ready) =>
+      _service.setReady(session, matchId, ready);
+
+  Future<GameLobbyView> startMatch(Session session, String matchId) =>
+      _service.startMatch(session, matchId);
+
   Future<GameCommandOutcome> submitTurn(
     Session session,
     GameSubmitTurnRequest request,

@@ -14,6 +14,7 @@ void main() {
       test('queries one recipient without mutating the match', () async {
         addTearDown(shutdownAonwGameNativeHost);
         final owner = _authenticated(sessionBuilder, 'query-owner').build();
+        final guest = _authenticated(sessionBuilder, 'query-guest').build();
         final outsider = _authenticated(
           sessionBuilder,
           'query-outsider',
@@ -32,6 +33,16 @@ void main() {
             creatorPlayerId: 'player-1',
           ),
         );
+        await endpoint.joinMatch(
+          guest,
+          game.GameJoinMatchRequest(
+            matchId: created.matchId,
+            playerId: 'player-2',
+          ),
+        );
+        await endpoint.setReady(owner, created.matchId, true);
+        await endpoint.setReady(guest, created.matchId, true);
+        await endpoint.startMatch(owner, created.matchId);
         final before = await game.GameMatch.db.findFirstRow(
           database,
           where: (table) => table.publicId.equals(created.matchId),

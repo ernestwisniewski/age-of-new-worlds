@@ -22,6 +22,7 @@ Future<GamePlayerQueryOutcome> _query(
       transaction: transaction,
       lock: true,
     );
+    _requireRunningMatch(match);
     final participant = await _participant(
       session,
       match.id!,
