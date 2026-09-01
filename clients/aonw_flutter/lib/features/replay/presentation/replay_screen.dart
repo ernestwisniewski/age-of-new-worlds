@@ -19,7 +19,7 @@ final class ReplayScreen extends StatefulWidget {
   });
 
   final ReplayPresentationController controller;
-  final AonwFlameGameFactory flameGameFactory;
+  final AonwFlameGame Function() flameGameFactory;
 
   @override
   State<ReplayScreen> createState() => _ReplayScreenState();

@@ -24,6 +24,7 @@ void main() {
 
     expect(find.text('Audio'), findsOneWidget);
     expect(find.text('Camera'), findsOneWidget);
+    expect(find.text('Map'), findsOneWidget);
     expect(find.text('Accessibility'), findsOneWidget);
 
     tester
@@ -48,11 +49,14 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
     await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('map-elevation-walls-setting')));
+    await tester.pumpAndSettle();
 
     expect(store.settings.masterVolume, 0.25);
     expect(store.settings.cameraSensitivity, 1.5);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
+    expect(store.settings.showMapElevationWalls, isTrue);
 
     await tester.tap(find.byKey(const ValueKey('reset-settings')));
     await tester.pumpAndSettle();

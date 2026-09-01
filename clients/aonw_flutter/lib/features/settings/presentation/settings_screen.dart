@@ -71,6 +71,11 @@ final class _SettingsForm extends StatelessWidget {
                 ),
                 const SizedBox(height: AonwSpacing.md),
                 _SettingsSection(
+                  title: l10n.mapSettings,
+                  child: _MapSettings(settings: settings, onChanged: onChanged),
+                ),
+                const SizedBox(height: AonwSpacing.md),
+                _SettingsSection(
                   title: l10n.accessibilitySettings,
                   child: _AccessibilitySettings(
                     settings: settings,
@@ -91,6 +96,24 @@ final class _SettingsForm extends StatelessWidget {
       ],
     );
   }
+}
+
+final class _MapSettings extends StatelessWidget {
+  const _MapSettings({required this.settings, required this.onChanged});
+
+  final ClientSettings settings;
+  final ValueChanged<ClientSettings> onChanged;
+
+  @override
+  Widget build(BuildContext context) => SwitchListTile.adaptive(
+    key: const ValueKey('map-elevation-walls-setting'),
+    contentPadding: EdgeInsets.zero,
+    title: Text(context.aonwL10n.mapElevationWalls),
+    subtitle: Text(context.aonwL10n.mapElevationWallsDescription),
+    value: settings.showMapElevationWalls,
+    onChanged: (value) =>
+        onChanged(settings.copyWith(showMapElevationWalls: value)),
+  );
 }
 
 final class _AudioSettings extends StatelessWidget {

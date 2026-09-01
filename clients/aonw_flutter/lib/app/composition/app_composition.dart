@@ -38,7 +38,7 @@ final class AppComposition {
     ReplayPresentationController? replayController,
     MapInputSource? mapInputSource,
     ClientSettingsStore? settingsStore,
-    AonwFlameGameFactory flameGameFactory = AonwFlameGame.new,
+    AonwFlameGame Function() flameGameFactory = AonwFlameGame.new,
     ClientTelemetry telemetry = const NoOpClientTelemetry(),
     MultiplayerAccessController? multiplayerAccessController,
     MultiplayerController? multiplayerController,

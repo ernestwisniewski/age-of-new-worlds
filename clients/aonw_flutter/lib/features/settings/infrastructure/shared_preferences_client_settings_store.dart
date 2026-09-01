@@ -12,6 +12,8 @@ final class SharedPreferencesClientSettingsStore
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
   static const _reducedMotionKey = 'aonw.settings.reducedMotion';
   static const _highContrastKey = 'aonw.settings.highContrast';
+  static const _showMapElevationWallsKey =
+      'aonw.settings.showMapElevationWalls';
 
   final SharedPreferencesAsync _preferences;
 
@@ -23,6 +25,9 @@ final class SharedPreferencesClientSettingsStore
     );
     final reducedMotion = await _preferences.getBool(_reducedMotionKey);
     final highContrast = await _preferences.getBool(_highContrastKey);
+    final showMapElevationWalls = await _preferences.getBool(
+      _showMapElevationWallsKey,
+    );
     return ClientSettings(
       masterVolume: _bounded(
         masterVolume,
@@ -38,6 +43,9 @@ final class SharedPreferencesClientSettingsStore
       ),
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
+      showMapElevationWalls:
+          showMapElevationWalls ??
+          ClientSettings.defaults.showMapElevationWalls,
     );
   }
 
@@ -50,6 +58,10 @@ final class SharedPreferencesClientSettingsStore
     );
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
     await _preferences.setBool(_highContrastKey, settings.highContrast);
+    await _preferences.setBool(
+      _showMapElevationWallsKey,
+      settings.showMapElevationWalls,
+    );
   }
 }
 

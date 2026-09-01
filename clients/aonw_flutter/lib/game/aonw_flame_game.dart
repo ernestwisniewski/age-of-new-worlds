@@ -23,8 +23,6 @@ import 'map/worker_infrastructure_layer.dart';
 import 'presentation/flame_scene_patch.dart';
 import 'presentation/flame_scene_sink.dart';
 
-typedef AonwFlameGameFactory = AonwFlameGame Function();
-
 final class AonwWorld extends World implements FlameSceneSink {
   AonwWorld()
     : terrainLayer = MapTerrainLayerComponent(),
@@ -280,6 +278,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void setCameraSensitivity(double sensitivity) {
     if (_disposed) return;
     inputSurface.setCameraSensitivity(sensitivity);
+  }
+
+  void setMapElevationWallsVisible(bool visible) {
+    if (!_disposed && world.terrainLayer.setElevationWallsVisible(visible)) {
+      _requestInputFrame();
+    }
   }
 
   void setKeyboardPanDirection({required double x, required double y}) {

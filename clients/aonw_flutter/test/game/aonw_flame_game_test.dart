@@ -55,4 +55,27 @@ void main() {
       expect(game.paused, isFalse);
     },
   );
+
+  testWithGame<AonwFlameGame>(
+    'applies elevation wall settings without replacing the scene',
+    AonwFlameGame.new,
+    (game) async {
+      final scene = testMapScene();
+      final snapshot = MapRenderSnapshot(
+        map: scene.map,
+        interaction: const MapInteractionState(),
+        reference: scene.reference,
+        player: scene.player,
+      );
+      game.sceneSink.replaceScene(snapshot);
+      await game.ready();
+
+      expect(game.world.terrainLayer.debugElevationWallsVisible, isFalse);
+      game.setMapElevationWallsVisible(true);
+
+      expect(game.world.terrainLayer.debugElevationWallsVisible, isTrue);
+      expect(game.world.debugScene, same(snapshot));
+      expect(game.world.debugSceneWriteCount, 1);
+    },
+  );
 }

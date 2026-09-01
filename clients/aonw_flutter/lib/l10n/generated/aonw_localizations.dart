@@ -1598,6 +1598,24 @@ abstract class AonwLocalizations {
   /// **'Zoom sensitivity'**
   String get cameraSensitivity;
 
+  /// No description provided for @mapSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get mapSettings;
+
+  /// No description provided for @mapElevationWalls.
+  ///
+  /// In en, this message translates to:
+  /// **'Elevation walls'**
+  String get mapElevationWalls;
+
+  /// No description provided for @mapElevationWallsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show neighbor-aware depth on raised hexes.'**
+  String get mapElevationWallsDescription;
+
   /// No description provided for @accessibilitySettings.
   ///
   /// In en, this message translates to:

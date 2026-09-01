@@ -49,7 +49,7 @@ final class MapScreen extends StatefulWidget {
   final MapPresentationController controller;
   final MapInputSource? inputSource;
   final VoidCallback? onOpenSettings;
-  final AonwFlameGameFactory flameGameFactory;
+  final AonwFlameGame Function() flameGameFactory;
   final RouteObserver<ModalRoute<void>>? routeObserver;
   final bool autoLoad;
 
@@ -169,6 +169,7 @@ final class _MapScreenState extends State<MapScreen>
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
+    _flameGame.setMapElevationWallsVisible(settings.showMapElevationWalls);
     _synchronizeGamepadSettings(settings.cameraSensitivity);
     return switch (state) {
       GameSessionLoading() => const LoadingMap(),

@@ -35,7 +35,7 @@ final class AonwApp extends StatefulWidget {
 
   final MapPresentationController mapController;
   final MapInputSource? mapInputSource;
-  final AonwFlameGameFactory flameGameFactory;
+  final AonwFlameGame Function() flameGameFactory;
   final ClientSettingsController? settingsController;
   final ReplayPresentationController? replayController;
   final MultiplayerAccessController? multiplayerAccessController;

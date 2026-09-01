@@ -1187,6 +1187,16 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get cameraSensitivity => 'Czułość przybliżenia';
 
   @override
+  String get mapSettings => 'Mapa';
+
+  @override
+  String get mapElevationWalls => 'Ściany wysokości';
+
+  @override
+  String get mapElevationWallsDescription =>
+      'Pokazuj głębokość wyniesionych heksów zależną od sąsiadów.';
+
+  @override
   String get accessibilitySettings => 'Dostępność';
 
   @override

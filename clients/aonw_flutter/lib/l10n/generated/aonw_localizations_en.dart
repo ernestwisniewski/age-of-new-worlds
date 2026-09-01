@@ -1184,6 +1184,16 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get cameraSensitivity => 'Zoom sensitivity';
 
   @override
+  String get mapSettings => 'Map';
+
+  @override
+  String get mapElevationWalls => 'Elevation walls';
+
+  @override
+  String get mapElevationWallsDescription =>
+      'Show neighbor-aware depth on raised hexes.';
+
+  @override
   String get accessibilitySettings => 'Accessibility';
 
   @override

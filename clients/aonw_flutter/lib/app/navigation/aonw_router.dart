@@ -73,7 +73,7 @@ final class AonwRouter {
 
   final MapPresentationController mapController;
   final ClientSettingsController settingsController;
-  final AonwFlameGameFactory flameGameFactory;
+  final AonwFlameGame Function() flameGameFactory;
   final RouteObserver<ModalRoute<void>> routeObserver;
   final ReplayPresentationController? replayController;
   final MultiplayerAccessController? multiplayerAccessController;

@@ -103,12 +103,22 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
     ..color = MapPalette.elevationWallLeft;
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
+  var _elevationWallsVisible = false;
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
 
   @visibleForTesting
   MapStaticRenderIdentity? get debugIdentity => _cache?.identity;
+
+  @visibleForTesting
+  bool get debugElevationWallsVisible => _elevationWallsVisible;
+
+  bool setElevationWallsVisible(bool visible) {
+    if (_elevationWallsVisible == visible) return false;
+    _elevationWallsVisible = visible;
+    return true;
+  }
 
   void applyCache(MapStaticRenderCache cache) {
     if (_cache?.identity == cache.identity) return;
@@ -126,9 +136,14 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   void render(ui.Canvas canvas) {
     final cache = _cache;
     if (cache == null) return;
-    canvas.drawPath(cache.elevationWallPaths.right, _elevationWallRightPaint);
-    canvas.drawPath(cache.elevationWallPaths.bottom, _elevationWallBottomPaint);
-    canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
+    if (_elevationWallsVisible) {
+      canvas.drawPath(cache.elevationWallPaths.right, _elevationWallRightPaint);
+      canvas.drawPath(
+        cache.elevationWallPaths.bottom,
+        _elevationWallBottomPaint,
+      );
+      canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
+    }
     for (final entry in cache.terrainPaths.entries) {
       canvas.drawPath(entry.value, _paints[entry.key]!);
     }
