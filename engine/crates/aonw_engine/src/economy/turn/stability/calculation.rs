@@ -60,6 +60,7 @@ pub(super) fn stability_breakdown(
     let city_cost = metrics
         .city_count
         .saturating_sub(1)
+        .max(0)
         .checked_mul(values.cost_per_city)
         .ok_or_else(|| EconomyTurnError::new("city stability cost overflow"))?;
     let building_sources = required(
