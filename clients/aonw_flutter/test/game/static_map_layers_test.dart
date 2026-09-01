@@ -2,7 +2,9 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/camera/map_viewport_projection.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/fog_map_layer.dart';
 import 'package:aonw_flutter/game/map/static_map_layers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
@@ -18,6 +20,7 @@ void main() {
     expect(cache.identity.cols, 40);
     expect(cache.identity.rows, 30);
     expect(cache.gridPath.computeMetrics(), hasLength(1200));
+    expect(cache.tilePaths, hasLength(1200));
     expect(
       cache.terrainPaths.values.fold<int>(
         0,
@@ -45,24 +48,26 @@ void main() {
       await game.ready();
 
       final layers = game.world.children.toList();
-      expect(layers, hasLength(12));
+      expect(layers, hasLength(13));
       expect(layers[0], same(game.world.terrainLayer));
       expect(layers[1], same(game.world.referenceLayer));
       expect(layers[2], same(game.world.gridLayer));
       expect(layers[3], same(game.world.workerInfrastructureLayer));
-      expect(layers[4], same(game.world.reachableLayer));
-      expect(layers[5], same(game.world.routeLayer));
-      expect(layers[6], same(game.world.objectiveLayer));
-      expect(layers[7], same(game.world.cityLayer));
-      expect(layers[8], same(game.world.artifactLayer));
-      expect(layers[9], same(game.world.unitLayer));
-      expect(layers[10], same(game.world.selectionLayer));
-      expect(layers[11], same(game.world.effectHost));
+      expect(layers[4], same(game.world.fogLayer));
+      expect(layers[5], same(game.world.reachableLayer));
+      expect(layers[6], same(game.world.routeLayer));
+      expect(layers[7], same(game.world.objectiveLayer));
+      expect(layers[8], same(game.world.cityLayer));
+      expect(layers[9], same(game.world.artifactLayer));
+      expect(layers[10], same(game.world.unitLayer));
+      expect(layers[11], same(game.world.selectionLayer));
+      expect(layers[12], same(game.world.effectHost));
       expect(layers.map((component) => component.priority), [
         0,
         10,
         20,
         25,
+        27,
         30,
         40,
         43,
@@ -83,6 +88,7 @@ void main() {
       expect(game.world.terrainLayer.debugCacheUpdateCount, 1);
       expect(game.world.referenceLayer.debugCacheUpdateCount, 1);
       expect(game.world.gridLayer.debugCacheUpdateCount, 1);
+      expect(game.world.fogLayer.isVisible, isFalse);
     },
   );
 
@@ -125,6 +131,39 @@ void main() {
       expect(game.world.gridLayer.debugCacheUpdateCount, 2);
     },
   );
+
+  test('batches recipient fog and reuses unchanged visibility paths', () {
+    final layer = MapFogLayerComponent();
+    final cache = MapStaticRenderCache.build(
+      testMapScene(cols: 3, rows: 2).map,
+    );
+    final fog = MapFogView(
+      enabled: true,
+      discoveredHexes: const [(col: 1, row: 0), (col: 2, row: 0)],
+      visibleHexes: const [(col: 2, row: 0)],
+    );
+    layer.applyFog(cache, fog);
+
+    expect(layer.isVisible, isTrue);
+    expect(layer.debugHiddenHexCount, 4);
+    expect(layer.debugDiscoveredHexCount, 1);
+    expect(layer.debugHiddenPathMetricCount, 4);
+    expect(layer.debugDiscoveredPathMetricCount, 1);
+    expect(layer.debugPathBuildCount, 1);
+
+    final equalFog = MapFogView(
+      enabled: true,
+      discoveredHexes: const [(col: 1, row: 0), (col: 2, row: 0)],
+      visibleHexes: const [(col: 2, row: 0)],
+    );
+    layer.applyFog(cache, equalFog);
+    expect(layer.debugPathBuildCount, 1);
+
+    layer.applyFog(cache, MapFogView.disabled());
+    expect(layer.isVisible, isFalse);
+    expect(layer.debugHiddenPathMetricCount, 0);
+    expect(layer.debugDiscoveredPathMetricCount, 0);
+  });
 }
 
 MapRenderSnapshot _snapshot(

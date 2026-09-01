@@ -24,6 +24,7 @@ final class MapStaticRenderCache {
     required this.identity,
     required this.geometry,
     required this.projection,
+    required this.tilePaths,
     required this.terrainPaths,
     required this.gridPath,
     required this.clipPath,
@@ -39,9 +40,11 @@ final class MapStaticRenderCache {
     final bounds = geometry.bounds;
     final projection = MapViewportProjection(geometry);
     final terrainPaths = <MapTerrain, ui.Path>{};
+    final tilePaths = <MapHexCoordinate, ui.Path>{};
     final gridPath = ui.Path();
     for (final tile in map.tiles) {
       final hex = aonwProjectedHexPath(projection, tile.coordinate);
+      tilePaths[tile.coordinate] = hex;
       terrainPaths
           .putIfAbsent(tile.displayTerrain, ui.Path.new)
           .addPath(hex, ui.Offset.zero);
@@ -56,6 +59,7 @@ final class MapStaticRenderCache {
       ),
       geometry: geometry,
       projection: projection,
+      tilePaths: Map.unmodifiable(tilePaths),
       terrainPaths: Map.unmodifiable(terrainPaths),
       gridPath: gridPath,
       clipPath: aonwProjectedMapClipPath(map, projection),
@@ -69,6 +73,7 @@ final class MapStaticRenderCache {
   final MapStaticRenderIdentity identity;
   final AonwOddQFlatTopGeometry geometry;
   final MapViewportProjection projection;
+  final Map<MapHexCoordinate, ui.Path> tilePaths;
   final Map<MapTerrain, ui.Path> terrainPaths;
   final ui.Path gridPath;
   final ui.Path clipPath;

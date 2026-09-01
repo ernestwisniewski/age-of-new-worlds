@@ -14,6 +14,7 @@ import 'input/flame_map_input_surface.dart';
 import 'map/artifact_map_layer.dart';
 import 'map/city_map_layer.dart';
 import 'map/flame_map_camera.dart';
+import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
 import 'map/map_effect_host.dart';
 import 'map/objective_map_layer.dart';
@@ -35,6 +36,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     objectiveLayer = MapObjectiveLayerComponent();
     reachableLayer = MapReachableLayerComponent();
     workerInfrastructureLayer = MapWorkerInfrastructureLayerComponent();
+    fogLayer = MapFogLayerComponent();
     routeLayer = MapRouteLayerComponent();
     selectionLayer = MapSelectionLayerComponent(units: unitLayer);
     effectHost = MapEffectHostComponent(units: unitLayer);
@@ -43,6 +45,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       referenceLayer,
       gridLayer,
       workerInfrastructureLayer,
+      fogLayer,
       reachableLayer,
       routeLayer,
       objectiveLayer,
@@ -59,6 +62,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   final MapGridLayerComponent gridLayer;
   late final MapReachableLayerComponent reachableLayer;
   late final MapWorkerInfrastructureLayerComponent workerInfrastructureLayer;
+  late final MapFogLayerComponent fogLayer;
   late final MapRouteLayerComponent routeLayer;
   late final MapUnitLayerComponent unitLayer;
   late final MapCityLayerComponent cityLayer;
@@ -106,6 +110,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     );
     gridLayer.applyCache(cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
+    fogLayer.applyFog(cache, snapshot.player.fog);
     reachableLayer.applyReachable(cache, snapshot.interaction.reachable);
     routeLayer.applyRoute(cache, snapshot.interaction.route);
     objectiveLayer.applyMap(snapshot.map, cache);
@@ -136,6 +141,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     referenceLayer.clearCache();
     gridLayer.clearCache();
     workerInfrastructureLayer.clearLayer();
+    fogLayer.clearLayer();
     reachableLayer.clearLayer();
     routeLayer.clearLayer();
     objectiveLayer.clearLayer();
