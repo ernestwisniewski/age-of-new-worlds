@@ -24,6 +24,9 @@ abstract final class MapPalette {
   static const mapIconFallback = Color(0xB4F0DCAE);
   static const heightBadge = Color(0xFFFFFFFF);
   static const heightBadgeOutline = Color(0xFF000000);
+  static const roadEdge = Color(0xFF000000);
+  static const roadAsphalt = Color(0xFF24262A);
+  static const roadMarking = Color(0xFFFFFFFF);
   static final elevationWallRight = Color.lerp(
     elevationWallBottom,
     elevationWallHighlight,

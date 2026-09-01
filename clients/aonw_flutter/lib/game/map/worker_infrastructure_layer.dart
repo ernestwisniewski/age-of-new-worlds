@@ -23,16 +23,52 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   }
 
   final _improvements = <MapHexCoordinate, MapFieldImprovementComponent>{};
-  final _roads = <MapHexCoordinate, MapRoadComponent>{};
+  final _roads = <MapHexCoordinate, RoadView>{};
+  Set<MapHexCoordinate> _cityCenters = const {};
+  ui.Path _roadPath = ui.Path();
+  ui.Path _markingPath = ui.Path();
+  var _operationalRoadCount = 0;
+  var _roadGeometryBuildCount = 0;
   var _createdCount = 0;
   var _updatedCount = 0;
   var _removedCount = 0;
+
+  static final _roadEdgePaint = ui.Paint()
+    ..color = MapPalette.roadEdge
+    ..strokeWidth = 9
+    ..strokeCap = ui.StrokeCap.round
+    ..style = ui.PaintingStyle.stroke
+    ..isAntiAlias = true;
+  static final _roadAsphaltPaint = ui.Paint()
+    ..color = MapPalette.roadAsphalt
+    ..strokeWidth = 7
+    ..strokeCap = ui.StrokeCap.round
+    ..style = ui.PaintingStyle.stroke
+    ..isAntiAlias = true;
+  static final _roadMarkingPaint = ui.Paint()
+    ..color = MapPalette.roadMarking
+    ..strokeWidth = 1.5
+    ..strokeCap = ui.StrokeCap.round
+    ..style = ui.PaintingStyle.stroke
+    ..isAntiAlias = true;
 
   @visibleForTesting
   int get debugImprovementCount => _improvements.length;
 
   @visibleForTesting
   int get debugRoadCount => _roads.length;
+
+  @visibleForTesting
+  int get debugOperationalRoadCount => _operationalRoadCount;
+
+  @visibleForTesting
+  int get debugRoadGeometryBuildCount => _roadGeometryBuildCount;
+
+  @visibleForTesting
+  int get debugRoadPathMetricCount => _roadPath.computeMetrics().length;
+
+  @visibleForTesting
+  int get debugCityConnectionCount => _cityConnectionCount();
 
   @visibleForTesting
   int get debugCreatedCount => _createdCount;
@@ -45,8 +81,7 @@ final class MapWorkerInfrastructureLayerComponent extends Component
 
   @visibleForTesting
   int get debugSharedPaintCount =>
-      MapFieldImprovementComponent.sharedPaintCount +
-      MapRoadComponent.sharedPaintCount;
+      MapFieldImprovementComponent.sharedPaintCount + 3;
 
   @visibleForTesting
   MapFieldImprovementComponent? debugImprovementAt(
@@ -54,15 +89,11 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   ) => _improvements[coordinate];
 
   @visibleForTesting
-  MapRoadComponent? debugRoadAt(MapHexCoordinate coordinate) =>
-      _roads[coordinate];
+  RoadView? debugRoadAt(MapHexCoordinate coordinate) => _roads[coordinate];
 
   void applyPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
     for (final coordinate in patch.removedFieldImprovementCoordinates) {
       _remove(_improvements.remove(coordinate));
-    }
-    for (final coordinate in patch.removedRoadCoordinates) {
-      _remove(_roads.remove(coordinate));
     }
     for (final improvement in patch.fieldImprovementUpserts) {
       final center = _center(cache, improvement.coordinate);
@@ -80,20 +111,32 @@ final class MapWorkerInfrastructureLayerComponent extends Component
         _updatedCount += 1;
       }
     }
-    for (final road in patch.roadUpserts) {
-      final center = _center(cache, road.coordinate);
-      final existing = _roads[road.coordinate];
-      if (existing == null) {
-        final component = MapRoadComponent(road: road, center: center);
-        _roads[road.coordinate] = component;
-        add(component);
-        _createdCount += 1;
-      } else {
-        existing.applyRoad(road, center);
-        _updatedCount += 1;
+    var roadsChanged = false;
+    for (final coordinate in patch.removedRoadCoordinates) {
+      if (_roads.remove(coordinate) != null) {
+        _removedCount += 1;
+        roadsChanged = true;
       }
     }
-    isVisible = _improvements.isNotEmpty || _roads.isNotEmpty;
+    for (final road in patch.roadUpserts) {
+      final existing = _roads[road.coordinate];
+      if (existing == null) {
+        _createdCount += 1;
+      } else {
+        _updatedCount += 1;
+      }
+      _roads[road.coordinate] = road;
+      roadsChanged = true;
+    }
+    final cityCenters = {
+      for (final city in patch.snapshot.player.cities) city.center,
+    };
+    if (!_sameCoordinates(_cityCenters, cityCenters)) {
+      _cityCenters = Set.unmodifiable(cityCenters);
+      roadsChanged = true;
+    }
+    if (roadsChanged) _rebuildRoadGeometry(cache);
+    isVisible = _improvements.isNotEmpty || _operationalRoadCount > 0;
   }
 
   void _remove(Component? component) {
@@ -103,12 +146,125 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   }
 
   void clearLayer() {
-    for (final component in [..._improvements.values, ..._roads.values]) {
+    for (final component in _improvements.values) {
       component.removeFromParent();
     }
     _improvements.clear();
     _roads.clear();
+    _cityCenters = const {};
+    _roadPath = ui.Path();
+    _markingPath = ui.Path();
+    _operationalRoadCount = 0;
     isVisible = false;
+  }
+
+  @override
+  void render(ui.Canvas canvas) {
+    if (_operationalRoadCount == 0) return;
+    canvas
+      ..drawPath(_roadPath, _roadEdgePaint)
+      ..drawPath(_roadPath, _roadAsphaltPaint)
+      ..drawPath(_markingPath, _roadMarkingPaint);
+  }
+
+  void _rebuildRoadGeometry(MapStaticRenderCache cache) {
+    _roadGeometryBuildCount += 1;
+    final roadPath = ui.Path();
+    final markingPath = ui.Path();
+    final operational = {
+      for (final road in _roads.values)
+        if (road.condition == TransportConditionView.operational)
+          road.coordinate,
+    };
+    for (final coordinate in operational) {
+      final center = _center(cache, coordinate);
+      var connected = false;
+      for (final neighbor in cache.geometry.neighbors(coordinate)) {
+        final connectsRoad = operational.contains(neighbor);
+        final connectsCity = _cityCenters.contains(neighbor);
+        if (!connectsRoad && !connectsCity) continue;
+        connected = true;
+        if (connectsRoad && !_drawsEdge(coordinate, neighbor)) continue;
+        _addRoadSegment(
+          roadPath,
+          markingPath,
+          center,
+          _center(cache, neighbor),
+        );
+      }
+      if (!connected) {
+        _addRoadSegment(
+          roadPath,
+          markingPath,
+          ui.Offset(center.dx - 8, center.dy),
+          ui.Offset(center.dx + 8, center.dy),
+        );
+      }
+    }
+    _roadPath = roadPath;
+    _markingPath = markingPath;
+    _operationalRoadCount = operational.length;
+  }
+
+  int _cityConnectionCount() {
+    var count = 0;
+    for (final road in _roads.values) {
+      if (road.condition != TransportConditionView.operational) continue;
+      for (final neighbor in _neighbors(road.coordinate)) {
+        if (_cityCenters.contains(neighbor)) count += 1;
+      }
+    }
+    return count;
+  }
+
+  Iterable<MapHexCoordinate> _neighbors(MapHexCoordinate coordinate) {
+    final odd = coordinate.col.isOdd;
+    return [
+      (col: coordinate.col + 1, row: coordinate.row + (odd ? 0 : -1)),
+      (col: coordinate.col + 1, row: coordinate.row + (odd ? 1 : 0)),
+      (col: coordinate.col, row: coordinate.row + 1),
+      (col: coordinate.col - 1, row: coordinate.row + (odd ? 1 : 0)),
+      (col: coordinate.col - 1, row: coordinate.row + (odd ? 0 : -1)),
+      (col: coordinate.col, row: coordinate.row - 1),
+    ];
+  }
+
+  static bool _sameCoordinates(
+    Set<MapHexCoordinate> left,
+    Set<MapHexCoordinate> right,
+  ) => left.length == right.length && left.containsAll(right);
+
+  static bool _drawsEdge(MapHexCoordinate source, MapHexCoordinate target) =>
+      source.col < target.col ||
+      (source.col == target.col && source.row < target.row);
+
+  static void _addRoadSegment(
+    ui.Path roadPath,
+    ui.Path markingPath,
+    ui.Offset start,
+    ui.Offset end,
+  ) {
+    roadPath
+      ..moveTo(start.dx, start.dy)
+      ..lineTo(end.dx, end.dy);
+    _addDashedLine(markingPath, start, end);
+  }
+
+  static void _addDashedLine(ui.Path path, ui.Offset start, ui.Offset end) {
+    const dashLength = 6.0;
+    const gapLength = 5.0;
+    final delta = end - start;
+    final length = delta.distance;
+    if (length == 0) return;
+    final direction = delta / length;
+    for (var offset = 0.0; offset < length; offset += dashLength + gapLength) {
+      final finish = math.min(offset + dashLength, length);
+      final dashStart = start + direction * offset;
+      final dashEnd = start + direction * finish;
+      path
+        ..moveTo(dashStart.dx, dashStart.dy)
+        ..lineTo(dashEnd.dx, dashEnd.dy);
+    }
   }
 }
 
@@ -203,45 +359,6 @@ final class MapFieldImprovementComponent extends PositionComponent
     if (isMounted && game.isAttached && game.paused) {
       game.stepEngine(stepTime: 0);
     }
-  }
-}
-
-final class MapRoadComponent extends PositionComponent {
-  MapRoadComponent({required RoadView road, required ui.Offset center})
-    : _road = road,
-      super(
-        position: Vector2(center.dx, center.dy),
-        size: Vector2.all(_size),
-        anchor: Anchor.center,
-      );
-
-  static const _size = 38.0;
-  static final ui.Paint _operational = ui.Paint()
-    ..color = MapPalette.cityOutline
-    ..strokeWidth = 5
-    ..strokeCap = ui.StrokeCap.round;
-  static final ui.Paint _pillaged = ui.Paint()
-    ..color = MapPalette.foreignCity
-    ..strokeWidth = 5
-    ..strokeCap = ui.StrokeCap.round;
-  static const sharedPaintCount = 2;
-
-  RoadView _road;
-
-  @visibleForTesting
-  RoadView get debugRoad => _road;
-
-  void applyRoad(RoadView value, ui.Offset center) {
-    _road = value;
-    position.setValues(center.dx, center.dy);
-  }
-
-  @override
-  void render(ui.Canvas canvas) {
-    final paint = _road.condition == TransportConditionView.operational
-        ? _operational
-        : _pillaged;
-    canvas.drawLine(const ui.Offset(3, 28), const ui.Offset(35, 10), paint);
   }
 }
 

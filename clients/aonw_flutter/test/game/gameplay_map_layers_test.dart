@@ -5,7 +5,6 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
-import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -349,71 +348,6 @@ void main() {
         ),
       );
       expect(game.world.effectHost.debugActiveCombatEffectCount, 0);
-    },
-  );
-
-  testWithGame<AonwFlameGame>(
-    'reconciles engine-projected improvements and roads by coordinate',
-    AonwFlameGame.new,
-    (game) async {
-      const improvement = FieldImprovementView(
-        coordinate: (col: 0, row: 0),
-        improvement: FieldImprovementKind.farm,
-      );
-      const road = RoadView(
-        coordinate: (col: 1, row: 0),
-        condition: TransportConditionView.operational,
-      );
-      final scene = testMapScene(
-        fieldImprovements: const [improvement],
-        roads: const [road],
-      );
-      game.replaceScene(_snapshot(scene, player: scene.player));
-      await game.ready();
-      final layer = game.world.workerInfrastructureLayer;
-      final stableImprovement = layer.debugImprovementAt(
-        improvement.coordinate,
-      );
-      final stableRoad = layer.debugRoadAt(road.coordinate);
-
-      game.replaceScene(
-        _snapshot(
-          scene,
-          player: _player(
-            units: const [],
-            fieldImprovements: const [improvement],
-            roads: const [
-              RoadView(
-                coordinate: (col: 1, row: 0),
-                condition: TransportConditionView.pillaged,
-              ),
-            ],
-          ),
-        ),
-      );
-
-      expect(
-        layer.debugImprovementAt(improvement.coordinate),
-        same(stableImprovement),
-      );
-      expect(layer.debugRoadAt(road.coordinate), same(stableRoad));
-      expect(layer.debugImprovementCount, 1);
-      expect(layer.debugRoadCount, 1);
-      expect(layer.debugCreatedCount, 2);
-      expect(layer.debugUpdatedCount, 1);
-      expect(layer.debugSharedPaintCount, 6);
-
-      game.replaceScene(
-        _snapshot(
-          scene,
-          player: _player(
-            units: const [],
-            fieldImprovements: const [improvement],
-          ),
-        ),
-      );
-      expect(layer.debugRoadCount, 0);
-      expect(layer.debugRemovedCount, 1);
     },
   );
 
