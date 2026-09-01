@@ -220,7 +220,12 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     }
   }
 
-  AonwEngineSession openGameTransport(String matchId) {
+  ServerpodGameTransport openGameTransport(
+    String matchId, {
+    void Function()? onReconnecting,
+    void Function()? onRecovered,
+    ServerpodGameRecoveryFailure? onRecoveryFailed,
+  }) {
     _ensureAuthenticated();
     return ServerpodGameTransport(
       matchId: matchId,
@@ -228,6 +233,9 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
       query: (value) => _gameRequest(() => _client.game.query(value)),
       command: (value) => _gameRequest(() => _client.game.applyCommand(value)),
       reconnect: reconnect,
+      onReconnecting: onReconnecting,
+      onRecovered: onRecovered,
+      onRecoveryFailed: onRecoveryFailed,
       decoder: _decoder,
     );
   }

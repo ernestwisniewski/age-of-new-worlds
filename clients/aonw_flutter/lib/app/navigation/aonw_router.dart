@@ -161,6 +161,9 @@ final class AonwRouter {
             );
             if (opened && context.mounted) {
               await Navigator.of(context).pushNamed(AonwRoute.map.location);
+              if (context.mounted) {
+                await multiplayerController!.reconnect();
+              }
             }
           },
         );

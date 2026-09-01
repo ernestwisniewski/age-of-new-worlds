@@ -73,6 +73,10 @@ final class _ReadyMap extends StatelessWidget {
         controller: controller,
       ),
       ..._featureOverlays(),
+      NetworkGameStatusOverlay(
+        connection: controller.networkConnection,
+        onReconnect: controller.reconnectNetworkMatch,
+      ),
     ],
   );
 

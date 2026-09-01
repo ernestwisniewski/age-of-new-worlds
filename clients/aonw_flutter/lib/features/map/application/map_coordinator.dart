@@ -309,6 +309,7 @@ final class MapCoordinator {
   bool _gameplayActive() {
     final current = _state;
     return current is GameSessionReady &&
+        !(_capabilities.networkGame?.connection.blocksGameplay ?? false) &&
         !current.recipient.turnView.outcome.isTerminal &&
         !current.localAiTurn.blocksGameplay &&
         !current.localHandoff.blocksGameplay &&

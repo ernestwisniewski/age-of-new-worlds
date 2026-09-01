@@ -38,10 +38,17 @@ final class MapPresentationController extends ChangeNotifier {
            assets: assets,
            diagnosticReporter: diagnosticReporter,
          ),
+         networkGame: capabilities.networkGame,
        );
 
-  MapPresentationController.fromCoordinator(this._coordinator) {
+  MapPresentationController.fromCoordinator(
+    this._coordinator, {
+    NetworkGameSessionPort? networkGame,
+  }) : _networkGame = networkGame {
     _subscription = _coordinator.changes.listen((_) => notifyListeners());
+    _networkSubscription = networkGame?.connectionChanges.listen(
+      (_) => notifyListeners(),
+    );
     _cursor = ValueNotifier<MapHexCoordinate?>(_coordinator.hovered);
     _cursorSubscription = _coordinator.cursorChanges.listen((value) {
       _cursor.value = value;
@@ -49,12 +56,17 @@ final class MapPresentationController extends ChangeNotifier {
   }
 
   final MapCoordinator _coordinator;
+  final NetworkGameSessionPort? _networkGame;
   late final StreamSubscription<GameSessionState> _subscription;
+  StreamSubscription<NetworkGameConnectionView>? _networkSubscription;
   late final ValueNotifier<MapHexCoordinate?> _cursor;
   late final StreamSubscription<MapHexCoordinate?> _cursorSubscription;
   var _disposed = false;
 
   GameSessionState get state => _coordinator.state;
+
+  NetworkGameConnectionView get networkConnection =>
+      _networkGame?.connection ?? NetworkGameConnectionView.inactive;
 
   ValueListenable<MapHexCoordinate?> get cursor => _cursor;
 
@@ -67,6 +79,8 @@ final class MapPresentationController extends ChangeNotifier {
 
   Future<bool> startNetworkMatch(NetworkMatchSetupView setup) =>
       _coordinator.startNetworkMatch(setup);
+
+  Future<bool> reconnectNetworkMatch() => _coordinator.reconnectNetworkMatch();
 
   Future<bool> hasLocalSave() => _coordinator.hasLocalSave();
 
@@ -137,6 +151,7 @@ final class MapPresentationController extends ChangeNotifier {
     if (_disposed) return;
     _disposed = true;
     unawaited(_subscription.cancel());
+    unawaited(_networkSubscription?.cancel());
     unawaited(_cursorSubscription.cancel());
     _cursor.dispose();
     _coordinator.dispose();

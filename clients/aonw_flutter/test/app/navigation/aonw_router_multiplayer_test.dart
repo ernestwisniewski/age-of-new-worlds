@@ -18,6 +18,7 @@ void main() {
     final scene = testMapScene();
     final gameplay = FakeGameSession.success(scene);
     final network = _NetworkGameSession(scene);
+    final multiplayerSession = _MultiplayerSession();
     final mapController = MapPresentationController(
       capabilities: testGameSessionCapabilities(
         gameplay,
@@ -25,7 +26,7 @@ void main() {
     );
     final multiplayerController = MultiplayerController(
       MultiplayerCoordinator(
-        session: _MultiplayerSession(),
+        session: multiplayerSession,
         documents: const _MultiplayerDocuments(),
       ),
     );
@@ -48,6 +49,13 @@ void main() {
     expect(network.setups.single.playerId, 'player-1');
     expect(find.byKey(const ValueKey('map-viewport')), findsOneWidget);
 
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('map-viewport'))),
+    ).pop();
+    await tester.pumpAndSettle();
+    expect(multiplayerSession.reconnectCalls, 1);
+    expect(multiplayerSession.resyncCalls, 1);
+
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
   });
@@ -60,13 +68,27 @@ final class _NetworkGameSession implements NetworkGameSessionPort {
   final setups = <NetworkMatchSetupView>[];
 
   @override
+  NetworkGameConnectionView get connection =>
+      const NetworkGameConnectionView(NetworkGameConnectionPhase.ready);
+
+  @override
+  Stream<NetworkGameConnectionView> get connectionChanges =>
+      const Stream.empty();
+
+  @override
   Future<MapScene> startNetworkMatch(NetworkMatchSetupView setup) async {
     setups.add(setup);
     return scene;
   }
+
+  @override
+  Future<MapScene> reconnectNetworkMatch() async => scene;
 }
 
 final class _MultiplayerSession implements MultiplayerSessionPort {
+  var reconnectCalls = 0;
+  var resyncCalls = 0;
+
   @override
   Future<MultiplayerAccountView?> restoreAccount() async =>
       const MultiplayerAccountView(userId: 'account-1');
@@ -83,7 +105,7 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
   Future<void> close() async {}
 
   @override
-  Future<void> reconnect() => throw UnsupportedError('Not used by this test.');
+  Future<void> reconnect() async => reconnectCalls += 1;
 
   @override
   Future<MultiplayerAccountView> createAccount({
@@ -99,8 +121,10 @@ final class _MultiplayerSession implements MultiplayerSessionPort {
   }) => throw UnsupportedError('Not used by this test.');
 
   @override
-  Future<MultiplayerProjectionView> resync(String matchId) =>
-      throw UnsupportedError('Not used by this test.');
+  Future<MultiplayerProjectionView> resync(String matchId) async {
+    resyncCalls += 1;
+    return _projection;
+  }
 
   @override
   Future<void> signOut() async {}

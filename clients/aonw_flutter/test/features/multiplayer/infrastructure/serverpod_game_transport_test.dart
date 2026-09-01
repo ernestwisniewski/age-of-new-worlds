@@ -123,4 +123,45 @@ void main() {
     expect(reconnectCalls, 1);
     expect(commandIds, ['command-1', 'command-1']);
   });
+
+  test('reports a recovered retryable query', () async {
+    final notices = <String>[];
+    var queryCalls = 0;
+    final transport = ServerpodGameTransport(
+      matchId: 'match-1',
+      resync: (_) => throw UnimplementedError(),
+      query: (request) async {
+        queryCalls += 1;
+        if (queryCalls == 1) {
+          throw const MultiplayerSessionException(
+            code: 'connection_interrupted',
+            message: 'Connection interrupted.',
+            retryable: true,
+          );
+        }
+        return server.GamePlayerQueryOutcome(
+          matchId: request.matchId,
+          outcomeJson: jsonEncode({
+            'status': 'failure',
+            'error': {'code': 'stale_revision', 'message': 'stale'},
+          }),
+        );
+      },
+      command: (_) => throw UnimplementedError(),
+      reconnect: () async {},
+      onReconnecting: () => notices.add('reconnecting'),
+      onRecovered: () => notices.add('ready'),
+      onRecoveryFailed: (code) => notices.add('failed:$code'),
+      commandIdFactory: () => 'command-1',
+    );
+    addTearDown(transport.close);
+
+    final response = await transport.send(
+      AonwClientRequest.reachable(expectedRevision: 7, unitId: 'unit-1'),
+    );
+
+    expect(response.error?.code, 'stale_revision');
+    expect(queryCalls, 2);
+    expect(notices, ['reconnecting', 'ready']);
+  });
 }

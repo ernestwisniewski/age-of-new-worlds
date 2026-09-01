@@ -19,6 +19,7 @@ typedef ServerpodGameCommand =
     );
 typedef ServerpodGameReconnect = Future<void> Function();
 typedef ServerpodCommandIdFactory = String Function();
+typedef ServerpodGameRecoveryFailure = void Function(String code);
 
 /// Adapts authenticated Serverpod gameplay to the shared local client protocol.
 final class ServerpodGameTransport implements AonwEngineSession {
@@ -28,6 +29,9 @@ final class ServerpodGameTransport implements AonwEngineSession {
     required ServerpodGameQuery query,
     required ServerpodGameCommand command,
     required ServerpodGameReconnect reconnect,
+    this.onReconnecting,
+    this.onRecovered,
+    this.onRecoveryFailed,
     ServerProjectionDecoder decoder = const ServerProjectionDecoder(),
     ServerpodCommandIdFactory? commandIdFactory,
     Random? secureRandom,
@@ -48,6 +52,9 @@ final class ServerpodGameTransport implements AonwEngineSession {
   final ServerpodGameQuery _query;
   final ServerpodGameCommand _command;
   final ServerpodGameReconnect _reconnect;
+  final void Function()? onReconnecting;
+  final void Function()? onRecovered;
+  final ServerpodGameRecoveryFailure? onRecoveryFailed;
   final ServerProjectionDecoder _decoder;
   final ServerpodCommandIdFactory _commandIdFactory;
   var _closed = false;
@@ -115,11 +122,22 @@ final class ServerpodGameTransport implements AonwEngineSession {
       return await request();
     } on MultiplayerSessionException catch (error) {
       if (!error.retryable) rethrow;
-      await _reconnect();
-      if (_closed) {
-        throw StateError('The Serverpod game transport is closed.');
+      onReconnecting?.call();
+      try {
+        await _reconnect();
+        if (_closed) {
+          throw StateError('The Serverpod game transport is closed.');
+        }
+        final response = await request();
+        onRecovered?.call();
+        return response;
+      } on MultiplayerSessionException catch (recoveryError) {
+        onRecoveryFailed?.call(recoveryError.code);
+        rethrow;
+      } on Object {
+        onRecoveryFailed?.call('connection_interrupted');
+        rethrow;
       }
-      return request();
     }
   }
 

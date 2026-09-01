@@ -53,8 +53,19 @@ final class _NetworkGameSession implements NetworkGameSessionPort {
   final setups = <NetworkMatchSetupView>[];
 
   @override
+  NetworkGameConnectionView get connection =>
+      const NetworkGameConnectionView(NetworkGameConnectionPhase.ready);
+
+  @override
+  Stream<NetworkGameConnectionView> get connectionChanges =>
+      const Stream.empty();
+
+  @override
   Future<MapScene> startNetworkMatch(NetworkMatchSetupView setup) async {
     setups.add(setup);
     return scene;
   }
+
+  @override
+  Future<MapScene> reconnectNetworkMatch() async => scene;
 }

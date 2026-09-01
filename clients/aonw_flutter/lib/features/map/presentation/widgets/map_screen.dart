@@ -31,6 +31,7 @@ import 'flame_map_viewport.dart';
 import 'map_hud_panels.dart';
 import 'map_selection_overlay.dart';
 import 'map_status.dart';
+import 'network_game_status_overlay.dart';
 
 part 'map_screen_ready.dart';
 
@@ -325,6 +326,7 @@ final class _MapScreenState extends State<MapScreen>
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
     final state = widget.controller.state;
     if (state is! GameSessionReady) return;
+    if (widget.controller.networkConnection.blocksGameplay) return;
     if (state.localHandoff.blocksGameplay) return;
     _handleReadyInput(state, command);
   }
@@ -358,6 +360,7 @@ final class _MapScreenState extends State<MapScreen>
 
   void _handleHexIntent(MapHexIntent intent) {
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
+    if (widget.controller.networkConnection.blocksGameplay) return;
     final state = widget.controller.state;
     if (state is GameSessionReady && state.localHandoff.blocksGameplay) return;
     switch (intent) {
