@@ -1202,6 +1202,24 @@ abstract class AonwLocalizations {
   /// **'Save import and export are unavailable on this platform.'**
   String get saveTransferUnavailable;
 
+  /// No description provided for @saveImportCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {map}. The previous save for this map was preserved as a backup.'**
+  String saveImportCompleted(String map);
+
+  /// No description provided for @saveExportCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported {map}.'**
+  String saveExportCompleted(String map);
+
+  /// No description provided for @saveTransferFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, unavailable{Save transfer is unavailable on this platform.} unreadable{The selected save file could not be read.} tooLarge{The selected save file exceeds the 16 MiB limit.} incompatible{The selected save is invalid or does not match an installed map, ruleset, or engine version.} missing{The selected saved game no longer exists.} writeFailed{The imported save could not be stored.} exportFailed{The save file could not be exported.} other{The save transfer could not be completed.}}'**
+  String saveTransferFailure(String value);
+
   /// No description provided for @replayTitle.
   ///
   /// In en, this message translates to:

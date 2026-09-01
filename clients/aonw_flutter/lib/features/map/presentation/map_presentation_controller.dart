@@ -15,6 +15,7 @@ import '../../research/read_model/research_view.dart';
 import '../../save_game/application/local_save_state.dart';
 import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
+import '../../save_game/application/local_save_transfer.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../application/game_session_capabilities.dart';
@@ -28,6 +29,7 @@ final class MapPresentationController extends ChangeNotifier {
   MapPresentationController({
     required GameSessionCapabilities capabilities,
     LocalSaveStore? saveStore,
+    LocalSaveTransferPort? saveTransfer,
     ReplayCapture? replayCapture,
     MapAssetPaths assets = MapAssetPaths.starter,
     MapDiagnosticReporter diagnosticReporter = _reportMapDiagnostic,
@@ -35,6 +37,7 @@ final class MapPresentationController extends ChangeNotifier {
          MapCoordinator(
            capabilities: capabilities,
            saveStore: saveStore,
+           saveTransfer: saveTransfer,
            replayCapture: replayCapture,
            assets: assets,
            diagnosticReporter: diagnosticReporter,
@@ -87,6 +90,15 @@ final class MapPresentationController extends ChangeNotifier {
 
   Future<List<LocalSaveSummaryView>> listLocalSaves() =>
       _coordinator.listLocalSaves();
+
+  bool get canTransferLocalSaves => _coordinator.canTransferLocalSaves;
+
+  Future<LocalSaveTransferResultView> importLocalSave() =>
+      _coordinator.importLocalSave();
+
+  Future<LocalSaveTransferResultView> exportLocalSave(
+    LocalGameScenarioView scenario,
+  ) => _coordinator.exportLocalSave(scenario);
 
   Future<LocalResumeResultView> resumeLocalGame(
     LocalGameScenarioView scenario,

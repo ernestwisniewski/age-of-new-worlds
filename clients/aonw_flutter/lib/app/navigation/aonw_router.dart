@@ -209,6 +209,12 @@ final class AonwRouter {
       onStartSinglePlayer: () => Navigator.of(
         context,
       ).pushReplacementNamed(AonwRoute.newGame.location),
+      onImportSave: mapController.canTransferLocalSaves
+          ? mapController.importLocalSave
+          : null,
+      onExportSave: mapController.canTransferLocalSaves
+          ? mapController.exportLocalSave
+          : null,
       onlineChanges: onlineController == null
           ? null
           : Listenable.merge([onlineController, ?multiplayerAccessController]),

@@ -12,6 +12,7 @@ dependencies:
   aonw_server_client:
     path: ../../packages/aonw_server_client
   crypto: 3.0.7
+  file_selector: 1.1.0
   flame: 1.38.0
   flame_texturepacker: 5.1.2
   flutter:
@@ -22,6 +23,7 @@ dependencies:
   intl: 0.20.2
   path_provider: 2.1.6
   serverpod_auth_core_client: 3.4.11
+  share_plus: 13.3.0
   shared_preferences: 2.5.5
   url_launcher: 6.3.2
 

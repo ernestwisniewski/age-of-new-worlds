@@ -1,10 +1,19 @@
 part of 'map_coordinator.dart';
 
 extension MapCoordinatorLocalSave on MapCoordinator {
+  bool get canTransferLocalSaves => _saveWorkflow.canTransfer;
+
   Future<bool> hasLocalSave() => _saveWorkflow.hasSave();
 
   Future<List<LocalSaveSummaryView>> listLocalSaves() =>
       _saveWorkflow.listSaves();
+
+  Future<LocalSaveTransferResultView> importLocalSave() =>
+      _saveWorkflow.importSave();
+
+  Future<LocalSaveTransferResultView> exportLocalSave(
+    LocalGameScenarioView scenario,
+  ) => _saveWorkflow.exportSave(scenario);
 
   Future<LocalResumeResultView> resumeLocalGame(
     LocalGameScenarioView scenario,

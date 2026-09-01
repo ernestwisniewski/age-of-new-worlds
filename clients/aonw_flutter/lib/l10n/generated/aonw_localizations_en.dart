@@ -730,6 +730,32 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'Save import and export are unavailable on this platform.';
 
   @override
+  String saveImportCompleted(String map) {
+    return 'Imported $map. The previous save for this map was preserved as a backup.';
+  }
+
+  @override
+  String saveExportCompleted(String map) {
+    return 'Exported $map.';
+  }
+
+  @override
+  String saveTransferFailure(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'unavailable': 'Save transfer is unavailable on this platform.',
+      'unreadable': 'The selected save file could not be read.',
+      'tooLarge': 'The selected save file exceeds the 16 MiB limit.',
+      'incompatible':
+          'The selected save is invalid or does not match an installed map, ruleset, or engine version.',
+      'missing': 'The selected saved game no longer exists.',
+      'writeFailed': 'The imported save could not be stored.',
+      'exportFailed': 'The save file could not be exported.',
+      'other': 'The save transfer could not be completed.',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get replayTitle => 'Replay';
 
   @override

@@ -4,6 +4,7 @@ import 'package:aonw_flutter/features/replay/application/replay_state.dart';
 import 'package:aonw_flutter/features/replay/presentation/replay_presentation_controller.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_state.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_summary.dart';
+import 'package:aonw_flutter/features/save_game/application/local_save_transfer.dart';
 import 'package:aonw_flutter/features/save_game/presentation/load_game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -151,6 +152,65 @@ void main() {
       expect(resumedMatchId, 'online-1');
     },
   );
+
+  testWidgets('imports, refreshes, and exports the selected local slot', (
+    tester,
+  ) async {
+    var imported = false;
+    LocalGameScenarioView? exportedScenario;
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: LoadGameScreen(
+          listLocalSaves: () async => imported
+              ? const [
+                  LocalSaveSummaryView.ready(
+                    scenario: LocalGameScenarioView.dravonia,
+                    gameMode: LocalSaveGameModeView.singlePlayer,
+                    turnMode: MatchTurnModeView.simultaneous,
+                    turn: 5,
+                    recoveredFromBackup: false,
+                  ),
+                ]
+              : const [],
+          resumeLocalGame: (_) async => const LocalResumeResultView.failed(
+            LocalResumeFailureViewCode.missing,
+          ),
+          onResumed: () {},
+          hasLocalReplay: (_) async => false,
+          openReplay: (_) async =>
+              const ReplayOpenResultView.failed(ReplayFailureViewCode.missing),
+          onReplayOpened: () {},
+          onStartSinglePlayer: () {},
+          onImportSave: () async {
+            imported = true;
+            return const LocalSaveTransferResultView.completed(
+              scenario: LocalGameScenarioView.dravonia,
+            );
+          },
+          onExportSave: (scenario) async {
+            exportedScenario = scenario;
+            return LocalSaveTransferResultView.completed(scenario: scenario);
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('import-save')));
+    await tester.pumpAndSettle();
+    expect(find.text('Single player · Dravonia'), findsOneWidget);
+    expect(
+      find.text(
+        'Imported Dravonia. The previous save for this map was preserved as a backup.',
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('export-save-dravonia')));
+    await tester.pumpAndSettle();
+    expect(exportedScenario, LocalGameScenarioView.dravonia);
+    expect(find.text('Exported Dravonia.'), findsOneWidget);
+  });
 
   testWidgets('offers multiplayer sign-in without showing an empty-save CTA', (
     tester,

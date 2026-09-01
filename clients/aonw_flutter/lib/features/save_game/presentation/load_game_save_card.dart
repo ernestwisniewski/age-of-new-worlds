@@ -6,6 +6,7 @@ final class _LocalSaveCard extends StatelessWidget {
     required this.busy,
     required this.resuming,
     required this.openingReplay,
+    required this.exporting,
     required this.onResume,
     required this.onOpenReplay,
     required this.onExportSave,
@@ -15,6 +16,7 @@ final class _LocalSaveCard extends StatelessWidget {
   final bool busy;
   final bool resuming;
   final bool openingReplay;
+  final bool exporting;
   final VoidCallback onResume;
   final VoidCallback onOpenReplay;
   final VoidCallback? onExportSave;
@@ -49,6 +51,7 @@ final class _LocalSaveCard extends StatelessWidget {
               canExport: compatible && !busy,
               resuming: resuming,
               openingReplay: openingReplay,
+              exporting: exporting,
               onResume: onResume,
               onOpenReplay: onOpenReplay,
               onExportSave: onExportSave,
@@ -83,6 +86,7 @@ final class _SaveCardActions extends StatelessWidget {
     required this.canExport,
     required this.resuming,
     required this.openingReplay,
+    required this.exporting,
     required this.onResume,
     required this.onOpenReplay,
     required this.onExportSave,
@@ -94,6 +98,7 @@ final class _SaveCardActions extends StatelessWidget {
   final bool canExport;
   final bool resuming;
   final bool openingReplay;
+  final bool exporting;
   final VoidCallback onResume;
   final VoidCallback onOpenReplay;
   final VoidCallback? onExportSave;
@@ -118,6 +123,7 @@ final class _SaveCardActions extends StatelessWidget {
       _ExportSaveButton(
         scenario: scenario,
         enabled: canExport,
+        active: exporting,
         onPressed: onExportSave,
       ),
     ],
@@ -176,11 +182,13 @@ final class _ExportSaveButton extends StatelessWidget {
   const _ExportSaveButton({
     required this.scenario,
     required this.enabled,
+    required this.active,
     required this.onPressed,
   });
 
   final LocalGameScenarioView scenario;
   final bool enabled;
+  final bool active;
   final VoidCallback? onPressed;
 
   @override
@@ -189,7 +197,10 @@ final class _ExportSaveButton extends StatelessWidget {
     child: OutlinedButton.icon(
       key: ValueKey('export-save-${scenario.name}'),
       onPressed: enabled ? onPressed : null,
-      icon: const Icon(Icons.file_download_outlined),
+      icon: _ProgressIcon(
+        active: active,
+        fallback: Icons.file_download_outlined,
+      ),
       label: Text(context.aonwL10n.exportSave),
     ),
   );

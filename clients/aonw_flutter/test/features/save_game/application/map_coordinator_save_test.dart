@@ -11,6 +11,7 @@ import 'package:aonw_flutter/features/save_game/application/game_save_session_po
 import 'package:aonw_flutter/features/save_game/application/local_save_state.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_store.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_summary.dart';
+import 'package:aonw_flutter/features/save_game/application/local_save_transfer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
@@ -23,7 +24,12 @@ void main() {
       final saveSession = _FakeSaveSession(exported: '{"engine":"save"}');
       final store = _MemorySaveStore();
       final replay = _ReplayCapture();
-      final coordinator = _coordinator(gameplay, saveSession, store, replay);
+      final coordinator = _coordinator(
+        gameplay,
+        saveSession,
+        store,
+        replayCapture: replay,
+      );
       addTearDown(coordinator.dispose);
       await coordinator.startLocalMatch(_entry, _setup());
 
@@ -197,16 +203,96 @@ void main() {
     expect(ready.localHandoff.phase, LocalHandoffPhase.awaitingConfirmation);
     expect(ready.localHandoff.playerName, 'Player 2');
   });
+
+  test(
+    'imports only the catalog slot accepted by the save validator',
+    () async {
+      final store = _MemorySaveStore();
+      final transfer = _FakeSaveTransfer(imported: 'dravonia-save');
+      final saveSession = _FakeSaveSession(
+        exported: '{}',
+        opened: testMapScene(mapId: 'dravonia'),
+        validDocument: 'dravonia-save',
+        validAssetDocument: LocalGameCatalog.entries[1].assets.document,
+      );
+      final coordinator = _coordinator(
+        FakeGameSession.success(testMapScene()),
+        saveSession,
+        store,
+        saveTransfer: transfer,
+      );
+      addTearDown(coordinator.dispose);
+
+      final result = await coordinator.importLocalSave();
+
+      expect(result.status, LocalSaveTransferStatusView.completed);
+      expect(result.scenario, LocalGameScenarioView.dravonia);
+      expect(store.scenario, LocalGameScenarioView.dravonia);
+      expect(store.primary, 'dravonia-save');
+      expect(saveSession.inspectedAssets, [
+        LocalGameCatalog.entries[0].assets.document,
+        LocalGameCatalog.entries[1].assets.document,
+      ]);
+    },
+  );
+
+  test(
+    'rejects an incompatible import before replacing the existing slot',
+    () async {
+      final store = _MemorySaveStore(primary: 'existing-save');
+      final coordinator = _coordinator(
+        FakeGameSession.success(testMapScene()),
+        _FakeSaveSession(exported: '{}', validDocument: 'never'),
+        store,
+        saveTransfer: _FakeSaveTransfer(imported: 'foreign-save'),
+      );
+      addTearDown(coordinator.dispose);
+
+      final result = await coordinator.importLocalSave();
+
+      expect(result.failure, LocalSaveTransferFailureViewCode.incompatible);
+      expect(store.primary, 'existing-save');
+      expect(store.backup, isNull);
+    },
+  );
+
+  test(
+    'exports the first backup that passes authoritative validation',
+    () async {
+      final transfer = _FakeSaveTransfer();
+      final coordinator = _coordinator(
+        FakeGameSession.success(testMapScene()),
+        _FakeSaveSession(
+          exported: '{}',
+          opened: testMapScene(mapId: 'aonw2_starter'),
+          validDocument: 'valid-backup',
+        ),
+        _MemorySaveStore(primary: 'broken-primary', backup: 'valid-backup'),
+        saveTransfer: transfer,
+      );
+      addTearDown(coordinator.dispose);
+
+      final result = await coordinator.exportLocalSave(
+        LocalGameScenarioView.starterDuel,
+      );
+
+      expect(result.status, LocalSaveTransferStatusView.completed);
+      expect(transfer.exportedDocument, 'valid-backup');
+      expect(transfer.suggestedName, 'aonw-starterDuel.aonwsave');
+    },
+  );
 }
 
 MapCoordinator _coordinator(
   FakeGameSession gameplay,
   GameSaveSessionPort saveSession,
-  LocalSaveStore store, [
+  LocalSaveStore store, {
   ReplayCapture? replayCapture,
-]) => MapCoordinator(
+  LocalSaveTransferPort? saveTransfer,
+}) => MapCoordinator(
   capabilities: testGameSessionCapabilities(gameplay, save: saveSession),
   saveStore: store,
+  saveTransfer: saveTransfer,
   replayCapture: replayCapture,
 );
 
@@ -255,15 +341,18 @@ final class _FakeSaveSession implements GameSaveSessionPort {
     required this.exported,
     this.opened,
     this.validDocument,
+    this.validAssetDocument,
     this.controlPlan,
   });
 
   final String exported;
   final MapScene? opened;
   final String? validDocument;
+  final String? validAssetDocument;
   final LocalMatchControlPlanView? controlPlan;
   final openedDocuments = <String>[];
   final inspectedDocuments = <String>[];
+  final inspectedAssets = <String>[];
   var exportCalls = 0;
 
   @override
@@ -278,7 +367,8 @@ final class _FakeSaveSession implements GameSaveSessionPort {
     required String document,
   }) {
     inspectedDocuments.add(document);
-    return _open(document);
+    inspectedAssets.add(assets.document);
+    return _open(document, assets: assets);
   }
 
   @override
@@ -287,11 +377,17 @@ final class _FakeSaveSession implements GameSaveSessionPort {
     required String document,
   }) async {
     openedDocuments.add(document);
-    return _open(document);
+    return _open(document, assets: assets);
   }
 
-  Future<OpenedGameSaveView> _open(String document) async {
-    if (document != validDocument || opened == null) {
+  Future<OpenedGameSaveView> _open(
+    String document, {
+    MapAssetPaths? assets,
+  }) async {
+    if (document != validDocument ||
+        opened == null ||
+        (validAssetDocument != null &&
+            assets?.document != validAssetDocument)) {
       throw const GameSaveSessionException(
         code: 'invalid_save',
         message: 'Invalid save.',
@@ -313,7 +409,7 @@ final class _MemorySaveStore implements LocalSaveStore {
 
   String? primary;
   String? backup;
-  final LocalGameScenarioView scenario;
+  LocalGameScenarioView scenario;
 
   @override
   Future<bool> contains(LocalGameScenarioView scenario) async =>
@@ -335,6 +431,28 @@ final class _MemorySaveStore implements LocalSaveStore {
   Future<void> write(LocalGameScenarioView scenario, String document) async {
     backup = primary;
     primary = document;
+    this.scenario = scenario;
+  }
+}
+
+final class _FakeSaveTransfer implements LocalSaveTransferPort {
+  _FakeSaveTransfer({this.imported});
+
+  final String? imported;
+  String? suggestedName;
+  String? exportedDocument;
+
+  @override
+  Future<String?> pickSaveDocument() async => imported;
+
+  @override
+  Future<LocalSaveExportDisposition> exportSaveDocument({
+    required String suggestedName,
+    required String document,
+  }) async {
+    this.suggestedName = suggestedName;
+    exportedDocument = document;
+    return LocalSaveExportDisposition.completed;
   }
 }
 

@@ -11,9 +11,12 @@ import '../../replay/application/replay_state.dart';
 import '../../replay/presentation/replay_presentation_controller.dart';
 import '../application/local_save_state.dart';
 import '../application/local_save_summary.dart';
+import '../application/local_save_transfer.dart';
 
 part 'load_game_save_card.dart';
 part 'load_game_online_card.dart';
+part 'load_game_feedback.dart';
+part 'load_game_body.dart';
 
 typedef LocalSaveIndexReader = Future<List<LocalSaveSummaryView>> Function();
 typedef LocalGameResume =
@@ -22,7 +25,11 @@ typedef LocalReplayAvailabilityReader =
     Future<bool> Function(LocalGameScenarioView scenario);
 typedef LocalReplayOpen =
     Future<ReplayOpenResultView> Function(LocalGameScenarioView scenario);
-typedef LocalSaveExport = void Function(LocalGameScenarioView scenario);
+typedef LocalSaveImport = Future<LocalSaveTransferResultView> Function();
+typedef LocalSaveExport =
+    Future<LocalSaveTransferResultView> Function(
+      LocalGameScenarioView scenario,
+    );
 typedef LocalArchiveAction =
     Future<void> Function(LocalGameScenarioView scenario);
 typedef OnlineSaveIndexReader = OnlineSaveIndexView Function();
@@ -54,7 +61,7 @@ final class LoadGameScreen extends StatefulWidget {
   final LocalReplayOpen openReplay;
   final VoidCallback onReplayOpened;
   final VoidCallback onStartSinglePlayer;
-  final VoidCallback? onImportSave;
+  final LocalSaveImport? onImportSave;
   final LocalSaveExport? onExportSave;
   final Listenable? onlineChanges;
   final Future<void> Function()? initializeOnline;
@@ -71,11 +78,15 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   var _resuming = false;
   var _openingReplay = false;
   var _resumingOnline = false;
+  var _transferring = false;
   LocalGameScenarioView? _activeScenario;
+  LocalGameScenarioView? _transferScenario;
   String? _activeOnlineMatchId;
   String? _onlineFailureCode;
   LocalResumeFailureViewCode? _resumeFailure;
   ReplayFailureViewCode? _replayFailure;
+  _LocalSaveTransferAction? _transferAction;
+  LocalSaveTransferResultView? _transferResult;
 
   @override
   void initState() {
@@ -109,14 +120,24 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             busy: _busy || _resumingOnline,
             resuming: _resuming,
             openingReplay: _openingReplay,
+            importing:
+                _transferring &&
+                _transferAction == _LocalSaveTransferAction.importSave,
+            exportingScenario:
+                _transferring &&
+                    _transferAction == _LocalSaveTransferAction.exportSave
+                ? _transferScenario
+                : null,
             activeScenario: _activeScenario,
             resumeFailure: _resumeFailure,
             replayFailure: _replayFailure,
             onResume: _resume,
             onOpenReplay: _openReplay,
             onStartSinglePlayer: widget.onStartSinglePlayer,
-            onImportSave: widget.onImportSave,
-            onExportSave: widget.onExportSave,
+            transferAction: _transferAction,
+            transferResult: _transferResult,
+            onImportSave: widget.onImportSave == null ? null : _importSave,
+            onExportSave: widget.onExportSave == null ? null : _exportSave,
             onlineIndex: widget.onlineIndex(),
             resumingOnline: _resumingOnline,
             activeOnlineMatchId: _activeOnlineMatchId,
@@ -129,7 +150,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
     ),
   );
 
-  bool get _busy => _resuming || _openingReplay;
+  bool get _busy => _resuming || _openingReplay || _transferring;
 
   Future<_LoadAvailability> _readAvailability() async {
     final saves = await widget.listLocalSaves();
@@ -156,6 +177,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       _activeScenario = scenario;
       _resumeFailure = null;
       _replayFailure = null;
+      _transferResult = null;
     });
     final result = await widget.resumeLocalGame(scenario);
     if (!mounted) return;
@@ -181,6 +203,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       _activeScenario = scenario;
       _resumeFailure = null;
       _replayFailure = null;
+      _transferResult = null;
     });
     final result = await widget.openReplay(scenario);
     if (!mounted) return;
@@ -207,6 +230,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       _onlineFailureCode = null;
       _resumeFailure = null;
       _replayFailure = null;
+      _transferResult = null;
     });
     final opened = await widget.resumeOnlineGame(matchId);
     if (!mounted) return;
@@ -216,7 +240,56 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       if (!opened) _onlineFailureCode = 'multiplayer_match_open_failed';
     });
   }
+
+  Future<void> _importSave() => _runTransfer(
+    action: _LocalSaveTransferAction.importSave,
+    operation: widget.onImportSave!,
+  );
+
+  Future<void> _exportSave(LocalGameScenarioView scenario) => _runTransfer(
+    action: _LocalSaveTransferAction.exportSave,
+    scenario: scenario,
+    operation: () => widget.onExportSave!(scenario),
+  );
+
+  Future<void> _runTransfer({
+    required _LocalSaveTransferAction action,
+    required Future<LocalSaveTransferResultView> Function() operation,
+    LocalGameScenarioView? scenario,
+  }) async {
+    if (_transferring) return;
+    setState(() {
+      _transferring = true;
+      _transferAction = action;
+      _transferScenario = scenario;
+      _transferResult = null;
+      _onlineFailureCode = null;
+      _resumeFailure = null;
+      _replayFailure = null;
+    });
+    late final LocalSaveTransferResultView result;
+    try {
+      result = await operation();
+    } on Object {
+      result = LocalSaveTransferResultView.failed(
+        action == _LocalSaveTransferAction.importSave
+            ? LocalSaveTransferFailureViewCode.unreadable
+            : LocalSaveTransferFailureViewCode.exportFailed,
+      );
+    }
+    if (!mounted) return;
+    setState(() {
+      _transferring = false;
+      _transferScenario = null;
+      _transferResult = result;
+      if (result.completed && action == _LocalSaveTransferAction.importSave) {
+        _availability = _readAvailability();
+      }
+    });
+  }
 }
+
+enum _LocalSaveTransferAction { importSave, exportSave }
 
 OnlineSaveIndexView _unavailableOnlineIndex() =>
     const OnlineSaveIndexView(phase: OnlineSaveIndexPhaseView.unavailable);
@@ -242,252 +315,4 @@ final class _LoadEntry {
   final LocalGameScenarioView scenario;
   final LocalSaveSummaryView? save;
   final bool hasReplay;
-}
-
-final class _LoadGameBody extends StatelessWidget {
-  const _LoadGameBody({
-    required this.availability,
-    required this.loading,
-    required this.busy,
-    required this.resuming,
-    required this.openingReplay,
-    required this.activeScenario,
-    required this.resumeFailure,
-    required this.replayFailure,
-    required this.onResume,
-    required this.onOpenReplay,
-    required this.onStartSinglePlayer,
-    required this.onImportSave,
-    required this.onExportSave,
-    required this.onlineIndex,
-    required this.resumingOnline,
-    required this.activeOnlineMatchId,
-    required this.onlineFailureCode,
-    required this.onResumeOnline,
-    required this.onOpenMultiplayer,
-  });
-
-  final _LoadAvailability? availability;
-  final bool loading;
-  final bool busy;
-  final bool resuming;
-  final bool openingReplay;
-  final LocalGameScenarioView? activeScenario;
-  final LocalResumeFailureViewCode? resumeFailure;
-  final ReplayFailureViewCode? replayFailure;
-  final LocalArchiveAction onResume;
-  final LocalArchiveAction onOpenReplay;
-  final VoidCallback onStartSinglePlayer;
-  final VoidCallback? onImportSave;
-  final LocalSaveExport? onExportSave;
-  final OnlineSaveIndexView onlineIndex;
-  final bool resumingOnline;
-  final String? activeOnlineMatchId;
-  final String? onlineFailureCode;
-  final Future<void> Function(String matchId) onResumeOnline;
-  final VoidCallback? onOpenMultiplayer;
-
-  @override
-  Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.all(AonwSpacing.lg),
-    children: [
-      Center(
-        child: AonwPanel(
-          semanticLabel: context.aonwL10n.loadGameTitle,
-          maxWidth: 760,
-          padding: const EdgeInsets.all(AonwSpacing.xl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _ImportAction(onPressed: onImportSave),
-              const SizedBox(height: AonwSpacing.lg),
-              _LocalSaveSection(
-                availability: availability,
-                loading: loading,
-                hasOnlineContent: _hasOnlineContent,
-                busy: busy,
-                resuming: resuming,
-                openingReplay: openingReplay,
-                activeScenario: activeScenario,
-                onResume: onResume,
-                onOpenReplay: onOpenReplay,
-                onStartSinglePlayer: onStartSinglePlayer,
-                onExportSave: onExportSave,
-              ),
-              _OnlineSaveSection(
-                index: onlineIndex,
-                busy: busy,
-                resuming: resumingOnline,
-                activeMatchId: activeOnlineMatchId,
-                onResume: onResumeOnline,
-                onOpenMultiplayer: onOpenMultiplayer,
-              ),
-              _LoadFailureMessages(
-                onlineFailureCode: onlineFailureCode,
-                resumeFailure: resumeFailure,
-                replayFailure: replayFailure,
-              ),
-            ],
-          ),
-        ),
-      ),
-    ],
-  );
-
-  bool get _hasOnlineContent => switch (onlineIndex.phase) {
-    OnlineSaveIndexPhaseView.unavailable => false,
-    OnlineSaveIndexPhaseView.ready =>
-      onlineIndex.saves.isNotEmpty || onlineIndex.failureCode != null,
-    _ => true,
-  };
-}
-
-final class _LocalSaveSection extends StatelessWidget {
-  const _LocalSaveSection({
-    required this.availability,
-    required this.loading,
-    required this.hasOnlineContent,
-    required this.busy,
-    required this.resuming,
-    required this.openingReplay,
-    required this.activeScenario,
-    required this.onResume,
-    required this.onOpenReplay,
-    required this.onStartSinglePlayer,
-    required this.onExportSave,
-  });
-
-  final _LoadAvailability? availability;
-  final bool loading;
-  final bool hasOnlineContent;
-  final bool busy;
-  final bool resuming;
-  final bool openingReplay;
-  final LocalGameScenarioView? activeScenario;
-  final LocalArchiveAction onResume;
-  final LocalArchiveAction onOpenReplay;
-  final VoidCallback onStartSinglePlayer;
-  final LocalSaveExport? onExportSave;
-
-  @override
-  Widget build(BuildContext context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
-    if (availability?.hasContent != true && !hasOnlineContent) {
-      return _EmptySaves(onStartSinglePlayer: onStartSinglePlayer);
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (final entry in availability?.entries ?? const <_LoadEntry>[])
-          Padding(
-            padding: const EdgeInsets.only(bottom: AonwSpacing.md),
-            child: _LocalSaveCard(
-              entry: entry,
-              busy: busy,
-              resuming: resuming && activeScenario == entry.scenario,
-              openingReplay: openingReplay && activeScenario == entry.scenario,
-              onResume: () => onResume(entry.scenario),
-              onOpenReplay: () => onOpenReplay(entry.scenario),
-              onExportSave: onExportSave == null
-                  ? null
-                  : () => onExportSave!(entry.scenario),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-final class _LoadFailureMessages extends StatelessWidget {
-  const _LoadFailureMessages({
-    required this.onlineFailureCode,
-    required this.resumeFailure,
-    required this.replayFailure,
-  });
-
-  final String? onlineFailureCode;
-  final LocalResumeFailureViewCode? resumeFailure;
-  final ReplayFailureViewCode? replayFailure;
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      if (onlineFailureCode case final code?) ...[
-        const SizedBox(height: AonwSpacing.md),
-        _FailureMessage(
-          key: const ValueKey('online-resume-failure'),
-          message: context.aonwL10n.multiplayerFailure(code),
-        ),
-      ],
-      if (resumeFailure case final failure?) ...[
-        const SizedBox(height: AonwSpacing.md),
-        _FailureMessage(
-          key: const ValueKey('resume-failure'),
-          message: context.aonwL10n.resumeFailure(failure.name),
-        ),
-      ],
-      if (replayFailure case final failure?) ...[
-        const SizedBox(height: AonwSpacing.md),
-        _FailureMessage(
-          key: const ValueKey('replay-failure'),
-          message: context.aonwL10n.replayFailure(failure.name),
-        ),
-      ],
-    ],
-  );
-}
-
-final class _ImportAction extends StatelessWidget {
-  const _ImportAction({required this.onPressed});
-
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) => Tooltip(
-    message: onPressed == null ? context.aonwL10n.saveTransferUnavailable : '',
-    child: OutlinedButton.icon(
-      key: const ValueKey('import-save'),
-      onPressed: onPressed,
-      icon: const Icon(Icons.file_upload_outlined),
-      label: Text(context.aonwL10n.importSave),
-    ),
-  );
-}
-
-final class _EmptySaves extends StatelessWidget {
-  const _EmptySaves({required this.onStartSinglePlayer});
-
-  final VoidCallback onStartSinglePlayer;
-
-  @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      const Icon(Icons.folder_off_outlined, size: 42),
-      const SizedBox(height: AonwSpacing.md),
-      Text(context.aonwL10n.loadGameEmpty),
-      const SizedBox(height: AonwSpacing.lg),
-      FilledButton.icon(
-        key: const ValueKey('empty-start-single-player'),
-        onPressed: onStartSinglePlayer,
-        icon: const Icon(Icons.add),
-        label: Text(context.aonwL10n.singlePlayer),
-      ),
-    ],
-  );
-}
-
-final class _FailureMessage extends StatelessWidget {
-  const _FailureMessage({required this.message, super.key});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) => Semantics(
-    liveRegion: true,
-    child: Text(
-      message,
-      style: TextStyle(color: Theme.of(context).colorScheme.error),
-    ),
-  );
 }

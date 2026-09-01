@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../local_game/application/local_game_catalog.dart';
 import '../../local_game/application/local_game_session_port.dart';
 import '../../map/read_model/map_scene.dart';
@@ -5,6 +7,9 @@ import 'game_save_session_port.dart';
 import 'local_save_state.dart';
 import 'local_save_store.dart';
 import 'local_save_summary.dart';
+import 'local_save_transfer.dart';
+
+part 'local_save_transfer_workflow.dart';
 
 typedef LocalSaveDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -33,13 +38,16 @@ final class LocalSaveWorkflow {
   const LocalSaveWorkflow({
     required GameSaveSessionPort? session,
     required LocalSaveStore? store,
+    LocalSaveTransferPort? transfer,
     required LocalSaveDiagnosticReporter diagnosticReporter,
   }) : _session = session,
        _store = store,
+       _transfer = transfer,
        _diagnosticReporter = diagnosticReporter;
 
   final GameSaveSessionPort? _session;
   final LocalSaveStore? _store;
+  final LocalSaveTransferPort? _transfer;
   final LocalSaveDiagnosticReporter _diagnosticReporter;
 
   Future<bool> hasSave() async {

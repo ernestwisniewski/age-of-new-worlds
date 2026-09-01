@@ -733,6 +733,32 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'Import i eksport zapisów są niedostępne na tej platformie.';
 
   @override
+  String saveImportCompleted(String map) {
+    return 'Zaimportowano mapę $map. Poprzedni zapis tej mapy zachowano jako kopię zapasową.';
+  }
+
+  @override
+  String saveExportCompleted(String map) {
+    return 'Wyeksportowano mapę $map.';
+  }
+
+  @override
+  String saveTransferFailure(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'unavailable': 'Transfer zapisów jest niedostępny na tej platformie.',
+      'unreadable': 'Nie udało się odczytać wybranego pliku zapisu.',
+      'tooLarge': 'Wybrany plik zapisu przekracza limit 16 MiB.',
+      'incompatible':
+          'Wybrany zapis jest nieprawidłowy albo nie pasuje do zainstalowanej mapy, rulesetu lub wersji silnika.',
+      'missing': 'Wybrany zapis gry już nie istnieje.',
+      'writeFailed': 'Nie udało się zachować zaimportowanego zapisu.',
+      'exportFailed': 'Nie udało się wyeksportować pliku zapisu.',
+      'other': 'Nie udało się ukończyć transferu zapisu.',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get replayTitle => 'Powtórka';
 
   @override

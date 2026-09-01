@@ -18,7 +18,9 @@ import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/infrastructure/atomic_local_replay_store.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
 import '../../features/save_game/application/local_save_store.dart';
+import '../../features/save_game/application/local_save_transfer.dart';
 import '../../features/save_game/infrastructure/atomic_local_save_store.dart';
+import '../../features/save_game/infrastructure/platform_local_save_transfer.dart';
 import '../../features/settings/application/client_settings_store.dart';
 import '../../features/settings/infrastructure/shared_preferences_client_settings_store.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
@@ -32,6 +34,7 @@ final class AppComposition {
   AppComposition({
     required GameSessionCapabilities capabilities,
     LocalSaveStore? saveStore,
+    LocalSaveTransferPort? saveTransfer,
     ReplayPresentationController? replayController,
     MapInputSource? mapInputSource,
     ClientSettingsStore? settingsStore,
@@ -46,6 +49,7 @@ final class AppComposition {
          mapController: MapPresentationController(
            capabilities: capabilities,
            saveStore: saveStore,
+           saveTransfer: saveTransfer,
            replayCapture: replayController,
          ),
          mapInputSource: mapInputSource,
@@ -92,6 +96,7 @@ final class AppComposition {
     return AppComposition(
       capabilities: gateway.capabilities.withNetworkGame(networkGame),
       saveStore: AtomicLocalSaveStore.production(),
+      saveTransfer: const PlatformLocalSaveTransfer(),
       replayController: replayController,
       mapInputSource: GamepadMapInputSource(),
       settingsStore: SharedPreferencesClientSettingsStore(),

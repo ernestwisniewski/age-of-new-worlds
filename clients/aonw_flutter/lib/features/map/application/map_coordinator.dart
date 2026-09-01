@@ -27,6 +27,7 @@ import '../../research/read_model/research_view.dart';
 import '../../save_game/application/local_save_state.dart';
 import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
+import '../../save_game/application/local_save_transfer.dart';
 import '../../save_game/application/local_save_workflow.dart';
 import '../../turns/application/turn_workflow.dart';
 import '../../unit_actions/application/action_deck_state.dart';
@@ -56,10 +57,21 @@ part 'map_coordinator_selection.dart';
 typedef MapDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
 
+UnitActionWorkflow _unitActionWorkflow(
+  GameSessionCapabilities capabilities,
+  MapDiagnosticReporter? diagnosticReporter,
+) => UnitActionWorkflow(
+  runner: UnitActionCommandRunner(
+    session: capabilities.unitActions,
+    diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
+  ),
+);
+
 final class MapCoordinator {
   MapCoordinator({
     required GameSessionCapabilities capabilities,
     LocalSaveStore? saveStore,
+    LocalSaveTransferPort? saveTransfer,
     ReplayCapture? replayCapture,
     this.assets = MapAssetPaths.starter,
     MapDiagnosticReporter? diagnosticReporter,
@@ -100,12 +112,7 @@ final class MapCoordinator {
          session: capabilities.diplomacy,
          diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
        ),
-       _unitActions = UnitActionWorkflow(
-         runner: UnitActionCommandRunner(
-           session: capabilities.unitActions,
-           diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
-         ),
-       ),
+       _unitActions = _unitActionWorkflow(capabilities, diagnosticReporter),
        _turns = TurnWorkflow(
          session: capabilities.turns,
          diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
@@ -114,6 +121,7 @@ final class MapCoordinator {
        _saveWorkflow = LocalSaveWorkflow(
          session: capabilities.save,
          store: saveStore,
+         transfer: saveTransfer,
          diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
        ),
        _replayCapture = replayCapture,

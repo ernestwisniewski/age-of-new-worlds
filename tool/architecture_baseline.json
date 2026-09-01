@@ -54,7 +54,6 @@
         "clients/aonw_flutter/lib/features/diplomacy/application/diplomacy_workflow.dart::class:DiplomacyWorkflow/method:_execute": 61,
         "clients/aonw_flutter/lib/features/diplomacy/infrastructure/engine_diplomacy_gateway.dart::function:_request": 71,
         "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
-        "clients/aonw_flutter/lib/features/map/application/map_coordinator.dart::class:MapCoordinator/constructor:<unnamed>": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
         "clients/aonw_flutter/lib/features/map/infrastructure/engine_game_session_loader.dart::class:EngineGameSessionLoader/method:prepareReplay": 63,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,

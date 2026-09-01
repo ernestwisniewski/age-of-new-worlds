@@ -20,6 +20,12 @@ void main() {
       final save = await saveSession.exportSaveDocument();
       final mismatch = jsonDecode(save) as Map<String, dynamic>;
       mismatch['mapHash'] = 'f' * 64;
+      final rulesetMismatch = jsonDecode(save) as Map<String, dynamic>;
+      rulesetMismatch['rulesetHash'] = 'e' * 64;
+      final behaviorMismatch = jsonDecode(save) as Map<String, dynamic>;
+      behaviorMismatch['behaviorFingerprint'] = 'legacy-client';
+      final digestMismatch = jsonDecode(save) as Map<String, dynamic>;
+      digestMismatch['stateDigest'] = 'd' * 64;
 
       final inspected = await saveSession.inspectSaveDocument(
         assets: assets,
@@ -34,6 +40,9 @@ void main() {
       for (final rejected in [
         save.substring(0, save.length ~/ 2),
         jsonEncode(mismatch),
+        jsonEncode(rulesetMismatch),
+        jsonEncode(behaviorMismatch),
+        jsonEncode(digestMismatch),
       ]) {
         await expectLater(
           saveSession.openSaveDocument(assets: assets, document: rejected),
