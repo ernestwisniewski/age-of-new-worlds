@@ -682,6 +682,12 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'DateTime?',
         ),
         _i2.ColumnDefinition(
+          name: 'turnDeadlineAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
           name: 'endedAt',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
@@ -776,6 +782,23 @@ class Protocol extends _i1.SerializationManagerServer {
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
               definition: 'startedAt',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'aonw_game_match_turn_deadline_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'turnDeadlineAt',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'publicId',
             ),
           ],
           type: 'btree',

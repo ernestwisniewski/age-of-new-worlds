@@ -33,6 +33,7 @@ abstract class GameMatch
     this.hostPlayerId,
     required this.turn,
     this.startedAt,
+    this.turnDeadlineAt,
     this.endedAt,
     this.outcomeCondition,
     this.winnerPlayerId,
@@ -59,6 +60,7 @@ abstract class GameMatch
     String? hostPlayerId,
     required int turn,
     DateTime? startedAt,
+    DateTime? turnDeadlineAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -88,6 +90,11 @@ abstract class GameMatch
       startedAt: jsonSerialization['startedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
+      turnDeadlineAt: jsonSerialization['turnDeadlineAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['turnDeadlineAt'],
+            ),
       endedAt: jsonSerialization['endedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
@@ -153,6 +160,8 @@ abstract class GameMatch
 
   DateTime? startedAt;
 
+  DateTime? turnDeadlineAt;
+
   DateTime? endedAt;
 
   String? outcomeCondition;
@@ -194,6 +203,7 @@ abstract class GameMatch
     String? hostPlayerId,
     int? turn,
     DateTime? startedAt,
+    DateTime? turnDeadlineAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -222,6 +232,7 @@ abstract class GameMatch
       if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
       'turn': turn,
       if (startedAt != null) 'startedAt': startedAt?.toJson(),
+      if (turnDeadlineAt != null) 'turnDeadlineAt': turnDeadlineAt?.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (outcomeCondition != null) 'outcomeCondition': outcomeCondition,
       if (winnerPlayerId != null) 'winnerPlayerId': winnerPlayerId,
@@ -322,6 +333,7 @@ class _GameMatchImpl extends GameMatch {
     String? hostPlayerId,
     required int turn,
     DateTime? startedAt,
+    DateTime? turnDeadlineAt,
     DateTime? endedAt,
     String? outcomeCondition,
     String? winnerPlayerId,
@@ -346,6 +358,7 @@ class _GameMatchImpl extends GameMatch {
          hostPlayerId: hostPlayerId,
          turn: turn,
          startedAt: startedAt,
+         turnDeadlineAt: turnDeadlineAt,
          endedAt: endedAt,
          outcomeCondition: outcomeCondition,
          winnerPlayerId: winnerPlayerId,
@@ -376,6 +389,7 @@ class _GameMatchImpl extends GameMatch {
     Object? hostPlayerId = _Undefined,
     int? turn,
     Object? startedAt = _Undefined,
+    Object? turnDeadlineAt = _Undefined,
     Object? endedAt = _Undefined,
     Object? outcomeCondition = _Undefined,
     Object? winnerPlayerId = _Undefined,
@@ -403,6 +417,9 @@ class _GameMatchImpl extends GameMatch {
       hostPlayerId: hostPlayerId is String? ? hostPlayerId : this.hostPlayerId,
       turn: turn ?? this.turn,
       startedAt: startedAt is DateTime? ? startedAt : this.startedAt,
+      turnDeadlineAt: turnDeadlineAt is DateTime?
+          ? turnDeadlineAt
+          : this.turnDeadlineAt,
       endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
       outcomeCondition: outcomeCondition is String?
           ? outcomeCondition
@@ -488,6 +505,12 @@ class GameMatchUpdateTable extends _i1.UpdateTable<GameMatchTable> {
   _i1.ColumnValue<DateTime, DateTime> startedAt(DateTime? value) =>
       _i1.ColumnValue(
         table.startedAt,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> turnDeadlineAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.turnDeadlineAt,
         value,
       );
 
@@ -579,6 +602,10 @@ class GameMatchTable extends _i1.Table<int?> {
       'startedAt',
       this,
     );
+    turnDeadlineAt = _i1.ColumnDateTime(
+      'turnDeadlineAt',
+      this,
+    );
     endedAt = _i1.ColumnDateTime(
       'endedAt',
       this,
@@ -632,6 +659,8 @@ class GameMatchTable extends _i1.Table<int?> {
   late final _i1.ColumnInt turn;
 
   late final _i1.ColumnDateTime startedAt;
+
+  late final _i1.ColumnDateTime turnDeadlineAt;
 
   late final _i1.ColumnDateTime endedAt;
 
@@ -805,6 +834,7 @@ class GameMatchTable extends _i1.Table<int?> {
     hostPlayerId,
     turn,
     startedAt,
+    turnDeadlineAt,
     endedAt,
     outcomeCondition,
     winnerPlayerId,

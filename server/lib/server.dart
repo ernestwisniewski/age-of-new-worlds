@@ -5,6 +5,7 @@ import 'package:aonw_server/src/auth/steam_auth_route.dart';
 import 'package:aonw_server/src/auth/steam_auth_service.dart';
 import 'package:aonw_server/src/game/native/game_native_runtime.dart'
     show initializeAonwGameNativeHost, shutdownAonwGameNativeHost;
+import 'package:aonw_server/src/game/service/game_turn_timeout_future_call.dart';
 import 'package:aonw_server/src/generated/endpoints.dart';
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:aonw_server/src/stats/public_game_stats_route.dart';
@@ -22,6 +23,7 @@ Future<void> run(List<String> args) async {
     shutdownAonwGameNativeHost,
   );
   final authMaintenanceRegistered = _registerAuthMaintenance(pod);
+  final gameTurnTimeoutRegistered = registerGameTurnTimeout(pod);
   final appleConfigured = _appleIdpConfigured(pod);
   final googleConfigured = _hasPassword(pod, 'googleClientSecret');
 
@@ -65,6 +67,20 @@ Future<void> run(List<String> args) async {
       authMaintenanceReconciler.close,
     );
   }
+  await _startGameTurnTimeoutLifecycle(pod, enabled: gameTurnTimeoutRegistered);
+}
+
+Future<void> _startGameTurnTimeoutLifecycle(
+  Serverpod pod, {
+  required bool enabled,
+}) async {
+  if (!enabled) return;
+  final reconciler = GameTurnTimeoutScheduleReconciler(pod);
+  await reconciler.start();
+  pod.experimental.shutdownTasks.addTask(
+    gameTurnTimeoutReconcilerShutdownTaskId,
+    reconciler.close,
+  );
 }
 
 bool _appleIdpConfigured(Serverpod pod) {

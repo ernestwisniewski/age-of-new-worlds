@@ -84,7 +84,12 @@ Future<GameLobbyView> _startMatch(Session session, String rawMatchId) {
     final now = DateTime.now().toUtc();
     final started = await GameMatch.db.updateRow(
       session,
-      match.copyWith(state: _matchStateRunning, startedAt: now, updatedAt: now),
+      match.copyWith(
+        state: _matchStateRunning,
+        startedAt: now,
+        turnDeadlineAt: now.add(gameTurnTimeoutDuration),
+        updatedAt: now,
+      ),
       transaction: transaction,
     );
     return _lobbyView(started, caller, participants);

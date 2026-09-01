@@ -1,6 +1,75 @@
 part of 'game_endpoint_smoke.dart';
 
 extension _GameEndpointPersistence on _GameEndpointJourney {
+  Future<void> _verifyTimeout(_JoinedMatch joined) async {
+    final ownerTurn = await _submitOwner(joined, joined.created.revision);
+    final persisted = await game.GameMatch.db.findFirstRow(
+      databaseSession,
+      where: (table) => table.publicId.equals(joined.created.matchId),
+    );
+    expect(persisted, isNotNull);
+    expect(persisted!.turnDeadlineAt, isNotNull);
+    final now = DateTime.now().toUtc();
+    await game.GameMatch.db.updateRow(
+      databaseSession,
+      persisted.copyWith(
+        turnDeadlineAt: now.subtract(const Duration(seconds: 1)),
+      ),
+    );
+
+    final result = await const GameTurnTimeoutService(
+      batchSize: 4,
+    ).run(databaseSession, now: now);
+    final retry = await const GameTurnTimeoutService(
+      batchSize: 4,
+    ).run(databaseSession, now: now);
+
+    expect(result.candidates, 1);
+    expect(result.finalized, 1);
+    expect(result.failures, isEmpty);
+    expect(result.backlogRemaining, isFalse);
+    expect(retry.candidates, 0);
+    expect(retry.finalized, 0);
+    final current = await game.GameMatch.db.findFirstRow(
+      databaseSession,
+      where: (table) => table.publicId.equals(joined.created.matchId),
+    );
+    expect(current, isNotNull);
+    expect(current!.revision, ownerTurn.nextRevision + 1);
+    expect(current.turn, persisted.turn + 1);
+    expect(current.turnDeadlineAt, isNotNull);
+    expect(current.turnDeadlineAt!.isAfter(now), isTrue);
+    final canonical = _object(jsonDecode(current.canonicalStateJson!));
+    final lifecycle = _object(canonical['turnLifecycle']);
+    expect(lifecycle['submittedPlayerIds'], isEmpty);
+    expect(lifecycle['timeoutStreaksByPlayerId'], {'player-2': 1});
+    expect(lifecycle['turnStartedAt'], now.toIso8601String());
+
+    final events = await game.GameEvent.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+      orderBy: (table) => table.offset,
+    );
+    final timeoutEvents = events
+        .map((event) => _object(jsonDecode(event.eventJson!)))
+        .where((event) => event['type'] == 'playerTimedOut')
+        .toList(growable: false);
+    expect(timeoutEvents, hasLength(1));
+    expect(timeoutEvents.single['playerId'], 'player-2');
+    final ledgers = await game.GameCommandLedger.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+    );
+    expect(ledgers, hasLength(1));
+    final snapshots = await game.GameRecipientSnapshot.db.find(
+      databaseSession,
+      where: (table) => table.matchId.equals(current.id!),
+    );
+    expect(snapshots.map((snapshot) => snapshot.eventOffset).toSet(), {
+      current.eventOffset,
+    });
+  }
+
   Future<void> _verifyResignation(_JoinedMatch joined) async {
     final request = game.GameResignMatchRequest(
       matchId: joined.created.matchId,
@@ -23,6 +92,7 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
     final current = match!;
     expect(current.state, 'finished');
     expect(current.endedAt, isNotNull);
+    expect(current.turnDeadlineAt, isNull);
     expect(current.outcomeCondition, 'resignation');
     expect(current.winnerPlayerId, 'player-2');
     expect(current.revision, joined.created.revision + 1);

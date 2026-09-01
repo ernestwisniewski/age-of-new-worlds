@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aonw_server/src/game/native/game_native_runtime.dart';
+import 'package:aonw_server/src/game/service/game_turn_timeout_policy.dart';
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:aonw_server_native/aonw_server_native.dart';
 import 'package:serverpod/serverpod.dart';
@@ -12,6 +13,7 @@ part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
 part 'game_match_service_support.dart';
 part 'game_match_service_system.dart';
+part 'game_match_service_timeout.dart';
 
 const _maximumIdentifierLength = 128;
 const _maximumContentDocumentBytes = 16 * 1024 * 1024;
@@ -68,6 +70,12 @@ final class GameMatchService {
     Session session,
     GameResignMatchRequest request,
   ) => _resignMatch(this, session, request);
+
+  Future<bool> finalizeTimedOutTurn(
+    Session session, {
+    required String matchId,
+    required DateTime now,
+  }) => _finalizeTimedOutTurn(this, session, matchId: matchId, now: now);
 
   Future<GamePlayerQueryOutcome> query(
     Session session,

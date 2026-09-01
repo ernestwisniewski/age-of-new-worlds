@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aonw_server/src/game/game_endpoint.dart';
 import 'package:aonw_server/src/game/native/game_native_runtime.dart';
+import 'package:aonw_server/src/game/service/game_turn_timeout_service.dart';
 import 'package:aonw_server/src/generated/protocol.dart' as game;
 import 'package:aonw_server/src/stats/public_game_stats_service.dart';
 import 'package:aonw_server/src/stats/public_game_stats_store.dart';
@@ -23,6 +24,10 @@ void main() {
       test('persists resignation once and finishes the match', () async {
         addTearDown(shutdownAonwGameNativeHost);
         await _GameEndpointJourney(sessionBuilder).runResignation();
+      });
+      test('finalizes an expired simultaneous turn once', () async {
+        addTearDown(shutdownAonwGameNativeHost);
+        await _GameEndpointJourney(sessionBuilder).runTimeout();
       });
     },
     rollbackDatabase: RollbackDatabase.afterEach,
@@ -54,6 +59,11 @@ final class _GameEndpointJourney {
   Future<void> runResignation() async {
     final joined = await _createAndJoin();
     await _verifyResignation(joined);
+  }
+
+  Future<void> runTimeout() async {
+    final joined = await _createAndJoin();
+    await _verifyTimeout(joined);
   }
 
   Future<void> _rejectInvalidCommand(_JoinedMatch joined) async {

@@ -160,6 +160,7 @@ final class _PreparedCreation {
     hostPlayerId: creatorPlayerId,
     turn: facts.turn,
     startedAt: null,
+    turnDeadlineAt: null,
     endedAt: null,
     outcomeCondition: facts.outcomeCondition,
     winnerPlayerId: facts.winnerPlayerId,

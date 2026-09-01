@@ -240,6 +240,11 @@ Future<void> _updateMatch(
     canonicalStateJson: jsonEncode(applied.nextState),
     state: applied.facts.state,
     turn: applied.facts.turn,
+    turnDeadlineAt: applied.facts.finished
+        ? null
+        : applied.facts.turn > match.turn
+        ? applied.now.add(gameTurnTimeoutDuration)
+        : match.turnDeadlineAt,
     endedAt: applied.facts.finished ? match.endedAt ?? applied.now : null,
     outcomeCondition: applied.facts.outcomeCondition,
     winnerPlayerId: applied.facts.winnerPlayerId,

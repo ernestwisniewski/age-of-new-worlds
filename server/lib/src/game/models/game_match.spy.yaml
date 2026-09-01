@@ -12,6 +12,7 @@ fields:
   hostPlayerId: String?
   turn: int
   startedAt: DateTime?
+  turnDeadlineAt: DateTime?, scope=serverOnly
   endedAt: DateTime?
   outcomeCondition: String?
   winnerPlayerId: String?
@@ -31,5 +32,7 @@ indexes:
     fields: updatedAt, publicId
   aonw_game_match_started_idx:
     fields: startedAt
+  aonw_game_match_turn_deadline_idx:
+    fields: turnDeadlineAt, publicId
   aonw_game_match_ended_idx:
     fields: endedAt

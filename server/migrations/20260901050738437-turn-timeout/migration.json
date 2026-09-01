@@ -1,0 +1,52 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "aonw_game_match",
+        "schema": "public",
+        "addColumns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "turnDeadlineAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          }
+        ],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [
+          {
+            "__className__": "serverpod.IndexDefinition",
+            "indexName": "aonw_game_match_turn_deadline_idx",
+            "elements": [
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "turnDeadlineAt"
+              },
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "publicId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": []
+      }
+    }
+  ],
+  "warnings": [],
+  "migrationApiVersion": 1
+}
