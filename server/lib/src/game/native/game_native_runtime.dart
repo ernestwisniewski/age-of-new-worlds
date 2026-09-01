@@ -129,6 +129,35 @@ final class GameNativeRuntime {
     }
   }
 
+  Map<String, Object?> queryPlayer({
+    required PreparedGameContent content,
+    required String authenticatedActorPlayerId,
+    required Map<String, Object?> query,
+    required Map<String, Object?> canonicalState,
+  }) {
+    try {
+      final response = _host.queryPlayerJson(
+        content._world,
+        jsonEncode({
+          'apiVersion': aonwServerHostApiVersion,
+          'authenticatedActorPlayerId': authenticatedActorPlayerId,
+          'query': query,
+          'mapHash': content.mapHash,
+          'rulesetHash': content.rulesetHash,
+          'state': canonicalState,
+        }),
+      );
+      return _result(response, 'playerQueryExecuted');
+    } on AonwServerNativeException catch (error) {
+      if (error.code != 'invalid_request') rethrow;
+      _rethrowInvalidRequest(
+        error: error,
+        content: content,
+        canonicalState: canonicalState,
+      );
+    }
+  }
+
   Never _rethrowInvalidRequest({
     required AonwServerNativeException error,
     required PreparedGameContent content,

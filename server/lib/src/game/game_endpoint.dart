@@ -33,6 +33,11 @@ final class GameEndpoint extends Endpoint {
     GamePlayerCommandRequest request,
   ) => _service.applyCommand(session, request);
 
+  Future<GamePlayerQueryOutcome> query(
+    Session session,
+    GamePlayerQueryRequest request,
+  ) => _service.query(session, request);
+
   Future<GameResync> resync(Session session, String matchId) =>
       _service.resync(session, matchId);
 }

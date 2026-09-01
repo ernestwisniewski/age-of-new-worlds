@@ -8,12 +8,14 @@ import 'package:serverpod/serverpod.dart';
 part 'game_match_service_commands.dart';
 part 'game_match_service_creation.dart';
 part 'game_match_service_membership.dart';
+part 'game_match_service_queries.dart';
 part 'game_match_service_support.dart';
 
 const _maximumIdentifierLength = 128;
 const _maximumContentDocumentBytes = 16 * 1024 * 1024;
 const _maximumIdentityDocumentBytes = 2 * 1024 * 1024;
 const _maximumCommandDocumentBytes = 64 * 1024;
+const _maximumQueryDocumentBytes = 64 * 1024;
 
 /// Transactional application service for engine-authoritative matches.
 final class GameMatchService {
@@ -42,6 +44,11 @@ final class GameMatchService {
     Session session,
     GamePlayerCommandRequest request,
   ) => _applyCommand(this, session, request);
+
+  Future<GamePlayerQueryOutcome> query(
+    Session session,
+    GamePlayerQueryRequest request,
+  ) => _query(this, session, request);
 
   Future<GameResync> resync(Session session, String matchId) =>
       _resync(session, matchId);

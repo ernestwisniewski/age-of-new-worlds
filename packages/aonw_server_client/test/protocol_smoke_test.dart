@@ -34,5 +34,15 @@ void main() {
     expect(commandRoundTrip.matchId, 'match-1');
     expect(commandRoundTrip.clientCommandId, 'command-1');
     expect(commandRoundTrip.commandJson, contains('fortifyUnit'));
+
+    final query = GamePlayerQueryRequest(
+      matchId: 'match-1',
+      queryJson: '{"type":"reachable","expectedRevision":3,"unitId":"unit-1"}',
+    );
+    final queryRoundTrip = Protocol().deserialize<GamePlayerQueryRequest>(
+      query.toJson(),
+    );
+    expect(queryRoundTrip.matchId, 'match-1');
+    expect(queryRoundTrip.queryJson, contains('reachable'));
   });
 }

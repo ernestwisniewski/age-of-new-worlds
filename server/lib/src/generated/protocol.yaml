@@ -30,4 +30,5 @@ game:
   - listMatches:
   - submitTurn:
   - applyCommand:
+  - query:
   - resync:

@@ -1,0 +1,4 @@
+class: GamePlayerQueryRequest
+fields:
+  matchId: String
+  queryJson: String
