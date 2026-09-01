@@ -7,6 +7,7 @@ import '../../features/local_game/presentation/new_game_screen.dart';
 import '../../features/main_menu/presentation/main_menu_screen.dart';
 import '../../features/main_menu/presentation/main_menu_support_screens.dart';
 import '../../features/map/application/network_game_session_port.dart';
+import '../../features/map/presentation/input/map_gamepad_input.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/map/presentation/widgets/map_screen.dart';
@@ -24,6 +25,7 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../game/aonw_flame_game.dart';
 import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
+import 'aonw_menu_navigation.dart';
 
 enum AonwRoute {
   menu('/'),
@@ -82,10 +84,22 @@ final class AonwRouter {
     final route = AonwRoute.fromLocation(settings.name);
     return MaterialPageRoute<void>(
       settings: settings,
-      builder: route == null
-          ? (_) => _UnknownRoute(location: settings.name)
-          : _routeBuilders[route]!,
+      builder: (context) {
+        final screen = route == null
+            ? _UnknownRoute(location: settings.name)
+            : _routeBuilders[route]!(context);
+        return _withMenuNavigation(route, screen);
+      },
     );
+  }
+
+  Widget _withMenuNavigation(AonwRoute? route, Widget child) {
+    if (route == AonwRoute.map || route == AonwRoute.replay) return child;
+    final input = switch (mapInputSource) {
+      final ContinuousMapInputSource source => source.continuousInputs,
+      _ => null,
+    };
+    return AonwMenuNavigation(input: input, child: child);
   }
 
   Map<AonwRoute, WidgetBuilder> get _routeBuilders => {

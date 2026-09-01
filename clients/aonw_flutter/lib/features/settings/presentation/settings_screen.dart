@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_menu_adjustable.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../application/client_settings.dart';
@@ -213,14 +214,22 @@ final class _LabeledSlider extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text('$label · $valueLabel'),
-      Slider(
-        value: value,
-        min: minimum,
-        max: maximum,
-        divisions: divisions,
-        label: valueLabel,
-        onChanged: onChanged,
+      AonwMenuAdjustable(
+        onAdjust: _adjust,
+        child: Slider(
+          value: value,
+          min: minimum,
+          max: maximum,
+          divisions: divisions,
+          label: valueLabel,
+          onChanged: onChanged,
+        ),
       ),
     ],
   );
+
+  void _adjust(int delta) {
+    final step = (maximum - minimum) / divisions;
+    onChanged((value + step * delta).clamp(minimum, maximum));
+  }
 }
