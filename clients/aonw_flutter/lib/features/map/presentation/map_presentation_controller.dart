@@ -71,6 +71,10 @@ final class MapPresentationController extends ChangeNotifier {
 
   GameSessionState get state => _coordinator.state;
 
+  void bindCommandEffects(Future<void> Function()? wait) {
+    _coordinator.waitForCommandEffects = wait;
+  }
+
   NetworkGameConnectionView get networkConnection =>
       _networkGame?.connection ?? NetworkGameConnectionView.inactive;
 

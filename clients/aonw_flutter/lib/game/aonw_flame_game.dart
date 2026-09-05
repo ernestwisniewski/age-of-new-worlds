@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -46,6 +47,7 @@ part 'aonw_world.dart';
 
 base class AonwFlameGame extends FlameGame<AonwWorld>
     implements FlameSceneSink {
+  Completer<void>? _commandEffectsCompletion;
   AonwFlameGame({
     AonwWorld? world,
     CameraComponent? camera,
@@ -340,6 +342,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
 
   @override
   void onRemove() {
+    skipEffects();
     _removeCount += 1;
     super.onRemove();
   }
@@ -347,6 +350,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void onDispose() {
     if (!_disposed) {
+      _completeCommandEffects();
       _disposed = true;
       clearScene();
       dispose();

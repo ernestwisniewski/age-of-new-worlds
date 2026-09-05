@@ -7,6 +7,7 @@ import '../application/local_replay_store.dart';
 import '../application/replay_capture.dart';
 import '../application/replay_session_port.dart';
 import '../application/replay_state.dart';
+import '../read_model/replay_frame_view.dart';
 
 typedef ReplayDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -38,6 +39,9 @@ final class ReplayPresentationController extends ChangeNotifier
   Timer? _timer;
   var _generation = 0;
   var _disposed = false;
+  var _playbackGeneration = 0;
+  var _waitingForEffects = false;
+  Future<void> Function()? waitForCommandEffects;
 
   ReplayState get state => _state;
 
@@ -96,6 +100,7 @@ final class ReplayPresentationController extends ChangeNotifier
   ) async {
     pause();
     final generation = ++_generation;
+    _waitingForEffects = false;
     _setState(const ReplayLoading());
     final session = _session;
     final store = _store;
@@ -190,6 +195,7 @@ final class ReplayPresentationController extends ChangeNotifier
   }
 
   void pause() {
+    _playbackGeneration++;
     _timer?.cancel();
     _timer = null;
     final ready = _state;
@@ -225,18 +231,12 @@ final class ReplayPresentationController extends ChangeNotifier
     }
     final bounded = position.clamp(0, ready.frame.entryCount);
     final generation = _generation;
+    final playbackGeneration = _playbackGeneration;
     _setState(ready.copyWith(isSeeking: true));
     try {
       final frame = await session.seekReplay(bounded);
       if (!_isCurrent(generation)) return false;
-      final updated = ReplayReady(
-        frame: frame,
-        speed: ready.speed,
-        isPlaying: resumeAfter && !frame.isComplete,
-        isSeeking: false,
-      );
-      _setState(updated);
-      if (updated.isPlaying) _scheduleNext();
+      await _presentFrame(frame, generation, playbackGeneration, resumeAfter);
       return true;
     } on ReplaySessionException catch (error, stackTrace) {
       _reportSession(error, stackTrace);
@@ -249,12 +249,40 @@ final class ReplayPresentationController extends ChangeNotifier
     return false;
   }
 
+  Future<void> _presentFrame(
+    ReplayFrameView frame,
+    int generation,
+    int playbackGeneration,
+    bool resumeAfter,
+  ) async {
+    final current = _state as ReplayReady;
+    final updated = ReplayReady(
+      frame: frame,
+      speed: current.speed,
+      isPlaying:
+          resumeAfter &&
+          playbackGeneration == _playbackGeneration &&
+          !frame.isComplete,
+      isSeeking: false,
+    );
+    _waitingForEffects = frame.command != null;
+    _setState(updated);
+    if (frame.command != null) await waitForCommandEffects?.call();
+    if (_isCurrent(generation) &&
+        _state is ReplayReady &&
+        identical((_state as ReplayReady).frame, frame)) {
+      _waitingForEffects = false;
+      _scheduleNext();
+    }
+  }
+
   void _scheduleNext() {
     _timer?.cancel();
     final ready = _state;
     if (ready is! ReplayReady || !ready.isPlaying || ready.frame.isComplete) {
       return;
     }
+    if (_waitingForEffects) return;
     _timer = Timer(
       ready.speed.frameDuration,
       () => _seek(ready.frame.position + 1, resumeAfter: true),

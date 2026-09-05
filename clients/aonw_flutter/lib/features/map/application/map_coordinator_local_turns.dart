@@ -60,6 +60,8 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
         ),
       );
       if (!_isCurrent(generation)) return null;
+      await _presentAiFrames(execution, generation);
+      if (!_isCurrent(generation)) return null;
       final ready = _state;
       if (ready is! GameSessionReady) return null;
       final advanced = ready.withRecipient(execution.player);
@@ -83,6 +85,26 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
     } on Object catch (error, stackTrace) {
       _publishUnexpectedAiFailure(error, stackTrace, generation);
       return null;
+    }
+  }
+
+  Future<void> _presentAiFrames(
+    LocalAiTurnExecutionView execution,
+    int generation,
+  ) async {
+    try {
+      for (final frame in execution.frames) {
+        if (!_isCurrent(generation)) return;
+        final ready = _state;
+        if (ready is! GameSessionReady) return;
+        _setState(ready.withRecipient(frame.player, commandFrame: frame));
+        await waitForCommandEffects?.call();
+      }
+    } finally {
+      final ready = _state;
+      if (_isCurrent(generation) && ready is GameSessionReady) {
+        _setState(ready.withRecipient(execution.player));
+      }
     }
   }
 

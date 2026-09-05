@@ -6,12 +6,15 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
 import 'flame_city_equality.dart';
+import 'flame_command_transition.dart';
+import 'flame_observed_command.dart';
+
+export 'flame_command_transition.dart';
 
 /// The presentation-only delta between two validated map snapshots.
 ///
-/// Movement transitions intentionally contain only authoritative start and end
-/// coordinates. A route preview is not ordered execution evidence and is never
-/// promoted to an animation path here.
+/// Observed commands carry executed paths. A route preview is never promoted to
+/// an animation path here.
 final class FlameScenePatch {
   FlameScenePatch._({
     required this.snapshot,
@@ -27,6 +30,7 @@ final class FlameScenePatch {
     required List<MapHexCoordinate> removedRoadCoordinates,
     required List<FlameUnitMovementTransition> movements,
     required List<FlameCombatTransition> combats,
+    this.hasObservedCommand = false,
   }) : unitUpserts = List.unmodifiable(unitUpserts),
        removedUnitIds = List.unmodifiable(removedUnitIds),
        cityUpserts = List.unmodifiable(cityUpserts),
@@ -98,6 +102,7 @@ final class FlameScenePatch {
       ],
       movements: _movementBetween(previous, next, previousUnits, nextUnits),
       combats: _combatBetween(previous, next, previousUnits, nextUnits),
+      hasObservedCommand: isFlameObservedAdvance(previous, next),
     );
   }
 
@@ -114,6 +119,7 @@ final class FlameScenePatch {
   final List<MapHexCoordinate> removedRoadCoordinates;
   final List<FlameUnitMovementTransition> movements;
   final List<FlameCombatTransition> combats;
+  final bool hasObservedCommand;
 
   static FlameScenePatch _replacement(
     MapRenderSnapshot? previous,
@@ -219,6 +225,9 @@ final class FlameScenePatch {
     Map<String, VisibleUnitView> previousUnits,
     Map<String, VisibleUnitView> nextUnits,
   ) {
+    if (next.commandFrame != null) {
+      return observedFlameMovements(previous, next);
+    }
     final unitId = previous.interaction.movementPending
         ? previous.interaction.selectedUnitId
         : null;
@@ -259,6 +268,7 @@ final class FlameScenePatch {
     Map<String, VisibleUnitView> previousUnits,
     Map<String, VisibleUnitView> nextUnits,
   ) {
+    if (next.commandFrame != null) return observedFlameCombats(previous, next);
     final execution = next.interaction.combat?.lastExecution;
     if (execution == null ||
         execution.revision ==
@@ -340,24 +350,6 @@ final class FlameScenePatch {
           leftRemainingTurns == rightRemainingTurns,
     _ => false,
   };
-
-  static bool _sameWorkerJob(WorkerJobView? left, WorkerJobView? right) {
-    if (left == null || right == null) return left == right;
-    if (left.target != right.target ||
-        left.remainingTurns != right.remainingTurns ||
-        left.totalTurns != right.totalTurns) {
-      return false;
-    }
-    return switch ((left, right)) {
-      (
-        FieldImprovementJobView(improvement: final leftImprovement),
-        FieldImprovementJobView(improvement: final rightImprovement),
-      ) =>
-        leftImprovement == rightImprovement,
-      (RoadConstructionJobView(), RoadConstructionJobView()) => true,
-      _ => false,
-    };
-  }
 }
 
 bool _sameFlameUnit(VisibleUnitView left, VisibleUnitView right) =>
@@ -398,7 +390,7 @@ bool _sameFlameUnit(VisibleUnitView left, VisibleUnitView right) =>
           right.cityFoundingRemainingTurns,
         ) &&
     _sameFlameArmy(left.army, right.army) &&
-    FlameScenePatch._sameWorkerJob(left.workerJob, right.workerJob);
+    _sameFlameWorkerJob(left.workerJob, right.workerJob);
 
 bool _sameFlameArmy(
   List<VisibleArmyTroopView> left,
@@ -421,42 +413,20 @@ bool _sameFlameImprovement(
     left != null &&
     (left.improvement, left.eraColumn) == (right.improvement, right.eraColumn);
 
-final class FlameCombatTransition {
-  const FlameCombatTransition({
-    required this.attacker,
-    required this.defender,
-    required this.revision,
-    required this.eventCount,
-    required this.outgoingDamage,
-    required this.retaliationDamage,
-    required this.attackerKilled,
-    required this.defenderKilled,
-    required this.defenderIsCity,
-  });
-
-  final MapHexCoordinate attacker;
-  final MapHexCoordinate defender;
-  final int revision;
-  final int eventCount;
-  final int outgoingDamage;
-  final int retaliationDamage;
-  final bool attackerKilled;
-  final bool defenderKilled;
-  final bool defenderIsCity;
-}
-
-final class FlameUnitMovementTransition {
-  const FlameUnitMovementTransition({
-    required this.unitId,
-    required this.from,
-    required this.to,
-    required this.fromRevision,
-    required this.toRevision,
-  });
-
-  final String unitId;
-  final MapHexCoordinate from;
-  final MapHexCoordinate to;
-  final int fromRevision;
-  final int toRevision;
+bool _sameFlameWorkerJob(WorkerJobView? left, WorkerJobView? right) {
+  if (left == null || right == null) return left == right;
+  if (left.target != right.target ||
+      left.remainingTurns != right.remainingTurns ||
+      left.totalTurns != right.totalTurns) {
+    return false;
+  }
+  return switch ((left, right)) {
+    (
+      FieldImprovementJobView(improvement: final leftImprovement),
+      FieldImprovementJobView(improvement: final rightImprovement),
+    ) =>
+      leftImprovement == rightImprovement,
+    (RoadConstructionJobView(), RoadConstructionJobView()) => true,
+    _ => false,
+  };
 }

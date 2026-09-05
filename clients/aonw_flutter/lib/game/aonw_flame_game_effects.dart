@@ -1,6 +1,23 @@
 part of 'aonw_flame_game.dart';
 
 extension AonwFlameGameEffects on AonwFlameGame {
+  Future<void> waitForCommandEffects() {
+    if (_disposed || !_hasCommandEffects) return Future.value();
+    return (_commandEffectsCompletion ??= Completer<void>()).future;
+  }
+
+  bool get _hasCommandEffects =>
+      _effectsActive || _eventFeedbackActive || _eraTintActive;
+
+  void _completeCommandEffectsIfIdle() {
+    if (!_hasCommandEffects) _completeCommandEffects();
+  }
+
+  void _completeCommandEffects() {
+    _commandEffectsCompletion?.complete();
+    _commandEffectsCompletion = null;
+  }
+
   void setReducedMotion(bool enabled) {
     if (_disposed || _reducedMotion == enabled) return;
     _reducedMotion = enabled;
@@ -32,6 +49,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
   void _handleEffectActivity(bool active) {
     if (_disposed || _effectsActive == active) return;
     _effectsActive = active;
+    _completeCommandEffectsIfIdle();
     _synchronizeGameLoop();
   }
 
@@ -44,12 +62,14 @@ extension AonwFlameGameEffects on AonwFlameGame {
   void _handleEraTintActivity(bool active) {
     if (_disposed || _eraTintActive == active) return;
     _eraTintActive = active;
+    _completeCommandEffectsIfIdle();
     _synchronizeGameLoop();
   }
 
   void _handleEventFeedbackActivity(bool active) {
     if (_disposed || _eventFeedbackActive == active) return;
     _eventFeedbackActive = active;
+    _completeCommandEffectsIfIdle();
     _synchronizeGameLoop();
   }
 

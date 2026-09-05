@@ -31,6 +31,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       unitPositionFor: (unitId) =>
           unitLayer.componentForUnit(unitId)?.visualCenter,
     );
+    effectHost.onObservedEvent = eventFeedbackLayer.advanceCommand;
     addAll([
       terrainLayer,
       referenceLayer,
@@ -107,12 +108,9 @@ final class AonwWorld extends World implements FlameSceneSink {
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
     if (identical(_scene, snapshot)) return;
-    if (_scene?.player.actorPlayerId != snapshot.player.actorPlayerId ||
-        _scene?.map.mapId != snapshot.map.mapId ||
-        _scene?.map.contentHash != snapshot.map.contentHash) {
-      effectHost.clearEffects();
-    }
+    _resetEffectsFor(snapshot);
     final patch = FlameScenePatch.between(_scene, snapshot);
+    if (patch.hasObservedCommand) effectHost.skipAll();
     _scene = snapshot;
     _sceneWriteCount += 1;
     final identity = (
@@ -167,9 +165,27 @@ final class AonwWorld extends World implements FlameSceneSink {
     selectionLayer.applyCursor(cache, _cursor);
     actionPaletteLayer.applyPalette(cache, snapshot.actionPalette);
     hexSelectionPaletteLayer.clearLayer();
-    eventFeedbackLayer.applySnapshot(snapshot, cache);
+    eventFeedbackLayer.applySnapshot(
+      snapshot,
+      cache,
+      deferCommandFeedback: patch.hasObservedCommand,
+    );
     cityProductionLayer.applySnapshot(snapshot, cache);
     effectHost.applyPatch(patch, cache);
+  }
+
+  void _resetEffectsFor(MapRenderSnapshot snapshot) {
+    if (_scene?.player.actorPlayerId != snapshot.player.actorPlayerId ||
+        _scene?.map.mapId != snapshot.map.mapId ||
+        _scene?.map.contentHash != snapshot.map.contentHash ||
+        _scene?.effectEpoch != snapshot.effectEpoch) {
+      effectHost.clearEffects();
+    }
+    if (_scene?.effectEpoch != snapshot.effectEpoch) {
+      eventFeedbackLayer.clearLayer();
+      eraTintLayer.clearLayer();
+      cityProductionLayer.clearLayer();
+    }
   }
 
   @override

@@ -6,9 +6,11 @@ import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../game/aonw_flame_game.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/application/map_interaction_state.dart';
+import '../../map/presentation/map_feedback_labels.dart';
 import '../../map/presentation/map_render_snapshot.dart';
 import '../../settings/presentation/client_settings_scope.dart';
 import '../application/replay_state.dart';
+import '../read_model/replay_frame_view.dart';
 import 'replay_presentation_controller.dart';
 
 final class ReplayScreen extends StatefulWidget {
@@ -29,6 +31,9 @@ final class _ReplayScreenState extends State<ReplayScreen>
     with WidgetsBindingObserver {
   late AonwFlameGame _game;
   late AppLifecycleState _lifecycleState;
+  ReplayFrameView? _lastFrame;
+  var _effectEpoch = 0;
+  AonwLocalizations? _localizations;
 
   @override
   void initState() {
@@ -37,6 +42,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
     _lifecycleState =
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     _game = widget.flameGameFactory();
+    widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
     widget.controller.addListener(_synchronizeScene);
     _synchronizeScene();
     _synchronizeLifecycle();
@@ -46,12 +52,17 @@ final class _ReplayScreenState extends State<ReplayScreen>
   void didUpdateWidget(ReplayScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.waitForCommandEffects = null;
+      _game.skipEffects();
       oldWidget.controller.removeListener(_synchronizeScene);
       widget.controller.addListener(_synchronizeScene);
     }
     if (oldWidget.flameGameFactory != widget.flameGameFactory) {
+      _game.skipEffects();
+      _game.setViewportActive(false);
       _game = widget.flameGameFactory();
     }
+    widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
     _synchronizeScene();
     _synchronizeLifecycle();
   }
@@ -67,6 +78,8 @@ final class _ReplayScreenState extends State<ReplayScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     widget.controller.pause();
+    widget.controller.waitForCommandEffects = null;
+    _game.skipEffects();
     widget.controller.removeListener(_synchronizeScene);
     _game.setViewportActive(false);
     super.dispose();
@@ -99,18 +112,40 @@ final class _ReplayScreenState extends State<ReplayScreen>
     );
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _localizations = context.aonwL10n;
+    _synchronizeScene();
+  }
+
   void _synchronizeScene() {
     switch (widget.controller.state) {
-      case ReplayReady(:final frame):
+      case ReplayReady(:final frame, :final speed):
+        if (!identical(_lastFrame, frame) && frame.command == null) {
+          _effectEpoch++;
+        }
+        _lastFrame = frame;
+        _game.setEffectPlaybackSpeed(speed.multiplier);
         _game.sceneSink.replaceScene(
           MapRenderSnapshot(
             map: frame.scene.map,
             interaction: const MapInteractionState(),
             reference: frame.scene.reference,
             player: frame.scene.player,
+            commandFrame: frame.command,
+            effectEpoch: _effectEpoch,
+            feedbackLabels: switch (_localizations) {
+              final l10n? => buildMapFeedbackLabels(
+                frame.scene.player.recentFeedback,
+                l10n,
+              ),
+              null => const MapFeedbackLabels.empty(),
+            },
           ),
         );
       case ReplayIdle() || ReplayLoading() || ReplayFailure():
+        _lastFrame = null;
         _game.sceneSink.clearScene();
     }
   }

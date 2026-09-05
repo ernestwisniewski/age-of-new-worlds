@@ -2,25 +2,28 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../read_model/map_view.dart';
 import '../read_model/player_map_view.dart';
+import 'map_combat_evidence_index.dart';
 
 /// Follows disclosed coordinates in one command's authoritative event order.
 final class MapFeedbackPositions {
-  MapFeedbackPositions(PlayerMapView previous, AonwClientEvidence? evidence)
-    : _units = {for (final unit in previous.units) unit.id: unit.coordinate},
-      _combats = switch (evidence) {
-        AonwCombatEvidence(:final execution) => [execution],
-        AonwTurnKernelEvidence(:final combatExecutions) => combatExecutions,
-        _ => const [],
-      };
+  MapFeedbackPositions(
+    PlayerMapView previous,
+    AonwClientEvidence? evidence,
+    List<AonwClientEvent> events,
+  ) : _units = {for (final unit in previous.units) unit.id: unit.coordinate},
+      _combats = MapCombatEvidenceIndex(evidence, events);
 
   final Map<String, MapHexCoordinate> _units;
-  final List<AonwCombatExecution> _combats;
-  int _nextCombat = 0;
+  final MapCombatEvidenceIndex _combats;
   AonwCombatExecution? _combat;
+
+  AonwCombatExecution? get combat => _combat;
+
+  MapHexCoordinate? coordinateOf(String unitId) => _units[unitId];
 
   MapHexCoordinate? advance(AonwClientEvent event) {
     if (event.kind == AonwClientEventKind.combatResolved) {
-      _combat = _nextCombat < _combats.length ? _combats[_nextCombat++] : null;
+      _combat = event is AonwCombatResolvedEvent ? _combats.take(event) : null;
     }
     switch (event) {
       case AonwUnitMovedEvent(:final unitId, :final to):
@@ -29,7 +32,11 @@ final class MapFeedbackPositions {
         return _units.remove(subjectUnitId);
       case AonwUnitRetreatedEvent():
         final coordinate = _retreat(event);
-        if (coordinate != null) _units[event.subjectUnitId] = coordinate;
+        if (coordinate == null) {
+          _units.remove(event.subjectUnitId);
+        } else {
+          _units[event.subjectUnitId] = coordinate;
+        }
         return coordinate;
       default:
         break;

@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../read_model/map_command_frame_view.dart';
 import '../read_model/map_view.dart';
 import '../read_model/player_map_view.dart';
+import 'map_command_animation_mapper.dart';
 import 'map_feedback_mapper.dart';
 import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';
@@ -63,7 +64,15 @@ final class ObservedCommandFrames {
           map: _map,
         ),
       );
-      yield MapCommandFrameView(player: player);
+      yield MapCommandFrameView(
+        player: player,
+        animations: mapCommandAnimations(
+          command: command,
+          previous: previous,
+          next: player,
+          map: _map,
+        ),
+      );
       previous = player;
     }
   }

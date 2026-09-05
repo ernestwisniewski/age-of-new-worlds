@@ -82,7 +82,7 @@
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_guards.dart::function:_executableProduction": 11,
-        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 19,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 18,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 11,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::function:_interactionCommandPending": 12,
         "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::class:ResearchViewMapper/method:options": 12,
@@ -99,7 +99,7 @@
         "clients/aonw_flutter/lib/features/diplomacy/presentation/diplomacy_overlay.dart::class:_DiplomacyComposerState/method:_submit": 20,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 34,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 17,
-        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 22,
+        "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_load": 21,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 20
       }
     },

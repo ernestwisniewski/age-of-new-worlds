@@ -1,0 +1,41 @@
+import 'map_view.dart';
+
+sealed class MapCommandAnimationView {
+  const MapCommandAnimationView({required this.eventIndex});
+
+  final int eventIndex;
+}
+
+final class MapCommandMovementView extends MapCommandAnimationView {
+  MapCommandMovementView({
+    required super.eventIndex,
+    required this.unitId,
+    required List<MapHexCoordinate> path,
+  }) : path = List.unmodifiable(path);
+
+  final String unitId;
+
+  /// Executed coordinates, including the origin; never a queued route.
+  final List<MapHexCoordinate> path;
+}
+
+final class MapCommandCombatView extends MapCommandAnimationView {
+  const MapCommandCombatView({
+    required super.eventIndex,
+    required this.attacker,
+    required this.defender,
+    required this.outgoingDamage,
+    required this.retaliationDamage,
+    required this.attackerKilled,
+    required this.defenderKilled,
+    required this.defenderIsCity,
+  });
+
+  final MapHexCoordinate attacker;
+  final MapHexCoordinate defender;
+  final int outgoingDamage;
+  final int retaliationDamage;
+  final bool attackerKilled;
+  final bool defenderKilled;
+  final bool defenderIsCity;
+}

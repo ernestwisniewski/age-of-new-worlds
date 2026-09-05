@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -5,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../design_system/aonw_tokens.dart';
+import '../../features/map/read_model/map_view.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'gameplay_map_layers.dart';
 import 'map_combat_feedback.dart';
@@ -12,6 +14,7 @@ import 'map_interaction_geometry.dart';
 import 'static_map_layers.dart';
 
 part 'map_combat_intent.dart';
+part 'map_observed_effect_sequence.dart';
 
 typedef MapEffectActivitySink = void Function(bool active);
 
@@ -26,6 +29,11 @@ final class MapEffectHostComponent extends Component {
 
   final MapUnitLayerComponent _units;
   final _movements = <String, _ActiveUnitMovement>{};
+  final _observedTransitions = Queue<FlameCommandTransition>();
+  MapStaticRenderCache? _observedCache;
+  int? _observedRevision;
+  bool _observedSequenceActive = false;
+  void Function(int? eventIndex)? onObservedEvent;
   final _combatPool = List.generate(
     _maximumCombatEffects,
     (_) => _ActiveCombatIntent(),
@@ -100,7 +108,20 @@ final class MapEffectHostComponent extends Component {
   @visibleForTesting
   bool get debugReducedMotion => _reducedMotion;
 
+  @visibleForTesting
+  int get debugPendingCommandEffectCount => _observedTransitions.length;
+
   void applyPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
+    if (patch.hasObservedCommand) {
+      _replaceObservedSequence(patch, cache);
+      _notifyActivity();
+      return;
+    }
+    if (_observedRevision != null &&
+        _observedRevision != patch.snapshot.player.stamp.revision) {
+      skipAll();
+      _observedRevision = null;
+    }
     _discardInterruptedMovements(patch);
     _startMovements(patch, cache);
     _startCombats(patch, cache);
@@ -121,23 +142,30 @@ final class MapEffectHostComponent extends Component {
 
   void _startMovements(FlameScenePatch patch, MapStaticRenderCache cache) {
     for (final movement in patch.movements) {
-      final unit = _units.componentForUnit(movement.unitId);
-      if (unit == null) continue;
-      final target = _units.visualCenterFor(
-        cache,
-        movement.unitId,
-        movement.to,
+      _startMovement(movement, cache);
+    }
+  }
+
+  void _startMovement(
+    FlameUnitMovementTransition movement,
+    MapStaticRenderCache cache,
+  ) {
+    final unit = _units.componentForUnit(movement.unitId);
+    if (unit == null) return;
+    ui.Offset center(MapHexCoordinate coordinate) =>
+        _units.visualCenterFor(cache, movement.unitId, coordinate);
+    final points = movement.path.isEmpty
+        ? [unit.visualCenter, center(movement.to)]
+        : [for (final coordinate in movement.path) center(coordinate)];
+    if (_reducedMotion) {
+      unit.setVisualCenter(points.last);
+      _completedMovementCount += 1;
+    } else {
+      unit.setVisualCenter(points.first);
+      _movements[movement.unitId] = _ActiveUnitMovement(
+        unit: unit,
+        points: points,
       );
-      if (_reducedMotion) {
-        unit.setVisualCenter(target);
-        _completedMovementCount += 1;
-      } else {
-        _movements[movement.unitId] = _ActiveUnitMovement(
-          unit: unit,
-          start: unit.visualCenter,
-          target: target,
-        );
-      }
     }
   }
 
@@ -162,7 +190,10 @@ final class MapEffectHostComponent extends Component {
     for (final combat in _combatPool) {
       combat.setReducedMotion(enabled);
     }
-    if (enabled) _finishMovements();
+    if (enabled) {
+      _finishMovements();
+      _startNextObservedEffect();
+    }
     _notifyActivity();
   }
 
@@ -177,6 +208,7 @@ final class MapEffectHostComponent extends Component {
     if (!_hasActiveEffects) return;
     _finishMovements();
     _clearCombatEffects();
+    _finishPendingObservedMovements();
     _notifyActivity();
   }
 
@@ -189,7 +221,9 @@ final class MapEffectHostComponent extends Component {
   }
 
   void clearEffects() {
-    _movements.clear();
+    _finishMovements();
+    _finishPendingObservedMovements();
+    _observedRevision = null;
     _clearCombatEffects(dispose: true);
     _notifyActivity();
   }
@@ -208,7 +242,10 @@ final class MapEffectHostComponent extends Component {
     _activeUpdateCount += 1;
     final movementCompleted = _updateMovements(dt);
     final combatCompleted = _updateCombats(dt);
-    if (movementCompleted || combatCompleted) _notifyActivity();
+    if (movementCompleted || combatCompleted) {
+      _startNextObservedEffect();
+      _notifyActivity();
+    }
   }
 
   bool _updateMovements(double dt) {
@@ -216,15 +253,22 @@ final class MapEffectHostComponent extends Component {
     for (final entry in _movements.entries) {
       final movement = entry.value;
       movement.elapsed += dt * _playbackSpeed;
-      final linear = (movement.elapsed / _movementDurationSeconds).clamp(
-        0.0,
-        1.0,
-      );
+      final segment = (movement.elapsed / _movementDurationSeconds)
+          .floor()
+          .clamp(0, movement.points.length - 2);
+      final linear = ((movement.elapsed / _movementDurationSeconds) - segment)
+          .clamp(0.0, 1.0);
       final eased = linear * linear * (3 - 2 * linear);
       movement.unit.setVisualCenter(
-        ui.Offset.lerp(movement.start, movement.target, eased)!,
+        ui.Offset.lerp(
+          movement.points[segment],
+          movement.points[segment + 1],
+          eased,
+        )!,
       );
-      if (linear >= 1) completed.add(entry.key);
+      if (segment == movement.points.length - 2 && linear >= 1) {
+        completed.add(entry.key);
+      }
     }
     for (final unitId in completed) {
       _movements.remove(unitId);
@@ -255,20 +299,19 @@ final class MapEffectHostComponent extends Component {
   }
 
   bool get _hasActiveEffects =>
+      _observedTransitions.isNotEmpty || _hasActiveVisualEffects;
+
+  bool get _hasActiveVisualEffects =>
       _movements.isNotEmpty || _combatPool.any((effect) => effect.active);
 
   void _notifyActivity() => onActivityChanged?.call(_hasActiveEffects);
 }
 
 final class _ActiveUnitMovement {
-  _ActiveUnitMovement({
-    required this.unit,
-    required this.start,
-    required this.target,
-  });
+  _ActiveUnitMovement({required this.unit, required this.points});
 
   final MapUnitComponent unit;
-  final ui.Offset start;
-  final ui.Offset target;
+  final List<ui.Offset> points;
+  ui.Offset get target => points.last;
   var elapsed = 0.0;
 }

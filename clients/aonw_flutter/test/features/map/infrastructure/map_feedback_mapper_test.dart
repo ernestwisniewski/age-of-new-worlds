@@ -1,16 +1,21 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
+import 'package:aonw_flutter/features/map/infrastructure/map_command_animation_mapper.dart';
 import 'package:aonw_flutter/features/map/infrastructure/map_feedback_mapper.dart';
 import 'package:aonw_flutter/features/map/infrastructure/player_map_view_mapper.dart';
+import 'package:aonw_flutter/features/map/read_model/map_command_animation_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_feedback_test_fixture.dart';
+import '../../../support/map_test_fixture.dart';
 
+part 'map_command_animation_mapper_tests.dart';
 part 'map_feedback_mapper_fixture.dart';
 part 'map_feedback_text_mapper_tests.dart';
 
 void main() {
   textMapperTests();
+  animationMapperTests();
   test(
     'retains event order exact anchors and owner color through the view mapper',
     () {

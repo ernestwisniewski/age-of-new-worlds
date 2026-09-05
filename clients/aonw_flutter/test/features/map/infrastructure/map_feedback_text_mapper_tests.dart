@@ -157,7 +157,10 @@ void textMapperTests() {
           from: AonwCoordinate(col: 2, row: 1),
           to: AonwCoordinate(col: 1, row: 1),
         ),
-        const AonwPresentationEvent(AonwClientEventKind.combatResolved),
+        const AonwCombatResolvedEvent(
+          attackerUnitId: 'first',
+          target: AonwUnitCombatTarget(unitId: 'unit'),
+        ),
         const AonwUnitRetreatedEvent(
           attackerUnitId: 'first',
           target: AonwUnitCombatTarget(unitId: 'unit'),
@@ -168,7 +171,10 @@ void textMapperTests() {
           from: AonwCoordinate(col: 2, row: 0),
           to: AonwCoordinate(col: 1, row: 0),
         ),
-        const AonwPresentationEvent(AonwClientEventKind.combatResolved),
+        const AonwCombatResolvedEvent(
+          attackerUnitId: 'second',
+          target: AonwUnitCombatTarget(unitId: 'unit'),
+        ),
         const AonwUnitKilledEvent(
           attackerUnitId: 'second',
           target: AonwUnitCombatTarget(unitId: 'unit'),

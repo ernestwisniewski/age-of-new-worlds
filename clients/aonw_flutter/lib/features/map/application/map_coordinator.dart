@@ -69,6 +69,7 @@ UnitActionWorkflow _unitActionWorkflow(
 );
 
 final class MapCoordinator {
+  Future<void> Function()? waitForCommandEffects;
   MapCoordinator({
     required GameSessionCapabilities capabilities,
     LocalSaveStore? saveStore,
@@ -367,9 +368,14 @@ final class MapCoordinator {
 }
 
 bool _shouldLoadResearch(GameSessionState previous, GameSessionState next) {
-  if (next is! GameSessionReady || !next.research.loading) return false;
+  if (next is! GameSessionReady ||
+      !next.research.loading ||
+      next.localAiTurn.inFlight) {
+    return false;
+  }
   final before = previous is GameSessionReady ? previous.research : null;
-  return before == null ||
+  return (previous is GameSessionReady && previous.localAiTurn.inFlight) ||
+      before == null ||
       !before.loading ||
       before.requestedRevision != next.research.requestedRevision;
 }

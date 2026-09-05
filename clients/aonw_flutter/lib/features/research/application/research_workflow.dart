@@ -50,10 +50,7 @@ final class ResearchWorkflow {
     required ResearchDisposed isDisposed,
   }) async {
     final current = readState();
-    if (current is! GameSessionReady ||
-        !current.research.loading ||
-        current.research.requestedRevision !=
-            current.recipient.stamp.revision) {
+    if (current is! GameSessionReady || !_canLoadResearch(current)) {
       return;
     }
     final revision = current.recipient.stamp.revision;
@@ -177,6 +174,11 @@ final class ResearchWorkflow {
     }
   }
 }
+
+bool _canLoadResearch(GameSessionReady current) =>
+    !current.localAiTurn.inFlight &&
+    current.research.loading &&
+    current.research.requestedRevision == current.recipient.stamp.revision;
 
 GameSessionReady? _selectable(
   GameSessionState state,

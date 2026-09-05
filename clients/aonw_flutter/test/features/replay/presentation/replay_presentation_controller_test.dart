@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/replay/application/local_replay_store.dart';
 import 'package:aonw_flutter/features/replay/application/replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
@@ -10,6 +13,87 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets(
+    'speed changes wait for active effects and pause prevents rescheduling',
+    (tester) async {
+      final session = _ReplaySession(observed: true);
+      final controller = ReplayPresentationController(
+        session: session,
+        store: _ReplayStore(primary: 'valid'),
+      );
+      addTearDown(controller.dispose);
+      final effects = Completer<void>();
+      controller.waitForCommandEffects = () => effects.future;
+      await controller.openLatest();
+      controller.play();
+      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump();
+      expect(session.positions, [1]);
+      controller.cycleSpeed();
+      await tester.pump(const Duration(seconds: 3));
+      expect(session.positions, [1]);
+      controller.pause();
+      effects.complete();
+      await tester.pump(const Duration(seconds: 3));
+      expect(session.positions, [1]);
+      controller.play();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump();
+      expect(session.positions, [1, 2]);
+      controller.pause();
+    },
+  );
+
+  testWidgets('pause and speed changes survive an in-flight replay response', (
+    tester,
+  ) async {
+    final session = _ReplaySession(observed: true)
+      ..seekCompletion = Completer<void>();
+    final controller = ReplayPresentationController(
+      session: session,
+      store: _ReplayStore(primary: 'valid'),
+    );
+    addTearDown(controller.dispose);
+    await controller.openLatest();
+    controller.play();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect((controller.state as ReplayReady).isSeeking, isTrue);
+    controller.pause();
+    controller.cycleSpeed();
+    session.seekCompletion!.complete();
+    await tester.pump();
+    final ready = controller.state as ReplayReady;
+    expect(ready.frame.position, 1);
+    expect(ready.speed, ReplaySpeedView.twoTimes);
+    expect(ready.isPlaying, isFalse);
+    await tester.pump(const Duration(seconds: 2));
+    expect(session.positions, [1]);
+  });
+
+  testWidgets('a jump supersedes an older frame waiting for effects', (
+    tester,
+  ) async {
+    final session = _ReplaySession(observed: true);
+    final controller = ReplayPresentationController(
+      session: session,
+      store: _ReplayStore(primary: 'valid'),
+    );
+    addTearDown(controller.dispose);
+    final effects = Completer<void>();
+    controller.waitForCommandEffects = () => effects.future;
+    await controller.openLatest();
+    controller.play();
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.pump();
+    controller.seek(3);
+    await tester.pump();
+    effects.complete();
+    await tester.pump(const Duration(seconds: 2));
+    expect((controller.state as ReplayReady).frame.position, 3);
+    expect((controller.state as ReplayReady).isPlaying, isFalse);
+    expect(session.positions, [1, 3]);
+  });
+
   testWidgets('captures, opens, seeks, changes speed, and plays in order', (
     tester,
   ) async {
@@ -87,9 +171,12 @@ void main() {
 }
 
 final class _ReplaySession implements ReplaySessionPort {
-  _ReplaySession({this.rejectDocument});
+  _ReplaySession({this.rejectDocument, this.observed = false});
 
   final String? rejectDocument;
+  final bool observed;
+  Completer<void>? seekCompletion;
+  int _position = 0;
   final positions = <int>[];
   final openedDocuments = <String>[];
 
@@ -114,11 +201,24 @@ final class _ReplaySession implements ReplaySessionPort {
   @override
   Future<ReplayFrameView> seekReplay(int position) async {
     positions.add(position);
-    return _frame(position);
+    await seekCompletion?.future;
+    final frame = _frame(
+      position,
+      command: observed && position == _position + 1,
+    );
+    _position = position;
+    return frame;
   }
 
-  ReplayFrameView _frame(int position) =>
-      ReplayFrameView(position: position, entryCount: 3, scene: testMapScene());
+  ReplayFrameView _frame(int position, {bool command = false}) {
+    final scene = testMapScene();
+    return ReplayFrameView(
+      position: position,
+      entryCount: 3,
+      scene: scene,
+      command: command ? MapCommandFrameView(player: scene.player) : null,
+    );
+  }
 }
 
 final class _ReplayStore implements LocalReplayStore {

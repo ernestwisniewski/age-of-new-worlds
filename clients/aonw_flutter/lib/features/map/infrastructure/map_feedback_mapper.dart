@@ -22,7 +22,11 @@ List<MapFeedbackCueView> mapCommandFeedback({
   }
   _validateFeedbackIdentity(command, snapshot, previous, map);
   final next = [...previous.recentFeedback];
-  final positions = MapFeedbackPositions(previous, command.evidence);
+  final positions = MapFeedbackPositions(
+    previous,
+    command.evidence,
+    command.events,
+  );
   for (var index = 0; index < command.events.length; index++) {
     final cues = _eventCues(
       command.events[index],

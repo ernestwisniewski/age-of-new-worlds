@@ -28,6 +28,8 @@ final class MapEventFeedbackLayerComponent extends Component {
   bool _active = false;
   double _speed = 1;
   int _activeUpdateCount = 0;
+  List<MapFeedbackCueView> _deferredCues = const [];
+  var _deferredCursor = 0;
   void Function(bool active)? onActivityChanged;
 
   @visibleForTesting
@@ -50,7 +52,14 @@ final class MapEventFeedbackLayerComponent extends Component {
   @visibleForTesting
   int get debugTextImageCount => _texts.imageCount;
 
-  void applySnapshot(MapRenderSnapshot snapshot, MapStaticRenderCache cache) {
+  @visibleForTesting
+  int get debugDeferredCueCount => _deferredCues.length - _deferredCursor;
+
+  void applySnapshot(
+    MapRenderSnapshot snapshot,
+    MapStaticRenderCache cache, {
+    bool deferCommandFeedback = false,
+  }) {
     final reset = _resetIfChanged(snapshot, cache);
     final player = snapshot.player;
     _particles.applyContext(cache, player.fog);
@@ -59,7 +68,12 @@ final class MapEventFeedbackLayerComponent extends Component {
     final previousRevision = _revision!;
     _revision = player.stamp.revision;
     if (!reset && player.stamp.revision > previousRevision) {
-      _enqueue(player.recentFeedback, previousRevision, player.stamp.revision);
+      _enqueue(
+        player.recentFeedback,
+        previousRevision,
+        player.stamp.revision,
+        defer: deferCommandFeedback,
+      );
     }
     _startPending();
     _notifyActivity();
@@ -84,14 +98,31 @@ final class MapEventFeedbackLayerComponent extends Component {
   void _enqueue(
     List<MapFeedbackCueView> cues,
     int previousRevision,
-    int revision,
-  ) {
-    _queue.add([
+    int revision, {
+    required bool defer,
+  }) {
+    final pending = [
       for (final cue in cues)
         if (cue.identity.revision > previousRevision &&
             cue.identity.revision <= revision)
           cue,
-    ]);
+    ];
+    _deferredCues = defer ? pending : const [];
+    _deferredCursor = 0;
+    if (!defer) _queue.add(pending);
+  }
+
+  void advanceCommand(int? eventIndex) {
+    final pending = <MapFeedbackCueView>[];
+    while (_deferredCursor < _deferredCues.length) {
+      final cue = _deferredCues[_deferredCursor];
+      if (eventIndex != null && cue.identity.eventIndex > eventIndex) break;
+      pending.add(cue);
+      _deferredCursor++;
+    }
+    _queue.add(pending);
+    _startPending();
+    _notifyActivity();
   }
 
   void _startPending() {
@@ -132,6 +163,8 @@ final class MapEventFeedbackLayerComponent extends Component {
   }
 
   void skip() {
+    _deferredCues = const [];
+    _deferredCursor = 0;
     _particles.skip();
     _texts.skip();
     _queue.clear();
@@ -139,6 +172,8 @@ final class MapEventFeedbackLayerComponent extends Component {
   }
 
   void clearLayer() {
+    _deferredCues = const [];
+    _deferredCursor = 0;
     _particles.clear();
     _texts.clear();
     _queue.reset();

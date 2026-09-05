@@ -100,6 +100,7 @@ final class _MapScreenState extends State<MapScreen>
       _handleHexSelectionPaletteIntent,
     );
     widget.controller.addListener(_synchronizeFlameScene);
+    widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
     widget.controller.cursor.addListener(_synchronizeFlameCursor);
     _listenToInput(widget.inputSource);
     if (widget.autoLoad) widget.controller.load();
@@ -120,9 +121,12 @@ final class _MapScreenState extends State<MapScreen>
   void didUpdateWidget(MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.bindCommandEffects(null);
+      _flameGame.skipEffects();
       oldWidget.controller.removeListener(_synchronizeFlameScene);
       oldWidget.controller.cursor.removeListener(_synchronizeFlameCursor);
       widget.controller.addListener(_synchronizeFlameScene);
+      widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
       widget.controller.cursor.addListener(_synchronizeFlameCursor);
     }
     if (oldWidget.inputSource != widget.inputSource) {
@@ -147,6 +151,9 @@ final class _MapScreenState extends State<MapScreen>
 
   @override
   void dispose() {
+    widget.controller.bindCommandEffects(null);
+    _flameGame.skipEffects();
+    _flameGame.setViewportActive(false);
     WidgetsBinding.instance.removeObserver(this);
     widget.routeObserver?.unsubscribe(this);
     widget.controller.removeListener(_synchronizeFlameScene);
@@ -318,10 +325,13 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _installFreshFlameGame() {
+    _flameGame.skipEffects();
+    _flameGame.setViewportActive(false);
     _flameGame.setHexIntentSink(null);
     _flameGame.setActionPaletteIntentSink(null);
     _flameGame.setHexSelectionPaletteIntentSink(null);
     _flameGame = widget.flameGameFactory();
+    widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
     _flameGame.setHexSelectionPaletteIntentSink(

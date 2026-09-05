@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aonw_flutter/features/local_game/application/local_ai_turn_state.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
@@ -5,6 +7,7 @@ import 'package:aonw_flutter/features/local_game/application/local_handoff_state
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_activity_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
@@ -12,7 +15,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
 
+part 'map_coordinator_observed_turn_tests.dart';
+
 void main() {
+  observedTurnTests();
   test('ends a local turn only after the accepted recipient patch', () async {
     final nextPlayer = PlayerMapView.preview(
       actorPlayerId: 'preview-player',

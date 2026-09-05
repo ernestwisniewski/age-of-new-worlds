@@ -3,13 +3,18 @@ part of 'map_screen.dart';
 extension _MapScreenScene on _MapScreenState {
   void _synchronizeFlameScene() {
     switch (widget.controller.state) {
-      case GameSessionReady(:final scene, :final interaction):
+      case GameSessionReady(
+        :final scene,
+        :final interaction,
+        :final commandFrame,
+      ):
         _flameGame.sceneSink.replaceScene(
           MapRenderSnapshot(
             map: scene.map,
             interaction: interaction,
             reference: scene.reference,
             player: scene.player,
+            commandFrame: commandFrame,
             feedbackLabels: switch (_localizations) {
               final l10n? => buildMapFeedbackLabels(
                 scene.player.recentFeedback,
