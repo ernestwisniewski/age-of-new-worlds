@@ -20,6 +20,7 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
     _cache = prepared.cache;
     _actorPlayerId = actorPlayerId;
     _replayEntryCount = null;
+    _replayPosition = null;
   }
 
   void _ensureCurrentLoad(int generation) {
@@ -39,6 +40,7 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
     LocalAiTurnRequestView request,
   ) async {
     final context = _context();
+    final initialSnapshot = context.cache.snapshot;
     if (context.actorPlayerId != request.humanPlayerId) {
       throw const LocalGameSessionException(
         code: 'local_actor_mismatch',
@@ -75,13 +77,21 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
         resyncedPlayer: player,
       );
     }
-    return _mapAiTurnResponse(response, request.aiPlayerId, player);
+    return _mapAiTurnResponse(
+      response,
+      request.aiPlayerId,
+      player,
+      context,
+      initialSnapshot,
+    );
   }
 
   LocalAiTurnExecutionView _mapAiTurnResponse(
     AonwClientResponse response,
     String aiPlayerId,
     PlayerMapView player,
+    EngineGameSessionContext context,
+    AonwPlayerViewSnapshot initialSnapshot,
   ) {
     try {
       final execution = response.require<AonwAiTurnAdvancedResponse>();
@@ -90,11 +100,23 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
           'AI response actor does not match request.',
         );
       }
+      validateObservedStamp(player.stamp, execution.stamp);
+      final observed = ObservedCommandFrames(
+        initialSnapshot: initialSnapshot,
+        initialPlayer: context.player,
+        map: context.map,
+        recipientPlayerId: execution.recipientPlayerId,
+        commands: execution.commands,
+        finalStamp: execution.stamp,
+        mapper: _playerMapper,
+      );
+      _retainPlayer(context, observed.finalPlayer);
       return LocalAiTurnExecutionView(
         aiPlayerId: execution.actorPlayerId,
         executedCommands: execution.executedCommands,
         completedTurn: execution.completedTurn,
-        player: player,
+        player: observed.finalPlayer,
+        frames: observed.frames,
       );
     } on FormatException catch (error, stackTrace) {
       throw LocalGameSessionException(

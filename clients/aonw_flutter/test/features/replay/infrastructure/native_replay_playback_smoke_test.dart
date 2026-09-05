@@ -17,7 +17,10 @@ void main() {
       expectedRevision: initial.player.stamp.revision,
     );
     expect(turn.accepted, isTrue);
-    final finalDigest = turn.player!.stamp.stateDigest;
+    final ai = await gateway.advanceAiTurn(
+      LocalAiTurnRequestView(aiPlayerId: 'player-2', humanPlayerId: 'player-1'),
+    );
+    final finalDigest = ai.player.stamp.stateDigest;
     final document = await replay.exportReplayDocument();
 
     final opened = await replay.openReplayDocument(
@@ -25,11 +28,27 @@ void main() {
       document: document,
     );
     expect(opened.position, 0);
-    expect(opened.entryCount, greaterThan(0));
+    expect(opened.entryCount, greaterThan(1));
+    expect(opened.command, isNull);
+    expect(opened.scene.player.recentFeedback, isEmpty);
+    for (var position = 1; position <= opened.entryCount; position++) {
+      final frame = await replay.seekReplay(position);
+      expect(frame.command, isNotNull);
+      expect(frame.command!.player, same(frame.scene.player));
+      expect(frame.scene.player.actorPlayerId, assets.actorPlayerId);
+    }
+    final repeated = await replay.seekReplay(opened.entryCount);
+    expect(repeated.command, isNull);
+    expect(repeated.scene.player.recentFeedback, isEmpty);
+    final restarted = await replay.seekReplay(0);
+    expect(restarted.command, isNull);
+    expect(restarted.scene.player.recentFeedback, isEmpty);
     final finalFrame = await replay.seekReplay(opened.entryCount);
 
     expect(finalFrame.position, opened.entryCount);
     expect(finalFrame.scene.player.stamp.stateDigest, finalDigest);
+    expect(finalFrame.command, isNull);
+    expect(finalFrame.scene.player.recentFeedback, isEmpty);
   });
 }
 

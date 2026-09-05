@@ -61,6 +61,22 @@ void main() {
         execution.player.stamp.revision,
         greaterThan(humanTurn.player!.stamp.revision),
       );
+      final frames = execution.frames.toList();
+      expect(frames, hasLength(execution.executedCommands));
+      expect(
+        frames.map((frame) => frame.player.actorPlayerId),
+        everyElement('player-1'),
+      );
+      expect(
+        frames.last.player.stamp.stateDigest,
+        execution.player.stamp.stateDigest,
+      );
+      await gateway.close();
+      expect(
+        execution.frames.map((frame) => frame.player.stamp.stateDigest),
+        frames.map((frame) => frame.player.stamp.stateDigest),
+        reason: 'Presentation does not retain a live engine session.',
+      );
     },
   );
 
@@ -89,6 +105,7 @@ void main() {
         expect(execution.completedTurn, isTrue);
         expect(execution.player.actorPlayerId, 'player-1');
         expect(execution.player.stamp.revision, greaterThan(previousRevision));
+        expect(execution.frames.length, execution.executedCommands);
         player = execution.player;
         completedTurns += 1;
       }

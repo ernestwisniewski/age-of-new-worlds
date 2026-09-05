@@ -1,4 +1,5 @@
 import '../../map/application/map_session_port.dart';
+import '../../map/read_model/map_command_frame_view.dart';
 import '../../map/read_model/map_scene.dart';
 import '../../map/read_model/player_map_view.dart';
 
@@ -197,12 +198,14 @@ final class LocalAiTurnExecutionView {
     required this.executedCommands,
     required this.completedTurn,
     required this.player,
+    this.frames = const [],
   });
 
   final String aiPlayerId;
   final int executedCommands;
   final bool completedTurn;
   final PlayerMapView player;
+  final Iterable<MapCommandFrameView> frames;
 }
 
 abstract interface class LocalGameSessionPort {

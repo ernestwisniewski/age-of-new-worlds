@@ -58,6 +58,7 @@ final class _EngineGameReplaySession implements ReplaySessionPort {
           generation,
         );
         _owner._replayEntryCount = prepared.frame.entryCount;
+        _owner._replayPosition = prepared.frame.position;
         retained = true;
         return prepared.frame;
       } finally {
@@ -88,7 +89,10 @@ final class _EngineGameReplaySession implements ReplaySessionPort {
         final context = _owner._context();
         final retainedScene = _owner._scene;
         final retainedEntryCount = _owner._replayEntryCount;
-        if (retainedScene == null || retainedEntryCount == null) {
+        final retainedPosition = _owner._replayPosition;
+        if (retainedScene == null ||
+            retainedEntryCount == null ||
+            retainedPosition == null) {
           throw const ReplaySessionException(
             code: 'replay_not_open',
             message: 'Replay playback is not open.',
@@ -109,29 +113,14 @@ final class _EngineGameReplaySession implements ReplaySessionPort {
             );
           }
           final frame = response.require<AonwReplayFrameResponse>();
-          if (frame.position != position ||
-              frame.entryCount != retainedEntryCount) {
-            throw const FormatException(
-              'Replay frame identity changed during seek.',
-            );
-          }
-          final player = _owner._playerMapper.fromWire(
-            frame.snapshot,
-            map: context.map,
-            actorPlayerId: context.actorPlayerId,
+          _validateFrame(
+            frame,
+            context,
+            position,
+            retainedPosition,
+            retainedEntryCount,
           );
-          final scene = retainedScene.withPlayer(player);
-          _owner._player = player;
-          _owner._scene = scene;
-          _owner._cache = RecipientProjectionCache.open(
-            snapshot: frame.snapshot,
-            map: context.map,
-          );
-          return ReplayFrameView(
-            position: frame.position,
-            entryCount: frame.entryCount,
-            scene: scene,
-          );
+          return _retainFrame(frame, context, retainedScene);
         } on ReplaySessionException {
           rethrow;
         } on Object catch (error, stackTrace) {
@@ -143,4 +132,59 @@ final class _EngineGameReplaySession implements ReplaySessionPort {
           );
         }
       });
+
+  static void _validateFrame(
+    AonwReplayFrameResponse frame,
+    EngineGameSessionContext context,
+    int position,
+    int retainedPosition,
+    int retainedEntryCount,
+  ) {
+    if (frame.position != position ||
+        frame.entryCount != retainedEntryCount ||
+        frame.recipientPlayerId != context.actorPlayerId ||
+        (frame.command != null) != (position == retainedPosition + 1)) {
+      throw const FormatException('Replay frame identity changed during seek.');
+    }
+  }
+
+  ReplayFrameView _retainFrame(
+    AonwReplayFrameResponse frame,
+    EngineGameSessionContext context,
+    MapScene retainedScene,
+  ) {
+    final freshPlayer = _owner._playerMapper.fromWire(
+      frame.snapshot,
+      map: context.map,
+      actorPlayerId: context.actorPlayerId,
+    );
+    final command = frame.command;
+    final observed = command == null
+        ? null
+        : ObservedCommandFrames(
+            initialSnapshot: context.cache.snapshot,
+            initialPlayer: context.player,
+            map: context.map,
+            recipientPlayerId: frame.recipientPlayerId,
+            commands: [command],
+            finalStamp: frame.snapshot.stamp,
+            mapper: _owner._playerMapper,
+          );
+    final player = observed?.finalPlayer ?? freshPlayer;
+    final scene = retainedScene.withPlayer(player);
+    final cache = RecipientProjectionCache.open(
+      snapshot: frame.snapshot,
+      map: context.map,
+    );
+    _owner._player = player;
+    _owner._scene = scene;
+    _owner._cache = cache;
+    _owner._replayPosition = frame.position;
+    return ReplayFrameView(
+      position: frame.position,
+      entryCount: frame.entryCount,
+      scene: scene,
+      command: observed?.lastFrame,
+    );
+  }
 }

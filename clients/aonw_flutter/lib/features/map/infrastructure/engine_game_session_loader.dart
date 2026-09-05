@@ -98,10 +98,7 @@ final class EngineGameSessionLoader {
           recipientPlayerId: assets.actorPlayerId,
         ),
       );
-      final frame = _loadResponse<AonwReplayFrameResponse>(
-        response,
-        'The replay could not be opened.',
-      );
+      final frame = _initialReplayFrame(response, assets.actorPlayerId);
       final player = _playerMapper.fromWire(
         frame.snapshot,
         map: map,
@@ -138,6 +135,22 @@ final class EngineGameSessionLoader {
       await candidate.close();
       rethrow;
     }
+  }
+
+  static AonwReplayFrameResponse _initialReplayFrame(
+    AonwClientResponse response,
+    String recipientPlayerId,
+  ) {
+    final frame = _loadResponse<AonwReplayFrameResponse>(
+      response,
+      'The replay could not be opened.',
+    );
+    if (frame.position != 0 ||
+        frame.recipientPlayerId != recipientPlayerId ||
+        frame.command != null) {
+      throw const FormatException('Replay initial frame is inconsistent.');
+    }
+    return frame;
   }
 
   Future<PreparedEngineGameSession> _prepareCandidate(

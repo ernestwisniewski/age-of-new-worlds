@@ -50,6 +50,7 @@ import 'engine_game_session_operations.dart';
 import 'engine_movement_gateway.dart';
 import 'map_feedback_mapper.dart';
 import 'map_view_mapper.dart';
+import 'observed_command_frames.dart';
 import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';
 
@@ -165,6 +166,7 @@ final class EngineGameSessionGateway
   RecipientProjectionCache? _cache;
   String? _actorPlayerId;
   int? _replayEntryCount;
+  int? _replayPosition;
   Future<void> _requestTail = Future<void>.value();
   var _loadGeneration = 0;
   var _sessionGeneration = 0;
@@ -399,6 +401,7 @@ final class EngineGameSessionGateway
     _cache = null;
     _actorPlayerId = null;
     _replayEntryCount = null;
+    _replayPosition = null;
     await _requestTail;
     if (session != null) await session.close();
   }
