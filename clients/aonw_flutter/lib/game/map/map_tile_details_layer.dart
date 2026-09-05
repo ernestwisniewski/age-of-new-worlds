@@ -182,6 +182,7 @@ final class MapTileDetailsLayerComponent extends Component
   List<MapTileIconPlacement> _terrainIcons = const [];
   List<MapTileIconPlacement> _resourceIcons = const [];
   List<MapHeightBadgePlacement> _heightBadges = const [];
+  var _framesScope = SpriteFrames.createScope();
   var _loadGeneration = 0;
   var _cacheUpdateCount = 0;
 
@@ -280,11 +281,20 @@ final class MapTileDetailsLayerComponent extends Component
 
   void clearLayer() {
     _loadGeneration += 1;
+    _framesScope.dispose();
+    _framesScope = SpriteFrames.createScope();
     _identity = null;
     _terrainIcons = const [];
     _resourceIcons = const [];
     _heightBadges = const [];
     isVisible = false;
+  }
+
+  @override
+  void onRemove() {
+    clearLayer();
+    _framesScope.dispose();
+    super.onRemove();
   }
 
   @override
@@ -309,7 +319,7 @@ final class MapTileDetailsLayerComponent extends Component
 
   void _drawIcons(ui.Canvas canvas, List<MapTileIconPlacement> placements) {
     for (final placement in placements) {
-      final frame = SpriteFrames.cached(placement.frameId);
+      final frame = _framesScope.cached(placement.frameId);
       if (frame == null) {
         canvas.drawCircle(
           placement.destination.center,
@@ -342,9 +352,13 @@ final class MapTileDetailsLayerComponent extends Component
       if (_options.showResourceIcons)
         for (final icon in _resourceIcons) icon.frameId,
     };
-    if (ids.isEmpty) return;
+    if (ids.isEmpty) {
+      _framesScope.dispose();
+      _framesScope = SpriteFrames.createScope();
+      return;
+    }
     try {
-      await SpriteFrames.preload(ids);
+      await _framesScope.preload(ids);
     } on Object {
       return;
     }

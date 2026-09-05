@@ -49,6 +49,7 @@ final class MapCityLayerComponent extends Component with HasVisibility {
     for (final cityId in patch.removedCityIds) {
       final component = _citiesById.remove(cityId);
       if (component != null) {
+        component.disposePresentation();
         component.removeFromParent();
         _removedCount += 1;
       }
@@ -77,8 +78,15 @@ final class MapCityLayerComponent extends Component with HasVisibility {
     isVisible = _citiesById.isNotEmpty;
   }
 
+  @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
   void clearLayer() {
     for (final component in _citiesById.values) {
+      component.disposePresentation();
       component.removeFromParent();
     }
     _citiesById.clear();
@@ -125,6 +133,7 @@ final class MapCityComponent extends PositionComponent
 
   CityView _city;
   bool _controlled;
+  final _framesScope = SpriteFrames.createScope();
   SpriteFrame? _frame;
   var _loadGeneration = 0;
 
@@ -191,7 +200,7 @@ final class MapCityComponent extends PositionComponent
     final id = MapSpriteCatalog.cityFrame(visualLevel: _visualLevel(_city));
     final SpriteFrame frame;
     try {
-      frame = await SpriteFrames.load(id);
+      frame = await _framesScope.load(id);
     } on Object {
       return;
     }
@@ -205,6 +214,18 @@ final class MapCityComponent extends PositionComponent
 
   static int _visualLevel(CityView city) =>
       MapSpriteCatalog.cityVisualLevel(city.ownedDetails?.population ?? 1);
+
+  void disposePresentation() {
+    _loadGeneration++;
+    _frame = null;
+    _framesScope.dispose();
+  }
+
+  @override
+  void onRemove() {
+    disposePresentation();
+    super.onRemove();
+  }
 
   void _refreshGameWidget() {
     if (isMounted && game.isAttached && game.paused) {

@@ -57,6 +57,7 @@ final class MapActionPaletteLayerComponent extends Component
   List<ui.Rect> _optionRects = const [];
   ui.Rect? _previewPanelRect;
   ui.Rect? _ctaRect;
+  var _framesScope = SpriteFrames.createScope();
   var _loadGeneration = 0;
   @visibleForTesting
   MapActionPaletteView? get debugView => _view;
@@ -75,7 +76,11 @@ final class MapActionPaletteLayerComponent extends Component
       return;
     }
     _layout(cache, view);
-    if (view is MapWorkerActionPaletteView) _preload(view);
+    if (view is MapWorkerActionPaletteView) {
+      _preload(view);
+    } else {
+      _releaseFrames();
+    }
   }
 
   MapActionPaletteTapResult handleTap(AonwPoint worldPoint) {
@@ -92,7 +97,7 @@ final class MapActionPaletteLayerComponent extends Component
     if (!view.enabled) return const MapActionPaletteTapResult.consumed();
     switch (view) {
       case MapMovePreviewPillView():
-        isVisible = false;
+        _clearGeometry();
         return const MapActionPaletteTapResult.consumed(
           ConfirmMapMovePaletteIntent(),
         );
@@ -109,7 +114,7 @@ final class MapActionPaletteLayerComponent extends Component
         if (_ctaRect?.contains(point) ?? false) {
           final improvement = view.previewedImprovement;
           if (improvement != null) {
-            isVisible = false;
+            _clearGeometry();
             return MapActionPaletteTapResult.consumed(
               ConfirmWorkerImprovementPaletteIntent(
                 unitId: view.unitId,
@@ -126,7 +131,6 @@ final class MapActionPaletteLayerComponent extends Component
     _view = null;
     _viewKey = null;
     _dismissedKey = null;
-    _loadGeneration += 1;
     _clearGeometry();
   }
 
@@ -200,7 +204,21 @@ final class MapActionPaletteLayerComponent extends Component
     );
   }
 
+  @override
+  void onRemove() {
+    clearLayer();
+    _framesScope.dispose();
+    super.onRemove();
+  }
+
+  void _releaseFrames() {
+    _loadGeneration++;
+    _framesScope.dispose();
+    _framesScope = SpriteFrames.createScope();
+  }
+
   void _clearGeometry() {
+    _releaseFrames();
     _bounds = null;
     _optionRects = const [];
     _previewPanelRect = null;
@@ -232,7 +250,8 @@ final class MapActionPaletteLayerComponent extends Component
   void _preload(MapWorkerActionPaletteView view) {
     final generation = ++_loadGeneration;
     unawaited(
-      SpriteFrames.preload([
+      _framesScope
+          .preload([
             for (final option in view.options)
               MapSpriteCatalog.improvementFrame(option.improvement),
           ])

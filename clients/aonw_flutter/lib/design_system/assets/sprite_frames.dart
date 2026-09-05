@@ -1,16 +1,14 @@
-import 'sprite_frame_id.dart';
+import 'package:flutter/foundation.dart';
+
 import 'sprite_frame_repository.dart';
 import 'texture_packer_sprite_frame_repository.dart';
 
-/// Process-scoped access to immutable generated sprite data.
+/// Shares generated frames while their owning presentation scopes are alive.
 abstract final class SpriteFrames {
-  static final SpriteFrameRepository _repository =
-      TexturePackerSpriteFrameRepository();
+  static final _repository = TexturePackerSpriteFrameRepository();
 
-  static SpriteFrame? cached(SpriteFrameId id) => _repository.cached(id);
+  static SpriteFrameScope createScope() => _repository.createScope();
 
-  static Future<SpriteFrame> load(SpriteFrameId id) => _repository.load(id);
-
-  static Future<void> preload(Iterable<SpriteFrameId> ids) =>
-      _repository.preload(ids);
+  @visibleForTesting
+  static Map<String, int> get debugAtlasBytes => _repository.atlasBytes;
 }

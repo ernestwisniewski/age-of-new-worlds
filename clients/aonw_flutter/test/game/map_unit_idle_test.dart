@@ -181,7 +181,7 @@ Future<AonwFlameGame> _mountIdleGame(WidgetTester tester) async {
       onLoaded: () {},
     );
     await sprite.load();
-    sprite.dispose();
+    addTearDown(sprite.dispose);
   });
   final layer = MapUnitLayerComponent(
     now: tester.binding.clock.now,

@@ -97,7 +97,9 @@ void main() {
     );
 
     await tester.runAsync(() async {
-      await SpriteFrames.preload([
+      final frames = SpriteFrames.createScope();
+      addTearDown(frames.dispose);
+      await frames.preload([
         MapSpriteCatalog.cityFrame(visualLevel: 2),
         ...MapSpriteCatalog.idleUnitFrames(VisibleUnitKind.commander),
       ]);

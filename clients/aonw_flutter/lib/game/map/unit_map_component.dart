@@ -190,9 +190,11 @@ final class MapUnitComponent extends PositionComponent
     _onAnimationChanged();
   }
 
+  void disposePresentation() => _sprite.dispose();
+
   @override
   void onRemove() {
-    _sprite.dispose();
+    disposePresentation();
     _onAnimationChanged();
     super.onRemove();
   }

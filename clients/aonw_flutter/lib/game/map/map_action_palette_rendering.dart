@@ -110,7 +110,7 @@ extension _MapActionPaletteRendering on MapActionPaletteLayerComponent {
     canvas
       ..drawRRect(rounded, fill)
       ..drawRRect(rounded, border);
-    final frame = SpriteFrames.cached(
+    final frame = _framesScope.cached(
       MapSpriteCatalog.improvementFrame(option.improvement),
     );
     if (frame == null) {

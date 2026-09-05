@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -15,6 +16,7 @@ Future<void> verifyUnitWorkPresentation(
   MapRenderSnapshot source, {
   required int rssBefore,
 }) async {
+  final atlasesBefore = SpriteFrames.debugAtlasBytes;
   game.setUnitIdleAnimations(false);
   game.replaceScene(_workingSnapshot(source));
   final layer = game.world.unitLayer;
@@ -55,6 +57,20 @@ Future<void> verifyUnitWorkPresentation(
   expect(layer.debugAnimationTicks, stoppedTicks);
   expect(game.paused, isTrue);
   final rssDelta = ProcessInfo.currentRss - rssBefore;
+  final workingAtlases = SpriteFrames.debugAtlasBytes;
+  game.replaceScene(source);
+  for (final unit in units) {
+    await unit.debugLoadSprite();
+  }
+  final restoredAtlases = SpriteFrames.debugAtlasBytes;
+  var releasedBytes = 0;
+  for (final kind in frames.keys) {
+    final atlasId = 'unit_$kind';
+    expect(atlasesBefore, isNot(contains(atlasId)));
+    expect(workingAtlases[atlasId], 1536 * 1536 * 4);
+    expect(restoredAtlases, isNot(contains(atlasId)));
+    releasedBytes += workingAtlases[atlasId]!;
+  }
   final record = {
     'schemaVersion': 1,
     'capturedAt': DateTime.now().toUtc().toIso8601String(),
@@ -69,12 +85,13 @@ Future<void> verifyUnitWorkPresentation(
     'idleAnimationsDisabled': true,
     'timerStoppedForReducedMotion': true,
     'residentMemoryDeltaBytes': rssDelta,
+    'releasedAtlasBytes': releasedBytes,
+    'residentMemoryDeltaAfterRestoreBytes': ProcessInfo.currentRss - rssBefore,
   };
   binding.reportData!['flameUnitWorkPresentation'] = record;
   // ignore: avoid_print
   print('AONW_FLAME_UNIT_WORK_PRESENTATION ${jsonEncode(record)}');
   expect(rssDelta, lessThanOrEqualTo(192 * 1024 * 1024));
-  game.replaceScene(source);
   game.setReducedMotion(false);
   game.setUnitIdleAnimations(true);
 }

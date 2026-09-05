@@ -157,14 +157,22 @@ final class MapWorkerInfrastructureLayerComponent extends Component
     }
   }
 
-  void _remove(Component? component) {
+  void _remove(MapFieldImprovementComponent? component) {
     if (component == null) return;
+    component.disposePresentation();
     component.removeFromParent();
     _removedCount += 1;
   }
 
+  @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
   void clearLayer() {
     for (final component in _improvements.values) {
+      component.disposePresentation();
       component.removeFromParent();
     }
     _improvements.clear();
@@ -329,6 +337,7 @@ final class MapFieldImprovementComponent extends PositionComponent
 
   FieldImprovementView _improvement;
   bool _selected;
+  var _framesScope = SpriteFrames.createScope();
   SpriteFrame? _frame;
   var _loadGeneration = 0;
 
@@ -366,12 +375,12 @@ final class MapFieldImprovementComponent extends PositionComponent
   }
 
   void applyImprovement(FieldImprovementView value, ui.Offset center) {
+    final kindChanged = _improvement.improvement != value.improvement;
     final frameChanged =
-        _improvement.improvement != value.improvement ||
-        _improvement.eraColumn != value.eraColumn;
+        kindChanged || _improvement.eraColumn != value.eraColumn;
     _improvement = value;
     position.setValues(center.dx, center.dy);
-    if (frameChanged) _reloadFrame();
+    if (frameChanged) _reloadFrame(releaseAtlas: kindChanged);
   }
 
   void setSelected(bool value) => _selected = value;
@@ -399,9 +408,13 @@ final class MapFieldImprovementComponent extends PositionComponent
     }
   }
 
-  void _reloadFrame() {
+  void _reloadFrame({required bool releaseAtlas}) {
     _frame = null;
     _loadGeneration += 1;
+    if (releaseAtlas) {
+      _framesScope.dispose();
+      _framesScope = SpriteFrames.createScope();
+    }
     if (isLoaded) unawaited(_loadFrame());
   }
 
@@ -411,7 +424,7 @@ final class MapFieldImprovementComponent extends PositionComponent
     final era = _improvement.eraColumn;
     final SpriteFrame frame;
     try {
-      frame = await SpriteFrames.load(
+      frame = await _framesScope.load(
         MapSpriteCatalog.improvementFrame(kind, era: era),
       );
     } on Object {
@@ -424,6 +437,18 @@ final class MapFieldImprovementComponent extends PositionComponent
     }
     _frame = frame;
     _refreshGameWidget();
+  }
+
+  void disposePresentation() {
+    _loadGeneration++;
+    _frame = null;
+    _framesScope.dispose();
+  }
+
+  @override
+  void onRemove() {
+    disposePresentation();
+    super.onRemove();
   }
 
   void _refreshGameWidget() {

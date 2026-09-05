@@ -110,6 +110,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
       final component = _unitsById.remove(unitId);
       _visualOffsetsById.remove(unitId);
       if (component != null) {
+        component.disposePresentation();
         component.removeFromParent();
         _removedCount += 1;
       }
@@ -168,6 +169,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
     _unitsById.clear();
     _frameClock.clear();
     for (final component in components) {
+      component.disposePresentation();
       component.removeFromParent();
     }
     _visualOffsetsById.clear();

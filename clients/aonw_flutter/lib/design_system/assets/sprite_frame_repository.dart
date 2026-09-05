@@ -61,14 +61,15 @@ final class SpriteFrameGeometry {
   final ui.Rect destination;
 }
 
-abstract interface class SpriteFrameRepository {
+/// Retains atlas pages until this scope or its repository is disposed.
+abstract interface class SpriteFrameScope {
   SpriteFrame? cached(SpriteFrameId id);
-
   Future<SpriteFrame> load(SpriteFrameId id);
-
   Future<void> preload(Iterable<SpriteFrameId> ids);
+  void dispose();
+}
 
-  void disposeAtlas(String atlasId);
-
+abstract interface class SpriteFrameRepository {
+  SpriteFrameScope createScope();
   void dispose();
 }

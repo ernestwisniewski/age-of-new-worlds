@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
@@ -137,6 +138,8 @@ void main() {
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
+    expect(SpriteFrames.debugAtlasBytes, isEmpty);
+    binding.reportData!['spriteAtlasesReleasedOnUnmount'] = true;
   });
 }
 

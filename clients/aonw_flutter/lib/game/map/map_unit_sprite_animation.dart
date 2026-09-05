@@ -23,6 +23,7 @@ final class MapUnitSpriteAnimation {
   final void Function() onLoaded;
   final double Function() _idlePauseDuration;
   VisibleUnitKind _kind;
+  var _framesScope = SpriteFrames.createScope();
   final _frames = <MapUnitSpriteAction, List<SpriteFrame>>{};
   final _pending = <MapUnitSpriteAction, Future<void>>{};
   var _adjustments = SpriteAnimationAdjustments.empty;
@@ -72,6 +73,8 @@ final class MapUnitSpriteAnimation {
     _frames.clear();
     _geometryFrame = null;
     _pending.clear();
+    _framesScope.dispose();
+    _framesScope = SpriteFrames.createScope();
     _action = MapUnitSpriteAction.idle;
     _index = 0;
     _elapsed = 0;
@@ -198,7 +201,7 @@ final class MapUnitSpriteAnimation {
     try {
       final frames = await Future.wait([
         for (var index = 0; index < MapSpriteCatalog.unitFrameCount; index++)
-          SpriteFrames.load(sequence.frame(index)),
+          _framesScope.load(sequence.frame(index)),
       ]);
       final adjustments = await SpriteAnimationAdjustments.load();
       if (_disposed || generation != _generation) return;
@@ -216,11 +219,13 @@ final class MapUnitSpriteAnimation {
       SpriteSequenceId('unit.${_kind.name}.${action.name}');
 
   void dispose() {
+    if (_disposed) return;
     _disposed = true;
     _generation++;
     _frames.clear();
     _geometryFrame = null;
     _pending.clear();
+    _framesScope.dispose();
   }
 
   static final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;

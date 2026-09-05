@@ -87,15 +87,17 @@ void main() {
   ) async {
     final repository = TexturePackerSpriteFrameRepository();
     addTearDown(repository.dispose);
+    final frames = repository.createScope();
+    addTearDown(frames.dispose);
 
     final loads = await tester.runAsync(
       () => Future.wait([
-        repository.load(const SpriteFrameId('unit.warrior.idle.0')),
-        repository.load(const SpriteFrameId('unit.warrior.idle.0')),
-        repository.load(const SpriteFrameId('city.growthCivic.0')),
-        repository.load(const SpriteFrameId('improvement.farm.0')),
-        repository.load(const SpriteFrameId('map.resource.wheat')),
-        repository.load(const SpriteFrameId('map.terrain.plains')),
+        frames.load(const SpriteFrameId('unit.warrior.idle.0')),
+        frames.load(const SpriteFrameId('unit.warrior.idle.0')),
+        frames.load(const SpriteFrameId('city.growthCivic.0')),
+        frames.load(const SpriteFrameId('improvement.farm.0')),
+        frames.load(const SpriteFrameId('map.resource.wheat')),
+        frames.load(const SpriteFrameId('map.terrain.plains')),
       ]),
     );
 

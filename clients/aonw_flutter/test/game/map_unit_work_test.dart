@@ -132,7 +132,7 @@ Future<AonwFlameGame> _mount(WidgetTester tester) async {
     ]) {
       final sprite = MapUnitSpriteAnimation(kind: kind, onLoaded: () {});
       await sprite.load();
-      sprite.dispose();
+      addTearDown(sprite.dispose);
     }
   });
   final layer = MapUnitLayerComponent(

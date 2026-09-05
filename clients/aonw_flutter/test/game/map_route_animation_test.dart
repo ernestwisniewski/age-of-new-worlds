@@ -145,7 +145,7 @@ Future<AonwFlameGame> _mount(WidgetTester tester) async {
       onLoaded: () {},
     );
     await sprite.load();
-    sprite.dispose();
+    addTearDown(sprite.dispose);
   });
   final game = AonwFlameGame();
   game.setUnitIdleAnimations(false);

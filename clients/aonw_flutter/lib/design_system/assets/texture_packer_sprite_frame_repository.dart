@@ -8,73 +8,131 @@ import 'atlas_store.dart';
 import 'sprite_frame_id.dart';
 import 'sprite_frame_repository.dart';
 
+part 'texture_packer_frame_scope.dart';
+part 'texture_packer_sprite_manifest.dart';
+
 final class TexturePackerSpriteFrameRepository
     implements SpriteFrameRepository {
   TexturePackerSpriteFrameRepository({AtlasStore? store})
     : _store = store ?? AtlasStore();
 
   static const manifestPath = 'assets/runtime/sprites/sprite_manifest.json';
-
   final AtlasStore _store;
   final Map<SpriteFrameId, SpriteFrame> _frames = {};
   final Map<SpriteFrameId, Future<SpriteFrame>> _pendingFrames = {};
+  final Map<String, int> _owners = {};
+  final Map<String, int> _readers = {};
   Future<_SpriteManifest>? _pendingManifest;
   _SpriteManifest? _manifest;
-  var _generation = 0;
   var _disposed = false;
 
-  @override
-  SpriteFrame? cached(SpriteFrameId id) {
-    _ensureActive();
-    return _frames[id];
-  }
+  Map<String, int> get atlasBytes => {
+    for (final entry
+        in _manifest?.atlases.entries ?? const <MapEntry<String, String>>[])
+      if (_store.cached(entry.value) != null)
+        entry.key: _store.decodedBytes(entry.value),
+  };
 
   @override
-  Future<SpriteFrame> load(SpriteFrameId id) async {
+  SpriteFrameScope createScope() {
     _ensureActive();
-    final ready = _frames[id];
-    if (ready != null) return ready;
-    final pending = _pendingFrames[id];
-    if (pending != null) return pending;
-
-    final generation = _generation;
-    final future = _loadAndCache(id, generation);
-    _pendingFrames[id] = future;
-    try {
-      return await future;
-    } finally {
-      if (identical(_pendingFrames[id], future)) {
-        _pendingFrames.remove(id)?.ignore();
-      }
-    }
+    return _TexturePackerFrameScope(this);
   }
 
-  Future<SpriteFrame> _loadAndCache(SpriteFrameId id, int generation) async {
-    final frame = await _load(id);
-    if (_disposed || generation != _generation) {
-      throw StateError('${id.value} was disposed while loading');
-    }
-    return _frames[id] = frame;
-  }
-
-  Future<SpriteFrame> _load(SpriteFrameId id) async {
+  Future<SpriteFrame> _load(
+    _TexturePackerFrameScope scope,
+    SpriteFrameId id,
+  ) async {
     final manifest = await _loadManifest();
+    scope._ensureActive();
     final entry = manifest.frames[id.value];
     if (entry == null) {
       throw StateError('Missing sprite frame manifest entry: ${id.value}');
     }
-    final atlasPath = manifest.atlases[entry.atlasId];
-    if (atlasPath == null) {
-      throw StateError('Missing atlas ${entry.atlasId} for ${id.value}');
+    if (scope._atlases.add(entry.atlasId)) {
+      _owners.update(entry.atlasId, (count) => count + 1, ifAbsent: () => 1);
     }
-    final atlas = await _store.load(atlasPath);
-    final sprite = atlas.findSpriteByNameIndex(entry.region, entry.index);
-    if (sprite == null) {
-      throw StateError(
-        'Missing region ${entry.region}#${entry.index} in $atlasPath',
-      );
+    final ready = _frames[id];
+    if (ready != null) return ready;
+    final future = _pendingFrames[id] ??= _readFrame(id, entry, manifest);
+    try {
+      final frame = await future;
+      scope._ensureActive();
+      return frame;
+    } finally {
+      if (identical(_pendingFrames[id], future)) _pendingFrames.remove(id);
     }
-    return _frameFromSprite(id, sprite, entry);
+  }
+
+  Future<SpriteFrame> _readFrame(
+    SpriteFrameId id,
+    _SpriteManifestEntry entry,
+    _SpriteManifest manifest,
+  ) async {
+    final atlasId = entry.atlasId;
+    _readers.update(atlasId, (count) => count + 1, ifAbsent: () => 1);
+    try {
+      final path = manifest.atlases[atlasId];
+      if (path == null) {
+        throw StateError('Missing atlas $atlasId for ${id.value}');
+      }
+      final atlas = await _store.load(path);
+      _ensureActive();
+      final sprite = atlas.findSpriteByNameIndex(entry.region, entry.index);
+      if (sprite == null) {
+        throw StateError(
+          'Missing region ${entry.region}#${entry.index} in $path',
+        );
+      }
+      return _frames[id] = _frameFromSprite(id, sprite, entry);
+    } finally {
+      _pendingFrames.remove(id);
+      final readers = _readers[atlasId]! - 1;
+      if (readers == 0) {
+        _readers.remove(atlasId);
+      } else {
+        _readers[atlasId] = readers;
+      }
+      _evictUnowned(atlasId);
+    }
+  }
+
+  void _release(String atlasId) {
+    if (_disposed) return;
+    final count = _owners[atlasId]! - 1;
+    if (count == 0) {
+      _owners.remove(atlasId);
+    } else {
+      _owners[atlasId] = count;
+    }
+    _evictUnowned(atlasId);
+  }
+
+  void _evictUnowned(String atlasId) {
+    if (_disposed ||
+        _owners.containsKey(atlasId) ||
+        _readers.containsKey(atlasId)) {
+      return;
+    }
+    final manifest = _manifest!;
+    _frames.removeWhere(
+      (id, _) => manifest.frames[id.value]?.atlasId == atlasId,
+    );
+    final path = manifest.atlases[atlasId];
+    if (path != null) _store.disposeAtlas(path);
+  }
+
+  Future<_SpriteManifest> _loadManifest() async {
+    _ensureActive();
+    if (_manifest case final manifest?) return manifest;
+    final future = _pendingManifest ??= _readManifest();
+    try {
+      final manifest = await future;
+      _ensureActive();
+      return _manifest = manifest;
+    } finally {
+      if (identical(_pendingManifest, future)) _pendingManifest = null;
+    }
   }
 
   SpriteFrame _frameFromSprite(
@@ -103,30 +161,6 @@ final class TexturePackerSpriteFrameRepository
           ui.Rect.fromLTWH(0, 0, originalWidth, originalHeight),
       statusTop: entry.statusTop ?? 0,
     );
-  }
-
-  Future<_SpriteManifest> _loadManifest() async {
-    _ensureActive();
-    final ready = _manifest;
-    if (ready != null) return ready;
-    final pending = _pendingManifest;
-    if (pending != null) return pending;
-    final generation = _generation;
-    final future = _readAndCacheManifest(generation);
-    _pendingManifest = future;
-    try {
-      return await future;
-    } finally {
-      if (identical(_pendingManifest, future)) _pendingManifest = null;
-    }
-  }
-
-  Future<_SpriteManifest> _readAndCacheManifest(int generation) async {
-    final manifest = await _readManifest();
-    if (_disposed || generation != _generation) {
-      throw StateError('Sprite manifest was disposed while loading');
-    }
-    return _manifest = manifest;
   }
 
   Future<_SpriteManifest> _readManifest() async {
@@ -163,33 +197,11 @@ final class TexturePackerSpriteFrameRepository
   }
 
   @override
-  Future<void> preload(Iterable<SpriteFrameId> ids) async {
-    _ensureActive();
-    await Future.wait(ids.map(load));
-  }
-
-  @override
-  void disposeAtlas(String atlasId) {
-    _ensureActive();
-    _generation += 1;
-    _pendingFrames.clear();
-    _pendingManifest = null;
-    final manifest = _manifest;
-    final atlasPath = manifest?.atlases[atlasId];
-    if (atlasPath == null) return;
-    _frames.removeWhere(
-      (id, _) => manifest!.frames[id.value]?.atlasId == atlasId,
-    );
-    _store.disposeAtlas(atlasPath);
-  }
-
-  @override
   void dispose() {
     if (_disposed) return;
     _disposed = true;
-    _generation += 1;
     _frames.clear();
-    _pendingFrames.clear();
+    _owners.clear();
     _manifest = null;
     _pendingManifest = null;
     _store.dispose();
@@ -197,49 +209,5 @@ final class TexturePackerSpriteFrameRepository
 
   void _ensureActive() {
     if (_disposed) throw StateError('Sprite frame repository is disposed');
-  }
-}
-
-final class _SpriteManifest {
-  const _SpriteManifest({required this.atlases, required this.frames});
-
-  final Map<String, String> atlases;
-  final Map<String, _SpriteManifestEntry> frames;
-}
-
-final class _SpriteManifestEntry {
-  const _SpriteManifestEntry({
-    required this.atlasId,
-    required this.region,
-    required this.index,
-    required this.contentBounds,
-    required this.statusTop,
-  });
-
-  factory _SpriteManifestEntry.fromJson(Map<String, dynamic> json) {
-    return _SpriteManifestEntry(
-      atlasId: json['atlas'] as String,
-      region: json['region'] as String,
-      index: json['index'] as int,
-      contentBounds: _contentBoundsFromJson(json['content']),
-      statusTop: (json['statusTop'] as num?)?.toDouble(),
-    );
-  }
-
-  final String atlasId;
-  final String region;
-  final int index;
-  final ui.Rect? contentBounds;
-  final double? statusTop;
-
-  static ui.Rect? _contentBoundsFromJson(Object? value) {
-    if (value is! List || value.length != 4) return null;
-    final numbers = value.cast<num>();
-    return ui.Rect.fromLTWH(
-      numbers[0].toDouble(),
-      numbers[1].toDouble(),
-      numbers[2].toDouble(),
-      numbers[3].toDouble(),
-    );
   }
 }
