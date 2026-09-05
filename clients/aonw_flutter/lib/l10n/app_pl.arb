@@ -270,7 +270,6 @@
   "openSettings": "Otwórz ustawienia",
   "settingsTitle": "Ustawienia",
   "audioSettings": "Dźwięk",
-  "masterVolume": "Głośność główna",
   "cameraSettings": "Kamera",
   "cameraSensitivity": "Czułość przybliżenia",
   "animationSettings": "Animacje",
@@ -337,5 +336,11 @@
   "focusOwnUnitMovement": "Kieruj kamerę na ruch mojej jednostki",
   "followOwnUnitMovement": "Śledź ruch mojej jednostki kamerą",
   "focusForeignUnitMovement": "Kieruj kamerę na ruch jednostki wroga",
-  "followForeignUnitMovement": "Śledź ruch jednostki wroga kamerą"
+  "followForeignUnitMovement": "Śledź ruch jednostki wroga kamerą",
+  "gameSoundsLabel": "Dźwięki gry",
+  "soundVolumeLabel": "Głośność dźwięków",
+  "gameMusicLabel": "Muzyka w grze",
+  "musicVolumeLabel": "Głośność muzyki",
+  "natureSoundsLabel": "Odgłosy natury",
+  "natureVolumeLabel": "Głośność natury"
 }

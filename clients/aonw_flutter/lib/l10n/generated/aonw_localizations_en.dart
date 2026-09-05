@@ -1201,9 +1201,6 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get audioSettings => 'Audio';
 
   @override
-  String get masterVolume => 'Master volume';
-
-  @override
   String get cameraSettings => 'Camera';
 
   @override
@@ -2052,4 +2049,22 @@ class AonwLocalizationsEn extends AonwLocalizations {
   @override
   String get followForeignUnitMovement =>
       'Track enemy unit movement with camera';
+
+  @override
+  String get gameSoundsLabel => 'Game sounds';
+
+  @override
+  String get soundVolumeLabel => 'Sound volume';
+
+  @override
+  String get gameMusicLabel => 'Game music';
+
+  @override
+  String get musicVolumeLabel => 'Music volume';
+
+  @override
+  String get natureSoundsLabel => 'Nature sounds';
+
+  @override
+  String get natureVolumeLabel => 'Nature volume';
 }

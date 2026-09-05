@@ -5,14 +5,95 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'uses three audio defaults when channel preferences are absent',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      expect((await store.load()).audio, const ClientAudioSettings());
+      const defaults = ClientAudioSettings();
+      expect(defaults.soundVolume, 0.25);
+      expect(defaults.musicVolume, 0.2);
+      expect(defaults.natureVolume, 0.4);
+      expect(defaults.soundsEnabled, isTrue);
+      expect(defaults.musicEnabled, isTrue);
+      expect(defaults.natureEnabled, isTrue);
+    },
+  );
+
+  test(
+    'persists independent channel switches and their retained volumes',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      for (final flags in [
+        (false, true, true),
+        (true, false, true),
+        (true, true, false),
+        (false, false, false),
+      ]) {
+        final audio = ClientAudioSettings(
+          soundsEnabled: flags.$1,
+          musicEnabled: flags.$2,
+          natureEnabled: flags.$3,
+          soundVolume: 0,
+          musicVolume: 0.55,
+          natureVolume: 1,
+        );
+        final settings = ClientSettings.defaults.copyWith(audio: audio);
+        await store.save(settings);
+        final restored = await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load();
+        expect(restored, settings);
+        expect(restored.hashCode, settings.hashCode);
+        expect(restored, isNot(ClientSettings.defaults));
+      }
+      await store.save(ClientSettings.defaults);
+      expect(await store.load(), ClientSettings.defaults);
+    },
+  );
+
+  test(
+    'invalid volumes fall back independently without changing switches',
+    () async {
+      final preferences = _Preferences();
+      preferences.values['aonw.settings.audio.musicEnabled'] = false;
+      for (final invalid in [double.nan, double.infinity, -0.1, 1.1]) {
+        for (final name in ['soundVolume', 'musicVolume', 'natureVolume']) {
+          preferences.values['aonw.settings.audio.$name'] = invalid;
+        }
+        final restored = await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load();
+        expect(restored.audio, const ClientAudioSettings(musicEnabled: false));
+      }
+      preferences.values['aonw.settings.audio.soundVolume'] = 0.75;
+      final restored = await SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      ).load();
+      expect(
+        restored.audio,
+        const ClientAudioSettings(soundVolume: 0.75, musicEnabled: false),
+      );
+    },
+  );
+
+  test(
     'missing animation keys retain defaults for existing installations',
     () async {
       final preferences = _Preferences();
-      preferences.values['aonw.settings.masterVolume'] = 0.25;
+      preferences.values['aonw.settings.cameraSensitivity'] = 1.5;
       final settings = await SharedPreferencesClientSettingsStore(
         preferences: preferences,
       ).load();
-      expect(settings, ClientSettings.defaults.copyWith(masterVolume: 0.25));
+      expect(
+        settings,
+        ClientSettings.defaults.copyWith(cameraSensitivity: 1.5),
+      );
       expect(settings.showUnitMovementAnimations, isTrue);
       expect(settings.showCombatAnimations, isTrue);
       expect(settings.showUnitIdleAnimations, isTrue);

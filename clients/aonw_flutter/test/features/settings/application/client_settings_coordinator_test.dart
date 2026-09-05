@@ -18,7 +18,10 @@ void main() {
     await coordinator.load();
     expect(coordinator.settings, stored);
 
-    final changed = stored.copyWith(masterVolume: 0.25, highContrast: true);
+    final changed = stored.copyWith(
+      audio: const ClientAudioSettings(soundVolume: 0.25),
+      highContrast: true,
+    );
     await coordinator.update(changed);
     expect(coordinator.settings, changed);
     expect(store.settings, changed);
@@ -35,9 +38,15 @@ void main() {
     addTearDown(coordinator.dispose);
 
     final pendingLoad = coordinator.load();
-    final changed = ClientSettings.defaults.copyWith(masterVolume: 0.4);
+    final changed = ClientSettings.defaults.copyWith(
+      audio: const ClientAudioSettings(soundVolume: 0.4),
+    );
     await coordinator.update(changed);
-    load.complete(ClientSettings.defaults.copyWith(masterVolume: 0.9));
+    load.complete(
+      ClientSettings.defaults.copyWith(
+        audio: const ClientAudioSettings(soundVolume: 0.9),
+      ),
+    );
     await pendingLoad;
 
     expect(coordinator.settings, changed);
@@ -47,8 +56,12 @@ void main() {
     final store = _ControlledSettingsStore();
     final coordinator = ClientSettingsCoordinator(store: store);
     addTearDown(coordinator.dispose);
-    final first = ClientSettings.defaults.copyWith(masterVolume: 0.4);
-    final second = ClientSettings.defaults.copyWith(masterVolume: 0.8);
+    final first = ClientSettings.defaults.copyWith(
+      audio: const ClientAudioSettings(soundVolume: 0.4),
+    );
+    final second = ClientSettings.defaults.copyWith(
+      audio: const ClientAudioSettings(soundVolume: 0.8),
+    );
 
     final firstWrite = coordinator.update(first);
     await store.firstStarted.future;

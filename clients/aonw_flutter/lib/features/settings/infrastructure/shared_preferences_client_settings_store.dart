@@ -3,13 +3,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../application/client_settings.dart';
 import '../application/client_settings_store.dart';
 
+part 'shared_preferences_audio_settings.dart';
+
 final class SharedPreferencesClientSettingsStore
     implements ClientSettingsStore {
   SharedPreferencesClientSettingsStore({SharedPreferencesAsync? preferences})
     : _preferences = preferences ?? SharedPreferencesAsync();
 
   static const _cinematicCameraKey = 'aonw.settings.cinematicCamera';
-  static const _masterVolumeKey = 'aonw.settings.masterVolume';
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
   static const _smoothCameraMovementKey = 'aonw.settings.smoothCameraMovement';
   static const _reducedMotionKey = 'aonw.settings.reducedMotion';
@@ -39,7 +40,7 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<ClientSettings> load() async {
-    final masterVolume = await _preferences.getDouble(_masterVolumeKey);
+    final audio = await _loadAudio();
     final cameraSensitivity = await _preferences.getDouble(
       _cameraSensitivityKey,
     );
@@ -70,12 +71,7 @@ final class SharedPreferencesClientSettingsStore
       followOwnUnitMovement: camera.followOwnUnitMovement,
       focusForeignUnitMovement: camera.focusForeignUnitMovement,
       followForeignUnitMovement: camera.followForeignUnitMovement,
-      masterVolume: _bounded(
-        masterVolume,
-        minimum: 0,
-        maximum: 1,
-        fallback: ClientSettings.defaults.masterVolume,
-      ),
+      audio: audio,
       cameraSensitivity: _bounded(
         cameraSensitivity,
         minimum: 0.5,
@@ -102,7 +98,7 @@ final class SharedPreferencesClientSettingsStore
   Future<void> save(ClientSettings settings) async {
     await _saveCamera(settings);
     await _saveAnimations(settings);
-    await _preferences.setDouble(_masterVolumeKey, settings.masterVolume);
+    await _saveAudio(settings.audio);
     await _preferences.setDouble(
       _cameraSensitivityKey,
       settings.cameraSensitivity,

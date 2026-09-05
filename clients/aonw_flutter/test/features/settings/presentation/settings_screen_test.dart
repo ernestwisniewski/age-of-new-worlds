@@ -31,11 +31,11 @@ void main() {
     tester
         .widget<Slider>(
           find.descendant(
-            of: find.byKey(const ValueKey('master-volume-setting')),
+            of: find.byKey(const ValueKey('sound-volume-setting')),
             matching: find.byType(Slider),
           ),
         )
-        .onChanged!(0.25);
+        .onChanged!(0.35);
     await tester.pumpAndSettle();
     tester
         .widget<Slider>(
@@ -72,7 +72,7 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    expect(store.settings.masterVolume, 0.25);
+    expect(store.settings.audio.soundVolume, 0.35);
     expect(store.settings.cameraSensitivity, 1.5);
     expect(store.settings.smoothCameraMovement, isFalse);
     expect(store.settings.cinematicCamera, isTrue);

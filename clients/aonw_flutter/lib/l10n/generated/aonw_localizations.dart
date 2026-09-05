@@ -1610,12 +1610,6 @@ abstract class AonwLocalizations {
   /// **'Audio'**
   String get audioSettings;
 
-  /// No description provided for @masterVolume.
-  ///
-  /// In en, this message translates to:
-  /// **'Master volume'**
-  String get masterVolume;
-
   /// No description provided for @cameraSettings.
   ///
   /// In en, this message translates to:
@@ -2023,6 +2017,42 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Track enemy unit movement with camera'**
   String get followForeignUnitMovement;
+
+  /// No description provided for @gameSoundsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Game sounds'**
+  String get gameSoundsLabel;
+
+  /// No description provided for @soundVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound volume'**
+  String get soundVolumeLabel;
+
+  /// No description provided for @gameMusicLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Game music'**
+  String get gameMusicLabel;
+
+  /// No description provided for @musicVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Music volume'**
+  String get musicVolumeLabel;
+
+  /// No description provided for @natureSoundsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature sounds'**
+  String get natureSoundsLabel;
+
+  /// No description provided for @natureVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature volume'**
+  String get natureVolumeLabel;
 }
 
 class _AonwLocalizationsDelegate

@@ -1,6 +1,10 @@
+import 'client_audio_settings.dart';
+
+export 'client_audio_settings.dart';
+
 final class ClientSettings {
   const ClientSettings({
-    required this.masterVolume,
+    this.audio = const ClientAudioSettings(),
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
@@ -19,11 +23,9 @@ final class ClientSettings {
     this.followOwnUnitMovement = false,
     this.focusForeignUnitMovement = false,
     this.followForeignUnitMovement = false,
-  }) : assert(masterVolume >= 0 && masterVolume <= 1),
-       assert(cameraSensitivity >= 0.5 && cameraSensitivity <= 2);
+  }) : assert(cameraSensitivity >= 0.5 && cameraSensitivity <= 2);
 
   static const defaults = ClientSettings(
-    masterVolume: 0.8,
     cameraSensitivity: 1,
     reducedMotion: false,
     highContrast: false,
@@ -34,7 +36,7 @@ final class ClientSettings {
     showMapHeightBadges: false,
   );
 
-  final double masterVolume;
+  final ClientAudioSettings audio;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
   final bool cinematicCamera;
@@ -55,7 +57,7 @@ final class ClientSettings {
   final bool showMapHeightBadges;
 
   ClientSettings copyWith({
-    double? masterVolume,
+    ClientAudioSettings? audio,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
     bool? cinematicCamera,
@@ -75,7 +77,7 @@ final class ClientSettings {
     bool? showMapResourceIcons,
     bool? showMapHeightBadges,
   }) => ClientSettings(
-    masterVolume: masterVolume ?? this.masterVolume,
+    audio: audio ?? this.audio,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     cinematicCamera: cinematicCamera ?? this.cinematicCamera,
@@ -103,7 +105,7 @@ final class ClientSettings {
   @override
   bool operator ==(Object other) =>
       other is ClientSettings &&
-      other.masterVolume == masterVolume &&
+      other.audio == audio &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
       _sameAnimations(other) &&
@@ -134,7 +136,7 @@ final class ClientSettings {
 
   @override
   int get hashCode => Object.hash(
-    masterVolume,
+    audio,
     cameraSensitivity,
     smoothCameraMovement,
     cinematicCamera,

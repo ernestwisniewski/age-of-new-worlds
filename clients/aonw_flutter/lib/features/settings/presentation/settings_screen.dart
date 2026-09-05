@@ -11,6 +11,7 @@ import 'client_settings_controller.dart';
 
 part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
+part 'settings_audio.dart';
 
 final class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.controller, super.key});
@@ -176,25 +177,6 @@ final class _MapSetting extends StatelessWidget {
     subtitle: Text(description),
     value: value,
     onChanged: onChanged,
-  );
-}
-
-final class _AudioSettings extends StatelessWidget {
-  const _AudioSettings({required this.settings, required this.onChanged});
-
-  final ClientSettings settings;
-  final ValueChanged<ClientSettings> onChanged;
-
-  @override
-  Widget build(BuildContext context) => _LabeledSlider(
-    key: const ValueKey('master-volume-setting'),
-    label: context.aonwL10n.masterVolume,
-    value: settings.masterVolume,
-    minimum: 0,
-    maximum: 1,
-    divisions: 20,
-    valueLabel: '${(settings.masterVolume * 100).round()}%',
-    onChanged: (value) => onChanged(settings.copyWith(masterVolume: value)),
   );
 }
 

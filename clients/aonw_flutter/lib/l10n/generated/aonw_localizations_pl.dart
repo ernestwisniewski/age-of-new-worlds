@@ -1206,9 +1206,6 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get audioSettings => 'Dźwięk';
 
   @override
-  String get masterVolume => 'Głośność główna';
-
-  @override
   String get cameraSettings => 'Kamera';
 
   @override
@@ -2057,4 +2054,22 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get followForeignUnitMovement => 'Śledź ruch jednostki wroga kamerą';
+
+  @override
+  String get gameSoundsLabel => 'Dźwięki gry';
+
+  @override
+  String get soundVolumeLabel => 'Głośność dźwięków';
+
+  @override
+  String get gameMusicLabel => 'Muzyka w grze';
+
+  @override
+  String get musicVolumeLabel => 'Głośność muzyki';
+
+  @override
+  String get natureSoundsLabel => 'Odgłosy natury';
+
+  @override
+  String get natureVolumeLabel => 'Głośność natury';
 }

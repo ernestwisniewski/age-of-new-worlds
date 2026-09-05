@@ -363,7 +363,6 @@
   "openSettings": "Open settings",
   "settingsTitle": "Settings",
   "audioSettings": "Audio",
-  "masterVolume": "Master volume",
   "cameraSettings": "Camera",
   "cameraSensitivity": "Zoom sensitivity",
   "animationSettings": "Animations",
@@ -480,5 +479,11 @@
   "focusOwnUnitMovement": "Focus camera on my unit movement",
   "followOwnUnitMovement": "Track my unit movement with camera",
   "focusForeignUnitMovement": "Focus camera on enemy unit movement",
-  "followForeignUnitMovement": "Track enemy unit movement with camera"
+  "followForeignUnitMovement": "Track enemy unit movement with camera",
+  "gameSoundsLabel": "Game sounds",
+  "soundVolumeLabel": "Sound volume",
+  "gameMusicLabel": "Game music",
+  "musicVolumeLabel": "Music volume",
+  "natureSoundsLabel": "Nature sounds",
+  "natureVolumeLabel": "Nature volume"
 }
