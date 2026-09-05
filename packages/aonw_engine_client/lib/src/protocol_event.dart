@@ -6,9 +6,14 @@ import 'package:aonw_engine_client/src/protocol_map.dart';
 import 'package:aonw_engine_client/src/protocol_outcome.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
+import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
+part 'protocol_artifact_event.dart';
+part 'protocol_city_event.dart';
 part 'protocol_event_schema.dart';
+part 'protocol_research_event.dart';
+part 'protocol_worker_event.dart';
 
 enum AonwClientEventKind {
   artifactExcavationStarted,
@@ -209,7 +214,11 @@ AonwClientEvent _knownEvent(Map<String, Object?> value, String type) {
       .firstOrNull;
   if (kind == null) throw FormatException('Unknown AoNW client event $type.');
   _validatePresentationEvent(value, type);
-  return AonwPresentationEvent(kind);
+  return _cityEvent(value, kind) ??
+      _researchEvent(value, kind) ??
+      _artifactEvent(value, kind) ??
+      _workerEvent(value, kind) ??
+      AonwPresentationEvent(kind);
 }
 
 List<String> _strings(Object? value, String label) =>
