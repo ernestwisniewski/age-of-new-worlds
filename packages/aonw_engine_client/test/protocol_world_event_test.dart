@@ -174,11 +174,26 @@ void main() {
                   'unitId': 'builder',
                   'target': {'col': 3, 'row': 2},
                   'completion': completion,
+                  'yieldDelta': {
+                    'food': 2,
+                    'production': 3,
+                    'gold': 4,
+                    'defense': 5,
+                  },
                 })
                 as AonwWorkerCompletedJobEvent;
         expect(
           (completed.unitId, completed.target.col, completed.target.row),
           ('builder', 3, 2),
+        );
+        expect(
+          (
+            completed.yieldDelta.food,
+            completed.yieldDelta.production,
+            completed.yieldDelta.gold,
+            completed.yieldDelta.defense,
+          ),
+          (2, 3, 4, 5),
         );
         if (completion['type'] == 'road') {
           expect(completed.completion, isA<AonwRoadCompletion>());
@@ -197,6 +212,7 @@ void main() {
     const worker = {
       'type': 'workerCompletedJob',
       'unitId': 'builder',
+      'yieldDelta': {'food': 0, 'production': 0, 'gold': 0, 'defense': 0},
       'target': {'col': 3, 'row': 2},
     };
     for (final invalid in [
@@ -223,6 +239,39 @@ void main() {
         'cityId': 'city',
         'unitType': 'futureUnit',
         'producedUnitId': 'unit',
+      }),
+      throwsFormatException,
+    );
+  });
+
+  test('requires exact integer worker yield fields', () {
+    const yieldDelta = {'food': 1, 'production': 2, 'gold': 3, 'defense': 4};
+    const event = {
+      'type': 'workerCompletedJob',
+      'unitId': 'worker',
+      'target': {'col': 1, 'row': 2},
+      'completion': {'type': 'fieldImprovement', 'improvement': 'farm'},
+    };
+    for (final key in yieldDelta.keys) {
+      expect(
+        () => AonwClientEvent.fromJson({
+          ...event,
+          'yieldDelta': {...yieldDelta}..remove(key),
+        }),
+        throwsFormatException,
+      );
+      expect(
+        () => AonwClientEvent.fromJson({
+          ...event,
+          'yieldDelta': {...yieldDelta, key: '1'},
+        }),
+        throwsFormatException,
+      );
+    }
+    expect(
+      () => AonwClientEvent.fromJson({
+        ...event,
+        'yieldDelta': {...yieldDelta, 'extra': 1},
       }),
       throwsFormatException,
     );

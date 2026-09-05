@@ -157,6 +157,7 @@ final _eventSchemas = <String, Map<String, _FieldReader>>{
     'unitId': _stringField,
     'target': _coordinateField,
     'completion': _workerCompletionField,
+    'yieldDelta': AonwYieldValue.fromJson,
   },
 };
 

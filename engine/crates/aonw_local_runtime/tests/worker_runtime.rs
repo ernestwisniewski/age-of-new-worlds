@@ -1,5 +1,8 @@
 //! Runtime, save, replay, cache, and recipient tests for current workers.
 
+#[path = "worker_runtime/completion.rs"]
+mod completion;
+
 use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};

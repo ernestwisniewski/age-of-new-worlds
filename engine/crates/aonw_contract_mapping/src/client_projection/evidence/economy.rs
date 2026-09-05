@@ -1,6 +1,17 @@
 use aonw_contracts::{StabilityBandDto, client::ClientEventDto};
 use aonw_engine::{CityClaimedHexEvent, StabilityBand, StabilityBandChangedEvent};
 
+pub(super) const fn worker_yield(
+    value: aonw_engine::YieldValue,
+) -> aonw_contracts::client::YieldValueDto {
+    aonw_contracts::client::YieldValueDto {
+        food: value.food,
+        production: value.production,
+        gold: value.gold,
+        defense: value.defense,
+    }
+}
+
 pub(super) fn city_claimed(value: &CityClaimedHexEvent) -> ClientEventDto {
     ClientEventDto::CityClaimedHex {
         city_id: value.city_id().as_str().to_owned(),

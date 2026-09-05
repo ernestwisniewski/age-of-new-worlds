@@ -369,12 +369,7 @@ fn improvement_yield(
         .improvement(kind)
         .ok_or(EconomyQueryError::ArithmeticOverflow)?
         .yield_delta();
-    Ok(YieldValue::new(
-        i64::from(value.food()),
-        i64::from(value.production()),
-        i64::from(value.gold()),
-        i64::from(value.defense()),
-    ))
+    Ok(value.into())
 }
 
 fn assigned_worker_hexes(state: &GameState, city: &City) -> Vec<HexCoord> {

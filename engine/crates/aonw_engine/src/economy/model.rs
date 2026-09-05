@@ -38,6 +38,17 @@ pub struct YieldValue {
     pub defense: i64,
 }
 
+impl From<aonw_content::WorkerYield> for YieldValue {
+    fn from(value: aonw_content::WorkerYield) -> Self {
+        Self::new(
+            i64::from(value.food()),
+            i64::from(value.production()),
+            i64::from(value.gold()),
+            i64::from(value.defense()),
+        )
+    }
+}
+
 impl YieldValue {
     /// Creates one exact integer yield.
     #[must_use]

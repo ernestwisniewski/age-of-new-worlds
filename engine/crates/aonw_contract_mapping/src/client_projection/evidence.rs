@@ -260,6 +260,7 @@ pub fn encode_client_event(value: &DomainEvent) -> ClientEventDto {
         DomainEvent::WorkerCompletedJob(value) => ClientEventDto::WorkerCompletedJob {
             unit_id: value.unit_id().as_str().to_owned(),
             target: coordinate(value.target()),
+            yield_delta: economy::worker_yield(value.yield_delta()),
             completion: match value.completion() {
                 aonw_engine::WorkerJobCompletion::FieldImprovement(improvement) => {
                     WorkerJobCompletionDto::FieldImprovement {

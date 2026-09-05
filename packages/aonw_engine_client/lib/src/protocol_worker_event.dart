@@ -5,11 +5,13 @@ final class AonwWorkerCompletedJobEvent extends AonwClientEvent {
     required this.unitId,
     required this.target,
     required this.completion,
+    required this.yieldDelta,
   }) : super(AonwClientEventKind.workerCompletedJob);
 
   final String unitId;
   final AonwCoordinate target;
   final AonwWorkerCompletion completion;
+  final AonwYieldValue yieldDelta;
 }
 
 sealed class AonwWorkerCompletion {
@@ -35,6 +37,7 @@ AonwClientEvent? _workerEvent(
   return AonwWorkerCompletedJobEvent(
     unitId: readString(value['unitId'], 'completed worker id'),
     target: AonwCoordinate.fromJson(value['target']),
+    yieldDelta: AonwYieldValue.fromJson(value['yieldDelta']),
     completion: completion['type'] == 'road'
         ? const AonwRoadCompletion()
         : AonwFieldImprovementCompletion(

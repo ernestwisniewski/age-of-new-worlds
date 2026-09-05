@@ -40,4 +40,4 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 16;
+pub const CLIENT_API_VERSION: u16 = 17;

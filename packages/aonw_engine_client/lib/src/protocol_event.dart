@@ -6,6 +6,7 @@ import 'package:aonw_engine_client/src/protocol_map.dart';
 import 'package:aonw_engine_client/src/protocol_outcome.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
+import 'package:aonw_engine_client/src/protocol_query.dart';
 import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 

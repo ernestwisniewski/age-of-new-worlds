@@ -117,6 +117,9 @@ fn complete_improvement(
     let Ok(city) = improvement_city(state, context, unit, target, improvement, false) else {
         return cleared(unit);
     };
+    let Some(definition) = context.ruleset().worker().improvement(improvement) else {
+        return cleared(unit);
+    };
     improvements.push(FieldImprovement::new(
         target,
         improvement,
@@ -126,6 +129,7 @@ fn complete_improvement(
         unit.id().clone(),
         target,
         WorkerJobCompletion::FieldImprovement(improvement),
+        definition.yield_delta().into(),
     ));
     WorkerCompletion {
         replacement: unit.after_worker_improvement_completed(),
@@ -160,6 +164,7 @@ fn complete_road(
         unit.id().clone(),
         target,
         WorkerJobCompletion::Road,
+        crate::YieldValue::default(),
     ));
     WorkerCompletion {
         replacement: Some(unit.with_worker_job(None)),

@@ -23,6 +23,7 @@ pub struct WorkerCompletedJobEvent {
     unit_id: UnitId,
     target: aonw_domain::HexCoord,
     completion: WorkerJobCompletion,
+    yield_delta: crate::YieldValue,
 }
 
 impl WorkerCompletedJobEvent {
@@ -30,11 +31,13 @@ impl WorkerCompletedJobEvent {
         unit_id: UnitId,
         target: aonw_domain::HexCoord,
         completion: WorkerJobCompletion,
+        yield_delta: crate::YieldValue,
     ) -> Self {
         Self {
             unit_id,
             target,
             completion,
+            yield_delta,
         }
     }
     /// Returns the worker identity before charge consumption.
@@ -51,6 +54,11 @@ impl WorkerCompletedJobEvent {
     #[must_use]
     pub const fn completion(&self) -> WorkerJobCompletion {
         self.completion
+    }
+    /// Returns the completed improvement's base yield, or zero for a road.
+    #[must_use]
+    pub const fn yield_delta(&self) -> crate::YieldValue {
+        self.yield_delta
     }
 }
 

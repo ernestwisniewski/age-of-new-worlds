@@ -421,6 +421,7 @@ List<Map<String, Object?>> _unitAndTurnEvents() {
     },
     {
       'type': 'workerCompletedJob',
+      'yieldDelta': {'food': 2, 'production': 0, 'gold': 0, 'defense': 0},
       'unitId': 'u1',
       'target': coordinate,
       'completion': {'type': 'fieldImprovement', 'improvement': 'farm'},

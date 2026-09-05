@@ -433,5 +433,7 @@ pub enum ClientEventDto {
         target: CoordinateDto,
         /// Completed construction kind.
         completion: WorkerJobCompletionDto,
+        /// Base yield contributed by the construction; zero for a road.
+        yield_delta: super::YieldValueDto,
     },
 }
