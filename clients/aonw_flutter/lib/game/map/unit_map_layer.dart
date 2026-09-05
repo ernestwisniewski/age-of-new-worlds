@@ -15,6 +15,7 @@ import '../../features/map/read_model/player_map_view.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_painter.dart';
+import 'map_sprite_shadow.dart';
 import 'static_map_layers.dart';
 import 'unit_marker_details.dart';
 
@@ -319,6 +320,11 @@ final class MapUnitComponent extends PositionComponent
   @override
   void render(ui.Canvas canvas) {
     const center = ui.Offset(_diameter / 2, _diameter / 2);
+    MapSpriteShadow.paintUnit(
+      canvas,
+      center: center,
+      compact: _visual.onCity || _visual.workBadgeLabel != null,
+    );
     final metrics = MapSpriteCatalog.unitMetrics(_unit.kind);
     final destination = ui.Rect.fromCenter(
       center: ui.Offset(
