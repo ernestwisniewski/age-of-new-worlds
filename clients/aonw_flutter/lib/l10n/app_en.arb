@@ -470,5 +470,9 @@
   "mapFeedbackText": "{kind, select, roadCompleted{+Road} unitKilled{KO} unitRetreated{Retreat} artifactExcavationStarted{Excavate} artifactCarried{Artifact carried} artifactStored{Artifact stored} other{}}",
   "@mapFeedbackText": {"placeholders": {"kind": {"type": "String"}}},
   "mapYieldShort": "{kind, select, food{FOOD} production{PROD} gold{GOLD} defense{DEF} other{}}",
-  "@mapYieldShort": {"placeholders": {"kind": {"type": "String"}}}
+  "@mapYieldShort": {"placeholders": {"kind": {"type": "String"}}},
+  "focusOwnUnitMovement": "Focus camera on my unit movement",
+  "followOwnUnitMovement": "Track my unit movement with camera",
+  "focusForeignUnitMovement": "Focus camera on enemy unit movement",
+  "followForeignUnitMovement": "Track enemy unit movement with camera"
 }

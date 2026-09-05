@@ -7,6 +7,7 @@ import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/flame_map_camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -151,6 +152,7 @@ void main() {
       expect(game.paused, isFalse);
       expect(unit.debugVisualCenter, start);
 
+      game.mapCamera.update(0.28);
       game.world.effectHost.update(0.12);
       expect(unit.debugVisualCenter, isNot(start));
       game.world.effectHost.update(0.12);

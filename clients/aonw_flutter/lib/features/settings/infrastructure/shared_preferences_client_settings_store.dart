@@ -20,6 +20,14 @@ final class SharedPreferencesClientSettingsStore
   static const _showMapResourceIconsKey = 'aonw.settings.showMapResourceIcons';
   static const _showMapHeightBadgesKey = 'aonw.settings.showMapHeightBadges';
 
+  static const _focusOwnUnitMovementKey = 'aonw.settings.focusOwnUnitMovement';
+  static const _followOwnUnitMovementKey =
+      'aonw.settings.followOwnUnitMovement';
+  static const _focusForeignUnitMovementKey =
+      'aonw.settings.focusForeignUnitMovement';
+  static const _followForeignUnitMovementKey =
+      'aonw.settings.followForeignUnitMovement';
+
   final SharedPreferencesAsync _preferences;
 
   @override
@@ -46,7 +54,12 @@ final class SharedPreferencesClientSettingsStore
     final showMapHeightBadges = await _preferences.getBool(
       _showMapHeightBadgesKey,
     );
+    final movement = await _loadMovementCamera();
     return ClientSettings(
+      focusOwnUnitMovement: movement.focusOwnUnitMovement,
+      followOwnUnitMovement: movement.followOwnUnitMovement,
+      focusForeignUnitMovement: movement.focusForeignUnitMovement,
+      followForeignUnitMovement: movement.followForeignUnitMovement,
       masterVolume: _bounded(
         masterVolume,
         minimum: 0,
@@ -78,6 +91,7 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<void> save(ClientSettings settings) async {
+    await _saveMovementCamera(settings);
     await _preferences.setDouble(_masterVolumeKey, settings.masterVolume);
     await _preferences.setDouble(
       _cameraSensitivityKey,
@@ -105,6 +119,48 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(
       _showMapHeightBadgesKey,
       settings.showMapHeightBadges,
+    );
+  }
+
+  Future<
+    ({
+      bool focusOwnUnitMovement,
+      bool followOwnUnitMovement,
+      bool focusForeignUnitMovement,
+      bool followForeignUnitMovement,
+    })
+  >
+  _loadMovementCamera() async => (
+    focusOwnUnitMovement:
+        await _preferences.getBool(_focusOwnUnitMovementKey) ??
+        ClientSettings.defaults.focusOwnUnitMovement,
+    followOwnUnitMovement:
+        await _preferences.getBool(_followOwnUnitMovementKey) ??
+        ClientSettings.defaults.followOwnUnitMovement,
+    focusForeignUnitMovement:
+        await _preferences.getBool(_focusForeignUnitMovementKey) ??
+        ClientSettings.defaults.focusForeignUnitMovement,
+    followForeignUnitMovement:
+        await _preferences.getBool(_followForeignUnitMovementKey) ??
+        ClientSettings.defaults.followForeignUnitMovement,
+  );
+
+  Future<void> _saveMovementCamera(ClientSettings settings) async {
+    await _preferences.setBool(
+      _focusOwnUnitMovementKey,
+      settings.focusOwnUnitMovement,
+    );
+    await _preferences.setBool(
+      _followOwnUnitMovementKey,
+      settings.followOwnUnitMovement,
+    );
+    await _preferences.setBool(
+      _focusForeignUnitMovementKey,
+      settings.focusForeignUnitMovement,
+    );
+    await _preferences.setBool(
+      _followForeignUnitMovementKey,
+      settings.followForeignUnitMovement,
     );
   }
 }

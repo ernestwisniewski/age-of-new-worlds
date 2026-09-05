@@ -10,6 +10,10 @@ final class ClientSettings {
     required this.showMapResourceIcons,
     required this.showMapHeightBadges,
     this.smoothCameraMovement = true,
+    this.focusOwnUnitMovement = true,
+    this.followOwnUnitMovement = false,
+    this.focusForeignUnitMovement = false,
+    this.followForeignUnitMovement = false,
   }) : assert(masterVolume >= 0 && masterVolume <= 1),
        assert(cameraSensitivity >= 0.5 && cameraSensitivity <= 2);
 
@@ -28,6 +32,10 @@ final class ClientSettings {
   final double masterVolume;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
+  final bool focusOwnUnitMovement;
+  final bool followOwnUnitMovement;
+  final bool focusForeignUnitMovement;
+  final bool followForeignUnitMovement;
   final bool reducedMotion;
   final bool highContrast;
   final bool showMapGrid;
@@ -40,6 +48,10 @@ final class ClientSettings {
     double? masterVolume,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
+    bool? focusOwnUnitMovement,
+    bool? followOwnUnitMovement,
+    bool? focusForeignUnitMovement,
+    bool? followForeignUnitMovement,
     bool? reducedMotion,
     bool? highContrast,
     bool? showMapGrid,
@@ -51,6 +63,12 @@ final class ClientSettings {
     masterVolume: masterVolume ?? this.masterVolume,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
+    focusOwnUnitMovement: focusOwnUnitMovement ?? this.focusOwnUnitMovement,
+    followOwnUnitMovement: followOwnUnitMovement ?? this.followOwnUnitMovement,
+    focusForeignUnitMovement:
+        focusForeignUnitMovement ?? this.focusForeignUnitMovement,
+    followForeignUnitMovement:
+        followForeignUnitMovement ?? this.followForeignUnitMovement,
     reducedMotion: reducedMotion ?? this.reducedMotion,
     highContrast: highContrast ?? this.highContrast,
     showMapGrid: showMapGrid ?? this.showMapGrid,
@@ -65,10 +83,17 @@ final class ClientSettings {
       other is ClientSettings &&
       other.masterVolume == masterVolume &&
       other.cameraSensitivity == cameraSensitivity &&
-      other.smoothCameraMovement == smoothCameraMovement &&
+      _sameCamera(other) &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
       _sameMapDisplay(other);
+
+  bool _sameCamera(ClientSettings other) =>
+      other.smoothCameraMovement == smoothCameraMovement &&
+      other.focusOwnUnitMovement == focusOwnUnitMovement &&
+      other.followOwnUnitMovement == followOwnUnitMovement &&
+      other.focusForeignUnitMovement == focusForeignUnitMovement &&
+      other.followForeignUnitMovement == followForeignUnitMovement;
 
   bool _sameMapDisplay(ClientSettings other) =>
       other.showMapGrid == showMapGrid &&
@@ -82,6 +107,10 @@ final class ClientSettings {
     masterVolume,
     cameraSensitivity,
     smoothCameraMovement,
+    focusOwnUnitMovement,
+    followOwnUnitMovement,
+    focusForeignUnitMovement,
+    followForeignUnitMovement,
     reducedMotion,
     highContrast,
     showMapGrid,

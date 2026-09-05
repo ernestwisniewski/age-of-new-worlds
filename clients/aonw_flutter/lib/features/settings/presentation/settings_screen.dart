@@ -9,6 +9,8 @@ import '../../../l10n/l10n.dart';
 import '../application/client_settings.dart';
 import 'client_settings_controller.dart';
 
+part 'settings_movement_camera.dart';
+
 final class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.controller, super.key});
 
@@ -225,6 +227,7 @@ final class _CameraSettings extends StatelessWidget {
         onChanged: (value) =>
             onChanged(settings.copyWith(smoothCameraMovement: value)),
       ),
+      _MovementCameraSettings(settings: settings, onChanged: onChanged),
     ],
   );
 }

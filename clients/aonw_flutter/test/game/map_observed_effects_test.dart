@@ -4,6 +4,7 @@ import 'package:aonw_flutter/features/map/read_model/map_command_animation_view.
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/flame_map_camera.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,6 +35,7 @@ void main() {
       final completion = game.waitForCommandEffects();
       var completed = false;
       completion.then((_) => completed = true);
+      game.mapCamera.update(0.28);
       host.update(0.24);
       expect((unit.visualCenter - middle).distance, closeTo(0, 0.0001));
       expect(host.debugActiveCombatEffectCount, 0);
@@ -49,6 +51,7 @@ void main() {
       host.update(1.28);
       expect(host.debugActiveCombatEffectCount, 0);
       expect(completed, isFalse);
+      game.mapCamera.update(0.28);
       host.update(0.24);
       await completion;
       expect((unit.visualCenter - target).distance, closeTo(0, 0.0001));

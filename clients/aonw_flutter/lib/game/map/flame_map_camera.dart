@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +12,7 @@ import '../../features/map/read_model/map_view.dart';
 import 'static_map_layers.dart';
 
 part 'flame_map_camera_motion.dart';
+part 'flame_map_camera_follow.dart';
 
 MapHexCoordinate? initialMapFocus(MapRenderSnapshot snapshot) {
   final actorPlayerId = snapshot.player.actorPlayerId;
@@ -37,6 +40,8 @@ final class FlameMapCameraController {
   final void Function(MapCameraTransform)? _onTransformChanged;
   final void Function(bool)? _onActivityChanged;
   _MapCameraMotion? _motion;
+  AonwPoint? Function()? _trackedPoint;
+  int _motionGeneration = 0;
   bool _motionEnabled = true;
   MapStaticRenderCache? _cache;
   MapCameraTransform? _transform;

@@ -33,6 +33,8 @@ import 'map/map_effect_host.dart';
 import 'map/map_era_tint_layer.dart';
 import 'map/map_event_feedback_layer.dart';
 import 'map/map_hex_selection_palette_layer.dart';
+import 'map/map_movement_camera.dart';
+import 'map/map_movement_presentation.dart';
 import 'map/map_threat_overlay_layer.dart';
 import 'map/map_tile_details_layer.dart';
 import 'map/objective_map_layer.dart';
@@ -41,8 +43,10 @@ import 'map/worker_infrastructure_layer.dart';
 import 'presentation/flame_scene_patch.dart';
 import 'presentation/flame_scene_sink.dart';
 import 'presentation/map_camera_selection.dart';
+import 'presentation/map_movement_camera_visibility.dart';
 
 part 'aonw_flame_game_camera.dart';
+part 'aonw_flame_game_movement_camera.dart';
 part 'aonw_flame_game_effects.dart';
 part 'aonw_flame_game_input.dart';
 part 'aonw_world.dart';
@@ -78,6 +82,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     );
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
+    this.world.effectHost.onMovementStart = _startMovementCamera;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
     this.world.eventFeedbackLayer.onActivityChanged =
@@ -107,6 +112,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _smoothCameraMovement = true;
   var _cameraActive = false;
   String? _lastCameraSelection;
+  MapMovementCameraOptions _movementCameraOptions =
+      defaultMapMovementCameraOptions;
+  MapMovementCamera? _movementCamera;
+  bool _startedMovementCameraInScene = false;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
   var _keyboardPanX = 0.0;
@@ -134,6 +143,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
     final previous = world._scene;
+    _startedMovementCameraInScene = false;
     world.replaceScene(snapshot);
     _setFoundingPreviewActive(world.cityFoundingPreviewLayer.isVisible);
     _synchronizeMapCamera(previous, snapshot);

@@ -34,6 +34,15 @@ extension AonwFlameGameCamera on AonwFlameGame {
       }
       return;
     }
+    if (_startedMovementCameraInScene) return;
+    _focusMapCameraSelection(snapshot, cache);
+  }
+
+  void _focusMapCameraSelection(
+    MapRenderSnapshot snapshot,
+    MapStaticRenderCache cache,
+  ) {
+    final selection = mapCameraSelection(snapshot);
     if (_lastCameraSelection == selection?.key) return;
     _lastCameraSelection = selection?.key;
     if (selection == null) {

@@ -2021,4 +2021,17 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get focusOwnUnitMovement => 'Focus camera on my unit movement';
+
+  @override
+  String get followOwnUnitMovement => 'Track my unit movement with camera';
+
+  @override
+  String get focusForeignUnitMovement => 'Focus camera on enemy unit movement';
+
+  @override
+  String get followForeignUnitMovement =>
+      'Track enemy unit movement with camera';
 }

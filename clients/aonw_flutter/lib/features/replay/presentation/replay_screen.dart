@@ -93,6 +93,12 @@ final class _ReplayScreenState extends State<ReplayScreen>
     );
     _game.setCameraSensitivity(settings.cameraSensitivity);
     _game.setSmoothCameraMovement(settings.smoothCameraMovement);
+    _game.setMovementCameraOptions((
+      focusOwn: settings.focusOwnUnitMovement,
+      followOwn: settings.followOwnUnitMovement,
+      focusForeign: settings.focusForeignUnitMovement,
+      followForeign: settings.followForeignUnitMovement,
+    ));
     return Scaffold(
       body: SafeArea(
         child: ListenableBuilder(

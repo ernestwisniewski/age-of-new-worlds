@@ -60,6 +60,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
     await tester.pumpAndSettle();
     for (final key in const [
+      'focusOwnUnitMovement-setting',
+      'followOwnUnitMovement-setting',
+      'focusForeignUnitMovement-setting',
+      'followForeignUnitMovement-setting',
       'map-grid-setting',
       'map-resource-icons-setting',
       'map-terrain-icons-setting',
@@ -67,7 +71,8 @@ void main() {
       'map-elevation-walls-setting',
     ]) {
       final setting = find.byKey(ValueKey(key));
-      await tester.ensureVisible(setting);
+      await Scrollable.ensureVisible(tester.element(setting), alignment: 0.5);
+      await tester.pumpAndSettle();
       await tester.tap(setting);
       await tester.pumpAndSettle();
     }
@@ -75,6 +80,10 @@ void main() {
     expect(store.settings.masterVolume, 0.25);
     expect(store.settings.cameraSensitivity, 1.5);
     expect(store.settings.smoothCameraMovement, isFalse);
+    expect(store.settings.focusOwnUnitMovement, isFalse);
+    expect(store.settings.followOwnUnitMovement, isTrue);
+    expect(store.settings.focusForeignUnitMovement, isTrue);
+    expect(store.settings.followForeignUnitMovement, isTrue);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapGrid, isTrue);

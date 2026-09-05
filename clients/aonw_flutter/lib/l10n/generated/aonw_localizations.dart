@@ -1963,6 +1963,30 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{kind, select, food{FOOD} production{PROD} gold{GOLD} defense{DEF} other{}}'**
   String mapYieldShort(String kind);
+
+  /// No description provided for @focusOwnUnitMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus camera on my unit movement'**
+  String get focusOwnUnitMovement;
+
+  /// No description provided for @followOwnUnitMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Track my unit movement with camera'**
+  String get followOwnUnitMovement;
+
+  /// No description provided for @focusForeignUnitMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus camera on enemy unit movement'**
+  String get focusForeignUnitMovement;
+
+  /// No description provided for @followForeignUnitMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Track enemy unit movement with camera'**
+  String get followForeignUnitMovement;
 }
 
 class _AonwLocalizationsDelegate

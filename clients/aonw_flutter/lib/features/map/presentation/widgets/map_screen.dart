@@ -192,22 +192,7 @@ final class _MapScreenState extends State<MapScreen>
 
   Widget _buildState(BuildContext context, Widget? child) {
     final state = widget.controller.state;
-    final settings = ClientSettingsScope.settingsOf(context);
-    _flameGame.setReducedMotion(
-      settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
-    );
-    _flameGame.setCameraSensitivity(settings.cameraSensitivity);
-    _flameGame.setSmoothCameraMovement(settings.smoothCameraMovement);
-    _flameGame.setMapDisplayOptions(
-      MapDisplayOptions(
-        showGrid: settings.showMapGrid,
-        showElevationWalls: settings.showMapElevationWalls,
-        showTerrainIcons: settings.showMapTerrainIcons,
-        showResourceIcons: settings.showMapResourceIcons,
-        showHeightBadges: settings.showMapHeightBadges,
-      ),
-    );
-    _synchronizeGamepadSettings(settings.cameraSensitivity);
+    _applyClientSettings(context);
     return switch (state) {
       GameSessionLoading() => const LoadingMap(),
       GameSessionFailure(:final code) => MapFailure(
@@ -244,6 +229,31 @@ final class _MapScreenState extends State<MapScreen>
           onRetryFlame: _retryFlame,
         ),
     };
+  }
+
+  void _applyClientSettings(BuildContext context) {
+    final settings = ClientSettingsScope.settingsOf(context);
+    _flameGame.setReducedMotion(
+      settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
+    );
+    _flameGame.setCameraSensitivity(settings.cameraSensitivity);
+    _flameGame.setSmoothCameraMovement(settings.smoothCameraMovement);
+    _flameGame.setMovementCameraOptions((
+      focusOwn: settings.focusOwnUnitMovement,
+      followOwn: settings.followOwnUnitMovement,
+      focusForeign: settings.focusForeignUnitMovement,
+      followForeign: settings.followForeignUnitMovement,
+    ));
+    _flameGame.setMapDisplayOptions(
+      MapDisplayOptions(
+        showGrid: settings.showMapGrid,
+        showElevationWalls: settings.showMapElevationWalls,
+        showTerrainIcons: settings.showMapTerrainIcons,
+        showResourceIcons: settings.showMapResourceIcons,
+        showHeightBadges: settings.showMapHeightBadges,
+      ),
+    );
+    _synchronizeGamepadSettings(settings.cameraSensitivity);
   }
 
   void _listenToInput(MapInputSource? source) {

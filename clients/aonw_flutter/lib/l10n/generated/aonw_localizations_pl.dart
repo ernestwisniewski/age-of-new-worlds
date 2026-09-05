@@ -2026,4 +2026,17 @@ class AonwLocalizationsPl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get focusOwnUnitMovement => 'Kieruj kamerę na ruch mojej jednostki';
+
+  @override
+  String get followOwnUnitMovement => 'Śledź ruch mojej jednostki kamerą';
+
+  @override
+  String get focusForeignUnitMovement =>
+      'Kieruj kamerę na ruch jednostki wroga';
+
+  @override
+  String get followForeignUnitMovement => 'Śledź ruch jednostki wroga kamerą';
 }

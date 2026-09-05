@@ -1,7 +1,8 @@
 part of 'flame_map_camera.dart';
 
 extension FlameMapCameraMotion on FlameMapCameraController {
-  bool get hasMotion => _motion != null;
+  bool get hasMotion => _motion != null || _trackedPoint != null;
+  int get motionGeneration => _motionGeneration;
 
   void setMotionEnabled(bool enabled) {
     if (_motionEnabled == enabled) return;
@@ -20,7 +21,11 @@ extension FlameMapCameraMotion on FlameMapCameraController {
     _apply(transform.centeredAt(point));
   }
 
-  void smoothCenterOnWorld(AonwPoint point, {double duration = 0.42}) {
+  void smoothCenterOnWorld(
+    AonwPoint point, {
+    double duration = 0.42,
+    Curve curve = Curves.easeInOutCubic,
+  }) {
     final transform = _transform;
     if (!_motionEnabled || transform == null || duration <= 0) {
       centerOnWorld(point);
@@ -34,35 +39,50 @@ extension FlameMapCameraMotion on FlameMapCameraController {
       return;
     }
     final wasActive = hasMotion;
-    _motion = _MapCameraMotion(start: start, target: point, duration: duration);
+    _motionGeneration++;
+    _trackedPoint = null;
+    _motion = _MapCameraMotion(
+      start: start,
+      target: point,
+      duration: duration,
+      curve: curve,
+    );
     if (!wasActive) _onActivityChanged?.call(true);
   }
 
   void cancelMotion() {
-    if (_motion == null) return;
+    final wasActive = hasMotion;
+    _motionGeneration++;
     _motion = null;
-    _onActivityChanged?.call(false);
+    _trackedPoint = null;
+    if (wasActive) _onActivityChanged?.call(false);
   }
 
   void skipMotion() {
-    final target = _motion?.target;
+    final target = _motion?.target ?? _trackedPoint?.call();
     if (target != null) centerOnWorld(target);
+    if (target == null) cancelMotion();
   }
 
   void update(double dt) {
+    if (!dt.isFinite || dt <= 0) return;
+    if (_updateTrackedPoint(dt)) return;
     final motion = _motion;
     final transform = _transform;
-    if (motion == null || transform == null || !dt.isFinite || dt <= 0) return;
+    if (motion == null || transform == null) return;
     motion.elapsed += dt;
     final progress = (motion.elapsed / motion.duration).clamp(0.0, 1.0);
-    final eased = Curves.easeInOutCubic.transform(progress);
+    final eased = motion.curve.transform(progress);
     _apply(
       transform.centeredAt((
         x: motion.start.x + (motion.target.x - motion.start.x) * eased,
         y: motion.start.y + (motion.target.y - motion.start.y) * eased,
       )),
     );
-    if (progress >= 1) cancelMotion();
+    if (progress >= 1) {
+      _motion = null;
+      _onActivityChanged?.call(false);
+    }
   }
 }
 
@@ -71,10 +91,12 @@ final class _MapCameraMotion {
     required this.start,
     required this.target,
     required this.duration,
+    required this.curve,
   });
 
   final AonwPoint start;
   final AonwPoint target;
   final double duration;
+  final Curve curve;
   double elapsed = 0;
 }
