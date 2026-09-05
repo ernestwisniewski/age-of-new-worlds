@@ -14,6 +14,7 @@ VisibleUnitView testVisibleUnit({
   MapHexCoordinate? workerAssignment,
   String? carriedArtifactId,
   String? excavatingArtifactId,
+  List<MapHexCoordinate> threatenedHexes = const [],
 }) => VisibleUnitView(
   id: id,
   ownerPlayerId: ownerPlayerId,
@@ -29,4 +30,5 @@ VisibleUnitView testVisibleUnit({
   workerAssignment: workerAssignment,
   carriedArtifactId: carriedArtifactId,
   excavatingArtifactId: excavatingArtifactId,
+  threatenedHexes: threatenedHexes,
 );

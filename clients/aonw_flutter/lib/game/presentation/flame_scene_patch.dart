@@ -246,6 +246,7 @@ final class FlameScenePatch {
     MapRenderSnapshot previous,
     MapRenderSnapshot next,
   ) =>
+      next.player.actorPlayerId == previous.player.actorPlayerId &&
       next.player.stamp.revision > previous.player.stamp.revision &&
       next.player.stamp.stateDigest != previous.player.stamp.stateDigest &&
       next.player.stamp.mapHash == previous.player.stamp.mapHash &&

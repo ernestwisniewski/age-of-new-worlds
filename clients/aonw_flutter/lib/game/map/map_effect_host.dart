@@ -48,7 +48,10 @@ final class MapEffectHostComponent extends Component {
   ({ui.Offset attacker, ui.Offset defender})? get debugCombatEndpoints {
     for (final effect in _combatPool) {
       if (effect.active) {
-        return (attacker: effect.attackerCenter, defender: effect.defenderCenter);
+        return (
+          attacker: effect.attackerCenter,
+          defender: effect.defenderCenter,
+        );
       }
     }
     return null;

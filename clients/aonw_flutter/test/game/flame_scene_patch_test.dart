@@ -131,9 +131,14 @@ void main() {
     final patch = FlameScenePatch.between(before, after);
 
     expect(patch.combats, hasLength(1));
+    expect(patch.combats.single.attacker, unit.coordinate);
     expect(patch.combats.single.defender, (col: 1, row: 0));
     expect(patch.combats.single.revision, 1);
     expect(patch.combats.single.eventCount, 3);
+    expect(FlameScenePatch.between(null, after).combats, isEmpty);
+    expect(FlameScenePatch.between(before, before).combats, isEmpty);
+    expect(FlameScenePatch.between(after, after).combats, isEmpty);
+    expect(FlameScenePatch.between(after, before).combats, isEmpty);
   });
 
   test('reconciles city markers by stable engine identity', () {

@@ -72,7 +72,12 @@ final class MapThreatOverlayLayerComponent extends Component
         final col = left.key.col.compareTo(right.key.col);
         return col == 0 ? left.key.row.compareTo(right.key.row) : col;
       });
-    final signature = _threatSignature(cache, entries, selected.coordinate, dimmed);
+    final signature = _threatSignature(
+      cache,
+      entries,
+      selected.coordinate,
+      dimmed,
+    );
     if (_signature == signature) return;
     _signature = signature;
     _dimmed = dimmed;
@@ -100,33 +105,37 @@ final class MapThreatOverlayLayerComponent extends Component
   void render(ui.Canvas canvas) {
     if (!isVisible) return;
     for (final hex in _hexes) {
-      final high = hex.count >= 3;
-      final color = high ? AonwColorTokens.danger : AonwColorTokens.warning;
-      final fillAlpha = _visibleAlpha(high ? 90 : 60);
-      final glowAlpha = _visibleAlpha(high ? 130 : 90);
-      final strokeAlpha = _visibleAlpha(high ? 220 : 180);
-      if (!hex.selectedUnitTile) {
-        canvas.drawPath(hex.path, ui.Paint()..color = color.withAlpha(fillAlpha));
-      }
-      canvas
-        ..drawPath(
-          hex.path,
-          ui.Paint()
-            ..color = color.withAlpha(glowAlpha)
-            ..style = ui.PaintingStyle.stroke
-            ..strokeWidth = hex.selectedUnitTile ? 5 : (high ? 2.8 : 2)
-            ..strokeJoin = ui.StrokeJoin.round,
-        )
-        ..drawPath(
-          hex.path,
-          ui.Paint()
-            ..color = color.withAlpha(strokeAlpha)
-            ..style = ui.PaintingStyle.stroke
-            ..strokeWidth = hex.selectedUnitTile ? 2.8 : (high ? 2 : 1.5)
-            ..strokeCap = ui.StrokeCap.round
-            ..strokeJoin = ui.StrokeJoin.round,
-        );
+      _renderHex(canvas, hex);
     }
+  }
+
+  void _renderHex(ui.Canvas canvas, _ThreatHexGeometry hex) {
+    final high = hex.count >= 3;
+    final color = high ? AonwColorTokens.danger : AonwColorTokens.warning;
+    final fillAlpha = _visibleAlpha(high ? 90 : 60);
+    final glowAlpha = _visibleAlpha(high ? 130 : 90);
+    final strokeAlpha = _visibleAlpha(high ? 220 : 180);
+    if (!hex.selectedUnitTile) {
+      canvas.drawPath(hex.path, ui.Paint()..color = color.withAlpha(fillAlpha));
+    }
+    canvas
+      ..drawPath(
+        hex.path,
+        ui.Paint()
+          ..color = color.withAlpha(glowAlpha)
+          ..style = ui.PaintingStyle.stroke
+          ..strokeWidth = hex.selectedUnitTile ? 5 : (high ? 2.8 : 2)
+          ..strokeJoin = ui.StrokeJoin.round,
+      )
+      ..drawPath(
+        hex.path,
+        ui.Paint()
+          ..color = color.withAlpha(strokeAlpha)
+          ..style = ui.PaintingStyle.stroke
+          ..strokeWidth = hex.selectedUnitTile ? 2.8 : (high ? 2 : 1.5)
+          ..strokeCap = ui.StrokeCap.round
+          ..strokeJoin = ui.StrokeJoin.round,
+      );
   }
 
   int _visibleAlpha(int alpha) => _dimmed ? math.min(alpha, 60) : alpha;

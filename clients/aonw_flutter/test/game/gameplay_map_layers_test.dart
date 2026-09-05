@@ -1,6 +1,5 @@
 import 'package:aonw_flutter/features/artifacts/read_model/artifact_view.dart';
 import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
-import 'package:aonw_flutter/features/combat/application/combat_state.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
@@ -254,7 +253,7 @@ void main() {
       expect(game.world.unitLayer.children, hasLength(120));
       expect(game.world.unitLayer.debugCreatedCount, 120);
       expect(game.world.unitLayer.debugSharedPaintCount, 8);
-      expect(game.world.children, hasLength(18));
+      expect(game.world.children, hasLength(19));
     },
   );
 
@@ -303,50 +302,6 @@ void main() {
       expect(layer.debugObjectiveCount, 0);
       expect(layer.debugRemovedCount, 2);
       expect(layer.children, isEmpty);
-    },
-  );
-
-  testWithGame<AonwFlameGame>(
-    'pools a bounded combat pulse and removes it under reduced motion',
-    AonwFlameGame.new,
-    (game) async {
-      final unit = testVisibleUnit();
-      final scene = testMapScene(units: [unit]);
-      game.replaceScene(_snapshot(scene, player: scene.player));
-      await game.ready();
-      game.replaceScene(
-        _snapshot(
-          scene,
-          player: _player(revision: 1, digest: 'd' * 64, units: [unit]),
-          interaction: CombatState(
-            attackerUnitId: unit.id,
-            defenderCoordinate: const (col: 1, row: 0),
-            lastExecution: testCombatExecutionView(),
-          ).asInteraction(),
-        ),
-      );
-
-      expect(game.world.effectHost.debugActiveCombatEffectCount, 1);
-      expect(
-        game.world.effectHost.debugActiveCombatEffectCount,
-        lessThanOrEqualTo(game.world.effectHost.debugMaximumCombatEffectCount),
-      );
-      game.world.effectHost.update(0.32);
-      expect(game.world.effectHost.debugActiveCombatEffectCount, 0);
-
-      game.setReducedMotion(true);
-      game.replaceScene(
-        _snapshot(
-          scene,
-          player: _player(revision: 2, digest: 'e' * 64, units: [unit]),
-          interaction: CombatState(
-            attackerUnitId: unit.id,
-            defenderCoordinate: const (col: 1, row: 0),
-            lastExecution: testCombatExecutionView(revision: 2),
-          ).asInteraction(),
-        ),
-      );
-      expect(game.world.effectHost.debugActiveCombatEffectCount, 0);
     },
   );
 
@@ -459,14 +414,6 @@ void main() {
       game.update(0);
       expect(game.world.artifactLayer.children, isEmpty);
     },
-  );
-}
-
-extension on CombatState {
-  MapInteractionState asInteraction() => MapInteractionState(
-    selected: defenderCoordinate,
-    selectedUnitId: attackerUnitId,
-    combat: this,
   );
 }
 

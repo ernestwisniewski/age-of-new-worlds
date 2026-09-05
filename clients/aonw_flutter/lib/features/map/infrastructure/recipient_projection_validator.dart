@@ -120,10 +120,7 @@ final class RecipientProjectionValidator {
         );
       }
       requireCoordinate(unit.coordinate, 'unit');
-      validateOrderedCoordinateValues(
-        unit.threatenedHexes,
-        'unit threat',
-      );
+      validateOrderedCoordinateValues(unit.threatenedHexes, 'unit threat');
       final assignment = unit.workerAssignment;
       if (assignment != null) {
         requireCoordinate(assignment, 'worker assignment');

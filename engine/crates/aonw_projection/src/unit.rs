@@ -264,6 +264,37 @@ mod tests {
     }
 
     #[test]
+    fn multi_row_threats_follow_recipient_coordinate_order() {
+        let actor = PlayerId::new("player-1").expect("actor id");
+        let foreign = PlayerId::new("player-2").expect("foreign id");
+        let state = GameState::try_new(
+            StateRevision::INITIAL,
+            0,
+            HexGridBounds::new(4, 3).expect("bounds"),
+            UnitOccupancyPolicy::Exclusive,
+            [
+                unit("owned", &actor, HexCoord::new(3, 2)),
+                unit("foreign", &foreign, HexCoord::new(1, 1)),
+            ],
+        )
+        .expect("state");
+        let views = visible_units(&state, &actor, &map(4, 3), RulesetDefinition::standard());
+        assert_eq!(
+            views[0].threatened_hexes(),
+            [
+                HexCoord::new(0, 1),
+                HexCoord::new(0, 2),
+                HexCoord::new(1, 0),
+                HexCoord::new(1, 1),
+                HexCoord::new(1, 2),
+                HexCoord::new(2, 1),
+                HexCoord::new(2, 2),
+            ]
+        );
+        assert!(views[1].threatened_hexes().is_empty());
+    }
+
+    #[test]
     fn visible_unit_health_includes_authoritative_maximum() {
         let actor = PlayerId::new("player-1").expect("actor id");
         let damaged = Unit::builder(

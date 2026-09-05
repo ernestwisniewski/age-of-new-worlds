@@ -89,6 +89,11 @@ final class AonwWorld extends World implements FlameSceneSink {
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
     if (identical(_scene, snapshot)) return;
+    if (_scene?.player.actorPlayerId != snapshot.player.actorPlayerId ||
+        _scene?.map.mapId != snapshot.map.mapId ||
+        _scene?.map.contentHash != snapshot.map.contentHash) {
+      effectHost.clearEffects();
+    }
     final patch = FlameScenePatch.between(_scene, snapshot);
     _scene = snapshot;
     _sceneWriteCount += 1;
@@ -115,7 +120,11 @@ final class AonwWorld extends World implements FlameSceneSink {
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
     routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
-    threatOverlayLayer.applyThreats(cache, snapshot.interaction, snapshot.player);
+    threatOverlayLayer.applyThreats(
+      cache,
+      snapshot.interaction,
+      snapshot.player,
+    );
     objectiveLayer.applyMap(snapshot.map, cache);
     cityLayer.applyPatch(patch, cache);
     artifactLayer.applyPatch(patch, cache);
