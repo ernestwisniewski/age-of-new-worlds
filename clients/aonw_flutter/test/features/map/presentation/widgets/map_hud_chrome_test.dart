@@ -1,12 +1,15 @@
+import 'package:aonw_flutter/features/audio/presentation/game_audio_host.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/flame_map_viewport.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
+import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
+import '../../../../support/recording_game_audio.dart';
 
 void main() {
   testWidgets('enables only available map view mode transitions', (
@@ -112,6 +115,10 @@ void main() {
   testWidgets('keeps the left-side gameplay panels mutually exclusive', (
     tester,
   ) async {
+    final audio = RecordingGameAudio();
+    final settings = ClientSettingsController.ephemeral();
+    final settingsReady = Future<void>.value();
+    addTearDown(settings.dispose);
     final session = FakeGameSession.success(testMapScene(cols: 7, rows: 7));
     final controller = MapPresentationController(
       capabilities: testGameSessionCapabilities(session),
@@ -120,14 +127,26 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1000, 760));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(
-      LocalizedTestApp(home: MapScreen(controller: controller)),
+    Widget app(Locale locale) => GameAudioHost(
+      settings: settings,
+      settingsReady: settingsReady,
+      audio: audio,
+      child: LocalizedTestApp(
+        home: MapScreen(controller: controller),
+        locale: locale,
+      ),
     );
+    await tester.pumpWidget(app(const Locale('en')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey('open-objectives')));
     await tester.pump();
     expect(find.byKey(const ValueKey('close-objectives')), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.uiPanelOpen]);
+    await tester.pumpWidget(app(const Locale('pl')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('close-objectives')), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.uiPanelOpen]);
 
     await tester.tap(find.byKey(const ValueKey('open-research')));
     await tester.pump();
@@ -142,6 +161,18 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('open-diplomacy')));
     await tester.pump();
     expect(find.byKey(const ValueKey('close-diplomacy')), findsNothing);
+    expect(audio.cues, [
+      GameSoundCue.uiPanelOpen,
+      GameSoundCue.technology,
+      GameSoundCue.uiPanelClose,
+      GameSoundCue.uiPanelClose,
+    ]);
+    audio.cues.clear();
+    await tester.tap(find.byKey(const ValueKey('open-diplomacy')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('close-diplomacy')));
+    await tester.pump();
+    expect(audio.cues, [GameSoundCue.uiPanelOpen, GameSoundCue.uiPanelClose]);
     expect(tester.takeException(), isNull);
   });
 }

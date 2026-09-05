@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../audio/presentation/game_audio_actions.dart';
 import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
@@ -98,6 +99,15 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   }
 
   void _setOpen(_MapHudPanel panel, bool open) {
-    setState(() => _openPanel = open ? panel : null);
+    if (_researchSelectionRequired || _terminal) return;
+    final next = open ? panel : (_openPanel == panel ? null : _openPanel);
+    if (next == _openPanel) return;
+    final cue = next == _MapHudPanel.research
+        ? GameSoundCue.technology
+        : _openPanel == null
+        ? GameSoundCue.uiPanelOpen
+        : GameSoundCue.uiPanelClose;
+    setState(() => _openPanel = next);
+    context.playGameSound(cue);
   }
 }
