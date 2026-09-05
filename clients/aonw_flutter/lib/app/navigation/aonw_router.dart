@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../design_system/widgets/aonw_panel.dart';
+import '../../features/audio/presentation/game_audio_scope.dart';
 import '../../features/help/presentation/help_screen.dart';
 import '../../features/local_game/presentation/local_game_launch_mode.dart';
 import '../../features/local_game/presentation/new_game_screen.dart';
@@ -97,7 +98,9 @@ final class AonwRouter {
   }
 
   Widget _withMenuNavigation(AonwRoute? route, Widget child) {
-    if (route == AonwRoute.map || route == AonwRoute.replay) return child;
+    if (route == AonwRoute.map || route == AonwRoute.replay) {
+      return GameAudioMap(child: child);
+    }
     final input = switch (mapInputSource) {
       final ContinuousMapInputSource source => source.continuousInputs,
       _ => null,

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../design_system/aonw_theme.dart';
+import '../../features/audio/application/game_audio_port.dart';
+import '../../features/audio/presentation/game_audio_host.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
@@ -22,6 +24,7 @@ final class AonwApp extends StatefulWidget {
     this.mapInputSource,
     this.flameGameFactory = AonwFlameGame.new,
     this.settingsController,
+    this.audio,
     this.replayController,
     this.multiplayerAccessController,
     this.multiplayerController,
@@ -37,6 +40,7 @@ final class AonwApp extends StatefulWidget {
   final MapInputSource? mapInputSource;
   final AonwFlameGame Function() flameGameFactory;
   final ClientSettingsController? settingsController;
+  final GameAudioPort? audio;
   final ReplayPresentationController? replayController;
   final MultiplayerAccessController? multiplayerAccessController;
   final MultiplayerController? multiplayerController;
@@ -52,6 +56,7 @@ final class AonwApp extends StatefulWidget {
 
 final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   late ClientSettingsController _settingsController;
+  late Future<void> _settingsReady;
   late AppLifecycleState _lifecycleState;
   final _routeObserver = RouteObserver<ModalRoute<void>>();
 
@@ -138,37 +143,42 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       openExternalUri: widget.openExternalUri,
       autoLoadMap: widget.initialRoute == AonwRoute.map,
     );
-    return ClientSettingsScope(
-      controller: _settingsController,
-      child: ListenableBuilder(
-        listenable: _settingsController,
-        builder: (context, child) => MaterialApp(
-          key: ValueKey(widget.mapController),
-          onGenerateTitle: (context) => context.aonwL10n.appTitle,
-          debugShowCheckedModeBanner: false,
-          theme: AonwTheme.darkFor(
-            highContrast: _settingsController.settings.highContrast,
+    return GameAudioHost(
+      audio: widget.audio,
+      settings: _settingsController,
+      settingsReady: _settingsReady,
+      child: ClientSettingsScope(
+        controller: _settingsController,
+        child: ListenableBuilder(
+          listenable: _settingsController,
+          builder: (context, child) => MaterialApp(
+            key: ValueKey(widget.mapController),
+            onGenerateTitle: (context) => context.aonwL10n.appTitle,
+            debugShowCheckedModeBanner: false,
+            theme: AonwTheme.darkFor(
+              highContrast: _settingsController.settings.highContrast,
+            ),
+            locale: widget.locale,
+            localizationsDelegates: AonwLocalizations.localizationsDelegates,
+            supportedLocales: AonwLocalizations.supportedLocales,
+            initialRoute: widget.initialRoute.location,
+            onGenerateRoute: router.onGenerateRoute,
+            navigatorObservers: [_routeObserver],
+            builder: (context, child) {
+              final media = MediaQuery.of(context);
+              return MediaQuery(
+                data: media.copyWith(
+                  disableAnimations:
+                      media.disableAnimations ||
+                      _settingsController.settings.reducedMotion,
+                  highContrast:
+                      media.highContrast ||
+                      _settingsController.settings.highContrast,
+                ),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           ),
-          locale: widget.locale,
-          localizationsDelegates: AonwLocalizations.localizationsDelegates,
-          supportedLocales: AonwLocalizations.supportedLocales,
-          initialRoute: widget.initialRoute.location,
-          onGenerateRoute: router.onGenerateRoute,
-          navigatorObservers: [_routeObserver],
-          builder: (context, child) {
-            final media = MediaQuery.of(context);
-            return MediaQuery(
-              data: media.copyWith(
-                disableAnimations:
-                    media.disableAnimations ||
-                    _settingsController.settings.reducedMotion,
-                highContrast:
-                    media.highContrast ||
-                    _settingsController.settings.highContrast,
-              ),
-              child: child ?? const SizedBox.shrink(),
-            );
-          },
         ),
       ),
     );
@@ -177,7 +187,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   void _installSettingsController() {
     _settingsController =
         widget.settingsController ?? ClientSettingsController.ephemeral();
-    unawaited(_settingsController.load());
+    _settingsReady = _settingsController.load();
   }
 
   void _synchronizeInputLifecycle() {

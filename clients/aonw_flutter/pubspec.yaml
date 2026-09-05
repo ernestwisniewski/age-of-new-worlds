@@ -11,6 +11,7 @@ dependencies:
     path: ../../packages/aonw_engine_client
   aonw_server_client:
     path: ../../packages/aonw_server_client
+  audioplayers: 6.8.1
   crypto: 3.0.7
   file_selector: 1.1.0
   flame: 1.38.0
@@ -46,6 +47,9 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
+    - assets/audio/
+    - assets/audio/music/
+    - assets/audio/nature/
     - assets/main_menu/background.jpg
     - assets/runtime/ui/logo.webp
     - assets/runtime/metadata/

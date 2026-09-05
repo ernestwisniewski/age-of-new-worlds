@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "source": "flame_4x/assets/sounds",
+  "assets": [
+    {
+      "asset": "assets/audio/attack.wav",
+      "bytes": 192078,
+      "sha256": "6239f0e9d4c7a104fdbcf24ca62791942f46627f3e456c4d648773ec1fa0df21"
+    },
+    {
+      "asset": "assets/audio/city.wav",
+      "bytes": 960078,
+      "sha256": "c014bceb22fd425ffd1979a4f22f63f749e1df403c4f30d4849153859ebe2a95"
+    },
+    {
+      "asset": "assets/audio/map_tile_select.wav",
+      "bytes": 22128,
+      "sha256": "b084664eab99680bdc0c755c8a4a9a96fabcb2cc4cf6cc95d6240721f47bf9d4"
+    },
+    {
+      "asset": "assets/audio/menu_back.wav",
+      "bytes": 22128,
+      "sha256": "abba803ac005a57d8401e003012edba295d213fc9b55e9b3fe638d588736655d"
+    },
+    {
+      "asset": "assets/audio/menu_click.wav",
+      "bytes": 46932,
+      "sha256": "0a335ee7f841b239229df0400f092a71401733642685ce38d88501b28f765a74"
+    },
+    {
+      "asset": "assets/audio/move_confirm.wav",
+      "bytes": 88448,
+      "sha256": "e29d320cc7b906ee546ac3c0ec2b4e16fec4d085aa8191de1b9577a93f1df587"
+    },
+    {
+      "asset": "assets/audio/music/korona1.mp3",
+      "bytes": 4675067,
+      "sha256": "3d09a23f3036b1e0cb0509b2a1d0794ddb6638f33632540e8ab5842b6116368b"
+    },
+    {
+      "asset": "assets/audio/music/korona2.mp3",
+      "bytes": 3261288,
+      "sha256": "c35496dccc91361ce325a8d2a23c57db552c5e42b74b7717d41705134fcd2e5e"
+    },
+    {
+      "asset": "assets/audio/music/kroniki1.mp3",
+      "bytes": 7435402,
+      "sha256": "035c972d753b281ffc33479a22165e7de350e8e202dd433c37370d884e473f8a"
+    },
+    {
+      "asset": "assets/audio/music/kroniki2.mp3",
+      "bytes": 7588851,
+      "sha256": "c7173577ef50cfd06437c8395984aa9ee8022078f3bc3d2dc882486587ee2b8c"
+    },
+    {
+      "asset": "assets/audio/music/oddech1.mp3",
+      "bytes": 3508602,
+      "sha256": "6880ba22716f4e021f691c757c723f1b9476b8c564eb7cf3d9b979f75faa293a"
+    },
+    {
+      "asset": "assets/audio/music/oddech2.mp3",
+      "bytes": 3982934,
+      "sha256": "a7cabce1900b53442349d7cc6ffa889cc045f29b5c02a9235728f5039a26ceea"
+    },
+    {
+      "asset": "assets/audio/music/szepty1.mp3",
+      "bytes": 10243592,
+      "sha256": "b37c1e0dbce864624193a4dd22388030a0b717be76a43d6d20a3c4040fdefb44"
+    },
+    {
+      "asset": "assets/audio/music/szepty2.mp3",
+      "bytes": 5887443,
+      "sha256": "9679b921a6843bbba84a341f994531a757385e5cca4c6f9ae42bb1cccaccb02e"
+    },
+    {
+      "asset": "assets/audio/nature/656124__itsthegoodstuff__nature-ambiance.mp3",
+      "bytes": 4239194,
+      "sha256": "680e9f6c4fe93e96902aade26e890b31f5b461d1f800177ccc454aa07589e48d"
+    },
+    {
+      "asset": "assets/audio/new_turn.wav",
+      "bytes": 1152078,
+      "sha256": "36da5f7bbcf58c6f7619d9091a53f7ef07c52dfe83d2b8dee7c3c1caf780f64d"
+    },
+    {
+      "asset": "assets/audio/technology.wav",
+      "bytes": 491598,
+      "sha256": "314add15d61f1806e558b0c2327bce8c55ef4bb1efa9d4ab4627a5056e825f30"
+    },
+    {
+      "asset": "assets/audio/ui_panel_open.wav",
+      "bytes": 59740,
+      "sha256": "63cbadfd661caea51eb74087fe93c6be02484605c65ce7baabaa22de8ed8bd49"
+    },
+    {
+      "asset": "assets/audio/walk.wav",
+      "bytes": 399438,
+      "sha256": "334e3db03927568b21cdeab4fd092a1a779c3e42135e1f73dbf4340adba80c6f"
+    }
+  ]
+}

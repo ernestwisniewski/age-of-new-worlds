@@ -1,6 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../features/audio/application/game_audio_port.dart';
+import '../../features/audio/infrastructure/audioplayers_device.dart';
+import '../../features/audio/infrastructure/game_audio_runtime.dart';
 import '../../features/map/application/game_session_capabilities.dart';
 import '../../features/map/infrastructure/engine_game_session_gateway.dart';
 import '../../features/map/infrastructure/gamepad_map_input_source.dart';
@@ -38,6 +41,7 @@ final class AppComposition {
     ReplayPresentationController? replayController,
     MapInputSource? mapInputSource,
     ClientSettingsStore? settingsStore,
+    GameAudioPort? audio,
     AonwFlameGame Function() flameGameFactory = AonwFlameGame.new,
     ClientTelemetry telemetry = const NoOpClientTelemetry(),
     MultiplayerAccessController? multiplayerAccessController,
@@ -53,6 +57,7 @@ final class AppComposition {
            replayCapture: replayController,
          ),
          mapInputSource: mapInputSource,
+         audio: audio,
          flameGameFactory: flameGameFactory,
          telemetry: telemetry,
          multiplayerAccessController: multiplayerAccessController,
@@ -100,6 +105,7 @@ final class AppComposition {
       replayController: replayController,
       mapInputSource: GamepadMapInputSource(),
       settingsStore: SharedPreferencesClientSettingsStore(),
+      audio: GameAudioRuntime(device: AudioplayersDevice()),
       multiplayerAccessController: multiplayerAccessController,
       multiplayerController: multiplayerController,
       onExit: SystemNavigator.pop,
