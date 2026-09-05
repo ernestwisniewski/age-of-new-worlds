@@ -7,6 +7,7 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_menu_backdrop.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 
 final class CreditsScreen extends StatelessWidget {
   const CreditsScreen({required this.openExternalUri, super.key});
@@ -97,7 +98,7 @@ final class _SupportScreen extends StatelessWidget {
                         : '',
                     child: FilledButton.icon(
                       key: actionKey,
-                      onPressed: onAction,
+                      onPressed: context.withGameSound(onAction),
                       icon: const Icon(Icons.open_in_new),
                       label: Text(actionLabel),
                     ),

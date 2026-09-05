@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 import '../application/local_game_catalog.dart';
 import '../application/local_game_session_port.dart';
 import 'local_game_launch_mode.dart';
@@ -66,13 +67,16 @@ final class NewGameReviewStep extends StatelessWidget {
           children: [
             OutlinedButton.icon(
               key: const ValueKey('back-to-setup'),
-              onPressed: starting ? null : onBack,
+              onPressed: context.withGameSound(
+                starting ? null : onBack,
+                cue: GameSoundCue.menuBack,
+              ),
               icon: const Icon(Icons.arrow_back),
               label: Text(l10n.changeSetup),
             ),
             FilledButton.icon(
               key: const ValueKey('start-game'),
-              onPressed: starting ? null : onStart,
+              onPressed: context.withGameSound(starting ? null : onStart),
               icon: starting
                   ? const SizedBox.square(
                       dimension: AonwSizes.compactProgress,

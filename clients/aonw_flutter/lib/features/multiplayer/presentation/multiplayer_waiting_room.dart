@@ -93,9 +93,9 @@ final class _WaitingRoomActions extends StatelessWidget {
       children: [
         OutlinedButton.icon(
           key: const ValueKey('multiplayer-ready'),
-          onPressed: state.busy
-              ? null
-              : () => controller.setReady(!current.isReady),
+          onPressed: context.withGameSound(
+            state.busy ? null : () => controller.setReady(!current.isReady),
+          ),
           icon: Icon(
             current.isReady ? Icons.close : Icons.check_circle_outline,
           ),
@@ -105,7 +105,10 @@ final class _WaitingRoomActions extends StatelessWidget {
         const SizedBox(height: AonwSpacing.sm),
         OutlinedButton.icon(
           key: const ValueKey('multiplayer-leave-lobby'),
-          onPressed: state.busy ? null : controller.leaveWaitingRoom,
+          onPressed: context.withGameSound(
+            state.busy ? null : controller.leaveWaitingRoom,
+            cue: GameSoundCue.menuBack,
+          ),
           icon: const Icon(Icons.exit_to_app),
           label: Text(l10n.leaveMultiplayerMatch),
         ),
@@ -134,9 +137,9 @@ final class _HostStartAction extends StatelessWidget {
         const SizedBox(height: AonwSpacing.sm),
         FilledButton.icon(
           key: const ValueKey('multiplayer-start-match'),
-          onPressed: state.busy || !state.lobby.canStart
-              ? null
-              : controller.startMatch,
+          onPressed: context.withGameSound(
+            state.busy || !state.lobby.canStart ? null : controller.startMatch,
+          ),
           icon: const Icon(Icons.play_arrow),
           label: Text(l10n.startGame),
         ),
@@ -164,14 +167,19 @@ final class _WaitingRoomNavigation extends StatelessWidget {
     children: [
       TextButton.icon(
         key: const ValueKey('multiplayer-refresh-lobby'),
-        onPressed: busy ? null : controller.refreshMatchLobby,
+        onPressed: context.withGameSound(
+          busy ? null : controller.refreshMatchLobby,
+        ),
         icon: const Icon(Icons.refresh),
         label: Text(context.aonwL10n.refreshMatch),
       ),
       const Spacer(),
       TextButton(
         key: const ValueKey('multiplayer-close-waiting-room'),
-        onPressed: busy ? null : controller.closeWaitingRoom,
+        onPressed: context.withGameSound(
+          busy ? null : controller.closeWaitingRoom,
+          cue: GameSoundCue.menuBack,
+        ),
         child: Text(context.aonwL10n.backToLobby),
       ),
     ],
@@ -199,7 +207,9 @@ final class _LobbyMatchCard extends StatelessWidget {
         '${context.aonwL10n.matchRevision(match.revision, match.eventOffset)}',
       ),
       trailing: const Icon(Icons.chevron_right),
-      onTap: busy ? null : () => controller.openMatch(match),
+      onTap: context.withGameSound(
+        busy ? null : () => controller.openMatch(match),
+      ),
     ),
   );
 }

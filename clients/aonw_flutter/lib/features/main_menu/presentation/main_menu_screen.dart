@@ -7,6 +7,7 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_gold_divider.dart';
 import '../../../design_system/widgets/aonw_menu_backdrop.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 
 part 'main_menu_panel.dart';
 part 'main_menu_widgets.dart';

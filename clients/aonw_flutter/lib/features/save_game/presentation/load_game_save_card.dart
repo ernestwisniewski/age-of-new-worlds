@@ -161,7 +161,7 @@ final class _ResumeSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FilledButton.icon(
     key: ValueKey('continue-game-$saveId'),
-    onPressed: enabled ? onPressed : null,
+    onPressed: context.withGameSound(enabled ? onPressed : null),
     icon: _ProgressIcon(active: active, fallback: Icons.play_arrow),
     label: Text(
       active ? context.aonwL10n.resumingGame : context.aonwL10n.continueGame,
@@ -185,7 +185,7 @@ final class _OpenReplayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => OutlinedButton.icon(
     key: ValueKey('open-replay-${scenario.name}'),
-    onPressed: enabled ? onPressed : null,
+    onPressed: context.withGameSound(enabled ? onPressed : null),
     icon: _ProgressIcon(active: active, fallback: Icons.movie_filter_outlined),
     label: Text(
       active ? context.aonwL10n.loadingReplay : context.aonwL10n.replayTitle,
@@ -211,7 +211,7 @@ final class _ExportSaveButton extends StatelessWidget {
     message: onPressed == null ? context.aonwL10n.saveTransferUnavailable : '',
     child: OutlinedButton.icon(
       key: ValueKey('export-save-$saveId'),
-      onPressed: enabled ? onPressed : null,
+      onPressed: context.withGameSound(enabled ? onPressed : null),
       icon: _ProgressIcon(
         active: active,
         fallback: Icons.file_download_outlined,

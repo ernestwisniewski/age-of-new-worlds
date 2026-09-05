@@ -6,6 +6,7 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_menu_adjustable.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 import '../application/client_settings.dart';
 import 'client_settings_controller.dart';
 
@@ -92,7 +93,7 @@ final class _SettingsForm extends StatelessWidget {
       const SizedBox(height: AonwSpacing.lg),
       OutlinedButton.icon(
         key: const ValueKey('reset-settings'),
-        onPressed: onReset,
+        onPressed: context.withGameSound(onReset),
         icon: const Icon(Icons.restore),
         label: Text(l10n.resetSettings),
       ),
@@ -176,7 +177,7 @@ final class _MapSetting extends StatelessWidget {
     title: Text(title),
     subtitle: Text(description),
     value: value,
-    onChanged: onChanged,
+    onChanged: context.withGameSoundValue(onChanged),
   );
 }
 
@@ -205,16 +206,18 @@ final class _CameraSettings extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.smoothCameraMovement),
         value: settings.smoothCameraMovement,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(smoothCameraMovement: value)),
+        onChanged: context.withGameSoundValue(
+          (value) => onChanged(settings.copyWith(smoothCameraMovement: value)),
+        ),
       ),
       SwitchListTile.adaptive(
         key: const ValueKey('cinematic-camera-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.cinematicCamera),
         value: settings.cinematicCamera,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(cinematicCamera: value)),
+        onChanged: context.withGameSoundValue(
+          (value) => onChanged(settings.copyWith(cinematicCamera: value)),
+        ),
       ),
       _MovementCameraSettings(settings: settings, onChanged: onChanged),
     ],
@@ -241,8 +244,9 @@ final class _AccessibilitySettings extends StatelessWidget {
           title: Text(l10n.reducedMotion),
           subtitle: Text(l10n.reducedMotionDescription),
           value: settings.reducedMotion,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(reducedMotion: value)),
+          onChanged: context.withGameSoundValue(
+            (value) => onChanged(settings.copyWith(reducedMotion: value)),
+          ),
         ),
         SwitchListTile.adaptive(
           key: const ValueKey('high-contrast-setting'),
@@ -250,8 +254,9 @@ final class _AccessibilitySettings extends StatelessWidget {
           title: Text(l10n.highContrast),
           subtitle: Text(l10n.highContrastDescription),
           value: settings.highContrast,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(highContrast: value)),
+          onChanged: context.withGameSoundValue(
+            (value) => onChanged(settings.copyWith(highContrast: value)),
+          ),
         ),
       ],
     );

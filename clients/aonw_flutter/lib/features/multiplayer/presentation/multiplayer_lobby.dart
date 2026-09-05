@@ -60,13 +60,18 @@ final class _LobbyAccountPanel extends StatelessWidget {
           Row(
             children: [
               TextButton.icon(
-                onPressed: state.busy ? null : controller.refreshLobby,
+                onPressed: context.withGameSound(
+                  state.busy ? null : controller.refreshLobby,
+                ),
                 icon: const Icon(Icons.refresh),
                 label: Text(l10n.refreshMatches),
               ),
               const Spacer(),
               TextButton(
-                onPressed: state.busy ? null : controller.signOut,
+                onPressed: context.withGameSound(
+                  state.busy ? null : controller.signOut,
+                  cue: GameSoundCue.menuBack,
+                ),
                 child: Text(l10n.signOut),
               ),
             ],
@@ -122,7 +127,7 @@ final class _MultiplayerCreateMatchPanelState
           const SizedBox(height: AonwSpacing.lg),
           FilledButton.icon(
             key: const ValueKey('multiplayer-create-match'),
-            onPressed: widget.busy ? null : _createMatch,
+            onPressed: context.withGameSound(widget.busy ? null : _createMatch),
             icon: const Icon(Icons.arrow_forward),
             label: Text(l10n.continueToLobby),
           ),
@@ -146,9 +151,9 @@ final class _MultiplayerCreateMatchPanelState
             child: Text(l10n.countryName(country.name)),
           ),
       ],
-      onChanged: widget.busy
-          ? null
-          : (value) => setState(() => _country = value!),
+      onChanged: context.withGameSoundValue(
+        widget.busy ? null : (value) => setState(() => _country = value!),
+      ),
     ),
   );
 
@@ -170,9 +175,9 @@ final class _MultiplayerCreateMatchPanelState
                 child: Text(l10n.localScenarioName(entry.id.name)),
               ),
           ],
-          onChanged: widget.busy
-              ? null
-              : (value) => setState(() => _scenario = value!),
+          onChanged: context.withGameSoundValue(
+            widget.busy ? null : (value) => setState(() => _scenario = value!),
+          ),
         ),
         const SizedBox(height: AonwSpacing.md),
         Text(l10n.turnModeTitle, style: Theme.of(context).textTheme.titleSmall),
@@ -188,9 +193,9 @@ final class _MultiplayerCreateMatchPanelState
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.fogOfWarLabel),
           value: _fogEnabled,
-          onChanged: widget.busy
-              ? null
-              : (value) => setState(() => _fogEnabled = value),
+          onChanged: context.withGameSoundValue(
+            widget.busy ? null : (value) => setState(() => _fogEnabled = value),
+          ),
         ),
       ],
     ),
@@ -291,19 +296,23 @@ final class _JoinMatchPanelState extends State<_JoinMatchPanel> {
                   child: Text(l10n.playerSeatNumber(number)),
                 ),
             ],
-            onChanged: widget.busy
-                ? null
-                : (value) => setState(() => _playerId = value!),
+            onChanged: context.withGameSoundValue(
+              widget.busy
+                  ? null
+                  : (value) => setState(() => _playerId = value!),
+            ),
           ),
           const SizedBox(height: AonwSpacing.sm),
           OutlinedButton.icon(
             key: const ValueKey('multiplayer-join-match'),
-            onPressed: widget.busy || _matchId.text.trim().isEmpty
-                ? null
-                : () => widget.controller.joinMatch(
-                    matchId: _matchId.text,
-                    playerId: _playerId,
-                  ),
+            onPressed: context.withGameSound(
+              widget.busy || _matchId.text.trim().isEmpty
+                  ? null
+                  : () => widget.controller.joinMatch(
+                      matchId: _matchId.text,
+                      playerId: _playerId,
+                    ),
+            ),
             icon: const Icon(Icons.login),
             label: Text(l10n.joinMultiplayerMatch),
           ),

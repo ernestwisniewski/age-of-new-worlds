@@ -102,7 +102,7 @@ final class _ImportAction extends StatelessWidget {
     message: onPressed == null ? context.aonwL10n.saveTransferUnavailable : '',
     child: OutlinedButton.icon(
       key: const ValueKey('import-save'),
-      onPressed: enabled ? onPressed : null,
+      onPressed: context.withGameSound(enabled ? onPressed : null),
       icon: _ProgressIcon(active: active, fallback: Icons.file_upload_outlined),
       label: Text(context.aonwL10n.importSave),
     ),
@@ -123,7 +123,7 @@ final class _EmptySaves extends StatelessWidget {
       const SizedBox(height: AonwSpacing.lg),
       FilledButton.icon(
         key: const ValueKey('empty-start-single-player'),
-        onPressed: onStartSinglePlayer,
+        onPressed: context.withGameSound(onStartSinglePlayer),
         icon: const Icon(Icons.add),
         label: Text(context.aonwL10n.singlePlayer),
       ),

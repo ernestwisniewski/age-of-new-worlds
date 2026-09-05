@@ -16,6 +16,7 @@ import '../../game/aonw_flame_game.dart';
 import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
 import '../telemetry/client_telemetry.dart';
+import 'aonw_route_observer.dart';
 import 'aonw_router.dart';
 
 final class AonwApp extends StatefulWidget {
@@ -58,7 +59,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   late ClientSettingsController _settingsController;
   late Future<void> _settingsReady;
   late AppLifecycleState _lifecycleState;
-  final _routeObserver = RouteObserver<ModalRoute<void>>();
+  final _routeObserver = AonwRouteObserver();
 
   @override
   void initState() {

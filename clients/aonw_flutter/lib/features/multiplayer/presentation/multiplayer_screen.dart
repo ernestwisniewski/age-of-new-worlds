@@ -4,6 +4,7 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 import '../../local_game/application/local_game_catalog.dart';
 import '../../local_game/application/local_game_session_port.dart';
 import '../../local_game/presentation/new_game_widgets.dart';
@@ -185,23 +186,7 @@ final class _AuthPanelState extends State<_AuthPanel> {
                   ),
                 ],
                 const SizedBox(height: AonwSpacing.lg),
-                FilledButton(
-                  key: const ValueKey('multiplayer-auth-submit'),
-                  onPressed: _submit,
-                  child: Text(
-                    _createAccount ? l10n.createAccount : l10n.signIn,
-                  ),
-                ),
-                TextButton(
-                  key: const ValueKey('multiplayer-auth-mode'),
-                  onPressed: () =>
-                      setState(() => _createAccount = !_createAccount),
-                  child: Text(
-                    _createAccount
-                        ? l10n.useExistingAccount
-                        : l10n.createNewAccount,
-                  ),
-                ),
+                ..._authenticationActions(l10n),
               ],
             ),
           ),
@@ -209,6 +194,23 @@ final class _AuthPanelState extends State<_AuthPanel> {
       ),
     );
   }
+
+  List<Widget> _authenticationActions(AonwLocalizations l10n) => [
+    FilledButton(
+      key: const ValueKey('multiplayer-auth-submit'),
+      onPressed: context.withGameSound(_submit),
+      child: Text(_createAccount ? l10n.createAccount : l10n.signIn),
+    ),
+    TextButton(
+      key: const ValueKey('multiplayer-auth-mode'),
+      onPressed: context.withGameSound(
+        () => setState(() => _createAccount = !_createAccount),
+      ),
+      child: Text(
+        _createAccount ? l10n.useExistingAccount : l10n.createNewAccount,
+      ),
+    ),
+  ];
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;

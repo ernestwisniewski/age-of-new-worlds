@@ -172,7 +172,7 @@ final class _MenuButtonFrame extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: item.onPressed,
+          onTap: context.withGameSound(item.onPressed),
           onHover: onHover,
           onFocusChange: onFocusChange,
           canRequestFocus: enabled,
@@ -392,7 +392,7 @@ final class _BottomLinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TextButton(
     key: link.key,
-    onPressed: link.onPressed,
+    onPressed: context.withGameSound(link.onPressed),
     style: TextButton.styleFrom(
       foregroundColor: AonwColorTokens.textSecondary,
       padding: EdgeInsets.zero,

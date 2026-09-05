@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 import '../application/local_game_catalog.dart';
 import '../application/local_game_session_port.dart';
 import 'local_game_launch_mode.dart';
@@ -72,7 +73,7 @@ final class NewGameSetupStep extends StatelessWidget {
         const SizedBox(height: AonwSpacing.lg),
         FilledButton.icon(
           key: const ValueKey('continue-to-summary'),
-          onPressed: onContinue,
+          onPressed: context.withGameSound(onContinue),
           icon: const Icon(Icons.arrow_forward),
           label: Text(l10n.continueToSummary),
         ),
@@ -101,7 +102,7 @@ final class NewGameSetupStep extends StatelessWidget {
         icon: Icons.tune,
         child: Column(
           children: [
-            _scenarioField(l10n),
+            _scenarioField(context, l10n),
             const SizedBox(height: AonwSpacing.md),
             _turnModeField(context, l10n),
             SwitchListTile.adaptive(
@@ -109,7 +110,7 @@ final class NewGameSetupStep extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.fogOfWarLabel),
               value: fogEnabled,
-              onChanged: onFogChanged,
+              onChanged: context.withGameSoundValue(onFogChanged),
             ),
           ],
         ),
@@ -151,7 +152,9 @@ final class NewGameSetupStep extends StatelessWidget {
               ),
           ],
           selected: {turnMode},
-          onSelectionChanged: (values) => onTurnModeChanged(values.single),
+          onSelectionChanged: context.withGameSoundValue(
+            (values) => onTurnModeChanged(values.single),
+          ),
         )
       else
         ListTile(
@@ -170,7 +173,7 @@ final class NewGameSetupStep extends StatelessWidget {
     ],
   );
 
-  Widget _scenarioField(AonwLocalizations l10n) =>
+  Widget _scenarioField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalGameCatalogEntryView>(
         key: ValueKey(('scenario', scenario.id)),
         initialValue: scenario,
@@ -185,7 +188,9 @@ final class NewGameSetupStep extends StatelessWidget {
               child: Text(l10n.localScenarioName(entry.id.name)),
             ),
         ],
-        onChanged: (value) => onScenarioChanged(value!),
+        onChanged: context.withGameSoundValue(
+          (value) => onScenarioChanged(value!),
+        ),
       );
 
   Widget _countryField(
@@ -205,7 +210,7 @@ final class NewGameSetupStep extends StatelessWidget {
           child: Text(context.aonwL10n.countryName(country.name)),
         ),
     ],
-    onChanged: (value) => onChanged(value!),
+    onChanged: context.withGameSoundValue((value) => onChanged(value!)),
   );
 
   Widget _facts(AonwLocalizations l10n) => Column(

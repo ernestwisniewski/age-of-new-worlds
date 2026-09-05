@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 import '../application/local_game_session_port.dart';
 import 'local_game_launch_mode.dart';
 
@@ -115,21 +116,21 @@ final class _OpponentCard extends StatelessWidget {
         ),
         if (launchMode == LocalGameLaunchModeView.hotseat) ...[
           const SizedBox(height: AonwSpacing.sm),
-          _controlField(l10n),
+          _controlField(context, l10n),
         ],
         const SizedBox(height: AonwSpacing.md),
-        _countryField(l10n),
+        _countryField(context, l10n),
         if (opponent.control == LocalPlayerControlView.ai) ...[
           const SizedBox(height: AonwSpacing.md),
-          _difficultyField(l10n),
+          _difficultyField(context, l10n),
           const SizedBox(height: AonwSpacing.md),
-          _personaField(l10n),
+          _personaField(context, l10n),
         ],
       ],
     );
   }
 
-  Widget _controlField(AonwLocalizations l10n) =>
+  Widget _controlField(BuildContext context, AonwLocalizations l10n) =>
       SegmentedButton<LocalPlayerControlView>(
         key: index == 0
             ? const ValueKey('opponent-control')
@@ -147,10 +148,12 @@ final class _OpponentCard extends StatelessWidget {
           ),
         ],
         selected: {opponent.control},
-        onSelectionChanged: (values) => onControlChanged(values.single),
+        onSelectionChanged: context.withGameSoundValue(
+          (values) => onControlChanged(values.single),
+        ),
       );
 
-  Widget _countryField(AonwLocalizations l10n) =>
+  Widget _countryField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalPlayerCountryView>(
         key: ValueKey(('opponent-country', index, opponent.country)),
         initialValue: opponent.country,
@@ -166,10 +169,12 @@ final class _OpponentCard extends StatelessWidget {
               child: Text(l10n.countryName(country.name)),
             ),
         ],
-        onChanged: (value) => onCountryChanged(value!),
+        onChanged: context.withGameSoundValue(
+          (value) => onCountryChanged(value!),
+        ),
       );
 
-  Widget _difficultyField(AonwLocalizations l10n) =>
+  Widget _difficultyField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalAiDifficultyView>(
         key: ValueKey(('difficulty', index, opponent.difficulty)),
         initialValue: opponent.difficulty,
@@ -181,10 +186,12 @@ final class _OpponentCard extends StatelessWidget {
               child: Text(l10n.aiDifficultyName(value.name)),
             ),
         ],
-        onChanged: (value) => onDifficultyChanged(value!),
+        onChanged: context.withGameSoundValue(
+          (value) => onDifficultyChanged(value!),
+        ),
       );
 
-  Widget _personaField(AonwLocalizations l10n) =>
+  Widget _personaField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalAiPersonaView>(
         key: ValueKey(('persona', index, opponent.persona)),
         initialValue: opponent.persona,
@@ -196,6 +203,8 @@ final class _OpponentCard extends StatelessWidget {
               child: Text(l10n.aiPersonaName(value.name)),
             ),
         ],
-        onChanged: (value) => onPersonaChanged(value!),
+        onChanged: context.withGameSoundValue(
+          (value) => onPersonaChanged(value!),
+        ),
       );
 }

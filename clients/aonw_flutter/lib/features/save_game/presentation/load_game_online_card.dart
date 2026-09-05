@@ -92,7 +92,7 @@ final class _OnlineSignedOut extends StatelessWidget {
           const SizedBox(height: AonwSpacing.md),
           OutlinedButton.icon(
             key: const ValueKey('open-online-sign-in'),
-            onPressed: onOpenMultiplayer,
+            onPressed: context.withGameSound(onOpenMultiplayer),
             icon: const Icon(Icons.login),
             label: Text(context.aonwL10n.signIn),
           ),
@@ -209,7 +209,7 @@ final class _OnlineSaveActions extends StatelessWidget {
     children: [
       FilledButton.icon(
         key: ValueKey('continue-online-$matchId'),
-        onPressed: enabled ? onResume : null,
+        onPressed: context.withGameSound(enabled ? onResume : null),
         icon: _ProgressIcon(active: resuming, fallback: Icons.public),
         label: Text(
           resuming

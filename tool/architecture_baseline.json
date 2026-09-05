@@ -54,9 +54,9 @@
         "clients/aonw_flutter/lib/features/help/presentation/help_screen.dart::class:HelpScreen/method:build": 61,
         "clients/aonw_flutter/lib/features/map/application/map_coordinator_selection.dart::extension:MapCoordinatorSelection/method:_selectControlledUnit": 78,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 61,
-        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 83,
+        "clients/aonw_flutter/lib/features/multiplayer/presentation/multiplayer_screen.dart::class:_AuthPanelState/method:build": 69,
         "clients/aonw_flutter/lib/features/objectives/presentation/objective_overlay.dart::class:_TerminalOutcome/method:build": 69,
-        "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 110,
+        "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 82,
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
         "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77

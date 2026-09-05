@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/map_test_fixture.dart';
+import '../../support/recording_game_audio.dart';
 import '../../support/test_map_input_source.dart';
 
 void main() {
@@ -81,8 +82,9 @@ void main() {
         FakeGameSession.success(testMapScene()),
       ),
     );
+    final audio = RecordingGameAudio();
     await tester.pumpWidget(
-      AonwApp(mapController: controller, mapInputSource: input),
+      AonwApp(mapController: controller, mapInputSource: input, audio: audio),
     );
     await tester.pumpAndSettle();
 
@@ -90,9 +92,11 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
     expect(find.text('Play with the computer'), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.menuClick]);
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('main-menu-panel')), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.menuClick, GameSoundCue.menuBack]);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -105,8 +109,9 @@ void main() {
         FakeGameSession.success(testMapScene()),
       ),
     );
+    final audio = RecordingGameAudio();
     await tester.pumpWidget(
-      AonwApp(mapController: controller, mapInputSource: input),
+      AonwApp(mapController: controller, mapInputSource: input, audio: audio),
     );
     await tester.pumpAndSettle();
 
@@ -114,9 +119,11 @@ void main() {
     await _pulse(tester, input, const MapGamepadInput(activate: true));
     await tester.pumpAndSettle();
     expect(find.text('Play with the computer'), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.menuClick]);
     await _pulse(tester, input, const MapGamepadInput(cancel: true));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('main-menu-panel')), findsOneWidget);
+    expect(audio.cues, [GameSoundCue.menuClick, GameSoundCue.menuBack]);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();

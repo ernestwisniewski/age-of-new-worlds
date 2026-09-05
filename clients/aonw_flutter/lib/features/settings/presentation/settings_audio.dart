@@ -82,7 +82,7 @@ final class _AudioChannelSetting extends StatelessWidget {
         secondary: Icon(icon),
         title: Text(label),
         value: enabled,
-        onChanged: onEnabled,
+        onChanged: context.withGameSoundValue(onEnabled),
       ),
       if (enabled)
         _LabeledSlider(

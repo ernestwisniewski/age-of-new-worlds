@@ -36,7 +36,7 @@ final class _MatchActions extends StatelessWidget {
           const SizedBox(height: AonwSpacing.sm),
           OutlinedButton.icon(
             key: const ValueKey('multiplayer-reconnect'),
-            onPressed: controller.reconnect,
+            onPressed: context.withGameSound(controller.reconnect),
             icon: const Icon(Icons.sync),
             label: Text(context.aonwL10n.reconnect),
           ),
@@ -44,9 +44,10 @@ final class _MatchActions extends StatelessWidget {
         const SizedBox(height: AonwSpacing.sm),
         TextButton(
           key: const ValueKey('multiplayer-leave-match'),
-          onPressed: state.commandPending
-              ? null
-              : () => _leaveOrResign(context),
+          onPressed: context.withGameSound(
+            state.commandPending ? null : () => _leaveOrResign(context),
+            cue: GameSoundCue.menuBack,
+          ),
           child: Text(
             state.lobby.match.phase == MultiplayerMatchPhase.running
                 ? context.aonwL10n.leaveMultiplayerMatch
@@ -70,12 +71,17 @@ final class _MatchActions extends StatelessWidget {
         content: Text(l10n.multiplayerResignBody),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
+            onPressed: dialogContext.withGameSound(
+              () => Navigator.of(dialogContext).pop(false),
+              cue: GameSoundCue.menuBack,
+            ),
             child: Text(l10n.cancelDialog),
           ),
           FilledButton(
             key: const ValueKey('multiplayer-confirm-resignation'),
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+            onPressed: dialogContext.withGameSound(
+              () => Navigator.of(dialogContext).pop(true),
+            ),
             child: Text(l10n.multiplayerResignConfirm),
           ),
         ],
@@ -159,7 +165,7 @@ final class _MatchParticipantTile extends StatelessWidget {
           ? IconButton(
               key: ValueKey(('multiplayer-kick', participant.playerId)),
               tooltip: l10n.multiplayerRemoveParticipant,
-              onPressed: () => _confirmRemoval(context),
+              onPressed: context.withGameSound(() => _confirmRemoval(context)),
               icon: const Icon(Icons.person_remove_outlined),
             )
           : null,
@@ -175,12 +181,17 @@ final class _MatchParticipantTile extends StatelessWidget {
         content: Text(l10n.multiplayerRemoveParticipantBody(participant.name)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
+            onPressed: dialogContext.withGameSound(
+              () => Navigator.of(dialogContext).pop(false),
+              cue: GameSoundCue.menuBack,
+            ),
             child: Text(l10n.cancelDialog),
           ),
           FilledButton(
             key: const ValueKey('multiplayer-confirm-kick'),
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+            onPressed: dialogContext.withGameSound(
+              () => Navigator.of(dialogContext).pop(true),
+            ),
             child: Text(l10n.multiplayerRemoveParticipant),
           ),
         ],
@@ -219,7 +230,7 @@ final class _OpenGameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FilledButton.icon(
     key: const ValueKey('multiplayer-open-game'),
-    onPressed: enabled && !opening ? onPressed : null,
+    onPressed: context.withGameSound(enabled && !opening ? onPressed : null),
     icon: opening
         ? const SizedBox.square(
             dimension: AonwSizes.compactProgress,
@@ -244,7 +255,7 @@ final class _SubmitTurnButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FilledButton.icon(
     key: const ValueKey('multiplayer-submit-turn'),
-    onPressed: enabled && !pending ? onPressed : null,
+    onPressed: context.withGameSound(enabled && !pending ? onPressed : null),
     icon: pending
         ? const SizedBox.square(
             dimension: AonwSizes.compactProgress,

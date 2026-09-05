@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 
 final class HelpScreen extends StatelessWidget {
   const HelpScreen({required this.onStartOnboarding, super.key});
@@ -58,7 +59,7 @@ final class HelpScreen extends StatelessWidget {
                   const SizedBox(height: AonwSpacing.sm),
                   FilledButton.icon(
                     key: const ValueKey('start-onboarding'),
-                    onPressed: onStartOnboarding,
+                    onPressed: context.withGameSound(onStartOnboarding),
                     icon: const Icon(Icons.school_outlined),
                     label: Text(l10n.startOnboarding),
                   ),

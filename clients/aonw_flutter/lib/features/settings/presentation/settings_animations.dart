@@ -14,32 +14,38 @@ final class _AnimationSettings extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showUnitIdleAnimations),
         value: settings.showUnitIdleAnimations,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(showUnitIdleAnimations: value)),
+        onChanged: context.withGameSoundValue(
+          (value) =>
+              onChanged(settings.copyWith(showUnitIdleAnimations: value)),
+        ),
       ),
       SwitchListTile.adaptive(
         key: const ValueKey('unit-movement-animations-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showUnitMovementAnimations),
         value: settings.showUnitMovementAnimations,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(showUnitMovementAnimations: value)),
+        onChanged: context.withGameSoundValue(
+          (value) =>
+              onChanged(settings.copyWith(showUnitMovementAnimations: value)),
+        ),
       ),
       SwitchListTile.adaptive(
         key: const ValueKey('route-animations-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showRouteAnimations),
         value: settings.showRouteAnimations,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(showRouteAnimations: value)),
+        onChanged: context.withGameSoundValue(
+          (value) => onChanged(settings.copyWith(showRouteAnimations: value)),
+        ),
       ),
       SwitchListTile.adaptive(
         key: const ValueKey('combat-animations-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showCombatAnimations),
         value: settings.showCombatAnimations,
-        onChanged: (value) =>
-            onChanged(settings.copyWith(showCombatAnimations: value)),
+        onChanged: context.withGameSoundValue(
+          (value) => onChanged(settings.copyWith(showCombatAnimations: value)),
+        ),
       ),
     ],
   );

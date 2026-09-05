@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../audio/presentation/game_audio_actions.dart';
 
 final class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({required this.onFinished, super.key});
@@ -52,7 +53,7 @@ final class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             key: const ValueKey('skip-onboarding'),
-            onPressed: widget.onFinished,
+            onPressed: context.withGameSound(widget.onFinished),
             child: Text(l10n.skipOnboarding),
           ),
         ],
@@ -91,37 +92,7 @@ final class _OnboardingScreenState extends State<OnboardingScreen> {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const SizedBox(height: AonwSpacing.xl),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          key: const ValueKey('previous-onboarding-step'),
-                          onPressed: _step == 0
-                              ? null
-                              : () => setState(() => _step -= 1),
-                          child: Text(l10n.previousOnboardingStep),
-                        ),
-                      ),
-                      const SizedBox(width: AonwSpacing.sm),
-                      Expanded(
-                        child: FilledButton(
-                          key: ValueKey(
-                            isLast
-                                ? 'finish-onboarding'
-                                : 'next-onboarding-step',
-                          ),
-                          onPressed: isLast
-                              ? widget.onFinished
-                              : () => setState(() => _step += 1),
-                          child: Text(
-                            isLast
-                                ? l10n.finishOnboarding
-                                : l10n.nextOnboardingStep,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _navigation(context, l10n, isLast),
                 ],
               ),
             ),
@@ -130,6 +101,35 @@ final class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
+
+  Widget _navigation(
+    BuildContext context,
+    AonwLocalizations l10n,
+    bool isLast,
+  ) => Row(
+    children: [
+      Expanded(
+        child: OutlinedButton(
+          key: const ValueKey('previous-onboarding-step'),
+          onPressed: context.withGameSound(
+            _step == 0 ? null : () => setState(() => _step -= 1),
+            cue: GameSoundCue.menuBack,
+          ),
+          child: Text(l10n.previousOnboardingStep),
+        ),
+      ),
+      const SizedBox(width: AonwSpacing.sm),
+      Expanded(
+        child: FilledButton(
+          key: ValueKey(isLast ? 'finish-onboarding' : 'next-onboarding-step'),
+          onPressed: context.withGameSound(
+            isLast ? widget.onFinished : () => setState(() => _step += 1),
+          ),
+          child: Text(isLast ? l10n.finishOnboarding : l10n.nextOnboardingStep),
+        ),
+      ),
+    ],
+  );
 }
 
 final class _OnboardingStep {
