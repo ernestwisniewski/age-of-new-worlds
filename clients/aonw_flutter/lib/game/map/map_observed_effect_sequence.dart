@@ -30,7 +30,7 @@ extension _ObservedEffectSequence on MapEffectHostComponent {
           _availableCombatEffect()!.start(
             combat,
             cache,
-            reducedMotion: _reducedMotion,
+            reducedMotion: _staticCombat,
           );
       }
     }

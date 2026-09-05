@@ -91,6 +91,8 @@ final class _ReplayScreenState extends State<ReplayScreen>
     _game.setReducedMotion(
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
+    _game.setUnitMovementAnimations(settings.showUnitMovementAnimations);
+    _game.setCombatAnimations(settings.showCombatAnimations);
     _game.setCameraSensitivity(settings.cameraSensitivity);
     _game.setSmoothCameraMovement(settings.smoothCameraMovement);
     _game.setCinematicCamera(settings.cinematicCamera);
@@ -123,7 +125,9 @@ final class _ReplayScreenState extends State<ReplayScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _localizations = context.aonwL10n;
+    final localizations = context.aonwL10n;
+    if (identical(_localizations, localizations)) return;
+    _localizations = localizations;
     _synchronizeScene();
   }
 

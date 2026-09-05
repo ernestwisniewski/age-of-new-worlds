@@ -10,6 +10,7 @@ import '../application/client_settings.dart';
 import 'client_settings_controller.dart';
 
 part 'settings_movement_camera.dart';
+part 'settings_animations.dart';
 
 final class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.controller, super.key});
@@ -45,58 +46,56 @@ final class _SettingsForm extends StatelessWidget {
   final VoidCallback onReset;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    return ListView(
-      padding: const EdgeInsets.all(AonwSpacing.lg),
-      children: [
-        Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 720),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _SettingsSection(
-                  title: l10n.audioSettings,
-                  child: _AudioSettings(
-                    settings: settings,
-                    onChanged: onChanged,
-                  ),
-                ),
-                const SizedBox(height: AonwSpacing.md),
-                _SettingsSection(
-                  title: l10n.cameraSettings,
-                  child: _CameraSettings(
-                    settings: settings,
-                    onChanged: onChanged,
-                  ),
-                ),
-                const SizedBox(height: AonwSpacing.md),
-                _SettingsSection(
-                  title: l10n.mapSettings,
-                  child: _MapSettings(settings: settings, onChanged: onChanged),
-                ),
-                const SizedBox(height: AonwSpacing.md),
-                _SettingsSection(
-                  title: l10n.accessibilitySettings,
-                  child: _AccessibilitySettings(
-                    settings: settings,
-                    onChanged: onChanged,
-                  ),
-                ),
-                const SizedBox(height: AonwSpacing.lg),
-                OutlinedButton.icon(
-                  key: const ValueKey('reset-settings'),
-                  onPressed: onReset,
-                  icon: const Icon(Icons.restore),
-                  label: Text(l10n.resetSettings),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context) => ListView(
+    padding: const EdgeInsets.all(AonwSpacing.lg),
+    children: [
+      Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: _sections(context),
           ),
         ),
-      ],
-    );
+      ),
+    ],
+  );
+
+  List<Widget> _sections(BuildContext context) {
+    final l10n = context.aonwL10n;
+    return [
+      _SettingsSection(
+        title: l10n.audioSettings,
+        child: _AudioSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.cameraSettings,
+        child: _CameraSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.animationSettings,
+        child: _AnimationSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.mapSettings,
+        child: _MapSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.accessibilitySettings,
+        child: _AccessibilitySettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.lg),
+      OutlinedButton.icon(
+        key: const ValueKey('reset-settings'),
+        onPressed: onReset,
+        icon: const Icon(Icons.restore),
+        label: Text(l10n.resetSettings),
+      ),
+    ];
   }
 }
 

@@ -1210,6 +1210,15 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get cameraSensitivity => 'Zoom sensitivity';
 
   @override
+  String get animationSettings => 'Animations';
+
+  @override
+  String get showUnitMovementAnimations => 'Show unit movement animations';
+
+  @override
+  String get showCombatAnimations => 'Show combat animations';
+
+  @override
   String get cinematicCamera => 'Cinematic camera';
 
   @override

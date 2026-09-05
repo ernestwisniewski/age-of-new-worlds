@@ -90,6 +90,50 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
+    'animation choices preserve the observed sequence and deferred feedback',
+    AonwFlameGame.new,
+    (game) async {
+      game.setUnitMovementAnimations(false);
+      game.setCombatAnimations(false);
+      game.replaceScene(_snapshot());
+      game.replaceScene(
+        _snapshot(revision: 1, animations: _sequence(), feedback: true),
+      );
+      final host = game.world.effectHost;
+      final feedback = game.world.eventFeedbackLayer;
+      expect(host.debugCompletedMovementCount, 1);
+      expect(host.debugActiveCombatEffectCount, 1);
+      expect(host.debugPendingCommandEffectCount, 1);
+      expect(host.debugCombatPulse, 0.55);
+      expect(feedback.debugDeferredCueCount, 1);
+      final completion = game.waitForCommandEffects();
+      host.update(1.28);
+      expect(host.debugCompletedMovementCount, 2);
+      expect(host.debugActiveEffectCount, 0);
+      expect(host.debugPendingCommandEffectCount, 0);
+      expect(feedback.debugDeferredCueCount, 0);
+      expect(feedback.debugActiveBurstCount, 1);
+      final expected = game.world.unitLayer.visualCenterFor(
+        game.world.debugStaticRenderCache!,
+        'unit',
+        (col: 1, row: 1),
+      );
+      expect(
+        (game.world.unitLayer.componentForUnit('unit')!.visualCenter - expected)
+            .distance,
+        closeTo(0, 0.0001),
+      );
+      var completed = false;
+      completion.then((_) => completed = true);
+      await Future<void>.value();
+      expect(completed, isFalse);
+      feedback.update(10);
+      await completion;
+      expect(game.paused, isTrue);
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
     'a replay jump clears active effects and deferred feedback',
     AonwFlameGame.new,
     (game) async {

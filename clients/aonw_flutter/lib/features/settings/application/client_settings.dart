@@ -11,6 +11,8 @@ final class ClientSettings {
     required this.showMapHeightBadges,
     this.smoothCameraMovement = true,
     this.cinematicCamera = false,
+    this.showUnitMovementAnimations = true,
+    this.showCombatAnimations = true,
     this.focusOwnUnitMovement = true,
     this.followOwnUnitMovement = false,
     this.focusForeignUnitMovement = false,
@@ -34,6 +36,8 @@ final class ClientSettings {
   final double cameraSensitivity;
   final bool smoothCameraMovement;
   final bool cinematicCamera;
+  final bool showUnitMovementAnimations;
+  final bool showCombatAnimations;
   final bool focusOwnUnitMovement;
   final bool followOwnUnitMovement;
   final bool focusForeignUnitMovement;
@@ -51,6 +55,8 @@ final class ClientSettings {
     double? cameraSensitivity,
     bool? smoothCameraMovement,
     bool? cinematicCamera,
+    bool? showUnitMovementAnimations,
+    bool? showCombatAnimations,
     bool? focusOwnUnitMovement,
     bool? followOwnUnitMovement,
     bool? focusForeignUnitMovement,
@@ -67,6 +73,9 @@ final class ClientSettings {
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     cinematicCamera: cinematicCamera ?? this.cinematicCamera,
+    showUnitMovementAnimations:
+        showUnitMovementAnimations ?? this.showUnitMovementAnimations,
+    showCombatAnimations: showCombatAnimations ?? this.showCombatAnimations,
     focusOwnUnitMovement: focusOwnUnitMovement ?? this.focusOwnUnitMovement,
     followOwnUnitMovement: followOwnUnitMovement ?? this.followOwnUnitMovement,
     focusForeignUnitMovement:
@@ -88,6 +97,8 @@ final class ClientSettings {
       other.masterVolume == masterVolume &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
+      other.showUnitMovementAnimations == showUnitMovementAnimations &&
+      other.showCombatAnimations == showCombatAnimations &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
       _sameMapDisplay(other);
@@ -113,6 +124,8 @@ final class ClientSettings {
     cameraSensitivity,
     smoothCameraMovement,
     cinematicCamera,
+    showUnitMovementAnimations,
+    showCombatAnimations,
     focusOwnUnitMovement,
     followOwnUnitMovement,
     focusForeignUnitMovement,

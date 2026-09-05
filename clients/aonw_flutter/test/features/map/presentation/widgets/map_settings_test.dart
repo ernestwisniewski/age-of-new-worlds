@@ -10,7 +10,9 @@ import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('applies live camera and map client preferences', (tester) async {
+  testWidgets('applies live camera, map and animation preferences', (
+    tester,
+  ) async {
     final settings = ClientSettingsController.ephemeral();
     await settings.update(
       ClientSettings.defaults.copyWith(cameraSensitivity: 2),
@@ -40,11 +42,33 @@ void main() {
     expect(flameGame.world.gridLayer.isVisible, isFalse);
     final sceneWrites = flameGame.world.debugSceneWriteCount;
 
-    await settings.update(settings.settings.copyWith(showMapGrid: true));
+    await settings.update(
+      settings.settings.copyWith(
+        showMapGrid: true,
+        showUnitMovementAnimations: false,
+      ),
+    );
     await tester.pump();
 
     expect(flameGame.world.gridLayer.debugGridVisible, isTrue);
     expect(flameGame.world.gridLayer.isVisible, isTrue);
     expect(flameGame.world.debugSceneWriteCount, sceneWrites);
+    final host = flameGame.world.effectHost;
+    expect(host.movementAnimationsEnabled, isFalse);
+    expect(host.combatAnimationsEnabled, isTrue);
+    expect(host.debugReducedMotion, isFalse);
+
+    await settings.update(
+      settings.settings.copyWith(showCombatAnimations: false),
+    );
+    await tester.pump();
+    expect(host.combatAnimationsEnabled, isFalse);
+    expect(host.movementAnimationsEnabled, isFalse);
+    expect(flameGame.world.debugSceneWriteCount, sceneWrites);
+
+    await settings.reset();
+    await tester.pump();
+    expect(host.combatAnimationsEnabled, isTrue);
+    expect(host.movementAnimationsEnabled, isTrue);
   });
 }

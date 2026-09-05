@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 void main() {
-  testWidgets('edits and resets audio, camera and accessibility', (
+  testWidgets('edits and resets audio, camera, animations and accessibility', (
     tester,
   ) async {
     final store = _MemorySettingsStore();
@@ -25,6 +25,7 @@ void main() {
     expect(find.text('Audio'), findsOneWidget);
     expect(find.text('Camera'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
+    expect(find.text('Animations'), findsOneWidget);
     expect(find.text('Accessibility'), findsOneWidget);
 
     tester
@@ -45,26 +46,17 @@ void main() {
         )
         .onChanged!(1.5);
     await tester.pumpAndSettle();
-    final smooth = find.byKey(const ValueKey('smooth-camera-movement-setting'));
-    await tester.ensureVisible(smooth);
-    await tester.tap(smooth);
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(
-      find.byKey(const ValueKey('reduced-motion-setting')),
-    );
-    await tester.tap(find.byKey(const ValueKey('reduced-motion-setting')));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(
-      find.byKey(const ValueKey('high-contrast-setting')),
-    );
-    await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
-    await tester.pumpAndSettle();
     for (final key in const [
+      'smooth-camera-movement-setting',
+      'reduced-motion-setting',
+      'high-contrast-setting',
       'cinematic-camera-setting',
       'focusOwnUnitMovement-setting',
       'followOwnUnitMovement-setting',
       'focusForeignUnitMovement-setting',
       'followForeignUnitMovement-setting',
+      'unit-movement-animations-setting',
+      'combat-animations-setting',
       'map-grid-setting',
       'map-resource-icons-setting',
       'map-terrain-icons-setting',
@@ -86,6 +78,8 @@ void main() {
     expect(store.settings.followOwnUnitMovement, isTrue);
     expect(store.settings.focusForeignUnitMovement, isTrue);
     expect(store.settings.followForeignUnitMovement, isTrue);
+    expect(store.settings.showUnitMovementAnimations, isFalse);
+    expect(store.settings.showCombatAnimations, isFalse);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapGrid, isTrue);
@@ -95,6 +89,7 @@ void main() {
     expect(store.settings.showMapHeightBadges, isTrue);
 
     await tester.ensureVisible(find.byKey(const ValueKey('reset-settings')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('reset-settings')));
     await tester.pumpAndSettle();
     expect(store.settings, ClientSettings.defaults);

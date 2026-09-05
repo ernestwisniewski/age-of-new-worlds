@@ -7,12 +7,64 @@ import 'package:aonw_flutter/features/replay/application/local_replay_store.dart
 import 'package:aonw_flutter/features/replay/application/replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
 import 'package:aonw_flutter/features/replay/presentation/replay_presentation_controller.dart';
+import 'package:aonw_flutter/features/replay/presentation/replay_screen.dart';
 import 'package:aonw_flutter/features/replay/read_model/replay_frame_view.dart';
+import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
+import 'package:aonw_flutter/features/settings/presentation/client_settings_scope.dart';
+import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets(
+    'replay applies animation settings live without changing its frame',
+    (tester) async {
+      final session = _ReplaySession();
+      final controller = ReplayPresentationController(
+        session: session,
+        store: _ReplayStore(primary: 'valid'),
+      );
+      final settings = ClientSettingsController.ephemeral();
+      final game = AonwFlameGame();
+      addTearDown(controller.dispose);
+      addTearDown(settings.dispose);
+      await controller.openLatest();
+      await settings.update(
+        settings.settings.copyWith(showCombatAnimations: false),
+      );
+      await tester.pumpWidget(
+        LocalizedTestApp(
+          home: ClientSettingsScope(
+            controller: settings,
+            child: ReplayScreen(
+              controller: controller,
+              flameGameFactory: () => game,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final host = game.world.effectHost;
+      final sceneWrites = game.world.debugSceneWriteCount;
+      expect(host.combatAnimationsEnabled, isFalse);
+      expect(host.movementAnimationsEnabled, isTrue);
+      await settings.update(
+        settings.settings.copyWith(showUnitMovementAnimations: false),
+      );
+      await tester.pump();
+      expect(host.movementAnimationsEnabled, isFalse);
+      expect(host.combatAnimationsEnabled, isFalse);
+      expect(game.world.debugSceneWriteCount, sceneWrites);
+      expect(session.positions, isEmpty);
+      await settings.reset();
+      await tester.pump();
+      expect(host.movementAnimationsEnabled, isTrue);
+      expect(host.combatAnimationsEnabled, isTrue);
+    },
+  );
+
   testWidgets(
     'speed changes wait for active effects and pause prevents rescheduling',
     (tester) async {

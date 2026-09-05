@@ -1628,6 +1628,24 @@ abstract class AonwLocalizations {
   /// **'Zoom sensitivity'**
   String get cameraSensitivity;
 
+  /// No description provided for @animationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Animations'**
+  String get animationSettings;
+
+  /// No description provided for @showUnitMovementAnimations.
+  ///
+  /// In en, this message translates to:
+  /// **'Show unit movement animations'**
+  String get showUnitMovementAnimations;
+
+  /// No description provided for @showCombatAnimations.
+  ///
+  /// In en, this message translates to:
+  /// **'Show combat animations'**
+  String get showCombatAnimations;
+
   /// No description provided for @cinematicCamera.
   ///
   /// In en, this message translates to:

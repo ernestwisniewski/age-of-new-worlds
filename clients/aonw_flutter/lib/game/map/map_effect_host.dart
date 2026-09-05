@@ -46,6 +46,12 @@ final class MapEffectHostComponent extends Component {
   )?
   onMovementStart;
   var _reducedMotion = false;
+  var _movementAnimationsEnabled = true;
+  var _combatAnimationsEnabled = true;
+
+  bool get movementAnimationsEnabled => _movementAnimationsEnabled;
+  bool get combatAnimationsEnabled => _combatAnimationsEnabled;
+  bool get _staticCombat => _reducedMotion || !_combatAnimationsEnabled;
   var _playbackSpeed = 1.0;
   var _activeUpdateCount = 0;
   var _completedMovementCount = 0;
@@ -171,7 +177,8 @@ final class MapEffectHostComponent extends Component {
         : [for (final coordinate in movement.path) center(coordinate)];
     unit.setVisualCenter(points.first);
     final presentation = onMovementStart?.call(movement, unit);
-    if (_reducedMotion) {
+    if (_reducedMotion ||
+        (!_movementAnimationsEnabled && (presentation?.ready ?? true))) {
       unit.setVisualCenter(points.last);
       presentation?.complete(interrupted: false);
       _completedMovementCount += 1;
@@ -180,6 +187,7 @@ final class MapEffectHostComponent extends Component {
         unit: unit,
         points: points,
         presentation: presentation,
+        animate: _movementAnimationsEnabled,
       );
     }
   }
@@ -188,7 +196,7 @@ final class MapEffectHostComponent extends Component {
     for (final combat in patch.combats) {
       final effect = _availableCombatEffect();
       if (effect == null) return;
-      effect.start(combat, cache, reducedMotion: _reducedMotion);
+      effect.start(combat, cache, reducedMotion: _staticCombat);
     }
   }
 
@@ -203,13 +211,31 @@ final class MapEffectHostComponent extends Component {
     if (_reducedMotion == enabled) return;
     _reducedMotion = enabled;
     for (final combat in _combatPool) {
-      combat.setReducedMotion(enabled);
+      combat.setReducedMotion(_staticCombat);
     }
     if (enabled) {
       _finishMovements();
       _startNextObservedEffect();
     }
     _notifyActivity();
+  }
+
+  void setMovementAnimations(bool enabled) {
+    if (_movementAnimationsEnabled == enabled) return;
+    _movementAnimationsEnabled = enabled;
+    if (!enabled) {
+      _finishMovements();
+      _startNextObservedEffect();
+    }
+    _notifyActivity();
+  }
+
+  void setCombatAnimations(bool enabled) {
+    if (_combatAnimationsEnabled == enabled) return;
+    _combatAnimationsEnabled = enabled;
+    for (final combat in _combatPool) {
+      combat.setReducedMotion(_staticCombat);
+    }
   }
 
   void setPlaybackSpeed(double speed) {
@@ -269,6 +295,11 @@ final class MapEffectHostComponent extends Component {
     for (final entry in _movements.entries) {
       final movement = entry.value;
       if (!(movement.presentation?.ready ?? true)) continue;
+      if (!movement.animate) {
+        movement.unit.setVisualCenter(movement.target);
+        completed.add(entry.key);
+        continue;
+      }
       movement.elapsed += dt * _playbackSpeed;
       final segment = (movement.elapsed / _movementDurationSeconds)
           .floor()
@@ -328,11 +359,13 @@ final class _ActiveUnitMovement {
   _ActiveUnitMovement({
     required this.unit,
     required this.points,
+    required this.animate,
     this.presentation,
   });
 
   final MapUnitComponent unit;
   final List<ui.Offset> points;
+  final bool animate;
   final MapMovementPresentation? presentation;
   ui.Offset get target => points.last;
   var elapsed = 0.0;

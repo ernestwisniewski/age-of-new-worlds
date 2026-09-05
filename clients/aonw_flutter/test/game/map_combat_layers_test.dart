@@ -6,6 +6,7 @@ import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart'
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/flame_map_camera.dart';
 import 'package:aonw_flutter/game/presentation/flame_scene_patch.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
@@ -143,6 +144,52 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
+    'combat animation choices preserve damage and respect reduced motion',
+    AonwFlameGame.new,
+    (game) async {
+      final scene = _threatScene();
+      game.setViewportActive(true);
+      game.replaceScene(_snapshot(scene));
+      await game.ready();
+      game.replaceScene(_combatSnapshot(scene, 1));
+      final effects = game.world.effectHost;
+      expect(effects.debugActiveParticleCount, 28);
+      final completion = game.waitForCommandEffects();
+      game.setCombatAnimations(false);
+      expect(effects.debugReducedMotion, isFalse);
+      expect(effects.movementAnimationsEnabled, isTrue);
+      expect(effects.debugActiveDamageLabelCount, 2);
+      expect(effects.debugActiveParticleCount, 0);
+      final early = await _renderEffects(game);
+      effects.update(0.8);
+      final late = await _renderEffects(game);
+      expect(late, early, reason: 'Disabled combat renders static evidence.');
+      game.setReducedMotion(true);
+      game.setCombatAnimations(true);
+      expect(effects.debugCombatPulse, 0.55);
+      game.setCombatAnimations(false);
+      game.setReducedMotion(false);
+      expect(effects.debugCombatPulse, 0.55);
+      effects.update(0.48);
+      game.mapCamera.skipMotion();
+      await completion;
+      expect(effects.debugActiveEffectCount, 0);
+      expect(game.paused, isTrue);
+
+      game.replaceScene(_combatSnapshot(scene, 2));
+      expect(effects.debugActiveDamageLabelCount, 2);
+      expect(effects.debugActiveParticleCount, 0);
+      game.skipEffects();
+      game.setCombatAnimations(true);
+      game.replaceScene(_combatSnapshot(scene, 3));
+      expect(effects.debugActiveParticleCount, 28);
+      effects.update(0.23);
+      expect(effects.debugCombatPulse, isNot(0.55));
+      game.skipEffects();
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
     'clears transient combat data when the recipient or map changes',
     AonwFlameGame.new,
     (game) async {
@@ -164,6 +211,18 @@ void main() {
       expect(game.world.threatOverlayLayer.isVisible, isFalse);
     },
   );
+}
+
+Future<List<int>> _renderEffects(AonwFlameGame game) async {
+  final recorder = ui.PictureRecorder();
+  final canvas = ui.Canvas(recorder)..translate(24, 45);
+  game.world.effectHost.render(canvas);
+  final picture = recorder.endRecording();
+  final image = await picture.toImage(340, 210);
+  final bytes = (await image.toByteData())!.buffer.asUint8List();
+  image.dispose();
+  picture.dispose();
+  return bytes;
 }
 
 MapScene _threatScene() => testMapScene(

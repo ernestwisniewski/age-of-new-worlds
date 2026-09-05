@@ -29,6 +29,10 @@ final class SharedPreferencesClientSettingsStore
   static const _followForeignUnitMovementKey =
       'aonw.settings.followForeignUnitMovement';
 
+  static const _unitMovementAnimationsKey =
+      'aonw.settings.showUnitMovementAnimations';
+  static const _combatAnimationsKey = 'aonw.settings.showCombatAnimations';
+
   final SharedPreferencesAsync _preferences;
 
   @override
@@ -53,7 +57,10 @@ final class SharedPreferencesClientSettingsStore
       _showMapHeightBadgesKey,
     );
     final camera = await _loadCamera();
+    final animations = await _loadAnimations();
     return ClientSettings(
+      showUnitMovementAnimations: animations.movement,
+      showCombatAnimations: animations.combat,
       cinematicCamera: camera.cinematicCamera,
       focusOwnUnitMovement: camera.focusOwnUnitMovement,
       followOwnUnitMovement: camera.followOwnUnitMovement,
@@ -90,6 +97,7 @@ final class SharedPreferencesClientSettingsStore
   @override
   Future<void> save(ClientSettings settings) async {
     await _saveCamera(settings);
+    await _saveAnimations(settings);
     await _preferences.setDouble(_masterVolumeKey, settings.masterVolume);
     await _preferences.setDouble(
       _cameraSensitivityKey,
@@ -113,6 +121,26 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(
       _showMapHeightBadgesKey,
       settings.showMapHeightBadges,
+    );
+  }
+
+  Future<({bool movement, bool combat})> _loadAnimations() async => (
+    movement:
+        await _preferences.getBool(_unitMovementAnimationsKey) ??
+        ClientSettings.defaults.showUnitMovementAnimations,
+    combat:
+        await _preferences.getBool(_combatAnimationsKey) ??
+        ClientSettings.defaults.showCombatAnimations,
+  );
+
+  Future<void> _saveAnimations(ClientSettings settings) async {
+    await _preferences.setBool(
+      _unitMovementAnimationsKey,
+      settings.showUnitMovementAnimations,
+    );
+    await _preferences.setBool(
+      _combatAnimationsKey,
+      settings.showCombatAnimations,
     );
   }
 

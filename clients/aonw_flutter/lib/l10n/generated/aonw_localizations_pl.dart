@@ -1215,6 +1215,15 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get cameraSensitivity => 'Czułość przybliżenia';
 
   @override
+  String get animationSettings => 'Animacje';
+
+  @override
+  String get showUnitMovementAnimations => 'Pokazuj animacje ruchu jednostki';
+
+  @override
+  String get showCombatAnimations => 'Pokazuj animacje walki';
+
+  @override
   String get cinematicCamera => 'Filmowa kamera';
 
   @override

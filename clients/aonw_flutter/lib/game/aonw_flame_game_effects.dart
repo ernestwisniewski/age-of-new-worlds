@@ -30,6 +30,22 @@ extension AonwFlameGameEffects on AonwFlameGame {
     _requestInputFrame();
   }
 
+  void setUnitMovementAnimations(bool enabled) {
+    if (_disposed || world.effectHost.movementAnimationsEnabled == enabled) {
+      return;
+    }
+    world.effectHost.setMovementAnimations(enabled);
+    _requestInputFrame();
+  }
+
+  void setCombatAnimations(bool enabled) {
+    if (_disposed || world.effectHost.combatAnimationsEnabled == enabled) {
+      return;
+    }
+    world.effectHost.setCombatAnimations(enabled);
+    _requestInputFrame();
+  }
+
   void setEffectPlaybackSpeed(double speed) {
     if (_disposed) return;
     world.effectHost.setPlaybackSpeed(speed);

@@ -18,7 +18,9 @@ extension AonwFlameGameMovementCamera on AonwFlameGame {
     final options = _movementCameraOptions;
     final focus = own ? options.focusOwn : options.focusForeign;
     final follow =
-        !_reducedMotion && (own ? options.followOwn : options.followForeign);
+        !_reducedMotion &&
+        world.effectHost.movementAnimationsEnabled &&
+        (own ? options.followOwn : options.followForeign);
     if (!focus && !follow) return null;
     _movementCamera?.complete(interrupted: true);
     _startedMovementCameraInScene = true;
