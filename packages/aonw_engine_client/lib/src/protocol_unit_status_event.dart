@@ -1,5 +1,15 @@
 part of 'protocol_event.dart';
 
+final class AonwCombatResolvedEvent extends AonwClientEvent {
+  const AonwCombatResolvedEvent({
+    required this.attackerUnitId,
+    required this.target,
+  }) : super(AonwClientEventKind.combatResolved);
+
+  final String attackerUnitId;
+  final AonwCombatTarget target;
+}
+
 sealed class AonwUnitStatusEvent extends AonwClientEvent {
   const AonwUnitStatusEvent(
     super.kind, {
@@ -33,6 +43,10 @@ AonwClientEvent? _unitStatusEvent(
   Map<String, Object?> value,
   AonwClientEventKind kind,
 ) => switch (kind) {
+  AonwClientEventKind.combatResolved => AonwCombatResolvedEvent(
+    attackerUnitId: readString(value['attackerUnitId'], 'attacking unit id'),
+    target: AonwCombatTarget.fromJson(value['target']),
+  ),
   AonwClientEventKind.unitKilled => AonwUnitKilledEvent(
     attackerUnitId: readString(value['attackerUnitId'], 'attacking unit id'),
     target: AonwCombatTarget.fromJson(value['target']),
