@@ -15,6 +15,7 @@ import '../features/map/presentation/input/map_hex_selection_palette_intent.dart
 import '../features/map/presentation/input/map_viewport_intent.dart';
 import '../features/map/presentation/map_hex_selection_palette_view.dart';
 import '../features/map/presentation/map_render_snapshot.dart';
+import '../features/map/read_model/map_feedback_view.dart';
 import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
 import 'map/artifact_map_layer.dart';
@@ -91,12 +92,16 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
     this.world.eventFeedbackLayer.onActivityChanged =
         _handleEventFeedbackActivity;
+    this.world.eventFeedbackLayer.onSound = (sound) {
+      if (!_disposed && _viewportActive && isAttached) _soundSink?.call(sound);
+    };
     this.world.cityProductionLayer.onActivityChanged =
         _handleProductionActivity;
   }
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
   MapHexIntentSink? _hexIntentSink;
+  void Function(MapSoundKindView sound)? _soundSink;
   MapActionPaletteIntentSink? _actionPaletteIntentSink;
   MapHexSelectionPaletteIntentSink? _hexSelectionPaletteIntentSink;
   AonwPoint? _lastHoverScreenPosition;
@@ -177,6 +182,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void setViewportActive(bool active) {
     if (_disposed || active == _viewportActive) return;
     _viewportActive = active;
+    world.eventFeedbackLayer.setAudioActive(active);
     world.cloudLayer.setViewportActive(active);
     world.cityProductionLayer.setViewportActive(active);
     world.unitLayer.setViewportActive(active);
@@ -202,6 +208,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void setHexIntentSink(MapHexIntentSink? sink) {
     if (_disposed) return;
     _hexIntentSink = sink;
+  }
+
+  void setSoundSink(void Function(MapSoundKindView sound)? sink) {
+    if (!_disposed) _soundSink = sink;
   }
 
   void setActionPaletteIntentSink(MapActionPaletteIntentSink? sink) {
@@ -373,6 +383,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (!_disposed) {
       _completeCommandEffects();
       _disposed = true;
+      _soundSink = null;
       clearScene();
       dispose();
     }

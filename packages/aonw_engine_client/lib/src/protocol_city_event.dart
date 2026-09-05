@@ -68,10 +68,24 @@ final class AonwCityClaimedHexEvent extends AonwClientEvent {
   final AonwCoordinate coordinate;
 }
 
+final class AonwCityCapturedEvent extends AonwClientEvent {
+  const AonwCityCapturedEvent({
+    required this.attackerUnitId,
+    required this.target,
+  }) : super(AonwClientEventKind.cityCaptured);
+
+  final String attackerUnitId;
+  final AonwCombatTarget target;
+}
+
 AonwClientEvent? _cityEvent(
   Map<String, Object?> value,
   AonwClientEventKind kind,
 ) => switch (kind) {
+  AonwClientEventKind.cityCaptured => AonwCityCapturedEvent(
+    attackerUnitId: readString(value['attackerUnitId'], 'capturing unit id'),
+    target: AonwCombatTarget.fromJson(value['target']),
+  ),
   AonwClientEventKind.cityFounded => AonwCityFoundedEvent(
     cityId: readString(value['cityId'], 'founded city id'),
     ownerPlayerId: readString(value['ownerPlayerId'], 'city owner id'),

@@ -6,6 +6,7 @@ import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'map_feedback_positions.dart';
+import 'map_sound_mapper.dart';
 
 part 'map_feedback_text_mapper.dart';
 
@@ -28,18 +29,24 @@ List<MapFeedbackCueView> mapCommandFeedback({
     command.events,
   );
   for (var index = 0; index < command.events.length; index++) {
+    final event = command.events[index];
+    final coordinate = positions.advance(event);
+    final identity = (revision: command.stamp.revision, eventIndex: index);
+    final sound = mapEventSound(event, identity, previous, snapshot, positions);
     final cues = _eventCues(
-      command.events[index],
-      (revision: command.stamp.revision, eventIndex: index),
+      event,
+      identity,
       snapshot,
       previous,
-      positions.advance(command.events[index]),
+      coordinate,
+      sound,
     );
     for (final cue in cues) {
-      if (_visible(cue.coordinate, snapshot, map)) next.add(cue);
+      if (!_visible(cue.coordinate, snapshot, map)) continue;
+      next.add(cue);
     }
   }
-  return _boundedJournal(next);
+  return deduplicateMapSounds(_boundedJournal(next));
 }
 
 List<MapFeedbackCueView> _boundedJournal(List<MapFeedbackCueView> cues) {
@@ -59,6 +66,7 @@ List<MapFeedbackCueView> _eventCues(
   AonwPlayerViewSnapshot snapshot,
   PlayerMapView previous,
   MapHexCoordinate? statusCoordinate,
+  MapSoundCueView? sound,
 ) {
   switch (event) {
     case AonwArtifactExcavationStartedEvent() ||
@@ -76,8 +84,9 @@ List<MapFeedbackCueView> _eventCues(
         identity,
         snapshot,
         previous.actorPlayerId,
+        sound?.sound,
       );
-      return cue == null ? const [] : [cue];
+      return [?(cue ?? sound)];
   }
 }
 
@@ -86,6 +95,7 @@ MapParticleCueView? _particleCue(
   MapEventIdentityView identity,
   AonwPlayerViewSnapshot snapshot,
   String actor,
+  MapSoundKindView? sound,
 ) {
   final (String owner, AonwCoordinate anchor, MapParticleKindView kind)? cue =
       switch (event) {
@@ -121,6 +131,7 @@ MapParticleCueView? _particleCue(
     coordinate: (col: cue.$2.col, row: cue.$2.row),
     kind: cue.$3,
     colorValue: color,
+    sound: sound,
   );
 }
 

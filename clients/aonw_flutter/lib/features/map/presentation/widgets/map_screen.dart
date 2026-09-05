@@ -32,6 +32,7 @@ import '../input/map_hex_selection_palette_intent.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
 import '../map_action_palette_view.dart';
+import '../map_audio.dart';
 import '../map_feedback_labels.dart';
 import '../map_hex_selection_palette_view.dart';
 import '../map_presentation_controller.dart';
@@ -94,6 +95,7 @@ final class _MapScreenState extends State<MapScreen>
     _gamepadTicker = createTicker(_tickGamepad);
     _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
     _flameGame = widget.flameGameFactory();
+    _flameGame.setSoundSink(context.playMapSound);
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);
     _flameGame.setHexSelectionPaletteIntentSink(
@@ -162,6 +164,7 @@ final class _MapScreenState extends State<MapScreen>
     unawaited(_continuousInputSubscription?.cancel());
     _gamepadTicker.dispose();
     _flameGame.setHexIntentSink(null);
+    _flameGame.setSoundSink(null);
     _flameGame.setActionPaletteIntentSink(null);
     _flameGame.setHexSelectionPaletteIntentSink(null);
     _flameFocusNode.dispose();
@@ -341,12 +344,14 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _installFreshFlameGame() {
+    _flameGame.setSoundSink(null);
     _flameGame.skipEffects();
     _flameGame.setViewportActive(false);
     _flameGame.setHexIntentSink(null);
     _flameGame.setActionPaletteIntentSink(null);
     _flameGame.setHexSelectionPaletteIntentSink(null);
     _flameGame = widget.flameGameFactory();
+    _flameGame.setSoundSink(context.playMapSound);
     widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
     _flameGame.setHexIntentSink(_handleHexIntent);
     _flameGame.setActionPaletteIntentSink(_handleActionPaletteIntent);

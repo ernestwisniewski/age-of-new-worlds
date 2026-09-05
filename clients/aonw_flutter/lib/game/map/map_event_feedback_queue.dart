@@ -4,13 +4,19 @@ import '../../features/map/presentation/map_feedback_labels.dart';
 import '../../features/map/read_model/map_feedback_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 
-/// Keeps the particle and text of one event together while capacity is occupied.
+/// Keeps one event's presentation together while capacity is occupied.
 final class MapEventFeedbackBatch {
-  const MapEventFeedbackBatch({this.particle, this.text, this.label});
+  const MapEventFeedbackBatch({
+    this.particle,
+    this.text,
+    this.label,
+    this.sound,
+  });
   final MapParticleCueView? particle;
   final MapFloatingTextCueView? text;
   final String? label;
-  bool get empty => particle == null && text == null;
+  final MapFeedbackCueView? sound;
+  bool get empty => particle == null && text == null && sound == null;
 
   MapEventFeedbackBatch filtered(
     MapFogView fog,
@@ -19,6 +25,7 @@ final class MapEventFeedbackBatch {
   ) {
     final p = particle;
     final t = text;
+    final s = sound;
     return MapEventFeedbackBatch(
       particle:
           p != null &&
@@ -32,6 +39,11 @@ final class MapEventFeedbackBatch {
           ? t
           : null,
       label: t == null ? null : labels.labelFor(t.identity) ?? label,
+      sound:
+          s != null &&
+              fog.visibilityAt(s.coordinate) == MapFogVisibilityView.visible
+          ? s
+          : null,
     );
   }
 }
@@ -75,8 +87,15 @@ final class MapEventFeedbackQueue {
           particle: cue,
           text: previous?.text,
           label: previous?.label,
+          sound: cue.sound == null ? previous?.sound : cue,
         ),
         MapFloatingTextCueView() => _withText(previous, cue),
+        MapSoundCueView() => MapEventFeedbackBatch(
+          particle: previous?.particle,
+          text: previous?.text,
+          label: previous?.label,
+          sound: cue,
+        ),
       };
     }
     for (final batch in batches.values) {
@@ -96,6 +115,7 @@ final class MapEventFeedbackQueue {
       particle: previous?.particle,
       text: label == null || label.isEmpty ? null : cue,
       label: label,
+      sound: previous?.sound,
     );
   }
 

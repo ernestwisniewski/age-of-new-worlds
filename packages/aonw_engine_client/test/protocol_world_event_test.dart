@@ -2,6 +2,18 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('preserves the attacker and typed target of a captured city', () {
+    final captured =
+        _event({
+              'type': 'cityCaptured',
+              'attackerUnitId': 'conqueror',
+              'target': {'type': 'city', 'cityId': 'captured-city'},
+            })
+            as AonwCityCapturedEvent;
+    expect(captured.attackerUnitId, 'conqueror');
+    expect((captured.target as AonwCityCombatTarget).cityId, 'captured-city');
+  });
+
   test('preserves city identities and exact production outcomes', () {
     final founded =
         _event({

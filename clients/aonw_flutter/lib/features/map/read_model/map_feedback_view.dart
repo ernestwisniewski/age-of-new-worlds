@@ -4,6 +4,8 @@ import 'pending_action_view.dart';
 
 typedef MapEventIdentityView = ({int revision, int eventIndex});
 
+enum MapSoundKindView { city, combat, movement }
+
 enum MapParticleKindView {
   cityFounded,
   unitProduced,
@@ -13,10 +15,23 @@ enum MapParticleKindView {
 
 /// Recipient-safe presentation facts retained across coalesced UI updates.
 sealed class MapFeedbackCueView {
-  const MapFeedbackCueView({required this.identity, required this.coordinate});
+  const MapFeedbackCueView({
+    required this.identity,
+    required this.coordinate,
+    this.sound,
+  });
 
   final MapEventIdentityView identity;
   final MapHexCoordinate coordinate;
+  final MapSoundKindView? sound;
+}
+
+final class MapSoundCueView extends MapFeedbackCueView {
+  const MapSoundCueView({
+    required super.identity,
+    required super.coordinate,
+    required MapSoundKindView sound,
+  }) : super(sound: sound);
 }
 
 final class MapParticleCueView extends MapFeedbackCueView {
@@ -25,6 +40,7 @@ final class MapParticleCueView extends MapFeedbackCueView {
     required super.coordinate,
     required this.kind,
     required this.colorValue,
+    super.sound,
   });
 
   final MapParticleKindView kind;

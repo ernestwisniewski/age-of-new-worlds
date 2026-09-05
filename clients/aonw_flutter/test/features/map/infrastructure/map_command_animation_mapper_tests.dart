@@ -155,8 +155,9 @@ void animationMapperTests() {
       previous: previous.player,
       map: previous.map,
     );
-    expect(cues.single.identity, (revision: 1, eventIndex: 4));
-    expect(cues.single.coordinate, (col: 0, row: 1));
+    final text = cues.whereType<MapFloatingTextCueView>().single;
+    expect(text.identity, (revision: 1, eventIndex: 4));
+    expect(text.coordinate, (col: 0, row: 1));
   });
 
   test(
@@ -197,7 +198,7 @@ void animationMapperTests() {
           snapshot: snapshot,
           previous: initial,
           map: previous.map,
-        ),
+        ).whereType<MapFloatingTextCueView>(),
         isEmpty,
       );
     },

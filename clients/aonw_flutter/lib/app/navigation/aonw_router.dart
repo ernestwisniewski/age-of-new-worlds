@@ -297,6 +297,7 @@ final class AonwRouter {
       : ReplayScreen(
           controller: replayController!,
           flameGameFactory: flameGameFactory,
+          routeObserver: routeObserver,
         );
 
   Widget _settingsScreen(BuildContext context) =>

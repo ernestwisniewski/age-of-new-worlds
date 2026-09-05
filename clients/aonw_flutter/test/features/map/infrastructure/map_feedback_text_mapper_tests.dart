@@ -203,7 +203,7 @@ void textMapperTests() {
         snapshot: snapshot,
         previous: previous,
         map: feedbackSnapshot().map,
-      ).cast<MapFloatingTextCueView>();
+      ).whereType<MapFloatingTextCueView>();
       expect(cues.map((cue) => cue.coordinate), [
         (col: 2, row: 0),
         (col: 1, row: 0),
@@ -228,7 +228,7 @@ void textMapperTests() {
           snapshot: snapshot,
           previous: previous,
           map: feedbackSnapshot().map,
-        ),
+        ).whereType<MapFloatingTextCueView>(),
         isEmpty,
       );
     },

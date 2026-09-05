@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:aonw_flutter/features/audio/presentation/game_audio_host.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:aonw_flutter/features/replay/application/local_replay_store.dart';
 import 'package:aonw_flutter/features/replay/application/replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
@@ -12,12 +14,18 @@ import 'package:aonw_flutter/features/replay/read_model/replay_frame_view.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_scope.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
+import '../../../support/map_feedback_test_fixture.dart';
 import '../../../support/map_test_fixture.dart';
+import '../../../support/recording_game_audio.dart';
+
+part 'replay_audio_tests.dart';
 
 void main() {
+  replayAudioTests();
   testWidgets(
     'replay applies animation settings live without changing its frame',
     (tester) async {
@@ -233,10 +241,15 @@ void main() {
 }
 
 final class _ReplaySession implements ReplaySessionPort {
-  _ReplaySession({this.rejectDocument, this.observed = false});
+  _ReplaySession({
+    this.rejectDocument,
+    this.observed = false,
+    this.audio = false,
+  });
 
   final String? rejectDocument;
   final bool observed;
+  final bool audio;
   Completer<void>? seekCompletion;
   int _position = 0;
   final positions = <int>[];
@@ -273,7 +286,20 @@ final class _ReplaySession implements ReplaySessionPort {
   }
 
   ReplayFrameView _frame(int position, {bool command = false}) {
-    final scene = testMapScene();
+    final scene = audio
+        ? testMapScene().withPlayer(
+            feedbackSnapshot(
+              revision: position,
+              cues: [
+                MapSoundCueView(
+                  identity: (revision: position, eventIndex: 0),
+                  coordinate: (col: 1, row: 0),
+                  sound: MapSoundKindView.combat,
+                ),
+              ],
+            ).player,
+          )
+        : testMapScene();
     return ReplayFrameView(
       position: position,
       entryCount: 3,

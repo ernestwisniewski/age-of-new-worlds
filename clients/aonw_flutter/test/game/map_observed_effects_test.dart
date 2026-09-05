@@ -2,6 +2,7 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_animation_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:aonw_flutter/game/map/flame_map_camera.dart';
@@ -13,6 +14,46 @@ import '../support/map_feedback_test_fixture.dart';
 import '../support/map_test_fixture.dart';
 
 void main() {
+  testWithGame<AonwFlameGame>(
+    'command audio follows movement and combat stages and stops on a jump',
+    AonwFlameGame.new,
+    (game) async {
+      final sounds = <MapSoundKindView>[];
+      game.world.eventFeedbackLayer.onSound = sounds.add;
+      game.setViewportActive(true);
+      game.replaceScene(_snapshot());
+      await game.ready();
+      game.replaceScene(
+        _snapshot(revision: 1, animations: _sequence(), audio: true),
+      );
+      expect(sounds, [MapSoundKindView.movement]);
+      game.mapCamera.update(0.28);
+      game.world.effectHost.update(1.2);
+      expect(sounds, [MapSoundKindView.movement, MapSoundKindView.combat]);
+      game.replaceScene(_snapshot(revision: 1, epoch: 1));
+      game.world.effectHost.update(10);
+      expect(sounds, hasLength(2));
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
+    'skipping a command drops audio that has not reached its event',
+    AonwFlameGame.new,
+    (game) async {
+      final sounds = <MapSoundKindView>[];
+      game.world.eventFeedbackLayer.onSound = sounds.add;
+      game.setViewportActive(true);
+      game.replaceScene(_snapshot());
+      await game.ready();
+      game.replaceScene(
+        _snapshot(revision: 1, animations: _sequence(), audio: true),
+      );
+      game.skipEffects();
+      await game.waitForCommandEffects();
+      expect(sounds, [MapSoundKindView.movement]);
+    },
+  );
+
   for (final city in [false, true]) {
     test('observed combat carries participant identities (city: $city)', () {
       final patch = FlameScenePatch.between(
@@ -255,6 +296,7 @@ MapRenderSnapshot _snapshot({
   int epoch = 0,
   List<MapCommandAnimationView>? animations,
   bool feedback = false,
+  bool audio = false,
 }) {
   final scene = testMapScene();
   final source = scene.player;
@@ -278,7 +320,21 @@ MapRenderSnapshot _snapshot({
         coordinate: revision == 0 ? (col: 0, row: 0) : (col: 1, row: 1),
       ),
     ],
-    recentFeedback: [if (feedback) particleCue(eventIndex: 3)],
+    recentFeedback: [
+      if (feedback) particleCue(eventIndex: 3),
+      if (audio) ...[
+        for (final (index, kind) in const [
+          (0, MapSoundKindView.movement),
+          (1, MapSoundKindView.combat),
+          (3, MapSoundKindView.city),
+        ])
+          MapSoundCueView(
+            identity: (revision: revision, eventIndex: index),
+            coordinate: (col: 1, row: 0),
+            sound: kind,
+          ),
+      ],
+    ],
   );
   return MapRenderSnapshot(
     map: scene.map,

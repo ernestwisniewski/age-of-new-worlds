@@ -5,6 +5,8 @@ AonwPlayerViewSnapshot _snapshot({
   bool cities = true,
   AonwCoordinate unitCoordinate = const AonwCoordinate(col: 0, row: 1),
   bool hasUnit = true,
+  String unitOwner = 'preview-player',
+  String cityOwner = 'preview-player',
   List<AonwCoordinate>? visible,
 }) => AonwPlayerViewSnapshot(
   stamp: AonwSessionStamp(
@@ -15,14 +17,22 @@ AonwPlayerViewSnapshot _snapshot({
   ),
   turn: 1,
   turnMode: AonwTurnMode.sequential,
-  participants: const [
-    AonwPlayerParticipantView(
+  participants: [
+    const AonwPlayerParticipantView(
       id: 'preview-player',
       name: 'Player',
       colorValue: 0xff68a7e8,
       country: AonwPlayerCountry.poland,
       kind: AonwPlayerKind.human,
     ),
+    for (final owner in {unitOwner, cityOwner}..remove('preview-player'))
+      AonwPlayerParticipantView(
+        id: owner,
+        name: owner,
+        colorValue: 0xffe8a768,
+        country: AonwPlayerCountry.poland,
+        kind: AonwPlayerKind.human,
+      ),
   ],
   fog: AonwPlayerFogView(
     enabled: visible != null,
@@ -55,7 +65,7 @@ AonwPlayerViewSnapshot _snapshot({
       ? [
           AonwPlayerUnitView(
             id: 'unit',
-            ownerPlayerId: 'preview-player',
+            ownerPlayerId: unitOwner,
             kind: AonwUnitKind.commander,
             name: 'Commander',
             coordinate: unitCoordinate,
@@ -68,13 +78,13 @@ AonwPlayerViewSnapshot _snapshot({
         ]
       : const [],
   cities: cities
-      ? const [
+      ? [
           AonwPlayerCityView(
             id: 'city',
-            ownerPlayerId: 'preview-player',
+            ownerPlayerId: cityOwner,
             name: 'City',
-            center: AonwCoordinate(col: 1, row: 0),
-            visibleControlledHexes: [AonwCoordinate(col: 1, row: 0)],
+            center: const AonwCoordinate(col: 1, row: 0),
+            visibleControlledHexes: const [AonwCoordinate(col: 1, row: 0)],
             ownedDetails: null,
           ),
         ]

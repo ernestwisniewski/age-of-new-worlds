@@ -12,10 +12,12 @@ import '../../../support/map_test_fixture.dart';
 part 'map_command_animation_mapper_tests.dart';
 part 'map_feedback_mapper_fixture.dart';
 part 'map_feedback_text_mapper_tests.dart';
+part 'map_sound_mapper_tests.dart';
 
 void main() {
   textMapperTests();
   animationMapperTests();
+  soundMapperTests();
   test(
     'retains event order exact anchors and owner color through the view mapper',
     () {
@@ -142,6 +144,8 @@ void main() {
       );
       expect(cues, hasLength(64));
       expect(cues.first.identity, (revision: 1, eventIndex: 6));
+      expect(cues.first.sound, MapSoundKindView.city);
+      expect(cues.where((cue) => cue.sound != null), hasLength(1));
       final previous = feedbackSnapshot(revision: 1, cues: cues);
       final second = _snapshot(revision: 2);
       final appended = mapCommandFeedback(

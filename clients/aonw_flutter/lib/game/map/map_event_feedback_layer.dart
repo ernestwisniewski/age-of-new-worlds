@@ -31,6 +31,14 @@ final class MapEventFeedbackLayerComponent extends Component {
   List<MapFeedbackCueView> _deferredCues = const [];
   var _deferredCursor = 0;
   void Function(bool active)? onActivityChanged;
+  void Function(MapSoundKindView sound)? onSound;
+  var _audioActive = false;
+  int? _silencedThroughRevision;
+
+  void setAudioActive(bool active) {
+    _audioActive = active;
+    if (!active) _silencedThroughRevision = _revision;
+  }
 
   @visibleForTesting
   int get debugActiveBurstCount => _particles.activeCount;
@@ -67,6 +75,7 @@ final class MapEventFeedbackLayerComponent extends Component {
     _queue.applyContext(player.fog, snapshot.feedbackLabels, _reducedMotion);
     final previousRevision = _revision!;
     _revision = player.stamp.revision;
+    if (!_audioActive) _silencedThroughRevision = _revision;
     if (!reset && player.stamp.revision > previousRevision) {
       _enqueue(
         player.recentFeedback,
@@ -137,6 +146,12 @@ final class MapEventFeedbackLayerComponent extends Component {
         return;
       }
       _queue.removeFirst();
+      final sound = batch.sound;
+      if (_audioActive &&
+          sound != null &&
+          sound.identity.revision > (_silencedThroughRevision ?? -1)) {
+        onSound?.call(sound.sound!);
+      }
       if (particle != null) _particles.enqueue(particle);
       if (text != null) _texts.enqueue(text, fallbackLabel: batch.label);
       _particles.startPending();
@@ -180,6 +195,7 @@ final class MapEventFeedbackLayerComponent extends Component {
     _cache = null;
     _actor = null;
     _revision = null;
+    _silencedThroughRevision = null;
     _notifyActivity();
   }
 

@@ -6,6 +6,7 @@ import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../game/aonw_flame_game.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/application/map_interaction_state.dart';
+import '../../map/presentation/map_audio.dart';
 import '../../map/presentation/map_feedback_labels.dart';
 import '../../map/presentation/map_render_snapshot.dart';
 import '../../settings/presentation/client_settings_scope.dart';
@@ -17,23 +18,27 @@ final class ReplayScreen extends StatefulWidget {
   const ReplayScreen({
     required this.controller,
     this.flameGameFactory = AonwFlameGame.new,
+    this.routeObserver,
     super.key,
   });
 
   final ReplayPresentationController controller;
   final AonwFlameGame Function() flameGameFactory;
+  final RouteObserver<ModalRoute<void>>? routeObserver;
 
   @override
   State<ReplayScreen> createState() => _ReplayScreenState();
 }
 
 final class _ReplayScreenState extends State<ReplayScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, RouteAware {
   late AonwFlameGame _game;
   late AppLifecycleState _lifecycleState;
   ReplayFrameView? _lastFrame;
   var _effectEpoch = 0;
   AonwLocalizations? _localizations;
+  ModalRoute<void>? _subscribedRoute;
+  var _routeVisible = true;
 
   @override
   void initState() {
@@ -42,6 +47,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
     _lifecycleState =
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     _game = widget.flameGameFactory();
+    _game.setSoundSink(context.playMapSound);
     widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
     widget.controller.addListener(_synchronizeScene);
     _synchronizeScene();
@@ -51,6 +57,11 @@ final class _ReplayScreenState extends State<ReplayScreen>
   @override
   void didUpdateWidget(ReplayScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.routeObserver != widget.routeObserver) {
+      oldWidget.routeObserver?.unsubscribe(this);
+      _subscribedRoute = null;
+      _subscribeToRoute();
+    }
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.waitForCommandEffects = null;
       _game.skipEffects();
@@ -58,9 +69,11 @@ final class _ReplayScreenState extends State<ReplayScreen>
       widget.controller.addListener(_synchronizeScene);
     }
     if (oldWidget.flameGameFactory != widget.flameGameFactory) {
+      _game.setSoundSink(null);
       _game.skipEffects();
       _game.setViewportActive(false);
       _game = widget.flameGameFactory();
+      _game.setSoundSink(context.playMapSound);
     }
     widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
     _synchronizeScene();
@@ -76,7 +89,9 @@ final class _ReplayScreenState extends State<ReplayScreen>
 
   @override
   void dispose() {
+    _game.setSoundSink(null);
     WidgetsBinding.instance.removeObserver(this);
+    widget.routeObserver?.unsubscribe(this);
     widget.controller.pause();
     widget.controller.waitForCommandEffects = null;
     _game.skipEffects();
@@ -127,6 +142,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _subscribeToRoute();
     final localizations = context.aonwL10n;
     if (identical(_localizations, localizations)) return;
     _localizations = localizations;
@@ -165,8 +181,34 @@ final class _ReplayScreenState extends State<ReplayScreen>
   }
 
   void _synchronizeLifecycle() {
-    _game.setViewportActive(_lifecycleState == AppLifecycleState.resumed);
+    _game.setViewportActive(
+      _routeVisible && _lifecycleState == AppLifecycleState.resumed,
+    );
   }
+
+  void _subscribeToRoute() {
+    final route = ModalRoute.of(context);
+    if (route is! ModalRoute<void> || route == _subscribedRoute) return;
+    widget.routeObserver?.unsubscribe(this);
+    _subscribedRoute = route;
+    widget.routeObserver?.subscribe(this, route);
+    _setRouteVisible(route.isCurrent);
+  }
+
+  void _setRouteVisible(bool visible) {
+    _routeVisible = visible;
+    _synchronizeLifecycle();
+    if (!visible) widget.controller.pause();
+  }
+
+  @override
+  void didPush() => _setRouteVisible(true);
+  @override
+  void didPopNext() => _setRouteVisible(true);
+  @override
+  void didPushNext() => _setRouteVisible(false);
+  @override
+  void didPop() => _setRouteVisible(false);
 }
 
 final class _ReplayPlayer extends StatelessWidget {
