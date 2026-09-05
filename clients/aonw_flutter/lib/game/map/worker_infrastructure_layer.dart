@@ -331,6 +331,17 @@ final class MapFieldImprovementComponent extends PositionComponent
   SpriteFrame? _frame;
   var _loadGeneration = 0;
 
+  static final _visualBounds = ui.Rect.fromLTWH(
+    0,
+    0,
+    _width,
+    _height,
+  ).inflate(20);
+  var _paintCount = 0;
+
+  @visibleForTesting
+  int get debugPaintCount => _paintCount;
+
   @visibleForTesting
   FieldImprovementView get debugImprovement => _improvement;
 
@@ -366,6 +377,8 @@ final class MapFieldImprovementComponent extends PositionComponent
 
   @override
   void render(ui.Canvas canvas) {
+    if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
+    _paintCount++;
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);
     final frame = _frame;

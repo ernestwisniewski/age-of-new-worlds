@@ -252,6 +252,12 @@ final class MapUnitComponent extends PositionComponent
   var _frameElapsed = 0.0;
   var _loadGeneration = 0;
 
+  static final _visualBounds = const ui.Rect.fromLTRB(-64, -96, 110, 110);
+  var _paintCount = 0;
+
+  @visibleForTesting
+  int get debugPaintCount => _paintCount;
+
   @visibleForTesting
   VisibleUnitView get debugUnit => _unit;
 
@@ -319,6 +325,8 @@ final class MapUnitComponent extends PositionComponent
 
   @override
   void render(ui.Canvas canvas) {
+    if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
+    _paintCount++;
     const center = ui.Offset(_diameter / 2, _diameter / 2);
     MapSpriteShadow.paintUnit(
       canvas,

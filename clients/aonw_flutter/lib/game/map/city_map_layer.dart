@@ -127,6 +127,17 @@ final class MapCityComponent extends PositionComponent
   SpriteFrame? _frame;
   var _loadGeneration = 0;
 
+  static final _visualBounds = ui.Rect.fromLTWH(
+    0,
+    0,
+    _width,
+    _height,
+  ).inflate(4);
+  var _paintCount = 0;
+
+  @visibleForTesting
+  int get debugPaintCount => _paintCount;
+
   @visibleForTesting
   CityView get debugCity => _city;
 
@@ -153,6 +164,8 @@ final class MapCityComponent extends PositionComponent
 
   @override
   void render(ui.Canvas canvas) {
+    if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
+    _paintCount++;
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);
     final frame = _frame;
