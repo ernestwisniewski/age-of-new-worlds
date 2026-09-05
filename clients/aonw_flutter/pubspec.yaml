@@ -48,6 +48,7 @@ flutter:
   assets:
     - assets/main_menu/background.jpg
     - assets/runtime/ui/logo.webp
+    - assets/runtime/metadata/
     - assets/runtime/sprites/
     - assets/runtime/sprites/buildings_a/
     - assets/runtime/sprites/buildings_b/

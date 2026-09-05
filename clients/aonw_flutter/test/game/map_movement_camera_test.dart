@@ -16,10 +16,7 @@ void main() {
       game.setReducedMotion(true);
       game.replaceScene(movementCameraSnapshot(revision: 1));
       final cache = game.world.debugStaticRenderCache!;
-      final origin = game.world.unitLayer.visualCenterFor(cache, 'moving', (
-        col: 6,
-        row: 3,
-      ));
+      final origin = game.world.unitLayer.centerFor(cache, (col: 6, row: 3));
       final target = game.world.unitLayer.visualCenterFor(cache, 'moving', (
         col: 8,
         row: 3,
@@ -58,18 +55,15 @@ void main() {
         x: origin.dx,
         y: origin.dy,
       ));
-      game.update(0.24);
+      game.update(0.6);
       expect(
         (unit.visualCenter -
-                game.world.unitLayer.visualCenterFor(cache, 'moving', (
-                  col: 7,
-                  row: 3,
-                )))
+                game.world.unitLayer.centerFor(cache, (col: 7, row: 3)))
             .distance,
         closeTo(0, 0.0001),
       );
       expect(game.mapCamera.hasMotion, isFalse);
-      game.update(0.24);
+      game.update(0.6);
       await completion;
       expect(
         (unit.visualCenter -
@@ -119,7 +113,7 @@ void main() {
             } else {
               expect(center, (x: origin.dx, y: origin.dy));
             }
-            game.update(1);
+            game.update(2);
             await game.waitForCommandEffects();
             expect(game.mapCamera.hasMotion, isFalse);
             expect(game.paused, isTrue);
@@ -148,7 +142,7 @@ void main() {
       game.update(0.1);
       expect(game.mapCamera.isFollowing, isFalse);
       expect(game.mapCamera.debugTransform!.worldCenter, manual);
-      game.update(1);
+      game.update(2);
       await game.waitForCommandEffects();
       expect(game.mapCamera.debugTransform!.worldCenter, manual);
       expect(game.paused, isTrue);
@@ -174,6 +168,7 @@ void main() {
       );
       expect(game.mapCamera.isFollowing, isFalse);
       game.update(0.42);
+      game.update(1);
       await game.waitForCommandEffects();
       final anchor = game.world.unitLayer
           .componentForUnit('anchor')!
@@ -221,7 +216,7 @@ void main() {
             game.skipEffects();
         }
         expect(game.mapCamera.hasMotion, isFalse, reason: action);
-        game.update(1);
+        game.update(2);
         await game.waitForCommandEffects();
         expect(game.paused, isTrue, reason: action);
       }

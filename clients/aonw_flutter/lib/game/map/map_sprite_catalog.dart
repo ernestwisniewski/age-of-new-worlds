@@ -24,6 +24,8 @@ abstract final class MapSpriteCatalog {
 
   static const _normalUnit = MapUnitSpriteMetrics(width: 64, height: 86);
   static const _wideUnit = MapUnitSpriteMetrics(width: 76, height: 72);
+  static const _smallUnit = MapUnitSpriteMetrics(width: 42, height: 57);
+  static const _wideSmallUnit = MapUnitSpriteMetrics(width: 50, height: 47);
 
   static SpriteSequenceId idleUnitSequence(VisibleUnitKind kind) =>
       SpriteSequenceId('unit.${kind.name}.idle');
@@ -35,15 +37,18 @@ abstract final class MapSpriteCatalog {
     }
   }
 
-  static MapUnitSpriteMetrics unitMetrics(VisibleUnitKind kind) {
+  static MapUnitSpriteMetrics unitMetrics(
+    VisibleUnitKind kind, {
+    bool onCity = false,
+  }) {
     return switch (kind) {
       VisibleUnitKind.catapult ||
       VisibleUnitKind.fieldCannon ||
       VisibleUnitKind.tank ||
       VisibleUnitKind.scoutShip ||
       VisibleUnitKind.warship ||
-      VisibleUnitKind.reconPlane => _wideUnit,
-      _ => _normalUnit,
+      VisibleUnitKind.reconPlane => onCity ? _wideSmallUnit : _wideUnit,
+      _ => onCity ? _smallUnit : _normalUnit,
     };
   }
 

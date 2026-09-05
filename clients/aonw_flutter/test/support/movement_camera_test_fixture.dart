@@ -2,6 +2,7 @@ import 'package:aonw_flutter/features/map/application/map_interaction_state.dart
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_animation_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 
 import 'map_test_fixture.dart';
@@ -12,6 +13,11 @@ MapRenderSnapshot movementCameraSnapshot({
   bool foreign = false,
   String? selected,
   MapFogView? fog,
+  List<MapHexCoordinate> path = const [
+    (col: 6, row: 3),
+    (col: 7, row: 3),
+    (col: 8, row: 3),
+  ],
 }) {
   final scene = testMapScene(
     cols: 12,
@@ -21,7 +27,7 @@ MapRenderSnapshot movementCameraSnapshot({
       testVisibleUnit(
         id: 'moving',
         ownerPlayerId: foreign ? 'opponent' : 'preview-player',
-        coordinate: revision == 0 ? (col: 6, row: 3) : (col: 8, row: 3),
+        coordinate: revision == 0 ? path.first : path.last,
       ),
     ],
     cities: [testCityView(center: (col: 8, row: 3))],
@@ -58,7 +64,7 @@ MapRenderSnapshot movementCameraSnapshot({
               MapCommandMovementView(
                 eventIndex: 0,
                 unitId: 'moving',
-                path: [(col: 6, row: 3), (col: 7, row: 3), (col: 8, row: 3)],
+                path: path,
               ),
             ],
           ),

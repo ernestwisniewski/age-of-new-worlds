@@ -6,7 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../design_system/assets/sprite_frame_repository.dart';
-import '../../design_system/assets/sprite_frames.dart';
 import '../../features/artifacts/read_model/artifact_view.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
@@ -15,8 +14,8 @@ import '../../features/map/read_model/player_map_view.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
-import 'map_sprite_painter.dart';
 import 'map_sprite_shadow.dart';
+import 'map_unit_sprite_animation.dart';
 import 'static_map_layers.dart';
 import 'unit_marker_details.dart';
 
@@ -51,6 +50,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   var _createdCount = 0;
   var _updatedCount = 0;
   var _removedCount = 0;
+  var _reducedMotion = false;
 
   @visibleForTesting
   int get debugUnitCount => _unitsById.length;
@@ -114,7 +114,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
           unit: unit,
           visual: visual,
           shadows: _shadows,
-        );
+        ).._reducedMotion = _reducedMotion;
         _unitsById[unit.id] = component;
         add(component);
         _createdCount += 1;
@@ -128,6 +128,14 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
       }
     }
     isVisible = _unitsById.isNotEmpty;
+  }
+
+  void setReducedMotion(bool enabled) {
+    if (_reducedMotion == enabled) return;
+    _reducedMotion = enabled;
+    for (final unit in _unitsById.values) {
+      unit._reducedMotion = enabled;
+    }
   }
 
   void clearLayer() {
@@ -158,6 +166,14 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   ) =>
       _center(cache, coordinate) +
       (_visualOffsetsById[unitId] ?? ui.Offset.zero);
+
+  ui.Offset settledCenterFor(
+    MapStaticRenderCache cache,
+    String unitId,
+    MapHexCoordinate coordinate,
+  ) => _unitsById[unitId]?._unit.coordinate == coordinate
+      ? visualCenterFor(cache, unitId, coordinate)
+      : centerFor(cache, coordinate);
 
   static _MapUnitVisualState _visualState({
     required MapStaticRenderCache cache,
@@ -256,17 +272,24 @@ final class MapUnitComponent extends PositionComponent
        );
 
   static const _diameter = 46.0;
-  static const _idleFrameDuration = 0.9;
   static const _spriteVerticalLiftFactor = 0.16;
   static const sharedPaintCount = MapUnitMarkerDetails.sharedPaintCount;
 
   VisibleUnitView _unit;
   _MapUnitVisualState _visual;
   final MapSpriteShadowCache _shadows;
-  List<SpriteFrame> _frames = const [];
-  var _frameIndex = 0;
-  var _frameElapsed = 0.0;
-  var _loadGeneration = 0;
+  late final _sprite = MapUnitSpriteAnimation(
+    kind: _unit.kind,
+    onLoaded: _refreshGameWidget,
+  );
+  var _moving = false;
+  var _reducedMotion = false;
+  MapHexCoordinate? _presentedCoordinate;
+  bool get _onCity =>
+      !_moving &&
+      _visual.onCity &&
+      (_presentedCoordinate == null ||
+          _presentedCoordinate == _unit.coordinate);
 
   static final _visualBounds = const ui.Rect.fromLTRB(-64, -96, 110, 110);
   var _paintCount = 0;
@@ -283,7 +306,25 @@ final class MapUnitComponent extends PositionComponent
   ui.Offset get visualCenter => ui.Offset(position.x, position.y);
 
   @visibleForTesting
-  SpriteFrame? get debugSpriteFrame => _currentFrame;
+  SpriteFrame? get debugSpriteFrame => _sprite.frame;
+
+  @visibleForTesting
+  MapUnitSpriteAction get debugSpriteAction => _sprite.action;
+
+  @visibleForTesting
+  bool get debugSpriteMirrored => _sprite.mirrored;
+
+  @visibleForTesting
+  Future<void> debugLoadSprite() => _sprite.load();
+
+  @visibleForTesting
+  ui.Size get debugSpriteSize => _spriteSize;
+
+  ui.Size get _spriteSize {
+    final metrics = MapSpriteCatalog.unitMetrics(_unit.kind, onCity: _onCity);
+    final scale = _visual.workBadgeLabel == null ? 1.0 : 0.72;
+    return ui.Size(metrics.width * scale, metrics.height * scale);
+  }
 
   @visibleForTesting
   ui.Color get debugOwnerColor => _visual.ownerColor;
@@ -292,7 +333,7 @@ final class MapUnitComponent extends PositionComponent
   bool get debugSelected => _visual.selected;
 
   @visibleForTesting
-  bool get debugOnCity => _visual.onCity;
+  bool get debugOnCity => _onCity;
 
   @visibleForTesting
   String? get debugWorkBadgeLabel => _visual.workBadgeLabel;
@@ -309,7 +350,7 @@ final class MapUnitComponent extends PositionComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    unawaited(_loadFrames());
+    unawaited(_sprite.load());
   }
 
   void _applyUnit(
@@ -320,23 +361,43 @@ final class MapUnitComponent extends PositionComponent
     final kindChanged = _unit.kind != unit.kind;
     _unit = unit;
     _visual = visual;
-    if (!preserveVisualPosition) setVisualCenter(visual.center);
-    if (kindChanged) _reloadFrames();
+    if (!preserveVisualPosition && !_moving) cancelMovement();
+    if (kindChanged) _sprite.setKind(unit.kind);
   }
 
   void setVisualCenter(ui.Offset center) {
     position.setValues(center.dx, center.dy);
   }
 
+  void beginMovement() {
+    _moving = true;
+    _sprite.playIdle();
+  }
+
+  void advanceWalk(ui.Offset from, ui.Offset to, double dt) {
+    _sprite.playWalkToward(from, to);
+    _sprite.advance(dt);
+  }
+
+  void finishMovement(MapHexCoordinate coordinate, ui.Offset center) {
+    setVisualCenter(center);
+    _moving = false;
+    _presentedCoordinate = coordinate;
+    _sprite.playIdle();
+  }
+
+  void cancelMovement() => finishMovement(_unit.coordinate, _visual.center);
+
   @override
   void update(double dt) {
     super.update(dt);
-    if (_frames.length < 2) return;
-    _frameElapsed += dt;
-    while (_frameElapsed >= _idleFrameDuration) {
-      _frameElapsed -= _idleFrameDuration;
-      _frameIndex = (_frameIndex + 1) % _frames.length;
-    }
+    if (!_moving && !_reducedMotion) _sprite.advance(dt);
+  }
+
+  @override
+  void onRemove() {
+    _sprite.dispose();
+    super.onRemove();
   }
 
   @override
@@ -347,18 +408,18 @@ final class MapUnitComponent extends PositionComponent
     _shadows.paintUnit(
       canvas,
       center: center,
-      compact: _visual.onCity || _visual.workBadgeLabel != null,
+      compact: _onCity || _visual.workBadgeLabel != null,
     );
-    final metrics = MapSpriteCatalog.unitMetrics(_unit.kind);
+    final size = _spriteSize;
     final destination = ui.Rect.fromCenter(
       center: ui.Offset(
         center.dx,
-        center.dy - metrics.height * _spriteVerticalLiftFactor,
+        center.dy - size.height * _spriteVerticalLiftFactor,
       ),
-      width: metrics.width,
-      height: metrics.height,
+      width: size.width,
+      height: size.height,
     );
-    final frame = _currentFrame;
+    final frame = _sprite.frame;
     if (_unit.movementUnits == 0) {
       canvas.saveLayer(
         destination.inflate(28),
@@ -366,7 +427,7 @@ final class MapUnitComponent extends PositionComponent
       );
     }
     if (frame != null) {
-      MapSpritePainter.paint(canvas, frame, destination: destination);
+      _sprite.paint(canvas, destination);
     } else {
       MapUnitMarkerDetails.paintFallback(
         canvas,
@@ -378,12 +439,10 @@ final class MapUnitComponent extends PositionComponent
     }
     if (_unit.movementUnits == 0) canvas.restore();
     final compact = _visual.workBadgeLabel != null;
-    final height = compact ? metrics.height * 0.72 : metrics.height;
     final statusTop =
-        center.dy -
-        height * (0.5 + _spriteVerticalLiftFactor) +
-        (compact || _visual.onCity ? 6 : 9);
-    final statusWidth = metrics.width * (compact ? 0.72 : 1) * 0.68;
+        destination.top +
+        (_sprite.statusTopOffset(size) ?? (compact || _onCity ? 6 : 9));
+    final statusWidth = size.width * 0.68;
     MapUnitMarkerDetails.paint(
       canvas,
       center: center,
@@ -391,38 +450,11 @@ final class MapUnitComponent extends PositionComponent
       ownerColor: _visual.ownerColor,
       selected: _visual.selected,
       skippedTurn: _visual.skippedTurn,
-      onCity: _visual.onCity,
+      onCity: _onCity,
       statusTop: statusTop,
       statusWidth: statusWidth < 28 ? 28 : statusWidth,
       workBadgeLabel: _visual.workBadgeLabel,
     );
-  }
-
-  SpriteFrame? get _currentFrame =>
-      _frames.isEmpty ? null : _frames[_frameIndex % _frames.length];
-
-  void _reloadFrames() {
-    _frames = const [];
-    _frameIndex = 0;
-    _frameElapsed = 0;
-    _loadGeneration += 1;
-    if (isLoaded) unawaited(_loadFrames());
-  }
-
-  Future<void> _loadFrames() async {
-    final generation = ++_loadGeneration;
-    final kind = _unit.kind;
-    final List<SpriteFrame> frames;
-    try {
-      frames = await Future.wait(
-        MapSpriteCatalog.idleUnitFrames(kind).map(SpriteFrames.load),
-      );
-    } on Object {
-      return;
-    }
-    if (generation != _loadGeneration || _unit.kind != kind) return;
-    _frames = List.unmodifiable(frames);
-    _refreshGameWidget();
   }
 
   void _refreshGameWidget() {

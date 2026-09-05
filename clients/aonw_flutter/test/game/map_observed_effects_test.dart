@@ -36,10 +36,10 @@ void main() {
       var completed = false;
       completion.then((_) => completed = true);
       game.mapCamera.update(0.28);
-      host.update(0.24);
+      host.update(0.6);
       expect((unit.visualCenter - middle).distance, closeTo(0, 0.0001));
       expect(host.debugActiveCombatEffectCount, 0);
-      host.update(0.24);
+      host.update(0.6);
       expect(host.debugActiveCombatEffectCount, 1);
       expect(host.debugPendingCommandEffectCount, 1);
       game.replaceScene(_snapshot(revision: 1, animations: _sequence()));
@@ -52,7 +52,7 @@ void main() {
       expect(host.debugActiveCombatEffectCount, 0);
       expect(completed, isFalse);
       game.mapCamera.update(0.28);
-      host.update(0.24);
+      host.update(0.6);
       await completion;
       expect((unit.visualCenter - target).distance, closeTo(0, 0.0001));
       expect(host.debugCompletedMovementCount, 2);
@@ -165,11 +165,11 @@ void main() {
       final layer = game.world.eventFeedbackLayer;
       expect(layer.debugDeferredCueCount, 1);
       expect(layer.debugActiveBurstCount, 0);
-      game.world.effectHost.update(0.48);
+      game.world.effectHost.update(1.2);
       expect(layer.debugActiveBurstCount, 0);
       game.world.effectHost.update(1.28);
       expect(layer.debugActiveBurstCount, 0);
-      game.world.effectHost.update(0.24);
+      game.world.effectHost.update(0.6);
       expect(layer.debugDeferredCueCount, 0);
       expect(layer.debugActiveBurstCount, 1);
       var completed = false;

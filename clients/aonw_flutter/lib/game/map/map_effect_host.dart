@@ -24,7 +24,7 @@ final class MapEffectHostComponent extends Component {
     : _units = units,
       super(priority: 70);
 
-  static const _movementDurationSeconds = 0.24;
+  static const _movementDurationSeconds = 0.6;
   static const _combatDurationSeconds = 1.28;
   static const _maximumCombatEffects = 4;
 
@@ -145,11 +145,11 @@ final class MapEffectHostComponent extends Component {
       for (final movement in patch.movements) movement.unitId,
     };
     for (final unitId in patch.removedUnitIds) {
-      _movements.remove(unitId)?.presentation?.complete(interrupted: true);
+      _cancelMovement(unitId);
     }
     for (final unit in patch.unitUpserts) {
       if (!transitionedIds.contains(unit.id)) {
-        _movements.remove(unit.id)?.presentation?.complete(interrupted: true);
+        _cancelMovement(unit.id);
       }
     }
   }
@@ -166,26 +166,27 @@ final class MapEffectHostComponent extends Component {
   ) {
     final unit = _units.componentForUnit(movement.unitId);
     if (unit == null) return;
-    _movements
-        .remove(movement.unitId)
-        ?.presentation
-        ?.complete(interrupted: true);
+    _cancelMovement(movement.unitId);
     ui.Offset center(MapHexCoordinate coordinate) =>
-        _units.visualCenterFor(cache, movement.unitId, coordinate);
+        _units.centerFor(cache, coordinate);
     final points = movement.path.isEmpty
-        ? [unit.visualCenter, center(movement.to)]
+        ? [center(movement.from), center(movement.to)]
         : [for (final coordinate in movement.path) center(coordinate)];
+    final target = _units.settledCenterFor(cache, movement.unitId, movement.to);
+    unit.beginMovement();
     unit.setVisualCenter(points.first);
     final presentation = onMovementStart?.call(movement, unit);
     if (_reducedMotion ||
         (!_movementAnimationsEnabled && (presentation?.ready ?? true))) {
-      unit.setVisualCenter(points.last);
+      unit.finishMovement(movement.to, target);
       presentation?.complete(interrupted: false);
       _completedMovementCount += 1;
     } else {
       _movements[movement.unitId] = _ActiveUnitMovement(
         unit: unit,
         points: points,
+        target: target,
+        destination: movement.to,
         presentation: presentation,
         animate: _movementAnimationsEnabled,
       );
@@ -253,9 +254,16 @@ final class MapEffectHostComponent extends Component {
     _notifyActivity();
   }
 
+  void _cancelMovement(String unitId) {
+    final movement = _movements.remove(unitId);
+    if (movement == null) return;
+    movement.unit.cancelMovement();
+    movement.presentation?.complete(interrupted: true);
+  }
+
   void _finishMovements() {
     for (final movement in _movements.values) {
-      movement.unit.setVisualCenter(movement.target);
+      movement.unit.finishMovement(movement.destination, movement.target);
       movement.presentation?.complete(interrupted: true);
       _completedMovementCount += 1;
     }
@@ -293,36 +301,32 @@ final class MapEffectHostComponent extends Component {
   bool _updateMovements(double dt) {
     final completed = <String>[];
     for (final entry in _movements.entries) {
-      final movement = entry.value;
-      if (!(movement.presentation?.ready ?? true)) continue;
-      if (!movement.animate) {
-        movement.unit.setVisualCenter(movement.target);
-        completed.add(entry.key);
-        continue;
-      }
-      movement.elapsed += dt * _playbackSpeed;
-      final segment = (movement.elapsed / _movementDurationSeconds)
-          .floor()
-          .clamp(0, movement.points.length - 2);
-      final linear = ((movement.elapsed / _movementDurationSeconds) - segment)
-          .clamp(0.0, 1.0);
-      final eased = linear * linear * (3 - 2 * linear);
-      movement.unit.setVisualCenter(
-        ui.Offset.lerp(
-          movement.points[segment],
-          movement.points[segment + 1],
-          eased,
-        )!,
-      );
-      if (segment == movement.points.length - 2 && linear >= 1) {
-        completed.add(entry.key);
-      }
+      if (_advanceMovement(entry.value, dt)) completed.add(entry.key);
     }
     for (final unitId in completed) {
-      _movements.remove(unitId)?.presentation?.complete(interrupted: false);
+      final movement = _movements.remove(unitId)!;
+      movement.unit.finishMovement(movement.destination, movement.target);
+      movement.presentation?.complete(interrupted: false);
       _completedMovementCount += 1;
     }
     return completed.isNotEmpty;
+  }
+
+  bool _advanceMovement(_ActiveUnitMovement movement, double dt) {
+    if (!(movement.presentation?.ready ?? true)) return false;
+    if (!movement.animate) return true;
+    movement.elapsed += dt * _playbackSpeed;
+    final duration = _movementDurationSeconds * (movement.points.length - 1);
+    if (movement.elapsed + 1e-9 >= duration) return true;
+    final segmentTime = movement.elapsed / _movementDurationSeconds;
+    final segment = segmentTime.floor();
+    final from = movement.points[segment];
+    final to = movement.points[segment + 1];
+    movement.unit.advanceWalk(from, to, dt * _playbackSpeed);
+    movement.unit.setVisualCenter(
+      ui.Offset.lerp(from, to, segmentTime - segment)!,
+    );
+    return false;
   }
 
   bool _updateCombats(double dt) {
@@ -359,6 +363,8 @@ final class _ActiveUnitMovement {
   _ActiveUnitMovement({
     required this.unit,
     required this.points,
+    required this.target,
+    required this.destination,
     required this.animate,
     this.presentation,
   });
@@ -367,6 +373,7 @@ final class _ActiveUnitMovement {
   final List<ui.Offset> points;
   final bool animate;
   final MapMovementPresentation? presentation;
-  ui.Offset get target => points.last;
+  final ui.Offset target;
+  final MapHexCoordinate destination;
   var elapsed = 0.0;
 }

@@ -48,8 +48,9 @@ extension _ObservedEffectSequence on MapEffectHostComponent {
           in _observedTransitions.whereType<FlameUnitMovementTransition>()) {
         _units
             .componentForUnit(movement.unitId)
-            ?.setVisualCenter(
-              _units.visualCenterFor(cache, movement.unitId, movement.to),
+            ?.finishMovement(
+              movement.to,
+              _units.settledCenterFor(cache, movement.unitId, movement.to),
             );
         _completedMovementCount += 1;
       }

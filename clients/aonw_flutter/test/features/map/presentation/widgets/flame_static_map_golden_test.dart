@@ -102,6 +102,9 @@ void main() {
         ...MapSpriteCatalog.idleUnitFrames(VisibleUnitKind.commander),
       ]);
       await game.ready();
+      for (final unit in game.world.debugScene!.player.units) {
+        await game.world.unitLayer.componentForUnit(unit.id)!.debugLoadSprite();
+      }
     });
     game.setCinematicCamera(true);
     game.stepEngine(stepTime: 0);

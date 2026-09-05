@@ -153,9 +153,9 @@ void main() {
       expect(unit.debugVisualCenter, start);
 
       game.mapCamera.update(0.28);
-      game.world.effectHost.update(0.12);
+      game.world.effectHost.update(0.3);
       expect(unit.debugVisualCenter, isNot(start));
-      game.world.effectHost.update(0.12);
+      game.world.effectHost.update(0.3);
 
       expect(game.world.effectHost.debugActiveEffectCount, 0);
       expect(game.world.effectHost.debugCompletedMovementCount, 1);

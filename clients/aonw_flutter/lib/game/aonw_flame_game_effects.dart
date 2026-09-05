@@ -23,6 +23,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
     _reducedMotion = enabled;
     mapCamera.setMotionEnabled(_smoothCameraMovement && !enabled);
     world.effectHost.setReducedMotion(enabled);
+    world.unitLayer.setReducedMotion(enabled);
     world.cloudLayer.setReducedMotion(enabled);
     world.eraTintLayer.setReducedMotion(enabled);
     world.eventFeedbackLayer.setReducedMotion(enabled);

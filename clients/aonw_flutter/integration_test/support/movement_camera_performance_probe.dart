@@ -5,6 +5,7 @@ import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart'
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:aonw_flutter/game/map/flame_map_camera.dart';
 import 'package:aonw_flutter/game/map/map_movement_camera.dart';
+import 'package:aonw_flutter/game/map/map_unit_sprite_animation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -38,12 +39,20 @@ Future<void> measureMovementCamera(
   )!;
   final origin = unit.visualCenter;
   expect(game.mapCamera.hasMotion, isTrue);
+  final spriteFrames = <String>{};
   final frameTimes = await measureActiveFrameTimings(
     tester,
     warmupFrames: 12,
     timedFrames: 60,
+    beforeFrame: () {
+      final frame = unit.debugSpriteFrame;
+      if (frame != null) spriteFrames.add(frame.id.value);
+    },
   );
   expect(game.mapCamera.isFollowing, isTrue);
+  expect(unit.debugSpriteAction, MapUnitSpriteAction.walk);
+  final walkFrames = spriteFrames.where((id) => id.contains('.walk.')).length;
+  expect(walkFrames, 6);
   expect(unit.visualCenter.dx, greaterThan(origin.dx));
   expect(game.world.effectHost.debugActiveEffectCount, 1);
   expect(game.world.debugStaticRenderCache, same(cache));
@@ -77,6 +86,7 @@ Future<void> measureMovementCamera(
     idleUpdates: idleUpdates,
     cinematic: cinematic,
     culling: culling,
+    walkFrames: walkFrames,
   );
   final label = cinematic ? 'CINEMATIC_CAMERA' : 'MOVEMENT_CAMERA';
   // ignore: avoid_print
@@ -105,6 +115,7 @@ Map<String, Object> _movementCameraRecord(
   required int updates,
   required int idleUpdates,
   required bool cinematic,
+  required int walkFrames,
   required ({int terrain, int era}) culling,
 }) {
   return {
@@ -127,6 +138,10 @@ Map<String, Object> _movementCameraRecord(
       'focusDurationSeconds': 0.28,
       'followHalfLifeSeconds': 0.1,
       'effectPlaybackSpeed': 2,
+      'movementStepDurationSeconds': 0.6,
+      'movementCurve': 'linear',
+      'walkFrameDurationSeconds': 0.14,
+      'observedWalkFrames': walkFrames,
       'cameraUpdates': updates,
       'evidenceScope':
           'synthetic observed movement with a public executed route',

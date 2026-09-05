@@ -1,0 +1,1306 @@
+{
+  "version": 2,
+  "frames": {
+    "unit.archer.attack|0": {
+      "offsetX": 4.0,
+      "offsetY": 16.0
+    },
+    "unit.archer.attack|1": {
+      "offsetX": 10.0,
+      "offsetY": 16.0
+    },
+    "unit.archer.attack|2": {
+      "offsetX": 4.0,
+      "offsetY": 16.0
+    },
+    "unit.archer.attack|3": {
+      "offsetX": 2.0,
+      "offsetY": 16.0
+    },
+    "unit.archer.attack|4": {
+      "offsetX": 8.0,
+      "offsetY": 14.0
+    },
+    "unit.archer.attack|5": {
+      "offsetX": 8.0,
+      "offsetY": 14.0
+    },
+    "unit.archer.die|0": {
+      "offsetX": 4.0,
+      "offsetY": 20.0
+    },
+    "unit.archer.die|1": {
+      "offsetX": 10.0,
+      "offsetY": 20.0,
+      "cropRight": 56.0
+    },
+    "unit.archer.die|2": {
+      "offsetX": 10.0,
+      "offsetY": 20.0
+    },
+    "unit.archer.die|3": {
+      "offsetX": 4.0,
+      "offsetY": 20.0
+    },
+    "unit.archer.die|4": {
+      "offsetX": 4.0,
+      "offsetY": 20.0
+    },
+    "unit.archer.die|5": {
+      "offsetX": 4.0,
+      "offsetY": 20.0
+    },
+    "unit.archer.idle|0": {
+      "offsetY": -6.0
+    },
+    "unit.archer.idle|1": {
+      "offsetX": 4.0,
+      "offsetY": -6.0
+    },
+    "unit.archer.idle|2": {
+      "offsetY": -6.0
+    },
+    "unit.archer.idle|3": {
+      "offsetY": -6.0
+    },
+    "unit.archer.idle|4": {
+      "offsetX": 2.0,
+      "offsetY": -6.0
+    },
+    "unit.archer.idle|5": {
+      "offsetX": 2.0,
+      "offsetY": -6.0,
+      "cropRight": 11.992928832116789
+    },
+    "unit.archer.walk|0": {
+      "offsetY": 6.0
+    },
+    "unit.archer.walk|1": {
+      "offsetX": 6.0,
+      "offsetY": 6.0
+    },
+    "unit.archer.walk|2": {
+      "offsetX": 2.0,
+      "offsetY": 6.0
+    },
+    "unit.archer.walk|3": {
+      "offsetX": 2.0,
+      "offsetY": 6.0
+    },
+    "unit.archer.walk|4": {
+      "offsetX": 4.0,
+      "offsetY": 6.0
+    },
+    "unit.archer.walk|5": {
+      "offsetX": 6.0,
+      "offsetY": 6.0
+    },
+    "unit.catapult.attack|0": {
+      "offsetY": 4.0
+    },
+    "unit.catapult.attack|1": {
+      "offsetY": 4.0
+    },
+    "unit.catapult.attack|2": {
+      "offsetX": 2.0,
+      "offsetY": 4.0
+    },
+    "unit.catapult.attack|3": {
+      "offsetX": 2.0,
+      "offsetY": 4.0
+    },
+    "unit.catapult.attack|4": {
+      "offsetX": 4.0,
+      "offsetY": 4.0
+    },
+    "unit.catapult.attack|5": {
+      "offsetX": 2.0,
+      "offsetY": 4.0
+    },
+    "unit.catapult.idle|0": {
+      "offsetX": -2.0,
+      "offsetY": -2.0
+    },
+    "unit.catapult.idle|1": {
+      "offsetY": -2.0
+    },
+    "unit.catapult.idle|2": {
+      "offsetY": -2.0
+    },
+    "unit.catapult.idle|3": {
+      "offsetX": 4.0,
+      "offsetY": -2.0
+    },
+    "unit.catapult.idle|4": {
+      "offsetX": 4.0,
+      "offsetY": -2.0
+    },
+    "unit.catapult.idle|5": {
+      "offsetX": 4.0,
+      "offsetY": -2.0
+    },
+    "unit.catapult.walk|0": {
+      "offsetX": -4.0
+    },
+    "unit.catapult.walk|1": {
+      "offsetX": -2.0
+    },
+    "unit.catapult.walk|2": {
+      "offsetX": -2.0
+    },
+    "unit.cavalry.attack|0": {
+      "offsetY": 18.0
+    },
+    "unit.cavalry.attack|1": {
+      "offsetY": 12.0,
+      "cropLeft": 36.0
+    },
+    "unit.cavalry.attack|2": {
+      "offsetY": 10.0
+    },
+    "unit.cavalry.attack|3": {
+      "offsetX": 6.0
+    },
+    "unit.cavalry.attack|4": {
+      "offsetY": 12.0
+    },
+    "unit.cavalry.attack|5": {
+      "offsetY": 12.0
+    },
+    "unit.cavalry.idle|0": {
+      "offsetY": 6.0
+    },
+    "unit.cavalry.idle|1": {
+      "offsetY": 6.0
+    },
+    "unit.cavalry.idle|2": {
+      "offsetY": 6.0
+    },
+    "unit.cavalry.idle|3": {
+      "offsetY": 6.0
+    },
+    "unit.cavalry.idle|4": {
+      "offsetY": 4.0
+    },
+    "unit.cavalry.idle|5": {
+      "offsetY": 4.0,
+      "cropTop": 4.0
+    },
+    "unit.cavalry.walk|0": {
+      "offsetY": 10.0
+    },
+    "unit.cavalry.walk|1": {
+      "offsetY": 10.0
+    },
+    "unit.cavalry.walk|2": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.cavalry.walk|3": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.cavalry.walk|4": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.cavalry.walk|5": {
+      "offsetX": 4.0,
+      "offsetY": 10.0
+    },
+    "unit.commander.attack|0": {
+      "offsetX": -4.0,
+      "offsetY": 6.0
+    },
+    "unit.commander.attack|1": {
+      "offsetX": -4.0,
+      "offsetY": 6.0,
+      "cropLeft": 22.0
+    },
+    "unit.commander.attack|2": {
+      "offsetX": -4.0,
+      "offsetY": 6.0,
+      "cropLeft": 90.0
+    },
+    "unit.commander.attack|3": {
+      "offsetY": 6.0,
+      "cropLeft": 42.0
+    },
+    "unit.commander.attack|4": {
+      "offsetY": 6.0
+    },
+    "unit.commander.attack|5": {
+      "offsetX": 6.0,
+      "offsetY": 6.0
+    },
+    "unit.commander.die|0": {
+      "offsetY": 10.0
+    },
+    "unit.commander.die|1": {
+      "offsetX": 6.0,
+      "offsetY": 10.0
+    },
+    "unit.commander.die|2": {
+      "offsetX": 8.0,
+      "offsetY": 10.0,
+      "cropRight": 68.0
+    },
+    "unit.commander.die|3": {
+      "offsetX": 16.0,
+      "offsetY": 10.0,
+      "cropRight": 106.0
+    },
+    "unit.commander.die|4": {
+      "offsetX": 16.0,
+      "offsetY": 10.0,
+      "cropRight": 96.0
+    },
+    "unit.commander.die|5": {
+      "offsetX": 10.0,
+      "offsetY": 10.0
+    },
+    "unit.commander.idle|0": {
+      "offsetX": -2.0,
+      "offsetY": -4.0,
+      "cropLeft": 24.634124087591246
+    },
+    "unit.commander.idle|1": {
+      "offsetY": -4.0,
+      "cropLeft": 13.497833029197082,
+      "cropRight": -4.607322080291965
+    },
+    "unit.commander.idle|2": {
+      "offsetY": -4.0
+    },
+    "unit.commander.idle|3": {
+      "offsetX": 2.0,
+      "offsetY": -4.0,
+      "cropRight": 24.54151459854015
+    },
+    "unit.commander.idle|4": {
+      "offsetX": 4.0,
+      "offsetY": -4.0,
+      "cropRight": 44.105269160583944
+    },
+    "unit.commander.idle|5": {
+      "offsetX": 6.0,
+      "offsetY": -4.0,
+      "cropRight": 68.73939324817522
+    },
+    "unit.commander.walk|0": {
+      "offsetY": 4.0
+    },
+    "unit.commander.walk|1": {
+      "offsetX": 6.0,
+      "offsetY": 4.0
+    },
+    "unit.commander.walk|2": {
+      "offsetX": 8.0,
+      "offsetY": 4.0
+    },
+    "unit.commander.walk|3": {
+      "offsetX": 8.0,
+      "offsetY": 4.0
+    },
+    "unit.commander.walk|4": {
+      "offsetX": 12.0,
+      "offsetY": 4.0,
+      "cropRight": 34.0
+    },
+    "unit.commander.walk|5": {
+      "offsetX": 14.0,
+      "offsetY": 4.0
+    },
+    "unit.fieldCannon.attack|0": {
+      "offsetX": -2.0,
+      "offsetY": 16.0
+    },
+    "unit.fieldCannon.attack|1": {
+      "offsetY": 16.0
+    },
+    "unit.fieldCannon.attack|2": {
+      "offsetY": 16.0
+    },
+    "unit.fieldCannon.attack|3": {
+      "offsetY": 16.0
+    },
+    "unit.fieldCannon.attack|4": {
+      "offsetY": 16.0,
+      "cropLeft": 18.0
+    },
+    "unit.fieldCannon.attack|5": {
+      "offsetY": 16.0
+    },
+    "unit.fieldCannon.idle|0": {
+      "offsetX": -4.0,
+      "offsetY": 4.0,
+      "cropLeft": 46.32789689781023,
+      "cropRight": -29.102531934306572,
+      "cropBottom": 40.77132755474452
+    },
+    "unit.fieldCannon.idle|1": {
+      "offsetY": 4.0,
+      "cropBottom": 30.491674270072988
+    },
+    "unit.fieldCannon.idle|2": {
+      "offsetX": 2.0,
+      "offsetY": 4.0,
+      "cropBottom": 27.620780109489054
+    },
+    "unit.fieldCannon.idle|3": {
+      "offsetX": 2.0,
+      "offsetY": 4.0,
+      "cropBottom": 55.75091240875913
+    },
+    "unit.fieldCannon.idle|4": {
+      "offsetX": 4.0,
+      "offsetY": 4.0,
+      "cropBottom": 49.638686131386876
+    },
+    "unit.fieldCannon.idle|5": {
+      "offsetX": 6.0,
+      "offsetY": 4.0,
+      "cropLeft": -27.204037408759117,
+      "cropRight": 40.19251824817518,
+      "cropBottom": 38.64130930656934
+    },
+    "unit.fieldCannon.walk|0": {
+      "offsetX": -6.0,
+      "offsetY": 10.0
+    },
+    "unit.fieldCannon.walk|1": {
+      "offsetX": -2.0,
+      "offsetY": 10.0,
+      "cropLeft": 20.0
+    },
+    "unit.fieldCannon.walk|2": {
+      "offsetY": 10.0
+    },
+    "unit.fieldCannon.walk|3": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.fieldCannon.walk|4": {
+      "offsetX": 6.0,
+      "offsetY": 10.0
+    },
+    "unit.fieldCannon.walk|5": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.attack|0": {
+      "offsetY": 10.0,
+      "cropBottom": 16.0
+    },
+    "unit.heavyInfantry.attack|1": {
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.attack|2": {
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.attack|3": {
+      "offsetX": 2.0,
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.attack|4": {
+      "offsetX": 8.0,
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.attack|5": {
+      "offsetX": 10.0,
+      "offsetY": 10.0
+    },
+    "unit.heavyInfantry.idle|0": {
+      "offsetY": -8.0,
+      "cropBottom": -44.869297445255484
+    },
+    "unit.heavyInfantry.idle|1": {
+      "offsetY": -8.0,
+      "cropBottom": -58.25136861313868
+    },
+    "unit.heavyInfantry.idle|2": {
+      "offsetX": 2.0,
+      "offsetY": -8.0,
+      "cropBottom": -43.92005018248176
+    },
+    "unit.heavyInfantry.idle|3": {
+      "offsetX": 4.0,
+      "offsetY": -8.0,
+      "cropRight": 41.88264142335767,
+      "cropBottom": -43.01710766423359
+    },
+    "unit.heavyInfantry.idle|4": {
+      "offsetX": 8.0,
+      "offsetY": -8.0,
+      "cropRight": 64.73403284671534,
+      "cropBottom": -48.1106295620438
+    },
+    "unit.heavyInfantry.idle|5": {
+      "offsetX": 12.0,
+      "offsetY": -8.0,
+      "cropLeft": -23.846943430656935,
+      "cropRight": 90.78045164233578,
+      "cropBottom": -61.839986313868614
+    },
+    "unit.heavyInfantry.walk|0": {
+      "offsetX": -4.0
+    },
+    "unit.heavyInfantry.walk|1": {
+      "offsetX": -4.0
+    },
+    "unit.heavyInfantry.walk|2": {
+      "offsetX": -2.0
+    },
+    "unit.heavyInfantry.walk|4": {
+      "offsetX": 2.0
+    },
+    "unit.heavyInfantry.walk|5": {
+      "offsetX": 4.0
+    },
+    "unit.reconPlane.attack|0": {
+      "offsetX": -6.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.attack|1": {
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.attack|2": {
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.attack|3": {
+      "offsetX": 10.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.attack|4": {
+      "offsetX": 4.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.attack|5": {
+      "offsetX": 8.0,
+      "offsetY": 12.0
+    },
+    "unit.reconPlane.idle|0": {
+      "offsetX": -4.0,
+      "offsetY": 4.0,
+      "cropLeft": 33.68670164233577,
+      "cropRight": -39.150661496350374,
+      "cropBottom": 64.94240419708028
+    },
+    "unit.reconPlane.idle|1": {
+      "offsetY": 4.0
+    },
+    "unit.reconPlane.idle|2": {
+      "offsetY": 4.0
+    },
+    "unit.reconPlane.idle|3": {
+      "offsetX": 4.0,
+      "offsetY": 4.0,
+      "cropLeft": -27.342951642335766,
+      "cropRight": 26.0
+    },
+    "unit.reconPlane.idle|4": {
+      "offsetX": 8.0,
+      "offsetY": 4.0,
+      "cropLeft": -69.41081204379562,
+      "cropRight": 62.928147810219,
+      "cropBottom": 26.949361313868614
+    },
+    "unit.reconPlane.idle|5": {
+      "offsetX": 6.0,
+      "offsetY": 4.0,
+      "cropLeft": -37.4373859489051,
+      "cropRight": 44.45255474452556,
+      "cropBottom": 56.09819799270073
+    },
+    "unit.reconPlane.walk|0": {
+      "offsetX": -8.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.walk|1": {
+      "offsetX": -6.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.walk|2": {
+      "offsetX": -2.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.walk|3": {
+      "offsetX": 4.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.walk|4": {
+      "offsetX": 8.0,
+      "offsetY": 14.0
+    },
+    "unit.reconPlane.walk|5": {
+      "offsetX": 10.0,
+      "offsetY": 12.0
+    },
+    "unit.rifleman.attack|0": {
+      "offsetY": 20.0,
+      "cropBottom": 70.0
+    },
+    "unit.rifleman.attack|1": {
+      "offsetY": 20.0,
+      "cropLeft": 62.0,
+      "cropBottom": 46.0
+    },
+    "unit.rifleman.attack|2": {
+      "offsetY": 20.0,
+      "cropLeft": 140.0
+    },
+    "unit.rifleman.attack|3": {
+      "offsetY": 20.0,
+      "cropLeft": 40.0
+    },
+    "unit.rifleman.attack|4": {
+      "offsetX": 10.0,
+      "offsetY": 20.0,
+      "cropRight": 74.0
+    },
+    "unit.rifleman.attack|5": {
+      "offsetX": 16.0,
+      "offsetY": 20.0
+    },
+    "unit.rifleman.idle|0": {
+      "offsetX": -4.0,
+      "cropLeft": 35.30736770072993,
+      "cropRight": -67.14187956204381
+    },
+    "unit.rifleman.idle|1": {
+      "offsetX": -2.0,
+      "cropLeft": 30.47901459854014,
+      "cropRight": -17.155907846715348
+    },
+    "unit.rifleman.idle|2": {
+      "offsetX": 2.0
+    },
+    "unit.rifleman.idle|3": {
+      "offsetX": 6.0,
+      "cropRight": 26.0
+    },
+    "unit.rifleman.idle|4": {
+      "offsetX": 10.0,
+      "cropLeft": -59.1311587591241,
+      "cropRight": 60.0
+    },
+    "unit.rifleman.idle|5": {
+      "offsetX": 14.0,
+      "cropLeft": -78.90328467153284,
+      "cropRight": 44.84614507299271
+    },
+    "unit.rifleman.walk|0": {
+      "offsetY": 6.0
+    },
+    "unit.rifleman.walk|1": {
+      "offsetY": 6.0,
+      "cropLeft": 50.0
+    },
+    "unit.rifleman.walk|2": {
+      "offsetX": 4.0,
+      "offsetY": 6.0
+    },
+    "unit.rifleman.walk|3": {
+      "offsetX": 8.0,
+      "offsetY": 6.0,
+      "cropRight": 36.0
+    },
+    "unit.rifleman.walk|4": {
+      "offsetX": 12.0,
+      "offsetY": 6.0,
+      "cropRight": 68.0
+    },
+    "unit.rifleman.walk|5": {
+      "offsetX": 16.0,
+      "offsetY": 6.0
+    },
+    "unit.scout.attack|0": {
+      "offsetY": 12.0
+    },
+    "unit.scout.attack|1": {
+      "offsetY": 12.0
+    },
+    "unit.scout.attack|2": {
+      "offsetY": 12.0
+    },
+    "unit.scout.attack|3": {
+      "offsetY": 12.0,
+      "cropRight": 16.0
+    },
+    "unit.scout.attack|4": {
+      "offsetY": 12.0
+    },
+    "unit.scout.attack|5": {
+      "offsetY": 12.0,
+      "cropLeft": 46.0
+    },
+    "unit.scout.idle|0": {
+      "offsetX": -4.0,
+      "offsetY": -2.0,
+      "cropLeft": 37.59945255474452,
+      "cropRight": -35.81671989051095,
+      "cropBottom": -15.558394160583942
+    },
+    "unit.scout.idle|1": {
+      "offsetX": -4.0,
+      "offsetY": -2.0,
+      "cropLeft": 30.561131386861312,
+      "cropRight": -31.880816605839417,
+      "cropBottom": -5.278740875912409
+    },
+    "unit.scout.idle|2": {
+      "offsetY": -2.0,
+      "cropRight": -17.34112682481752,
+      "cropBottom": -19.05440237226277
+    },
+    "unit.scout.idle|3": {
+      "offsetY": -2.0,
+      "cropBottom": -24.79619069343066
+    },
+    "unit.scout.idle|4": {
+      "offsetX": 2.0,
+      "offsetY": -2.0,
+      "cropBottom": -23.360743613138688
+    },
+    "unit.scout.idle|5": {
+      "offsetX": 4.0,
+      "offsetY": -2.0,
+      "cropLeft": -17.781021897810223,
+      "cropRight": 25.722285583941606,
+      "cropBottom": -7.3856067518248185
+    },
+    "unit.scout.walk|0": {
+      "offsetX": -4.0
+    },
+    "unit.scout.walk|1": {
+      "offsetX": -4.0,
+      "cropLeft": 32.0,
+      "cropRight": 2.0
+    },
+    "unit.scout.walk|2": {
+      "offsetX": -4.0,
+      "cropLeft": 26.0
+    },
+    "unit.scout.walk|3": {
+      "offsetX": -4.0,
+      "cropLeft": 26.0,
+      "cropRight": 6.0
+    },
+    "unit.scout.walk|5": {
+      "offsetX": 2.0
+    },
+    "unit.scoutShip.attack|0": {
+      "offsetX": -6.0,
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.attack|1": {
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.attack|2": {
+      "offsetX": 4.0,
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.attack|3": {
+      "offsetX": 8.0,
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.attack|4": {
+      "offsetX": 10.0,
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.attack|5": {
+      "offsetX": 12.0,
+      "offsetY": 2.0
+    },
+    "unit.scoutShip.idle|0": {
+      "offsetY": -6.0,
+      "cropTop": 6.0
+    },
+    "unit.scoutShip.idle|1": {
+      "offsetY": -6.0
+    },
+    "unit.scoutShip.idle|2": {
+      "offsetY": -6.0
+    },
+    "unit.scoutShip.idle|3": {
+      "offsetX": 6.0,
+      "offsetY": -6.0
+    },
+    "unit.scoutShip.idle|4": {
+      "offsetX": 8.0,
+      "offsetY": -6.0
+    },
+    "unit.scoutShip.idle|5": {
+      "offsetX": 10.0,
+      "offsetY": -6.0,
+      "cropBottom": -42.27623175182483
+    },
+    "unit.scoutShip.walk|0": {
+      "offsetX": -12.0,
+      "offsetY": -2.0
+    },
+    "unit.scoutShip.walk|1": {
+      "offsetX": -10.0,
+      "offsetY": -2.0
+    },
+    "unit.scoutShip.walk|2": {
+      "offsetX": -2.0,
+      "offsetY": -2.0
+    },
+    "unit.scoutShip.walk|3": {
+      "offsetX": 4.0,
+      "offsetY": -2.0
+    },
+    "unit.scoutShip.walk|4": {
+      "offsetX": 8.0,
+      "offsetY": -2.0,
+      "cropRight": 24.0
+    },
+    "unit.scoutShip.walk|5": {
+      "offsetX": 12.0,
+      "offsetY": -2.0
+    },
+    "unit.settler.idle|0": {
+      "offsetX": -10.0,
+      "offsetY": -6.0,
+      "cropRight": -67.02611770072991,
+      "cropBottom": -56.584397810219
+    },
+    "unit.settler.idle|1": {
+      "offsetX": -6.0,
+      "offsetY": -6.0,
+      "cropLeft": 42.0,
+      "cropRight": -57.811473540146004,
+      "cropBottom": -52.92632299270072
+    },
+    "unit.settler.idle|2": {
+      "offsetX": -4.0,
+      "offsetY": -6.0,
+      "cropLeft": 22.0,
+      "cropRight": -27.505018248175183,
+      "cropBottom": -33.909329379562045
+    },
+    "unit.settler.idle|3": {
+      "offsetX": 2.0,
+      "offsetY": -6.0,
+      "cropRight": 30.0,
+      "cropBottom": -47.25399178832117
+    },
+    "unit.settler.idle|4": {
+      "offsetX": 6.0,
+      "offsetY": -6.0,
+      "cropLeft": -46.67518248175183,
+      "cropRight": 67.64210766423358,
+      "cropBottom": -59.987796532846716
+    },
+    "unit.settler.idle|5": {
+      "offsetX": 10.0,
+      "offsetY": -6.0,
+      "cropLeft": -67.09557481751824,
+      "cropRight": 75.84717153284672,
+      "cropBottom": -42.78558394160585
+    },
+    "unit.settler.walk|0": {
+      "offsetX": -4.0
+    },
+    "unit.settler.walk|1": {
+      "offsetX": -2.0
+    },
+    "unit.settler.walk|2": {
+      "offsetX": 2.0
+    },
+    "unit.settler.walk|3": {
+      "offsetX": 6.0,
+      "cropRight": 14.0
+    },
+    "unit.settler.walk|4": {
+      "offsetX": 12.0,
+      "cropRight": 64.0
+    },
+    "unit.settler.walk|5": {
+      "offsetX": 16.0
+    },
+    "unit.settler.work|0": {
+      "offsetX": -6.0,
+      "offsetY": 10.0
+    },
+    "unit.settler.work|1": {
+      "offsetY": 10.0
+    },
+    "unit.settler.work|2": {
+      "offsetX": 8.0,
+      "offsetY": 10.0,
+      "cropRight": 48.0
+    },
+    "unit.settler.work|3": {
+      "offsetX": 10.0,
+      "offsetY": 10.0,
+      "cropRight": 76.0
+    },
+    "unit.settler.work|4": {
+      "offsetX": 10.0,
+      "offsetY": 6.0,
+      "cropRight": 76.0
+    },
+    "unit.settler.work|5": {
+      "offsetX": 10.0,
+      "offsetY": 6.0
+    },
+    "unit.spearman.attack|0": {
+      "offsetY": 16.0
+    },
+    "unit.spearman.attack|1": {
+      "offsetX": 2.0,
+      "offsetY": 16.0
+    },
+    "unit.spearman.attack|2": {
+      "offsetX": 4.0,
+      "offsetY": 16.0,
+      "cropRight": 16.0
+    },
+    "unit.spearman.attack|3": {
+      "offsetX": 6.0,
+      "offsetY": 16.0,
+      "cropRight": 80.0
+    },
+    "unit.spearman.attack|4": {
+      "offsetX": 8.0,
+      "offsetY": 14.0
+    },
+    "unit.spearman.attack|5": {
+      "offsetX": 8.0,
+      "offsetY": 16.0
+    },
+    "unit.spearman.idle|0": {
+      "offsetX": -6.0,
+      "offsetY": 4.0,
+      "cropLeft": 74.45802919708035,
+      "cropRight": -55.05634124087594
+    },
+    "unit.spearman.idle|1": {
+      "offsetX": -6.0,
+      "offsetY": 4.0,
+      "cropLeft": 66.51482664233575,
+      "cropRight": -52.301208941605836
+    },
+    "unit.spearman.idle|2": {
+      "offsetY": 4.0,
+      "cropLeft": 40.0,
+      "cropRight": -3.0561131386861304
+    },
+    "unit.spearman.idle|3": {
+      "offsetX": 4.0,
+      "offsetY": 4.0,
+      "cropRight": 18.10515510948905
+    },
+    "unit.spearman.idle|4": {
+      "offsetX": 6.0,
+      "offsetY": 4.0,
+      "cropLeft": -39.75262317518249,
+      "cropRight": 40.53980383211679
+    },
+    "unit.spearman.idle|5": {
+      "offsetX": 10.0,
+      "offsetY": 4.0,
+      "cropLeft": -61.14541514598541,
+      "cropRight": 65.03501368613139
+    },
+    "unit.spearman.walk|0": {
+      "offsetX": -6.0,
+      "offsetY": 14.0
+    },
+    "unit.spearman.walk|1": {
+      "offsetX": -4.0,
+      "offsetY": 12.0,
+      "cropLeft": 26.0
+    },
+    "unit.spearman.walk|2": {
+      "offsetY": 12.0
+    },
+    "unit.spearman.walk|3": {
+      "offsetX": 8.0,
+      "offsetY": 14.0,
+      "cropRight": 22.0
+    },
+    "unit.spearman.walk|4": {
+      "offsetX": 10.0,
+      "offsetY": 12.0,
+      "cropRight": 30.0
+    },
+    "unit.spearman.walk|5": {
+      "offsetX": 12.0,
+      "offsetY": 10.0
+    },
+    "unit.tank.attack|0": {
+      "offsetX": -6.0,
+      "offsetY": 10.0
+    },
+    "unit.tank.attack|1": {
+      "offsetY": 10.0
+    },
+    "unit.tank.attack|2": {
+      "offsetY": 10.0,
+      "cropLeft": 32.0
+    },
+    "unit.tank.attack|3": {
+      "offsetX": -2.0,
+      "offsetY": 10.0,
+      "cropLeft": 50.0
+    },
+    "unit.tank.attack|4": {
+      "offsetY": 10.0
+    },
+    "unit.tank.attack|5": {
+      "offsetY": 10.0
+    },
+    "unit.tank.idle|0": {
+      "offsetX": -2.0,
+      "offsetY": -4.0,
+      "cropLeft": 0.6945711678832117,
+      "cropRight": -27.204037408759117,
+      "cropBottom": -26.185333029197082
+    },
+    "unit.tank.idle|1": {
+      "offsetY": -4.0,
+      "cropBottom": -12.20130018248175
+    },
+    "unit.tank.idle|2": {
+      "offsetX": 2.0,
+      "offsetY": -4.0
+    },
+    "unit.tank.idle|3": {
+      "offsetX": 4.0,
+      "offsetY": -4.0,
+      "cropLeft": -17.642107664233578,
+      "cropRight": 19.748973540145986
+    },
+    "unit.tank.idle|4": {
+      "offsetX": 8.0,
+      "offsetY": -4.0,
+      "cropLeft": -38.9422901459854,
+      "cropRight": 42.667997262773724
+    },
+    "unit.tank.idle|5": {
+      "offsetX": 10.0,
+      "offsetY": -4.0,
+      "cropLeft": -71.03147810218978,
+      "cropRight": 48.22639142335766
+    },
+    "unit.tank.walk|0": {
+      "offsetX": -2.0,
+      "offsetY": 4.0
+    },
+    "unit.tank.walk|1": {
+      "offsetY": 4.0
+    },
+    "unit.tank.walk|2": {
+      "offsetX": 4.0,
+      "offsetY": 4.0
+    },
+    "unit.tank.walk|3": {
+      "offsetX": 6.0,
+      "offsetY": 4.0
+    },
+    "unit.tank.walk|4": {
+      "offsetX": 8.0,
+      "offsetY": 4.0
+    },
+    "unit.tank.walk|5": {
+      "offsetX": 10.0,
+      "offsetY": 4.0
+    },
+    "unit.warrior.attack|0": {
+      "offsetY": 18.0
+    },
+    "unit.warrior.attack|1": {
+      "offsetY": 18.0,
+      "cropBottom": 62.0
+    },
+    "unit.warrior.attack|2": {
+      "offsetY": 18.0
+    },
+    "unit.warrior.attack|3": {
+      "offsetY": 18.0,
+      "cropLeft": 10.0
+    },
+    "unit.warrior.attack|4": {
+      "offsetY": 16.0,
+      "cropLeft": 12.0
+    },
+    "unit.warrior.attack|5": {
+      "offsetY": 16.0,
+      "cropLeft": 44.0
+    },
+    "unit.warrior.die|0": {
+      "offsetY": 18.0
+    },
+    "unit.warrior.die|1": {
+      "offsetY": 18.0
+    },
+    "unit.warrior.die|2": {
+      "offsetX": 2.0,
+      "offsetY": 18.0
+    },
+    "unit.warrior.die|3": {
+      "offsetX": 2.0,
+      "offsetY": 18.0
+    },
+    "unit.warrior.die|4": {
+      "offsetX": 4.0,
+      "offsetY": 18.0
+    },
+    "unit.warrior.die|5": {
+      "offsetX": 4.0,
+      "offsetY": 18.0
+    },
+    "unit.warrior.idle|0": {
+      "offsetX": -2.0,
+      "offsetY": -2.0,
+      "cropLeft": 18.545050182481752
+    },
+    "unit.warrior.idle|1": {
+      "offsetX": -2.0,
+      "offsetY": -2.0
+    },
+    "unit.warrior.idle|2": {
+      "offsetY": -2.0
+    },
+    "unit.warrior.idle|3": {
+      "offsetX": 2.0,
+      "offsetY": -2.0
+    },
+    "unit.warrior.idle|4": {
+      "offsetX": 2.0,
+      "offsetY": -2.0
+    },
+    "unit.warrior.idle|5": {
+      "offsetX": 6.0,
+      "offsetY": -2.0,
+      "cropRight": 44.45255474452554
+    },
+    "unit.warrior.walk|0": {
+      "offsetX": -4.0,
+      "offsetY": 10.0
+    },
+    "unit.warrior.walk|1": {
+      "offsetX": -4.0,
+      "offsetY": 10.0
+    },
+    "unit.warrior.walk|2": {
+      "offsetX": -2.0,
+      "offsetY": 10.0
+    },
+    "unit.warrior.walk|3": {
+      "offsetX": -2.0,
+      "offsetY": 10.0
+    },
+    "unit.warrior.walk|4": {
+      "offsetY": 10.0
+    },
+    "unit.warrior.walk|5": {
+      "offsetX": 4.0,
+      "offsetY": 10.0
+    },
+    "unit.warship.attack|0": {
+      "offsetX": -4.0,
+      "offsetY": 2.0
+    },
+    "unit.warship.attack|1": {
+      "offsetY": 2.0,
+      "cropLeft": 22.0
+    },
+    "unit.warship.attack|2": {
+      "offsetX": 2.0,
+      "offsetY": 2.0
+    },
+    "unit.warship.attack|3": {
+      "offsetX": 6.0,
+      "offsetY": 2.0
+    },
+    "unit.warship.attack|4": {
+      "offsetX": 10.0,
+      "offsetY": 2.0,
+      "cropRight": 36.0
+    },
+    "unit.warship.attack|5": {
+      "offsetX": 14.0,
+      "offsetY": 2.0
+    },
+    "unit.warship.idle|0": {
+      "offsetX": -6.0,
+      "offsetY": -2.0
+    },
+    "unit.warship.idle|1": {
+      "offsetX": -6.0,
+      "offsetY": -2.0,
+      "cropLeft": 42.0
+    },
+    "unit.warship.idle|2": {
+      "offsetX": -6.0,
+      "offsetY": -2.0,
+      "cropLeft": 36.0
+    },
+    "unit.warship.idle|3": {
+      "offsetY": -2.0
+    },
+    "unit.warship.idle|4": {
+      "offsetX": 4.0,
+      "offsetY": -2.0,
+      "cropRight": 36.0
+    },
+    "unit.warship.idle|5": {
+      "offsetX": 10.0,
+      "offsetY": -2.0
+    },
+    "unit.warship.walk|0": {
+      "offsetX": -10.0
+    },
+    "unit.warship.walk|1": {
+      "offsetX": -8.0,
+      "cropLeft": 48.0
+    },
+    "unit.warship.walk|2": {
+      "offsetX": -4.0,
+      "cropLeft": 30.0
+    },
+    "unit.warship.walk|4": {
+      "offsetX": 6.0,
+      "cropRight": 32.0
+    },
+    "unit.warship.walk|5": {
+      "offsetX": 12.0
+    },
+    "unit.worker.idle|0": {
+      "offsetX": -4.0,
+      "offsetY": -8.0,
+      "cropRight": -33.87192062043796,
+      "cropBottom": -86.77509124087592
+    },
+    "unit.worker.idle|1": {
+      "offsetX": -4.0,
+      "offsetY": -8.0,
+      "cropLeft": 34.821167883211686,
+      "cropRight": -42.62351733576643,
+      "cropBottom": -97.23996350364966
+    },
+    "unit.worker.idle|2": {
+      "offsetX": -6.0,
+      "offsetY": -8.0,
+      "cropLeft": 46.42050638686131,
+      "cropRight": -56.908531021897815,
+      "cropBottom": -90.01642335766424
+    },
+    "unit.worker.idle|3": {
+      "offsetY": -8.0,
+      "cropBottom": -79.9219890510949
+    },
+    "unit.worker.idle|4": {
+      "offsetX": 6.0,
+      "offsetY": -8.0,
+      "cropLeft": -46.97616332116789,
+      "cropRight": 38.43293795620438,
+      "cropBottom": -86.56671989051092
+    },
+    "unit.worker.idle|5": {
+      "offsetX": 6.0,
+      "offsetY": -8.0,
+      "cropLeft": -40.09990875912409,
+      "cropRight": 50.26380018248176,
+      "cropBottom": -99.85618156934311
+    },
+    "unit.worker.walk|0": {
+      "cropTop": 80.0
+    },
+    "unit.worker.walk|1": {
+      "cropTop": 72.0
+    },
+    "unit.worker.walk|2": {
+      "cropTop": 78.0
+    },
+    "unit.worker.walk|3": {
+      "cropTop": 72.0
+    },
+    "unit.worker.walk|4": {
+      "cropTop": 78.0
+    },
+    "unit.worker.walk|5": {
+      "cropTop": 84.0
+    },
+    "unit.worker.work|0": {
+      "offsetY": 16.0
+    },
+    "unit.worker.work|1": {
+      "offsetX": 4.0,
+      "offsetY": 16.0
+    },
+    "unit.worker.work|2": {
+      "offsetX": 6.0,
+      "offsetY": 16.0
+    },
+    "unit.worker.work|3": {
+      "offsetX": 6.0,
+      "offsetY": 16.0
+    },
+    "unit.worker.work|4": {
+      "offsetX": 10.0,
+      "offsetY": 16.0
+    },
+    "unit.worker.work|5": {
+      "offsetX": 10.0,
+      "offsetY": 16.0
+    }
+  },
+  "animations": {
+    "unit.archer.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.catapult.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.cavalry.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.commander.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.fieldCannon.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.heavyInfantry.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.merchant.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.reconPlane.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.rifleman.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.scout.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.scoutShip.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.settler.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.spearman.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.tank.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.warrior.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.warship.idle": {
+      "frameDuration": 0.30333333333333334
+    },
+    "unit.worker.idle": {
+      "frameDuration": 0.30333333333333334
+    }
+  }
+}
