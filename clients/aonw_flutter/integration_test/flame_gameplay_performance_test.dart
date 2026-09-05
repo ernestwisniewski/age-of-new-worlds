@@ -291,4 +291,12 @@ Future<void> _measureActiveEffects(
     snapshot,
     rssBefore: rssBefore,
   );
+  await measureMovementCamera(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+    cinematic: true,
+  );
 }

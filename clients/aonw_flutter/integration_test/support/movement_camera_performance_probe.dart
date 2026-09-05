@@ -17,7 +17,9 @@ Future<void> measureMovementCamera(
   AonwFlameGame game,
   MapRenderSnapshot source, {
   required int rssBefore,
+  bool cinematic = false,
 }) async {
+  game.setCinematicCamera(cinematic);
   game.replaceScene(source);
   game.skipEffects();
   game.setMovementCameraOptions((
@@ -45,9 +47,21 @@ Future<void> measureMovementCamera(
   expect(unit.visualCenter.dx, greaterThan(origin.dx));
   expect(game.world.effectHost.debugActiveEffectCount, 1);
   expect(game.world.debugStaticRenderCache, same(cache));
+  final culling = (
+    terrain: game.world.terrainLayer.debugRenderedRegionCount,
+    era: game.world.eraTintLayer.debugRenderedRegionCount,
+  );
+  expect(culling.terrain, inInclusiveRange(1, cache.terrainRegions.length - 1));
+  expect(
+    culling.era,
+    inInclusiveRange(1, game.world.eraTintLayer.debugRegionCount - 1),
+  );
   final updates = game.mapCamera.debugTransformUpdateCount - cameraUpdates;
   expect(updates, greaterThan(60));
-  binding.reportData!['flameMovementCameraFrameTimes'] = frameTimes;
+  binding.reportData![cinematic
+          ? 'flameCinematicCameraFrameTimes'
+          : 'flameMovementCameraFrameTimes'] =
+      frameTimes;
   final rssDelta = ProcessInfo.currentRss - rssBefore;
   game.skipEffects();
   await game.waitForCommandEffects();
@@ -55,7 +69,45 @@ Future<void> measureMovementCamera(
   final idleUpdates = game.mapCamera.debugTransformUpdateCount;
   await tester.pump(const Duration(milliseconds: 100));
   expect(game.mapCamera.debugTransformUpdateCount, idleUpdates);
-  final record = {
+  final record = _movementCameraRecord(
+    game,
+    frameTimes,
+    rssDelta: rssDelta,
+    updates: updates,
+    idleUpdates: idleUpdates,
+    cinematic: cinematic,
+    culling: culling,
+  );
+  final label = cinematic ? 'CINEMATIC_CAMERA' : 'MOVEMENT_CAMERA';
+  // ignore: avoid_print
+  print('AONW_FLAME_${label}_BASELINE ${jsonEncode(record)}');
+  expect(
+    frameTimes['99th_percentile_frame_build_time_millis'],
+    lessThanOrEqualTo(16.667),
+  );
+  expect(
+    frameTimes['99th_percentile_frame_rasterizer_time_millis'],
+    lessThanOrEqualTo(16.667),
+  );
+  expect(frameTimes['missed_frame_build_budget_count'], 0);
+  expect(frameTimes['missed_frame_rasterizer_budget_count'], 0);
+  expect(rssDelta, lessThanOrEqualTo(192 * 1024 * 1024));
+  game.setCinematicCamera(false);
+  game.setEffectPlaybackSpeed(1);
+  game.setMovementCameraOptions(defaultMapMovementCameraOptions);
+  game.replaceScene(source);
+}
+
+Map<String, Object> _movementCameraRecord(
+  AonwFlameGame game,
+  Map<String, dynamic> frameTimes, {
+  required int rssDelta,
+  required int updates,
+  required int idleUpdates,
+  required bool cinematic,
+  required ({int terrain, int era}) culling,
+}) {
+  return {
     'schemaVersion': 1,
     'capturedAt': DateTime.now().toUtc().toIso8601String(),
     'environment': {
@@ -70,6 +122,7 @@ Future<void> measureMovementCamera(
       'cities': 40,
       'improvements': 120,
       'roads': 120,
+      'cinematicProjectionStrength': cinematic ? 0.26 : 0,
       'executedPathSteps': 39,
       'focusDurationSeconds': 0.28,
       'followHalfLifeSeconds': 0.1,
@@ -82,6 +135,15 @@ Future<void> measureMovementCamera(
     },
     'metrics': {
       'residentMemoryDeltaBytes': rssDelta,
+      'renderedTerrainRegions': culling.terrain,
+      'terrainRegions':
+          game.world.debugStaticRenderCache!.terrainRegions.length,
+      'renderedEraTintRegions': culling.era,
+      'eraTintRegions': game.world.eraTintLayer.debugRegionCount,
+      'territoryGlowImages':
+          game.world.cityTerritoryLayer.debugGlowCache.debugImageCount,
+      'territoryGlowPixels':
+          game.world.cityTerritoryLayer.debugGlowCache.debugPixelCount,
       'frameTimes': frameTimes,
       'idleCameraUpdatesAfterSkip':
           game.mapCamera.debugTransformUpdateCount - idleUpdates,
@@ -93,20 +155,4 @@ Future<void> measureMovementCamera(
       'residentMemoryDeltaBytesMax': 192 * 1024 * 1024,
     },
   };
-  // ignore: avoid_print
-  print('AONW_FLAME_MOVEMENT_CAMERA_BASELINE ${jsonEncode(record)}');
-  expect(
-    frameTimes['99th_percentile_frame_build_time_millis'],
-    lessThanOrEqualTo(16.667),
-  );
-  expect(
-    frameTimes['99th_percentile_frame_rasterizer_time_millis'],
-    lessThanOrEqualTo(16.667),
-  );
-  expect(frameTimes['missed_frame_build_budget_count'], 0);
-  expect(frameTimes['missed_frame_rasterizer_budget_count'], 0);
-  expect(rssDelta, lessThanOrEqualTo(192 * 1024 * 1024));
-  game.setEffectPlaybackSpeed(1);
-  game.setMovementCameraOptions(defaultMapMovementCameraOptions);
-  game.replaceScene(source);
 }
