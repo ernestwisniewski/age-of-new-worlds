@@ -24,6 +24,7 @@ import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
 import 'map/map_action_palette_layer.dart';
+import 'map/map_city_production_layer.dart';
 import 'map/map_clipped_viewport.dart';
 import 'map/map_cloud_layer.dart';
 import 'map/map_display_options.dart';
@@ -64,6 +65,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     mapCamera = FlameMapCameraController(
       this.camera,
       onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
+      onTransformChanged: this.world.cityProductionLayer.applyCamera,
     );
     inputSurface = FlameMapInputSurface(
       onIntent: _handleViewportIntent,
@@ -75,6 +77,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
     this.world.eventFeedbackLayer.onActivityChanged =
         _handleEventFeedbackActivity;
+    this.world.cityProductionLayer.onActivityChanged =
+        _handleProductionActivity;
   }
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
@@ -93,6 +97,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _cloudsActive = false;
   var _eraTintActive = false;
   var _eventFeedbackActive = false;
+  var _productionActive = false;
   var _reducedMotion = false;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
@@ -156,6 +161,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (_disposed || active == _viewportActive) return;
     _viewportActive = active;
     world.cloudLayer.setViewportActive(active);
+    world.cityProductionLayer.setViewportActive(active);
     inputSurface.setEnabled(active);
     if (!active) {
       _keyboardPanX = 0;
@@ -277,6 +283,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
             _cloudsActive ||
             _eraTintActive ||
             _eventFeedbackActive ||
+            _productionActive ||
             _foundingPreviewActive ||
             keyboardActive)) {
       resumeEngine();

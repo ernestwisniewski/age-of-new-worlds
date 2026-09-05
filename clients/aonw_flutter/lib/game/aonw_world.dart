@@ -1,12 +1,14 @@
 part of 'aonw_flame_game.dart';
 
 final class AonwWorld extends World implements FlameSceneSink {
-  AonwWorld({MapCloudLayerComponent? cloudLayer})
-    : terrainLayer = MapTerrainLayerComponent(),
-      referenceLayer = MapReferenceLayerComponent(),
-      gridLayer = MapGridLayerComponent(),
-      tileDetailsLayer = MapTileDetailsLayerComponent(),
-      cityTerritoryLayer = MapCityTerritoryLayerComponent() {
+  AonwWorld({
+    MapCloudLayerComponent? cloudLayer,
+    MapCityProductionLayerComponent? cityProductionLayer,
+  }) : terrainLayer = MapTerrainLayerComponent(),
+       referenceLayer = MapReferenceLayerComponent(),
+       gridLayer = MapGridLayerComponent(),
+       tileDetailsLayer = MapTileDetailsLayerComponent(),
+       cityTerritoryLayer = MapCityTerritoryLayerComponent() {
     unitLayer = MapUnitLayerComponent();
     cityLayer = MapCityLayerComponent();
     artifactLayer = MapArtifactLayerComponent();
@@ -22,6 +24,8 @@ final class AonwWorld extends World implements FlameSceneSink {
     hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
     this.cloudLayer = cloudLayer ?? MapCloudLayerComponent();
+    this.cityProductionLayer =
+        cityProductionLayer ?? MapCityProductionLayerComponent();
     eraTintLayer = MapEraTintLayerComponent();
     eventFeedbackLayer = MapEventFeedbackLayerComponent(
       unitPositionFor: (unitId) =>
@@ -50,6 +54,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       eventFeedbackLayer,
       effectHost,
       this.cloudLayer,
+      this.cityProductionLayer,
     ]);
   }
 
@@ -75,6 +80,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapCloudLayerComponent cloudLayer;
   late final MapEraTintLayerComponent eraTintLayer;
   late final MapEventFeedbackLayerComponent eventFeedbackLayer;
+  late final MapCityProductionLayerComponent cityProductionLayer;
   MapRenderSnapshot? _scene;
   MapStaticRenderCache? _staticCache;
   MapHexCoordinate? _cursor;
@@ -162,6 +168,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     actionPaletteLayer.applyPalette(cache, snapshot.actionPalette);
     hexSelectionPaletteLayer.clearLayer();
     eventFeedbackLayer.applySnapshot(snapshot, cache);
+    cityProductionLayer.applySnapshot(snapshot, cache);
     effectHost.applyPatch(patch, cache);
   }
 
@@ -187,6 +194,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     tileDetailsLayer.clearLayer();
     eraTintLayer.clearLayer();
     eventFeedbackLayer.clearLayer();
+    cityProductionLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
     cloudLayer.clearLayer();

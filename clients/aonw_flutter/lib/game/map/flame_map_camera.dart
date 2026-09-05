@@ -20,11 +20,16 @@ MapHexCoordinate? initialMapFocus(MapRenderSnapshot snapshot) {
 }
 
 final class FlameMapCameraController {
-  FlameMapCameraController(this._camera, {void Function(double)? onZoomChanged})
-    : _onZoomChanged = onZoomChanged;
+  FlameMapCameraController(
+    this._camera, {
+    void Function(double)? onZoomChanged,
+    void Function(MapCameraTransform)? onTransformChanged,
+  }) : _onZoomChanged = onZoomChanged,
+       _onTransformChanged = onTransformChanged;
 
   final CameraComponent _camera;
   final void Function(double)? _onZoomChanged;
+  final void Function(MapCameraTransform)? _onTransformChanged;
   MapStaticRenderCache? _cache;
   MapCameraTransform? _transform;
   Vector2 _viewport = Vector2.zero();
@@ -176,5 +181,6 @@ final class FlameMapCameraController {
       ..anchor = Anchor.center
       ..position = Vector2(transform.worldCenter.x, transform.worldCenter.y)
       ..zoom = transform.zoom;
+    _onTransformChanged?.call(transform);
   }
 }

@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'support/active_frame_timings.dart';
+import 'support/city_production_performance_probe.dart';
 import 'support/cloud_performance_probe.dart';
 import 'support/combat_performance_probe.dart';
 import 'support/era_tint_performance_probe.dart';
@@ -58,7 +59,7 @@ void main() {
     expect(game.world.workerInfrastructureLayer.debugImprovementCount, 120);
     expect(game.world.workerInfrastructureLayer.debugRoadCount, 120);
     expect(game.world.workerInfrastructureLayer.debugSharedPaintCount, 9);
-    expect(game.world.children, hasLength(22));
+    expect(game.world.children, hasLength(23));
     expect(game.paused, isTrue, reason: 'the turn-based world starts idle');
     final idleUpdates = game.world.effectHost.debugActiveUpdateCount;
     for (var frame = 0; frame < 12; frame++) {
@@ -251,6 +252,14 @@ Future<void> _measureActiveEffects(
   );
 
   await measureMapFloatingText(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureCityProductionHints(
     binding,
     tester,
     game,

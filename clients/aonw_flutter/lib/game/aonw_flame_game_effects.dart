@@ -8,6 +8,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
     world.cloudLayer.setReducedMotion(enabled);
     world.eraTintLayer.setReducedMotion(enabled);
     world.eventFeedbackLayer.setReducedMotion(enabled);
+    world.cityProductionLayer.setReducedMotion(enabled);
     _requestInputFrame();
   }
 
@@ -16,6 +17,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
     world.effectHost.setPlaybackSpeed(speed);
     world.eraTintLayer.setPlaybackSpeed(speed);
     world.eventFeedbackLayer.setPlaybackSpeed(speed);
+    world.cityProductionLayer.setPlaybackSpeed(speed);
   }
 
   void skipEffects() {
@@ -23,6 +25,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
     world.effectHost.skipAll();
     world.eraTintLayer.skip();
     world.eventFeedbackLayer.skip();
+    world.cityProductionLayer.skip();
     _requestInputFrame();
   }
 
@@ -47,6 +50,12 @@ extension AonwFlameGameEffects on AonwFlameGame {
   void _handleEventFeedbackActivity(bool active) {
     if (_disposed || _eventFeedbackActive == active) return;
     _eventFeedbackActive = active;
+    _synchronizeGameLoop();
+  }
+
+  void _handleProductionActivity(bool active) {
+    if (_disposed || _productionActive == active) return;
+    _productionActive = active;
     _synchronizeGameLoop();
   }
 }
