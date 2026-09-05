@@ -21,6 +21,8 @@ void main() {
         VisibleUnitKind.archer,
         VisibleUnitKind.tank,
         VisibleUnitKind.worker,
+        VisibleUnitKind.settler,
+        VisibleUnitKind.merchant,
       ]) {
         await _compareKind(kind, adjustments);
       }
@@ -40,6 +42,10 @@ Future<void> _compareKind(
     for (final walk in [false, true]) {
       sprite.playWalkToward(ui.Offset.zero, ui.Offset(mirror ? -1 : 1, 0));
       if (!walk) sprite.playIdle();
+      await _compareFrames(sprite, adjustments, size);
+    }
+    sprite.playWork();
+    if (sprite.action == MapUnitSpriteAction.work) {
       await _compareFrames(sprite, adjustments, size);
     }
   }

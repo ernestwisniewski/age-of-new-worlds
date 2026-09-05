@@ -19,7 +19,7 @@ Future<void> verifyUnitIdlePresentation(
   final cache = game.world.debugStaticRenderCache;
   final sceneWrites = game.world.debugSceneWriteCount;
   final effectUpdates = game.world.effectHost.debugActiveUpdateCount;
-  final firstTick = layer.debugIdleTicks;
+  final firstTick = layer.debugAnimationTicks;
   final paints = unit.debugPaintCount;
   final frames = <String>{};
   for (var sample = 0; sample < 32; sample++) {
@@ -30,18 +30,18 @@ Future<void> verifyUnitIdlePresentation(
   expect(frames, hasLength(6));
   expect(frames, everyElement(contains('.idle.')));
   expect(unit.debugPaintCount, greaterThan(paints));
-  expect(layer.debugIdleTicks, greaterThan(firstTick));
+  expect(layer.debugAnimationTicks, greaterThan(firstTick));
   expect(game.world.debugStaticRenderCache, same(cache));
   expect(game.world.debugSceneWriteCount, sceneWrites);
   expect(game.world.effectHost.debugActiveUpdateCount, effectUpdates);
   await game.waitForCommandEffects();
 
   game.setUnitIdleAnimations(false);
-  final stoppedTicks = layer.debugIdleTicks;
+  final stoppedTicks = layer.debugAnimationTicks;
   final frozen = unit.debugSpriteFrame;
   await tester.pump(const Duration(milliseconds: 400));
-  expect(layer.debugIdleScheduled, isFalse);
-  expect(layer.debugIdleTicks, stoppedTicks);
+  expect(layer.debugAnimationScheduled, isFalse);
+  expect(layer.debugAnimationTicks, stoppedTicks);
   expect(unit.debugSpriteFrame, same(frozen));
   expect(game.paused, isTrue);
   final rssDelta = ProcessInfo.currentRss - rssBefore;

@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-abstract interface class MapUnitIdleParticipant {
-  double get idleFrameDelay;
-  bool advanceIdle(double dt);
+abstract interface class MapUnitFrameParticipant {
+  double get frameDelay;
+  bool advanceStationary(double dt);
 }
 
-/// Requests a frame only when an idle pose changes; Flame can stay paused.
-final class MapUnitIdleClock {
-  MapUnitIdleClock({required this.onFrame, DateTime Function()? now})
+/// Requests a frame only when a stationary pose changes; Flame can stay paused.
+final class MapUnitFrameClock {
+  MapUnitFrameClock({required this.onFrame, DateTime Function()? now})
     : _now = now ?? DateTime.now;
 
   final void Function() onFrame;
   final DateTime Function() _now;
-  List<MapUnitIdleParticipant> _units = const [];
+  List<MapUnitFrameParticipant> _units = const [];
   Timer? _timer;
   DateTime? _started;
   int _ticks = 0;
@@ -22,7 +22,7 @@ final class MapUnitIdleClock {
   int get ticks => _ticks;
   int get participantCount => _units.length;
 
-  void synchronize(Iterable<MapUnitIdleParticipant> units) {
+  void synchronize(Iterable<MapUnitFrameParticipant> units) {
     flush();
     _units = units.toList(growable: false);
     _schedule();
@@ -40,14 +40,14 @@ final class MapUnitIdleClock {
     );
     var changed = false;
     for (final unit in _units) {
-      if (unit.advanceIdle(elapsed)) changed = true;
+      if (unit.advanceStationary(elapsed)) changed = true;
     }
     if (changed) onFrame();
   }
 
   void _schedule() {
     if (_units.isEmpty) return;
-    final next = _units.map((unit) => unit.idleFrameDelay).reduce(math.min);
+    final next = _units.map((unit) => unit.frameDelay).reduce(math.min);
     // Coalesce independently phased units into at most one request per 60 Hz frame.
     final delay = math.max(1 / 60, next);
     _started = _now();

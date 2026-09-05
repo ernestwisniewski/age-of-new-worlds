@@ -22,12 +22,12 @@ void main() {
         sprite.advance(sprite.frameDuration);
         expect(sprite.index, frame % 6);
       }
-      expect(sprite.idleFrameDelay, closeTo(0.8 + 1.82 / 6, 1e-9));
+      expect(sprite.frameDelay, closeTo(0.8 + 1.82 / 6, 1e-9));
       sprite.advance(0.5);
       expect(sprite.index, 0);
-      expect(sprite.idleFrameDelay, closeTo(0.3 + 1.82 / 6, 1e-9));
+      expect(sprite.frameDelay, closeTo(0.3 + 1.82 / 6, 1e-9));
       sprite.setIdlePausesEnabled(false);
-      expect(sprite.idleFrameDelay, closeTo(1.82 / 6, 1e-9));
+      expect(sprite.frameDelay, closeTo(1.82 / 6, 1e-9));
       sprite.advance(sprite.frameDuration * 7);
       expect(sprite.index, 1);
       sprite.playWalkToward(ui.Offset.zero, const ui.Offset(1, 0));
@@ -35,7 +35,7 @@ void main() {
       sprite.advance(0.14 * 7);
       expect(sprite.index, 1, reason: 'cycle pauses apply only to idle');
       sprite.playIdle();
-      expect(sprite.idleFrameDelay, closeTo(1.82 / 6, 1e-9));
+      expect(sprite.frameDelay, closeTo(1.82 / 6, 1e-9));
     },
   );
 

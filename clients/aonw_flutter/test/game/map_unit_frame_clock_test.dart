@@ -1,4 +1,4 @@
-import 'package:aonw_flutter/game/map/map_unit_idle_clock.dart';
+import 'package:aonw_flutter/game/map/map_unit_frame_clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -6,7 +6,7 @@ void main() {
     tester,
   ) async {
     var redraws = 0;
-    final clock = MapUnitIdleClock(
+    final clock = MapUnitFrameClock(
       now: tester.binding.clock.now,
       onFrame: () => redraws++,
     );
@@ -25,14 +25,14 @@ void main() {
   });
 }
 
-final class _DueIdleUnit implements MapUnitIdleParticipant {
+final class _DueIdleUnit implements MapUnitFrameParticipant {
   var advances = 0;
 
   @override
-  double get idleFrameDelay => 0.001;
+  double get frameDelay => 0.001;
 
   @override
-  bool advanceIdle(double dt) {
+  bool advanceStationary(double dt) {
     advances++;
     return true;
   }

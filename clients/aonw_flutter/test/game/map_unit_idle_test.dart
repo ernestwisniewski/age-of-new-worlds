@@ -27,7 +27,7 @@ void main() {
     final cache = game.world.debugStaticRenderCache;
     final effects = game.world.effectHost.debugActiveUpdateCount;
     final paints = unit.debugPaintCount;
-    expect(layer.debugIdleScheduled, isTrue);
+    expect(layer.debugAnimationScheduled, isTrue);
     expect(game.paused, isTrue);
     await tester.pump(const Duration(milliseconds: 303));
     expect(_index(unit), 0);
@@ -36,7 +36,7 @@ void main() {
     expect(_index(unit), 1);
     expect(unit.debugPaintCount, greaterThan(paints));
     expect(_index(distant), 0);
-    expect(layer.debugIdleTicks, 1);
+    expect(layer.debugAnimationTicks, 1);
     expect(game.paused, isTrue);
     expect(game.world.debugSceneWriteCount, writes);
     expect(game.world.debugStaticRenderCache, same(cache));
@@ -59,7 +59,7 @@ void main() {
     final unit = layer.componentForUnit('near')!;
     await tester.pump(const Duration(milliseconds: 100));
     game.setUnitIdleAnimations(false);
-    expect(layer.debugIdleScheduled, isFalse);
+    expect(layer.debugAnimationScheduled, isFalse);
     await tester.pump(const Duration(seconds: 10));
     expect(_index(unit), 0);
     game.setUnitIdleAnimations(true);
@@ -68,13 +68,13 @@ void main() {
     for (final stop in ['reduced', 'hidden', 'offscreen', 'zoom']) {
       _disable(game, stop);
       final frame = unit.debugSpriteFrame;
-      final ticks = layer.debugIdleTicks;
-      expect(layer.debugIdleScheduled, isFalse, reason: stop);
+      final ticks = layer.debugAnimationTicks;
+      expect(layer.debugAnimationScheduled, isFalse, reason: stop);
       await tester.pump(const Duration(seconds: 10));
       expect(unit.debugSpriteFrame, same(frame), reason: stop);
-      expect(layer.debugIdleTicks, ticks, reason: stop);
+      expect(layer.debugAnimationTicks, ticks, reason: stop);
       _enable(game, stop);
-      expect(layer.debugIdleScheduled, isTrue, reason: stop);
+      expect(layer.debugAnimationScheduled, isTrue, reason: stop);
     }
     expect(layer.idleAnimationsEnabled, isTrue);
     await _unmount(tester, game);
@@ -88,10 +88,10 @@ void main() {
     final unit = layer.componentForUnit('near')!;
     await tester.pump(const Duration(milliseconds: 1821));
     expect(_index(unit), 0);
-    final ticks = layer.debugIdleTicks;
+    final ticks = layer.debugAnimationTicks;
     final paints = unit.debugPaintCount;
     await tester.pump(const Duration(milliseconds: 500));
-    expect(layer.debugIdleTicks, ticks);
+    expect(layer.debugAnimationTicks, ticks);
     expect(unit.debugPaintCount, paints);
     game.setSmoothCameraMovement(false);
     game.replaceScene(_snapshot(selected: 'near'));
@@ -121,13 +121,13 @@ void main() {
     final unit = layer.componentForUnit('moving')!;
     await tester.runAsync(unit.debugLoadSprite);
     game.mapCamera.centerOnHex((col: 6, row: 3));
-    expect(layer.debugIdleUnitCount, 1);
+    expect(layer.debugAnimationUnitCount, 1);
     game.replaceScene(movementCameraSnapshot(revision: 1));
-    expect(layer.debugIdleUnitCount, 0);
-    expect(layer.debugIdleScheduled, isFalse);
+    expect(layer.debugAnimationUnitCount, 0);
+    expect(layer.debugAnimationScheduled, isFalse);
     game.world.effectHost.update(0.15);
     final walking = unit.debugSpriteFrame;
-    expect(unit.advanceIdle(1), isFalse);
+    expect(unit.advanceStationary(1), isFalse);
     expect(unit.debugSpriteFrame, same(walking));
     await tester.pump(const Duration(milliseconds: 304));
     // Drive the movement host explicitly, with the viewport stopped, to isolate
@@ -140,7 +140,7 @@ void main() {
     game.skipEffects();
     game.mapCamera.centerOnHex((col: 8, row: 3));
     game.setViewportActive(true);
-    expect(layer.debugIdleUnitCount, 1);
+    expect(layer.debugAnimationUnitCount, 1);
     expect(unit.debugSpriteFrame!.id.value, 'unit.commander.idle.0');
     await tester.pump(const Duration(milliseconds: 304));
     expect(unit.debugSpriteFrame!.id.value, 'unit.commander.idle.1');
@@ -153,22 +153,22 @@ void main() {
       final game = await _mountIdleGame(tester);
       final layer = game.world.unitLayer;
       final distant = layer.componentForUnit('far')!;
-      expect(layer.debugIdleUnitCount, 1);
+      expect(layer.debugAnimationUnitCount, 1);
       game.setCinematicCamera(true);
-      expect(layer.debugIdleUnitCount, 1);
+      expect(layer.debugAnimationUnitCount, 1);
       await tester.pump(const Duration(milliseconds: 304));
       expect(_index(distant), 0);
       final near = layer.componentForUnit('near')!;
       final nearFrame = near.debugSpriteFrame;
       game.mapCamera.centerOnHex((col: 19, row: 15));
-      expect(layer.debugIdleUnitCount, 1);
+      expect(layer.debugAnimationUnitCount, 1);
       await tester.pump(const Duration(milliseconds: 304));
       expect(_index(distant), 1);
       expect(near.debugSpriteFrame, same(nearFrame));
       game.setCinematicCamera(false);
-      expect(layer.debugIdleUnitCount, 1);
+      expect(layer.debugAnimationUnitCount, 1);
       game.clearScene();
-      expect(layer.debugIdleScheduled, isFalse);
+      expect(layer.debugAnimationScheduled, isFalse);
       await _unmount(tester, game);
     },
   );
@@ -208,7 +208,7 @@ Future<AonwFlameGame> _mountIdleGame(WidgetTester tester) async {
 Future<void> _unmount(WidgetTester tester, AonwFlameGame game) async {
   await tester.pumpWidget(const SizedBox.shrink());
   await tester.pump();
-  expect(game.world.unitLayer.debugIdleScheduled, isFalse);
+  expect(game.world.unitLayer.debugAnimationScheduled, isFalse);
 }
 
 MapRenderSnapshot _snapshot({String? selected}) {

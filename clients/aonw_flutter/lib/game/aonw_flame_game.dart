@@ -84,7 +84,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
     this.world.effectHost.onMovementStart = _startMovementCamera;
-    this.world.unitLayer.onIdleFrame = _requestInputFrame;
+    this.world.unitLayer.onAnimationFrame = _requestInputFrame;
     this.world.routeLayer.onActivityChanged = _handleRouteActivity;
     this.world.routeLayer.onFrameRequested = _requestInputFrame;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;

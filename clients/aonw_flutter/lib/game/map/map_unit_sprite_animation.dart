@@ -9,7 +9,7 @@ import '../../design_system/assets/sprite_frames.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import 'map_sprite_catalog.dart';
 
-enum MapUnitSpriteAction { idle, walk }
+enum MapUnitSpriteAction { idle, walk, work }
 
 /// Owns unit poses, direction and authored frame geometry.
 final class MapUnitSpriteAnimation {
@@ -41,7 +41,7 @@ final class MapUnitSpriteAnimation {
   MapUnitSpriteAction get action => _action;
   bool get mirrored => _mirrored;
   int get index => _index;
-  double get idleFrameDelay => _idlePauseRemaining + frameDuration - _elapsed;
+  double get frameDelay => _idlePauseRemaining + frameDuration - _elapsed;
 
   void setIdlePausesEnabled(bool enabled) {
     _idlePausesEnabled = enabled;
@@ -50,15 +50,18 @@ final class MapUnitSpriteAnimation {
 
   SpriteSequenceId get _sequence => _sequenceFor(_action);
   SpriteFrame? get frame => _frames[_action]?[_index];
-  double get frameDuration => _adjustments.frameDuration(
-    _sequence,
-    _action == MapUnitSpriteAction.idle ? 0.9 : 0.14,
-  );
+  double get frameDuration =>
+      _adjustments.frameDuration(_sequence, switch (_action) {
+        MapUnitSpriteAction.idle => 0.9,
+        MapUnitSpriteAction.walk => 0.14,
+        MapUnitSpriteAction.work => 0.22,
+      });
 
   Future<void> load() async {
     await Future.wait([
       _loadAction(MapUnitSpriteAction.idle),
       _loadAction(MapUnitSpriteAction.walk),
+      if (_supportsWork) _loadAction(MapUnitSpriteAction.work),
     ]);
   }
 
@@ -78,6 +81,17 @@ final class MapUnitSpriteAnimation {
   }
 
   void playIdle() => _play(MapUnitSpriteAction.idle);
+
+  void playWork() => _play(
+    _supportsWork ? MapUnitSpriteAction.work : MapUnitSpriteAction.idle,
+  );
+
+  bool get _supportsWork => switch (_kind) {
+    VisibleUnitKind.settler ||
+    VisibleUnitKind.worker ||
+    VisibleUnitKind.merchant => true,
+    _ => false,
+  };
 
   void playWalkToward(ui.Offset from, ui.Offset to) {
     final dx = to.dx - from.dx;

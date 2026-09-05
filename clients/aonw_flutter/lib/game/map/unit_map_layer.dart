@@ -15,13 +15,13 @@ import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_shadow.dart';
-import 'map_unit_idle_clock.dart';
+import 'map_unit_frame_clock.dart';
 import 'map_unit_sprite_animation.dart';
 import 'static_map_layers.dart';
 import 'unit_marker_details.dart';
 
 part 'unit_map_component.dart';
-part 'unit_map_idle.dart';
+part 'unit_map_animation.dart';
 
 enum _CityUnitPlacement { none, primary, companion }
 
@@ -58,17 +58,17 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   var _removedCount = 0;
   final DateTime Function()? _now;
   final double Function()? idlePauseDuration;
-  late final _idleClock = MapUnitIdleClock(
+  late final _frameClock = MapUnitFrameClock(
     now: _now,
-    onFrame: () => onIdleFrame?.call(),
+    onFrame: () => onAnimationFrame?.call(),
   );
-  void Function()? onIdleFrame;
+  void Function()? onAnimationFrame;
   var _idleEnabled = true;
   var _viewportActive = false;
   var _reducedMotion = false;
-  var _idleZoom = 0.0;
+  var _animationZoom = 0.0;
   var _applyingPatch = false;
-  ui.Rect _idleViewport = ui.Rect.zero;
+  ui.Rect _animationViewport = ui.Rect.zero;
 
   bool get idleAnimationsEnabled => _idleEnabled;
 
@@ -93,13 +93,13 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   MapUnitComponent? componentForUnit(String unitId) => _unitsById[unitId];
 
   void applyPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
-    _idleClock.flush();
+    _frameClock.flush();
     _applyingPatch = true;
     try {
       _applyUnitPatch(patch, cache);
     } finally {
       _applyingPatch = false;
-      _synchronizeIdle();
+      _synchronizeAnimations();
     }
   }
 
@@ -145,7 +145,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
           unit: unit,
           visual: visual,
           shadows: _shadows,
-          onIdleChanged: _synchronizeIdle,
+          onAnimationChanged: _synchronizeAnimations,
           idlePauseDuration: idlePauseDuration,
         );
         _unitsById[unit.id] = component;
@@ -166,7 +166,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   void clearLayer() {
     final components = _unitsById.values.toList(growable: false);
     _unitsById.clear();
-    _idleClock.clear();
+    _frameClock.clear();
     for (final component in components) {
       component.removeFromParent();
     }
@@ -268,7 +268,8 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
     final remainingTurns =
         unit.workerJob?.remainingTurns ??
         unit.cityFoundingRemainingTurns ??
-        excavationTurns;
+        excavationTurns ??
+        (unit.excavatingArtifactId == null ? null : 1);
     if (remainingTurns != null) return '${remainingTurns}t';
     if (unit.workerAssignment != null) return '+50%';
     return null;

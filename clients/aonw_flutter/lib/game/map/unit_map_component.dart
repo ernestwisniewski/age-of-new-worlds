@@ -2,17 +2,17 @@ part of 'unit_map_layer.dart';
 
 final class MapUnitComponent extends PositionComponent
     with HasGameReference<FlameGame>
-    implements MapUnitIdleParticipant {
+    implements MapUnitFrameParticipant {
   MapUnitComponent._({
     required VisibleUnitView unit,
     required _MapUnitVisualState visual,
     required MapSpriteShadowCache shadows,
-    required void Function() onIdleChanged,
+    required void Function() onAnimationChanged,
     required double Function()? idlePauseDuration,
   }) : _unit = unit,
        _visual = visual,
        _shadows = shadows,
-       _onIdleChanged = onIdleChanged,
+       _onAnimationChanged = onAnimationChanged,
        _idlePauseDuration = idlePauseDuration,
        super(
          position: Vector2(visual.center.dx, visual.center.dy),
@@ -27,23 +27,30 @@ final class MapUnitComponent extends PositionComponent
   VisibleUnitView _unit;
   _MapUnitVisualState _visual;
   final MapSpriteShadowCache _shadows;
-  final void Function() _onIdleChanged;
+  final void Function() _onAnimationChanged;
   final double Function()? _idlePauseDuration;
-  late final _sprite = MapUnitSpriteAnimation(
-    kind: _unit.kind,
-    onLoaded: _spriteLoaded,
-    idlePauseDuration: _idlePauseDuration,
-  )..setIdlePausesEnabled(!_visual.selected);
+  late final _sprite = _createSprite();
+
+  MapUnitSpriteAnimation _createSprite() {
+    final sprite = MapUnitSpriteAnimation(
+      kind: _unit.kind,
+      onLoaded: _spriteLoaded,
+      idlePauseDuration: _idlePauseDuration,
+    )..setIdlePausesEnabled(!_visual.selected);
+    if (_visual.workBadgeLabel != null) sprite.playWork();
+    return sprite;
+  }
 
   void _spriteLoaded() {
-    _onIdleChanged();
+    _onAnimationChanged();
     _refreshGameWidget();
   }
 
-  bool get _canAnimateIdle =>
+  bool get _canAnimateStationary =>
       isMounted &&
       !_moving &&
-      _sprite.action == MapUnitSpriteAction.idle &&
+      (_sprite.action == MapUnitSpriteAction.idle ||
+          _sprite.action == MapUnitSpriteAction.work) &&
       _sprite.frame != null;
 
   ui.Rect get _worldBounds => _visualBounds.shift(
@@ -128,8 +135,9 @@ final class MapUnitComponent extends PositionComponent
     _unit = unit;
     _visual = visual;
     _sprite.setIdlePausesEnabled(!visual.selected);
-    if (!preserveVisualPosition && !_moving) cancelMovement();
     if (kindChanged) _sprite.setKind(unit.kind);
+    if (!preserveVisualPosition && !_moving) cancelMovement();
+    if (!_moving) _restoreStationaryPose();
   }
 
   void setVisualCenter(ui.Offset center) {
@@ -139,7 +147,7 @@ final class MapUnitComponent extends PositionComponent
   void beginMovement() {
     _moving = true;
     _sprite.playIdle();
-    _onIdleChanged();
+    _onAnimationChanged();
   }
 
   void advanceWalk(ui.Offset from, ui.Offset to, double dt) {
@@ -151,18 +159,26 @@ final class MapUnitComponent extends PositionComponent
     setVisualCenter(center);
     _moving = false;
     _presentedCoordinate = coordinate;
-    _sprite.playIdle();
-    _onIdleChanged();
+    _restoreStationaryPose();
+    _onAnimationChanged();
   }
 
   void cancelMovement() => finishMovement(_unit.coordinate, _visual.center);
 
-  @override
-  double get idleFrameDelay => _sprite.idleFrameDelay;
+  void _restoreStationaryPose() {
+    if (_visual.workBadgeLabel != null) {
+      _sprite.playWork();
+    } else {
+      _sprite.playIdle();
+    }
+  }
 
   @override
-  bool advanceIdle(double dt) {
-    if (!_canAnimateIdle) return false;
+  double get frameDelay => _sprite.frameDelay;
+
+  @override
+  bool advanceStationary(double dt) {
+    if (!_canAnimateStationary) return false;
     final previous = _sprite.index;
     _sprite.advance(dt);
     return _sprite.index != previous;
@@ -171,13 +187,13 @@ final class MapUnitComponent extends PositionComponent
   @override
   void onMount() {
     super.onMount();
-    _onIdleChanged();
+    _onAnimationChanged();
   }
 
   @override
   void onRemove() {
     _sprite.dispose();
-    _onIdleChanged();
+    _onAnimationChanged();
     super.onRemove();
   }
 

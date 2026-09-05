@@ -8,7 +8,10 @@ extension AonwFlameGameCamera on AonwFlameGame {
 
   void _synchronizeAnimatedViewport() {
     final bounds = mapCamera.visibleWorldBounds;
-    world.unitLayer.applyIdleViewport(bounds: bounds, zoom: mapCamera.zoom);
+    world.unitLayer.applyAnimationViewport(
+      bounds: bounds,
+      zoom: mapCamera.zoom,
+    );
     world.routeLayer.applyViewport(bounds);
   }
 
