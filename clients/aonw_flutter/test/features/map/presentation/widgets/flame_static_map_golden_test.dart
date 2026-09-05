@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
@@ -9,6 +10,7 @@ import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/map_sprite_catalog.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -92,6 +94,28 @@ void main() {
     await expectLater(
       find.byKey(const ValueKey('flame-starter-golden')),
       matchesGoldenFile('goldens/flame_gameplay_map.png'),
+    );
+
+    await tester.runAsync(() async {
+      await SpriteFrames.preload([
+        MapSpriteCatalog.cityFrame(visualLevel: 2),
+        ...MapSpriteCatalog.idleUnitFrames(VisibleUnitKind.commander),
+      ]);
+      await game.ready();
+    });
+    game.setCinematicCamera(true);
+    game.stepEngine(stepTime: 0);
+    await tester.pump();
+    await expectLater(
+      find.byKey(const ValueKey('flame-starter-golden')),
+      matchesGoldenFile('goldens/flame_gameplay_map_cinematic.png'),
+    );
+    game.setCinematicCamera(false);
+    game.stepEngine(stepTime: 0);
+    await tester.pump();
+    await expectLater(
+      find.byKey(const ValueKey('flame-starter-golden')),
+      matchesGoldenFile('goldens/flame_gameplay_map_loaded.png'),
     );
 
     await tester.pumpWidget(const SizedBox.shrink());

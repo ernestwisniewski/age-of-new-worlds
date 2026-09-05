@@ -136,78 +136,84 @@ void main() {
     },
   );
 
-  testWidgets('routes a real Flame tap through the framework-neutral intent', (
-    tester,
-  ) async {
-    final intents = <MapHexIntent>[];
-    final game = AonwFlameGame(onHexIntent: intents.add);
-    game.sceneSink.replaceScene(_snapshot(testMapScene(cols: 7, rows: 7)));
-    game.setViewportActive(true);
-    await tester.binding.setSurfaceSize(const Size(900, 800));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+  for (final cinematic in [false, true]) {
+    testWidgets('routes viewport gestures with cinematic camera $cinematic', (
+      tester,
+    ) async {
+      final intents = <MapHexIntent>[];
+      final game = AonwFlameGame(onHexIntent: intents.add)
+        ..setCinematicCamera(cinematic);
+      game.sceneSink.replaceScene(_snapshot(testMapScene(cols: 7, rows: 7)));
+      game.setViewportActive(true);
+      await tester.binding.setSurfaceSize(const Size(900, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(
-      Directionality(
-        textDirection: TextDirection.ltr,
-        child: MapViewportGestureLayer(
-          game: game,
-          child: GameWidget<AonwFlameGame>(
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: MapViewportGestureLayer(
             game: game,
-            autofocus: false,
-            behavior: HitTestBehavior.opaque,
+            child: GameWidget<AonwFlameGame>(
+              game: game,
+              autofocus: false,
+              behavior: HitTestBehavior.opaque,
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
-    await tester.runAsync(() async {
-      await game.toBeLoaded();
+      );
+      await tester.pump();
+      await tester.runAsync(() async {
+        await game.toBeLoaded();
+      });
+      await tester.pump();
+      await tester.runAsync(game.ready);
+      await tester.pump(const Duration(milliseconds: 10));
+      expect(game.inputSurface.isMounted, isTrue);
+      expect(game.inputSurface.size.x, closeTo(900, 1e-9));
+      expect(game.inputSurface.size.y, closeTo(800, 1e-9));
+      final screen = game.debugScreenForHex((col: 3, row: 3))!;
+      final gameWidget = find.byType(GameWidget<AonwFlameGame>);
+      await tester.tapAt(
+        tester.getTopLeft(gameWidget) + Offset(screen.x, screen.y),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      final select = intents.whereType<MapHexSelectIntent>().single;
+      expect(select.coordinate, (col: 3, row: 3));
+
+      intents.clear();
+      await tester.longPressAt(
+        tester.getTopLeft(gameWidget) + Offset(screen.x, screen.y),
+      );
+      await tester.pump();
+      final longPress = intents.whereType<MapHexLongPressIntent>().single;
+      expect(longPress.coordinate, (col: 3, row: 3));
+      expect(longPress.screenPosition.x, closeTo(screen.x, 1e-3));
+      expect(longPress.screenPosition.y, closeTo(screen.y, 1e-3));
+
+      final beforeDrag = game.mapCamera.debugTransformUpdateCount;
+      await tester.drag(gameWidget, const Offset(36, 24));
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(game.mapCamera.debugTransformUpdateCount, greaterThan(beforeDrag));
+
+      final beforeScroll = game.mapCamera.debugTransformUpdateCount;
+      await tester.sendEventToBinding(
+        PointerScrollEvent(
+          position: tester.getCenter(gameWidget),
+          scrollDelta: const Offset(0, -40),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(
+        game.mapCamera.debugTransformUpdateCount,
+        greaterThan(beforeScroll),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
     });
-    await tester.pump();
-    await tester.runAsync(game.ready);
-    await tester.pump(const Duration(milliseconds: 10));
-    expect(game.inputSurface.isMounted, isTrue);
-    expect(game.inputSurface.size.x, closeTo(900, 1e-9));
-    expect(game.inputSurface.size.y, closeTo(800, 1e-9));
-    final screen = game.debugScreenForHex((col: 3, row: 3))!;
-    final gameWidget = find.byType(GameWidget<AonwFlameGame>);
-    await tester.tapAt(
-      tester.getTopLeft(gameWidget) + Offset(screen.x, screen.y),
-    );
-    await tester.pump(const Duration(milliseconds: 100));
-
-    final select = intents.whereType<MapHexSelectIntent>().single;
-    expect(select.coordinate, (col: 3, row: 3));
-
-    intents.clear();
-    await tester.longPressAt(
-      tester.getTopLeft(gameWidget) + Offset(screen.x, screen.y),
-    );
-    await tester.pump();
-    final longPress = intents.whereType<MapHexLongPressIntent>().single;
-    expect(longPress.coordinate, (col: 3, row: 3));
-    expect(longPress.screenPosition.x, closeTo(screen.x, 1e-3));
-    expect(longPress.screenPosition.y, closeTo(screen.y, 1e-3));
-
-    final beforeDrag = game.mapCamera.debugTransformUpdateCount;
-    await tester.drag(gameWidget, const Offset(36, 24));
-    await tester.pump(const Duration(milliseconds: 16));
-    expect(game.mapCamera.debugTransformUpdateCount, greaterThan(beforeDrag));
-
-    final beforeScroll = game.mapCamera.debugTransformUpdateCount;
-    await tester.sendEventToBinding(
-      PointerScrollEvent(
-        position: tester.getCenter(gameWidget),
-        scrollDelta: const Offset(0, -40),
-      ),
-    );
-    await tester.pump(const Duration(milliseconds: 16));
-    expect(game.mapCamera.debugTransformUpdateCount, greaterThan(beforeScroll));
-    await tester.pump(const Duration(milliseconds: 100));
-
-    await tester.pumpWidget(const SizedBox.shrink());
-    await tester.pump();
-  });
+  }
 }
 
 MapRenderSnapshot _snapshot(MapScene scene) => MapRenderSnapshot(

@@ -1,6 +1,15 @@
 part of 'aonw_flame_game.dart';
 
 extension AonwFlameGameCamera on AonwFlameGame {
+  void setCinematicCamera(bool enabled) {
+    if (_disposed || !mapCamera.setCinematicEnabled(enabled)) return;
+    final hover = _lastHoverScreenPosition;
+    if (_viewportActive && hover != null) {
+      inputSurface.submitHover(Vector2(hover.x, hover.y));
+    }
+    _requestInputFrame();
+  }
+
   void setSmoothCameraMovement(bool enabled) {
     if (_disposed || _smoothCameraMovement == enabled) return;
     _smoothCameraMovement = enabled;

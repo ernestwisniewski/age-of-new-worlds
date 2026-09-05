@@ -10,6 +10,7 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/map_view_mode.dart';
 import 'city_territory_geometry.dart';
 import 'city_territory_style.dart';
+import 'map_canvas_clip.dart';
 import 'static_map_layers.dart';
 import 'territory_glow_cache.dart';
 
@@ -168,7 +169,7 @@ final class MapCityTerritoryLayerComponent extends Component
   void render(ui.Canvas canvas) {
     _renderedTerritoryCount = 0;
     if (_territories.isEmpty) return;
-    final clip = canvas.getLocalClipBounds();
+    final clip = mapCanvasClipBounds(canvas);
     final visible = [
       for (final territory in _territories)
         if (territory.bounds.overlaps(clip)) territory,

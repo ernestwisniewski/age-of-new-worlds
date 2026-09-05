@@ -227,6 +227,14 @@ final class _CameraSettings extends StatelessWidget {
         onChanged: (value) =>
             onChanged(settings.copyWith(smoothCameraMovement: value)),
       ),
+      SwitchListTile.adaptive(
+        key: const ValueKey('cinematic-camera-setting'),
+        contentPadding: EdgeInsets.zero,
+        title: Text(context.aonwL10n.cinematicCamera),
+        value: settings.cinematicCamera,
+        onChanged: (value) =>
+            onChanged(settings.copyWith(cinematicCamera: value)),
+      ),
       _MovementCameraSettings(settings: settings, onChanged: onChanged),
     ],
   );

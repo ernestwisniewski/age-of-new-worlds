@@ -12,6 +12,7 @@ import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_reference_bundle.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/map_view_mode.dart';
+import 'map_canvas_clip.dart';
 
 part 'map_terrain_regions.dart';
 
@@ -170,7 +171,7 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
       );
       canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
     }
-    final clip = canvas.getLocalClipBounds();
+    final clip = mapCanvasClipBounds(canvas);
     for (final region in cache.terrainRegions) {
       if (!region.bounds.overlaps(clip)) continue;
       canvas.save();

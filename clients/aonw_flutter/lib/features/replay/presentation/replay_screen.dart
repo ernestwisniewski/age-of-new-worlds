@@ -93,6 +93,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
     );
     _game.setCameraSensitivity(settings.cameraSensitivity);
     _game.setSmoothCameraMovement(settings.smoothCameraMovement);
+    _game.setCinematicCamera(settings.cinematicCamera);
     _game.setMovementCameraOptions((
       focusOwn: settings.focusOwnUnitMovement,
       followOwn: settings.followOwnUnitMovement,

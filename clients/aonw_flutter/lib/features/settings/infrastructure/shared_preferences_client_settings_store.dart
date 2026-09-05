@@ -8,6 +8,7 @@ final class SharedPreferencesClientSettingsStore
   SharedPreferencesClientSettingsStore({SharedPreferencesAsync? preferences})
     : _preferences = preferences ?? SharedPreferencesAsync();
 
+  static const _cinematicCameraKey = 'aonw.settings.cinematicCamera';
   static const _masterVolumeKey = 'aonw.settings.masterVolume';
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
   static const _smoothCameraMovementKey = 'aonw.settings.smoothCameraMovement';
@@ -37,9 +38,6 @@ final class SharedPreferencesClientSettingsStore
       _cameraSensitivityKey,
     );
     final reducedMotion = await _preferences.getBool(_reducedMotionKey);
-    final smoothCameraMovement = await _preferences.getBool(
-      _smoothCameraMovementKey,
-    );
     final highContrast = await _preferences.getBool(_highContrastKey);
     final showMapGrid = await _preferences.getBool(_showMapGridKey);
     final showMapElevationWalls = await _preferences.getBool(
@@ -54,12 +52,13 @@ final class SharedPreferencesClientSettingsStore
     final showMapHeightBadges = await _preferences.getBool(
       _showMapHeightBadgesKey,
     );
-    final movement = await _loadMovementCamera();
+    final camera = await _loadCamera();
     return ClientSettings(
-      focusOwnUnitMovement: movement.focusOwnUnitMovement,
-      followOwnUnitMovement: movement.followOwnUnitMovement,
-      focusForeignUnitMovement: movement.focusForeignUnitMovement,
-      followForeignUnitMovement: movement.followForeignUnitMovement,
+      cinematicCamera: camera.cinematicCamera,
+      focusOwnUnitMovement: camera.focusOwnUnitMovement,
+      followOwnUnitMovement: camera.followOwnUnitMovement,
+      focusForeignUnitMovement: camera.focusForeignUnitMovement,
+      followForeignUnitMovement: camera.followForeignUnitMovement,
       masterVolume: _bounded(
         masterVolume,
         minimum: 0,
@@ -73,8 +72,7 @@ final class SharedPreferencesClientSettingsStore
         fallback: ClientSettings.defaults.cameraSensitivity,
       ),
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
-      smoothCameraMovement:
-          smoothCameraMovement ?? ClientSettings.defaults.smoothCameraMovement,
+      smoothCameraMovement: camera.smoothCameraMovement,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
       showMapGrid: showMapGrid ?? ClientSettings.defaults.showMapGrid,
       showMapElevationWalls:
@@ -91,17 +89,13 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<void> save(ClientSettings settings) async {
-    await _saveMovementCamera(settings);
+    await _saveCamera(settings);
     await _preferences.setDouble(_masterVolumeKey, settings.masterVolume);
     await _preferences.setDouble(
       _cameraSensitivityKey,
       settings.cameraSensitivity,
     );
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
-    await _preferences.setBool(
-      _smoothCameraMovementKey,
-      settings.smoothCameraMovement,
-    );
     await _preferences.setBool(_highContrastKey, settings.highContrast);
     await _preferences.setBool(_showMapGridKey, settings.showMapGrid);
     await _preferences.setBool(
@@ -124,13 +118,21 @@ final class SharedPreferencesClientSettingsStore
 
   Future<
     ({
+      bool cinematicCamera,
+      bool smoothCameraMovement,
       bool focusOwnUnitMovement,
       bool followOwnUnitMovement,
       bool focusForeignUnitMovement,
       bool followForeignUnitMovement,
     })
   >
-  _loadMovementCamera() async => (
+  _loadCamera() async => (
+    cinematicCamera:
+        await _preferences.getBool(_cinematicCameraKey) ??
+        ClientSettings.defaults.cinematicCamera,
+    smoothCameraMovement:
+        await _preferences.getBool(_smoothCameraMovementKey) ??
+        ClientSettings.defaults.smoothCameraMovement,
     focusOwnUnitMovement:
         await _preferences.getBool(_focusOwnUnitMovementKey) ??
         ClientSettings.defaults.focusOwnUnitMovement,
@@ -145,7 +147,12 @@ final class SharedPreferencesClientSettingsStore
         ClientSettings.defaults.followForeignUnitMovement,
   );
 
-  Future<void> _saveMovementCamera(ClientSettings settings) async {
+  Future<void> _saveCamera(ClientSettings settings) async {
+    await _preferences.setBool(_cinematicCameraKey, settings.cinematicCamera);
+    await _preferences.setBool(
+      _smoothCameraMovementKey,
+      settings.smoothCameraMovement,
+    );
     await _preferences.setBool(
       _focusOwnUnitMovementKey,
       settings.focusOwnUnitMovement,

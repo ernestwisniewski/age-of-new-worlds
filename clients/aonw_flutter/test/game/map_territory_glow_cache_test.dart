@@ -2,58 +2,75 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:aonw_flutter/game/map/city_territory_style.dart';
+import 'package:aonw_flutter/game/map/map_cinematic_projection.dart';
 import 'package:aonw_flutter/game/map/territory_glow_cache.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test('retains strategic glow gradients across camera zooms', () async {
-    final cache = MapTerritoryGlowCache();
-    addTearDown(cache.clear);
-    final path = ui.Path()
-      ..moveTo(30, 20)
-      ..lineTo(90, 20)
-      ..lineTo(90, 70)
-      ..lineTo(55, 50)
-      ..lineTo(30, 70)
-      ..close();
-    final style = MapCityTerritoryStyle(
-      const ui.Color(0xff009bff),
-      strategicView: true,
-    );
-    for (final paint in [
-      style.borderGlowPaint,
-      style.strategicCenterGlowPaint,
-    ]) {
-      for (final zoom in [0.2, 0.5, 1.0, 2.0, 5.0]) {
-        final actual = await _render(
-          zoom,
-          (canvas) => cache.draw(canvas, path, paint.color),
-        );
-        final expected = await _render(
-          zoom,
-          (canvas) => canvas.drawPath(path, paint),
-        );
-        final a = (await actual.toByteData())!.buffer.asUint8List();
-        final b = (await expected.toByteData())!.buffer.asUint8List();
-        var total = 0;
-        var maximum = 0;
-        for (var i = 0; i < a.length; i++) {
-          final delta = (a[i] - b[i]).abs();
-          total += delta;
-          maximum = math.max(maximum, delta);
-        }
-        // Resampling only affects diffuse gradients: mean channel error < 0.3%.
-        expect(total / (a.length * 255), lessThan(0.003), reason: 'zoom $zoom');
-        expect(maximum, lessThanOrEqualTo(14), reason: 'zoom $zoom');
+  for (final cinematic in [false, true]) {
+    test('retains strategic glow gradients (cinematic: $cinematic)', () async {
+      Future<ui.Image> render(double zoom, void Function(ui.Canvas) paint) =>
+          _render(zoom, paint, cinematic: cinematic);
+      final cache = MapTerritoryGlowCache();
+      addTearDown(cache.clear);
+      final path = ui.Path()
+        ..moveTo(30, 20)
+        ..lineTo(90, 20)
+        ..lineTo(90, 70)
+        ..lineTo(55, 50)
+        ..lineTo(30, 70)
+        ..close();
+      final style = MapCityTerritoryStyle(
+        const ui.Color(0xff009bff),
+        strategicView: true,
+      );
+      for (final paint in [
+        style.borderGlowPaint,
+        style.strategicCenterGlowPaint,
+      ]) {
+        for (final zoom in [0.2, 0.5, 1.0, 2.0, 5.0]) {
+          final actual = await render(
+            zoom,
+            (canvas) => cache.draw(canvas, path, paint.color),
+          );
+          // Recording the cached texture before projection preserves its pixels.
+          final recorder = ui.PictureRecorder();
+          cache.draw(ui.Canvas(recorder), path, paint.color);
+          final recorded = recorder.endRecording();
+          final expected = await render(
+            zoom,
+            (canvas) => cinematic
+                ? canvas.drawPicture(recorded)
+                : canvas.drawPath(path, paint),
+          );
+          recorded.dispose();
+          final a = (await actual.toByteData())!.buffer.asUint8List();
+          final b = (await expected.toByteData())!.buffer.asUint8List();
+          var total = 0;
+          var maximum = 0;
+          for (var i = 0; i < a.length; i++) {
+            final delta = (a[i] - b[i]).abs();
+            total += delta;
+            maximum = math.max(maximum, delta);
+          }
+          if (cinematic) expect(a, b);
+          // Resampling only affects diffuse gradients: mean channel error < 0.3%.
+          expect(
+            total / (a.length * 255),
+            lessThan(0.003),
+            reason: 'zoom $zoom',
+          );
+          expect(maximum, lessThanOrEqualTo(14), reason: 'zoom $zoom');
 
-        actual.dispose();
-        expected.dispose();
+          actual.dispose();
+          expected.dispose();
+        }
       }
-    }
-    expect(cache.debugImageCount, 2);
-    expect(cache.debugBuildCount, 2);
-  });
+      expect(cache.debugImageCount, 2);
+      expect(cache.debugBuildCount, 2);
+    });
+  }
 
   test('bounds pixel memory and releases textures on clear', () {
     final cache = MapTerritoryGlowCache();
@@ -83,10 +100,18 @@ void main() {
   });
 }
 
-Future<ui.Image> _render(double zoom, void Function(ui.Canvas) paint) async {
+Future<ui.Image> _render(
+  double zoom,
+  void Function(ui.Canvas) paint, {
+  required bool cinematic,
+}) async {
+  final projection = MapCinematicProjection()..resize(120 * zoom, 100 * zoom);
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder)
     ..drawColor(const ui.Color(0xff808080), ui.BlendMode.src)
+    ..transform(
+      cinematic ? projection.matrix : (MapCinematicProjection().matrix),
+    )
     ..scale(zoom)
     ..translate(0.3, 0.7);
   paint(canvas);

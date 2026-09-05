@@ -366,6 +366,7 @@
   "masterVolume": "Master volume",
   "cameraSettings": "Camera",
   "cameraSensitivity": "Zoom sensitivity",
+  "cinematicCamera": "Cinematic camera",
   "smoothCameraMovement": "Smooth camera movement",
   "mapSettings": "Map",
   "mapGrid": "Hex borders",

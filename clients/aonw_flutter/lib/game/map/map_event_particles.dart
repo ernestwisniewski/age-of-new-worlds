@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/animation.dart';
 
 import '../../features/map/read_model/map_feedback_view.dart';
+import 'map_canvas_clip.dart';
 
 /// One reusable burst with the geometry and timing of map event feedback.
 final class MapEventParticleBurst {
@@ -64,9 +65,9 @@ final class MapEventParticleBurst {
 
   void render(ui.Canvas canvas) {
     if (!active ||
-        !canvas.getLocalClipBounds().overlaps(
-          ui.Rect.fromCircle(center: _center, radius: 300),
-        )) {
+        !mapCanvasClipBounds(
+          canvas,
+        ).overlaps(ui.Rect.fromCircle(center: _center, radius: 300))) {
       return;
     }
     final progress = (elapsed / _duration).clamp(0.0, 1.0);

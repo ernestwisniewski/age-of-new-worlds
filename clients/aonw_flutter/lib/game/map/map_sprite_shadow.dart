@@ -7,7 +7,7 @@ final class MapSpriteShadowCache {
   static const _density = 1;
   static const _bounds = ui.Rect.fromLTWH(-48, -24, 96, 72);
   final _images = <bool, ui.Image>{};
-  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;
+  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.low;
 
   @visibleForTesting
   int get debugImageCount => _images.length;

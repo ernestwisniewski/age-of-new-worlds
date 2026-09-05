@@ -10,7 +10,7 @@ final class MapTerritoryGlowCache {
   static const _density = 1;
   static const _padding = 12.0;
   final _images = <(ui.Path, int), ({ui.Image image, ui.Rect bounds})>{};
-  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;
+  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.low;
   var _pixelCount = 0;
   var _buildCount = 0;
 

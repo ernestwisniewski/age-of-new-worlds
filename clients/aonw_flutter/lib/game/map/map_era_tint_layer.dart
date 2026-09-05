@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import 'map_canvas_clip.dart';
 import 'static_map_layers.dart';
 
 /// Draws the recipient's authoritative research era below infrastructure and fog.
@@ -147,7 +148,7 @@ final class MapEraTintLayerComponent extends Component with HasVisibility {
   void render(ui.Canvas canvas) {
     _renderedRegionCount = 0;
     if (!isVisible) return;
-    final clip = canvas.getLocalClipBounds();
+    final clip = mapCanvasClipBounds(canvas);
     for (final region in _regions) {
       if (!region.bounds.overlaps(clip)) continue;
       canvas.drawPath(region.path, _paint);

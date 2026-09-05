@@ -12,6 +12,7 @@ import '../../design_system/assets/sprite_frames.dart';
 import '../../features/cities/read_model/city_view.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
@@ -164,7 +165,7 @@ final class MapCityComponent extends PositionComponent
 
   @override
   void render(ui.Canvas canvas) {
-    if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
+    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
     _paintCount++;
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);

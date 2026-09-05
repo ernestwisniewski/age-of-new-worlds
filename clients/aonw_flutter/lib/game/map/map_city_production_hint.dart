@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/animation.dart';
 
 import '../../design_system/aonw_tokens.dart';
+import 'map_canvas_clip.dart';
 
 /// One reusable particle per visible producing city.
 final class MapCityProductionHint {
@@ -40,7 +41,7 @@ final class MapCityProductionHint {
       _startedAt != null && now - _startedAt! < lifespan;
 
   bool render(ui.Canvas canvas, double now, ui.Paint paint) {
-    if (!activeAt(now) || !canvas.getLocalClipBounds().overlaps(bounds)) {
+    if (!activeAt(now) || !mapCanvasClipBounds(canvas).overlaps(bounds)) {
       return false;
     }
     final progress = ((now - _startedAt!) / lifespan).clamp(0.0, 1.0);

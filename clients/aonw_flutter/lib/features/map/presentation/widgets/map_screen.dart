@@ -238,6 +238,7 @@ final class _MapScreenState extends State<MapScreen>
     );
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
     _flameGame.setSmoothCameraMovement(settings.smoothCameraMovement);
+    _flameGame.setCinematicCamera(settings.cinematicCamera);
     _flameGame.setMovementCameraOptions((
       focusOwn: settings.focusOwnUnitMovement,
       followOwn: settings.followOwnUnitMovement,

@@ -10,6 +10,7 @@ final class ClientSettings {
     required this.showMapResourceIcons,
     required this.showMapHeightBadges,
     this.smoothCameraMovement = true,
+    this.cinematicCamera = false,
     this.focusOwnUnitMovement = true,
     this.followOwnUnitMovement = false,
     this.focusForeignUnitMovement = false,
@@ -32,6 +33,7 @@ final class ClientSettings {
   final double masterVolume;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
+  final bool cinematicCamera;
   final bool focusOwnUnitMovement;
   final bool followOwnUnitMovement;
   final bool focusForeignUnitMovement;
@@ -48,6 +50,7 @@ final class ClientSettings {
     double? masterVolume,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
+    bool? cinematicCamera,
     bool? focusOwnUnitMovement,
     bool? followOwnUnitMovement,
     bool? focusForeignUnitMovement,
@@ -63,6 +66,7 @@ final class ClientSettings {
     masterVolume: masterVolume ?? this.masterVolume,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
+    cinematicCamera: cinematicCamera ?? this.cinematicCamera,
     focusOwnUnitMovement: focusOwnUnitMovement ?? this.focusOwnUnitMovement,
     followOwnUnitMovement: followOwnUnitMovement ?? this.followOwnUnitMovement,
     focusForeignUnitMovement:
@@ -90,6 +94,7 @@ final class ClientSettings {
 
   bool _sameCamera(ClientSettings other) =>
       other.smoothCameraMovement == smoothCameraMovement &&
+      other.cinematicCamera == cinematicCamera &&
       other.focusOwnUnitMovement == focusOwnUnitMovement &&
       other.followOwnUnitMovement == followOwnUnitMovement &&
       other.focusForeignUnitMovement == focusForeignUnitMovement &&
@@ -107,6 +112,7 @@ final class ClientSettings {
     masterVolume,
     cameraSensitivity,
     smoothCameraMovement,
+    cinematicCamera,
     focusOwnUnitMovement,
     followOwnUnitMovement,
     focusForeignUnitMovement,

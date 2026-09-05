@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/animation.dart';
 
 import '../../features/map/read_model/map_feedback_view.dart';
+import 'map_canvas_clip.dart';
 import 'map_floating_text_image.dart';
 
 final class MapFloatingText {
@@ -67,7 +68,7 @@ final class MapFloatingText {
           image.width / MapFloatingTextImage.scale,
           image.height / MapFloatingTextImage.scale,
         );
-    if (opacity == 0 || !canvas.getLocalClipBounds().overlaps(bounds)) {
+    if (opacity == 0 || !mapCanvasClipBounds(canvas).overlaps(bounds)) {
       return false;
     }
     _paint.color = const ui.Color(0xffffffff).withValues(alpha: opacity);

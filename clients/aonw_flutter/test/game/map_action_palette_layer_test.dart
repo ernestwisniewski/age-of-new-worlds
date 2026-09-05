@@ -7,6 +7,7 @@ import 'package:aonw_flutter/features/map/presentation/map_action_palette_view.d
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/flame_map_camera.dart';
 import 'package:aonw_flutter/game/map/map_action_palette_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
@@ -17,48 +18,52 @@ import '../support/map_test_fixture.dart';
 void main() {
   final movePaletteIntents = <MapActionPaletteIntent>[];
   final moveHexIntents = <MapHexIntent>[];
-  testWithGame<AonwFlameGame>(
-    'move pill consumes map input before selecting a hex',
-    () => AonwFlameGame(
-      onActionPaletteIntent: movePaletteIntents.add,
-      onHexIntent: moveHexIntents.add,
-    ),
-    (game) async {
-      movePaletteIntents.clear();
-      moveHexIntents.clear();
-      game.onGameResize(Vector2(900, 800));
-      final scene = testMapScene(cols: 7, rows: 7);
-      game.replaceScene(
-        MapRenderSnapshot(
-          map: scene.map,
-          interaction: MapInteractionState(route: testRoutePlanView()),
-          reference: scene.reference,
-          player: scene.player,
-          actionPalette: const MapMovePreviewPillView(
-            coordinate: (col: 1, row: 0),
-            enabled: true,
-            label: 'Confirm · 1 turn',
-            warning: false,
+  for (final cinematic in [false, true]) {
+    testWithGame<AonwFlameGame>(
+      'move pill consumes map input before selecting a hex (cinematic: $cinematic)',
+      () => AonwFlameGame(
+        onActionPaletteIntent: movePaletteIntents.add,
+        onHexIntent: moveHexIntents.add,
+      ),
+      (game) async {
+        movePaletteIntents.clear();
+        moveHexIntents.clear();
+        game.setCinematicCamera(cinematic);
+        game.onGameResize(Vector2(900, 800));
+        final scene = testMapScene(cols: 7, rows: 7);
+        game.replaceScene(
+          MapRenderSnapshot(
+            map: scene.map,
+            interaction: MapInteractionState(route: testRoutePlanView()),
+            reference: scene.reference,
+            player: scene.player,
+            actionPalette: const MapMovePreviewPillView(
+              coordinate: (col: 1, row: 0),
+              enabled: true,
+              label: 'Confirm · 1 turn',
+              warning: false,
+            ),
           ),
-        ),
-      );
-      game.setViewportActive(true);
-      await game.ready();
+        );
+        game.setViewportActive(true);
+        await game.ready();
 
-      final bounds = game.world.actionPaletteLayer.debugBounds!;
-      expect(bounds.width, inInclusiveRange(58, 172));
-      expect(bounds.height, 42);
-      final screen = game.mapCamera.debugTransform!.worldToScreen((
-        x: bounds.center.dx,
-        y: bounds.center.dy,
-      ));
-      game.handleViewportTap(Vector2(screen.x, screen.y));
+        final bounds = game.world.actionPaletteLayer.debugBounds!;
+        expect(bounds.width, inInclusiveRange(58, 172));
+        expect(bounds.height, 42);
+        final flatScreen = game.mapCamera.debugTransform!.worldToScreen((
+          x: bounds.center.dx,
+          y: bounds.center.dy,
+        ));
+        final screen = game.mapCamera.projectScreenPoint(flatScreen);
+        game.handleViewportTap(Vector2(screen.x, screen.y));
 
-      expect(movePaletteIntents, hasLength(1));
-      expect(movePaletteIntents.single, isA<ConfirmMapMovePaletteIntent>());
-      expect(moveHexIntents, isEmpty);
-    },
-  );
+        expect(movePaletteIntents, hasLength(1));
+        expect(movePaletteIntents.single, isA<ConfirmMapMovePaletteIntent>());
+        expect(moveHexIntents, isEmpty);
+      },
+    );
+  }
 
   testWithGame<AonwFlameGame>(
     'worker palette keeps geometry and emits typed choices',

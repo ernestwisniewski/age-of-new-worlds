@@ -9,10 +9,12 @@ import '../../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../../features/map/presentation/input/map_viewport_intent.dart';
 import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/map_view.dart';
+import 'map_cinematic_projection.dart';
 import 'static_map_layers.dart';
 
 part 'flame_map_camera_motion.dart';
 part 'flame_map_camera_follow.dart';
+part 'flame_map_camera_projection.dart';
 
 MapHexCoordinate? initialMapFocus(MapRenderSnapshot snapshot) {
   final actorPlayerId = snapshot.player.actorPlayerId;
@@ -39,6 +41,8 @@ final class FlameMapCameraController {
   final void Function(double)? _onZoomChanged;
   final void Function(MapCameraTransform)? _onTransformChanged;
   final void Function(bool)? _onActivityChanged;
+  final _cinematicProjection = MapCinematicProjection();
+  bool _cinematicEnabled = false;
   _MapCameraMotion? _motion;
   AonwPoint? Function()? _trackedPoint;
   int _motionGeneration = 0;
@@ -91,6 +95,7 @@ final class FlameMapCameraController {
     if (viewport.x <= 0 || viewport.y <= 0) return;
     if (_viewport.x == viewport.x && _viewport.y == viewport.y) return;
     _viewport = viewport.clone();
+    _cinematicProjection.resize(viewport.x, viewport.y);
     final transform = _transform;
     if (transform == null) {
       _initializeIfReady();
@@ -103,18 +108,20 @@ final class FlameMapCameraController {
     final cache = _cache;
     final transform = _transform;
     if (cache == null || transform == null) return null;
-    return cache.projection.hexAt(transform.screenToWorld(screenPoint));
+    return cache.projection.hexAt(
+      transform.screenToWorld(_unprojectScreenPoint(screenPoint)),
+    );
   }
 
   AonwPoint? worldAtScreen(AonwPoint screenPoint) =>
-      _transform?.screenToWorld(screenPoint);
+      _transform?.screenToWorld(_unprojectScreenPoint(screenPoint));
 
   AonwPoint? screenForHex(MapHexCoordinate coordinate) {
     final cache = _cache;
     final transform = _transform;
     if (cache == null || transform == null) return null;
     final world = cache.projection.hexCenter(coordinate);
-    return transform.worldToScreen(world);
+    return projectScreenPoint(transform.worldToScreen(world));
   }
 
   void centerOnHex(MapHexCoordinate coordinate) {
@@ -168,7 +175,10 @@ final class FlameMapCameraController {
       next = next.panByScreen(screenPanDelta);
     }
     if (zoomFocalPoint != null && _validZoomFactor(zoomFactor)) {
-      next = next.zoomAtScreen(focalPoint: zoomFocalPoint, factor: zoomFactor);
+      next = next.zoomAtScreen(
+        focalPoint: _unprojectScreenPoint(zoomFocalPoint),
+        factor: zoomFactor,
+      );
     }
     if (identical(next, transform)) return false;
     cancelMotion();

@@ -95,6 +95,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   MapHexIntentSink? _hexIntentSink;
   MapActionPaletteIntentSink? _actionPaletteIntentSink;
   MapHexSelectionPaletteIntentSink? _hexSelectionPaletteIntentSink;
+  AonwPoint? _lastHoverScreenPosition;
   MapHexCoordinate? _lastHoveredHex;
   MapHexCoordinate? _longPressedHex;
   var _hasHoveredHex = false;
@@ -162,6 +163,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     _setFoundingPreviewActive(false);
     mapCamera.clear();
     _lastCameraSelection = null;
+    _lastHoverScreenPosition = null;
     _lastHoveredHex = null;
     _hasHoveredHex = false;
     _requestInputFrame();
@@ -175,6 +177,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     inputSurface.setEnabled(active);
     if (!active) {
       mapCamera.cancelMotion();
+      _lastHoverScreenPosition = null;
       _keyboardPanX = 0;
       _keyboardPanY = 0;
       _longPressedHex = null;
@@ -332,6 +335,24 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     super.onGameResize(size);
     inputSurface.resize(size);
     mapCamera.resize(size);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    final matrix = mapCamera.cinematicMatrix;
+    if (matrix == null) {
+      super.render(canvas);
+      return;
+    }
+    canvas
+      ..save()
+      ..clipRect(mapCamera.cinematicClipBounds, doAntiAlias: false)
+      ..transform(matrix);
+    try {
+      super.render(canvas);
+    } finally {
+      canvas.restore();
+    }
   }
 
   @override

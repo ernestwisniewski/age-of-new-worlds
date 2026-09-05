@@ -79,8 +79,10 @@ extension AonwFlameGameViewportInput on AonwFlameGame {
     mapCamera.applyIntent(intent);
     switch (intent) {
       case MapHoverIntent(:final screenPosition):
+        _lastHoverScreenPosition = screenPosition;
         _emitHover(mapCamera.hexAtScreen(screenPosition));
       case MapHoverExitIntent():
+        _lastHoverScreenPosition = null;
         _emitHover(null);
       case MapSelectIntent(:final screenPosition):
         if (_handleHexSelectionPaletteTap(screenPosition) ||
@@ -103,6 +105,7 @@ extension AonwFlameGameViewportInput on AonwFlameGame {
     }
     final hoverScreenPosition = intent.hoverScreenPosition;
     if (hoverScreenPosition != null) {
+      _lastHoverScreenPosition = hoverScreenPosition;
       _emitHover(mapCamera.hexAtScreen(hoverScreenPosition));
     }
   }

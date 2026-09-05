@@ -13,6 +13,7 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/pending_action_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_painter.dart';
 import 'map_sprite_shadow.dart';
@@ -340,7 +341,7 @@ final class MapUnitComponent extends PositionComponent
 
   @override
   void render(ui.Canvas canvas) {
-    if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
+    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
     _paintCount++;
     const center = ui.Offset(_diameter / 2, _diameter / 2);
     _shadows.paintUnit(
