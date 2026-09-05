@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
@@ -17,7 +16,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'support/active_frame_timings.dart';
+import 'support/cloud_performance_probe.dart';
 import 'support/combat_performance_probe.dart';
+import 'support/gameplay_performance_record.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,9 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     final rssBefore = ProcessInfo.currentRss;
     final snapshot = _largeSnapshot();
-    final game = AonwFlameGame();
+    final game = AonwFlameGame(
+      world: AonwWorld(cloudLayer: performanceCloudLayer()),
+    );
     final startup = Stopwatch()..start();
 
     await tester.pumpWidget(
@@ -51,7 +55,7 @@ void main() {
     expect(game.world.workerInfrastructureLayer.debugImprovementCount, 120);
     expect(game.world.workerInfrastructureLayer.debugRoadCount, 120);
     expect(game.world.workerInfrastructureLayer.debugSharedPaintCount, 9);
-    expect(game.world.children, hasLength(19));
+    expect(game.world.children, hasLength(20));
     expect(game.paused, isTrue, reason: 'the turn-based world starts idle');
     final idleUpdates = game.world.effectHost.debugActiveUpdateCount;
     for (var frame = 0; frame < 12; frame++) {
@@ -59,20 +63,18 @@ void main() {
     }
     expect(game.world.effectHost.debugActiveUpdateCount, idleUpdates);
 
+    expectPerformanceSpritesReady(game, snapshot);
     game.setContinuousRendering(true);
-    for (var frame = 0; frame < 12; frame++) {
-      await tester.pump(const Duration(microseconds: 16667));
-    }
-    await binding.watchPerformance(() async {
-      for (var frame = 0; frame < 60; frame++) {
-        await tester.pump(const Duration(microseconds: 16667));
-      }
-    }, reportKey: 'flameGameplayFrameTimes');
+    final frameTimes = await measureActiveFrameTimings(
+      tester,
+      warmupFrames: 12,
+      timedFrames: 60,
+    );
+    binding.reportData ??= <String, dynamic>{};
+    binding.reportData!['flameGameplayFrameTimes'] = frameTimes;
     game.setContinuousRendering(false);
     expect(game.paused, isTrue);
 
-    final frameTimes =
-        binding.reportData!['flameGameplayFrameTimes']! as Map<String, dynamic>;
     final buildP99 =
         frameTimes['99th_percentile_frame_build_time_millis']! as num;
     final rasterP99 =
@@ -88,50 +90,23 @@ void main() {
     expect(missedRaster, 0);
     expect(rssDelta, lessThanOrEqualTo(192 * 1024 * 1024));
 
-    final record = <String, Object?>{
-      'schemaVersion': 1,
-      'environment': {
-        'operatingSystem': Platform.operatingSystemVersion,
-        'dart': Platform.version,
-        'buildMode': 'flutter-test-device-debug',
-        'flame': '1.38.0',
-      },
-      'workload': {
-        'mapId': 'flame-performance-40x30',
-        'dimensions': {'cols': 40, 'rows': 30},
-        'visibleUnits': 120,
-        'visibleCities': 40,
-        'visibleFieldImprovements': 120,
-        'visibleRoads': 120,
-        'warmupFrames': 12,
-        'timedFrames': 60,
-        'worldComponents': game.world.children.length,
-        'sharedUnitPaints': game.world.unitLayer.debugSharedPaintCount,
-        'sharedCityPaints': game.world.cityLayer.debugSharedPaintCount,
-        'sharedInfrastructurePaints':
-            game.world.workerInfrastructureLayer.debugSharedPaintCount,
-      },
-      'metrics': {
-        'startupMicros': startup.elapsedMicroseconds,
-        'residentMemoryDeltaBytes': rssDelta,
-        'idleEffectUpdates':
-            game.world.effectHost.debugActiveUpdateCount - idleUpdates,
-        'frameTimes': frameTimes,
-      },
-      'policy': {
-        'classification': 'hard-flame-gameplay',
-        'owner': 'Flutter client',
-        'buildP99MillisMax': 16.667,
-        'rasterP99MillisMax': 16.667,
-        'missedFrameBudgetMax': 0,
-        'residentMemoryDeltaBytesMax': 192 * 1024 * 1024,
-      },
-    };
-    // Stable marker copied into the reviewed Flame performance record.
-    // ignore: avoid_print
-    print('AONW_FLAME_GAMEPLAY_BASELINE ${jsonEncode(record)}');
+    recordGameplayPerformance(
+      game,
+      frameTimes,
+      startupMicros: startup.elapsedMicroseconds,
+      rssDelta: rssDelta,
+      idleUpdates: idleUpdates,
+    );
 
     await measureCombatFeedback(
+      binding,
+      tester,
+      game,
+      snapshot,
+      rssBefore: rssBefore,
+    );
+
+    await measureCloudDrift(
       binding,
       tester,
       game,

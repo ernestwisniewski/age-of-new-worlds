@@ -24,6 +24,7 @@ import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
 import 'map/map_action_palette_layer.dart';
+import 'map/map_cloud_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
 import 'map/map_hex_selection_palette_layer.dart';
@@ -63,6 +64,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     );
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
+    this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
   }
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
@@ -78,6 +80,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _viewportActive = false;
   var _continuousRendering = false;
   var _effectsActive = false;
+  var _cloudsActive = false;
+  var _reducedMotion = false;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
   var _keyboardPanX = 0.0;
@@ -139,6 +143,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void setViewportActive(bool active) {
     if (_disposed || active == _viewportActive) return;
     _viewportActive = active;
+    world.cloudLayer.setViewportActive(active);
     inputSurface.setEnabled(active);
     if (!active) {
       _keyboardPanX = 0;
@@ -257,6 +262,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (_viewportActive &&
         (_continuousRendering ||
             _effectsActive ||
+            _cloudsActive ||
             _foundingPreviewActive ||
             keyboardActive)) {
       resumeEngine();
@@ -266,8 +272,11 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   }
 
   void setReducedMotion(bool enabled) {
-    if (_disposed) return;
+    if (_disposed || _reducedMotion == enabled) return;
+    _reducedMotion = enabled;
     world.effectHost.setReducedMotion(enabled);
+    world.cloudLayer.setReducedMotion(enabled);
+    _requestInputFrame();
   }
 
   void setEffectPlaybackSpeed(double speed) {
@@ -283,6 +292,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void _handleEffectActivity(bool active) {
     if (_disposed || _effectsActive == active) return;
     _effectsActive = active;
+    _synchronizeGameLoop();
+  }
+
+  void _handleCloudActivity(bool active) {
+    if (_disposed || _cloudsActive == active) return;
+    _cloudsActive = active;
     _synchronizeGameLoop();
   }
 

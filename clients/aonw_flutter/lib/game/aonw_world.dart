@@ -1,7 +1,7 @@
 part of 'aonw_flame_game.dart';
 
 final class AonwWorld extends World implements FlameSceneSink {
-  AonwWorld()
+  AonwWorld({MapCloudLayerComponent? cloudLayer})
     : terrainLayer = MapTerrainLayerComponent(),
       referenceLayer = MapReferenceLayerComponent(),
       gridLayer = MapGridLayerComponent(),
@@ -21,6 +21,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     actionPaletteLayer = MapActionPaletteLayerComponent();
     hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
+    this.cloudLayer = cloudLayer ?? MapCloudLayerComponent();
     addAll([
       terrainLayer,
       referenceLayer,
@@ -41,6 +42,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       actionPaletteLayer,
       hexSelectionPaletteLayer,
       effectHost,
+      this.cloudLayer,
     ]);
   }
 
@@ -63,6 +65,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapActionPaletteLayerComponent actionPaletteLayer;
   late final MapHexSelectionPaletteLayerComponent hexSelectionPaletteLayer;
   late final MapEffectHostComponent effectHost;
+  late final MapCloudLayerComponent cloudLayer;
   MapRenderSnapshot? _scene;
   MapStaticRenderCache? _staticCache;
   MapHexCoordinate? _cursor;
@@ -119,6 +122,11 @@ final class AonwWorld extends World implements FlameSceneSink {
     tileDetailsLayer.applyMap(snapshot.map, cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
+    cloudLayer.applyFog(
+      cache,
+      snapshot.player.fog,
+      actorPlayerId: snapshot.player.actorPlayerId,
+    );
     routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
     threatOverlayLayer.applyThreats(
       cache,
@@ -168,6 +176,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     tileDetailsLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
+    cloudLayer.clearLayer();
     routeLayer.clearLayer();
     threatOverlayLayer.clearLayer();
     objectiveLayer.clearLayer();

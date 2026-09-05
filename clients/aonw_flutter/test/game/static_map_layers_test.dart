@@ -41,7 +41,7 @@ void main() {
     expect(cache.clipPath.getBounds(), cache.gridPath.getBounds());
   });
 
-  test('cache matches legacy neighbor-aware elevation walls', () {
+  test('cache matches neighbor-aware elevation walls', () {
     final source = testMapScene(cols: 2, rows: 2).map;
     final cache = MapStaticRenderCache.build(
       _withHeight(source, coordinate: (col: 0, row: 0), height: 2),
@@ -56,7 +56,7 @@ void main() {
     );
   });
 
-  test('terrain surface follows explicit legacy graphic and tile modes', () {
+  test('terrain surface follows explicit graphic and tile modes', () {
     final layer = MapTerrainLayerComponent();
     final cache = MapStaticRenderCache.build(testMapScene().map);
 
@@ -72,7 +72,7 @@ void main() {
     expect(layer.isVisible, isFalse);
   });
 
-  test('grid follows the explicit legacy hex border option', () {
+  test('grid follows the explicit hex border option', () {
     final layer = MapGridLayerComponent();
     layer.applyCache(MapStaticRenderCache.build(testMapScene().map));
 
@@ -93,7 +93,7 @@ void main() {
       await game.ready();
 
       final layers = game.world.children.toList();
-      expect(layers, hasLength(19));
+      expect(layers, hasLength(20));
       expect(layers[0], same(game.world.terrainLayer));
       expect(layers[1], same(game.world.referenceLayer));
       expect(layers[2], same(game.world.gridLayer));
@@ -109,10 +109,11 @@ void main() {
       expect(layers[12], same(game.world.unitLayer));
       expect(layers[13], same(game.world.cityFoundingPreviewLayer));
       expect(layers[14], same(game.world.cityManagementOverlayLayer));
-      expect(layers[15], same(game.world.selectionLayer));
-      expect(layers[16], same(game.world.effectHost));
-      expect(layers[17], same(game.world.actionPaletteLayer));
-      expect(layers[18], same(game.world.hexSelectionPaletteLayer));
+      expect(layers[15], same(game.world.cloudLayer));
+      expect(layers[16], same(game.world.selectionLayer));
+      expect(layers[17], same(game.world.effectHost));
+      expect(layers[18], same(game.world.actionPaletteLayer));
+      expect(layers[19], same(game.world.hexSelectionPaletteLayer));
       expect(layers.map((component) => component.priority), [
         0,
         10,
@@ -129,6 +130,7 @@ void main() {
         50,
         55,
         55,
+        56,
         60,
         70,
         80,

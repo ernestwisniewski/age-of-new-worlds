@@ -86,6 +86,10 @@ device, workload, build mode, warm-up, percentiles, and resource budgets. Engine
 runtime latency must not be inferred from a frame golden, and renderer timing
 must not be inferred from a headless Rust benchmark.
 
+All Flame frame windows use engine timestamps after 12 warm-up frames and
+collect 60 consecutive frames. This avoids VM timeline allocation in the RSS
+measurement. The device test verifies loaded sprite frames before sampling.
+
 The Flame device test also saturates the four combat slots with eight damage
 labels and 136 city-hit particles on the 40×30 scene. It measures 60 consecutive
 engine frame timestamps after 12 warm-up frames. Effects run at 0.1 playback
@@ -94,3 +98,12 @@ asserts the same occupancy at both ends. The combat record uses the same frame
 and 192 MiB total RSS limits as the static scene. It uses synthetic accepted
 combat evidence and excludes fog and HUD; it does not replace the full-scene
 parity gate.
+
+A third window renders three clouds with 33 puffs over the discovered clip.
+Each cloud caches its soft shape in one image; movement only changes position,
+rotation and opacity. The record includes the camera focus and cloud age so the
+measured group stays in the starting viewport region. It includes all 1200
+hexes in the cloud clip but excludes fog shading and HUD. Coverage of newly
+visible atlas groups during wider camera travel remains a separate parity QA
+requirement. Both transient workloads verify that Flame stops updating after
+effects are disabled.

@@ -15,11 +15,11 @@ Future<Map<String, dynamic>> measureActiveFrameTimings(
   binding.addTimingsCallback(collect);
   try {
     for (var frame = 0; frame < warmupFrames; frame++) {
-      await tester.pump(const Duration(microseconds: 16667));
+      await _pumpLiveFrame(tester);
     }
     final start = binding.currentSystemFrameTimeStamp.inMicroseconds;
     for (var frame = 0; frame < timedFrames; frame++) {
-      await tester.pump(const Duration(microseconds: 16667));
+      await _pumpLiveFrame(tester);
     }
     final end = binding.currentSystemFrameTimeStamp.inMicroseconds;
     for (var attempt = 0; attempt < 40; attempt++) {
@@ -38,3 +38,12 @@ Future<Map<String, dynamic>> measureActiveFrameTimings(
 
 int _vsync(FrameTiming timing) =>
     timing.timestampInMicroseconds(FramePhase.vsyncStart);
+
+Future<void> _pumpLiveFrame(WidgetTester tester) => tester
+    .pump(const Duration(microseconds: 16667))
+    .timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => throw TestFailure(
+        'No live frame arrived within five seconds; check the macOS test window.',
+      ),
+    );
