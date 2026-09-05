@@ -50,17 +50,23 @@ void main() {
       final sceneWrites = game.world.debugSceneWriteCount;
       expect(host.combatAnimationsEnabled, isFalse);
       expect(host.movementAnimationsEnabled, isTrue);
+      expect(game.world.unitLayer.idleAnimationsEnabled, isTrue);
       await settings.update(
-        settings.settings.copyWith(showUnitMovementAnimations: false),
+        settings.settings.copyWith(
+          showUnitMovementAnimations: false,
+          showUnitIdleAnimations: false,
+        ),
       );
       await tester.pump();
       expect(host.movementAnimationsEnabled, isFalse);
+      expect(game.world.unitLayer.idleAnimationsEnabled, isFalse);
       expect(host.combatAnimationsEnabled, isFalse);
       expect(game.world.debugSceneWriteCount, sceneWrites);
       expect(session.positions, isEmpty);
       await settings.reset();
       await tester.pump();
       expect(host.movementAnimationsEnabled, isTrue);
+      expect(game.world.unitLayer.idleAnimationsEnabled, isTrue);
       expect(host.combatAnimationsEnabled, isTrue);
     },
   );

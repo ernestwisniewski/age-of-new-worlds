@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../features/map/presentation/camera/map_camera_transform.dart';
 import '../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../features/map/presentation/input/map_action_palette_intent.dart';
 import '../features/map/presentation/input/map_gamepad_input.dart';
@@ -73,7 +74,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     mapCamera = FlameMapCameraController(
       this.camera,
       onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
-      onTransformChanged: this.world.cityProductionLayer.applyCamera,
+      onTransformChanged: _handleMapCameraTransform,
       onActivityChanged: _handleCameraActivity,
     );
     inputSurface = FlameMapInputSurface(
@@ -83,6 +84,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
     this.world.effectHost.onMovementStart = _startMovementCamera;
+    this.world.unitLayer.onIdleFrame = _requestInputFrame;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
     this.world.eventFeedbackLayer.onActivityChanged =
@@ -174,6 +176,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     _viewportActive = active;
     world.cloudLayer.setViewportActive(active);
     world.cityProductionLayer.setViewportActive(active);
+    world.unitLayer.setViewportActive(active);
     inputSurface.setEnabled(active);
     if (!active) {
       mapCamera.cancelMotion();
@@ -228,25 +231,6 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     final zoom = mapCamera.zoom;
     final speed = _keyboardPanSpeed * dt / zoom;
     return (x: _keyboardPanX * speed, y: _keyboardPanY * speed);
-  }
-
-  void applyGamepadCameraFrame(MapGamepadFrame frame, double dt) {
-    if (_disposed || !_viewportActive || !dt.isFinite || dt < 0) return;
-    final focalPoint = mapCamera.viewportCenter;
-    final zoomFactor = focalPoint == null || frame.zoom == 0
-        ? 1.0
-        : 1 + frame.zoom * _gamepadZoomSpeed * dt;
-    mapCamera.applyIntent(
-      MapViewportFrameIntent(
-        screenPanDelta: (
-          x: frame.cameraX * _gamepadPanSpeed * dt,
-          y: -frame.cameraY * _gamepadPanSpeed * dt,
-        ),
-        zoomFocalPoint: focalPoint,
-        zoomFactor: zoomFactor,
-        hoverScreenPosition: null,
-      ),
-    );
   }
 
   void handleViewportPointerDown(int pointerId, Vector2 position) =>

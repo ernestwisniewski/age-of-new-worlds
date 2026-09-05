@@ -69,7 +69,7 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
-    'reduced motion freezes idle frames while other presentation time advances',
+    'Flame updates leave idle timing to the presentation clock',
     AonwFlameGame.new,
     (game) async {
       game.setReducedMotion(true);
@@ -82,7 +82,7 @@ void main() {
       expect(unit.debugSpriteFrame, same(frame));
       game.setReducedMotion(false);
       unit.update(0.31);
-      expect(unit.debugSpriteFrame, isNot(same(frame)));
+      expect(unit.debugSpriteFrame, same(frame));
       game.setReducedMotion(true);
       final frozen = unit.debugSpriteFrame;
       game.replaceScene(movementCameraSnapshot(revision: 1));

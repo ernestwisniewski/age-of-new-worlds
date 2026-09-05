@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import '../../design_system/assets/sprite_animation_adjustments.dart';
@@ -15,9 +16,12 @@ final class MapUnitSpriteAnimation {
   MapUnitSpriteAnimation({
     required VisibleUnitKind kind,
     required this.onLoaded,
-  }) : _kind = kind;
+    double Function()? idlePauseDuration,
+  }) : _kind = kind,
+       _idlePauseDuration = idlePauseDuration ?? math.Random().nextDouble;
 
   final void Function() onLoaded;
+  final double Function() _idlePauseDuration;
   VisibleUnitKind _kind;
   final _frames = <MapUnitSpriteAction, List<SpriteFrame>>{};
   final _pending = <MapUnitSpriteAction, Future<void>>{};
@@ -28,6 +32,8 @@ final class MapUnitSpriteAnimation {
   var _index = 0;
   var _elapsed = 0.0;
   var _mirrored = false;
+  var _idlePausesEnabled = true;
+  var _idlePauseRemaining = 0.0;
   SpriteFrame? _geometryFrame;
   ui.Rect? _geometryDestination;
   SpriteFrameGeometry? _geometry;
@@ -35,6 +41,13 @@ final class MapUnitSpriteAnimation {
   MapUnitSpriteAction get action => _action;
   bool get mirrored => _mirrored;
   int get index => _index;
+  double get idleFrameDelay => _idlePauseRemaining + frameDuration - _elapsed;
+
+  void setIdlePausesEnabled(bool enabled) {
+    _idlePausesEnabled = enabled;
+    if (!enabled) _idlePauseRemaining = 0;
+  }
+
   SpriteSequenceId get _sequence => _sequenceFor(_action);
   SpriteFrame? get frame => _frames[_action]?[_index];
   double get frameDuration => _adjustments.frameDuration(
@@ -59,6 +72,7 @@ final class MapUnitSpriteAnimation {
     _action = MapUnitSpriteAction.idle;
     _index = 0;
     _elapsed = 0;
+    _idlePauseRemaining = 0;
     _mirrored = false;
     unawaited(load());
   }
@@ -76,15 +90,37 @@ final class MapUnitSpriteAnimation {
     _action = action;
     _index = 0;
     _elapsed = 0;
+    _idlePauseRemaining = 0;
     unawaited(_loadAction(action));
   }
 
   void advance(double dt) {
     if (_disposed || !dt.isFinite || dt <= 0) return;
+    if (_action == MapUnitSpriteAction.idle && _idlePausesEnabled) {
+      _advanceIdle(dt);
+      return;
+    }
     _elapsed += dt;
     final count = (_elapsed / frameDuration).floor();
     _elapsed -= count * frameDuration;
     _index = (_index + count) % MapSpriteCatalog.unitFrameCount;
+  }
+
+  void _advanceIdle(double dt) {
+    final activeTime = dt - _idlePauseRemaining;
+    _idlePauseRemaining = math.max(0, -activeTime);
+    if (activeTime <= 0) return;
+    _elapsed += activeTime;
+    final count = (_elapsed / frameDuration).floor();
+    if (_index + count < MapSpriteCatalog.unitFrameCount) {
+      _index += count;
+      _elapsed -= count * frameDuration;
+      return;
+    }
+    _index = 0;
+    _elapsed = 0;
+    final pause = _idlePauseDuration();
+    _idlePauseRemaining = pause.isFinite ? pause.clamp(0, 1) : 0;
   }
 
   void paint(ui.Canvas canvas, ui.Rect destination) {

@@ -15,9 +15,13 @@ import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_shadow.dart';
+import 'map_unit_idle_clock.dart';
 import 'map_unit_sprite_animation.dart';
 import 'static_map_layers.dart';
 import 'unit_marker_details.dart';
+
+part 'unit_map_component.dart';
+part 'unit_map_idle.dart';
 
 enum _CityUnitPlacement { none, primary, companion }
 
@@ -40,7 +44,9 @@ final class _MapUnitVisualState {
 }
 
 final class MapUnitLayerComponent extends Component with HasVisibility {
-  MapUnitLayerComponent() : super(priority: 50) {
+  MapUnitLayerComponent({DateTime Function()? now, this.idlePauseDuration})
+    : _now = now,
+      super(priority: 50) {
     isVisible = false;
   }
 
@@ -50,7 +56,21 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   var _createdCount = 0;
   var _updatedCount = 0;
   var _removedCount = 0;
+  final DateTime Function()? _now;
+  final double Function()? idlePauseDuration;
+  late final _idleClock = MapUnitIdleClock(
+    now: _now,
+    onFrame: () => onIdleFrame?.call(),
+  );
+  void Function()? onIdleFrame;
+  var _idleEnabled = true;
+  var _viewportActive = false;
   var _reducedMotion = false;
+  var _idleZoom = 0.0;
+  var _applyingPatch = false;
+  ui.Rect _idleViewport = ui.Rect.zero;
+
+  bool get idleAnimationsEnabled => _idleEnabled;
 
   @visibleForTesting
   int get debugUnitCount => _unitsById.length;
@@ -73,6 +93,17 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   MapUnitComponent? componentForUnit(String unitId) => _unitsById[unitId];
 
   void applyPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
+    _idleClock.flush();
+    _applyingPatch = true;
+    try {
+      _applyUnitPatch(patch, cache);
+    } finally {
+      _applyingPatch = false;
+      _synchronizeIdle();
+    }
+  }
+
+  void _applyUnitPatch(FlameScenePatch patch, MapStaticRenderCache cache) {
     final animatedIds = {for (final value in patch.movements) value.unitId};
     final changedIds = {for (final value in patch.unitUpserts) value.id};
     for (final unitId in patch.removedUnitIds) {
@@ -114,7 +145,9 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
           unit: unit,
           visual: visual,
           shadows: _shadows,
-        ).._reducedMotion = _reducedMotion;
+          onIdleChanged: _synchronizeIdle,
+          idlePauseDuration: idlePauseDuration,
+        );
         _unitsById[unit.id] = component;
         add(component);
         _createdCount += 1;
@@ -130,19 +163,13 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
     isVisible = _unitsById.isNotEmpty;
   }
 
-  void setReducedMotion(bool enabled) {
-    if (_reducedMotion == enabled) return;
-    _reducedMotion = enabled;
-    for (final unit in _unitsById.values) {
-      unit._reducedMotion = enabled;
-    }
-  }
-
   void clearLayer() {
-    for (final component in _unitsById.values) {
+    final components = _unitsById.values.toList(growable: false);
+    _unitsById.clear();
+    _idleClock.clear();
+    for (final component in components) {
       component.removeFromParent();
     }
-    _unitsById.clear();
     _visualOffsetsById.clear();
     _shadows.clear();
     isVisible = false;
@@ -253,213 +280,5 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
   ) {
     final center = cache.projection.hexCenter(coordinate);
     return ui.Offset(center.x, center.y - 12);
-  }
-}
-
-final class MapUnitComponent extends PositionComponent
-    with HasGameReference<FlameGame> {
-  MapUnitComponent._({
-    required VisibleUnitView unit,
-    required _MapUnitVisualState visual,
-    required MapSpriteShadowCache shadows,
-  }) : _unit = unit,
-       _visual = visual,
-       _shadows = shadows,
-       super(
-         position: Vector2(visual.center.dx, visual.center.dy),
-         size: Vector2.all(_diameter),
-         anchor: Anchor.center,
-       );
-
-  static const _diameter = 46.0;
-  static const _spriteVerticalLiftFactor = 0.16;
-  static const sharedPaintCount = MapUnitMarkerDetails.sharedPaintCount;
-
-  VisibleUnitView _unit;
-  _MapUnitVisualState _visual;
-  final MapSpriteShadowCache _shadows;
-  late final _sprite = MapUnitSpriteAnimation(
-    kind: _unit.kind,
-    onLoaded: _refreshGameWidget,
-  );
-  var _moving = false;
-  var _reducedMotion = false;
-  MapHexCoordinate? _presentedCoordinate;
-  bool get _onCity =>
-      !_moving &&
-      _visual.onCity &&
-      (_presentedCoordinate == null ||
-          _presentedCoordinate == _unit.coordinate);
-
-  static final _visualBounds = const ui.Rect.fromLTRB(-64, -96, 110, 110);
-  var _paintCount = 0;
-
-  @visibleForTesting
-  int get debugPaintCount => _paintCount;
-
-  @visibleForTesting
-  VisibleUnitView get debugUnit => _unit;
-
-  @visibleForTesting
-  ui.Offset get debugVisualCenter => visualCenter;
-
-  ui.Offset get visualCenter => ui.Offset(position.x, position.y);
-
-  @visibleForTesting
-  SpriteFrame? get debugSpriteFrame => _sprite.frame;
-
-  @visibleForTesting
-  MapUnitSpriteAction get debugSpriteAction => _sprite.action;
-
-  @visibleForTesting
-  bool get debugSpriteMirrored => _sprite.mirrored;
-
-  @visibleForTesting
-  Future<void> debugLoadSprite() => _sprite.load();
-
-  @visibleForTesting
-  ui.Size get debugSpriteSize => _spriteSize;
-
-  ui.Size get _spriteSize {
-    final metrics = MapSpriteCatalog.unitMetrics(_unit.kind, onCity: _onCity);
-    final scale = _visual.workBadgeLabel == null ? 1.0 : 0.72;
-    return ui.Size(metrics.width * scale, metrics.height * scale);
-  }
-
-  @visibleForTesting
-  ui.Color get debugOwnerColor => _visual.ownerColor;
-
-  @visibleForTesting
-  bool get debugSelected => _visual.selected;
-
-  @visibleForTesting
-  bool get debugOnCity => _onCity;
-
-  @visibleForTesting
-  String? get debugWorkBadgeLabel => _visual.workBadgeLabel;
-
-  @visibleForTesting
-  double get debugHealthFraction => MapUnitMarkerDetails.healthFraction(_unit);
-
-  @visibleForTesting
-  MapUnitStateBadge? get debugStateBadge => MapUnitMarkerDetails.stateBadgeFor(
-    unit: _unit,
-    skippedTurn: _visual.skippedTurn,
-  );
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    unawaited(_sprite.load());
-  }
-
-  void _applyUnit(
-    VisibleUnitView unit, {
-    required _MapUnitVisualState visual,
-    required bool preserveVisualPosition,
-  }) {
-    final kindChanged = _unit.kind != unit.kind;
-    _unit = unit;
-    _visual = visual;
-    if (!preserveVisualPosition && !_moving) cancelMovement();
-    if (kindChanged) _sprite.setKind(unit.kind);
-  }
-
-  void setVisualCenter(ui.Offset center) {
-    position.setValues(center.dx, center.dy);
-  }
-
-  void beginMovement() {
-    _moving = true;
-    _sprite.playIdle();
-  }
-
-  void advanceWalk(ui.Offset from, ui.Offset to, double dt) {
-    _sprite.playWalkToward(from, to);
-    _sprite.advance(dt);
-  }
-
-  void finishMovement(MapHexCoordinate coordinate, ui.Offset center) {
-    setVisualCenter(center);
-    _moving = false;
-    _presentedCoordinate = coordinate;
-    _sprite.playIdle();
-  }
-
-  void cancelMovement() => finishMovement(_unit.coordinate, _visual.center);
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (!_moving && !_reducedMotion) _sprite.advance(dt);
-  }
-
-  @override
-  void onRemove() {
-    _sprite.dispose();
-    super.onRemove();
-  }
-
-  @override
-  void render(ui.Canvas canvas) {
-    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
-    _paintCount++;
-    const center = ui.Offset(_diameter / 2, _diameter / 2);
-    _shadows.paintUnit(
-      canvas,
-      center: center,
-      compact: _onCity || _visual.workBadgeLabel != null,
-    );
-    final size = _spriteSize;
-    final destination = ui.Rect.fromCenter(
-      center: ui.Offset(
-        center.dx,
-        center.dy - size.height * _spriteVerticalLiftFactor,
-      ),
-      width: size.width,
-      height: size.height,
-    );
-    final frame = _sprite.frame;
-    if (_unit.movementUnits == 0) {
-      canvas.saveLayer(
-        destination.inflate(28),
-        MapUnitMarkerDetails.exhaustedPaint,
-      );
-    }
-    if (frame != null) {
-      _sprite.paint(canvas, destination);
-    } else {
-      MapUnitMarkerDetails.paintFallback(
-        canvas,
-        center: center,
-        unit: _unit,
-        ownerColor: _visual.ownerColor,
-        selected: _visual.selected,
-      );
-    }
-    if (_unit.movementUnits == 0) canvas.restore();
-    final compact = _visual.workBadgeLabel != null;
-    final statusTop =
-        destination.top +
-        (_sprite.statusTopOffset(size) ?? (compact || _onCity ? 6 : 9));
-    final statusWidth = size.width * 0.68;
-    MapUnitMarkerDetails.paint(
-      canvas,
-      center: center,
-      unit: _unit,
-      ownerColor: _visual.ownerColor,
-      selected: _visual.selected,
-      skippedTurn: _visual.skippedTurn,
-      onCity: _onCity,
-      statusTop: statusTop,
-      statusWidth: statusWidth < 28 ? 28 : statusWidth,
-      workBadgeLabel: _visual.workBadgeLabel,
-    );
-  }
-
-  void _refreshGameWidget() {
-    if (isMounted && game.isAttached && game.paused) {
-      game.stepEngine(stepTime: 0);
-    }
   }
 }

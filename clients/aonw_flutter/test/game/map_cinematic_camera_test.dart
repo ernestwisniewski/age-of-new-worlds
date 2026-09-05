@@ -9,6 +9,33 @@ import 'package:flutter_test/flutter_test.dart';
 import '../support/movement_camera_test_fixture.dart';
 
 void main() {
+  testWithGame<AonwFlameGame>(
+    'visible world bounds preserve the viewport clip through projection and resize',
+    AonwFlameGame.new,
+    (game) async {
+      game.replaceScene(movementCameraSnapshot());
+      await game.ready();
+      for (final size in [Vector2(900, 700), Vector2(390, 844)]) {
+        game.onGameResize(size);
+        for (final zoom in [0.2, 1.0, 5.0]) {
+          game.setCinematicCamera(false);
+          game.mapCamera.applyIntent(
+            MapZoomIntent(
+              focalPoint: game.mapCamera.viewportCenter!,
+              factor: zoom / game.mapCamera.zoom,
+            ),
+          );
+          final flat = game.mapCamera.visibleWorldBounds;
+          game.setCinematicCamera(true);
+          final cinematic = game.mapCamera.visibleWorldBounds;
+          expect(cinematic, flat);
+          expect(cinematic.width, closeTo(size.x / zoom, 1e-8));
+          expect(cinematic.height, closeTo(size.y / zoom, 1e-8));
+        }
+      }
+    },
+  );
+
   test('cinematic perspective preserves its reference shape and inverse', () {
     final projection = MapCinematicProjection();
     for (final size in [

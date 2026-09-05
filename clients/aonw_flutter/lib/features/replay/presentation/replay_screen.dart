@@ -93,6 +93,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
     );
     _game.setUnitMovementAnimations(settings.showUnitMovementAnimations);
     _game.setCombatAnimations(settings.showCombatAnimations);
+    _game.setUnitIdleAnimations(settings.showUnitIdleAnimations);
     _game.setCameraSensitivity(settings.cameraSensitivity);
     _game.setSmoothCameraMovement(settings.smoothCameraMovement);
     _game.setCinematicCamera(settings.cinematicCamera);

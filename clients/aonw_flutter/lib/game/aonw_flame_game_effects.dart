@@ -39,6 +39,11 @@ extension AonwFlameGameEffects on AonwFlameGame {
     _requestInputFrame();
   }
 
+  void setUnitIdleAnimations(bool enabled) {
+    if (_disposed) return;
+    world.unitLayer.setIdleAnimations(enabled);
+  }
+
   void setCombatAnimations(bool enabled) {
     if (_disposed || world.effectHost.combatAnimationsEnabled == enabled) {
       return;

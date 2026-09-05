@@ -275,6 +275,7 @@
   "cameraSensitivity": "Czułość przybliżenia",
   "animationSettings": "Animacje",
   "showUnitMovementAnimations": "Pokazuj animacje ruchu jednostki",
+  "showUnitIdleAnimations": "Pokazuj animacje bezczynności",
   "showCombatAnimations": "Pokazuj animacje walki",
   "cinematicCamera": "Filmowa kamera",
   "smoothCameraMovement": "Płynny ruch kamery",

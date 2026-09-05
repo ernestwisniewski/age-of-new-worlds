@@ -13,6 +13,7 @@ final class ClientSettings {
     this.cinematicCamera = false,
     this.showUnitMovementAnimations = true,
     this.showCombatAnimations = true,
+    this.showUnitIdleAnimations = true,
     this.focusOwnUnitMovement = true,
     this.followOwnUnitMovement = false,
     this.focusForeignUnitMovement = false,
@@ -38,6 +39,7 @@ final class ClientSettings {
   final bool cinematicCamera;
   final bool showUnitMovementAnimations;
   final bool showCombatAnimations;
+  final bool showUnitIdleAnimations;
   final bool focusOwnUnitMovement;
   final bool followOwnUnitMovement;
   final bool focusForeignUnitMovement;
@@ -57,6 +59,7 @@ final class ClientSettings {
     bool? cinematicCamera,
     bool? showUnitMovementAnimations,
     bool? showCombatAnimations,
+    bool? showUnitIdleAnimations,
     bool? focusOwnUnitMovement,
     bool? followOwnUnitMovement,
     bool? focusForeignUnitMovement,
@@ -76,6 +79,8 @@ final class ClientSettings {
     showUnitMovementAnimations:
         showUnitMovementAnimations ?? this.showUnitMovementAnimations,
     showCombatAnimations: showCombatAnimations ?? this.showCombatAnimations,
+    showUnitIdleAnimations:
+        showUnitIdleAnimations ?? this.showUnitIdleAnimations,
     focusOwnUnitMovement: focusOwnUnitMovement ?? this.focusOwnUnitMovement,
     followOwnUnitMovement: followOwnUnitMovement ?? this.followOwnUnitMovement,
     focusForeignUnitMovement:
@@ -99,6 +104,7 @@ final class ClientSettings {
       _sameCamera(other) &&
       other.showUnitMovementAnimations == showUnitMovementAnimations &&
       other.showCombatAnimations == showCombatAnimations &&
+      other.showUnitIdleAnimations == showUnitIdleAnimations &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
       _sameMapDisplay(other);
@@ -126,6 +132,7 @@ final class ClientSettings {
     cinematicCamera,
     showUnitMovementAnimations,
     showCombatAnimations,
+    showUnitIdleAnimations,
     focusOwnUnitMovement,
     followOwnUnitMovement,
     focusForeignUnitMovement,

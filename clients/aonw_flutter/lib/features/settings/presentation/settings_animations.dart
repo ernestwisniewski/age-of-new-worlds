@@ -10,6 +10,14 @@ final class _AnimationSettings extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       SwitchListTile.adaptive(
+        key: const ValueKey('unit-idle-animations-setting'),
+        contentPadding: EdgeInsets.zero,
+        title: Text(context.aonwL10n.showUnitIdleAnimations),
+        value: settings.showUnitIdleAnimations,
+        onChanged: (value) =>
+            onChanged(settings.copyWith(showUnitIdleAnimations: value)),
+      ),
+      SwitchListTile.adaptive(
         key: const ValueKey('unit-movement-animations-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showUnitMovementAnimations),

@@ -1221,6 +1221,9 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get showUnitMovementAnimations => 'Pokazuj animacje ruchu jednostki';
 
   @override
+  String get showUnitIdleAnimations => 'Pokazuj animacje bezczynności';
+
+  @override
   String get showCombatAnimations => 'Pokazuj animacje walki';
 
   @override

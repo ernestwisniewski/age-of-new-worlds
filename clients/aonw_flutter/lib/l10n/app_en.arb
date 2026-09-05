@@ -368,6 +368,7 @@
   "cameraSensitivity": "Zoom sensitivity",
   "animationSettings": "Animations",
   "showUnitMovementAnimations": "Show unit movement animations",
+  "showUnitIdleAnimations": "Show unit idle animations",
   "showCombatAnimations": "Show combat animations",
   "cinematicCamera": "Cinematic camera",
   "smoothCameraMovement": "Smooth camera movement",

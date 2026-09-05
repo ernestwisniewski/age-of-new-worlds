@@ -4,12 +4,13 @@ final class AonwWorld extends World implements FlameSceneSink {
   AonwWorld({
     MapCloudLayerComponent? cloudLayer,
     MapCityProductionLayerComponent? cityProductionLayer,
+    MapUnitLayerComponent? unitLayer,
   }) : terrainLayer = MapTerrainLayerComponent(),
        referenceLayer = MapReferenceLayerComponent(),
        gridLayer = MapGridLayerComponent(),
        tileDetailsLayer = MapTileDetailsLayerComponent(),
        cityTerritoryLayer = MapCityTerritoryLayerComponent() {
-    unitLayer = MapUnitLayerComponent();
+    this.unitLayer = unitLayer ?? MapUnitLayerComponent();
     cityLayer = MapCityLayerComponent();
     artifactLayer = MapArtifactLayerComponent();
     objectiveLayer = MapObjectiveLayerComponent();
@@ -22,14 +23,14 @@ final class AonwWorld extends World implements FlameSceneSink {
     cityManagementOverlayLayer = MapCityManagementOverlayLayerComponent();
     actionPaletteLayer = MapActionPaletteLayerComponent();
     hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
-    effectHost = MapEffectHostComponent(units: unitLayer);
+    effectHost = MapEffectHostComponent(units: this.unitLayer);
     this.cloudLayer = cloudLayer ?? MapCloudLayerComponent();
     this.cityProductionLayer =
         cityProductionLayer ?? MapCityProductionLayerComponent();
     eraTintLayer = MapEraTintLayerComponent();
     eventFeedbackLayer = MapEventFeedbackLayerComponent(
       unitPositionFor: (unitId) =>
-          unitLayer.componentForUnit(unitId)?.visualCenter,
+          this.unitLayer.componentForUnit(unitId)?.visualCenter,
     );
     effectHost.onObservedEvent = eventFeedbackLayer.advanceCommand;
     addAll([
@@ -46,7 +47,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       objectiveLayer,
       cityLayer,
       artifactLayer,
-      unitLayer,
+      this.unitLayer,
       cityFoundingPreviewLayer,
       cityManagementOverlayLayer,
       selectionLayer,

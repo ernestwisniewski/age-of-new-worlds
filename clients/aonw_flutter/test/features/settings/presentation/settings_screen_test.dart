@@ -57,6 +57,7 @@ void main() {
       'followForeignUnitMovement-setting',
       'unit-movement-animations-setting',
       'combat-animations-setting',
+      'unit-idle-animations-setting',
       'map-grid-setting',
       'map-resource-icons-setting',
       'map-terrain-icons-setting',
@@ -80,6 +81,7 @@ void main() {
     expect(store.settings.followForeignUnitMovement, isTrue);
     expect(store.settings.showUnitMovementAnimations, isFalse);
     expect(store.settings.showCombatAnimations, isFalse);
+    expect(store.settings.showUnitIdleAnimations, isFalse);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapGrid, isTrue);

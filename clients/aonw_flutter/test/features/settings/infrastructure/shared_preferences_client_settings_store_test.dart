@@ -15,8 +15,33 @@ void main() {
       expect(settings, ClientSettings.defaults.copyWith(masterVolume: 0.25));
       expect(settings.showUnitMovementAnimations, isTrue);
       expect(settings.showCombatAnimations, isTrue);
+      expect(settings.showUnitIdleAnimations, isTrue);
     },
   );
+
+  test('persists idle separately from motion and accessibility', () async {
+    final preferences = _Preferences();
+    final store = SharedPreferencesClientSettingsStore(
+      preferences: preferences,
+    );
+    for (final idle in [false, true]) {
+      final settings = ClientSettings.defaults.copyWith(
+        showUnitIdleAnimations: idle,
+        showUnitMovementAnimations: false,
+        reducedMotion: true,
+      );
+      await store.save(settings);
+      expect(preferences.values['aonw.settings.showUnitIdleAnimations'], idle);
+      final loaded = await SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      ).load();
+      expect(loaded, settings);
+      expect(loaded.hashCode, settings.hashCode);
+      expect(loaded, isNot(settings.copyWith(showUnitIdleAnimations: !idle)));
+    }
+    await store.save(ClientSettings.defaults);
+    expect(await store.load(), ClientSettings.defaults);
+  });
 
   test(
     'persists independent animation choices across store recreation and reset',

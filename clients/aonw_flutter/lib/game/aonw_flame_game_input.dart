@@ -1,6 +1,25 @@
 part of 'aonw_flame_game.dart';
 
 extension AonwFlameGameViewportInput on AonwFlameGame {
+  void applyGamepadCameraFrame(MapGamepadFrame frame, double dt) {
+    if (_disposed || !_viewportActive || !dt.isFinite || dt < 0) return;
+    final focalPoint = mapCamera.viewportCenter;
+    final zoomFactor = focalPoint == null || frame.zoom == 0
+        ? 1.0
+        : 1 + frame.zoom * AonwFlameGame._gamepadZoomSpeed * dt;
+    mapCamera.applyIntent(
+      MapViewportFrameIntent(
+        screenPanDelta: (
+          x: frame.cameraX * AonwFlameGame._gamepadPanSpeed * dt,
+          y: -frame.cameraY * AonwFlameGame._gamepadPanSpeed * dt,
+        ),
+        zoomFocalPoint: focalPoint,
+        zoomFactor: zoomFactor,
+        hoverScreenPosition: null,
+      ),
+    );
+  }
+
   void setHexSelectionPaletteIntentSink(
     MapHexSelectionPaletteIntentSink? sink,
   ) {

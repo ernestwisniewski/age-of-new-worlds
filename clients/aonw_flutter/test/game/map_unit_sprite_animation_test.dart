@@ -9,6 +9,37 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
+    'idle cycles pause once and selection clears the remaining pause',
+    () async {
+      final sprite = MapUnitSpriteAnimation(
+        kind: VisibleUnitKind.commander,
+        onLoaded: () {},
+        idlePauseDuration: () => 0.8,
+      );
+      addTearDown(sprite.dispose);
+      await sprite.load();
+      for (var frame = 1; frame <= 6; frame++) {
+        sprite.advance(sprite.frameDuration);
+        expect(sprite.index, frame % 6);
+      }
+      expect(sprite.idleFrameDelay, closeTo(0.8 + 1.82 / 6, 1e-9));
+      sprite.advance(0.5);
+      expect(sprite.index, 0);
+      expect(sprite.idleFrameDelay, closeTo(0.3 + 1.82 / 6, 1e-9));
+      sprite.setIdlePausesEnabled(false);
+      expect(sprite.idleFrameDelay, closeTo(1.82 / 6, 1e-9));
+      sprite.advance(sprite.frameDuration * 7);
+      expect(sprite.index, 1);
+      sprite.playWalkToward(ui.Offset.zero, const ui.Offset(1, 0));
+      sprite.setIdlePausesEnabled(true);
+      sprite.advance(0.14 * 7);
+      expect(sprite.index, 1, reason: 'cycle pauses apply only to idle');
+      sprite.playIdle();
+      expect(sprite.idleFrameDelay, closeTo(1.82 / 6, 1e-9));
+    },
+  );
+
+  test(
     'loads authored timing and keeps walk time across direction changes',
     () async {
       final sprite = MapUnitSpriteAnimation(
