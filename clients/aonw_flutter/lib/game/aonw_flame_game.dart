@@ -28,6 +28,7 @@ import 'map/map_clipped_viewport.dart';
 import 'map/map_cloud_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
+import 'map/map_era_tint_layer.dart';
 import 'map/map_hex_selection_palette_layer.dart';
 import 'map/map_threat_overlay_layer.dart';
 import 'map/map_tile_details_layer.dart';
@@ -69,6 +70,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.camera.viewport.add(inputSurface);
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
+    this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
   }
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
@@ -85,6 +87,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _continuousRendering = false;
   var _effectsActive = false;
   var _cloudsActive = false;
+  var _eraTintActive = false;
   var _reducedMotion = false;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
@@ -267,6 +270,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
         (_continuousRendering ||
             _effectsActive ||
             _cloudsActive ||
+            _eraTintActive ||
             _foundingPreviewActive ||
             keyboardActive)) {
       resumeEngine();
@@ -280,17 +284,21 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     _reducedMotion = enabled;
     world.effectHost.setReducedMotion(enabled);
     world.cloudLayer.setReducedMotion(enabled);
+    world.eraTintLayer.setReducedMotion(enabled);
     _requestInputFrame();
   }
 
   void setEffectPlaybackSpeed(double speed) {
     if (_disposed) return;
     world.effectHost.setPlaybackSpeed(speed);
+    world.eraTintLayer.setPlaybackSpeed(speed);
   }
 
   void skipEffects() {
     if (_disposed) return;
     world.effectHost.skipAll();
+    world.eraTintLayer.skip();
+    _requestInputFrame();
   }
 
   void _handleEffectActivity(bool active) {
@@ -302,6 +310,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void _handleCloudActivity(bool active) {
     if (_disposed || _cloudsActive == active) return;
     _cloudsActive = active;
+    _synchronizeGameLoop();
+  }
+
+  void _handleEraTintActivity(bool active) {
+    if (_disposed || _eraTintActive == active) return;
+    _eraTintActive = active;
     _synchronizeGameLoop();
   }
 

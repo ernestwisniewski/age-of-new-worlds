@@ -32,6 +32,11 @@ void recordGameplayPerformance(
       'timingCollector':
           'engine timestamps between consecutive warmup and measured frames',
       'worldComponents': game.world.children.length,
+      'eraTint': game.world.eraTintLayer.debugEra!.name,
+      'eraTintRegions': game.world.eraTintLayer.debugRegionCount,
+      'eraTintContours': game.world.eraTintLayer.debugRegionContourCount,
+      'renderedEraTintRegions':
+          game.world.eraTintLayer.debugRenderedRegionCount,
       'sharedUnitPaints': game.world.unitLayer.debugSharedPaintCount,
       'sharedCityPaints': game.world.cityLayer.debugSharedPaintCount,
       'sharedInfrastructurePaints':

@@ -22,12 +22,14 @@ final class AonwWorld extends World implements FlameSceneSink {
     hexSelectionPaletteLayer = MapHexSelectionPaletteLayerComponent();
     effectHost = MapEffectHostComponent(units: unitLayer);
     this.cloudLayer = cloudLayer ?? MapCloudLayerComponent();
+    eraTintLayer = MapEraTintLayerComponent();
     addAll([
       terrainLayer,
       referenceLayer,
       gridLayer,
       cityTerritoryLayer,
       tileDetailsLayer,
+      eraTintLayer,
       workerInfrastructureLayer,
       fogLayer,
       threatOverlayLayer,
@@ -66,6 +68,7 @@ final class AonwWorld extends World implements FlameSceneSink {
   late final MapHexSelectionPaletteLayerComponent hexSelectionPaletteLayer;
   late final MapEffectHostComponent effectHost;
   late final MapCloudLayerComponent cloudLayer;
+  late final MapEraTintLayerComponent eraTintLayer;
   MapRenderSnapshot? _scene;
   MapStaticRenderCache? _staticCache;
   MapHexCoordinate? _cursor;
@@ -120,6 +123,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     gridLayer.applyCache(cache);
     cityTerritoryLayer.applySnapshot(snapshot, cache);
     tileDetailsLayer.applyMap(snapshot.map, cache);
+    eraTintLayer.applySnapshot(snapshot, cache);
     workerInfrastructureLayer.applyPatch(patch, cache);
     fogLayer.applyFog(cache, snapshot.player.fog);
     cloudLayer.applyFog(
@@ -174,6 +178,7 @@ final class AonwWorld extends World implements FlameSceneSink {
     gridLayer.clearCache();
     cityTerritoryLayer.clearLayer();
     tileDetailsLayer.clearLayer();
+    eraTintLayer.clearLayer();
     workerInfrastructureLayer.clearLayer();
     fogLayer.clearLayer();
     cloudLayer.clearLayer();
