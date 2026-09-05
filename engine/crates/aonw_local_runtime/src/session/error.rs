@@ -13,6 +13,8 @@ pub enum RuntimeError {
     Engine(CanonicalEngineError),
     /// Authoritative event offset exhausted its integer range.
     EventOffsetOverflow,
+    /// An observed command batch exceeded its reviewed command count.
+    ObservationBudgetExceeded,
     /// The engine emitted more events than the reviewed command budget.
     EventBudgetExceeded {
         /// Reviewed upper bound for the concrete player command.
@@ -32,6 +34,7 @@ impl RuntimeError {
             Self::Query(error) => error.code(),
             Self::Engine(_) => "canonical_engine_failed",
             Self::EventOffsetOverflow => "event_offset_overflow",
+            Self::ObservationBudgetExceeded => "observation_budget_exceeded",
             Self::EventBudgetExceeded { .. } => "event_budget_exceeded",
         }
     }
@@ -47,6 +50,9 @@ impl core::fmt::Display for RuntimeError {
             Self::Query(source) => source.fmt(formatter),
             Self::Engine(source) => source.fmt(formatter),
             Self::EventOffsetOverflow => formatter.write_str("event offset overflow"),
+            Self::ObservationBudgetExceeded => {
+                formatter.write_str("observed command budget exceeded")
+            }
             Self::EventBudgetExceeded { maximum, actual } => write!(
                 formatter,
                 "event budget exceeded: maximum {maximum}, actual {actual}"

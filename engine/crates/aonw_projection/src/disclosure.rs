@@ -1,17 +1,22 @@
 use core::cmp::Ordering;
 
-use aonw_domain::{CityId, PlayerId, UnitId};
-use aonw_engine::{CombatExecution, CombatTarget, DomainEvent, ExecutionEvidence};
+use aonw_domain::{CityId, HexCoord, PlayerId, UnitId};
+use aonw_engine::{
+    CombatExecution, CombatTarget, DomainEvent, ExecutionEvidence, LogisticsExecution,
+    UnitMovementExecution,
+};
 
-use crate::{PlayerCityView, PlayerUnitView};
+use crate::{PlayerCityView, PlayerFogView, PlayerUnitView, ProjectedView};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 /// Recipient-specific visibility policy for events and execution evidence.
 pub struct RecipientDisclosure {
     actor: PlayerId,
     unit_ids: Box<[UnitId]>,
+    owned_unit_ids: Box<[UnitId]>,
     city_ids: Box<[CityId]>,
     combats: Box<[(UnitId, CombatTarget)]>,
+    observed_fog: Option<(PlayerFogView, PlayerFogView)>,
 }
 
 impl RecipientDisclosure {
@@ -53,6 +58,11 @@ impl RecipientDisclosure {
         combats.sort_unstable_by(compare_combat);
         combats.dedup();
         Self {
+            owned_unit_ids: visible_units
+                .iter()
+                .filter(|unit| unit.owner_player_id() == &actor)
+                .map(|unit| unit.id().clone())
+                .collect(),
             actor,
             unit_ids: visible_units.iter().map(|unit| unit.id().clone()).collect(),
             city_ids: visible_cities
@@ -60,7 +70,62 @@ impl RecipientDisclosure {
                 .map(|city| city.id().clone())
                 .collect(),
             combats: combats.into_boxed_slice(),
+            observed_fog: None,
         }
+    }
+
+    /// Captures a fixed viewer's disclosure across another actor's command.
+    #[must_use]
+    pub fn observed_transition(
+        actor: PlayerId,
+        before: &ProjectedView,
+        after: &ProjectedView,
+        evidence: Option<&ExecutionEvidence>,
+    ) -> Self {
+        let fog = before.fog();
+        let visible_cities: Vec<_> = before
+            .cities()
+            .iter()
+            .filter(|city| {
+                city.owner_player_id() == &actor
+                    || !fog.enabled()
+                    || fog.visible_hexes().binary_search(&city.center()).is_ok()
+            })
+            .cloned()
+            .collect();
+        let mut value = Self::new(actor, before.units(), &visible_cities, evidence);
+        value.unit_ids = extend_ids(
+            value.unit_ids,
+            after.units().iter().map(|unit| unit.id().clone()),
+        );
+        value.owned_unit_ids = extend_ids(
+            value.owned_unit_ids,
+            after
+                .units()
+                .iter()
+                .filter(|unit| unit.owner_player_id() == &value.actor)
+                .map(|unit| unit.id().clone()),
+        );
+        value.city_ids = extend_ids(
+            value.city_ids,
+            after
+                .cities()
+                .iter()
+                .filter(|city| {
+                    city.owner_player_id() == &value.actor
+                        || !after.fog().enabled()
+                        || after
+                            .fog()
+                            .visible_hexes()
+                            .binary_search(&city.center())
+                            .is_ok()
+                })
+                .map(|city| city.id().clone()),
+        );
+        if fog.enabled() && after.fog().enabled() {
+            value.observed_fog = Some((fog.clone(), after.fog().clone()));
+        }
+        value
     }
 
     /// Creates a disclosure that reveals no entity-specific details.
@@ -69,8 +134,10 @@ impl RecipientDisclosure {
         Self {
             actor,
             unit_ids: Box::new([]),
+            owned_unit_ids: Box::new([]),
             city_ids: Box::new([]),
             combats: Box::new([]),
+            observed_fog: None,
         }
     }
 
@@ -80,13 +147,46 @@ impl RecipientDisclosure {
         self.unit_ids.binary_search(unit_id).is_ok()
     }
 
+    /// Returns whether private orders belong to the recipient.
+    #[must_use]
+    pub fn owns_unit(&self, unit_id: &UnitId) -> bool {
+        self.owned_unit_ids.binary_search(unit_id).is_ok()
+    }
+
+    /// Returns whether an entire executed path is known to the recipient.
+    #[must_use]
+    pub fn allows_movement(&self, execution: &UnitMovementExecution) -> bool {
+        self.allows_unit(execution.unit_id())
+            && (self.owns_unit(execution.unit_id())
+                || (self.allows_coordinate(execution.from())
+                    && execution
+                        .steps()
+                        .iter()
+                        .all(|step| self.allows_coordinate(step.coordinate()))))
+    }
+
+    /// Returns whether the recipient owns the orders described by logistics evidence.
+    #[must_use]
+    pub fn allows_logistics(&self, execution: &LogisticsExecution) -> bool {
+        let unit_id = match execution {
+            LogisticsExecution::AutoExplore { unit_id, .. }
+            | LogisticsExecution::MerchantRouteAssigned { unit_id, .. }
+            | LogisticsExecution::MerchantTravelQueued { unit_id, .. } => unit_id,
+            LogisticsExecution::TroopDetached { source_unit_id, .. } => source_unit_id,
+        };
+        self.owns_unit(unit_id)
+    }
+
     /// Returns whether all parties of one combat are visible.
     #[must_use]
     pub fn allows_combat(&self, execution: &CombatExecution) -> bool {
         self.allows(
             &execution.preview.attacker_unit_id,
             &execution.preview.target,
-        )
+        ) && execution
+            .outcome
+            .defender_retreat
+            .is_none_or(|coordinate| self.allows_coordinate(coordinate))
     }
 
     /// Returns whether one city is visible to the recipient.
@@ -100,10 +200,14 @@ impl RecipientDisclosure {
     pub fn allows_event(&self, event: &DomainEvent) -> bool {
         match event {
             DomainEvent::ArtifactExcavationStarted(value) => {
-                value.owner_player_id() == &self.actor || self.allows_unit(value.unit_id())
+                value.owner_player_id() == &self.actor
+                    || (self.allows_unit(value.unit_id())
+                        && self.allows_coordinate(value.coordinate()))
             }
             DomainEvent::ArtifactCarried(value) => {
-                value.owner_player_id() == &self.actor || self.allows_unit(value.unit_id())
+                value.owner_player_id() == &self.actor
+                    || (self.allows_unit(value.unit_id())
+                        && self.allows_coordinate(value.coordinate()))
             }
             DomainEvent::ArtifactStored(value) => {
                 value.owner_player_id() == &self.actor || self.allows_city(value.city_id())
@@ -123,7 +227,9 @@ impl RecipientDisclosure {
             }
             DomainEvent::TechnologyResearched(value) => value.player_id() == &self.actor,
             DomainEvent::ResearchPointsGained(value) => value.player_id() == &self.actor,
-            DomainEvent::CityClaimedHex(value) => self.allows_city(value.city_id()),
+            DomainEvent::CityClaimedHex(value) => {
+                self.allows_city(value.city_id()) && self.allows_coordinate(value.coordinate())
+            }
             DomainEvent::StabilityBandChanged(value) => value.player_id() == &self.actor,
             DomainEvent::MapObjectiveSecured(value) => value.player_id() == &self.actor,
             DomainEvent::UnitAttacked(value)
@@ -160,12 +266,20 @@ impl RecipientDisclosure {
             DomainEvent::DiplomaticRelationChanged(value) => {
                 value.player_a_id() == &self.actor || value.player_b_id() == &self.actor
             }
-            DomainEvent::UnitMoved(value) => self.allows_unit(value.unit_id()),
-            DomainEvent::AutoExplorePlanned(value) => self.allows_unit(value.unit_id()),
-            DomainEvent::MerchantRouteAssigned(value) => self.allows_unit(value.unit_id()),
-            DomainEvent::MerchantTravelQueued(value) => self.allows_unit(value.unit_id()),
-            DomainEvent::TroopDetached(value) => self.allows_unit(value.source_unit_id()),
-            DomainEvent::WorkerCompletedJob(value) => self.allows_unit(value.unit_id()),
+            DomainEvent::UnitMoved(value) => {
+                self.owns_unit(value.unit_id())
+                    || (self.allows_unit(value.unit_id())
+                        && self.allows_coordinate(value.from())
+                        && self.allows_coordinate(value.to()))
+            }
+            DomainEvent::AutoExplorePlanned(value) => self.owns_unit(value.unit_id()),
+            DomainEvent::MerchantRouteAssigned(value) => self.owns_unit(value.unit_id()),
+            DomainEvent::MerchantTravelQueued(value) => self.owns_unit(value.unit_id()),
+            DomainEvent::TroopDetached(value) => self.owns_unit(value.source_unit_id()),
+            DomainEvent::WorkerCompletedJob(value) => {
+                self.owns_unit(value.unit_id())
+                    || (self.allows_unit(value.unit_id()) && self.allows_coordinate(value.target()))
+            }
             DomainEvent::MatchEnded(_)
             | DomainEvent::DominationThresholdReached(_)
             | DomainEvent::TurnEnded(_)
@@ -181,6 +295,21 @@ impl RecipientDisclosure {
             .binary_search_by(|candidate| compare_combat_parts(candidate, attacker, target))
             .is_ok()
     }
+
+    fn allows_coordinate(&self, coordinate: HexCoord) -> bool {
+        self.observed_fog.as_ref().is_none_or(|(before, after)| {
+            before.visible_hexes().binary_search(&coordinate).is_ok()
+                || after.visible_hexes().binary_search(&coordinate).is_ok()
+        })
+    }
+}
+
+fn extend_ids<T: Ord>(current: Box<[T]>, next: impl Iterator<Item = T>) -> Box<[T]> {
+    let mut values = current.into_vec();
+    values.extend(next);
+    values.sort_unstable();
+    values.dedup();
+    values.into_boxed_slice()
 }
 
 fn push_visible_combat(

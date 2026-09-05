@@ -5,7 +5,7 @@ use aonw_domain::PlayerId;
 use aonw_engine::GameEngine;
 
 use crate::persistence::{PersistenceError, verify_entry, verify_replay};
-use crate::{OpenSession, PlayerViewSnapshot};
+use crate::{CommandResult, OpenSession, PlayerViewSnapshot};
 
 use super::LocalRuntime;
 
@@ -18,6 +18,9 @@ pub struct ReplayFrame {
     pub entry_count: u64,
     /// Complete projection for the selected participant.
     pub snapshot: PlayerViewSnapshot,
+    /// Exact command for a one-entry advance; absent for open, repeat, or random seeks.
+    /// Wire encoding applies its recipient disclosure to events and evidence.
+    pub command: Option<CommandResult>,
 }
 
 #[derive(Clone, Debug)]
@@ -91,7 +94,11 @@ impl LocalRuntime {
                     entry_count: playback.entry_count,
                 },
             )?;
-            if let Err(error) = verify_entry(self, segment_index, entry_index, &entry) {
+            self.start_observing_recipient(1)
+                .map_err(PersistenceError::Runtime)?;
+            let result = verify_entry(self, segment_index, entry_index, &entry);
+            let mut commands = self.finish_observing_recipient().into_vec();
+            if let Err(error) = result {
                 self.poison();
                 return Err(error);
             }
@@ -101,7 +108,9 @@ impl LocalRuntime {
                 position,
                 ..playback
             });
-            return self.playback_frame();
+            let mut frame = self.playback_frame()?;
+            frame.command = commands.pop();
+            return Ok(frame);
         }
 
         let (candidate, frame) = build_candidate(&playback, position)?;
@@ -124,6 +133,7 @@ impl LocalRuntime {
             position: playback.position,
             entry_count: playback.entry_count,
             snapshot: self.snapshot().map_err(PersistenceError::Runtime)?,
+            command: None,
         })
     }
 }

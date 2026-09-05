@@ -28,9 +28,12 @@ use super::{OpenSession, OpenSessionError, RuntimeError, Session, SessionStamp};
 
 mod actor_handoff;
 mod ai_turn;
+mod observation;
 mod replay;
 
-pub use ai_turn::{AiTurnDriver, AiTurnError, AiTurnExecution, MAX_AI_TURN_COMMAND_BUDGET};
+pub use ai_turn::{
+    AiTurnDriver, AiTurnError, AiTurnExecution, MAX_AI_TURN_COMMAND_BUDGET, ObservedAiTurn,
+};
 pub use replay::ReplayFrame;
 
 /// Mutable owner of at most one local game session.
@@ -41,26 +44,10 @@ pub struct LocalRuntime {
     poisoned: bool,
     workspace: MovementSearchWorkspace,
     query_cache: QueryCache,
+    observation: Option<observation::CommandObservation>,
 }
 
 impl LocalRuntime {
-    /// Creates an isolated simulation runtime without copying immutable world,
-    /// projection, visibility, or replay storage.
-    #[must_use]
-    pub fn simulation_clone(&self) -> Self {
-        let mut session = self.session.clone();
-        if let Some(session) = session.as_mut() {
-            session.disable_replay();
-        }
-        Self {
-            session,
-            replay_playback: None,
-            poisoned: self.poisoned,
-            workspace: MovementSearchWorkspace::default(),
-            query_cache: QueryCache::default(),
-        }
-    }
-
     /// Schedules a validated city-founding job.
     ///
     /// # Errors
@@ -245,6 +232,7 @@ impl LocalRuntime {
         let candidate = Session::try_open(request)?;
         let stamp = candidate.stamp();
         self.session = Some(candidate);
+        self.observation = None;
         self.replay_playback = None;
         self.poisoned = false;
         self.query_cache.clear();
@@ -277,6 +265,7 @@ impl LocalRuntime {
 
     /// Invalidates the current session after crossing a panic boundary.
     pub fn poison(&mut self) {
+        self.observation = None;
         self.session = None;
         self.replay_playback = None;
         self.poisoned = true;
@@ -285,6 +274,7 @@ impl LocalRuntime {
 
     /// Closes the current session. Repeated calls are harmless.
     pub fn close(&mut self) {
+        self.observation = None;
         self.session = None;
         self.replay_playback = None;
         self.poisoned = false;
@@ -550,7 +540,13 @@ impl LocalRuntime {
         {
             self.session = None;
             self.poisoned = true;
+            self.observation = None;
         }
-        result
+        let result = result?;
+        if let Some(observation) = self.observation.as_mut() {
+            let session = self.session.as_ref().ok_or(RuntimeError::SessionNotOpen)?;
+            observation.record(session, &result)?;
+        }
+        Ok(result)
     }
 }

@@ -26,6 +26,7 @@ use crate::{ClientProtocol, LocalRuntime, PendingActionView};
 
 use super::*;
 
+mod observation;
 mod session;
 
 #[test]

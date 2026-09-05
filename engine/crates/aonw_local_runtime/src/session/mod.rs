@@ -13,7 +13,7 @@ pub use handoff::ActorHandoffError;
 pub use open::{OpenSession, OpenSessionError};
 pub use runtime::{
     AiTurnDriver, AiTurnError, AiTurnExecution, LocalRuntime, MAX_AI_TURN_COMMAND_BUDGET,
-    ReplayFrame,
+    ObservedAiTurn, ReplayFrame,
 };
 
 pub(crate) use state::Session;

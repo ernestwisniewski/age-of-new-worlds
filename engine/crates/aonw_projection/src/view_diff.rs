@@ -249,6 +249,12 @@ impl ProjectedView {
         )
     }
 
+    /// Returns the recipient's current authoritative visibility.
+    #[must_use]
+    pub fn fog(&self) -> &PlayerFogView {
+        &self.fog
+    }
+
     /// Returns visible units in stable identity order.
     #[must_use]
     pub fn units(&self) -> &[PlayerUnitView] {

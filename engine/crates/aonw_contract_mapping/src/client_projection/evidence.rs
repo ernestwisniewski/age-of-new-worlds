@@ -1,5 +1,6 @@
 mod diplomacy;
 mod economy;
+mod execution;
 mod logistics;
 mod movement;
 mod objective;
@@ -22,8 +23,7 @@ use aonw_engine::{
 use aonw_projection::RecipientDisclosure;
 
 use super::coordinate;
-use super::worker::encode_worker_automation_option;
-use logistics::{logistics_evidence, movement_execution};
+use execution::encode_evidence;
 
 #[allow(clippy::too_many_lines)]
 /// Maps a canonical domain event to its strict current client DTO.
@@ -280,8 +280,7 @@ pub fn encode_client_event(value: &DomainEvent) -> ClientEventDto {
 /// Panics if complete evidence is unexpectedly rejected by the unfiltered encoder.
 #[must_use]
 pub fn encode_client_evidence(value: &ExecutionEvidence) -> ClientEvidenceDto {
-    encode_evidence(value, |_| true, |_| true, |_| true)
-        .expect("unfiltered evidence is always visible")
+    encode_evidence(value, None).expect("unfiltered evidence is always visible")
 }
 
 /// Maps command evidence only when the recipient disclosure permits it.
@@ -290,85 +289,7 @@ pub fn encode_recipient_evidence(
     value: &ExecutionEvidence,
     disclosure: &RecipientDisclosure,
 ) -> Option<ClientEvidenceDto> {
-    encode_evidence(
-        value,
-        |combat| disclosure.allows_combat(combat),
-        |unit| disclosure.allows_unit(unit),
-        |city| disclosure.allows_city(city),
-    )
-}
-
-fn encode_evidence(
-    value: &ExecutionEvidence,
-    allows_combat: impl Fn(&CombatExecution) -> bool,
-    allows_unit: impl Fn(&aonw_domain::UnitId) -> bool,
-    allows_city: impl Fn(&aonw_domain::CityId) -> bool,
-) -> Option<ClientEvidenceDto> {
-    match value {
-        ExecutionEvidence::Combat(value) => {
-            allows_combat(value).then(|| ClientEvidenceDto::Combat {
-                execution: combat_execution(value),
-            })
-        }
-        ExecutionEvidence::UnitMovement(value) => Some(ClientEvidenceDto::UnitMovement {
-            unit_id: value.unit_id().as_str().to_owned(),
-            from: coordinate(value.from()),
-            steps: value.steps().iter().map(movement::step).collect(),
-        }),
-        ExecutionEvidence::Logistics(value) => Some(ClientEvidenceDto::Logistics {
-            execution: logistics_evidence(value),
-        }),
-        ExecutionEvidence::TurnKernel(value) => Some(ClientEvidenceDto::TurnKernel {
-            processors: value
-                .processors()
-                .iter()
-                .map(|processor| processor.as_str().to_owned())
-                .collect(),
-            founded_city_ids: value
-                .founded_city_ids()
-                .iter()
-                .filter(|city| allows_city(city))
-                .map(|city| city.as_str().to_owned())
-                .collect(),
-            combat_executions: value
-                .combat_executions()
-                .iter()
-                .filter(|combat| allows_combat(combat))
-                .map(combat_execution)
-                .collect(),
-            reset_unit_ids: value
-                .reset_unit_ids()
-                .iter()
-                .filter(|unit| allows_unit(unit))
-                .map(|unit| unit.as_str().to_owned())
-                .collect(),
-            movement_executions: value
-                .movement_executions()
-                .iter()
-                .filter(|movement| allows_unit(movement.unit_id()))
-                .map(movement_execution)
-                .collect(),
-            invalidated_order_unit_ids: value
-                .invalidated_order_unit_ids()
-                .iter()
-                .filter(|unit| allows_unit(unit))
-                .map(|unit| unit.as_str().to_owned())
-                .collect(),
-            finished_auto_explore_unit_ids: value
-                .finished_auto_explore_unit_ids()
-                .iter()
-                .filter(|unit| allows_unit(unit))
-                .map(|unit| unit.as_str().to_owned())
-                .collect(),
-        }),
-        ExecutionEvidence::WorkerAutomation(value) => {
-            allows_unit(value.unit_id()).then(|| ClientEvidenceDto::WorkerAutomation {
-                unit_id: value.unit_id().as_str().to_owned(),
-                option: encode_worker_automation_option(value.option()),
-                movement: value.movement().map(movement_execution),
-            })
-        }
-    }
+    encode_evidence(value, Some(disclosure))
 }
 
 fn combat_event(

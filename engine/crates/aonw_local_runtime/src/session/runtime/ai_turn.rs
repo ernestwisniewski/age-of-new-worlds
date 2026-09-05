@@ -2,7 +2,7 @@ use core::num::NonZeroU32;
 
 use aonw_domain::{AiPlayer, GameMode, PlayerId, PlayerKind};
 
-use crate::{ActorHandoffError, LocalRuntime, SessionStamp};
+use crate::{ActorHandoffError, CommandResult, LocalRuntime, RuntimeError, SessionStamp};
 
 /// Largest reviewed number of authoritative commands in one AI turn request.
 pub const MAX_AI_TURN_COMMAND_BUDGET: u32 = 1_024;
@@ -36,6 +36,17 @@ pub struct AiTurnExecution {
     pub completed_turn: bool,
 }
 
+/// AI execution and command frames for the recipient watching the turn.
+#[derive(Clone, Debug)]
+pub struct ObservedAiTurn {
+    /// Participant whose projection and disclosure policy each frame uses.
+    pub recipient_player_id: PlayerId,
+    /// Authoritative driver summary.
+    pub execution: AiTurnExecution,
+    /// Ordered runtime results; wire encoding applies each disclosure policy.
+    pub commands: Box<[CommandResult]>,
+}
+
 /// Failure while preparing or executing one AI-controlled turn.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum AiTurnError {
@@ -60,6 +71,8 @@ pub enum AiTurnError {
     Handoff(ActorHandoffError),
     /// The injected planner failed.
     Driver(Box<str>),
+    /// Preparing the observing recipient failed.
+    Observation(RuntimeError),
 }
 
 impl core::fmt::Display for AiTurnError {
@@ -82,6 +95,7 @@ impl core::fmt::Display for AiTurnError {
             }
             Self::Handoff(source) => source.fmt(formatter),
             Self::Driver(source) => write!(formatter, "AI driver failed: {source}"),
+            Self::Observation(source) => source.fmt(formatter),
         }
     }
 }
@@ -89,6 +103,44 @@ impl core::fmt::Display for AiTurnError {
 impl std::error::Error for AiTurnError {}
 
 impl LocalRuntime {
+    /// Executes an AI turn with command frames for the current recipient.
+    ///
+    /// The planner sees its own projection. Frames retain a separate recipient
+    /// projection and visibility before each command. Simulation clones and
+    /// persisted replay records do not include observations.
+    ///
+    /// # Errors
+    ///
+    /// Returns invalid AI ownership, observer setup, or driver failures. Failed
+    /// batches discard their frames; callers may restore the recipient snapshot.
+    pub fn advance_ai_turn_observed(
+        &mut self,
+        actor: PlayerId,
+        command_budget: NonZeroU32,
+        driver: &mut dyn AiTurnDriver,
+    ) -> Result<ObservedAiTurn, AiTurnError> {
+        if command_budget.get() > MAX_AI_TURN_COMMAND_BUDGET {
+            return Err(AiTurnError::CommandBudgetTooLarge {
+                maximum: MAX_AI_TURN_COMMAND_BUDGET,
+            });
+        }
+        let maximum = usize::try_from(command_budget.get()).map_err(|_| {
+            AiTurnError::CommandBudgetTooLarge {
+                maximum: MAX_AI_TURN_COMMAND_BUDGET,
+            }
+        })?;
+        let recipient_player_id = self
+            .start_observing_recipient(maximum)
+            .map_err(AiTurnError::Observation)?;
+        let execution = self.advance_ai_turn(actor, command_budget, driver);
+        let commands = self.finish_observing_recipient();
+        execution.map(|execution| ObservedAiTurn {
+            recipient_player_id,
+            execution,
+            commands,
+        })
+    }
+
     /// Hands control to one configured AI participant and executes a bounded
     /// complete turn using the supplied planner port.
     ///
