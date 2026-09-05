@@ -25,6 +25,7 @@ import 'support/era_tint_performance_probe.dart';
 import 'support/gameplay_performance_record.dart';
 import 'support/map_event_performance_probe.dart';
 import 'support/map_floating_text_performance_probe.dart';
+import 'support/movement_camera_performance_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -277,6 +278,13 @@ Future<void> _measureActiveEffects(
   );
 
   await measureCameraFocus(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+  await measureMovementCamera(
     binding,
     tester,
     game,

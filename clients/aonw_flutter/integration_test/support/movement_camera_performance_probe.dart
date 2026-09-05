@@ -1,0 +1,112 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
+import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/flame_map_camera.dart';
+import 'package:aonw_flutter/game/map/map_movement_camera.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+
+import 'active_frame_timings.dart';
+import 'movement_camera_performance_fixture.dart';
+
+Future<void> measureMovementCamera(
+  IntegrationTestWidgetsFlutterBinding binding,
+  WidgetTester tester,
+  AonwFlameGame game,
+  MapRenderSnapshot source, {
+  required int rssBefore,
+}) async {
+  game.replaceScene(source);
+  game.skipEffects();
+  game.setMovementCameraOptions((
+    focusOwn: true,
+    followOwn: true,
+    focusForeign: false,
+    followForeign: false,
+  ));
+  game.setEffectPlaybackSpeed(2);
+  game.mapCamera.centerOnHex((col: 30, row: 15));
+  final cache = game.world.debugStaticRenderCache!;
+  final cameraUpdates = game.mapCamera.debugTransformUpdateCount;
+  game.replaceScene(movementCameraPerformanceSnapshot(source));
+  final unit = game.world.unitLayer.componentForUnit(
+    source.player.units.first.id,
+  )!;
+  final origin = unit.visualCenter;
+  expect(game.mapCamera.hasMotion, isTrue);
+  final frameTimes = await measureActiveFrameTimings(
+    tester,
+    warmupFrames: 12,
+    timedFrames: 60,
+  );
+  expect(game.mapCamera.isFollowing, isTrue);
+  expect(unit.visualCenter.dx, greaterThan(origin.dx));
+  expect(game.world.effectHost.debugActiveEffectCount, 1);
+  expect(game.world.debugStaticRenderCache, same(cache));
+  final updates = game.mapCamera.debugTransformUpdateCount - cameraUpdates;
+  expect(updates, greaterThan(60));
+  binding.reportData!['flameMovementCameraFrameTimes'] = frameTimes;
+  final rssDelta = ProcessInfo.currentRss - rssBefore;
+  game.skipEffects();
+  await game.waitForCommandEffects();
+  expect(game.paused, isTrue);
+  final idleUpdates = game.mapCamera.debugTransformUpdateCount;
+  await tester.pump(const Duration(milliseconds: 100));
+  expect(game.mapCamera.debugTransformUpdateCount, idleUpdates);
+  final record = {
+    'schemaVersion': 1,
+    'capturedAt': DateTime.now().toUtc().toIso8601String(),
+    'environment': {
+      'operatingSystem': Platform.operatingSystemVersion,
+      'dart': Platform.version,
+      'buildMode': 'flutter-test-device-debug',
+      'flame': '1.38.0',
+    },
+    'workload': {
+      'mapDimensions': {'cols': 40, 'rows': 30},
+      'units': 120,
+      'cities': 40,
+      'improvements': 120,
+      'roads': 120,
+      'executedPathSteps': 39,
+      'focusDurationSeconds': 0.28,
+      'followHalfLifeSeconds': 0.1,
+      'effectPlaybackSpeed': 2,
+      'cameraUpdates': updates,
+      'evidenceScope':
+          'synthetic observed movement with a public executed route',
+      'warmupFrames': 12,
+      'timedFrames': 60,
+    },
+    'metrics': {
+      'residentMemoryDeltaBytes': rssDelta,
+      'frameTimes': frameTimes,
+      'idleCameraUpdatesAfterSkip':
+          game.mapCamera.debugTransformUpdateCount - idleUpdates,
+    },
+    'policy': {
+      'buildP99MillisMax': 16.667,
+      'rasterP99MillisMax': 16.667,
+      'missedFrameBudgetMax': 0,
+      'residentMemoryDeltaBytesMax': 192 * 1024 * 1024,
+    },
+  };
+  // ignore: avoid_print
+  print('AONW_FLAME_MOVEMENT_CAMERA_BASELINE ${jsonEncode(record)}');
+  expect(
+    frameTimes['99th_percentile_frame_build_time_millis'],
+    lessThanOrEqualTo(16.667),
+  );
+  expect(
+    frameTimes['99th_percentile_frame_rasterizer_time_millis'],
+    lessThanOrEqualTo(16.667),
+  );
+  expect(frameTimes['missed_frame_build_budget_count'], 0);
+  expect(frameTimes['missed_frame_rasterizer_budget_count'], 0);
+  expect(rssDelta, lessThanOrEqualTo(192 * 1024 * 1024));
+  game.setEffectPlaybackSpeed(1);
+  game.setMovementCameraOptions(defaultMapMovementCameraOptions);
+  game.replaceScene(source);
+}
