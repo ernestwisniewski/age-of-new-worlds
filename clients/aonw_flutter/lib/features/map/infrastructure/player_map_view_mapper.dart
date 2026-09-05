@@ -380,25 +380,25 @@ MapFogView _mapFog(AonwPlayerFogView fog) => MapFogView(
   ],
 );
 
-PlayerResearchSummaryView _mapResearch(AonwPlayerResearchView research) =>
-    PlayerResearchSummaryView(
-      activeTechnologyId: research.activeTechnology?.name,
-      activeProgress: research.activeProgress,
-      activeEffectiveCost: research.activeEffectiveCost,
-      scienceOverflow: research.scienceOverflow,
-      sciencePerTurn: research.scienceYield.total,
-      scienceByCityId: research.scienceYield.byCityId,
-      scienceSources: [
-        for (final source in research.scienceYield.sources)
-          PlayerScienceYieldSourceView(
-            cityId: source.cityId,
-            amount: source.amount,
-            kind: PlayerScienceYieldSourceKindView.values.byName(
-              source.kind.name,
-            ),
-          ),
-      ],
-    );
+PlayerResearchSummaryView _mapResearch(
+  AonwPlayerResearchView research,
+) => PlayerResearchSummaryView(
+  dominantEra: PlayerTechnologyEraView.values.byName(research.dominantEra.name),
+  activeTechnologyId: research.activeTechnology?.name,
+  activeProgress: research.activeProgress,
+  activeEffectiveCost: research.activeEffectiveCost,
+  scienceOverflow: research.scienceOverflow,
+  sciencePerTurn: research.scienceYield.total,
+  scienceByCityId: research.scienceYield.byCityId,
+  scienceSources: [
+    for (final source in research.scienceYield.sources)
+      PlayerScienceYieldSourceView(
+        cityId: source.cityId,
+        amount: source.amount,
+        kind: PlayerScienceYieldSourceKindView.values.byName(source.kind.name),
+      ),
+  ],
+);
 
 RecipientTurnView _mapTurnView(
   AonwPlayerViewSnapshot wire,

@@ -100,6 +100,7 @@ AonwPlayerDiplomacyView _diplomacy() => const AonwPlayerDiplomacyView(
 );
 
 AonwPlayerResearchView _research({int progress = 4}) => AonwPlayerResearchView(
+  dominantEra: AonwTechnologyEra.specialization,
   activeTechnology: AonwTechnologyId.agriculture,
   activeProgress: progress,
   activeEffectiveCost: 20,

@@ -1,5 +1,22 @@
 import 'package:aonw_engine_client/src/protocol_json.dart';
 
+enum AonwTechnologyEra {
+  foundation,
+  settlement,
+  expansion,
+  specialization,
+  industry,
+  strategy;
+
+  factory AonwTechnologyEra.fromJson(Object? source) {
+    final wire = readString(source, 'technology era');
+    return values.firstWhere(
+      (value) => value.name == wire,
+      orElse: () => throw FormatException('Unknown AoNW technology era $wire.'),
+    );
+  }
+}
+
 enum AonwTechnologyId {
   agriculture,
   woodworking,

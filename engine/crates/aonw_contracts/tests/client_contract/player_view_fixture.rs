@@ -114,6 +114,7 @@ pub(super) fn economy() -> PlayerEconomyViewDto {
 
 pub(super) fn research() -> PlayerResearchViewDto {
     PlayerResearchViewDto {
+        dominant_era: aonw_contracts::client::TechnologyEraDto::Foundation,
         active_technology_id: Some(TechnologyIdDto::Agriculture),
         active_progress: Some(9),
         active_effective_cost: Some(42),

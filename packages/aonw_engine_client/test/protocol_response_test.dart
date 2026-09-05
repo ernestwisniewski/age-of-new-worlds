@@ -236,6 +236,7 @@ void main() {
     expect(snapshot.research.activeTechnology, AonwTechnologyId.agriculture);
     expect(snapshot.research.activeProgress, 4);
     expect(snapshot.research.activeEffectiveCost, 20);
+    expect(snapshot.research.dominantEra, AonwTechnologyEra.industry);
     expect(snapshot.research.scienceOverflow, 1);
     expect(snapshot.research.scienceYield.total, 0);
     expect(snapshot.victory.dominationRequiredControlPercent, 60);

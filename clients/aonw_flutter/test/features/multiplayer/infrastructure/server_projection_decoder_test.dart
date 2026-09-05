@@ -183,6 +183,7 @@ Map<String, Object?> _snapshot(int revision, {bool submitted = false}) => {
   'fog': _fog(),
   'economy': _economy(),
   'research': {
+    'dominantEra': 'foundation',
     'activeTechnologyId': null,
     'activeProgress': null,
     'activeEffectiveCost': null,

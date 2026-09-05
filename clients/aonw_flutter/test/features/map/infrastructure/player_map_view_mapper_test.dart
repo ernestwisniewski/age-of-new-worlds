@@ -85,6 +85,7 @@ void main() {
     );
 
     expect(player.research.activeTechnologyId, 'agriculture');
+    expect(player.research.dominantEra, PlayerTechnologyEraView.specialization);
     expect(player.research.activeProgress, 4);
     expect(player.research.activeEffectiveCost, 20);
     expect(player.research.scienceOverflow, 1);

@@ -4,6 +4,35 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('research era is a required closed recipient value', () {
+    final source = <String, Object?>{
+      'dominantEra': 'strategy',
+      'activeTechnologyId': 'agriculture',
+      'activeProgress': 0,
+      'activeEffectiveCost': 12,
+      'scienceOverflow': 0,
+      'scienceYield': {
+        'total': 0,
+        'byCityId': <String, int>{},
+        'sources': <Object?>[],
+      },
+    };
+    expect(
+      AonwPlayerResearchView.fromJson(source).dominantEra,
+      AonwTechnologyEra.strategy,
+    );
+    source['dominantEra'] = 'futureEra';
+    expect(
+      () => AonwPlayerResearchView.fromJson(source),
+      throwsFormatException,
+    );
+    source.remove('dominantEra');
+    expect(
+      () => AonwPlayerResearchView.fromJson(source),
+      throwsFormatException,
+    );
+  });
+
   test('serializes current research query and command exactly', () {
     expect(_request(AonwResearchRequest.options(expectedRevision: 8)), {
       'type': 'query',

@@ -246,9 +246,10 @@ impl TechnologyKey {
 
 /// Research-era cost band.
 #[allow(missing_docs)]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TechnologyEra {
+    #[default]
     Foundation,
     Settlement,
     Expansion,

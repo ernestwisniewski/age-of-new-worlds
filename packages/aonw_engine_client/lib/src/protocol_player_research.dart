@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/src/protocol_research_values.dart';
 
 final class AonwPlayerResearchView {
   const AonwPlayerResearchView({
+    required this.dominantEra,
     required this.activeTechnology,
     required this.activeProgress,
     required this.activeEffectiveCost,
@@ -11,6 +12,7 @@ final class AonwPlayerResearchView {
   });
 
   factory AonwPlayerResearchView.empty() => AonwPlayerResearchView(
+    dominantEra: AonwTechnologyEra.foundation,
     activeTechnology: null,
     activeProgress: null,
     activeEffectiveCost: null,
@@ -25,6 +27,7 @@ final class AonwPlayerResearchView {
   factory AonwPlayerResearchView.fromJson(Object? source) {
     final value = readObject(source, 'player research view');
     requireKeys(value, const {
+      'dominantEra',
       'activeTechnologyId',
       'activeProgress',
       'activeEffectiveCost',
@@ -32,6 +35,7 @@ final class AonwPlayerResearchView {
       'scienceYield',
     }, 'player research view');
     return AonwPlayerResearchView(
+      dominantEra: AonwTechnologyEra.fromJson(value['dominantEra']),
       activeTechnology: value['activeTechnologyId'] == null
           ? null
           : AonwTechnologyId.fromJson(value['activeTechnologyId']),
@@ -49,6 +53,7 @@ final class AonwPlayerResearchView {
     );
   }
 
+  final AonwTechnologyEra dominantEra;
   final AonwTechnologyId? activeTechnology;
   final int? activeProgress;
   final int? activeEffectiveCost;

@@ -43,7 +43,7 @@ pub use query::{
 pub use rejection::ClientCommandRejectionCodeDto;
 pub use research::{
     PlayerResearchViewDto, ResearchOptionDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
-    ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyUnlockDto,
+    ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto,
 };
 pub use session::{ClientErrorDto, ClientReplayVerificationDto};
 pub use unit::{CityFoundingJobViewDto, OwnedUnitDetailsViewDto, PlayerUnitViewDto};

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
-use aonw_content::{MapDefinition, RulesetDefinition};
-use aonw_domain::{CityId, GameState, PlayerId, TechnologyId};
+use aonw_content::{MapDefinition, RulesetDefinition, TechnologyEra};
+use aonw_domain::{CityId, GameState, PlayerId, PlayerResearchState, TechnologyId};
 use aonw_engine::{
     CanonicalQueryError, EngineContext, GameEngine, GameQuery, QueryResult, ResearchOptionsQuery,
     ScienceYieldSourceKind,
@@ -38,6 +38,7 @@ impl PlayerScienceYieldSourceView {
 /// Recipient-owned research progress and current science forecast required by the HUD.
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct PlayerResearchView {
+    dominant_era: TechnologyEra,
     active_technology_id: Option<TechnologyId>,
     active_progress: Option<i64>,
     active_effective_cost: Option<u32>,
@@ -73,6 +74,13 @@ impl PlayerResearchView {
         debug_assert_eq!(active.is_some(), options.active_technology().is_some());
         let science = options.science_yield();
         Ok(Self {
+            dominant_era: state
+                .research()
+                .players()
+                .get(actor)
+                .map_or(TechnologyEra::Foundation, |research| {
+                    dominant_era_for_research(research, ruleset)
+                }),
             active_technology_id: active.map(|(technology, _, _)| technology),
             active_progress: active.map(|(_, progress, _)| progress),
             active_effective_cost: active.map(|(_, _, cost)| cost),
@@ -96,6 +104,12 @@ impl PlayerResearchView {
     pub(crate) const fn with_science_per_turn(mut self, amount: i64) -> Self {
         self.science_per_turn = amount;
         self
+    }
+
+    /// Returns the highest completed research era belonging to this recipient.
+    #[must_use]
+    pub const fn dominant_era(&self) -> TechnologyEra {
+        self.dominant_era
     }
 
     /// Returns the selected technology, when research is active.
@@ -140,3 +154,19 @@ impl PlayerResearchView {
         &self.science_sources
     }
 }
+
+pub(crate) fn dominant_era_for_research(
+    research: &PlayerResearchState,
+    ruleset: &RulesetDefinition,
+) -> TechnologyEra {
+    research
+        .unlocked_technology_ids()
+        .iter()
+        .filter_map(|id| ruleset.technology(*id))
+        .map(aonw_content::TechnologyDefinition::era)
+        .max()
+        .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests;

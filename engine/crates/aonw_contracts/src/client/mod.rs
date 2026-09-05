@@ -33,11 +33,11 @@ pub use response::{
     PlayerViewSnapshotDto, ProductionOptionDto, ReachableTileViewDto, ResearchOptionDto,
     RoadViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
     StabilityBreakdownDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
-    TechnologyAvailabilityDto, TechnologyUnlockDto, UnitMovementExecutionDto,
+    TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto, UnitMovementExecutionDto,
     UnitProductionOptionDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
     WorkerAutomationActionDto, WorkerAutomationMetricsDto, WorkerAutomationOptionDto,
     WorkerImprovementOptionDto, WorkerJobCompletionDto, WorkerJobViewDto, YieldValueDto,
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 15;
+pub const CLIENT_API_VERSION: u16 = 16;

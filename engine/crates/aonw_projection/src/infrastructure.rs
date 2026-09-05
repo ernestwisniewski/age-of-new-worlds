@@ -122,18 +122,12 @@ fn visual_era_column(state: &GameState, owner: &PlayerId, ruleset: &RulesetDefin
 }
 
 fn era_column_for_research(research: &PlayerResearchState, ruleset: &RulesetDefinition) -> u8 {
-    research
-        .unlocked_technology_ids()
-        .iter()
-        .filter_map(|id| ruleset.technology(*id))
-        .map(|definition| match definition.era() {
-            TechnologyEra::Foundation | TechnologyEra::Settlement => 0,
-            TechnologyEra::Expansion | TechnologyEra::Specialization => 1,
-            TechnologyEra::Industry => 2,
-            TechnologyEra::Strategy => 3,
-        })
-        .max()
-        .unwrap_or(0)
+    match crate::research::dominant_era_for_research(research, ruleset) {
+        TechnologyEra::Foundation | TechnologyEra::Settlement => 0,
+        TechnologyEra::Expansion | TechnologyEra::Specialization => 1,
+        TechnologyEra::Industry => 2,
+        TechnologyEra::Strategy => 3,
+    }
 }
 
 fn known_coordinate(state: &GameState, actor: &PlayerId, coordinate: HexCoord) -> bool {

@@ -117,6 +117,7 @@ const _snapshot = {
     },
   },
   'research': {
+    'dominantEra': 'industry',
     'activeTechnologyId': 'agriculture',
     'activeProgress': 4,
     'activeEffectiveCost': 20,

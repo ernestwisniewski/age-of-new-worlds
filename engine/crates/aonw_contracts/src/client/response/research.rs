@@ -7,6 +7,19 @@ use crate::{
     WonderTypeDto,
 };
 
+/// Highest completed research era belonging to the authenticated recipient.
+#[allow(missing_docs)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum TechnologyEraDto {
+    Foundation,
+    Settlement,
+    Expansion,
+    Specialization,
+    Industry,
+    Strategy,
+}
+
 /// Current engine-owned availability of one technology.
 #[allow(missing_docs)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
@@ -85,6 +98,8 @@ pub struct ScienceYieldBreakdownDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PlayerResearchViewDto {
+    /// Highest era among completed technologies, or foundation before research.
+    pub dominant_era: TechnologyEraDto,
     /// Selected technology, when research is active.
     pub active_technology_id: Option<TechnologyIdDto>,
     /// Persisted progress for the active technology.

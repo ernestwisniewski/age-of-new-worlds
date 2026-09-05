@@ -259,6 +259,7 @@ AonwPlayerResearchView _research({
   int? activeEffectiveCost = 20,
   String sourceCityId = 'city-a',
 }) => AonwPlayerResearchView(
+  dominantEra: AonwTechnologyEra.specialization,
   activeTechnology: activeTechnology,
   activeProgress: activeProgress,
   activeEffectiveCost: activeEffectiveCost,

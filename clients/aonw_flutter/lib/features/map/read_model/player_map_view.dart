@@ -87,8 +87,18 @@ final class PlayerScienceYieldSourceView {
   final PlayerScienceYieldSourceKindView kind;
 }
 
+enum PlayerTechnologyEraView {
+  foundation,
+  settlement,
+  expansion,
+  specialization,
+  industry,
+  strategy,
+}
+
 final class PlayerResearchSummaryView {
   PlayerResearchSummaryView({
+    required this.dominantEra,
     required this.activeTechnologyId,
     required this.activeProgress,
     required this.activeEffectiveCost,
@@ -100,6 +110,7 @@ final class PlayerResearchSummaryView {
        scienceSources = List.unmodifiable(scienceSources);
 
   factory PlayerResearchSummaryView.empty() => PlayerResearchSummaryView(
+    dominantEra: PlayerTechnologyEraView.foundation,
     activeTechnologyId: null,
     activeProgress: null,
     activeEffectiveCost: null,
@@ -109,6 +120,7 @@ final class PlayerResearchSummaryView {
     scienceSources: const [],
   );
 
+  final PlayerTechnologyEraView dominantEra;
   final String? activeTechnologyId;
   final int? activeProgress;
   final int? activeEffectiveCost;

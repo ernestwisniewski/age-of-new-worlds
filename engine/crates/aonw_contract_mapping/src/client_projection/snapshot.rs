@@ -4,7 +4,7 @@ use aonw_contracts::client::{
     PlayerFogViewDto, PlayerParticipantViewDto, PlayerResearchViewDto, PlayerVictoryViewDto,
     PlayerViewSnapshotDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
     ScienceYieldSourceKindDto, StabilityBreakdownDto, StrategicResourceAmountDto,
-    StrategicResourceSourceDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
+    StrategicResourceSourceDto, TechnologyEraDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
 };
 
 use aonw_projection::{PlayerViewSnapshot, SessionStamp};
@@ -105,6 +105,7 @@ pub(super) fn victory(value: &aonw_projection::PlayerVictoryView) -> PlayerVicto
 
 pub(super) fn research(value: &aonw_projection::PlayerResearchView) -> PlayerResearchViewDto {
     PlayerResearchViewDto {
+        dominant_era: technology_era(value.dominant_era()),
         active_technology_id: value.active_technology_id().map(crate::encode_technology),
         active_progress: value.active_progress(),
         active_effective_cost: value.active_effective_cost(),
@@ -278,5 +279,16 @@ fn participant(value: &aonw_projection::PlayerParticipantView) -> PlayerParticip
         color_value: value.color_value(),
         country: crate::game_state_mapping::encode_country(value.country()),
         kind: crate::game_state_mapping::encode_player_kind(value.kind()),
+    }
+}
+
+const fn technology_era(value: aonw_content::TechnologyEra) -> TechnologyEraDto {
+    match value {
+        aonw_content::TechnologyEra::Foundation => TechnologyEraDto::Foundation,
+        aonw_content::TechnologyEra::Settlement => TechnologyEraDto::Settlement,
+        aonw_content::TechnologyEra::Expansion => TechnologyEraDto::Expansion,
+        aonw_content::TechnologyEra::Specialization => TechnologyEraDto::Specialization,
+        aonw_content::TechnologyEra::Industry => TechnologyEraDto::Industry,
+        aonw_content::TechnologyEra::Strategy => TechnologyEraDto::Strategy,
     }
 }
