@@ -3,6 +3,7 @@ import '../../cities/read_model/city_view.dart';
 import '../../diplomacy/read_model/diplomacy_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/read_model/worker_view.dart';
+import 'map_feedback_view.dart';
 import 'map_view.dart';
 import 'pending_action_view.dart';
 import 'player_economy_view.dart';
@@ -254,28 +255,20 @@ final class PlayerMapView {
     required this.turnView,
     required this.diplomacy,
     required List<VisibleUnitView> units,
+    List<MapFeedbackCueView> recentFeedback = const [],
     List<CityView> cities = const [],
     List<WorldArtifactView> artifacts = const [],
     List<FieldImprovementView> fieldImprovements = const [],
     List<RoadView> roads = const [],
     this.cityFoundingDraft,
-  }) : participants = List.unmodifiable(participants),
+  }) : recentFeedback = List.unmodifiable(recentFeedback),
+       participants = List.unmodifiable(participants),
        units = List.unmodifiable(units),
        cities = List.unmodifiable(cities),
        artifacts = List.unmodifiable(artifacts),
        fieldImprovements = List.unmodifiable(fieldImprovements),
        roads = List.unmodifiable(roads) {
-    final byCoordinate = <MapHexCoordinate, List<VisibleUnitView>>{};
-    final controlledById = <String, VisibleUnitView>{};
-    for (final unit in units) {
-      (byCoordinate[unit.coordinate] ??= []).add(unit);
-      if (unit.ownerPlayerId == actorPlayerId) controlledById[unit.id] = unit;
-    }
-    _unitsByCoordinate = Map.unmodifiable({
-      for (final entry in byCoordinate.entries)
-        entry.key: List<VisibleUnitView>.unmodifiable(entry.value),
-    });
-    _controlledUnitsById = Map.unmodifiable(controlledById);
+    _indexUnits();
     _citiesByCoordinate = Map.unmodifiable({
       for (final city in cities) city.center: city,
     });
@@ -301,6 +294,20 @@ final class PlayerMapView {
     _roadsByCoordinate = Map.unmodifiable({
       for (final road in roads) road.coordinate: road,
     });
+  }
+
+  void _indexUnits() {
+    final byCoordinate = <MapHexCoordinate, List<VisibleUnitView>>{};
+    final controlledById = <String, VisibleUnitView>{};
+    for (final unit in units) {
+      (byCoordinate[unit.coordinate] ??= []).add(unit);
+      if (unit.ownerPlayerId == actorPlayerId) controlledById[unit.id] = unit;
+    }
+    _unitsByCoordinate = Map.unmodifiable({
+      for (final entry in byCoordinate.entries)
+        entry.key: List<VisibleUnitView>.unmodifiable(entry.value),
+    });
+    _controlledUnitsById = Map.unmodifiable(controlledById);
   }
 
   factory PlayerMapView.preview({
@@ -370,6 +377,7 @@ final class PlayerMapView {
   final RecipientTurnView turnView;
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;
+  final List<MapFeedbackCueView> recentFeedback;
   final List<CityView> cities;
   final List<WorldArtifactView> artifacts;
   final List<FieldImprovementView> fieldImprovements;

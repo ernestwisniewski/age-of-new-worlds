@@ -80,7 +80,6 @@
         "clients/aonw_flutter/lib/features/map/application/unit_action_workflow.dart::function:_actionable": 13,
         "clients/aonw_flutter/lib/features/map/infrastructure/player_map_view_mapper.dart::class:PlayerMapViewMapper/method:_validateArtifactReferences": 23,
         "clients/aonw_flutter/lib/features/map/infrastructure/recipient_projection_cache.dart::function:_samePendingAction": 16,
-        "clients/aonw_flutter/lib/features/map/read_model/player_map_view.dart::class:PlayerMapView/constructor:<unnamed>": 13,
         "clients/aonw_flutter/lib/features/multiplayer/infrastructure/server_connection_config.dart::class:ServerConnectionConfig/constructor:checked": 18,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_commands.dart::extension:ProductionWorkflowCommands/method:_execute": 11,
         "clients/aonw_flutter/lib/features/production/application/production_workflow_guards.dart::function:_executableProduction": 11,

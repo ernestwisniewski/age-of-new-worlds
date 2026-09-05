@@ -29,6 +29,7 @@ import 'map/map_cloud_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
 import 'map/map_era_tint_layer.dart';
+import 'map/map_event_feedback_layer.dart';
 import 'map/map_hex_selection_palette_layer.dart';
 import 'map/map_threat_overlay_layer.dart';
 import 'map/map_tile_details_layer.dart';
@@ -38,6 +39,7 @@ import 'map/worker_infrastructure_layer.dart';
 import 'presentation/flame_scene_patch.dart';
 import 'presentation/flame_scene_sink.dart';
 
+part 'aonw_flame_game_effects.dart';
 part 'aonw_flame_game_input.dart';
 part 'aonw_world.dart';
 
@@ -71,6 +73,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
+    this.world.eventFeedbackLayer.onActivityChanged =
+        _handleEventFeedbackActivity;
   }
   late final FlameMapCameraController mapCamera;
   late final FlameMapInputSurface inputSurface;
@@ -88,6 +92,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _effectsActive = false;
   var _cloudsActive = false;
   var _eraTintActive = false;
+  var _eventFeedbackActive = false;
   var _reducedMotion = false;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
@@ -271,52 +276,13 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
             _effectsActive ||
             _cloudsActive ||
             _eraTintActive ||
+            _eventFeedbackActive ||
             _foundingPreviewActive ||
             keyboardActive)) {
       resumeEngine();
     } else {
       pauseEngine();
     }
-  }
-
-  void setReducedMotion(bool enabled) {
-    if (_disposed || _reducedMotion == enabled) return;
-    _reducedMotion = enabled;
-    world.effectHost.setReducedMotion(enabled);
-    world.cloudLayer.setReducedMotion(enabled);
-    world.eraTintLayer.setReducedMotion(enabled);
-    _requestInputFrame();
-  }
-
-  void setEffectPlaybackSpeed(double speed) {
-    if (_disposed) return;
-    world.effectHost.setPlaybackSpeed(speed);
-    world.eraTintLayer.setPlaybackSpeed(speed);
-  }
-
-  void skipEffects() {
-    if (_disposed) return;
-    world.effectHost.skipAll();
-    world.eraTintLayer.skip();
-    _requestInputFrame();
-  }
-
-  void _handleEffectActivity(bool active) {
-    if (_disposed || _effectsActive == active) return;
-    _effectsActive = active;
-    _synchronizeGameLoop();
-  }
-
-  void _handleCloudActivity(bool active) {
-    if (_disposed || _cloudsActive == active) return;
-    _cloudsActive = active;
-    _synchronizeGameLoop();
-  }
-
-  void _handleEraTintActivity(bool active) {
-    if (_disposed || _eraTintActive == active) return;
-    _eraTintActive = active;
-    _synchronizeGameLoop();
   }
 
   void _setFoundingPreviewActive(bool active) {

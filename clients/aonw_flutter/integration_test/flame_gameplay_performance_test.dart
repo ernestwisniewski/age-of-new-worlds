@@ -21,6 +21,7 @@ import 'support/cloud_performance_probe.dart';
 import 'support/combat_performance_probe.dart';
 import 'support/era_tint_performance_probe.dart';
 import 'support/gameplay_performance_record.dart';
+import 'support/map_event_performance_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +57,7 @@ void main() {
     expect(game.world.workerInfrastructureLayer.debugImprovementCount, 120);
     expect(game.world.workerInfrastructureLayer.debugRoadCount, 120);
     expect(game.world.workerInfrastructureLayer.debugSharedPaintCount, 9);
-    expect(game.world.children, hasLength(21));
+    expect(game.world.children, hasLength(22));
     expect(game.paused, isTrue, reason: 'the turn-based world starts idle');
     final idleUpdates = game.world.effectHost.debugActiveUpdateCount;
     for (var frame = 0; frame < 12; frame++) {
@@ -113,6 +114,14 @@ void main() {
     );
 
     await measureEraTintTransition(
+      binding,
+      tester,
+      game,
+      snapshot,
+      rssBefore: rssBefore,
+    );
+
+    await measureMapEventParticles(
       binding,
       tester,
       game,

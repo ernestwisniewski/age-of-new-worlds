@@ -48,6 +48,7 @@ import 'engine_game_session_context.dart';
 import 'engine_game_session_loader.dart';
 import 'engine_game_session_operations.dart';
 import 'engine_movement_gateway.dart';
+import 'map_feedback_mapper.dart';
 import 'map_view_mapper.dart';
 import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';

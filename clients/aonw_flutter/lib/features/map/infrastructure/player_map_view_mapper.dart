@@ -5,6 +5,7 @@ import '../../cities/read_model/city_view.dart';
 import '../../diplomacy/infrastructure/diplomacy_view_mapper.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/infrastructure/worker_view_mapper.dart';
+import '../read_model/map_feedback_view.dart';
 import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
@@ -31,6 +32,7 @@ final class PlayerMapViewMapper {
     AonwPlayerViewSnapshot wire, {
     required MapView map,
     required String actorPlayerId,
+    List<MapFeedbackCueView> recentFeedback = const [],
   }) {
     RecipientProjectionValidator(map).validateSnapshot(wire);
     _validateActor(wire.participants, actorPlayerId);
@@ -54,6 +56,7 @@ final class PlayerMapViewMapper {
     return PlayerMapView(
       actorPlayerId: actorPlayerId,
       stamp: _mapStamp(wire.stamp),
+      recentFeedback: recentFeedback,
       turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
       participants: _mapParticipants(wire.participants),
       fog: _mapFog(wire.fog),
