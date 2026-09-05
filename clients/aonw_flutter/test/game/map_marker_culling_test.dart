@@ -13,6 +13,44 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
+    'camera clips offscreen markers without relying on a parent canvas clip',
+    AonwFlameGame.new,
+    (game) async {
+      final scene = testMapScene(
+        cols: 40,
+        rows: 30,
+        units: [
+          testVisibleUnit(id: 'near'),
+          testVisibleUnit(id: 'far', coordinate: (col: 39, row: 29)),
+        ],
+      );
+      game.onGameResize(Vector2(640, 360));
+      game.replaceScene(
+        MapRenderSnapshot(
+          map: scene.map,
+          reference: scene.reference,
+          player: scene.player,
+          interaction: const MapInteractionState(),
+        ),
+      );
+      await game.ready();
+      final near = game.world.unitLayer.debugComponentForUnit('near')!;
+      final far = game.world.unitLayer.debugComponentForUnit('far')!;
+      _renderCamera(game);
+      expect(near.debugPaintCount, 1);
+      expect(far.debugPaintCount, 0);
+      game.mapCamera.centerOnHex((col: 39, row: 29));
+      game.onGameResize(Vector2(320, 240));
+      _renderCamera(game);
+      expect(near.debugPaintCount, 1);
+      expect(far.debugPaintCount, 1);
+      final viewport = game.camera.viewport;
+      expect(viewport.containsLocalPoint(Vector2(319, 239)), isTrue);
+      expect(viewport.containsLocalPoint(Vector2(321, 239)), isFalse);
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
     'culls offscreen markers while keeping badges and glow at viewport edges',
     AonwFlameGame.new,
     (game) async {
@@ -90,6 +128,12 @@ void main() {
       );
     },
   );
+}
+
+void _renderCamera(AonwFlameGame game) {
+  final recorder = ui.PictureRecorder();
+  game.camera.renderTree(ui.Canvas(recorder));
+  recorder.endRecording().dispose();
 }
 
 void _renderClipped(Component component, ui.Rect clip) {

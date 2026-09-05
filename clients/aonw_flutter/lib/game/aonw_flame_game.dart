@@ -24,6 +24,7 @@ import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
 import 'map/gameplay_map_layers.dart';
 import 'map/map_action_palette_layer.dart';
+import 'map/map_clipped_viewport.dart';
 import 'map/map_cloud_layer.dart';
 import 'map/map_display_options.dart';
 import 'map/map_effect_host.dart';
@@ -47,7 +48,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     MapHexIntentSink? onHexIntent,
     MapActionPaletteIntentSink? onActionPaletteIntent,
     MapHexSelectionPaletteIntentSink? onHexSelectionPaletteIntent,
-  }) : super(world: world ?? AonwWorld(), camera: camera ?? CameraComponent()) {
+  }) : super(
+         world: world ?? AonwWorld(),
+         camera: camera ?? CameraComponent(viewport: MapClippedViewport()),
+       ) {
     // Route and application visibility are coordinated by the Flutter owner.
     pauseWhenBackgrounded = false;
     pauseEngine();
