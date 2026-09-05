@@ -23,7 +23,10 @@ final class AonwWorld extends World implements FlameSceneSink {
     effectHost = MapEffectHostComponent(units: unitLayer);
     this.cloudLayer = cloudLayer ?? MapCloudLayerComponent();
     eraTintLayer = MapEraTintLayerComponent();
-    eventFeedbackLayer = MapEventFeedbackLayerComponent();
+    eventFeedbackLayer = MapEventFeedbackLayerComponent(
+      unitPositionFor: (unitId) =>
+          unitLayer.componentForUnit(unitId)?.visualCenter,
+    );
     addAll([
       terrainLayer,
       referenceLayer,

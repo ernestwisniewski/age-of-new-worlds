@@ -22,6 +22,7 @@ import 'support/combat_performance_probe.dart';
 import 'support/era_tint_performance_probe.dart';
 import 'support/gameplay_performance_record.dart';
 import 'support/map_event_performance_probe.dart';
+import 'support/map_floating_text_performance_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -105,37 +106,7 @@ void main() {
       idleUpdates: idleUpdates,
     );
 
-    await measureCombatFeedback(
-      binding,
-      tester,
-      game,
-      snapshot,
-      rssBefore: rssBefore,
-    );
-
-    await measureEraTintTransition(
-      binding,
-      tester,
-      game,
-      snapshot,
-      rssBefore: rssBefore,
-    );
-
-    await measureMapEventParticles(
-      binding,
-      tester,
-      game,
-      snapshot,
-      rssBefore: rssBefore,
-    );
-
-    await measureCloudDrift(
-      binding,
-      tester,
-      game,
-      snapshot,
-      rssBefore: rssBefore,
-    );
+    await _measureActiveEffects(binding, tester, game, snapshot, rssBefore);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -245,5 +216,53 @@ MapRenderSnapshot _largeSnapshot() {
       fieldImprovements: fieldImprovements,
       roads: roads,
     ),
+  );
+}
+
+Future<void> _measureActiveEffects(
+  IntegrationTestWidgetsFlutterBinding binding,
+  WidgetTester tester,
+  AonwFlameGame game,
+  MapRenderSnapshot snapshot,
+  int rssBefore,
+) async {
+  await measureCombatFeedback(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureEraTintTransition(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureMapEventParticles(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureMapFloatingText(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureCloudDrift(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
   );
 }

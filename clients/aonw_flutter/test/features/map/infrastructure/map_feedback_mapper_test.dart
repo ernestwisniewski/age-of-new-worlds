@@ -7,8 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_feedback_test_fixture.dart';
 
 part 'map_feedback_mapper_fixture.dart';
+part 'map_feedback_text_mapper_tests.dart';
 
 void main() {
+  textMapperTests();
   test(
     'retains event order exact anchors and owner color through the view mapper',
     () {

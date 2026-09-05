@@ -1992,4 +1992,30 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String mapFeedbackText(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'roadCompleted': '+Road',
+      'unitKilled': 'KO',
+      'unitRetreated': 'Retreat',
+      'artifactExcavationStarted': 'Excavate',
+      'artifactCarried': 'Artifact carried',
+      'artifactStored': 'Artifact stored',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String mapYieldShort(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'food': 'FOOD',
+      'production': 'PROD',
+      'gold': 'GOLD',
+      'defense': 'DEF',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 }

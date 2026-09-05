@@ -1,6 +1,7 @@
 import 'package:aonw_engine_client/src/protocol_city_view.dart';
 import 'package:aonw_engine_client/src/protocol_coordinate.dart';
 import 'package:aonw_engine_client/src/protocol_diplomacy.dart';
+import 'package:aonw_engine_client/src/protocol_evidence.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_map.dart';
 import 'package:aonw_engine_client/src/protocol_outcome.dart';
@@ -14,6 +15,7 @@ part 'protocol_artifact_event.dart';
 part 'protocol_city_event.dart';
 part 'protocol_event_schema.dart';
 part 'protocol_research_event.dart';
+part 'protocol_unit_status_event.dart';
 part 'protocol_worker_event.dart';
 
 enum AonwClientEventKind {
@@ -219,6 +221,7 @@ AonwClientEvent _knownEvent(Map<String, Object?> value, String type) {
       _researchEvent(value, kind) ??
       _artifactEvent(value, kind) ??
       _workerEvent(value, kind) ??
+      _unitStatusEvent(value, kind) ??
       AonwPresentationEvent(kind);
 }
 

@@ -1,8 +1,13 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
+import '../../cities/read_model/city_view.dart';
 import '../read_model/map_feedback_view.dart';
 import '../read_model/map_view.dart';
+import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
+import 'map_feedback_positions.dart';
+
+part 'map_feedback_text_mapper.dart';
 
 const maximumRecentMapFeedback = 64;
 
@@ -17,19 +22,59 @@ List<MapFeedbackCueView> mapCommandFeedback({
   }
   _validateFeedbackIdentity(command, snapshot, previous, map);
   final next = [...previous.recentFeedback];
+  final positions = MapFeedbackPositions(previous, command.evidence);
   for (var index = 0; index < command.events.length; index++) {
-    final cue = _particleCue(
+    final cues = _eventCues(
       command.events[index],
       (revision: command.stamp.revision, eventIndex: index),
       snapshot,
-      previous.actorPlayerId,
+      previous,
+      positions.advance(command.events[index]),
     );
-    if (cue == null || !_visible(cue.coordinate, snapshot, map)) continue;
-    next.add(cue);
+    for (final cue in cues) {
+      if (_visible(cue.coordinate, snapshot, map)) next.add(cue);
+    }
   }
-  return next.length <= maximumRecentMapFeedback
-      ? next
-      : next.sublist(next.length - maximumRecentMapFeedback);
+  return _boundedJournal(next);
+}
+
+List<MapFeedbackCueView> _boundedJournal(List<MapFeedbackCueView> cues) {
+  if (cues.length <= maximumRecentMapFeedback) return cues;
+  var start = cues.length - maximumRecentMapFeedback;
+  // Evict complete events so an artifact never loses half of its feedback.
+  while (start < cues.length &&
+      cues[start - 1].identity == cues[start].identity) {
+    start++;
+  }
+  return cues.sublist(start);
+}
+
+List<MapFeedbackCueView> _eventCues(
+  AonwClientEvent event,
+  MapEventIdentityView identity,
+  AonwPlayerViewSnapshot snapshot,
+  PlayerMapView previous,
+  MapHexCoordinate? statusCoordinate,
+) {
+  switch (event) {
+    case AonwArtifactExcavationStartedEvent() ||
+        AonwArtifactCarriedEvent() ||
+        AonwArtifactStoredEvent():
+      return _artifactCues(event, identity, previous.actorPlayerId);
+    case AonwWorkerCompletedJobEvent():
+      return [_workerCue(event, identity)];
+    case AonwUnitStatusEvent():
+      final cue = _unitStatusCue(event, identity, statusCoordinate);
+      return cue == null ? const [] : [cue];
+    default:
+      final cue = _particleCue(
+        event,
+        identity,
+        snapshot,
+        previous.actorPlayerId,
+      );
+      return cue == null ? const [] : [cue];
+  }
 }
 
 MapParticleCueView? _particleCue(

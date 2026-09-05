@@ -1,7 +1,10 @@
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
+import 'package:aonw_flutter/features/map/presentation/map_feedback_labels.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/l10n/generated/aonw_localizations.dart';
+import 'package:aonw_flutter/l10n/generated/aonw_localizations_en.dart';
 
 import 'map_test_fixture.dart';
 
@@ -11,6 +14,7 @@ MapRenderSnapshot feedbackSnapshot({
   String? contentHash,
   MapFogView? fog,
   List<MapFeedbackCueView> cues = const [],
+  AonwLocalizations? l10n,
 }) {
   final scene = testMapScene(contentHash: contentHash);
   final source = scene.player;
@@ -18,6 +22,7 @@ MapRenderSnapshot feedbackSnapshot({
     map: scene.map,
     reference: scene.reference,
     interaction: const MapInteractionState(),
+    feedbackLabels: buildMapFeedbackLabels(cues, l10n ?? AonwLocalizationsEn()),
     player: PlayerMapView(
       actorPlayerId: actor,
       stamp: testSessionStamp(revision: revision),

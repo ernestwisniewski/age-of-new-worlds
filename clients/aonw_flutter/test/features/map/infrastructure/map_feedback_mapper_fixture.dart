@@ -3,6 +3,8 @@ part of 'map_feedback_mapper_test.dart';
 AonwPlayerViewSnapshot _snapshot({
   int revision = 1,
   bool cities = true,
+  AonwCoordinate unitCoordinate = const AonwCoordinate(col: 0, row: 1),
+  bool hasUnit = true,
   List<AonwCoordinate>? visible,
 }) => AonwPlayerViewSnapshot(
   stamp: AonwSessionStamp(
@@ -49,20 +51,22 @@ AonwPlayerViewSnapshot _snapshot({
     messages: [],
     resourceTradeAgreements: [],
   ),
-  units: const [
-    AonwPlayerUnitView(
-      id: 'unit',
-      ownerPlayerId: 'preview-player',
-      kind: AonwUnitKind.commander,
-      name: 'Commander',
-      coordinate: AonwCoordinate(col: 0, row: 1),
-      movementUnits: 12,
-      posture: AonwUnitPosture.active,
-      workerBuildCharges: 0,
-      workerJob: null,
-      workerAssignment: null,
-    ),
-  ],
+  units: hasUnit
+      ? [
+          AonwPlayerUnitView(
+            id: 'unit',
+            ownerPlayerId: 'preview-player',
+            kind: AonwUnitKind.commander,
+            name: 'Commander',
+            coordinate: unitCoordinate,
+            movementUnits: 12,
+            posture: AonwUnitPosture.active,
+            workerBuildCharges: 0,
+            workerJob: null,
+            workerAssignment: null,
+          ),
+        ]
+      : const [],
   cities: cities
       ? const [
           AonwPlayerCityView(
@@ -85,13 +89,14 @@ AonwCommandResult _command(
   List<AonwClientEvent> events, {
   bool accepted = true,
   int? fromRevision,
+  AonwClientEvidence? evidence,
 }) => AonwCommandResult(
   stamp: snapshot.stamp,
   outcome: accepted
       ? const AonwCommandAccepted()
       : const AonwCommandRejected(AonwCommandRejectionCode.staleRevision),
   events: events,
-  evidence: null,
+  evidence: evidence,
   viewPatch: AonwPlayerViewPatch(
     fromRevision: fromRevision ?? snapshot.stamp.revision - 1,
     toRevision: snapshot.stamp.revision,

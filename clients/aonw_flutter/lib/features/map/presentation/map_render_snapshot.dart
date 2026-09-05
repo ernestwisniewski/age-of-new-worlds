@@ -4,6 +4,7 @@ import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
 import '../read_model/player_map_view.dart';
 import 'map_action_palette_view.dart';
+import 'map_feedback_labels.dart';
 
 final class MapRenderSnapshot {
   const MapRenderSnapshot({
@@ -12,6 +13,7 @@ final class MapRenderSnapshot {
     required this.reference,
     required this.player,
     this.actionPalette,
+    this.feedbackLabels = const MapFeedbackLabels.empty(),
   });
 
   final MapView map;
@@ -19,6 +21,7 @@ final class MapRenderSnapshot {
   final MapReferenceBundle reference;
   final PlayerMapView player;
   final MapActionPaletteView? actionPalette;
+  final MapFeedbackLabels feedbackLabels;
 
   MapViewMode get effectiveViewMode => interaction.viewMode.effectiveFor(
     hasReference: reference.pages.isNotEmpty,

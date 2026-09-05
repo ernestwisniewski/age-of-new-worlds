@@ -32,6 +32,7 @@ import '../input/map_hex_selection_palette_intent.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
 import '../map_action_palette_view.dart';
+import '../map_feedback_labels.dart';
 import '../map_hex_selection_palette_view.dart';
 import '../map_presentation_controller.dart';
 import '../map_render_snapshot.dart';
@@ -44,6 +45,7 @@ import 'network_game_status_overlay.dart';
 part 'map_screen_action_palette.dart';
 part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_ready.dart';
+part 'map_screen_scene.dart';
 
 final class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -313,34 +315,6 @@ final class _MapScreenState extends State<MapScreen>
       }
     }
     _synchronizeGamepadTicker();
-  }
-
-  void _synchronizeFlameScene() {
-    switch (widget.controller.state) {
-      case GameSessionReady(:final scene, :final interaction):
-        _flameGame.sceneSink.replaceScene(
-          MapRenderSnapshot(
-            map: scene.map,
-            interaction: interaction,
-            reference: scene.reference,
-            player: scene.player,
-            actionPalette: switch (_localizations) {
-              final l10n? => buildMapActionPaletteView(
-                interaction: interaction,
-                player: scene.player,
-                l10n: l10n,
-              ),
-              null => null,
-            },
-          ),
-        );
-      case GameSessionLoading() || GameSessionFailure():
-        _flameGame.sceneSink.clearScene();
-    }
-  }
-
-  void _synchronizeFlameCursor() {
-    _flameGame.sceneSink.replaceCursor(widget.controller.cursor.value);
   }
 
   void _installFreshFlameGame() {

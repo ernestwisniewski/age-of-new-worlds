@@ -1945,6 +1945,18 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{value, select, friendship{Friendship} truce{Truce} other{Unknown proposal}}'**
   String diplomaticProposalName(String value);
+
+  /// No description provided for @mapFeedbackText.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind, select, roadCompleted{+Road} unitKilled{KO} unitRetreated{Retreat} artifactExcavationStarted{Excavate} artifactCarried{Artifact carried} artifactStored{Artifact stored} other{}}'**
+  String mapFeedbackText(String kind);
+
+  /// No description provided for @mapYieldShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind, select, food{FOOD} production{PROD} gold{GOLD} defense{DEF} other{}}'**
+  String mapYieldShort(String kind);
 }
 
 class _AonwLocalizationsDelegate
