@@ -45,8 +45,18 @@ void main() {
         )
         .onChanged!(1.5);
     await tester.pumpAndSettle();
+    final smooth = find.byKey(const ValueKey('smooth-camera-movement-setting'));
+    await tester.ensureVisible(smooth);
+    await tester.tap(smooth);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('reduced-motion-setting')),
+    );
     await tester.tap(find.byKey(const ValueKey('reduced-motion-setting')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('high-contrast-setting')),
+    );
     await tester.tap(find.byKey(const ValueKey('high-contrast-setting')));
     await tester.pumpAndSettle();
     for (final key in const [
@@ -64,6 +74,7 @@ void main() {
 
     expect(store.settings.masterVolume, 0.25);
     expect(store.settings.cameraSensitivity, 1.5);
+    expect(store.settings.smoothCameraMovement, isFalse);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapGrid, isTrue);
@@ -72,6 +83,7 @@ void main() {
     expect(store.settings.showMapResourceIcons, isFalse);
     expect(store.settings.showMapHeightBadges, isTrue);
 
+    await tester.ensureVisible(find.byKey(const ValueKey('reset-settings')));
     await tester.tap(find.byKey(const ValueKey('reset-settings')));
     await tester.pumpAndSettle();
     expect(store.settings, ClientSettings.defaults);

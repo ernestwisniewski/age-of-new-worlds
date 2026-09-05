@@ -366,6 +366,7 @@
   "masterVolume": "Master volume",
   "cameraSettings": "Camera",
   "cameraSensitivity": "Zoom sensitivity",
+  "smoothCameraMovement": "Smooth camera movement",
   "mapSettings": "Map",
   "mapGrid": "Hex borders",
   "mapGridDescription": "Show black borders around map hexes.",

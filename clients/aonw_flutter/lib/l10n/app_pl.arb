@@ -273,6 +273,7 @@
   "masterVolume": "Głośność główna",
   "cameraSettings": "Kamera",
   "cameraSensitivity": "Czułość przybliżenia",
+  "smoothCameraMovement": "Płynny ruch kamery",
   "mapSettings": "Mapa",
   "mapGrid": "Obramowanie heksów",
   "mapGridDescription": "Pokazuj czarne obramowanie heksów mapy.",

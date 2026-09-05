@@ -1210,6 +1210,9 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get cameraSensitivity => 'Zoom sensitivity';
 
   @override
+  String get smoothCameraMovement => 'Smooth camera movement';
+
+  @override
   String get mapSettings => 'Map';
 
   @override

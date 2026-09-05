@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../features/map/presentation/camera/map_camera_transform.dart';
@@ -7,6 +8,8 @@ import '../../features/map/presentation/input/map_viewport_intent.dart';
 import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/map_view.dart';
 import 'static_map_layers.dart';
+
+part 'flame_map_camera_motion.dart';
 
 MapHexCoordinate? initialMapFocus(MapRenderSnapshot snapshot) {
   final actorPlayerId = snapshot.player.actorPlayerId;
@@ -24,12 +27,17 @@ final class FlameMapCameraController {
     this._camera, {
     void Function(double)? onZoomChanged,
     void Function(MapCameraTransform)? onTransformChanged,
+    void Function(bool)? onActivityChanged,
   }) : _onZoomChanged = onZoomChanged,
-       _onTransformChanged = onTransformChanged;
+       _onTransformChanged = onTransformChanged,
+       _onActivityChanged = onActivityChanged;
 
   final CameraComponent _camera;
   final void Function(double)? _onZoomChanged;
   final void Function(MapCameraTransform)? _onTransformChanged;
+  final void Function(bool)? _onActivityChanged;
+  _MapCameraMotion? _motion;
+  bool _motionEnabled = true;
   MapStaticRenderCache? _cache;
   MapCameraTransform? _transform;
   Vector2 _viewport = Vector2.zero();
@@ -56,6 +64,7 @@ final class FlameMapCameraController {
     required double authoredZoom,
   }) {
     if (_cache?.identity == cache.identity) return false;
+    cancelMotion();
     _cache = cache;
     _authoredZoom = authoredZoom;
     _transform = null;
@@ -66,6 +75,7 @@ final class FlameMapCameraController {
   }
 
   void clear() {
+    cancelMotion();
     _cache = null;
     _transform = null;
     _pendingWorldCenter = null;
@@ -105,14 +115,7 @@ final class FlameMapCameraController {
   void centerOnHex(MapHexCoordinate coordinate) {
     final cache = _cache;
     if (cache == null) return;
-    final world = cache.projection.hexCenter(coordinate);
-    final transform = _transform;
-    if (transform == null) {
-      _pendingWorldCenter = world;
-      return;
-    }
-    _pendingWorldCenter = null;
-    _apply(transform.centeredAt(world));
+    centerOnWorld(cache.projection.hexCenter(coordinate));
   }
 
   bool applyIntent(MapViewportIntent intent) {
@@ -120,11 +123,19 @@ final class FlameMapCameraController {
     if (transform == null) return false;
     switch (intent) {
       case MapPanIntent(:final screenDelta):
-        _apply(transform.panByScreen(screenDelta));
-        return true;
+        return _applyFrameIntent(
+          transform,
+          screenPanDelta: screenDelta,
+          zoomFocalPoint: null,
+          zoomFactor: 1,
+        );
       case MapZoomIntent(:final focalPoint, :final factor):
-        _apply(transform.zoomAtScreen(focalPoint: focalPoint, factor: factor));
-        return true;
+        return _applyFrameIntent(
+          transform,
+          screenPanDelta: (x: 0, y: 0),
+          zoomFocalPoint: focalPoint,
+          zoomFactor: factor,
+        );
       case MapViewportFrameIntent(
         :final screenPanDelta,
         :final zoomFocalPoint,
@@ -151,10 +162,11 @@ final class FlameMapCameraController {
     if (screenPanDelta.x != 0 || screenPanDelta.y != 0) {
       next = next.panByScreen(screenPanDelta);
     }
-    if (zoomFocalPoint != null && zoomFactor != 1) {
+    if (zoomFocalPoint != null && _validZoomFactor(zoomFactor)) {
       next = next.zoomAtScreen(focalPoint: zoomFocalPoint, factor: zoomFactor);
     }
     if (identical(next, transform)) return false;
+    cancelMotion();
     _apply(next);
     return true;
   }
@@ -184,3 +196,6 @@ final class FlameMapCameraController {
     _onTransformChanged?.call(transform);
   }
 }
+
+bool _validZoomFactor(double factor) =>
+    factor.isFinite && factor > 0 && factor != 1;

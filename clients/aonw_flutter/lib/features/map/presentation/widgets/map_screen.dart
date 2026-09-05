@@ -197,6 +197,7 @@ final class _MapScreenState extends State<MapScreen>
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
     _flameGame.setCameraSensitivity(settings.cameraSensitivity);
+    _flameGame.setSmoothCameraMovement(settings.smoothCameraMovement);
     _flameGame.setMapDisplayOptions(
       MapDisplayOptions(
         showGrid: settings.showMapGrid,

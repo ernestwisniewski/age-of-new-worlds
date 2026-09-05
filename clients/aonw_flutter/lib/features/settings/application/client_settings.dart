@@ -9,6 +9,7 @@ final class ClientSettings {
     required this.showMapTerrainIcons,
     required this.showMapResourceIcons,
     required this.showMapHeightBadges,
+    this.smoothCameraMovement = true,
   }) : assert(masterVolume >= 0 && masterVolume <= 1),
        assert(cameraSensitivity >= 0.5 && cameraSensitivity <= 2);
 
@@ -26,6 +27,7 @@ final class ClientSettings {
 
   final double masterVolume;
   final double cameraSensitivity;
+  final bool smoothCameraMovement;
   final bool reducedMotion;
   final bool highContrast;
   final bool showMapGrid;
@@ -37,6 +39,7 @@ final class ClientSettings {
   ClientSettings copyWith({
     double? masterVolume,
     double? cameraSensitivity,
+    bool? smoothCameraMovement,
     bool? reducedMotion,
     bool? highContrast,
     bool? showMapGrid,
@@ -47,6 +50,7 @@ final class ClientSettings {
   }) => ClientSettings(
     masterVolume: masterVolume ?? this.masterVolume,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
+    smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     reducedMotion: reducedMotion ?? this.reducedMotion,
     highContrast: highContrast ?? this.highContrast,
     showMapGrid: showMapGrid ?? this.showMapGrid,
@@ -61,8 +65,12 @@ final class ClientSettings {
       other is ClientSettings &&
       other.masterVolume == masterVolume &&
       other.cameraSensitivity == cameraSensitivity &&
+      other.smoothCameraMovement == smoothCameraMovement &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
+      _sameMapDisplay(other);
+
+  bool _sameMapDisplay(ClientSettings other) =>
       other.showMapGrid == showMapGrid &&
       other.showMapElevationWalls == showMapElevationWalls &&
       other.showMapTerrainIcons == showMapTerrainIcons &&
@@ -73,6 +81,7 @@ final class ClientSettings {
   int get hashCode => Object.hash(
     masterVolume,
     cameraSensitivity,
+    smoothCameraMovement,
     reducedMotion,
     highContrast,
     showMapGrid,

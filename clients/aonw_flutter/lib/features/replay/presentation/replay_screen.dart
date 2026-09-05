@@ -92,6 +92,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
       settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
     );
     _game.setCameraSensitivity(settings.cameraSensitivity);
+    _game.setSmoothCameraMovement(settings.smoothCameraMovement);
     return Scaffold(
       body: SafeArea(
         child: ListenableBuilder(

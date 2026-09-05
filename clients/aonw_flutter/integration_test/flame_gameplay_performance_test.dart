@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'support/active_frame_timings.dart';
+import 'support/camera_focus_performance_probe.dart';
 import 'support/city_production_performance_probe.dart';
 import 'support/cloud_performance_probe.dart';
 import 'support/combat_performance_probe.dart';
@@ -268,6 +269,14 @@ Future<void> _measureActiveEffects(
   );
 
   await measureCloudDrift(
+    binding,
+    tester,
+    game,
+    snapshot,
+    rssBefore: rssBefore,
+  );
+
+  await measureCameraFocus(
     binding,
     tester,
     game,

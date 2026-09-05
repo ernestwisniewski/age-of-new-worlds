@@ -204,16 +204,28 @@ final class _CameraSettings extends StatelessWidget {
   final ValueChanged<ClientSettings> onChanged;
 
   @override
-  Widget build(BuildContext context) => _LabeledSlider(
-    key: const ValueKey('camera-sensitivity-setting'),
-    label: context.aonwL10n.cameraSensitivity,
-    value: settings.cameraSensitivity,
-    minimum: 0.5,
-    maximum: 2,
-    divisions: 6,
-    valueLabel: '${settings.cameraSensitivity}×',
-    onChanged: (value) =>
-        onChanged(settings.copyWith(cameraSensitivity: value)),
+  Widget build(BuildContext context) => Column(
+    children: [
+      _LabeledSlider(
+        key: const ValueKey('camera-sensitivity-setting'),
+        label: context.aonwL10n.cameraSensitivity,
+        value: settings.cameraSensitivity,
+        minimum: 0.5,
+        maximum: 2,
+        divisions: 6,
+        valueLabel: '${settings.cameraSensitivity}×',
+        onChanged: (value) =>
+            onChanged(settings.copyWith(cameraSensitivity: value)),
+      ),
+      SwitchListTile.adaptive(
+        key: const ValueKey('smooth-camera-movement-setting'),
+        contentPadding: EdgeInsets.zero,
+        title: Text(context.aonwL10n.smoothCameraMovement),
+        value: settings.smoothCameraMovement,
+        onChanged: (value) =>
+            onChanged(settings.copyWith(smoothCameraMovement: value)),
+      ),
+    ],
   );
 }
 

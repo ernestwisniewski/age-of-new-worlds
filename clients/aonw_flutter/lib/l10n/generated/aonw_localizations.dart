@@ -1628,6 +1628,12 @@ abstract class AonwLocalizations {
   /// **'Zoom sensitivity'**
   String get cameraSensitivity;
 
+  /// No description provided for @smoothCameraMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Smooth camera movement'**
+  String get smoothCameraMovement;
+
   /// No description provided for @mapSettings.
   ///
   /// In en, this message translates to:

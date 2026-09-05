@@ -40,7 +40,9 @@ import 'map/static_map_layers.dart';
 import 'map/worker_infrastructure_layer.dart';
 import 'presentation/flame_scene_patch.dart';
 import 'presentation/flame_scene_sink.dart';
+import 'presentation/map_camera_selection.dart';
 
+part 'aonw_flame_game_camera.dart';
 part 'aonw_flame_game_effects.dart';
 part 'aonw_flame_game_input.dart';
 part 'aonw_world.dart';
@@ -68,6 +70,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       this.camera,
       onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
       onTransformChanged: this.world.cityProductionLayer.applyCamera,
+      onActivityChanged: _handleCameraActivity,
     );
     inputSurface = FlameMapInputSurface(
       onIntent: _handleViewportIntent,
@@ -101,6 +104,9 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _eventFeedbackActive = false;
   var _productionActive = false;
   var _reducedMotion = false;
+  var _smoothCameraMovement = true;
+  var _cameraActive = false;
+  String? _lastCameraSelection;
   var _foundingPreviewActive = false;
   var _inputFrameScheduled = false;
   var _keyboardPanX = 0.0;
@@ -127,19 +133,10 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       mapCamera.screenForHex(coordinate);
   @override
   void replaceScene(MapRenderSnapshot snapshot) {
+    final previous = world._scene;
     world.replaceScene(snapshot);
     _setFoundingPreviewActive(world.cityFoundingPreviewLayer.isVisible);
-    final cache = world._staticRenderCacheForGame;
-    if (cache != null) {
-      final mapChanged = mapCamera.replaceMap(
-        cache: cache,
-        authoredZoom: snapshot.map.defaultZoom,
-      );
-      if (mapChanged) {
-        final focus = initialMapFocus(snapshot);
-        if (focus != null) mapCamera.centerOnHex(focus);
-      }
-    }
+    _synchronizeMapCamera(previous, snapshot);
     _requestInputFrame();
   }
 
@@ -154,6 +151,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     world.clearScene();
     _setFoundingPreviewActive(false);
     mapCamera.clear();
+    _lastCameraSelection = null;
     _lastHoveredHex = null;
     _hasHoveredHex = false;
     _requestInputFrame();
@@ -166,6 +164,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     world.cityProductionLayer.setViewportActive(active);
     inputSurface.setEnabled(active);
     if (!active) {
+      mapCamera.cancelMotion();
       _keyboardPanX = 0;
       _keyboardPanY = 0;
       _longPressedHex = null;
@@ -286,6 +285,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
             _eraTintActive ||
             _eventFeedbackActive ||
             _productionActive ||
+            _cameraActive ||
             _foundingPreviewActive ||
             keyboardActive)) {
       resumeEngine();
@@ -309,9 +309,12 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void update(double dt) {
     super.update(dt);
-    if (!_viewportActive || (_keyboardPanX == 0 && _keyboardPanY == 0)) return;
-    final delta = keyboardPanDelta(dt);
-    mapCamera.applyIntent(MapPanIntent(delta));
+    if (!_viewportActive) return;
+    if (_keyboardPanX != 0 || _keyboardPanY != 0) {
+      final delta = keyboardPanDelta(dt);
+      mapCamera.applyIntent(MapPanIntent(delta));
+    }
+    mapCamera.update(dt);
   }
 
   @override

@@ -8,6 +8,7 @@ Future<Map<String, dynamic>> measureActiveFrameTimings(
   WidgetTester tester, {
   required int warmupFrames,
   required int timedFrames,
+  void Function()? beforeFrame,
 }) async {
   final binding = tester.binding;
   final timings = <FrameTiming>[];
@@ -15,10 +16,12 @@ Future<Map<String, dynamic>> measureActiveFrameTimings(
   binding.addTimingsCallback(collect);
   try {
     for (var frame = 0; frame < warmupFrames; frame++) {
+      beforeFrame?.call();
       await _pumpLiveFrame(tester);
     }
     final start = binding.currentSystemFrameTimeStamp.inMicroseconds;
     for (var frame = 0; frame < timedFrames; frame++) {
+      beforeFrame?.call();
       await _pumpLiveFrame(tester);
     }
     final end = binding.currentSystemFrameTimeStamp.inMicroseconds;

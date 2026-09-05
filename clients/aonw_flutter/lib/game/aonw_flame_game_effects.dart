@@ -7,7 +7,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
   }
 
   bool get _hasCommandEffects =>
-      _effectsActive || _eventFeedbackActive || _eraTintActive;
+      _effectsActive || _eventFeedbackActive || _eraTintActive || _cameraActive;
 
   void _completeCommandEffectsIfIdle() {
     if (!_hasCommandEffects) _completeCommandEffects();
@@ -21,6 +21,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
   void setReducedMotion(bool enabled) {
     if (_disposed || _reducedMotion == enabled) return;
     _reducedMotion = enabled;
+    mapCamera.setMotionEnabled(_smoothCameraMovement && !enabled);
     world.effectHost.setReducedMotion(enabled);
     world.cloudLayer.setReducedMotion(enabled);
     world.eraTintLayer.setReducedMotion(enabled);
@@ -39,6 +40,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
 
   void skipEffects() {
     if (_disposed) return;
+    mapCamera.skipMotion();
     world.effectHost.skipAll();
     world.eraTintLayer.skip();
     world.eventFeedbackLayer.skip();

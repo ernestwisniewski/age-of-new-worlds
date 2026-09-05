@@ -10,6 +10,7 @@ final class SharedPreferencesClientSettingsStore
 
   static const _masterVolumeKey = 'aonw.settings.masterVolume';
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
+  static const _smoothCameraMovementKey = 'aonw.settings.smoothCameraMovement';
   static const _reducedMotionKey = 'aonw.settings.reducedMotion';
   static const _highContrastKey = 'aonw.settings.highContrast';
   static const _showMapGridKey = 'aonw.settings.showMapGrid';
@@ -28,6 +29,9 @@ final class SharedPreferencesClientSettingsStore
       _cameraSensitivityKey,
     );
     final reducedMotion = await _preferences.getBool(_reducedMotionKey);
+    final smoothCameraMovement = await _preferences.getBool(
+      _smoothCameraMovementKey,
+    );
     final highContrast = await _preferences.getBool(_highContrastKey);
     final showMapGrid = await _preferences.getBool(_showMapGridKey);
     final showMapElevationWalls = await _preferences.getBool(
@@ -56,6 +60,8 @@ final class SharedPreferencesClientSettingsStore
         fallback: ClientSettings.defaults.cameraSensitivity,
       ),
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
+      smoothCameraMovement:
+          smoothCameraMovement ?? ClientSettings.defaults.smoothCameraMovement,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
       showMapGrid: showMapGrid ?? ClientSettings.defaults.showMapGrid,
       showMapElevationWalls:
@@ -78,6 +84,10 @@ final class SharedPreferencesClientSettingsStore
       settings.cameraSensitivity,
     );
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
+    await _preferences.setBool(
+      _smoothCameraMovementKey,
+      settings.smoothCameraMovement,
+    );
     await _preferences.setBool(_highContrastKey, settings.highContrast);
     await _preferences.setBool(_showMapGridKey, settings.showMapGrid);
     await _preferences.setBool(
