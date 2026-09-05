@@ -11,6 +11,9 @@ import '../../features/map/read_model/map_view_mode.dart';
 import 'city_territory_geometry.dart';
 import 'city_territory_style.dart';
 import 'static_map_layers.dart';
+import 'territory_glow_cache.dart';
+
+part 'city_territory_rendering.dart';
 
 final class MapCityTerritoryLayerComponent extends Component
     with HasVisibility {
@@ -19,6 +22,7 @@ final class MapCityTerritoryLayerComponent extends Component
   }
 
   final _boundaryCache = <String, ui.Path>{};
+  final _glows = MapTerritoryGlowCache();
   final _styleCache =
       <({int colorValue, bool strategic}), MapCityTerritoryStyle>{};
   List<_MapCityTerritory> _territories = const [];
@@ -29,6 +33,13 @@ final class MapCityTerritoryLayerComponent extends Component
   var _zoomEmphasis = 0.0;
   var _geometryBuildCount = 0;
   var _syncCount = 0;
+  var _renderedTerritoryCount = 0;
+
+  @visibleForTesting
+  int get debugRenderedTerritoryCount => _renderedTerritoryCount;
+
+  @visibleForTesting
+  MapTerritoryGlowCache get debugGlowCache => _glows;
 
   @visibleForTesting
   int get debugTerritoryCount => _territories.length;
@@ -90,6 +101,7 @@ final class MapCityTerritoryLayerComponent extends Component
       cache: cache,
     );
     if (_renderSignature == signature) return;
+    _glows.clear();
 
     final territories = <_MapCityTerritory>[];
     final liveBoundaries = <String>{};
@@ -134,6 +146,7 @@ final class MapCityTerritoryLayerComponent extends Component
   }
 
   void clearLayer() {
+    _glows.clear();
     _territories = const [];
     _boundaryCache.clear();
     _styleCache.clear();
@@ -146,9 +159,22 @@ final class MapCityTerritoryLayerComponent extends Component
   }
 
   @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
+  @override
   void render(ui.Canvas canvas) {
+    _renderedTerritoryCount = 0;
     if (_territories.isEmpty) return;
-    for (final territory in _territories) {
+    final clip = canvas.getLocalClipBounds();
+    final visible = [
+      for (final territory in _territories)
+        if (territory.bounds.overlaps(clip)) territory,
+    ];
+    _renderedTerritoryCount = visible.length;
+    for (final territory in visible) {
       final style = _styleFor(territory.playerColor);
       canvas.drawPath(
         territory.boundary,
@@ -161,127 +187,19 @@ final class MapCityTerritoryLayerComponent extends Component
         _drawInsetWash(canvas, territory, style);
       }
     }
-    for (final territory in _territories) {
+    for (final territory in visible) {
       if (territory.selected) continue;
       _drawBorder(canvas, territory);
     }
     if (_strategicView) {
-      for (final territory in _territories) {
+      for (final territory in visible) {
         _drawStrategicCenter(canvas, territory);
       }
     }
     final selected = _selectedTerritory;
     if (selected == null) return;
     _drawMapDimming(canvas);
-    _drawSelectedBorder(canvas, selected);
-  }
-
-  MapCityTerritoryStyle _styleFor(ui.Color color) {
-    final key = (colorValue: color.toARGB32(), strategic: _strategicView);
-    return _styleCache.putIfAbsent(
-      key,
-      () => MapCityTerritoryStyle(color, strategicView: _strategicView),
-    );
-  }
-
-  void _drawInsetWash(
-    ui.Canvas canvas,
-    _MapCityTerritory territory,
-    MapCityTerritoryStyle style,
-  ) {
-    canvas
-      ..save()
-      ..clipPath(territory.boundary, doAntiAlias: true)
-      ..drawPath(
-        territory.boundary,
-        territory.empireHighlighted
-            ? style.selectedInsetWashPaint
-            : style.insetWashPaint,
-      )
-      ..restore();
-  }
-
-  void _drawBorder(ui.Canvas canvas, _MapCityTerritory territory) {
-    final style = _styleFor(territory.playerColor);
-    if (!_strategicView) {
-      final glow = style.edgeGlowPaint(
-        empireHighlighted: territory.empireHighlighted,
-        zoomEmphasis: _zoomEmphasis,
-      );
-      if (_zoomEmphasis >= 0.5) glow.maskFilter = null;
-      canvas
-        ..drawPath(territory.boundary, glow)
-        ..drawPath(
-          territory.boundary,
-          style.edgeBandPaint(
-            empireHighlighted: territory.empireHighlighted,
-            zoomEmphasis: _zoomEmphasis,
-          ),
-        );
-    } else {
-      canvas.drawPath(territory.boundary, style.borderGlowPaint);
-    }
-    canvas
-      ..drawPath(territory.boundary, style.outerBorderPaint)
-      ..drawPath(territory.boundary, style.solidBorderPaint)
-      ..drawPath(territory.boundary, style.atlasInkBorderPaint)
-      ..drawPath(
-        territory.boundary,
-        style.innerBorderHighlightPaint(_zoomEmphasis),
-      );
-  }
-
-  void _drawStrategicCenter(ui.Canvas canvas, _MapCityTerritory territory) {
-    final style = _styleFor(territory.playerColor);
-    final center = territory.centerPath.getBounds().center;
-    canvas
-      ..drawPath(territory.centerPath, style.strategicCenterGlowPaint)
-      ..drawPath(territory.centerPath, mapCityTerritoryCenterFillPaint)
-      ..drawPath(territory.centerPath, mapCityTerritoryCenterBorderPaint)
-      ..drawPath(territory.centerPath, style.strategicCenterInnerPaint);
-    _drawCityGlyph(canvas, center);
-  }
-
-  void _drawMapDimming(ui.Canvas canvas) {
-    final path = ui.Path()
-      ..fillType = ui.PathFillType.evenOdd
-      ..addRect(const ui.Rect.fromLTRB(-100000, -100000, 100000, 100000));
-    for (final territory in _territories) {
-      if (territory.empireHighlighted) {
-        path.addPath(territory.boundary, ui.Offset.zero);
-      }
-    }
-    canvas.drawPath(path, mapCityTerritoryDimmingPaint);
-  }
-
-  void _drawSelectedBorder(ui.Canvas canvas, _MapCityTerritory territory) {
-    final style = _styleFor(territory.playerColor);
-    _drawDashedPath(
-      canvas,
-      territory.boundary,
-      style.selectedBorderGlowPaint(_zoomEmphasis),
-    );
-    _drawDashedPath(
-      canvas,
-      territory.boundary,
-      style.selectedBorderBackingPaint,
-    );
-    _drawDashedPath(
-      canvas,
-      territory.boundary,
-      style.selectedPlayerBorderPaint(_zoomEmphasis),
-    );
-  }
-
-  void _drawDashedPath(ui.Canvas canvas, ui.Path path, ui.Paint paint) {
-    for (final metric in path.computeMetrics()) {
-      var distance = 0.0;
-      while (distance < metric.length) {
-        final end = (distance + 12).clamp(0.0, metric.length);
-        canvas.drawPath(metric.extractPath(distance, end), paint);
-        distance = end + 7;
-      }
-    }
+    if (selected.bounds.overlaps(clip)) _drawSelectedBorder(canvas, selected);
   }
 
   _MapCityTerritory? get _selectedTerritory {
@@ -360,7 +278,7 @@ final class MapCityTerritoryLayerComponent extends Component
 }
 
 final class _MapCityTerritory {
-  const _MapCityTerritory({
+  _MapCityTerritory({
     required this.city,
     required this.hexes,
     required this.boundary,
@@ -368,7 +286,10 @@ final class _MapCityTerritory {
     required this.playerColor,
     required this.selected,
     required this.empireHighlighted,
-  });
+  }) : bounds = boundary
+           .getBounds()
+           .expandToInclude(centerPath.getBounds())
+           .inflate(32);
 
   final CityView city;
   final List<MapHexCoordinate> hexes;
@@ -377,4 +298,5 @@ final class _MapCityTerritory {
   final ui.Color playerColor;
   final bool selected;
   final bool empireHighlighted;
+  final ui.Rect bounds;
 }

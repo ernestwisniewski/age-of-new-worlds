@@ -46,6 +46,7 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
 
   final _unitsById = <String, MapUnitComponent>{};
   final _visualOffsetsById = <String, ui.Offset>{};
+  final _shadows = MapSpriteShadowCache();
   var _createdCount = 0;
   var _updatedCount = 0;
   var _removedCount = 0;
@@ -108,7 +109,11 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
           visual.center - _center(cache, unit.coordinate);
       final existing = _unitsById[unit.id];
       if (existing == null) {
-        final component = MapUnitComponent._(unit: unit, visual: visual);
+        final component = MapUnitComponent._(
+          unit: unit,
+          visual: visual,
+          shadows: _shadows,
+        );
         _unitsById[unit.id] = component;
         add(component);
         _createdCount += 1;
@@ -130,7 +135,14 @@ final class MapUnitLayerComponent extends Component with HasVisibility {
     }
     _unitsById.clear();
     _visualOffsetsById.clear();
+    _shadows.clear();
     isVisible = false;
+  }
+
+  @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
   }
 
   ui.Offset centerFor(
@@ -232,8 +244,10 @@ final class MapUnitComponent extends PositionComponent
   MapUnitComponent._({
     required VisibleUnitView unit,
     required _MapUnitVisualState visual,
+    required MapSpriteShadowCache shadows,
   }) : _unit = unit,
        _visual = visual,
+       _shadows = shadows,
        super(
          position: Vector2(visual.center.dx, visual.center.dy),
          size: Vector2.all(_diameter),
@@ -247,6 +261,7 @@ final class MapUnitComponent extends PositionComponent
 
   VisibleUnitView _unit;
   _MapUnitVisualState _visual;
+  final MapSpriteShadowCache _shadows;
   List<SpriteFrame> _frames = const [];
   var _frameIndex = 0;
   var _frameElapsed = 0.0;
@@ -328,7 +343,7 @@ final class MapUnitComponent extends PositionComponent
     if (!canvas.getLocalClipBounds().overlaps(_visualBounds)) return;
     _paintCount++;
     const center = ui.Offset(_diameter / 2, _diameter / 2);
-    MapSpriteShadow.paintUnit(
+    _shadows.paintUnit(
       canvas,
       center: center,
       compact: _visual.onCity || _visual.workBadgeLabel != null,

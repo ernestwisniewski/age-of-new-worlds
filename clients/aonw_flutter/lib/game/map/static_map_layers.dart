@@ -13,6 +13,8 @@ import '../../features/map/read_model/map_reference_bundle.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/map_view_mode.dart';
 
+part 'map_terrain_regions.dart';
+
 typedef MapStaticRenderIdentity = ({
   String mapId,
   String contentHash,
@@ -30,6 +32,7 @@ final class MapStaticRenderCache {
     required this.tilePaths,
     required this.elevationWallPaths,
     required this.terrainPaths,
+    required this.terrainRegions,
     required this.gridPath,
     required this.clipPath,
     required this.size,
@@ -67,6 +70,7 @@ final class MapStaticRenderCache {
       tilePaths: Map.unmodifiable(tilePaths),
       elevationWallPaths: elevationWallPaths,
       terrainPaths: Map.unmodifiable(terrainPaths),
+      terrainRegions: _buildTerrainRegions(map, tilePaths),
       gridPath: gridPath,
       clipPath: aonwProjectedMapClipPath(map, projection),
       size: ui.Size(
@@ -82,6 +86,7 @@ final class MapStaticRenderCache {
   final Map<MapHexCoordinate, ui.Path> tilePaths;
   final MapElevationWallPaths elevationWallPaths;
   final Map<MapTerrain, ui.Path> terrainPaths;
+  final List<MapTerrainRegion> terrainRegions;
   final ui.Path gridPath;
   final ui.Path clipPath;
   final ui.Size size;
@@ -106,6 +111,10 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   var _cacheUpdateCount = 0;
   var _elevationWallsVisible = false;
   var _viewMode = MapViewMode.graphic;
+  var _renderedRegionCount = 0;
+
+  @visibleForTesting
+  int get debugRenderedRegionCount => _renderedRegionCount;
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
@@ -150,6 +159,7 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
 
   @override
   void render(ui.Canvas canvas) {
+    _renderedRegionCount = 0;
     final cache = _cache;
     if (cache == null) return;
     if (_elevationWallsVisible) {
@@ -160,8 +170,17 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
       );
       canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
     }
-    for (final entry in cache.terrainPaths.entries) {
-      canvas.drawPath(entry.value, _paints[entry.key]!);
+    final clip = canvas.getLocalClipBounds();
+    for (final region in cache.terrainRegions) {
+      if (!region.bounds.overlaps(clip)) continue;
+      canvas.save();
+      canvas.clipRect(region.clip, doAntiAlias: false);
+      for (final terrain in cache.terrainPaths.keys) {
+        final path = region.paths[terrain];
+        if (path != null) canvas.drawPath(path, _paints[terrain]!);
+      }
+      canvas.restore();
+      _renderedRegionCount++;
     }
   }
 }
