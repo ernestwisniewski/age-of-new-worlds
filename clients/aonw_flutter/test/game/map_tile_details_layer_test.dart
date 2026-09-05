@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../support/map_test_fixture.dart';
 
 void main() {
-  test('matches legacy projected tile detail geometry', () {
+  test('matches projected tile detail geometry', () {
     const center = ui.Offset(100, 100);
     final terrain = MapTileDetailLayout.terrainIcons(
       center: center,

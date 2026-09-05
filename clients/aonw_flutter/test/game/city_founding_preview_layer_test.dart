@@ -12,7 +12,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'renders the animated recipient-safe legacy founding preview',
+    'renders the animated recipient-safe founding preview',
     AonwFlameGame.new,
     (game) async {
       final founder = testVisibleUnit(kind: VisibleUnitKind.settler);

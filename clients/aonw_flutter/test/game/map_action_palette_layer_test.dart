@@ -61,7 +61,7 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
-    'worker palette keeps legacy geometry and emits typed choices',
+    'worker palette keeps geometry and emits typed choices',
     AonwFlameGame.new,
     (game) async {
       final scene = testMapScene();

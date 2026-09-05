@@ -13,7 +13,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'renders recipient-safe legacy worked and expansion hex overlays',
+    'renders recipient-safe worked and expansion hex overlays',
     AonwFlameGame.new,
     (game) async {
       final city = testCityView();

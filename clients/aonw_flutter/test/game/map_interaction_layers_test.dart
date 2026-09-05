@@ -12,7 +12,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'uses legacy selected top face and intent-specific hover markers',
+    'uses selected top face and intent-specific hover markers',
     AonwFlameGame.new,
     (game) async {
       final scene = testMapScene(

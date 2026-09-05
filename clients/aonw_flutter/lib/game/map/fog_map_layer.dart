@@ -9,7 +9,7 @@ import '../../features/map/read_model/player_map_view.dart';
 import 'static_map_layers.dart';
 
 /// Recipient-safe fog rendered between map infrastructure and interaction
-/// overlays, matching the legacy Flame layer order.
+/// overlays, following the Flame layer order.
 final class MapFogLayerComponent extends Component with HasVisibility {
   MapFogLayerComponent() : super(priority: 27) {
     isVisible = false;

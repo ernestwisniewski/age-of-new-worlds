@@ -12,7 +12,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'batches connected legacy roads and joins visible city centers',
+    'batches connected roads and joins visible city centers',
     AonwFlameGame.new,
     (game) async {
       final city = testCityView(center: (col: 2, row: 0));

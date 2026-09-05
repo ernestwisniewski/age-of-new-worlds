@@ -21,7 +21,7 @@ void main() {
   final paletteIntents = <MapHexSelectionPaletteIntent>[];
   final hexIntents = <MapHexIntent>[];
   testWithGame<AonwFlameGame>(
-    'keeps legacy fan geometry and consumes target taps before the map',
+    'keeps fan geometry and consumes target taps before the map',
     () => AonwFlameGame(
       onHexSelectionPaletteIntent: paletteIntents.add,
       onHexIntent: hexIntents.add,

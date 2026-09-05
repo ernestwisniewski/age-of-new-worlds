@@ -14,7 +14,7 @@ import '../support/map_test_fixture.dart';
 
 void main() {
   testWithGame<AonwFlameGame>(
-    'keeps one marker while health selection and legacy status change',
+    'keeps one marker while health selection and status change',
     AonwFlameGame.new,
     (game) async {
       final working = testVisibleUnit(
@@ -71,7 +71,7 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
-    'places a city garrison and merchant on opposite legacy sides',
+    'places a city garrison and merchant on opposite sides',
     AonwFlameGame.new,
     (game) async {
       const center = (col: 1, row: 1);

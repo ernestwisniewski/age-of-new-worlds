@@ -12,19 +12,22 @@ void main() {
     await loader.load();
   });
 
-  test('renders accepted damage and city embers in the legacy style', () async {
-    final feedback = MapCombatFeedback();
-    addTearDown(feedback.dispose);
-    _start(feedback);
-    expect(feedback.labelCount, 2);
-    expect(feedback.particleCount, 34);
-    final image = await _render(feedback, 0.23);
-    await expectLater(
-      image,
-      matchesGoldenFile('goldens/map_combat_feedback.png'),
-    );
-    image.dispose();
-  });
+  test(
+    'renders accepted damage and city embers with readable damage labels',
+    () async {
+      final feedback = MapCombatFeedback();
+      addTearDown(feedback.dispose);
+      _start(feedback);
+      expect(feedback.labelCount, 2);
+      expect(feedback.particleCount, 34);
+      final image = await _render(feedback, 0.23);
+      await expectLater(
+        image,
+        matchesGoldenFile('goldens/map_combat_feedback.png'),
+      );
+      image.dispose();
+    },
+  );
 
   test(
     'reduced motion preserves readable static damage without particles',

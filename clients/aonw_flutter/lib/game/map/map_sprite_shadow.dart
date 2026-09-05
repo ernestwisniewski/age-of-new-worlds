@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-/// The three shared shadow passes used by legacy unit sprites and fallbacks.
+/// The three shared shadow passes used by unit sprites and fallbacks.
 abstract final class MapSpriteShadow {
   static final _castPaint = _paint(alpha: 34, blur: 7.4);
   static final _ambientPaint = _paint(alpha: 54, blur: 4.6);

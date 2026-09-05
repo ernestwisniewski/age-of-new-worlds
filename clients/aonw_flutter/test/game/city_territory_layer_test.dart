@@ -126,7 +126,7 @@ void main() {
     },
   );
 
-  test('matches legacy territory zoom emphasis thresholds', () {
+  test('matches territory zoom emphasis thresholds', () {
     final layer = AonwWorld().cityTerritoryLayer;
 
     expect(layer.setZoom(0.95), isFalse);

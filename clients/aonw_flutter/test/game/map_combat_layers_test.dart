@@ -64,7 +64,7 @@ void main() {
   );
 
   testWithGame<AonwFlameGame>(
-    'renders legacy threat colors trajectory and distinct combat alerts',
+    'renders threat colors trajectory and distinct combat alerts',
     AonwFlameGame.new,
     (game) async {
       final scene = _threatScene();
