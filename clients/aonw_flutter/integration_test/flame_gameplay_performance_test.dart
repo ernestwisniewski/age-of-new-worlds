@@ -17,6 +17,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'support/combat_performance_probe.dart';
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -128,6 +130,14 @@ void main() {
     // Stable marker copied into the reviewed Flame performance record.
     // ignore: avoid_print
     print('AONW_FLAME_GAMEPLAY_BASELINE ${jsonEncode(record)}');
+
+    await measureCombatFeedback(
+      binding,
+      tester,
+      game,
+      snapshot,
+      rssBefore: rssBefore,
+    );
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();

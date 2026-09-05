@@ -85,3 +85,12 @@ The committed records under `clients/aonw_flutter/performance/` state their
 device, workload, build mode, warm-up, percentiles, and resource budgets. Engine
 runtime latency must not be inferred from a frame golden, and renderer timing
 must not be inferred from a headless Rust benchmark.
+
+The Flame device test also saturates the four combat slots with eight damage
+labels and 136 city-hit particles on the 40×30 scene. It measures 60 consecutive
+engine frame timestamps after 12 warm-up frames. Effects run at 0.1 playback
+speed to keep all slots occupied during live device pumps; the measured window
+asserts the same occupancy at both ends. The combat record uses the same frame
+and 192 MiB total RSS limits as the static scene. It uses synthetic accepted
+combat evidence and excludes fog and HUD; it does not replace the full-scene
+parity gate.

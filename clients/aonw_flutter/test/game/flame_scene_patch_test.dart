@@ -135,6 +135,11 @@ void main() {
     expect(patch.combats.single.defender, (col: 1, row: 0));
     expect(patch.combats.single.revision, 1);
     expect(patch.combats.single.eventCount, 3);
+    expect(patch.combats.single.outgoingDamage, 4);
+    expect(patch.combats.single.retaliationDamage, 1);
+    expect(patch.combats.single.defenderKilled, isTrue);
+    expect(patch.combats.single.attackerKilled, isFalse);
+    expect(patch.combats.single.defenderIsCity, isFalse);
     expect(FlameScenePatch.between(null, after).combats, isEmpty);
     expect(FlameScenePatch.between(before, before).combats, isEmpty);
     expect(FlameScenePatch.between(after, after).combats, isEmpty);

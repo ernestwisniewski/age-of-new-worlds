@@ -1,5 +1,6 @@
 import '../../features/artifacts/read_model/artifact_view.dart';
 import '../../features/cities/read_model/city_view.dart';
+import '../../features/combat/read_model/combat_view.dart';
 import '../../features/map/presentation/map_render_snapshot.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
@@ -275,6 +276,12 @@ final class FlameScenePatch {
         defender: execution.preview.defenderCoordinate,
         revision: execution.revision,
         eventCount: execution.events.length,
+        outgoingDamage: execution.outcome.outgoingDamage,
+        retaliationDamage: execution.outcome.retaliationDamage,
+        attackerKilled: execution.outcome.attackerKilled,
+        defenderKilled: execution.outcome.defenderKilled,
+        defenderIsCity:
+            execution.preview.target.kind == CombatTargetKindView.city,
       ),
     ];
   }
@@ -420,12 +427,22 @@ final class FlameCombatTransition {
     required this.defender,
     required this.revision,
     required this.eventCount,
+    required this.outgoingDamage,
+    required this.retaliationDamage,
+    required this.attackerKilled,
+    required this.defenderKilled,
+    required this.defenderIsCity,
   });
 
   final MapHexCoordinate attacker;
   final MapHexCoordinate defender;
   final int revision;
   final int eventCount;
+  final int outgoingDamage;
+  final int retaliationDamage;
+  final bool attackerKilled;
+  final bool defenderKilled;
+  final bool defenderIsCity;
 }
 
 final class FlameUnitMovementTransition {

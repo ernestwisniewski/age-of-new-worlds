@@ -8,12 +8,18 @@ import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:aonw_flutter/game/presentation/flame_scene_patch.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/map_test_fixture.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(() async {
+    final loader = FontLoader('Lato')
+      ..addFont(rootBundle.load('assets/fonts/Lato-Bold.ttf'));
+    await loader.load();
+  });
   testWithGame<AonwFlameGame>(
     'counts authoritative threats and caches geometry across hover updates',
     AonwFlameGame.new,
@@ -66,6 +72,8 @@ void main() {
       await game.ready();
       game.replaceScene(_combatSnapshot(scene, 1));
       final effects = game.world.effectHost;
+      expect(effects.debugActiveDamageLabelCount, 2);
+      expect(effects.debugActiveParticleCount, 28);
       final cache = game.world.debugStaticRenderCache!;
       final start = cache.projection.hexTopFaceCenter((col: 0, row: 0));
       final end = cache.projection.hexTopFaceCenter((col: 1, row: 0));
@@ -116,6 +124,8 @@ void main() {
         effects.debugMaximumCombatEffectCount,
       );
       game.setReducedMotion(true);
+      expect(effects.debugActiveDamageLabelCount, 8);
+      expect(effects.debugActiveParticleCount, 0);
       expect(effects.debugCombatPulse, 0.55);
       effects.update(0.32);
       expect(effects.debugCombatPulse, 0.55);
@@ -126,6 +136,8 @@ void main() {
       expect(effects.debugActiveCombatEffectCount, 1);
       game.skipEffects();
       expect(effects.debugActiveEffectCount, 0);
+      expect(effects.debugActiveDamageLabelCount, 0);
+      expect(effects.debugActiveParticleCount, 0);
       expect(game.paused, isTrue);
     },
   );
