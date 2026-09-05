@@ -64,12 +64,16 @@ fn protocol_delivers_recipient_frames_for_ai_and_sequential_replay() {
     );
     let ClientResponseBodyDto::ReplayFrame {
         command: Some(command),
+        snapshot,
         ..
     } = success_body(&json)
     else {
         panic!("forward command");
     };
     assert_eq!(*command, commands[0]);
+    assert_eq!(snapshot.participants[0].id, "human");
+    assert_eq!(snapshot.victory.domination[0].player_id, "ai");
+    assert_eq!(snapshot.victory.domination[1].player_id, "human");
     assert_eq!(
         json,
         include_str!(concat!(

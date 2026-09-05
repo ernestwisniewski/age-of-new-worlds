@@ -75,16 +75,7 @@ pub(super) fn victory(value: &aonw_projection::PlayerVictoryView) -> PlayerVicto
             .iter()
             .map(|(player, score)| (player.as_str().to_owned(), *score))
             .collect(),
-        domination: value
-            .domination()
-            .iter()
-            .map(|progress| DominationVictoryProgressDto {
-                player_id: progress.player_id().as_str().to_owned(),
-                controlled_passable_hexes: progress.controlled_passable_hexes(),
-                total_passable_hexes: progress.total_passable_hexes(),
-                hold_turns: progress.hold_turns(),
-            })
-            .collect(),
+        domination: domination(value.domination()),
         own_cultural: CulturalVictoryProgressDto {
             unique_stored_artifacts: value.own_cultural().unique_stored_artifacts(),
             hold_turns: value.own_cultural().hold_turns(),
@@ -101,6 +92,22 @@ pub(super) fn victory(value: &aonw_projection::PlayerVictoryView) -> PlayerVicto
             })
             .collect(),
     }
+}
+
+fn domination(
+    progress: &[aonw_projection::PlayerDominationVictoryProgressView],
+) -> Vec<DominationVictoryProgressDto> {
+    let mut entries: Vec<_> = progress
+        .iter()
+        .map(|progress| DominationVictoryProgressDto {
+            player_id: progress.player_id().as_str().to_owned(),
+            controlled_passable_hexes: progress.controlled_passable_hexes(),
+            total_passable_hexes: progress.total_passable_hexes(),
+            hold_turns: progress.hold_turns(),
+        })
+        .collect();
+    entries.sort_unstable_by(|left, right| left.player_id.cmp(&right.player_id));
+    entries
 }
 
 pub(super) fn research(value: &aonw_projection::PlayerResearchView) -> PlayerResearchViewDto {
