@@ -26,6 +26,7 @@ import 'support/gameplay_performance_record.dart';
 import 'support/map_event_performance_probe.dart';
 import 'support/map_floating_text_performance_probe.dart';
 import 'support/movement_camera_performance_probe.dart';
+import 'support/route_performance_probe.dart';
 import 'support/unit_idle_presentation_probe.dart';
 
 void main() {
@@ -111,6 +112,13 @@ void main() {
     );
 
     await verifyUnitIdlePresentation(
+      binding,
+      tester,
+      game,
+      snapshot,
+      rssBefore: rssBefore,
+    );
+    await measurePlannedRoute(
       binding,
       tester,
       game,

@@ -3,17 +3,18 @@ part of 'aonw_flame_game.dart';
 extension AonwFlameGameCamera on AonwFlameGame {
   void _handleMapCameraTransform(MapCameraTransform transform) {
     world.cityProductionLayer.applyCamera(transform);
-    _synchronizeIdleViewport();
+    _synchronizeAnimatedViewport();
   }
 
-  void _synchronizeIdleViewport() => world.unitLayer.applyIdleViewport(
-    bounds: mapCamera.visibleWorldBounds,
-    zoom: mapCamera.zoom,
-  );
+  void _synchronizeAnimatedViewport() {
+    final bounds = mapCamera.visibleWorldBounds;
+    world.unitLayer.applyIdleViewport(bounds: bounds, zoom: mapCamera.zoom);
+    world.routeLayer.applyViewport(bounds);
+  }
 
   void setCinematicCamera(bool enabled) {
     if (_disposed || !mapCamera.setCinematicEnabled(enabled)) return;
-    _synchronizeIdleViewport();
+    _synchronizeAnimatedViewport();
     final hover = _lastHoverScreenPosition;
     if (_viewportActive && hover != null) {
       inputSurface.submitHover(Vector2(hover.x, hover.y));

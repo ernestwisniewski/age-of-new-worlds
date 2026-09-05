@@ -1646,6 +1646,12 @@ abstract class AonwLocalizations {
   /// **'Show unit idle animations'**
   String get showUnitIdleAnimations;
 
+  /// No description provided for @showRouteAnimations.
+  ///
+  /// In en, this message translates to:
+  /// **'Show planned route animations'**
+  String get showRouteAnimations;
+
   /// No description provided for @showCombatAnimations.
   ///
   /// In en, this message translates to:

@@ -14,6 +14,7 @@ final class ClientSettings {
     this.showUnitMovementAnimations = true,
     this.showCombatAnimations = true,
     this.showUnitIdleAnimations = true,
+    this.showRouteAnimations = true,
     this.focusOwnUnitMovement = true,
     this.followOwnUnitMovement = false,
     this.focusForeignUnitMovement = false,
@@ -40,6 +41,7 @@ final class ClientSettings {
   final bool showUnitMovementAnimations;
   final bool showCombatAnimations;
   final bool showUnitIdleAnimations;
+  final bool showRouteAnimations;
   final bool focusOwnUnitMovement;
   final bool followOwnUnitMovement;
   final bool focusForeignUnitMovement;
@@ -60,6 +62,7 @@ final class ClientSettings {
     bool? showUnitMovementAnimations,
     bool? showCombatAnimations,
     bool? showUnitIdleAnimations,
+    bool? showRouteAnimations,
     bool? focusOwnUnitMovement,
     bool? followOwnUnitMovement,
     bool? focusForeignUnitMovement,
@@ -81,6 +84,7 @@ final class ClientSettings {
     showCombatAnimations: showCombatAnimations ?? this.showCombatAnimations,
     showUnitIdleAnimations:
         showUnitIdleAnimations ?? this.showUnitIdleAnimations,
+    showRouteAnimations: showRouteAnimations ?? this.showRouteAnimations,
     focusOwnUnitMovement: focusOwnUnitMovement ?? this.focusOwnUnitMovement,
     followOwnUnitMovement: followOwnUnitMovement ?? this.followOwnUnitMovement,
     focusForeignUnitMovement:
@@ -102,12 +106,16 @@ final class ClientSettings {
       other.masterVolume == masterVolume &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
-      other.showUnitMovementAnimations == showUnitMovementAnimations &&
-      other.showCombatAnimations == showCombatAnimations &&
-      other.showUnitIdleAnimations == showUnitIdleAnimations &&
+      _sameAnimations(other) &&
       other.reducedMotion == reducedMotion &&
       other.highContrast == highContrast &&
       _sameMapDisplay(other);
+
+  bool _sameAnimations(ClientSettings other) =>
+      other.showUnitMovementAnimations == showUnitMovementAnimations &&
+      other.showCombatAnimations == showCombatAnimations &&
+      other.showUnitIdleAnimations == showUnitIdleAnimations &&
+      other.showRouteAnimations == showRouteAnimations;
 
   bool _sameCamera(ClientSettings other) =>
       other.smoothCameraMovement == smoothCameraMovement &&
@@ -133,6 +141,7 @@ final class ClientSettings {
     showUnitMovementAnimations,
     showCombatAnimations,
     showUnitIdleAnimations,
+    showRouteAnimations,
     focusOwnUnitMovement,
     followOwnUnitMovement,
     focusForeignUnitMovement,

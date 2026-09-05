@@ -51,15 +51,18 @@ void main() {
       expect(host.combatAnimationsEnabled, isFalse);
       expect(host.movementAnimationsEnabled, isTrue);
       expect(game.world.unitLayer.idleAnimationsEnabled, isTrue);
+      expect(game.world.routeLayer.animationsEnabled, isTrue);
       await settings.update(
         settings.settings.copyWith(
           showUnitMovementAnimations: false,
           showUnitIdleAnimations: false,
+          showRouteAnimations: false,
         ),
       );
       await tester.pump();
       expect(host.movementAnimationsEnabled, isFalse);
       expect(game.world.unitLayer.idleAnimationsEnabled, isFalse);
+      expect(game.world.routeLayer.animationsEnabled, isFalse);
       expect(host.combatAnimationsEnabled, isFalse);
       expect(game.world.debugSceneWriteCount, sceneWrites);
       expect(session.positions, isEmpty);
@@ -67,6 +70,7 @@ void main() {
       await tester.pump();
       expect(host.movementAnimationsEnabled, isTrue);
       expect(game.world.unitLayer.idleAnimationsEnabled, isTrue);
+      expect(game.world.routeLayer.animationsEnabled, isTrue);
       expect(host.combatAnimationsEnabled, isTrue);
     },
   );

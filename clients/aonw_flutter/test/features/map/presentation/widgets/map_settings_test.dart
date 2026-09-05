@@ -47,6 +47,7 @@ void main() {
         showMapGrid: true,
         showUnitMovementAnimations: false,
         showUnitIdleAnimations: false,
+        showRouteAnimations: false,
       ),
     );
     await tester.pump();
@@ -59,6 +60,7 @@ void main() {
     expect(host.combatAnimationsEnabled, isTrue);
     expect(host.debugReducedMotion, isFalse);
     expect(flameGame.world.unitLayer.idleAnimationsEnabled, isFalse);
+    expect(flameGame.world.routeLayer.animationsEnabled, isFalse);
 
     await settings.update(
       settings.settings.copyWith(showCombatAnimations: false),
@@ -73,5 +75,6 @@ void main() {
     expect(host.combatAnimationsEnabled, isTrue);
     expect(host.movementAnimationsEnabled, isTrue);
     expect(flameGame.world.unitLayer.idleAnimationsEnabled, isTrue);
+    expect(flameGame.world.routeLayer.animationsEnabled, isTrue);
   });
 }

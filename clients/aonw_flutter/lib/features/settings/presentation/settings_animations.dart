@@ -26,6 +26,14 @@ final class _AnimationSettings extends StatelessWidget {
             onChanged(settings.copyWith(showUnitMovementAnimations: value)),
       ),
       SwitchListTile.adaptive(
+        key: const ValueKey('route-animations-setting'),
+        contentPadding: EdgeInsets.zero,
+        title: Text(context.aonwL10n.showRouteAnimations),
+        value: settings.showRouteAnimations,
+        onChanged: (value) =>
+            onChanged(settings.copyWith(showRouteAnimations: value)),
+      ),
+      SwitchListTile.adaptive(
         key: const ValueKey('combat-animations-setting'),
         contentPadding: EdgeInsets.zero,
         title: Text(context.aonwL10n.showCombatAnimations),

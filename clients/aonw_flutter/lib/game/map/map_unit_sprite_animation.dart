@@ -123,7 +123,7 @@ final class MapUnitSpriteAnimation {
     _idlePauseRemaining = pause.isFinite ? pause.clamp(0, 1) : 0;
   }
 
-  void paint(ui.Canvas canvas, ui.Rect destination) {
+  void paint(ui.Canvas canvas, ui.Rect destination, {ui.Paint? paint}) {
     final current = frame;
     if (current == null) return;
     final geometry = _geometryFor(current, destination);
@@ -140,7 +140,7 @@ final class MapUnitSpriteAnimation {
         current.image,
         geometry.source,
         geometry.destination,
-        _paint,
+        paint ?? _paint,
       )
       ..restore();
   }

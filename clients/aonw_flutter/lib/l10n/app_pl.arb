@@ -276,6 +276,7 @@
   "animationSettings": "Animacje",
   "showUnitMovementAnimations": "Pokazuj animacje ruchu jednostki",
   "showUnitIdleAnimations": "Pokazuj animacje bezczynności",
+  "showRouteAnimations": "Pokazuj animacje wyznaczonej trasy",
   "showCombatAnimations": "Pokazuj animacje walki",
   "cinematicCamera": "Filmowa kamera",
   "smoothCameraMovement": "Płynny ruch kamery",

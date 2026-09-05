@@ -85,6 +85,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     this.world.effectHost.onActivityChanged = _handleEffectActivity;
     this.world.effectHost.onMovementStart = _startMovementCamera;
     this.world.unitLayer.onIdleFrame = _requestInputFrame;
+    this.world.routeLayer.onActivityChanged = _handleRouteActivity;
+    this.world.routeLayer.onFrameRequested = _requestInputFrame;
     this.world.cloudLayer.onActivityChanged = _handleCloudActivity;
     this.world.eraTintLayer.onActivityChanged = _handleEraTintActivity;
     this.world.eventFeedbackLayer.onActivityChanged =
@@ -111,6 +113,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   var _eraTintActive = false;
   var _eventFeedbackActive = false;
   var _productionActive = false;
+  var _routeActive = false;
   var _reducedMotion = false;
   var _smoothCameraMovement = true;
   var _cameraActive = false;
@@ -177,6 +180,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     world.cloudLayer.setViewportActive(active);
     world.cityProductionLayer.setViewportActive(active);
     world.unitLayer.setViewportActive(active);
+    world.routeLayer.setViewportActive(active);
     inputSurface.setEnabled(active);
     if (!active) {
       mapCamera.cancelMotion();
@@ -278,10 +282,9 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     if (_viewportActive &&
         (_continuousRendering ||
             _effectsActive ||
-            _cloudsActive ||
+            _hasAmbientAnimation ||
             _eraTintActive ||
             _eventFeedbackActive ||
-            _productionActive ||
             _cameraActive ||
             _foundingPreviewActive ||
             keyboardActive)) {

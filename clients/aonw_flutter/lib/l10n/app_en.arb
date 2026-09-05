@@ -369,6 +369,7 @@
   "animationSettings": "Animations",
   "showUnitMovementAnimations": "Show unit movement animations",
   "showUnitIdleAnimations": "Show unit idle animations",
+  "showRouteAnimations": "Show planned route animations",
   "showCombatAnimations": "Show combat animations",
   "cinematicCamera": "Cinematic camera",
   "smoothCameraMovement": "Smooth camera movement",

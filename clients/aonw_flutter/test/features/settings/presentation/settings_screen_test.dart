@@ -58,6 +58,7 @@ void main() {
       'unit-movement-animations-setting',
       'combat-animations-setting',
       'unit-idle-animations-setting',
+      'route-animations-setting',
       'map-grid-setting',
       'map-resource-icons-setting',
       'map-terrain-icons-setting',
@@ -82,6 +83,7 @@ void main() {
     expect(store.settings.showUnitMovementAnimations, isFalse);
     expect(store.settings.showCombatAnimations, isFalse);
     expect(store.settings.showUnitIdleAnimations, isFalse);
+    expect(store.settings.showRouteAnimations, isFalse);
     expect(store.settings.reducedMotion, isTrue);
     expect(store.settings.highContrast, isTrue);
     expect(store.settings.showMapGrid, isTrue);

@@ -165,7 +165,9 @@ void main() {
     expect(flameGame.world.unitLayer.debugUnitCount, 1);
 
     controller.select((col: 1, row: 0));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(flameGame.paused, isFalse);
 
     expect(find.byKey(const ValueKey('confirm-move')), findsOneWidget);
     expect(find.textContaining('Route: 4 movement units'), findsOneWidget);

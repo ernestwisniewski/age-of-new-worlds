@@ -33,6 +33,7 @@ final class SharedPreferencesClientSettingsStore
       'aonw.settings.showUnitMovementAnimations';
   static const _combatAnimationsKey = 'aonw.settings.showCombatAnimations';
   static const _idleAnimationsKey = 'aonw.settings.showUnitIdleAnimations';
+  static const _routeAnimationsKey = 'aonw.settings.showRouteAnimations';
 
   final SharedPreferencesAsync _preferences;
 
@@ -63,6 +64,7 @@ final class SharedPreferencesClientSettingsStore
       showUnitMovementAnimations: animations.movement,
       showCombatAnimations: animations.combat,
       showUnitIdleAnimations: animations.idle,
+      showRouteAnimations: animations.route,
       cinematicCamera: camera.cinematicCamera,
       focusOwnUnitMovement: camera.focusOwnUnitMovement,
       followOwnUnitMovement: camera.followOwnUnitMovement,
@@ -126,7 +128,11 @@ final class SharedPreferencesClientSettingsStore
     );
   }
 
-  Future<({bool movement, bool combat, bool idle})> _loadAnimations() async => (
+  Future<({bool movement, bool combat, bool idle, bool route})>
+  _loadAnimations() async => (
+    route:
+        await _preferences.getBool(_routeAnimationsKey) ??
+        ClientSettings.defaults.showRouteAnimations,
     idle:
         await _preferences.getBool(_idleAnimationsKey) ??
         ClientSettings.defaults.showUnitIdleAnimations,
@@ -139,6 +145,10 @@ final class SharedPreferencesClientSettingsStore
   );
 
   Future<void> _saveAnimations(ClientSettings settings) async {
+    await _preferences.setBool(
+      _routeAnimationsKey,
+      settings.showRouteAnimations,
+    );
     await _preferences.setBool(
       _idleAnimationsKey,
       settings.showUnitIdleAnimations,

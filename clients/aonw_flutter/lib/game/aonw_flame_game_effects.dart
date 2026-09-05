@@ -6,6 +6,9 @@ extension AonwFlameGameEffects on AonwFlameGame {
     return (_commandEffectsCompletion ??= Completer<void>()).future;
   }
 
+  bool get _hasAmbientAnimation =>
+      _cloudsActive || _productionActive || _routeActive;
+
   bool get _hasCommandEffects =>
       _effectsActive || _eventFeedbackActive || _eraTintActive || _cameraActive;
 
@@ -24,6 +27,7 @@ extension AonwFlameGameEffects on AonwFlameGame {
     mapCamera.setMotionEnabled(_smoothCameraMovement && !enabled);
     world.effectHost.setReducedMotion(enabled);
     world.unitLayer.setReducedMotion(enabled);
+    world.routeLayer.setReducedMotion(enabled);
     world.cloudLayer.setReducedMotion(enabled);
     world.eraTintLayer.setReducedMotion(enabled);
     world.eventFeedbackLayer.setReducedMotion(enabled);
@@ -42,6 +46,17 @@ extension AonwFlameGameEffects on AonwFlameGame {
   void setUnitIdleAnimations(bool enabled) {
     if (_disposed) return;
     world.unitLayer.setIdleAnimations(enabled);
+  }
+
+  void setRouteAnimations(bool enabled) {
+    if (_disposed) return;
+    world.routeLayer.setAnimations(enabled);
+  }
+
+  void _handleRouteActivity(bool active) {
+    if (_disposed || _routeActive == active) return;
+    _routeActive = active;
+    _synchronizeGameLoop();
   }
 
   void setCombatAnimations(bool enabled) {

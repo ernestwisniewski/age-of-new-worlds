@@ -102,6 +102,7 @@ void main() {
         ...MapSpriteCatalog.idleUnitFrames(VisibleUnitKind.commander),
       ]);
       await game.ready();
+      await game.world.routeLayer.debugLoadGhost();
       for (final unit in game.world.debugScene!.player.units) {
         await game.world.unitLayer.componentForUnit(unit.id)!.debugLoadSprite();
       }

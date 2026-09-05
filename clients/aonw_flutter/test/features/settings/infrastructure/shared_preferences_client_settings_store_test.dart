@@ -16,6 +16,7 @@ void main() {
       expect(settings.showUnitMovementAnimations, isTrue);
       expect(settings.showCombatAnimations, isTrue);
       expect(settings.showUnitIdleAnimations, isTrue);
+      expect(settings.showRouteAnimations, isTrue);
     },
   );
 
@@ -42,6 +43,37 @@ void main() {
     await store.save(ClientSettings.defaults);
     expect(await store.load(), ClientSettings.defaults);
   });
+
+  test(
+    'persists route animation independently across recreation and reset',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      for (final enabled in [false, true]) {
+        final settings = ClientSettings.defaults.copyWith(
+          showRouteAnimations: enabled,
+          showUnitMovementAnimations: false,
+          showUnitIdleAnimations: false,
+          reducedMotion: true,
+        );
+        await store.save(settings);
+        expect(
+          preferences.values['aonw.settings.showRouteAnimations'],
+          enabled,
+        );
+        final loaded = await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load();
+        expect(loaded, settings);
+        expect(loaded.hashCode, settings.hashCode);
+        expect(loaded, isNot(settings.copyWith(showRouteAnimations: !enabled)));
+      }
+      await store.save(ClientSettings.defaults);
+      expect(await store.load(), ClientSettings.defaults);
+    },
+  );
 
   test(
     'persists independent animation choices across store recreation and reset',
