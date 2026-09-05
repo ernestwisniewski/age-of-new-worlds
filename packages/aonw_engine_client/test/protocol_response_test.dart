@@ -127,7 +127,9 @@ void main() {
         'type': 'aiTurnAdvanced',
         'stamp': _stamp,
         'actorPlayerId': 'player-ai',
-        'executedCommands': 4,
+        'recipientPlayerId': 'player-1',
+        'executedCommands': 0,
+        'commands': [],
         'completedTurn': true,
       }): AonwAiTurnAdvancedResponse,
       _success({'type': 'sessionClosed'}): AonwSessionClosedResponse,
@@ -156,7 +158,9 @@ void main() {
         'type': 'replayFrame',
         'position': 2,
         'entryCount': 3,
+        'recipientPlayerId': 'player-1',
         'snapshot': _snapshot,
+        'command': null,
       }): AonwReplayFrameResponse,
     };
 

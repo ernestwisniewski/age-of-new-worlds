@@ -46,4 +46,4 @@ final class AonwNativeIdentity {
   bool get isCompatible => status == AonwNativeIdentityStatus.compatible;
 }
 
-const aonwClientApiVersion = 17;
+const aonwClientApiVersion = 18;

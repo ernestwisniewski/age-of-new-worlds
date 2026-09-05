@@ -1,4 +1,5 @@
 mod disclosure;
+mod protocol;
 mod replay;
 
 use std::collections::BTreeMap;
@@ -249,11 +250,12 @@ fn opened_with_visibility(visible: &[i32]) -> (MapDefinition, RulesetDefinition,
         "recipient-observation",
         GridLayout::OddQFlatTop,
         12,
-        1,
-        (0..12)
-            .map(|col| {
+        5,
+        (0..5)
+            .flat_map(|row| (0..12).map(move |col| (col, row)))
+            .map(|(col, row)| {
                 TileDefinition::try_new_for_simulation(
-                    HexCoord::new(col, 0),
+                    HexCoord::new(col, row),
                     vec![TerrainType::Grassland],
                     Vec::new(),
                     0,

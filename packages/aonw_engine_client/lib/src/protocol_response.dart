@@ -2,6 +2,7 @@ import 'package:aonw_engine_client/src/protocol_execution.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_map.dart';
 import 'package:aonw_engine_client/src/protocol_match.dart';
+import 'package:aonw_engine_client/src/protocol_observed_commands.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
 import 'package:aonw_engine_client/src/protocol_query.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
@@ -96,8 +97,10 @@ final class AonwAiTurnAdvancedResponse extends AonwClientResponseBody {
   const AonwAiTurnAdvancedResponse({
     required this.stamp,
     required this.actorPlayerId,
+    required this.recipientPlayerId,
     required this.executedCommands,
     required this.completedTurn,
+    required this.commands,
   });
 
   factory AonwAiTurnAdvancedResponse.fromJson(Map<String, Object?> value) {
@@ -105,28 +108,43 @@ final class AonwAiTurnAdvancedResponse extends AonwClientResponseBody {
       'type',
       'stamp',
       'actorPlayerId',
+      'recipientPlayerId',
       'executedCommands',
       'completedTurn',
+      'commands',
     }, 'AI turn advanced response');
     final completedTurn = value['completedTurn'];
     if (completedTurn is! bool) {
       throw const FormatException('Invalid AI turn completion flag.');
     }
+    final stamp = AonwSessionStamp.fromJson(value['stamp']);
+    final executedCommands = readUnsigned(
+      value['executedCommands'],
+      'AI executed command count',
+    );
     return AonwAiTurnAdvancedResponse(
-      stamp: AonwSessionStamp.fromJson(value['stamp']),
+      stamp: stamp,
       actorPlayerId: readString(value['actorPlayerId'], 'AI actor player id'),
-      executedCommands: readUnsigned(
-        value['executedCommands'],
-        'AI executed command count',
+      recipientPlayerId: readString(
+        value['recipientPlayerId'],
+        'AI observing player id',
       ),
+      executedCommands: executedCommands,
       completedTurn: completedTurn,
+      commands: readObservedCommands(
+        value['commands'],
+        executedCommands,
+        stamp,
+      ),
     );
   }
 
   final AonwSessionStamp stamp;
   final String actorPlayerId;
+  final String recipientPlayerId;
   final int executedCommands;
   final bool completedTurn;
+  final List<AonwCommandResult> commands;
 }
 
 final class AonwSessionClosedResponse extends AonwClientResponseBody {
@@ -278,7 +296,9 @@ final class AonwReplayFrameResponse extends AonwClientResponseBody {
   const AonwReplayFrameResponse({
     required this.position,
     required this.entryCount,
+    required this.recipientPlayerId,
     required this.snapshot,
+    required this.command,
   });
 
   factory AonwReplayFrameResponse.fromJson(Map<String, Object?> value) {
@@ -286,18 +306,34 @@ final class AonwReplayFrameResponse extends AonwClientResponseBody {
       'type',
       'position',
       'entryCount',
+      'recipientPlayerId',
       'snapshot',
+      'command',
     }, 'replay frame response');
+    final position = readUnsigned(value['position'], 'replay position');
+    final entryCount = readUnsigned(value['entryCount'], 'replay entry count');
+    final snapshot = AonwPlayerViewSnapshot.fromJson(value['snapshot']);
+    final command = value['command'] == null
+        ? null
+        : AonwCommandResult.fromJson(value['command']);
+    validateObservedReplay(position, entryCount, snapshot, command);
     return AonwReplayFrameResponse(
-      position: readUnsigned(value['position'], 'replay position'),
-      entryCount: readUnsigned(value['entryCount'], 'replay entry count'),
-      snapshot: AonwPlayerViewSnapshot.fromJson(value['snapshot']),
+      position: position,
+      entryCount: entryCount,
+      recipientPlayerId: readString(
+        value['recipientPlayerId'],
+        'replay recipient player id',
+      ),
+      snapshot: snapshot,
+      command: command,
     );
   }
 
   final int position;
   final int entryCount;
+  final String recipientPlayerId;
   final AonwPlayerViewSnapshot snapshot;
+  final AonwCommandResult? command;
 }
 
 final class AonwReplayVerification {

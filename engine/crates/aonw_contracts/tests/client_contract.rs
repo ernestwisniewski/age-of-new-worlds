@@ -24,6 +24,8 @@ mod diplomacy_contract;
 mod economy_contract;
 #[path = "client_contract/objective.rs"]
 mod objective_contract;
+#[path = "client_contract/observation.rs"]
+mod observation_contract;
 #[path = "client_contract/player_view_fixture.rs"]
 mod player_view_fixture;
 #[path = "client_contract/production.rs"]
@@ -468,11 +470,7 @@ fn remaining_response_variants() -> Vec<ClientResponseBodyDto> {
                 final_stamp: stamp(),
             },
         },
-        ClientResponseBodyDto::ReplayFrame {
-            position: 3,
-            entry_count: 4,
-            snapshot: player_snapshot(),
-        },
+        observation_contract::replay_response(),
     ]
 }
 

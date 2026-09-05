@@ -10,6 +10,7 @@ mod diplomacy;
 mod economy;
 mod event;
 mod logistics;
+mod observation;
 mod production;
 mod query;
 mod rejection;
@@ -123,10 +124,14 @@ pub enum ClientResponseBodyDto {
         stamp: ClientSessionStampDto,
         /// Participant controlled by the AI driver.
         actor_player_id: String,
+        /// Participant whose view and disclosure policy every command uses.
+        recipient_player_id: String,
         /// Number of authoritative commands executed.
         executed_commands: u32,
         /// Whether the planner completed the participant turn.
         completed_turn: bool,
+        /// Ordered recipient-safe results, including their view patches.
+        commands: Vec<ClientCommandResultDto>,
     },
     /// The local session was closed.
     SessionClosed,
@@ -175,8 +180,13 @@ pub enum ClientResponseBodyDto {
         position: u64,
         /// Total number of entries in the verified replay archive.
         entry_count: u64,
+        /// Participant whose projection this frame carries.
+        recipient_player_id: String,
         /// Recipient-safe snapshot at this exact entry boundary.
         snapshot: PlayerViewSnapshotDto,
+        /// Result of one forward entry; explicit null for open, repeat, or random seeks.
+        #[serde(deserialize_with = "Option::deserialize")]
+        command: Option<Box<ClientCommandResultDto>>,
     },
 }
 

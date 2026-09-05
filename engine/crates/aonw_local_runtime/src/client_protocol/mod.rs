@@ -283,12 +283,18 @@ fn dispatch_ai_turn(
     match aonw_domain::PlayerId::new(actor_player_id) {
         Ok(actor) => {
             let response_actor = actor.as_str().to_owned();
-            match runtime.advance_ai_turn(actor, command_budget, driver) {
-                Ok(execution) => success(ClientResponseBodyDto::AiTurnAdvanced {
-                    stamp: encode::stamp(execution.stamp),
+            match runtime.advance_ai_turn_observed(actor, command_budget, driver) {
+                Ok(observed) => success(ClientResponseBodyDto::AiTurnAdvanced {
+                    stamp: encode::stamp(observed.execution.stamp),
                     actor_player_id: response_actor,
-                    executed_commands: execution.executed_commands,
-                    completed_turn: execution.completed_turn,
+                    recipient_player_id: observed.recipient_player_id.as_str().to_owned(),
+                    executed_commands: observed.execution.executed_commands,
+                    completed_turn: observed.execution.completed_turn,
+                    commands: observed
+                        .commands
+                        .iter()
+                        .map(encode::command_result)
+                        .collect(),
                 }),
                 Err(error) => failure("ai_turn_failed", error),
             }
@@ -329,11 +335,7 @@ fn dispatch_persistence(
             recipient_player_id,
         ),
         ClientRequestBodyDto::SeekReplay { position } => match runtime.seek_replay(position) {
-            Ok(frame) => success(ClientResponseBodyDto::ReplayFrame {
-                position: frame.position,
-                entry_count: frame.entry_count,
-                snapshot: encode::snapshot(&frame.snapshot),
-            }),
+            Ok(frame) => success(encode::replay_frame(&frame)),
             Err(error) => failure("replay_seek_failed", error),
         },
         _ => unreachable!("only persistence requests are routed here"),
@@ -373,11 +375,7 @@ fn dispatch_open_replay(
             replay_document,
             recipient,
         ) {
-            Ok(frame) => success(ClientResponseBodyDto::ReplayFrame {
-                position: frame.position,
-                entry_count: frame.entry_count,
-                snapshot: encode::snapshot(&frame.snapshot),
-            }),
+            Ok(frame) => success(encode::replay_frame(&frame)),
             Err(error) => failure("replay_open_failed", error),
         },
         Err(error) => error.into_response(),

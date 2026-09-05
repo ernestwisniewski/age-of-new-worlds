@@ -18,7 +18,7 @@
   ],
   "automationTileBudget": 1200,
   "automationLegalityBudget": 24000,
-  "clientApiVersion": 17,
+  "clientApiVersion": 18,
   "cases": [
     "all-seven-command-revision-precedence",
     "assignment-capacity",

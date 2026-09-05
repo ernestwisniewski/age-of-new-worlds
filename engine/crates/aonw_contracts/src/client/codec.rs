@@ -26,6 +26,8 @@ pub enum ClientCodecError {
     },
     /// JSON violates the strict protocol contract.
     Json(serde_json::Error),
+    /// Observed command frames violate their count, identity, or revision boundaries.
+    InvalidObservation,
 }
 
 impl core::fmt::Display for ClientCodecError {
@@ -42,6 +44,7 @@ impl core::fmt::Display for ClientCodecError {
                 "unsupported client API version {found}; expected {supported}"
             ),
             Self::Json(source) => source.fmt(formatter),
+            Self::InvalidObservation => formatter.write_str("invalid observed command frames"),
         }
     }
 }
@@ -80,6 +83,7 @@ impl ClientResponseDto {
     pub fn from_json(input: &str) -> Result<Self, ClientCodecError> {
         let response: Self = parse_bounded(input, MAX_CLIENT_RESPONSE_JSON_BYTES)?;
         require_supported_version(response.api_version)?;
+        response.validate_observation()?;
         Ok(response)
     }
 
@@ -90,6 +94,7 @@ impl ClientResponseDto {
     /// Returns an error for a foreign version or oversized output.
     pub fn to_json(&self) -> Result<String, ClientCodecError> {
         require_supported_version(self.api_version)?;
+        self.validate_observation()?;
         serialize_bounded(self, MAX_CLIENT_RESPONSE_JSON_BYTES)
     }
 }

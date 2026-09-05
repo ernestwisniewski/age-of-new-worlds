@@ -2,7 +2,9 @@ use aonw_contract_mapping::{
     encode_client_event, encode_command_rejection, encode_player_view_patch,
     encode_recipient_evidence,
 };
-use aonw_contracts::client::{ClientCommandOutcomeDto, ClientCommandResultDto};
+use aonw_contracts::client::{
+    ClientCommandOutcomeDto, ClientCommandResultDto, ClientResponseBodyDto,
+};
 
 use crate::CommandResult;
 
@@ -25,6 +27,19 @@ pub(super) use query::query_result;
 #[cfg(test)]
 use query::{merchant_destination, movement_metrics};
 pub(super) use simple::replay_verification;
+
+pub(super) fn replay_frame(value: &crate::ReplayFrame) -> ClientResponseBodyDto {
+    ClientResponseBodyDto::ReplayFrame {
+        position: value.position,
+        entry_count: value.entry_count,
+        recipient_player_id: value.snapshot.recipient_player_id().as_str().to_owned(),
+        snapshot: snapshot(&value.snapshot),
+        command: value
+            .command
+            .as_ref()
+            .map(|value| Box::new(command_result(value))),
+    }
+}
 
 pub(crate) fn command_result(value: &CommandResult) -> ClientCommandResultDto {
     ClientCommandResultDto {
