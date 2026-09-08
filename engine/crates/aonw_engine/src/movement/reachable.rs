@@ -64,6 +64,8 @@ pub struct ReachableMovement {
     revision: u64,
     unit_id: UnitId,
     available_movement: MovementUnits,
+    can_start_targeting: bool,
+    can_retain_targeting: bool,
     tiles: Box<[ReachableMovementTile]>,
     search_metrics: MovementSearchMetrics,
 }
@@ -85,6 +87,18 @@ impl ReachableMovement {
     #[must_use]
     pub const fn available_movement(&self) -> MovementUnits {
         self.available_movement
+    }
+
+    /// Returns whether the unit can enter a new manual targeting session.
+    #[must_use]
+    pub const fn can_start_targeting(&self) -> bool {
+        self.can_start_targeting
+    }
+
+    /// Returns whether an existing manual targeting session remains meaningful.
+    #[must_use]
+    pub const fn can_retain_targeting(&self) -> bool {
+        self.can_retain_targeting
     }
 
     /// Returns reachable tiles in stable row-major order.
@@ -170,10 +184,17 @@ pub(crate) fn find_reachable_tiles_with_workspace(
         })
         .collect::<Vec<_>>()
         .into_boxed_slice();
+    let can_retain_targeting = unit.queued_path().is_none()
+        && !matches!(
+            unit.posture(),
+            UnitPosture::AutoExploring | UnitPosture::AutoWorking
+        );
     Ok(ReachableMovement {
         revision: state.revision().get(),
         unit_id: unit.id().clone(),
         available_movement: available,
+        can_start_targeting: can_retain_targeting && available.get() > 0,
+        can_retain_targeting,
         tiles,
         search_metrics,
     })

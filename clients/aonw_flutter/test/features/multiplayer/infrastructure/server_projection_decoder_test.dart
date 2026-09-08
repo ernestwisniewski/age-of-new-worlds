@@ -72,6 +72,8 @@ void main() {
             'status': 'success',
             'result': {
               'type': 'reachable',
+              'canStartTargeting': true,
+              'canRetainTargeting': true,
               'stamp': _stamp(7),
               'unitId': 'unit-1',
               'availableMovementUnits': 2,

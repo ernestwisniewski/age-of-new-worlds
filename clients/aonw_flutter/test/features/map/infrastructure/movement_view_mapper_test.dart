@@ -7,11 +7,40 @@ import '../../../support/map_test_fixture.dart';
 void main() {
   const mapper = MovementViewMapper();
 
+  test(
+    'preserves engine targeting availability independently of reachable tiles',
+    () {
+      for (final availability in [
+        (true, true),
+        (false, true),
+        (false, false),
+      ]) {
+        final reachable = mapper.reachable(
+          AonwReachableResult(
+            stamp: _stamp(),
+            unitId: 'preview-commander',
+            availableMovementUnits: 0,
+            canStartTargeting: availability.$1,
+            canRetainTargeting: availability.$2,
+            tiles: const [],
+          ),
+          map: testMapScene().map,
+          expectedUnitId: 'preview-commander',
+          expectedRevision: 0,
+        );
+        expect(reachable.canStartTargeting, availability.$1);
+        expect(reachable.canRetainTargeting, availability.$2);
+      }
+    },
+  );
+
   test('maps stable reachable tiles and a complete route', () {
     final map = testMapScene().map;
     final unit = testVisibleUnit();
     final reachable = mapper.reachable(
       AonwReachableResult(
+        canStartTargeting: true,
+        canRetainTargeting: true,
         stamp: _stamp(),
         unitId: unit.id,
         availableMovementUnits: 12,
@@ -75,6 +104,8 @@ void main() {
     expect(
       () => mapper.reachable(
         AonwReachableResult(
+          canStartTargeting: true,
+          canRetainTargeting: true,
           stamp: _stamp(revision: 1),
           unitId: unit.id,
           availableMovementUnits: 12,

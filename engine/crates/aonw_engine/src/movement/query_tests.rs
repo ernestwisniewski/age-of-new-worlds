@@ -431,3 +431,6 @@ fn reachable_query_performs_one_bounded_row_major_search() {
     assert_eq!(reachable.tiles()[0].cost(), MovementUnits::new(4));
     assert!(reachable.tiles()[0].exhausts_movement());
 }
+
+#[path = "query_tests/targeting.rs"]
+mod targeting;

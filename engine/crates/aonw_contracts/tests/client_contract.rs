@@ -404,6 +404,8 @@ fn core_response_variants() -> Vec<ClientResponseBodyDto> {
                 stamp: query_stamp.clone(),
                 unit_id: "unit-1".to_owned(),
                 available_movement_units: 8,
+                can_start_targeting: true,
+                can_retain_targeting: true,
                 tiles: vec![ReachableTileViewDto {
                     coordinate: coordinate(4, 4),
                     cost_units: 2,

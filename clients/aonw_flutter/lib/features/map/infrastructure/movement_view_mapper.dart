@@ -43,6 +43,8 @@ final class MovementViewMapper {
       stamp: _stamp(wire.stamp),
       unitId: wire.unitId,
       availableMovementUnits: wire.availableMovementUnits,
+      canStartTargeting: wire.canStartTargeting,
+      canRetainTargeting: wire.canRetainTargeting,
       tiles: tiles,
     );
   }

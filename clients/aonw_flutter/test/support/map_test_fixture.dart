@@ -36,6 +36,7 @@ part 'game_session_capabilities_test_fixture.dart';
 part 'local_game_test_fixture.dart';
 part 'map_combat_test_fixture.dart';
 part 'map_unit_test_fixture.dart';
+part 'map_movement_test_fixture.dart';
 
 typedef ProductionOverviewFixture = ({
   ProductionOptionsView options,
@@ -175,21 +176,6 @@ SessionStampView testSessionStamp({int revision = 0, String? stateDigest}) =>
       rulesetHash: 'c' * 64,
     );
 
-ReachableView testReachableView({
-  String unitId = 'preview-commander',
-  List<ReachableTileView> tiles = const [
-    ReachableTileView(
-      coordinate: (col: 1, row: 0),
-      costUnits: 4,
-      exhaustsMovement: false,
-    ),
-  ],
-}) => ReachableView(
-  stamp: testSessionStamp(),
-  unitId: unitId,
-  availableMovementUnits: 12,
-  tiles: tiles,
-);
 RoutePlanView testRoutePlanView({
   String unitId = 'preview-commander',
   MapHexCoordinate origin = (col: 0, row: 0),

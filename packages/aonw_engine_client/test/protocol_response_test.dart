@@ -285,12 +285,41 @@ void main() {
     );
   });
 
+  test('requires explicit booleans for manual targeting availability', () {
+    final base = <String, Object?>{
+      'type': 'reachable',
+      'stamp': _stamp,
+      'unitId': 'unit-1',
+      'availableMovementUnits': 0,
+      'tiles': <Object?>[],
+      'canStartTargeting': false,
+      'canRetainTargeting': true,
+    };
+    final exhausted = AonwReachableResult.fromJson(base);
+    expect(exhausted.canStartTargeting, isFalse);
+    expect(exhausted.canRetainTargeting, isTrue);
+    for (final field in ['canStartTargeting', 'canRetainTargeting']) {
+      expect(
+        () => AonwReachableResult.fromJson({...base}..remove(field)),
+        throwsFormatException,
+      );
+      for (final invalid in [null, 0, 'true']) {
+        expect(
+          () => AonwReachableResult.fromJson({...base, field: invalid}),
+          throwsFormatException,
+        );
+      }
+    }
+  });
+
   test('typed parser covers both movement query results', () {
     final reachable = AonwClientResponse.parse(
       _success({
         'type': 'query',
         'result': {
           'type': 'reachable',
+          'canStartTargeting': true,
+          'canRetainTargeting': true,
           'stamp': _stamp,
           'unitId': 'unit-1',
           'availableMovementUnits': 4,

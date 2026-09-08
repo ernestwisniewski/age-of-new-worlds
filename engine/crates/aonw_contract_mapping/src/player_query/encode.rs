@@ -41,6 +41,8 @@ pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQu
             stamp: encode_client_stamp(stamp),
             unit_id: result.unit_id().as_str().to_owned(),
             available_movement_units: result.available_movement().get(),
+            can_start_targeting: result.can_start_targeting(),
+            can_retain_targeting: result.can_retain_targeting(),
             tiles: result
                 .tiles()
                 .iter()

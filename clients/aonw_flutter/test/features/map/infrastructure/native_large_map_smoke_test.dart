@@ -82,6 +82,8 @@ void main() {
       ),
     ]);
     final reachable = reachableResponses.first;
+    expect(reachable.canStartTargeting, isTrue);
+    expect(reachable.canRetainTargeting, isTrue);
     expect(reachable, isNotNull);
     expect(reachable.tiles, isNotEmpty);
     expect(backend.maximumInFlightRequests, 1);

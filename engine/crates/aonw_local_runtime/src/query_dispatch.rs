@@ -8,10 +8,12 @@ use aonw_engine::{
 };
 
 mod logistics;
+mod movement;
 mod read_models;
 mod worker;
 
 use logistics::dispatch_logistics_query;
+pub use movement::{MovementStepView, ReachableResult, ReachableTileView, RoutePlanResult};
 pub use read_models::{
     CityYieldRequest, CombatPreviewRequest, ProductionOptionsRequest,
     StrategicResourceProjectionRequest,
@@ -124,64 +126,6 @@ pub enum RuntimeQuery {
     RoutePlan(RoutePlanRequest),
     /// Auto-exploration, merchant, and detachment options.
     UnitLogisticsOptions(UnitLogisticsOptionsRequest),
-}
-
-/// One reachable tile.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct ReachableTileView {
-    /// Tile coordinate.
-    pub coordinate: HexCoord,
-    /// Fixed-point path cost.
-    pub cost: MovementUnits,
-    /// Whether entering consumes the remaining current-turn movement.
-    pub exhausts_movement: bool,
-}
-
-/// Reachable-overlay response.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ReachableResult {
-    /// Version and authoritative identity metadata.
-    pub stamp: SessionStamp,
-    /// Queried unit.
-    pub unit_id: UnitId,
-    /// Movement available at query time.
-    pub available_movement: MovementUnits,
-    /// Stable row-major reachable tiles.
-    pub tiles: Box<[ReachableTileView]>,
-}
-
-/// One route step including the zero-cost origin.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct MovementStepView {
-    /// Step coordinate.
-    pub coordinate: HexCoord,
-    /// Entry cost.
-    pub enter_cost: MovementUnits,
-    /// Cumulative route cost.
-    pub cumulative_cost: MovementUnits,
-}
-
-/// Route-preview response.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct RoutePlanResult {
-    /// Version and authoritative identity metadata.
-    pub stamp: SessionStamp,
-    /// Queried unit.
-    pub unit_id: UnitId,
-    /// Requested target.
-    pub target: HexCoord,
-    /// Planned destination, which can be an approach coordinate.
-    pub destination: HexCoord,
-    /// Total complete-route cost.
-    pub total_cost: MovementUnits,
-    /// Current-turn movement available.
-    pub available_movement: MovementUnits,
-    /// Current-turn movement remaining after the executable prefix.
-    pub remaining_movement: MovementUnits,
-    /// Calendar turns needed by the complete route.
-    pub estimated_turns: u32,
-    /// Ordered route including the origin.
-    pub steps: Box<[MovementStepView]>,
 }
 
 /// Engine-selected auto-exploration action.
@@ -351,6 +295,8 @@ pub(crate) fn dispatch_query(
                 stamp: session.stamp(),
                 unit_id: result.unit_id().clone(),
                 available_movement: result.available_movement(),
+                can_start_targeting: result.can_start_targeting(),
+                can_retain_targeting: result.can_retain_targeting(),
                 tiles: result
                     .tiles()
                     .iter()

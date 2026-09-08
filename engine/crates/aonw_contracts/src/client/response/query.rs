@@ -245,6 +245,10 @@ pub enum ClientQueryResultDto {
         unit_id: String,
         /// Movement available at query time.
         available_movement_units: u32,
+        /// Whether a new manual targeting session may start.
+        can_start_targeting: bool,
+        /// Whether an existing manual targeting session may continue.
+        can_retain_targeting: bool,
         /// Stable row-major reachable tiles.
         tiles: Vec<ReachableTileViewDto>,
     },

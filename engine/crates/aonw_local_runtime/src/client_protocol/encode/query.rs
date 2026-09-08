@@ -64,6 +64,8 @@ pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
             stamp: encode_client_stamp(value.stamp),
             unit_id: value.unit_id.as_str().to_owned(),
             available_movement_units: value.available_movement.get(),
+            can_start_targeting: value.can_start_targeting,
+            can_retain_targeting: value.can_retain_targeting,
             tiles: value
                 .tiles
                 .iter()

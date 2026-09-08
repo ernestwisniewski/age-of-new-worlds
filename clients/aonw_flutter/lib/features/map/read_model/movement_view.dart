@@ -18,6 +18,8 @@ final class ReachableView {
     required this.stamp,
     required this.unitId,
     required this.availableMovementUnits,
+    required this.canStartTargeting,
+    required this.canRetainTargeting,
     required List<ReachableTileView> tiles,
   }) : tiles = List.unmodifiable(tiles),
        _tilesByCoordinate = Map.unmodifiable({
@@ -27,6 +29,8 @@ final class ReachableView {
   final SessionStampView stamp;
   final String unitId;
   final int availableMovementUnits;
+  final bool canStartTargeting;
+  final bool canRetainTargeting;
   final List<ReachableTileView> tiles;
   final Map<MapHexCoordinate, ReachableTileView> _tilesByCoordinate;
 

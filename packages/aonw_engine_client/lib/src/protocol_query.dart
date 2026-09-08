@@ -226,6 +226,8 @@ final class AonwReachableResult extends AonwQueryResult {
     required this.stamp,
     required this.unitId,
     required this.availableMovementUnits,
+    required this.canStartTargeting,
+    required this.canRetainTargeting,
     required this.tiles,
   });
 
@@ -235,6 +237,8 @@ final class AonwReachableResult extends AonwQueryResult {
       'stamp',
       'unitId',
       'availableMovementUnits',
+      'canStartTargeting',
+      'canRetainTargeting',
       'tiles',
     }, 'reachable result');
     return AonwReachableResult(
@@ -243,6 +247,14 @@ final class AonwReachableResult extends AonwQueryResult {
       availableMovementUnits: readUnsigned(
         value['availableMovementUnits'],
         'available movement',
+      ),
+      canStartTargeting: readBool(
+        value['canStartTargeting'],
+        'can start targeting',
+      ),
+      canRetainTargeting: readBool(
+        value['canRetainTargeting'],
+        'can retain targeting',
       ),
       tiles: readList(
         value['tiles'],
@@ -255,6 +267,8 @@ final class AonwReachableResult extends AonwQueryResult {
   final AonwSessionStamp stamp;
   final String unitId;
   final int availableMovementUnits;
+  final bool canStartTargeting;
+  final bool canRetainTargeting;
   final List<AonwReachableTile> tiles;
 }
 
