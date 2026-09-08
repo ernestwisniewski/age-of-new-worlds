@@ -13,6 +13,7 @@ mod context;
 mod diplomacy;
 mod diplomacy_policy;
 mod economy;
+mod hex_inspection;
 mod match_start;
 mod movement;
 mod outcome;
@@ -72,6 +73,10 @@ pub use economy::{
     CityYieldQuery, EconomyForecast, EconomyForecastQuery, EconomyQueryError, StabilityBreakdown,
     StrategicResourceProjection, StrategicResourceProjectionQuery, StrategicResourceSource,
     UnitUpkeepBreakdown, UnitUpkeepSource, WealthProjectGoldIncomeSource, YieldValue,
+};
+pub use hex_inspection::{
+    HexAssessmentKind, HexAssessmentScore, HexAssessmentTag, HexImprovementAccess,
+    HexImprovementOption, HexInspection, HexInspectionError, HexInspectionQuery, HexRecommendation,
 };
 pub use match_start::{MatchStartError, start_match};
 pub use movement::{

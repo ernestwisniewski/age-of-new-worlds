@@ -422,7 +422,7 @@ const fn artifact_type_yield(artifact: WorldArtifactType) -> YieldValue {
     }
 }
 
-const fn from_content(value: EconomyYield) -> YieldValue {
+pub(crate) const fn from_content(value: EconomyYield) -> YieldValue {
     YieldValue::new(
         value.food(),
         value.production(),
@@ -431,7 +431,10 @@ const fn from_content(value: EconomyYield) -> YieldValue {
     )
 }
 
-fn checked_add(left: YieldValue, right: YieldValue) -> Result<YieldValue, EconomyQueryError> {
+pub(crate) fn checked_add(
+    left: YieldValue,
+    right: YieldValue,
+) -> Result<YieldValue, EconomyQueryError> {
     Ok(YieldValue::new(
         left.food
             .checked_add(right.food)
