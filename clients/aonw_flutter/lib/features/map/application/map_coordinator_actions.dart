@@ -222,8 +222,33 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
+  void setWorkerActionsOpen(bool open) {
+    final current = _availableSelectionState();
+    final unitId = current?.interaction.selectedUnitId;
+    if (unitId == null) return;
+    _workers.setActionsOpen(
+      unitId: unitId,
+      open: open,
+      readState: () => _state,
+      publish: _setState,
+    );
+  }
+
+  void previewWorkerImprovement(
+    String unitId,
+    FieldImprovementKind improvement,
+  ) {
+    if (_availableSelectionState() == null) return;
+    _workers.previewImprovement(
+      unitId: unitId,
+      improvement: improvement,
+      readState: () => _state,
+      publish: _setState,
+    );
+  }
+
   void executeWorkerAction(WorkerActionView action) {
-    if (!_gameplayActive()) return;
+    if (_availableSelectionState() == null) return;
     _workers.execute(
       action: action,
       readState: () => _state,

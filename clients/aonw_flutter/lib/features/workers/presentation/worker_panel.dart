@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
@@ -8,11 +9,14 @@ import '../application/worker_state.dart';
 import '../read_model/worker_view.dart';
 import 'worker_copy.dart';
 
+part 'worker_improvement_selection.dart';
+
 final class WorkerPanel extends StatelessWidget {
   const WorkerPanel({
     required this.state,
     required this.unit,
-    required this.pendingAction,
+    required this.onOpenChanged,
+    required this.onPreview,
     required this.onAction,
     this.enabled = true,
     super.key,
@@ -20,7 +24,8 @@ final class WorkerPanel extends StatelessWidget {
 
   final WorkerState state;
   final VisibleUnitView unit;
-  final PendingWorkerActionSelectionView? pendingAction;
+  final ValueChanged<bool> onOpenChanged;
+  final ValueChanged<FieldImprovementKind> onPreview;
   final ValueChanged<WorkerActionView> onAction;
   final bool enabled;
 
@@ -56,7 +61,9 @@ final class WorkerPanel extends StatelessWidget {
             _WorkerActions(
               options: options,
               unit: unit,
-              pendingAction: pendingAction,
+              state: state,
+              onOpenChanged: onOpenChanged,
+              onPreview: onPreview,
               enabled: acceptsInput,
               onAction: onAction,
             ),
@@ -102,15 +109,19 @@ final class _WorkerJobProgress extends StatelessWidget {
 final class _WorkerActions extends StatelessWidget {
   const _WorkerActions({
     required this.options,
+    required this.state,
     required this.unit,
-    required this.pendingAction,
+    required this.onOpenChanged,
+    required this.onPreview,
     required this.enabled,
     required this.onAction,
   });
 
   final WorkerOptionsView options;
+  final WorkerState state;
   final VisibleUnitView unit;
-  final PendingWorkerActionSelectionView? pendingAction;
+  final ValueChanged<bool> onOpenChanged;
+  final ValueChanged<FieldImprovementKind> onPreview;
   final bool enabled;
   final ValueChanged<WorkerActionView> onAction;
 
@@ -133,30 +144,17 @@ final class _WorkerActions extends StatelessWidget {
       );
     }
 
-    final pending = pendingAction;
-    if (pending?.unitId == options.unitId && pending?.improvement != null) {
-      add(
-        ConfirmWorkerImprovementActionView(
-          unitId: options.unitId,
-          improvement: pending!.improvement!,
+    if (unit.workerJob == null && options.improvements.isNotEmpty) {
+      buttons.add(
+        _WorkerImprovementSelection(
+          state: state,
+          options: options,
+          enabled: enabled,
+          onOpenChanged: onOpenChanged,
+          onPreview: onPreview,
+          onAction: onAction,
         ),
-        '${copy.text(WorkerText.confirmImprovement)} · '
-        '${copy.improvement(pending.improvement!.name)}',
-        Icons.check_circle_outline,
       );
-    } else {
-      for (final option in options.improvements) {
-        add(
-          SelectWorkerImprovementActionView(
-            unitId: options.unitId,
-            improvement: option.improvement,
-          ),
-          '${copy.text(WorkerText.selectImprovement)} '
-          '${copy.improvement(option.improvement.name)} '
-          '(${option.buildTurns})',
-          Icons.handyman_outlined,
-        );
-      }
     }
     if (unit.workerJob != null) {
       add(

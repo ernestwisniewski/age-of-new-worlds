@@ -2,6 +2,7 @@ import 'package:aonw_flutter/features/cities/application/city_state.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_action_palette_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/workers/application/worker_state.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations_en.dart';
@@ -32,10 +33,13 @@ void main() {
     const unitId = 'worker-1';
     const coordinate = (col: 1, row: 1);
     final scene = testMapScene(
-      pendingAction: const PendingWorkerActionSelectionView(
-        unitId: unitId,
-        improvement: FieldImprovementKind.mine,
-      ),
+      units: [
+        testVisibleUnit(
+          id: unitId,
+          coordinate: coordinate,
+          kind: VisibleUnitKind.worker,
+        ),
+      ],
     );
     final options = WorkerOptionsView(
       stamp: testSessionStamp(),
@@ -59,7 +63,13 @@ void main() {
     final view = buildMapActionPaletteView(
       interaction: MapInteractionState(
         route: testRoutePlanView(),
-        worker: WorkerState(unitId: unitId, options: options),
+        selectedUnitId: unitId,
+        worker: WorkerState(
+          unitId: unitId,
+          options: options,
+          actionsOpen: true,
+          previewedImprovement: FieldImprovementKind.mine,
+        ),
       ),
       player: scene.player,
       l10n: AonwLocalizationsEn(),

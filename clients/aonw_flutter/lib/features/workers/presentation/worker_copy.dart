@@ -12,6 +12,8 @@ enum WorkerText {
   buildCharges,
   progress,
   assigned,
+  openActions,
+  closeActions,
   selectImprovement,
   confirmImprovement,
   cancelJob,

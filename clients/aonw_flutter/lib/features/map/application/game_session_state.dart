@@ -78,10 +78,19 @@ final class GameSessionReady extends GameSessionState {
     final identityChanged =
         value.actorPlayerId != recipient.actorPlayerId ||
         value.stamp.revision != recipient.stamp.revision ||
-        value.stamp.stateDigest != recipient.stamp.stateDigest;
+        value.stamp.stateDigest != recipient.stamp.stateDigest ||
+        value.stamp.mapHash != recipient.stamp.mapHash ||
+        value.stamp.rulesetHash != recipient.stamp.rulesetHash;
     return GameSessionReady(
       scene: scene.withPlayer(value),
-      interaction: interaction,
+      interaction: identityChanged && interaction.worker != null
+          ? interaction.copyWith(
+              worker: interaction.worker!.copyWith(
+                actionsOpen: false,
+                clearPreview: true,
+              ),
+            )
+          : interaction,
       turnPresentations: turnPresentations.observe(value.turn),
       turnAction: turnAction,
       research: identityChanged

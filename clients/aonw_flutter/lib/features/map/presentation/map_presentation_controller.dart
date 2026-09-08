@@ -27,6 +27,7 @@ import '../application/map_session_port.dart';
 import '../application/network_game_session_port.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
+import '../read_model/pending_action_view.dart';
 import 'map_interaction_audio.dart';
 
 final class MapPresentationController extends ChangeNotifier {
@@ -153,6 +154,16 @@ final class MapPresentationController extends ChangeNotifier {
 
   void executeUnitLogistics(UnitLogisticsActionView action) =>
       _coordinator.executeUnitLogistics(action);
+
+  void setWorkerActionsOpen(bool open) => _interactionAudio.perform(
+    MapInteractionAudioAction.workerActions,
+    () => _coordinator.setWorkerActionsOpen(open),
+  );
+
+  void previewWorkerImprovement(
+    String unitId,
+    FieldImprovementKind improvement,
+  ) => _coordinator.previewWorkerImprovement(unitId, improvement);
 
   void executeWorkerAction(WorkerActionView action) =>
       _coordinator.executeWorkerAction(action);

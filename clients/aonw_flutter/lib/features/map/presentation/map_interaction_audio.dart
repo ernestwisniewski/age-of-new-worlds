@@ -3,7 +3,13 @@ import 'package:flutter/foundation.dart';
 import '../../audio/application/game_audio_port.dart';
 import '../application/game_session_state.dart';
 
-enum MapInteractionAudioAction { selectHex, selectCity, foundCity, manageCity }
+enum MapInteractionAudioAction {
+  selectHex,
+  selectCity,
+  foundCity,
+  manageCity,
+  workerActions,
+}
 
 /// Retains at most one user-requested query until its presentation is ready.
 final class MapInteractionAudio {
@@ -42,6 +48,11 @@ final class MapInteractionAudio {
         _selectCity(after);
       case MapInteractionAudioAction.foundCity:
         _awaitFounding(after);
+      case MapInteractionAudioAction.workerActions:
+        if (after.interaction.worker?.actionsOpen == true &&
+            before.interaction.worker?.actionsOpen != true) {
+          play(GameSoundCue.uiPanelOpen);
+        }
       case MapInteractionAudioAction.manageCity:
         final mode = after.interaction.city?.managementMode;
         if (mode != null && mode != before.interaction.city?.managementMode) {

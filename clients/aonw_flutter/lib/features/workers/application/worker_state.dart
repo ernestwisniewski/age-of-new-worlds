@@ -1,3 +1,4 @@
+import '../../map/read_model/pending_action_view.dart';
 import '../read_model/worker_view.dart';
 
 enum WorkerFailureCode {
@@ -21,6 +22,8 @@ final class WorkerState {
   const WorkerState({
     required this.unitId,
     this.loading = false,
+    this.actionsOpen = false,
+    this.previewedImprovement,
     this.correlationId = 0,
     this.options,
     this.inFlightAction,
@@ -33,6 +36,8 @@ final class WorkerState {
 
   final String unitId;
   final bool loading;
+  final bool actionsOpen;
+  final FieldImprovementKind? previewedImprovement;
   final int correlationId;
   final WorkerOptionsView? options;
   final WorkerActionView? inFlightAction;
@@ -43,6 +48,9 @@ final class WorkerState {
 
   WorkerState copyWith({
     bool? loading,
+    bool? actionsOpen,
+    FieldImprovementKind? previewedImprovement,
+    bool clearPreview = false,
     int? correlationId,
     WorkerOptionsView? options,
     bool clearOptions = false,
@@ -54,6 +62,10 @@ final class WorkerState {
   }) => WorkerState(
     unitId: unitId,
     loading: loading ?? this.loading,
+    actionsOpen: actionsOpen ?? this.actionsOpen,
+    previewedImprovement: clearPreview
+        ? null
+        : previewedImprovement ?? this.previewedImprovement,
     correlationId: correlationId ?? this.correlationId,
     options: clearOptions ? null : options ?? this.options,
     inFlightAction: clearInFlightAction

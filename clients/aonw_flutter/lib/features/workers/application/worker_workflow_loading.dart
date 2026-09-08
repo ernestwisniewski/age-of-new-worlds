@@ -21,7 +21,7 @@ extension WorkerWorkflowLoading on WorkerWorkflow {
       publish(
         ready.withInteraction(
           ready.interaction.copyWith(
-            worker: WorkerState(unitId: unitId, options: options),
+            worker: _loadedWorkerState(ready, options),
           ),
         ),
       );
@@ -60,3 +60,29 @@ GameSessionReady _unexpectedLoadFailure(GameSessionReady current) =>
         ),
       ),
     );
+
+WorkerState _loadedWorkerState(
+  GameSessionReady current,
+  WorkerOptionsView options,
+) {
+  final worker = current.interaction.worker!;
+  final pending = current.recipient.pendingAction;
+  final resumed =
+      worker.loading &&
+          pending is PendingWorkerActionSelectionView &&
+          pending.unitId == worker.unitId
+      ? pending
+      : null;
+  final preview = resumed?.improvement ?? worker.previewedImprovement;
+  final validPreview = options.improvements.any(
+    (option) => option.improvement == preview,
+  );
+  return worker.copyWith(
+    loading: false,
+    options: options,
+    clearFailure: true,
+    actionsOpen: worker.actionsOpen || resumed != null,
+    previewedImprovement: preview,
+    clearPreview: !validPreview,
+  );
+}

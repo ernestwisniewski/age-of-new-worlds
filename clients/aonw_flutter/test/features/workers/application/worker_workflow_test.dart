@@ -10,58 +10,92 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  test('loads engine options and correlates one worker command', () async {
-    final worker = testVisibleUnit(kind: VisibleUnitKind.worker);
-    final options = _options(worker);
-    final updatedPlayer = PlayerMapView.preview(
-      actorPlayerId: 'preview-player',
-      stamp: testSessionStamp(revision: 1),
-      turn: 1,
-      pendingAction: PendingWorkerActionSelectionView(
+  test(
+    'previews locally and correlates exactly one confirmed construction',
+    () async {
+      final worker = testVisibleUnit(kind: VisibleUnitKind.worker);
+      final options = _options(worker);
+      final updatedPlayer = PlayerMapView.preview(
+        pendingAction: null,
+        actorPlayerId: 'preview-player',
+        stamp: testSessionStamp(revision: 1),
+        turn: 1,
+        units: [
+          testVisibleUnit(
+            kind: VisibleUnitKind.worker,
+            workerJob: const FieldImprovementJobView(
+              target: (col: 0, row: 0),
+              improvement: FieldImprovementKind.farm,
+              remainingTurns: 3,
+              totalTurns: 3,
+            ),
+          ),
+        ],
+      );
+      final session = FakeGameSession.success(
+        testMapScene(units: [worker]),
+        reachableResult: testReachableView(unitId: worker.id),
+        workerOptionsResult: options,
+        workerResult: WorkerCommandResultView.accepted(
+          player: updatedPlayer,
+          automation: null,
+        ),
+      );
+      final controller = MapCoordinator(
+        capabilities: testGameSessionCapabilities(session),
+      );
+      addTearDown(controller.dispose);
+
+      await controller.load();
+      controller.select(worker.coordinate);
+      await pumpEventQueue();
+      final loaded = (controller.state as GameSessionReady).interaction.worker;
+      expect(loaded?.options?.improvements.single.buildTurns, 3);
+      expect(session.workerOptionCalls, 1);
+
+      final initial = controller.state as GameSessionReady;
+      expect(loaded?.actionsOpen, isFalse);
+      controller.setWorkerActionsOpen(true);
+      controller.previewWorkerImprovement(worker.id, FieldImprovementKind.farm);
+      expect(session.workerCommandCalls, 0);
+      expect(
+        (controller.state as GameSessionReady).recipient,
+        same(initial.recipient),
+      );
+      expect(
+        (controller.state as GameSessionReady)
+            .interaction
+            .worker
+            ?.previewedImprovement,
+        FieldImprovementKind.farm,
+      );
+      final action = ConfirmWorkerImprovementActionView(
         unitId: worker.id,
         improvement: FieldImprovementKind.farm,
-      ),
-      units: [worker],
-    );
-    final session = FakeGameSession.success(
-      testMapScene(units: [worker]),
-      reachableResult: testReachableView(unitId: worker.id),
-      workerOptionsResult: options,
-      workerResult: WorkerCommandResultView.accepted(
-        player: updatedPlayer,
-        automation: null,
-      ),
-    );
-    final controller = MapCoordinator(
-      capabilities: testGameSessionCapabilities(session),
-    );
-    addTearDown(controller.dispose);
+      );
+      controller.executeWorkerAction(action);
+      controller.setWorkerActionsOpen(false);
+      expect(
+        (controller.state as GameSessionReady).interaction.worker?.actionsOpen,
+        isTrue,
+      );
+      controller.executeWorkerAction(action);
+      await pumpEventQueue();
 
-    await controller.load();
-    controller.select(worker.coordinate);
-    await pumpEventQueue();
-    final loaded = (controller.state as GameSessionReady).interaction.worker;
-    expect(loaded?.options?.improvements.single.buildTurns, 3);
-    expect(session.workerOptionCalls, 1);
-
-    final action = SelectWorkerImprovementActionView(
-      unitId: worker.id,
-      improvement: FieldImprovementKind.farm,
-    );
-    controller.executeWorkerAction(action);
-    controller.executeWorkerAction(action);
-    await pumpEventQueue();
-
-    expect(session.workerCommandCalls, 1);
-    expect(session.lastWorkerExpectedRevision, 0);
-    expect(session.lastWorkerAction, same(action));
-    final ready = controller.state as GameSessionReady;
-    expect(ready.recipient.stamp.revision, 1);
-    expect(
-      ready.recipient.pendingAction,
-      isA<PendingWorkerActionSelectionView>(),
-    );
-  });
+      expect(session.workerCommandCalls, 1);
+      expect(session.lastWorkerExpectedRevision, 0);
+      expect(session.lastWorkerAction, same(action));
+      final ready = controller.state as GameSessionReady;
+      expect(ready.recipient.stamp.revision, 1);
+      expect(ready.recipient.pendingAction, isNull);
+      expect(
+        ready.recipient.controlledUnitById(worker.id)?.workerJob,
+        isA<FieldImprovementJobView>(),
+      );
+      expect(ready.interaction.worker?.actionsOpen, isFalse);
+      expect(ready.interaction.worker?.previewedImprovement, isNull);
+    },
+  );
 
   test('keeps rejection typed and does not apply a client fallback', () async {
     final worker = testVisibleUnit(kind: VisibleUnitKind.worker);

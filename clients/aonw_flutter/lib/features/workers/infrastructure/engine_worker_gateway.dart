@@ -91,12 +91,6 @@ final class EngineWorkerGateway {
 
 AonwClientRequest _request(WorkerActionView action, int expectedRevision) =>
     switch (action) {
-      SelectWorkerImprovementActionView(:final unitId, :final improvement) =>
-        AonwWorkerRequest.selectImprovement(
-          expectedRevision: expectedRevision,
-          unitId: unitId,
-          improvement: AonwFieldImprovementKind.values.byName(improvement.name),
-        ),
       ConfirmWorkerImprovementActionView(:final unitId, :final improvement) =>
         AonwWorkerRequest.confirmImprovement(
           expectedRevision: expectedRevision,

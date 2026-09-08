@@ -1421,6 +1421,8 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'buildCharges': 'Ładunki budowy',
       'progress': 'Postęp',
       'assigned': 'Przypisane pole',
+      'openActions': 'Ulepsz pole',
+      'closeActions': 'Anuluj wybór',
       'selectImprovement': 'Wybierz',
       'confirmImprovement': 'Potwierdź ulepszenie',
       'cancelJob': 'Anuluj budowę',

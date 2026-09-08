@@ -8,6 +8,12 @@ final class ConfirmMapMovePaletteIntent extends MapActionPaletteIntent {
   const ConfirmMapMovePaletteIntent();
 }
 
+final class CancelWorkerSelectionPaletteIntent extends MapActionPaletteIntent {
+  const CancelWorkerSelectionPaletteIntent({required this.unitId});
+
+  final String unitId;
+}
+
 sealed class MapWorkerImprovementPaletteIntent extends MapActionPaletteIntent {
   const MapWorkerImprovementPaletteIntent({
     required this.unitId,

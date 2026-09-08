@@ -61,15 +61,15 @@ final class MapSelectionOverlay extends StatelessWidget {
                 ? scene.player.cityAt(selected)
                 : scene.player.cityById(interaction.city!.cityId!),
             player: scene.player,
-            pendingWorkerAction:
-                scene.player.pendingAction is PendingWorkerActionSelectionView
-                ? scene.player.pendingAction!
-                      as PendingWorkerActionSelectionView
-                : null,
             onConfirmMove: controller.confirmMove,
             onUnitAction: controller.executeUnitAction,
             onUnitLogistics: controller.executeUnitLogistics,
             onWorkerAction: controller.executeWorkerAction,
+            onWorkerOpenChanged: controller.setWorkerActionsOpen,
+            onWorkerPreview: (kind) => controller.previewWorkerImprovement(
+              interaction.worker!.unitId,
+              kind,
+            ),
             onConfirmCombat: controller.confirmCombat,
             onCityConquestAction: controller.setCityConquestAction,
             onOpenCityFounding: controller.openCityFounding,
@@ -94,11 +94,12 @@ final class _MapSelectionPanel extends StatelessWidget {
     required this.unit,
     required this.city,
     required this.player,
-    required this.pendingWorkerAction,
     required this.onConfirmMove,
     required this.onUnitAction,
     required this.onUnitLogistics,
     required this.onWorkerAction,
+    required this.onWorkerOpenChanged,
+    required this.onWorkerPreview,
     required this.onConfirmCombat,
     required this.onCityConquestAction,
     required this.onOpenCityFounding,
@@ -116,11 +117,12 @@ final class _MapSelectionPanel extends StatelessWidget {
   final VisibleUnitView? unit;
   final CityView? city;
   final PlayerMapView player;
-  final PendingWorkerActionSelectionView? pendingWorkerAction;
   final VoidCallback onConfirmMove;
   final ValueChanged<UnitActionKindView> onUnitAction;
   final ValueChanged<UnitLogisticsActionView> onUnitLogistics;
   final ValueChanged<WorkerActionView> onWorkerAction;
+  final ValueChanged<bool> onWorkerOpenChanged;
+  final ValueChanged<FieldImprovementKind> onWorkerPreview;
   final VoidCallback onConfirmCombat;
   final ValueChanged<CityConquestActionView> onCityConquestAction;
   final VoidCallback onOpenCityFounding;
@@ -157,11 +159,12 @@ final class _MapSelectionPanel extends StatelessWidget {
                   unitId: unitId,
                   interaction: interaction,
                   unit: unit,
-                  pendingWorkerAction: pendingWorkerAction,
                   onConfirmMove: onConfirmMove,
                   onUnitAction: onUnitAction,
                   onUnitLogistics: onUnitLogistics,
                   onWorkerAction: onWorkerAction,
+                  onWorkerOpenChanged: onWorkerOpenChanged,
+                  onWorkerPreview: onWorkerPreview,
                   onOpenCityFounding: onOpenCityFounding,
                 ),
               _SelectionFeatureControls(
@@ -193,22 +196,24 @@ final class _SelectedUnitControls extends StatelessWidget {
     required this.unitId,
     required this.interaction,
     required this.unit,
-    required this.pendingWorkerAction,
     required this.onConfirmMove,
     required this.onUnitAction,
     required this.onUnitLogistics,
     required this.onWorkerAction,
+    required this.onWorkerOpenChanged,
+    required this.onWorkerPreview,
     required this.onOpenCityFounding,
   });
 
   final String unitId;
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
-  final PendingWorkerActionSelectionView? pendingWorkerAction;
   final VoidCallback onConfirmMove;
   final ValueChanged<UnitActionKindView> onUnitAction;
   final ValueChanged<UnitLogisticsActionView> onUnitLogistics;
   final ValueChanged<WorkerActionView> onWorkerAction;
+  final ValueChanged<bool> onWorkerOpenChanged;
+  final ValueChanged<FieldImprovementKind> onWorkerPreview;
   final VoidCallback onOpenCityFounding;
 
   @override
@@ -236,9 +241,10 @@ final class _SelectedUnitControls extends StatelessWidget {
         _SelectedWorkerControls(
           interaction: interaction,
           unit: unit,
-          pendingAction: pendingWorkerAction,
           foundingActive: foundingActive,
           onAction: onWorkerAction,
+          onOpenChanged: onWorkerOpenChanged,
+          onPreview: onWorkerPreview,
         ),
         if (!foundingActive && _canOfferCityFounding(unit))
           TextButton.icon(
@@ -308,14 +314,16 @@ final class _SelectedWorkerControls extends StatelessWidget {
   const _SelectedWorkerControls({
     required this.interaction,
     required this.unit,
-    required this.pendingAction,
+    required this.onOpenChanged,
+    required this.onPreview,
     required this.foundingActive,
     required this.onAction,
   });
 
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
-  final PendingWorkerActionSelectionView? pendingAction;
+  final ValueChanged<bool> onOpenChanged;
+  final ValueChanged<FieldImprovementKind> onPreview;
   final bool foundingActive;
   final ValueChanged<WorkerActionView> onAction;
 
@@ -329,9 +337,8 @@ final class _SelectedWorkerControls extends StatelessWidget {
     return WorkerPanel(
       state: worker,
       unit: selectedUnit,
-      pendingAction: pendingAction?.unitId == selectedUnit.id
-          ? pendingAction
-          : null,
+      onOpenChanged: onOpenChanged,
+      onPreview: onPreview,
       enabled:
           !interaction.movementPending &&
           !(interaction.actionDeck?.commandPending ?? false) &&

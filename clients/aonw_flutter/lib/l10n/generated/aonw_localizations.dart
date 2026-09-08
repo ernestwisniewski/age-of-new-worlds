@@ -1859,7 +1859,7 @@ abstract class AonwLocalizations {
   /// No description provided for @workerText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{Worker} loading{Loading worker options} empty{No worker action is currently available.} executing{Applying worker action} buildCharges{Build charges} progress{Progress} assigned{Assigned hex} selectImprovement{Select} confirmImprovement{Confirm improvement} cancelJob{Cancel construction} assign{Assign to hex} cancelAssignment{Cancel assignment} buildRoad{Build road} automate{Automate} automationEvidence{Planner evidence} other{Worker}}'**
+  /// **'{key, select, title{Worker} loading{Loading worker options} empty{No worker action is currently available.} executing{Applying worker action} buildCharges{Build charges} progress{Progress} assigned{Assigned hex} openActions{Improve hex} closeActions{Cancel selection} selectImprovement{Select} confirmImprovement{Confirm improvement} cancelJob{Cancel construction} assign{Assign to hex} cancelAssignment{Cancel assignment} buildRoad{Build road} automate{Automate} automationEvidence{Planner evidence} other{Worker}}'**
   String workerText(String key);
 
   /// No description provided for @workerFailure.

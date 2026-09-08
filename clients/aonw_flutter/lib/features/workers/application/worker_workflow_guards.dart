@@ -43,16 +43,8 @@ bool _containsWorkerAction(
   final unit = current.recipient.controlledUnitById(action.unitId);
   if (unit == null) return false;
   return switch (action) {
-    SelectWorkerImprovementActionView(:final improvement) =>
-      options.improvements.any((option) => option.improvement == improvement),
     ConfirmWorkerImprovementActionView(:final improvement) =>
-      current.recipient.pendingAction is PendingWorkerActionSelectionView &&
-          (current.recipient.pendingAction! as PendingWorkerActionSelectionView)
-                  .unitId ==
-              action.unitId &&
-          (current.recipient.pendingAction! as PendingWorkerActionSelectionView)
-                  .improvement ==
-              improvement,
+      _canConfirmImprovement(current, improvement),
     CancelWorkerJobActionView() => unit.workerJob != null,
     AssignWorkerToHexActionView() => options.canAssign,
     CancelWorkerAssignmentActionView() => unit.workerAssignment != null,

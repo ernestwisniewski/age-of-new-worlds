@@ -40,6 +40,7 @@ import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
 import '../read_model/movement_view.dart';
+import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'game_session_capabilities.dart';
 import 'game_session_state.dart';

@@ -1416,6 +1416,8 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'buildCharges': 'Build charges',
       'progress': 'Progress',
       'assigned': 'Assigned hex',
+      'openActions': 'Improve hex',
+      'closeActions': 'Cancel selection',
       'selectImprovement': 'Select',
       'confirmImprovement': 'Confirm improvement',
       'cancelJob': 'Cancel construction',

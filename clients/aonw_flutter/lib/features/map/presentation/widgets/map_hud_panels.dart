@@ -6,6 +6,7 @@ import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../research/presentation/research_overlay.dart';
+import '../../application/game_session_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/pending_action_view.dart';
 import '../map_presentation_controller.dart';
@@ -32,6 +33,26 @@ final class MapHudPanels extends StatefulWidget {
 
 final class _MapHudPanelsState extends State<MapHudPanels> {
   _MapHudPanel? _openPanel;
+  var _workerActionsWereOpen = false;
+
+  bool get _workerActionsOpen => switch (widget.controller.state) {
+    GameSessionReady(:final interaction) =>
+      interaction.worker?.actionsOpen ?? false,
+    _ => false,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _workerActionsWereOpen = _workerActionsOpen;
+    widget.controller.addListener(_observeWorkerActions);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_observeWorkerActions);
+    super.dispose();
+  }
 
   bool get _researchSelectionRequired =>
       widget.scene.player.pendingAction is PendingResearchSelectionView;
@@ -41,6 +62,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   @override
   void didUpdateWidget(covariant MapHudPanels oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _synchronizeController(oldWidget.controller);
     final sceneChanged =
         oldWidget.scene.map.mapId != widget.scene.map.mapId ||
         oldWidget.scene.map.contentHash != widget.scene.map.contentHash ||
@@ -54,6 +76,22 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     if (sceneChanged || selectionBecameRequired || matchBecameTerminal) {
       _openPanel = null;
     }
+  }
+
+  void _synchronizeController(MapPresentationController previous) {
+    if (identical(previous, widget.controller)) return;
+    previous.removeListener(_observeWorkerActions);
+    widget.controller.addListener(_observeWorkerActions);
+    _workerActionsWereOpen = _workerActionsOpen;
+    _openPanel = null;
+  }
+
+  void _observeWorkerActions() {
+    final becameOpen = !_workerActionsWereOpen && _workerActionsOpen;
+    _workerActionsWereOpen = _workerActionsOpen;
+    if (!becameOpen || _openPanel == null) return;
+    setState(() => _openPanel = null);
+    context.playGameSound(GameSoundCue.uiPanelClose);
   }
 
   @override

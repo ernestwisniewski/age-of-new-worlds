@@ -7,18 +7,15 @@ extension _MapScreenActionPalette on _MapScreenState {
     final state = widget.controller.state;
     if (state is! GameSessionReady || state.localHandoff.blocksGameplay) return;
     switch (intent) {
+      case CancelWorkerSelectionPaletteIntent(:final unitId):
+        _cancelWorkerPalette(state, unitId);
       case ConfirmMapMovePaletteIntent():
         widget.controller.confirmMove();
       case PreviewWorkerImprovementPaletteIntent(
         :final unitId,
         :final improvement,
       ):
-        widget.controller.executeWorkerAction(
-          SelectWorkerImprovementActionView(
-            unitId: unitId,
-            improvement: improvement,
-          ),
-        );
+        widget.controller.previewWorkerImprovement(unitId, improvement);
       case ConfirmWorkerImprovementPaletteIntent(
         :final unitId,
         :final improvement,
@@ -29,6 +26,12 @@ extension _MapScreenActionPalette on _MapScreenState {
             improvement: improvement,
           ),
         );
+    }
+  }
+
+  void _cancelWorkerPalette(GameSessionReady state, String unitId) {
+    if (state.interaction.worker?.unitId == unitId) {
+      widget.controller.setWorkerActionsOpen(false);
     }
   }
 }

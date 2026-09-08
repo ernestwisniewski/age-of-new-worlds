@@ -59,7 +59,7 @@
         "clients/aonw_flutter/lib/features/onboarding/presentation/onboarding_screen.dart::class:_OnboardingScreenState/method:build": 82,
         "clients/aonw_flutter/lib/features/production/presentation/production_panel.dart::class:_ProductionActions/method:build": 78,
         "clients/aonw_flutter/lib/features/research/application/research_workflow.dart::class:ResearchWorkflow/method:_select": 61,
-        "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 77
+        "clients/aonw_flutter/lib/features/workers/presentation/worker_panel.dart::class:_WorkerActions/method:build": 64
       },
       "nesting": {},
       "cyclomaticComplexity": {
@@ -89,7 +89,6 @@
         "clients/aonw_flutter/lib/features/research/infrastructure/research_view_mapper.dart::function:_option": 12,
         "clients/aonw_flutter/lib/features/turns/application/turn_workflow.dart::class:TurnWorkflow/method:_execute": 14,
         "clients/aonw_flutter/lib/features/workers/application/worker_workflow_commands.dart::extension:WorkerWorkflowCommands/method:_execute": 11,
-        "clients/aonw_flutter/lib/features/workers/application/worker_workflow_guards.dart::function:_containsWorkerAction": 13,
         "clients/aonw_flutter/lib/features/workers/infrastructure/worker_view_mapper.dart::class:WorkerViewMapper/method:command": 11,
         "clients/aonw_flutter/lib/game/presentation/flame_scene_patch.dart::class:FlameScenePatch/constructor:between": 15
       },

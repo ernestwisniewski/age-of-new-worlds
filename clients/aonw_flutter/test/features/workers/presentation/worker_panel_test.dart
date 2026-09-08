@@ -10,7 +10,7 @@ import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('shows progress semantics and confirms exact pending selection', (
+  testWidgets('shows progress semantics and cancels the running construction', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
@@ -33,10 +33,8 @@ void main() {
             child: WorkerPanel(
               state: WorkerState(unitId: unit.id, options: _options(unit.id)),
               unit: unit,
-              pendingAction: PendingWorkerActionSelectionView(
-                unitId: unit.id,
-                improvement: FieldImprovementKind.farm,
-              ),
+              onOpenChanged: (_) {},
+              onPreview: (_) {},
               onAction: (value) => dispatched = value,
             ),
           ),
@@ -49,12 +47,9 @@ void main() {
     );
     expect(progress.label, contains('Progress'));
     expect(progress.value, '1 / 3');
-    await tester.tap(find.textContaining('Confirm improvement'));
-    expect(dispatched, isA<ConfirmWorkerImprovementActionView>());
-    expect(
-      (dispatched! as ConfirmWorkerImprovementActionView).improvement,
-      FieldImprovementKind.farm,
-    );
+    expect(find.byKey(const ValueKey('worker-actions-toggle')), findsNothing);
+    await tester.tap(find.text('Cancel construction'));
+    expect(dispatched, isA<CancelWorkerJobActionView>());
     expect(tester.takeException(), isNull);
     semantics.dispose();
   });
@@ -89,7 +84,8 @@ void main() {
               ),
             ),
             unit: unit,
-            pendingAction: null,
+            onOpenChanged: (_) {},
+            onPreview: (_) {},
             onAction: (value) => dispatched = value,
           ),
         ),

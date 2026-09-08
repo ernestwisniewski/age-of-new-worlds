@@ -11,6 +11,7 @@ import 'worker_state.dart';
 part 'worker_workflow_commands.dart';
 part 'worker_workflow_guards.dart';
 part 'worker_workflow_loading.dart';
+part 'worker_workflow_selection.dart';
 
 typedef WorkerStateReader = GameSessionState Function();
 typedef WorkerStatePublisher = void Function(GameSessionReady value);

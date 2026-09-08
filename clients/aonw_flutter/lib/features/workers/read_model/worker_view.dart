@@ -135,15 +135,6 @@ sealed class WorkerActionView {
   final String unitId;
 }
 
-final class SelectWorkerImprovementActionView extends WorkerActionView {
-  const SelectWorkerImprovementActionView({
-    required super.unitId,
-    required this.improvement,
-  });
-
-  final FieldImprovementKind improvement;
-}
-
 final class ConfirmWorkerImprovementActionView extends WorkerActionView {
   const ConfirmWorkerImprovementActionView({
     required super.unitId,

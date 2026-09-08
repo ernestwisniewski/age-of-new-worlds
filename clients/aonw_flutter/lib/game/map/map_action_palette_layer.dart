@@ -69,6 +69,7 @@ final class MapActionPaletteLayerComponent extends Component
   ui.Rect? get debugCtaRect => _ctaRect;
   void applyPalette(MapStaticRenderCache cache, MapActionPaletteView? view) {
     _view = view;
+    if (view == null) _dismissedKey = null;
     final nextKey = _keyFor(view);
     _viewKey = nextKey;
     if (view == null || nextKey == _dismissedKey) {
@@ -92,7 +93,11 @@ final class MapActionPaletteLayerComponent extends Component
     if (!(_bounds?.contains(point) ?? false)) {
       _dismissedKey = _viewKey;
       _clearGeometry();
-      return const MapActionPaletteTapResult.consumed();
+      return MapActionPaletteTapResult.consumed(
+        view is MapWorkerActionPaletteView
+            ? CancelWorkerSelectionPaletteIntent(unitId: view.unitId)
+            : null,
+      );
     }
     if (!view.enabled) return const MapActionPaletteTapResult.consumed();
     switch (view) {

@@ -1,4 +1,5 @@
 import '../../../l10n/generated/aonw_localizations.dart';
+import '../../workers/application/worker_state.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../application/map_interaction_state.dart';
 import '../read_model/map_view.dart';
@@ -70,22 +71,18 @@ MapWorkerActionPaletteView? _buildWorkerPalette(
   PlayerMapView player,
   AonwLocalizations l10n,
 ) {
-  final pendingAction = player.pendingAction;
   final worker = interaction.worker;
   final workerOptions = worker?.options;
-  if (pendingAction is PendingWorkerActionSelectionView &&
+  if (worker != null &&
       workerOptions != null &&
-      worker != null &&
-      workerOptions.unitId == pendingAction.unitId &&
-      worker.unitId == pendingAction.unitId &&
-      workerOptions.improvements.isNotEmpty) {
-    final previewed = pendingAction.improvement;
+      _workerPaletteAvailable(worker, workerOptions, interaction, player)) {
+    final previewed = worker.previewedImprovement;
     final previewedLabel = previewed == null
         ? null
         : l10n.presentationName(previewed.name);
     return MapWorkerActionPaletteView(
       coordinate: workerOptions.coordinate,
-      enabled: !worker.loading && !worker.commandPending,
+      enabled: !worker.loading && !_hasPendingCommand(interaction),
       unitId: workerOptions.unitId,
       options: _localizedWorkerOptions(workerOptions.improvements, l10n),
       previewedImprovement: previewed,
@@ -94,6 +91,21 @@ MapWorkerActionPaletteView? _buildWorkerPalette(
   }
 
   return null;
+}
+
+bool _workerPaletteAvailable(
+  WorkerState worker,
+  WorkerOptionsView options,
+  MapInteractionState interaction,
+  PlayerMapView player,
+) {
+  final unit = player.controlledUnitById(worker.unitId);
+  return worker.actionsOpen &&
+      worker.unitId == interaction.selectedUnitId &&
+      options.unitId == worker.unitId &&
+      options.improvements.isNotEmpty &&
+      unit != null &&
+      unit.workerJob == null;
 }
 
 List<MapWorkerImprovementOptionView> _localizedWorkerOptions(
