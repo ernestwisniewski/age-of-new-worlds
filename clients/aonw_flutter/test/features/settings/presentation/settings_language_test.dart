@@ -43,6 +43,14 @@ void main() {
       'Polonia',
       'Estados Unidos',
     ),
+    (
+      ClientLanguage.dutch,
+      'EÉN SPELER',
+      'SPEL LADEN',
+      'Beschaving kiezen',
+      'Polen',
+      'Verenigd Koninkrijk',
+    ),
   ]) {
     testWidgets(
       '$language menu opens the local game wizard on a narrow screen',
@@ -94,6 +102,13 @@ void main() {
       'Ajustes',
       'Idioma del sistema',
       Locale('es', 'MX'),
+    ),
+    (
+      ClientLanguage.dutch,
+      'Nederlands',
+      'Instellingen',
+      'Systeemtaal',
+      Locale('nl', 'BE'),
     ),
   ]) {
     testWidgets(

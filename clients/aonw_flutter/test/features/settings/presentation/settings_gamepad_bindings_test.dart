@@ -22,6 +22,7 @@ void main() {
     (Locale('fr'), 'Non affecté', 'Affecté à :', 'Stick gauche, axe X'),
     (Locale('de'), 'Nicht belegt', 'Belegt mit:', 'Linker Stick X'),
     (Locale('es'), 'Sin asignar', 'Asignado a:', 'Palanca izquierda X'),
+    (Locale('nl'), 'Niet toegewezen', 'Toegewezen aan:', 'Linkerstick X'),
   ]) {
     testWidgets(
       'edits and resets bindings with visible displaced actions in $locale',
@@ -141,6 +142,7 @@ void main() {
     Locale('fr'),
     Locale('de'),
     Locale('es'),
+    Locale('nl'),
   ]) {
     testWidgets(
       '$locale bindings and picker fit a narrow viewport with larger text',

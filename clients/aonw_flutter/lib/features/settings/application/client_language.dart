@@ -4,7 +4,8 @@ enum ClientLanguage {
   english('en'),
   french('fr'),
   german('de'),
-  spanish('es');
+  spanish('es'),
+  dutch('nl');
 
   const ClientLanguage(this.storageValue);
 

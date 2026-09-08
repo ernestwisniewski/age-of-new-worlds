@@ -9,6 +9,7 @@ import 'aonw_localizations_de.dart';
 import 'aonw_localizations_en.dart';
 import 'aonw_localizations_es.dart';
 import 'aonw_localizations_fr.dart';
+import 'aonw_localizations_nl.dart';
 import 'aonw_localizations_pl.dart';
 
 // ignore_for_file: type=lint
@@ -101,6 +102,7 @@ abstract class AonwLocalizations {
     Locale('en'),
     Locale('es'),
     Locale('fr'),
+    Locale('nl'),
     Locale('pl'),
   ];
 
@@ -2469,8 +2471,14 @@ class _AonwLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'es', 'fr', 'pl'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'de',
+    'en',
+    'es',
+    'fr',
+    'nl',
+    'pl',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AonwLocalizationsDelegate old) => false;
@@ -2487,6 +2495,8 @@ AonwLocalizations lookupAonwLocalizations(Locale locale) {
       return AonwLocalizationsEs();
     case 'fr':
       return AonwLocalizationsFr();
+    case 'nl':
+      return AonwLocalizationsNl();
     case 'pl':
       return AonwLocalizationsPl();
   }

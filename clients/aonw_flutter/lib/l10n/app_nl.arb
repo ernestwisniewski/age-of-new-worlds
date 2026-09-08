@@ -1,0 +1,1089 @@
+{
+  "@@locale": "nl",
+  "moveTargeting": "Verplaatsen",
+  "appTitle": "Age of New Worlds",
+  "mainMenuTitle": "Hoofdmenu",
+  "mainMenuWelcome": "Welkom bij Age of New Worlds. Bouw steden, leid commandanten, ontdek nieuwe landen en schrijf de geschiedenis van je beschaving.",
+  "mainMenuSynopsisTitle": "Bouw · Onderzoek · Voer het bevel",
+  "mainMenuWhatsNew": "Wat is er nieuw",
+  "singlePlayer": "Eén speler",
+  "singlePlayerSublabel": "Speel tegen de computer",
+  "multiplayerSublabel": "Speel online",
+  "hotseat": "Hotseat",
+  "hotseatSublabel": "Spelers delen één apparaat",
+  "hotseatUnavailable": "Hotseat instellen is nog niet beschikbaar.",
+  "hotseatHandoffTitle": "Geef het apparaat door",
+  "hotseatHandoffBody": "Geef het apparaat aan {name}. De kaart blijft verborgen totdat deze speler bevestigt.",
+  "@hotseatHandoffBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hotseatContinueAs": "Doorgaan als {name}",
+  "@hotseatContinueAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hotseatHandoffSwitching": "De volgende speler wordt voorbereid",
+  "hotseatHandoffFailure": "De sessie van de volgende lokale speler kon niet veilig worden geopend.",
+  "loadGame": "Spel laden",
+  "loadGameSublabel": "Opgeslagen spellen en herhalingen",
+  "exitGame": "Afsluiten",
+  "instructions": "Handleiding",
+  "creditsTitle": "Credits",
+  "creditsCreatedBy": "Gemaakt door {name}",
+  "@creditsCreatedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devlogLinkLabel": "Ontwikkeldagboek: ernest.dev",
+  "feedbackTitle": "Feedback",
+  "feedbackDescription": "Deel ideeën, meld problemen en volg de ontwikkeling met de community van Age of New Worlds.",
+  "openFeedback": "r/aonw openen",
+  "externalLinkUnavailable": "Externe links zijn niet beschikbaar op dit platform.",
+  "serverUpdateSoon": "Er staat een nieuwe versie klaar die binnenkort op dit platform verschijnt. Kijk over enige tijd opnieuw in je winkel of launcher.",
+  "continueGame": "Doorgaan",
+  "resumingGame": "Spel wordt hervat",
+  "newGame": "Nieuw spel",
+  "multiplayerTitle": "Multiplayer",
+  "multiplayerUnavailable": "Multiplayer is niet beschikbaar in deze versie.",
+  "loadingMultiplayer": "Verbinding maken met multiplayer",
+  "multiplayerAuthenticationTitle": "AoNW-account",
+  "emailLabel": "E-mail",
+  "passwordLabel": "Wachtwoord",
+  "displayNameLabel": "Weergavenaam",
+  "invalidEmail": "Voer een geldig e-mailadres in.",
+  "invalidPassword": "Gebruik minstens 12 tekens.",
+  "invalidDisplayName": "Voer een weergavenaam in.",
+  "signIn": "Inloggen",
+  "signOut": "Uitloggen",
+  "createAccount": "Account aanmaken",
+  "createNewAccount": "Een nieuw account aanmaken",
+  "useExistingAccount": "Een bestaand account gebruiken",
+  "multiplayerLobbyTitle": "Partijlobby",
+  "signedInAccount": "Account: {userId}",
+  "@signedInAccount": {
+    "placeholders": {
+      "userId": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerSetupTitle": "Online spel aanmaken",
+  "multiplayerSetupIntro": "Kies je beschaving en kaart voordat je de door de server beheerde wachtkamer opent.",
+  "multiplayerTurnModeDescription": "Alle spelers handelen tijdens één gedeelde beurt. De spelengine verwerkt die nadat alle vereiste bevestigingen binnen zijn of de termijn van de server is verstreken.",
+  "continueToLobby": "Doorgaan naar de lobby",
+  "createMultiplayerMatch": "Partij aanmaken",
+  "joinMultiplayerMatch": "Deelnemen aan partij",
+  "matchIdLabel": "Partij-ID",
+  "playerSeatLabel": "Spelersplaats",
+  "playerSeatOne": "Speler één",
+  "playerSeatTwo": "Speler twee",
+  "playerSeatNumber": "Speler {number}",
+  "@playerSeatNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "refreshMatches": "Partijen vernieuwen",
+  "yourMatches": "Jouw partijen",
+  "noMultiplayerMatches": "Je neemt nog niet deel aan een partij.",
+  "matchRevision": "Revisie {revision} · gebeurtenispositie {eventOffset}",
+  "@matchRevision": {
+    "placeholders": {
+      "revision": {
+        "type": "int"
+      },
+      "eventOffset": {
+        "type": "int"
+      }
+    }
+  },
+  "multiplayerMatchPhase": "Status: {phase, select, lobby{wachtkamer} running{bezig} finished{afgelopen} abandoned{verlaten} other{onbekend}}",
+  "@multiplayerMatchPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerWaitingRoomTitle": "Wachtkamer van de partij",
+  "multiplayerReady": "Klaar",
+  "multiplayerNotReady": "Niet klaar",
+  "multiplayerSeatOpen": "Vrije spelersplaats",
+  "multiplayerHumanSeat": "Mens",
+  "multiplayerAiSeat": "Computer",
+  "multiplayerHost": "Host",
+  "multiplayerCurrentPlayer": "Jij",
+  "markReady": "Gereedheid bevestigen",
+  "markNotReady": "Gereedheid intrekken",
+  "waitingForPlayers": "Alle menselijke spelersplaatsen moeten bezet en klaar zijn voordat de partij begint.",
+  "refreshMatch": "Partij vernieuwen",
+  "leaveMultiplayerMatch": "Partij verlaten",
+  "multiplayerResignTitle": "Deze partij opgeven?",
+  "multiplayerResignBody": "Je deelname eindigt onmiddellijk. Deze actie kan niet ongedaan worden gemaakt.",
+  "multiplayerResignConfirm": "Opgeven",
+  "multiplayerMatchTitle": "Online partij",
+  "multiplayerParticipants": "Deelnemers",
+  "multiplayerRemoveParticipant": "Verwijderen",
+  "multiplayerRemoveParticipantTitle": "Deelnemer verwijderen?",
+  "multiplayerRemoveParticipantBody": "{name} uit deze partij verwijderen? Deze speler kan daarna niet opnieuw verbinden.",
+  "@multiplayerRemoveParticipantBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelDialog": "Annuleren",
+  "matchIdentifier": "Partij: {matchId}",
+  "@matchIdentifier": {
+    "placeholders": {
+      "matchId": {
+        "type": "String"
+      }
+    }
+  },
+  "playerIdentifier": "Speler: {playerId}",
+  "@playerIdentifier": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerTurn": "Beurt {turn}",
+  "@multiplayerTurn": {
+    "placeholders": {
+      "turn": {
+        "type": "int"
+      }
+    }
+  },
+  "multiplayerSubmissionProgress": "Bevestigd: {submitted} van {required}",
+  "@multiplayerSubmissionProgress": {
+    "placeholders": {
+      "submitted": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "visibleUnits": "Zichtbare eenheden: {count}",
+  "@visibleUnits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "networkPhase": "Verbinding: {phase, select, connecting{verbinden} ready{online} reconnecting{opnieuw verbinden} resyncing{synchroniseren} failed{offline} closed{gesloten} other{niet beschikbaar}}",
+  "@networkPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "submitTurn": "Beurt bevestigen",
+  "reconnect": "Opnieuw verbinden",
+  "backToLobby": "Terug naar de lobby",
+  "multiplayerFailure": "{code, select, client_update_required{Werk de client bij voordat je verbinding maakt.} authentication_required{Log opnieuw in om door te gaan.} invalid_authentication_response{Het authenticatieantwoord was ongeldig.} authentication_identity_changed{De accountidentiteit is tijdens het vernieuwen veranderd.} connection_interrupted{De verbinding is onderbroken. Verbind opnieuw om de partij te synchroniseren.} invalid_server_response{Het serverantwoord heeft de validatie niet doorstaan.} invalid_command_sequence{De opdrachtenreeks was niet aaneengesloten.} invalid_resync_sequence{De gesynchroniseerde toestand is teruggegaan.} invalid_match_lifecycle{Het antwoord over het partijverloop was tegenstrijdig.} match_not_found{De partij is niet gevonden.} match_not_started{De host heeft de partij nog niet gestart.} match_already_started{De partij is al begonnen.} host_required{Alleen de host kan deze actie uitvoeren.} lobby_not_ready{Alle menselijke spelers moeten deelnemen en klaar zijn.} participant_not_claimable{Computerbestuurde plaatsen kunnen niet worden overgenomen.} participant_not_active{Die deelnemer is niet meer actief.} invalid_kick_target{De host kan zichzelf niet verwijderen.} player_seat_taken{Die spelersplaats is al bezet.} other{Het multiplayerverzoek kon niet worden voltooid.}}",
+  "@multiplayerFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "helpTitle": "Hoe speel je",
+  "helpIntroduction": "Bouw beurt voor beurt een beschaving op. De spelengine past alle regels toe; deze gids legt de beschikbare beslissingen in de client uit.",
+  "helpObjectiveTitle": "Streef je doel na",
+  "helpObjectiveBody": "Breid uit, ontwikkel steden en voltooi de scenariodoelen vóór je tegenstander. Open de strategische doelen op de kaart om de vastgelegde doelen te bekijken.",
+  "helpMapTitle": "Verken en voer het bevel",
+  "helpMapBody": "Selecteer een zichtbare hex om die te inspecteren. Selecteer je eenheid, kies een gemarkeerde bestemming en bevestig de route. Toetsenbord, gamepad en aanraakbediening gebruiken dezelfde opdrachten.",
+  "helpDevelopmentTitle": "Ontwikkel je beschaving",
+  "helpDevelopmentBody": "Gebruik de panelen voor steden, onderzoek, productie, werkers, logistiek, artefacten en diplomatie zodra hun acties beschikbaar zijn.",
+  "helpTurnTitle": "Beëindig de beurt bewust",
+  "helpTurnBody": "Rond je acties af en beëindig dan de beurt. De computer voltooit zijn door de spelengine gecontroleerde beurt voordat jij weer de controle krijgt.",
+  "helpSaveReplayTitle": "Opslaan en terugkijken",
+  "helpSaveReplayBody": "Sla op vanuit de kaart. Doorgaan opent het laatste geldige opgeslagen spel. Een herhaling toont de geschiedenis van bevestigde opdrachten zonder het spel te veranderen.",
+  "startOnboarding": "Begeleide introductie starten",
+  "onboardingTitle": "Begeleide introductie",
+  "onboardingProgress": "Stap {step} van {count}",
+  "@onboardingProgress": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingExploreTitle": "Lees de kaart",
+  "onboardingExploreBody": "De kaart toont alleen informatie die jouw speler kan zien. Selecteer hexen om terrein, steden en eenheden te inspecteren. Verschuif de kaart of zoom in om je volgende actie te plannen.",
+  "onboardingCommandTitle": "Geef nauwkeurige opdrachten",
+  "onboardingCommandBody": "Beschikbare bestemmingen en acties komen van de spelengine. Kies een optie, bekijk het voorbeeld en bevestig. Afgewezen of verouderde opdrachten veranderen de partij nooit.",
+  "onboardingDevelopTitle": "Bouw een blijvend voordeel op",
+  "onboardingDevelopBody": "Steden, productie, onderzoek, werkers, logistiek, artefacten en diplomatie bepalen je strategie. Hun panelen tonen alleen acties die de spelengine op dat moment toestaat.",
+  "onboardingContinueTitle": "Ga met vertrouwen verder",
+  "onboardingContinueBody": "Sla de bevestigde partijtoestand op voordat je vertrekt. Doorgaan valideert die in een nieuwe sessie van de spelengine. Een herhaling laat je dezelfde geschiedenis bekijken zonder die te veranderen.",
+  "previousOnboardingStep": "Vorige",
+  "nextOnboardingStep": "Volgende",
+  "skipOnboarding": "Overslaan",
+  "finishOnboarding": "Een spel aanmaken",
+  "newGameTitle": "Lokaal spel aanmaken",
+  "singlePlayerSetupTitle": "Tegen de computer spelen",
+  "singlePlayerSetupIntro": "Kies je beschaving en stel een lokale partij in die door de spelengine wordt beheerd.",
+  "hotseatSetupTitle": "In Hotseat-modus spelen",
+  "hotseatSetupIntro": "Deel één apparaat. De weergave van elke menselijke speler blijft verborgen totdat de volgende speler de overdracht bevestigt.",
+  "chooseCivilizationTitle": "Beschaving kiezen",
+  "gameSetupTitle": "Spelinstellingen",
+  "turnModeTitle": "Beurtmodus",
+  "turnModeName": "{value, select, sequential{Traditioneel} simultaneous{Gelijktijdig} other{Onbekend}}",
+  "@turnModeName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "turnModeSequentialDescription": "Beschavingen voltooien en verwerken hun beurten na elkaar.",
+  "turnModeSimultaneousDescription": "Jij en de computer handelen tijdens één gedeelde beurt voordat de spelengine de gemeenschappelijke fasen verwerkt.",
+  "opponentsTitle": "Tegenstanders",
+  "opponentControlLabel": "Besturing tegenstander",
+  "opponentNumberLabel": "Tegenstander {number}",
+  "@opponentNumberLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "humanOpponent": "Menselijke speler",
+  "aiOpponent": "Computer",
+  "mapSetupTitle": "Kaart",
+  "mapSetupBody": "Een compacte, ontworpen kaart van 7 × 7 vakken voor een gerichte partij tussen twee beschavingen.",
+  "mapSetupDetails": "{mapName} · {columns} × {rows} · {players} beschavingen",
+  "@mapSetupDetails": {
+    "placeholders": {
+      "mapName": {
+        "type": "String"
+      },
+      "columns": {
+        "type": "int"
+      },
+      "rows": {
+        "type": "int"
+      },
+      "players": {
+        "type": "int"
+      }
+    }
+  },
+  "victoryPathsTitle": "Wegen naar de overwinning",
+  "victoryPathsBody": "De spelengine bepaalt overwinningen door verovering, dominantie, cultuur en punten.",
+  "settlementToEmpireTitle": "Van nederzetting tot rijk",
+  "settlementToEmpireBody": "Verken, sticht steden, doe onderzoek, vorm legers en bouw blijvende voordelen op.",
+  "continueToSummary": "Doorgaan naar overzicht",
+  "gameSummaryTitle": "Expeditie gereed",
+  "gameSummaryIntro": "Controleer alle lokale deelnemers voordat je de partij aanmaakt.",
+  "summaryModeLabel": "Modus",
+  "summaryTurnModeLabel": "Beurten",
+  "summaryCivilizationLabel": "Jouw beschaving",
+  "summaryOpponentLabel": "Tegenstander",
+  "summaryMapLabel": "Kaart",
+  "summaryFogLabel": "Oorlogsmist",
+  "summaryAiLabel": "Computerprofiel",
+  "changeSetup": "Instellingen wijzigen",
+  "localModeName": "{value, select, singlePlayer{Eén speler} hotseat{Hotseat} other{Lokaal spel}}",
+  "@localModeName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "participantControlName": "{value, select, human{Mens} ai{Computer} other{Onbekend}}",
+  "@participantControlName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "fogSettingName": "{value, select, enabled{Ingeschakeld} disabled{Uitgeschakeld} other{Onbekend}}",
+  "@fogSettingName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultSecondPlayerName": "Speler 2",
+  "defaultNumberedPlayerName": "Speler {number}",
+  "@defaultNumberedPlayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultNumberedAiName": "Computer {number}",
+  "@defaultNumberedAiName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "scenarioLabel": "Kaart",
+  "localScenarioName": "{value, select, starterDuel{Startkaart} dravonia{Dravonia} myranth{Myranth} terenos{Terenos} verdantia{Verdantia} other{Lokale kaart}}",
+  "@localScenarioName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "humanCountryLabel": "Jouw land",
+  "aiCountryLabel": "AI-land",
+  "aiDifficultyLabel": "AI-moeilijkheid",
+  "aiPersonaLabel": "AI-persoonlijkheid",
+  "fogOfWarLabel": "Oorlogsmist",
+  "startGame": "Spel starten",
+  "startingGame": "Spel wordt gestart",
+  "localGameStartFailed": "Het lokale spel kon niet worden gestart.",
+  "saveGame": "Spel opslaan",
+  "savingGame": "Spel wordt opgeslagen",
+  "gameSaved": "Spel opgeslagen",
+  "saveFailure": "{value, select, unavailable{Opslaan is niet beschikbaar voor deze sessie.} exportFailed{Het spel kon niet worden geëxporteerd.} writeFailed{Het opslagbestand kon niet worden bewaard.} other{Het spel kon niet worden opgeslagen.}}",
+  "@saveFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "resumeFailure": "{value, select, unavailable{Opgeslagen spellen zijn niet beschikbaar op dit platform.} missing{Er is geen opgeslagen spel gevonden.} unreadable{Het opgeslagen spel kon niet worden gelezen.} incompatible{Het opgeslagen spel is ongeldig of niet compatibel met het huidige spel.} other{Het opgeslagen spel kon niet worden hervat.}}",
+  "@resumeFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "loadGameTitle": "Spel laden",
+  "loadGameEmpty": "Er zijn geen opgeslagen spellen gevonden.",
+  "loadGameSingleLabel": "Eén speler · {scenario}",
+  "@loadGameSingleLabel": {
+    "placeholders": {
+      "scenario": {
+        "type": "String"
+      }
+    }
+  },
+  "importSave": "Opgeslagen spel importeren",
+  "exportSave": "Exporteren",
+  "saveTransferUnavailable": "Het importeren en exporteren van opgeslagen spellen is niet beschikbaar op dit platform.",
+  "saveImportCompleted": "{map} is als afzonderlijk opgeslagen spel geïmporteerd.",
+  "@saveImportCompleted": {
+    "placeholders": {
+      "map": {
+        "type": "String"
+      }
+    }
+  },
+  "saveExportCompleted": "{map} is geëxporteerd.",
+  "@saveExportCompleted": {
+    "placeholders": {
+      "map": {
+        "type": "String"
+      }
+    }
+  },
+  "saveTransferFailure": "{value, select, unavailable{Het overzetten van opgeslagen spellen is niet beschikbaar op dit platform.} unreadable{Het geselecteerde opslagbestand kon niet worden gelezen.} tooLarge{Het geselecteerde opslagbestand overschrijdt de limiet van 16 MiB.} incompatible{Het geselecteerde opgeslagen spel is ongeldig of komt niet overeen met een geïnstalleerde kaart, regelset of versie van de spelengine.} missing{Het geselecteerde opgeslagen spel bestaat niet meer.} writeFailed{Het geïmporteerde spel kon niet worden opgeslagen.} exportFailed{Het opslagbestand kon niet worden geëxporteerd.} other{Het opgeslagen spel kon niet worden overgezet.}}",
+  "@saveTransferFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "replayTitle": "Herhaling",
+  "loadingReplay": "Herhaling wordt geladen",
+  "replayUnavailable": "Herhalingen afspelen is niet beschikbaar.",
+  "replayFailure": "{value, select, unavailable{Herhalingen afspelen is niet beschikbaar op dit platform.} missing{Er is geen herhaling gevonden. Sla eerst een lokaal spel op.} unreadable{Het herhalingsbestand kon niet worden gelezen.} incompatible{De herhaling is ongeldig of niet compatibel met het huidige spel.} seekFailed{De gevraagde stap van de herhaling kon niet worden geladen.} other{De herhaling kon niet worden geopend.}}",
+  "@replayFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "replayMapLabel": "Herhalingskaart",
+  "replayControls": "Herhalingsbediening",
+  "playReplay": "Herhaling afspelen",
+  "pauseReplay": "Herhaling pauzeren",
+  "backToMenu": "Terug naar het hoofdmenu",
+  "replayProgress": "{position} van {entryCount}",
+  "@replayProgress": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "entryCount": {
+        "type": "int"
+      }
+    }
+  },
+  "replaySpeed": "Snelheid {value}×",
+  "@replaySpeed": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiTurnRunning": "De computer is aan de beurt.",
+  "aiTurnFailure": "{value, select, requestFailed{De computerbeurt kon niet worden voltooid.} responseIncompatible{Het antwoord op de computerbeurt is niet compatibel met deze client.} incomplete{De computer heeft zijn beurt niet binnen de veilige opdrachtenlimiet voltooid.} other{De computerbeurt kon niet worden voltooid.}}",
+  "@aiTurnFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultPlayerName": "Speler",
+  "defaultAiName": "Computer",
+  "countryName": "{value, select, poland{Polen} ukraine{Oekraïne} germany{Duitsland} france{Frankrijk} unitedKingdom{Verenigd Koninkrijk} italy{Italië} spain{Spanje} netherlands{Nederland} sweden{Zweden} russia{Rusland} unitedStates{Verenigde Staten} canada{Canada} china{China} korea{Korea} japan{Japan} portugal{Portugal} india{India} brazil{Brazilië} indonesia{Indonesië} mexico{Mexico} turkey{Turkije} saudiArabia{Saoedi-Arabië} egypt{Egypte} greece{Griekenland} other{Onbekend land}}",
+  "@countryName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiDifficultyName": "{value, select, easy{Makkelijk} normal{Normaal} hard{Moeilijk} veryHard{Zeer moeilijk} other{Onbekende moeilijkheid}}",
+  "@aiDifficultyName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiPersonaName": "{value, select, balanced{Evenwichtig} aggressive{Agressief} expansive{Expansionistisch} economic{Economisch} scientific{Wetenschappelijk} other{Onbekende persoonlijkheid}}",
+  "@aiPersonaName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "unknownRouteLabel": "Onbekende pagina",
+  "pageUnavailable": "Pagina niet beschikbaar",
+  "unknownRouteMessage": "Onbekende pagina: {location}",
+  "@unknownRouteMessage": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "missingRouteLocation": "(ontbreekt)",
+  "mapSemanticsLabel": "Kaart {mapId}, {cols} bij {rows} hexen",
+  "@mapSemanticsLabel": {
+    "placeholders": {
+      "mapId": {
+        "type": "String"
+      },
+      "cols": {
+        "type": "int"
+      },
+      "rows": {
+        "type": "int"
+      }
+    }
+  },
+  "mapInputHint": "Gebruik WASD of de pijltjestoetsen om de camera te verschuiven, Enter om te selecteren, M voor verplaatsen, I om te inspecteren, R om de kaartweergave te wisselen, vierkante haakjes voor openstaande acties en Spatie voor de volgende actie of om de beurt te beëindigen. Gebruik Tab om bedieningselementen te focussen.",
+  "noHexSelected": "Geen hex geselecteerd",
+  "selectedHex": "Geselecteerde hex {col}, {row}",
+  "@selectedHex": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "mapViewModeTooltip": "Kaartweergave wijzigen",
+  "mapViewGraphicUnavailable": "Grafische weergave is niet beschikbaar voor deze kaart.",
+  "mapViewModeGraphic": "Grafisch",
+  "mapViewModeTiles": "Tegels",
+  "hexLabel": "Hex {col}, {row}",
+  "selectionTerrain": "Terrein",
+  "@hexLabel": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "unitLabel": "Eenheid {unitId}",
+  "@unitLabel": {
+    "placeholders": {
+      "unitId": {
+        "type": "String"
+      }
+    }
+  },
+  "routeSummary": "Route: {totalCost} bewegingspunten · {remaining} resterend",
+  "@routeSummary": {
+    "placeholders": {
+      "totalCost": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmMove": "Verplaatsing bevestigen",
+  "moveTurnCost": "{turns, plural, one{1 beurt} other{{turns} beurten}}",
+  "@moveTurnCost": {
+    "placeholders": {
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmMoveWithCost": "Bevestigen · {turnCost}",
+  "@confirmMoveWithCost": {
+    "placeholders": {
+      "turnCost": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseHighlightedDestination": "Kies een gemarkeerde bestemming.",
+  "movingUnit": "Eenheid wordt verplaatst",
+  "unitActionLabel": "{label, select, title{Eenheidsacties} fortify{Verschansen} skip{Overslaan} cancel{Actie annuleren} executing{Eenheidsactie wordt uitgevoerd} logisticsTitle{Logistiek} logisticsLoading{Logistieke opties worden geladen} logisticsEmpty{Er zijn momenteel geen logistieke acties beschikbaar.} autoExplore{Automatisch verkennen} merchantRoute{Handelsroute toewijzen} merchantTravel{Naar stad verplaatsen} detachTroop{Troep afsplitsen} other{Eenheidsactie}}",
+  "@unitActionLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "unitActionFailure": "{failure, select, requestFailed{Het verzoek voor de eenheidsactie kon niet worden voltooid.} responseIncompatible{Het antwoord op de eenheidsactie is niet compatibel met deze client.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} stale{De speltoestand is veranderd. Controleer de eenheid en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} unitUnavailable{Die eenheid kan geen opdrachten meer ontvangen.} unitBusy{Die eenheid is bezig en kan deze actie nu niet uitvoeren.} internal{De eenheidsactie kon niet worden toegepast. Probeer het opnieuw.} logisticsRequestFailed{Het logistieke verzoek kon niet worden voltooid.} logisticsResponseIncompatible{Het logistieke antwoord is niet compatibel met deze client.} logisticsOptionUnavailable{Die logistieke optie is niet meer beschikbaar.} combatFailureRequestFailed{Het gevechtsverzoek kon niet worden voltooid.} combatFailureResponseIncompatible{Het gevechtsantwoord is niet compatibel met deze client.} combatFailureSessionUnavailable{De lokale spelsessie is niet beschikbaar.} combatFailureTargetUnavailable{Er is geen aanvalsvoorbeeld beschikbaar voor dat doel.} combatFailureStaleRevision{De speltoestand is veranderd. Controleer die en probeer het opnieuw.} combatFailureMatchFinished{De partij is al afgelopen.} combatFailureAttackerNotFound{De aanvallende eenheid is niet meer beschikbaar.} combatFailureAttackerNotControlled{Deze speler bestuurt de aanvallende eenheid niet.} combatFailureAttackerUnavailable{De aanvallende eenheid is niet beschikbaar.} combatFailureAttackerExhausted{De aanvallende eenheid is uitgeput.} combatFailureAttackerOutOfBounds{De aanvallende eenheid bevindt zich buiten de kaart.} combatFailureAttackerCannotAttack{Die eenheid kan niet aanvallen.} combatFailureAttackTargetNotVisible{Het doel is niet zichtbaar.} combatFailureAttackTargetOutOfBounds{Het doel bevindt zich buiten de kaart.} combatFailureAttackTargetNotFound{Daar is geen doel aanwezig.} combatFailureAttackTargetNotEnemy{Dat doel is geen vijand.} combatFailureAttackTargetProtectedByTreaty{Een verdrag beschermt dat doel.} combatFailureAttackTargetOutOfRange{Het doel is buiten bereik.} combatFailureAttackCityHasNoHealth{Die stad kan niet worden aangevallen.} other{De eenheidsactie kon niet worden voltooid.}}",
+  "@unitActionFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  },
+  "turnSummary": "{kind, select, label{BEURT {turn}} progress{Klaar: {submitted} van {required}} other{BEURT {turn}}}",
+  "@turnSummary": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "turn": {
+        "type": "int"
+      },
+      "submitted": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "turnText": "{value, select, statusActive{Jouw beurt} statusFinished{Beurt voltooid} statusSubmitted{Beurt bevestigd} statusWaiting{Wachten} statusPendingAction{Actie vereist} actionEnd{Beurt beëindigen} actionEnding{Beurt wordt beëindigd} outcomeConquest{Veroveringsoverwinning} outcomeDomination{Dominantieoverwinning} outcomeCultural{Culturele overwinning} outcomeScore{Puntenoverwinning} outcomeResignation{Partij geëindigd door opgave} outcomeDraw{Gelijkspel} outcomeOngoing{Partij bezig} activityTitle{Activiteit} activityArtifact{Artefactactiviteit} activityCity{Stadsactiviteit} activityResearch{Onderzoeksvoortgang} activityObjective{Strategisch doel bijgewerkt} activityOutcome{Partijresultaat bijgewerkt} activityCombat{Gevechtsactiviteit} activityDiplomacy{Diplomatieke activiteit} activityUnit{Eenheidsactiviteit} activityTurn{Beurt bijgewerkt} activityWorker{Werkerstaak voltooid} combatTitle{Gevecht} combatLoading{Gevechtsvoorbeeld wordt geladen} combatTarget{Doel} combatDistance{Afstand} combatOutgoing{Toegebrachte schade} combatRetaliation{Schade door tegenaanval} combatNone{Geen} combatCapture{Stad innemen} combatDestroy{Stad vernietigen} combatConfirm{Aanval bevestigen} combatExecuting{Gevecht wordt verwerkt} combatResolved{Gevecht verwerkt} combatAttackerHp{Gezondheid aanvaller} combatDefenderHp{Gezondheid verdediger} combatEventUnitAttacked{Eenheid aangevallen} combatEventCityAttacked{Stad aangevallen} combatEventCombatResolved{Gevecht verwerkt} combatEventUnitGainedExperience{Eenheid heeft ervaring opgedaan} combatEventUnitKilled{Eenheid verslagen} combatEventUnitRetreated{Eenheid teruggetrokken} combatEventCityCaptured{Stad ingenomen} combatEventCityDestroyed{Stad vernietigd} combatEventDiplomaticScoreChanged{Diplomatieke relatie gewijzigd} other{Spelactiviteit}}",
+  "@turnText": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "turnFailure": "{failure, select, requestFailed{Het beurtverzoek kon niet worden voltooid.} responseIncompatible{Het beurtantwoord is niet compatibel met deze client.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} stale_revision{De speltoestand is veranderd. Controleer die en probeer het opnieuw.} match_finished{De partij is al afgelopen.} turn_player_not_controlled{Deze speler kan de huidige beurt niet beëindigen.} turn_player_not_active{Deze speler is niet actief.} turn_scope_invalid{Het bereik van de huidige beurt is ongeldig.} turn_processor_unsupported{Een vereiste beurtverwerking is niet beschikbaar.} turn_number_overflow{Het volgende beurtnummer overschrijdt de toegestane limiet.} state_revision_overflow{De spelrevisie kan niet verder worden verhoogd.} other{De beurt kon niet worden voltooid.}}",
+  "@turnFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  },
+  "loadingMap": "Kaart wordt geladen",
+  "mapLoadingFailed": "Kaart laden mislukt",
+  "mapUnavailable": "Kaart niet beschikbaar",
+  "mapAdapterUnavailable": "De native speladapter is niet beschikbaar op dit platform.",
+  "mapClientIncompatible": "De native speladapter is niet compatibel met deze client.",
+  "mapLoadSuperseded": "Een nieuwer kaartverzoek heeft dit verzoek vervangen.",
+  "mapLoadFailure": "De kaart kon niet worden geladen.",
+  "movementRequestFailed": "Het verplaatsingsverzoek kon niet worden voltooid.",
+  "movementResponseIncompatible": "Het verplaatsingsantwoord is niet compatibel met deze client.",
+  "movementSessionUnavailable": "De lokale spelsessie is niet beschikbaar.",
+  "moveRejectedStale": "De speltoestand is veranderd. Controleer de nieuwste positie en probeer het opnieuw.",
+  "moveRejectedUnitUnavailable": "Die eenheid is niet meer beschikbaar om te verplaatsen.",
+  "moveRejectedUnitBusy": "Die eenheid is bezig en kan nu niet verplaatsen.",
+  "moveRejectedTargetUnavailable": "Die bestemming is niet beschikbaar.",
+  "moveRejectedMovementInsufficient": "De eenheid heeft niet genoeg bewegingspunten over.",
+  "moveRejectedPathUnavailable": "Er is geen geldige route naar die bestemming beschikbaar.",
+  "moveRejectedInternal": "De verplaatsing kon niet worden toegepast. Probeer het opnieuw.",
+  "retry": "Opnieuw proberen",
+  "openSettings": "Instellingen openen",
+  "settingsTitle": "Instellingen",
+  "audioSettings": "Audio",
+  "cameraSettings": "Camera",
+  "cameraSensitivity": "Zoomgevoeligheid",
+  "animationSettings": "Animaties",
+  "showUnitMovementAnimations": "Bewegingsanimaties van eenheden tonen",
+  "showUnitIdleAnimations": "Rustanimaties van eenheden tonen",
+  "showRouteAnimations": "Animaties van geplande routes tonen",
+  "showCombatAnimations": "Gevechtsanimaties tonen",
+  "cinematicCamera": "Filmische camera",
+  "smoothCameraMovement": "Soepele camerabeweging",
+  "mapSettings": "Kaart",
+  "mapGrid": "Hexranden",
+  "mapGridDescription": "Zwarte randen rond hexen op de kaart tonen.",
+  "mapResourceIcons": "Grondstofpictogrammen",
+  "mapResourceIconsDescription": "Beschikbare grondstoffen op hexen tonen.",
+  "mapTerrainIcons": "Terreinpictogrammen",
+  "mapTerrainIconsDescription": "De terreinkenmerken van elke hex tonen.",
+  "mapHeightBadges": "Hoogtelabels",
+  "mapHeightBadgesDescription": "De vastgelegde hoogte van verhoogde hexen tonen.",
+  "mapElevationWalls": "Hoogtewanden",
+  "mapElevationWallsDescription": "Diepte bij verhoogde hexen tonen, rekening houdend met hun buren.",
+  "accessibilitySettings": "Toegankelijkheid",
+  "reducedMotion": "Beweging verminderen",
+  "reducedMotionDescription": "Niet-essentiële animaties en overgangen vermijden.",
+  "highContrast": "Hoog contrast",
+  "highContrastDescription": "Het contrast van de gebruikersinterface verhogen.",
+  "resetSettings": "Standaardwaarden herstellen",
+  "objectivesTitle": "Strategische doelen",
+  "openObjectives": "Doelen openen",
+  "closeObjectives": "Doelen sluiten",
+  "objectivesEmpty": "Deze kaart heeft geen doelen.",
+  "objectivesAuthoredRules": "Vastgelegde kaartvereisten. De spelengine beheert de huidige voortgang.",
+  "objectiveType": "{type, select, ruins{Ruïnes} strategicPass{Strategische pas} holySite{Heilige plaats} legendaryResource{Legendarische grondstof} other{Strategisch doel}}",
+  "@objectiveType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "objectiveDetails": "Hex {col}, {row}\nVereiste bezettingsbeurten: {holdTurns} · Overwinningspunten: {victoryPoints} · Goud per beurt: {goldPerTurn}",
+  "@objectiveDetails": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      },
+      "holdTurns": {
+        "type": "int"
+      },
+      "victoryPoints": {
+        "type": "int"
+      },
+      "goldPerTurn": {
+        "type": "int"
+      }
+    }
+  },
+  "matchFinishedTitle": "Partij afgelopen",
+  "outcomeWinner": "Winnaar: {playerId}",
+  "@outcomeWinner": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      }
+    }
+  },
+  "outcomeNoWinner": "Geen winnaar",
+  "outcomeFinalScore": "Eindscore",
+  "outcomeScoreLine": "{playerId}: {score}",
+  "@outcomeScoreLine": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "cityText": "{key, select, title{Stad} foundingTitle{Een stad stichten} loading{Stadsgegevens worden geladen} owner{Eigenaar} health{Gezondheid} population{Bevolking} territory{Gebied} foundingSelection{Begingebied} foundingConfirm{Stadsstichting bevestigen} foundingCancel{Stichting annuleren} executing{Stadsactie wordt toegepast} cityYield{Opbrengst} food{Voedsel} production{Productie} gold{Goud} defense{Verdediging} workedHexes{Bewerkte hexen} workedHexSelect{Bewerkte hexen beheren} workedHexHint{Selecteer een gemarkeerde hex onder jouw controle op de kaart.} expansion{Gewenste uitbreiding} expansionSelect{Uitbreiding kiezen} expansionHint{Selecteer een gemarkeerde uitbreidingshex op de kaart.} managementCancel{Kaartselectie afronden} foundingOpen{Een stad plannen} other{Stad}}",
+  "@cityText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "cityFailure": "{code, select, requestFailed{Het stadsverzoek kon niet worden voltooid.} responseIncompatible{Het stadsantwoord is niet compatibel met deze client.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{De speltoestand is veranderd. Controleer de stad en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} cityFounderNotFound{De stichtende eenheid is niet meer beschikbaar.} cityFounderNotControlled{Deze speler bestuurt de stichtende eenheid niet.} cityFounderBusy{De stichtende eenheid is bezig.} cityFounderInvalid{Die eenheid kan geen stad stichten.} cityFounderNoSettlers{De stichtende eenheid heeft geen kolonisten.} citySiteInvalid{Op die plaats kan geen stad worden gesticht.} cityCenterOccupied{Het stadscentrum is bezet.} cityCenterClaimed{Het stadscentrum is al opgeëist.} cityCenterTooClose{Het stadscentrum ligt te dicht bij een andere stad.} cityControlledHexesInvalid{Het geselecteerde begingebied is ongeldig.} cityNotFound{Die stad is niet meer beschikbaar.} cityNotControlled{Deze speler bestuurt die stad niet.} workedHexUnavailable{Die bewerkte hex is niet beschikbaar.} workedHexLimitReached{De stad heeft haar limiet voor bewerkte hexen bereikt.} cityExpansionHexUnavailable{Die uitbreidingshex is niet beschikbaar.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het stadsverzoek kon niet worden voltooid.}}",
+  "@cityFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "workerText": "{key, select, title{Werker} loading{Werkeropties worden geladen} empty{Er is momenteel geen werkeractie beschikbaar.} executing{Werkeractie wordt toegepast} buildCharges{Bouwacties} progress{Voortgang} assigned{Toegewezen hex} openActions{Hex verbeteren} closeActions{Selectie annuleren} selectImprovement{Selecteren} confirmImprovement{Verbetering bevestigen} cancelJob{Bouw annuleren} assign{Aan hex toewijzen} cancelAssignment{Toewijzing annuleren} buildRoad{Weg aanleggen} automate{Automatiseren} automationEvidence{Planningsonderbouwing} other{Werker}}",
+  "@workerText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "workerFailure": "{code, select, requestFailed{Het werkerverzoek kon niet worden voltooid.} responseIncompatible{Het werkerantwoord is niet compatibel met deze client.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{De speltoestand is veranderd. Controleer de werker en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} workerNotFound{De werker is niet meer beschikbaar.} workerNotControlled{Deze speler bestuurt de werker niet.} workerUnavailable{De werker is niet beschikbaar.} workerNoMovementPoints{De werker heeft geen bewegingspunten.} workerQueuedPathActive{De werker heeft een actieve verplaatsingsopdracht.} workerImprovementNotSelected{Selecteer eerst een verbetering.} workerActionNotControlled{Deze speler beheert de openstaande werkeractie niet.} workerImprovementUnavailable{Die verbetering is niet beschikbaar.} workerJobNotActive{De werker heeft geen actieve bouwopdracht.} workerAssignmentUnavailable{De werker kan hier niet worden toegewezen.} workerAssignmentNotActive{De werker heeft geen actieve toewijzing.} workerRoadUnavailable{Hier kan geen weg worden aangelegd.} roadConstructionExistingRoad{Hier ligt al een weg.} roadConstructionCity{Op een stadscentrum kan geen weg worden aangelegd.} roadConstructionEnemyTerritory{In vijandelijk gebied kan geen weg worden aangelegd.} roadConstructionImpassableTerrain{Op dit terrein kan geen weg worden aangelegd.} workerAutomationNotActive{Werkerautomatisering is niet actief.} workerAutomationNoTarget{Werkerautomatisering heeft geen doel gevonden.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het werkerverzoek kon niet worden voltooid.}}",
+  "@workerFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "productionText": "{key, select, title{Productie en grondstoffen} loading{Productieopties worden geladen} executing{Stadsproductie wordt bijgewerkt} current{Huidige productie} invested{Geïnvesteerd} overflow{Overschot} resources{Strategische grondstoffen} buildings{Gebouwen} units{Eenheden} projects{Projecten} wonders{Wereldwonderen} specializations{Specialisaties} rush{Productie versnellen} cost{kosten} requires{vereist} empty{Er is momenteel geen optie beschikbaar.} other{Productie}}",
+  "@productionText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "productionFailure": "{code, select, requestFailed{Het productieverzoek kon niet worden voltooid.} responseIncompatible{Het productieantwoord is niet compatibel.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{De stad is veranderd. Controleer de productie en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} cityNotFound{De stad is niet meer beschikbaar.} cityNotControlled{Deze speler bestuurt de stad niet.} buildingNotAvailable{Dit gebouw is niet beschikbaar.} unitProductionInvalidResourceOption{Die grondstofoptie is ongeldig.} unitProductionNotAvailable{Deze eenheid is niet beschikbaar.} unitProductionRequiresResource{Selecteer een grondstofoptie.} unitProductionMissingStrategicResource{Vereiste grondstoffen ontbreken.} unitProductionRequiresCoast{Deze eenheid vereist een kuststad.} unitSupplyLimitReached{De bevoorradingslimiet voor eenheden is bereikt.} wonderNotAvailable{Dit wereldwonder is niet beschikbaar.} citySpecializationLocked{Deze specialisatie is vergrendeld.} citySpecializationUnchanged{Deze specialisatie is al actief.} citySpecializationMissingBuilding{Een vereist gebouw ontbreekt.} productionQueueEmpty{De productiewachtrij is leeg.} projectCannotBeRushed{Een doorlopend project kan niet worden versneld.} rushProductionUnavailable{Productie versnellen is niet beschikbaar.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het productieverzoek kon niet worden voltooid.}}",
+  "@productionFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactText": "{key, select, title{Wereldartefacten} executing{Artefactactie wordt toegepast} startExcavation{Opgraving starten} storeInCity{In stad opslaan} trade{Artefact verhandelen} targetPlayer{Ontvangende speler} offeredGold{Aangeboden goud} onMap{Op de kaart bij} carried{Gedragen door} stored{Opgeslagen in} excavation{Opgraving bij} turnsRemaining{beurten resterend} other{Artefact}}",
+  "@artifactText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactName": "{kind, select, ancientImperialCrown{Oude keizerskroon} astronomersTablets{Tabletten van de astronoom} prophetMask{Masker van de profeet} heroSword{Zwaard van de held} merchantsSeal{Zegel van de koopman} firstPeoplesChronicle{Kroniek van het eerste volk} templeReliquary{Tempelreliekschrijn} queensMirror{Spiegel van de koningin} other{Wereldartefact}}",
+  "@artifactName": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactOnMap": "Op de kaart bij {col}, {row}",
+  "@artifactOnMap": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "artifactCarriedBy": "Gedragen door {unitName}",
+  "@artifactCarriedBy": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactStoredIn": "Opgeslagen in {cityName}",
+  "@artifactStoredIn": {
+    "placeholders": {
+      "cityName": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactExcavationAt": "Opgraving bij {col}, {row} · {remainingTurns, plural, one{1 beurt resterend} other{{remainingTurns} beurten resterend}}",
+  "@artifactExcavationAt": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      },
+      "remainingTurns": {
+        "type": "int"
+      }
+    }
+  },
+  "artifactFailure": "{code, select, requestFailed{Het artefactverzoek kon niet worden voltooid.} responseIncompatible{Het artefactantwoord is niet compatibel.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{De speltoestand is veranderd. Controleer het artefact en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} unitNotFound{De eenheid is niet meer beschikbaar.} unitNotControlled{Deze speler bestuurt de eenheid niet.} unitUnavailable{De eenheid is niet beschikbaar.} unitAlreadyCarryingArtifact{De eenheid draagt al een artefact.} artifactNotFound{Het artefact is niet meer beschikbaar.} unitNotCarryingArtifact{De eenheid draagt geen artefact.} cityNotFound{De stad is niet meer beschikbaar.} cityNotControlled{Deze speler bestuurt de stad niet.} unitNotInCity{De eenheid bevindt zich niet in die stad.} cityArtifactSlotFull{De artefactplaats van de stad is vol.} artifactTradeActorUnavailable{Deze speler kan geen artefacten verhandelen.} artifactTradeTargetInvalid{De ontvangende speler is ongeldig.} artifactTradeGoldInvalid{Het goudaanbod is ongeldig.} artifactTradeBlockedByWar{Oorlog blokkeert de artefacthandel.} artifactTradeGoldUnavailable{Het aangeboden goud is niet beschikbaar.} offeredArtifactUnavailable{Het aangeboden artefact is niet beschikbaar.} targetArtifactSlotUnavailable{De ontvanger heeft geen artefactplaats.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het artefactverzoek kon niet worden voltooid.}}",
+  "@artifactFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "researchText": "{key, select, title{Onderzoek} open{Onderzoek openen} close{Onderzoek sluiten} loading{Onderzoeksopties worden geladen} retry{Opnieuw proberen} selecting{Technologie wordt geselecteerd} selectionRequired{Selecteer een technologie om door te gaan} sciencePerTurn{Wetenschap per beurt} overflow{Opgeslagen wetenschap} active{Actieve technologie} none{Geen} cost{Kosten} progress{Voortgang} boost{Kostenkorting door impuls} prerequisites{Vereisten} blockedBy{Geblokkeerd door} unlocks{Ontgrendelt} choose{Selecteren} other{Onderzoek}}",
+  "@researchText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "researchAvailability": "{value, select, unlocked{Onderzocht} active{Actief} available{Beschikbaar} lockedByPrerequisites{Vereisten nodig} lockedByTechnology{Geblokkeerd door technologie} other{Niet beschikbaar}}",
+  "@researchAvailability": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "researchUnlock": "{kind}: {target}",
+  "@researchUnlock": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "researchFailure": "{code, select, requestFailed{Het onderzoeksverzoek kon niet worden voltooid.} responseIncompatible{Het onderzoeksantwoord is niet compatibel.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{Het onderzoek is veranderd. Controleer de opties en probeer het opnieuw.} technologyPlayerNotControlled{Deze speler kan geen onderzoek selecteren.} technologyNotAvailable{Deze technologie is niet beschikbaar.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het onderzoeksverzoek kon niet worden voltooid.}}",
+  "@researchFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomacyText": "{key, select, title{Diplomatie} open{Diplomatie openen} close{Diplomatie sluiten} noContacts{Geen contacten} compose{Nieuwe actie} target{Gesprekspartner} action{Actie} send{Verzenden} invalid{Controleer de voorwaarden in het formulier.} pending{Diplomatieke actie wordt verzonden} relations{Relaties} proposals{Voorstellen} messages{Privéberichten} agreements{Grondstoffenovereenkomsten} accept{Accepteren} reject{Afwijzen} amount{Hoeveelheid} goldPerTurn{Goud per beurt} duration{Beurten} resource{Grondstof} offered{Aangeboden grondstof} requested{Gevraagde grondstof} topic{Onderwerp} other{Diplomatie}}",
+  "@diplomacyText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomacyFailure": "{code, select, requestFailed{Het diplomatieverzoek kon niet worden voltooid.} responseIncompatible{Het diplomatieantwoord is niet compatibel.} sessionUnavailable{De lokale spelsessie is niet beschikbaar.} staleRevision{De diplomatieke situatie is veranderd. Controleer de huidige toestand en probeer het opnieuw.} matchFinished{De partij is al afgelopen.} diplomacyPlayerNotControlled{Deze speler kan geen diplomatieke acties uitvoeren.} diplomacyTargetNotDiscovered{Deze gesprekspartner is niet beschikbaar.} diplomacyProposalNotAllowed{Dit voorstel is niet toegestaan.} diplomacyDuplicateProposal{Dit voorstel bestaat al.} diplomacyProposalNotFound{Dit voorstel bestaat niet meer.} diplomacyProposalPaymentUnavailable{De betaling voor het voorstel is niet beschikbaar.} diplomacyMessageCooldown{Er is te kort geleden een vergelijkbaar bericht verzonden.} diplomacyDuplicateMessage{Dit bericht bestaat al.} diplomacyMessageNotFound{Dit bericht bestaat niet meer.} diplomacyMessageUnavailable{Dit bericht kan nu niet worden gebruikt.} diplomacyTruceActive{Er is een wapenstilstand actief.} diplomacyWarAlreadyActive{Er is al oorlog.} diplomacyInvalidGoldAmount{De hoeveelheid goud is ongeldig.} diplomacyGoldGiftBlockedByRelation{Deze relatie blokkeert goudgiften.} diplomacyGoldUnavailable{Het vereiste goud is niet beschikbaar.} diplomacyGoldGiftUnavailable{Deze goudgift is niet beschikbaar.} invalidResourceTradeTarget{De ontvanger van de grondstoffenhandel is ongeldig.} invalidResourceTradeResource{De geselecteerde grondstof is ongeldig.} invalidResourceTradeTerms{De voorwaarden van de grondstoffenhandel zijn ongeldig.} resourceTradeBlockedByWar{Oorlog blokkeert deze grondstoffenhandel.} resourceTradeGoldUnavailable{Het goud voor de handel is niet beschikbaar.} resourceTradeAlreadyActive{Deze grondstoffenhandel is al actief.} invalidResourceTradeAgreementId{De identificatie van de overeenkomst is ongeldig.} resourceTradeAgreementIdConflict{De identificatie van de overeenkomst veroorzaakt een conflict.} resourceTradeExportUnavailable{De grondstofexport is niet beschikbaar.} resourceTradeOfferUnavailable{De aangeboden grondstof is niet beschikbaar.} resourceTradeRequestUnavailable{De gevraagde grondstof is niet beschikbaar.} stateRevisionOverflow{De speltoestand kan niet verder worden bijgewerkt.} other{Het diplomatieverzoek kon niet worden voltooid.}}",
+  "@diplomacyFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "presentationName": "{value, select, farm{Boerderij} riverFarm{Rivierboerderij} mine{Mijn} lumberMill{Zagerij} pasture{Weide} camp{Kamp} quarry{Steengroeve} fishingBoats{Vissersboten} orchard{Boomgaard} plantation{Plantage} vineyard{Wijngaard} tradingPost{Handelspost} prospectorCamp{Prospectiekamp} horseRanch{Paardenfokkerij} pearlDivers{Parelduikers} coalShaft{Kolenschacht} oilWell{Oliebron} bauxiteMine{Bauxietmijn} uraniumMine{Uraniummijn} wheat{Tarwe} fish{Vis} deer{Hert} sheep{Schaap} rice{Rijst} cow{Koe} apple{Appel} banana{Banaan} citrus{Citrusvruchten} gold{Goud} silver{Zilver} gems{Edelstenen} silk{Zijde} spices{Specerijen} cotton{Katoen} grapes{Druiven} ivory{Ivoor} pearls{Parels} coffee{Koffie} cocoa{Cacao} tobacco{Tabak} sugar{Suiker} iron{IJzer} coal{Steenkool} oil{Olie} aluminium{Aluminium} uranium{Uranium} horses{Paarden} marble{Marmer} commander{Commandant} warrior{Krijger} archer{Boogschutter} settler{Kolonist} worker{Werker} merchant{Koopman} scout{Verkenner} spearman{Speerdrager} cavalry{Cavalerie} catapult{Katapult} heavyInfantry{Zware infanterie} fieldCannon{Veldkanon} rifleman{Geweerschutter} tank{Tank} scoutShip{Verkenningsschip} warship{Oorlogsschip} reconPlane{Verkenningsvliegtuig} building{Gebouw} improvement{Verbetering} resourceVisibility{Grondstofzichtbaarheid} unit{Eenheid} wonder{Wereldwonder} friendly{Vriendelijk} neutral{Neutraal} hostile{Vijandig} truce{Wapenstilstand} war{Oorlog} warning{Waarschuwing} complaint{Klacht} request{Verzoek} praise{Lof} threat{Dreiging} cooperation{Samenwerking} troopsNearCities{Troepen bij steden} citiesTooClose{Steden te dichtbij} blockedRoutes{Geblokkeerde routes} withdrawScouts{Verkenners terugtrekken} avoidEscalation{Escalatie vermijden} commonEnemy{Gemeenschappelijke vijand} expansionProvocation{Provocatie door uitbreiding} peacefulPraise{Lof voor vreedzaam gedrag} conciliatory{Verzoenend} evasive{Ontwijkend} aggressive{Agressief} declareWar{Oorlog verklaren} goldGift{Goudgift} friendshipProposal{Vriendschapsvoorstel} truceProposal{Wapenstilstandsvoorstel} message{Bericht} resourceTrade{Grondstoffenhandel} resourceExchange{Grondstoffenruil} granary{Graanschuur} workshop{Werkplaats} industry{Industrie} other{{value}}}",
+  "@presentationName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "technologyName": "{value, select, agriculture{Landbouw} woodworking{Houtbewerking} mining{Mijnbouw} animalHusbandry{Veeteelt} hunting{Jacht} fishing{Visserij} craftsmanship{Ambacht} trade{Handel} storage{Opslag} waterEngineering{Waterbouw} stoneworking{Steenbewerking} militaryOrganization{Militaire organisatie} advancedTrade{Geavanceerde handel} construction{Bouwkunde} navigation{Navigatie} irrigation{Irrigatie} banking{Bankwezen} engineering{Techniek} metallurgy{Metallurgie} horsebackRiding{Paardrijden} ironWorking{IJzerbewerking} coalMining{Steenkoolwinning} machinery{Machines} administration{Bestuur} logistics{Logistiek} shipbuilding{Scheepsbouw} tactics{Tactiek} economy{Economie} urbanization{Verstedelijking} fortifications{Vestingwerken} strategy{Strategie} specialization{Specialisatie} writing{Schrift} mathematics{Wiskunde} medicine{Geneeskunde} civilService{Ambtenarenapparaat} siegecraft{Belegeringstechniek} cartography{Cartografie} guilds{Gilden} law{Recht} education{Onderwijs} urbanPlanning{Stedenbouw} navalDoctrine{Marinedoctrine} steel{Staal} bureaucracy{Bureaucratie} nationalism{Nationalisme} scientificMethod{Wetenschappelijke methode} steamPower{Stoomkracht} electricity{Elektriciteit} combustion{Verbranding} flight{Luchtvaart} massProduction{Massaproductie} radio{Radio} nuclearPhysics{Kernfysica} other{{value}}}",
+  "@technologyName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "cityContentName": "{value, select, growth{Groei} industry{Industrie} commerce{Handel} science{Wetenschap} military{Militair} wealth{Rijkdom} research{Onderzoek} granary{Graanschuur} waterMill{Watermolen} workshop{Werkplaats} storehouse{Pakhuis} housing{Woningen} merchantHall{Koopmanshal} stonemason{Steenhouwer} barracks{Kazerne} marketplace{Marktplaats} port{Haven} aqueduct{Aquaduct} forge{Smidse} stable{Stal} bank{Bank} buildersGuild{Bouwgilde} factory{Fabriek} lighthouse{Vuurtoren} trainingGrounds{Oefenterrein} townHall{Stadhuis} monument{Monument} archive{Archief} academy{Academie} university{Universiteit} observatory{Observatorium} laboratory{Laboratorium} reactor{Reactor} courthouse{Gerechtsgebouw} court{Hof} governorsOffice{Gouverneurskantoor} surveyorsOffice{Landmeterskantoor} planningOffice{Planningskantoor} apothecary{Apotheek} publicBaths{Openbare baden} hospital{Ziekenhuis} ministries{Ministeries} walls{Stadsmuren} armory{Wapenkamer} siegeWorkshop{Belegeringswerkplaats} citadel{Citadel} warCollege{Krijgsacademie} conscriptionOffice{Dienstplichtkantoor} borderFort{Grensfort} airfield{Vliegveld} artisansGuild{Ambachtsgilde} masterWorkshop{Meesterwerkplaats} steelworks{Staalfabriek} railDepot{Spoorwegdepot} powerPlant{Elektriciteitscentrale} assemblyPlant{Assemblagefabriek} refinery{Raffinaderij} mapRoom{Kaartenkamer} shipyard{Scheepswerf} dryDock{Droogdok} navalAcademy{Marineacademie} harborCustoms{Havendouane} museum{Museum} parliament{Parlement} broadcastTower{Zendmast} worldFairGrounds{Wereldtentoonstellingsterrein} greatLibrary{Grote Bibliotheek} hangingGardens{Hangende Tuinen} greatWall{Grote Muur} petra{Petra} centralBank{Centrale Bank} imperialUniversity{Keizerlijke Universiteit} grandCathedral{Grote Kathedraal} motherFactory{Moederfabriek} nationalObservatory{Nationaal Observatorium} svalbardSeedVault{Wereldzadenbank op Spitsbergen} grandExposition{Grote Tentoonstelling} other{Onbekende stadsinhoud}}",
+  "@cityContentName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomaticProposalName": "{value, select, friendship{Vriendschap} truce{Wapenstilstand} other{Onbekend voorstel}}",
+  "@diplomaticProposalName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "mapFeedbackText": "{kind, select, roadCompleted{+Weg} unitKilled{KO} unitRetreated{Terugtocht} artifactExcavationStarted{Opgraving} artifactCarried{Artefact opgepakt} artifactStored{Artefact opgeslagen} other{}}",
+  "@mapFeedbackText": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "mapYieldShort": "{kind, select, food{VOED} production{PROD} gold{GOUD} defense{VERD} other{}}",
+  "@mapYieldShort": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "focusOwnUnitMovement": "Camera richten op bewegingen van mijn eenheden",
+  "followOwnUnitMovement": "Bewegingen van mijn eenheden volgen met de camera",
+  "focusForeignUnitMovement": "Camera richten op bewegingen van vijandelijke eenheden",
+  "followForeignUnitMovement": "Bewegingen van vijandelijke eenheden volgen met de camera",
+  "gameSoundsLabel": "Spelgeluiden",
+  "soundVolumeLabel": "Geluidsvolume",
+  "gameMusicLabel": "Spelmuziek",
+  "musicVolumeLabel": "Muziekvolume",
+  "natureSoundsLabel": "Natuurgeluiden",
+  "natureVolumeLabel": "Volume van natuurgeluiden",
+  "hexInspectionKind": "{value, select, idealCitySite{Ideale stadsplaats} goodCitySite{Goede stadsplaats} fertileField{Vruchtbaar veld} fertilePlains{Vruchtbare vlakten} richPlain{Rijke vlakte} strategicBorderland{Strategisch grensland} strategicField{Strategisch veld} defensivePosition{Verdedigingspositie} fertileForest{Vruchtbaar bos} forestBackline{Bebost achterland} forestForge{Industrieel bos} wildLand{Wildernis} richWilds{Rijke wildernis} exoticBackline{Exotisch achterland} difficultStrategicTerrain{Moeilijk strategisch terrein} highGround{Hooggelegen terrein} riverHills{Rivierheuvels} industrialStronghold{Industrieel bolwerk} richHills{Rijke heuvels} barrenLand{Onvruchtbaar land} oasis{Oase} tradeOasis{Handelsoase} desertDeposits{Woestijnafzettingen} harshLand{Guur land} coldPastures{Koude weiden} resourceOutpost{Grondstoffenvoorpost} hostileLand{Onherbergzaam land} arcticDeposits{Arctische afzettingen} coast{Kust} fishingCoast{Visrijke kust} richCoast{Rijke kust} riverPort{Rivierhaven} regionalPortHeart{Regionaal havenknooppunt} openSea{Open zee} naturalBarrier{Natuurlijke barrière} promisingLand{Veelbelovend land} weakLand{Weinig productief land} ordinaryLand{Gewoon land} mapTile{Kaarttegel} other{Kaarttegel}}",
+  "@hexInspectionKind": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionDescription": "{value, select, idealCitySite{Een waardevolle vestigingsplek waar voedsel, groei en uitbreidingspotentieel samenkomen.} goodCitySite{Degelijk terrein voor een stadscentrum met genoeg basiswaarde om vroege groei te ondersteunen.} fertileField{Grasland langs een rivier dat voedsel, bevolkingsgroei en verbeteringen door werkers bevordert.} fertilePlains{Open vlakten langs een rivier, nuttig voor een balans tussen voedsel en productie.} richPlain{Een waardevolle open tegel met luxegrondstoffen of handelswaarde die de moeite waard is om binnen de grenzen te brengen.} strategicBorderland{Goed land met strategische waarde, nuttig voor uitbreiding voordat rivalen het opeisen.} strategicField{Een vlaktetegel met strategische grondstoffen of invloed op de grenssituatie.} defensivePosition{Terrein dat de verdediging versterkt en helpt nabijgelegen toegangen te bewaken.} fertileForest{Een bos langs een rivier dat groeipotentieel met natuurlijke dekking combineert.} forestBackline{Een veiligere bostegel die groei of op jacht gerichte verbeteringen kan ondersteunen.} forestForge{Bos met industriële grondstoffen, veelbelovend voor productie zodra het is verbeterd.} wildLand{Dicht en lastig terrein, alleen nuttig met een duidelijk plan voor werkers of uitbreiding.} richWilds{Wild terrein met genoeg vruchtbaarheid of grondstoffen om zorgvuldige ontwikkeling te rechtvaardigen.} exoticBackline{Een jungle- of moerastegel met luxegrondstoffen voor latere uitbreiding en handel.} difficultStrategicTerrain{Lastig terrein met strategische grondstoffen: later krachtig, vroeg onhandig.} highGround{Heuvels die verdediging en kaartcontrole meer bevorderen dan snelle groei.} riverHills{Heuvels langs een rivier die verdediging met beter economisch potentieel combineren.} industrialStronghold{Heuvels met industriële grondstoffen, een sterk productiedoel voor een stad.} richHills{Heuvels met waardevolle grondstoffen, nuttig voor uitbreiding gericht op goud of productie.} barrenLand{Droog land met weinig directe waarde, tenzij latere technologie of grenzen het plan veranderen.} oasis{Woestijn met toegang tot een rivier, waardoor zwak land bruikbaar wordt voor groei.} tradeOasis{Een handelsplek in de woestijn die met de juiste verbetering waardevol kan worden.} desertDeposits{Slechte vestigingsgrond met een strategische afzetting die in latere tijdperken belangrijker wordt.} harshLand{Koud of ruig land met een beperkte vroege economie en trage ontwikkeling.} coldPastures{Koud terrein met genoeg weidewaarde om een grensstad te ondersteunen.} resourceOutpost{Afgelegen koud land dat vooral de moeite waard is vanwege de grondstof die het herbergt.} hostileLand{Onherbergzaam terrein met weinig vestigingswaarde en lage directe opbrengsten.} arcticDeposits{Besneeuwd grondstofgebied dat moeilijk bruikbaar is, maar strategisch belangrijk kan worden.} coast{Kustland dat toegang tot de zee en flexibele stadsgroei mogelijk maakt.} fishingCoast{Kust met voedselwaarde, een goede reden om dicht bij het water te werken of te vestigen.} richCoast{Luxegrondstoffen of handelswaarde aan de kust die de moeite waard zijn om binnen stadsgrenzen te brengen.} riverPort{Een riviermonding met handels- en verplaatsingswaarde voor een kuststad.} regionalPortHeart{Een sterk kustcentrum waar de waarde van rivier en grondstoffen samenkomt.} openSea{Water dat nuttig is voor schepen en verkenning, maar niet voor vestiging op land.} naturalBarrier{Onbegaanbaar terrein dat vooral beweging en verdediging beïnvloedt, in plaats van de economie.} promisingLand{Een doorgaans nuttige tegel met genoeg waarde om te inspecteren voordat je verdergaat.} weakLand{Terrein met lage opbrengsten dat vroeg in het spel zelden werkertijd verdient.} ordinaryLand{Een gewone tegel zonder uitgesproken sterke kant, nuttig als die in het stadsplan past.} mapTile{Een eenvoudige kaarttegel met te weinig informatie voor een duidelijk oordeel.} other{Een eenvoudige kaarttegel met te weinig informatie voor een duidelijk oordeel.}}",
+  "@hexInspectionDescription": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionRecommendation": "{value, select, foundCity{Goede ontwikkelingsplek} defendHere{Goede verdedigingspositie} exploitEconomy{De moeite waard om te benutten} avoid{Zonder plan vermijden} neutral{Inspecteren vóór verplaatsing} other{Inspecteren vóór verplaatsing}}",
+  "@hexInspectionRecommendation": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionRecommendationDetail": "{value, select, foundCity{Als het gebied vrij is van grenzen, overweeg dan hier een stad te stichten of een kolonist heen te sturen.} defendHere{Gebruik de positie om eenheden op te stellen, grenzen te beschermen of nabijgelegen steden te dekken.} exploitEconomy{Breng de tegel binnen je grenzen en wijs een werker toe zodra de stad ervan kan profiteren.} avoid{Sla de tegel vroeg over, tenzij een grondstof, route of militaire noodzaak de waarde verandert.} neutral{Verken naburige tegels en vergelijk grondstoffen voordat je een werker of kolonist inzet.} other{Verken naburige tegels en vergelijk grondstoffen voordat je een werker of kolonist inzet.}}",
+  "@hexInspectionRecommendationDetail": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionText": "{value, select, title{Hexinspectie} close{Inspectie sluiten} loading{Hex wordt geïnspecteerd…} requestFailed{De hex kon niet worden geïnspecteerd. Probeer het opnieuw.} responseIncompatible{Het antwoord op de hexinspectie is niet compatibel.} sessionUnavailable{De spelsessie is niet beschikbaar.} description{Beschrijving} terrain{Terrein} resources{Grondstoffen} none{Geen} height{Hoogte} improvements{Mogelijke verbeteringen} noImprovements{Geen passende verbeteringen.} fromStart{Vanaf het begin beschikbaar} unlocked{Technologie ontgrendeld} locked{Technologie vereist} riverBonus{Rivierbonus} defenseBonus{Verdedigingsterrein} outsideCity{Buiten de beheerde stadsgrenzen} cityCenter{Stadscentrum} alreadyImproved{Deze hex is al verbeterd} objective{Kaartdoel} other{Hexinspectie}}",
+  "@hexInspectionText": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionCity": "Bewerkt door {city}",
+  "@hexInspectionCity": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionBuildTurns": "Bouwtijd: {turns, plural, one{1 beurt} other{{turns} beurten}}",
+  "@hexInspectionBuildTurns": {
+    "placeholders": {
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "hexInspectionTerrain": "{value, select, ocean{Oceaan} coast{Kust} lake{Meer} plains{Vlakten} grassland{Grasland} desert{Woestijn} tundra{Toendra} snow{Sneeuw} mountain{Berg} hills{Heuvels} wetlands{Moerasland} jungle{Jungle} forest{Bos} river{Rivier} other{Vlakten}}",
+  "@hexInspectionTerrain": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "gamepadSettings": "Gamepad",
+  "gamepadEnabled": "Gamepadinvoer",
+  "gamepadDeadzone": "Dode zone van gamepad",
+  "gamepadCameraSensitivity": "Cameragevoeligheid van gamepad",
+  "gamepadInvertCameraY": "Y-as van gamepadcamera omkeren",
+  "gamepadButtonBindings": "Knoptoewijzingen",
+  "gamepadAxisBindings": "Astoewijzingen",
+  "gamepadResetBindings": "Toewijzingen herstellen",
+  "gamepadUnassigned": "Niet toegewezen",
+  "gamepadAssignedTo": "Toegewezen aan: {action}",
+  "gamepadActionConfirm": "Bevestigen",
+  "gamepadActionCancel": "Annuleren",
+  "gamepadActionMoveMode": "Verplaatsingsmodus",
+  "gamepadActionInspect": "Hex inspecteren",
+  "gamepadActionHudPrevious": "Vorige interfacesectie",
+  "gamepadActionHudNext": "Volgende interfacesectie",
+  "gamepadActionPrevious": "Vorige openstaande actie",
+  "gamepadActionNext": "Volgende openstaande actie",
+  "gamepadActionPrimary": "Hoofdactie",
+  "gamepadActionUp": "Richtingsknop omhoog",
+  "gamepadActionDown": "Richtingsknop omlaag",
+  "gamepadActionLeft": "Richtingsknop links",
+  "gamepadActionRight": "Richtingsknop rechts",
+  "gamepadActionZoomIn": "Inzoomen",
+  "gamepadActionZoomOut": "Uitzoomen",
+  "gamepadActionCursorX": "Cursor X",
+  "gamepadActionCursorY": "Cursor Y",
+  "gamepadActionCameraX": "Camera X",
+  "gamepadActionCameraY": "Camera Y",
+  "gamepadControlHome": "Home",
+  "gamepadControlTouchpad": "Touchpad",
+  "gamepadControlLeftStickX": "Linkerstick X",
+  "gamepadControlLeftStickY": "Linkerstick Y",
+  "gamepadControlRightStickX": "Rechterstick X",
+  "gamepadControlRightStickY": "Rechterstick Y",
+  "gamepadControlLeftTrigger": "Linkertrigger (LT)",
+  "gamepadControlRightTrigger": "Rechtertrigger (RT)",
+  "@gamepadAssignedTo": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "keyboardSettings": "Toetsenbord",
+  "keyboardScope": "Kaartsneltoetsen werken wanneer de kaart toetsenbordfocus heeft. Klik op de kaart om de focus terug te geven.",
+  "keyboardPanKeys": "W / A / S / D of pijltjestoetsen",
+  "keyboardPan": "Camera verschuiven",
+  "keyboardSelect": "De hex onder de aanwijzer of de huidige selectie selecteren",
+  "keyboardMove": "Doelselectie voor verplaatsing van de geselecteerde eenheid omschakelen",
+  "keyboardInspect": "De hex onder de aanwijzer, de geselecteerde hex of het midden van de weergave inspecteren",
+  "keyboardMapMode": "Wisselen tussen grafische kaartweergave en tegelweergave",
+  "keyboardPending": "Vorige / volgende openstaande beurtactie",
+  "keyboardSpace": "Spatie",
+  "keyboardPrimary": "Naar de volgende openstaande actie gaan; de beurt beëindigen als er geen acties meer zijn",
+  "keyboardCancel": "Het actieve paneel sluiten of de huidige interactie annuleren",
+  "keyboardFocus": "Het volgende / vorige bedieningselement focussen",
+  "textSize": "Tekstgrootte",
+  "textSizeDescription": "Wordt toegepast boven op de tekstgrootte van het systeem.",
+  "textScaleStandard": "Standaard (100%)",
+  "textScaleLarge": "Groot (115%)",
+  "textScaleExtraLarge": "Extra groot (130%)",
+  "languageSettings": "Taal",
+  "languageSystem": "Systeemtaal"
+}

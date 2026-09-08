@@ -96,6 +96,27 @@ void main() {
       'Excavación en 2, 4 · 3 turnos restantes',
     );
   });
+
+  test('Dutch plural messages preserve zero, one and larger counts', () {
+    final dutch = lookupAonwLocalizations(
+      AonwLocalizations.supportedLocales.singleWhere(
+        (l) => l.languageCode == 'nl',
+      ),
+    );
+    expect(dutch.moveTurnCost(0), '0 beurten');
+    expect(dutch.moveTurnCost(1), '1 beurt');
+    expect(dutch.moveTurnCost(2), '2 beurten');
+    expect(dutch.hexInspectionBuildTurns(1), 'Bouwtijd: 1 beurt');
+    expect(dutch.hexInspectionBuildTurns(3), 'Bouwtijd: 3 beurten');
+    expect(
+      dutch.artifactExcavationAt(2, 4, 1),
+      'Opgraving bij 2, 4 · 1 beurt resterend',
+    );
+    expect(
+      dutch.artifactExcavationAt(2, 4, 3),
+      'Opgraving bij 2, 4 · 3 beurten resterend',
+    );
+  });
 }
 
 Map<String, Object?> _catalog(String language) =>
