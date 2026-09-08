@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'aonw_localizations_de.dart';
 import 'aonw_localizations_en.dart';
+import 'aonw_localizations_es.dart';
 import 'aonw_localizations_fr.dart';
 import 'aonw_localizations_pl.dart';
 
@@ -98,6 +99,7 @@ abstract class AonwLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
+    Locale('es'),
     Locale('fr'),
     Locale('pl'),
   ];
@@ -2468,7 +2470,7 @@ class _AonwLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'fr', 'pl'].contains(locale.languageCode);
+      <String>['de', 'en', 'es', 'fr', 'pl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AonwLocalizationsDelegate old) => false;
@@ -2481,6 +2483,8 @@ AonwLocalizations lookupAonwLocalizations(Locale locale) {
       return AonwLocalizationsDe();
     case 'en':
       return AonwLocalizationsEn();
+    case 'es':
+      return AonwLocalizationsEs();
     case 'fr':
       return AonwLocalizationsFr();
     case 'pl':

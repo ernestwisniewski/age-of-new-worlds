@@ -11,6 +11,7 @@ void main() {
     ('pl', 'Klawiatura', 'Spacja'),
     ('fr', 'Clavier', 'Espace'),
     ('de', 'Tastatur', 'Leertaste'),
+    ('es', 'Teclado', 'Espacio'),
   ]) {
     testWidgets(
       'keyboard help starts collapsed and scales on mobile in $locale',

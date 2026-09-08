@@ -35,6 +35,14 @@ void main() {
       'Polen',
       'Vereinigtes Königreich',
     ),
+    (
+      ClientLanguage.spanish,
+      'UN JUGADOR',
+      'CARGAR PARTIDA',
+      'Elegir civilización',
+      'Polonia',
+      'Estados Unidos',
+    ),
   ]) {
     testWidgets(
       '$language menu opens the local game wizard on a narrow screen',
@@ -79,6 +87,13 @@ void main() {
       'Einstellungen',
       'Systemsprache',
       Locale('de', 'AT'),
+    ),
+    (
+      ClientLanguage.spanish,
+      'Español',
+      'Ajustes',
+      'Idioma del sistema',
+      Locale('es', 'MX'),
     ),
   ]) {
     testWidgets(

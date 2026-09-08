@@ -17,6 +17,7 @@ void main() {
     ('pl', 'Bardzo duży (130%)'),
     ('fr', 'Très grand (130%)'),
     ('de', 'Sehr groß (130%)'),
+    ('es', 'Muy grande (130%)'),
   ]) {
     testWidgets('changes text size live, retains route and resets in $locale', (
       tester,

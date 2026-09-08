@@ -69,6 +69,33 @@ void main() {
       'Ausgrabung bei 2, 4 · 3 Runden verbleibend',
     );
   });
+
+  test('Spanish plural messages preserve zero, one and larger counts', () {
+    final spanish = lookupAonwLocalizations(
+      AonwLocalizations.supportedLocales.singleWhere(
+        (l) => l.languageCode == 'es',
+      ),
+    );
+    expect(spanish.moveTurnCost(0), '0 turnos');
+    expect(spanish.moveTurnCost(1), '1 turno');
+    expect(spanish.moveTurnCost(2), '2 turnos');
+    expect(
+      spanish.hexInspectionBuildTurns(1),
+      'Tiempo de construcción: 1 turno',
+    );
+    expect(
+      spanish.hexInspectionBuildTurns(3),
+      'Tiempo de construcción: 3 turnos',
+    );
+    expect(
+      spanish.artifactExcavationAt(2, 4, 1),
+      'Excavación en 2, 4 · 1 turno restante',
+    );
+    expect(
+      spanish.artifactExcavationAt(2, 4, 3),
+      'Excavación en 2, 4 · 3 turnos restantes',
+    );
+  });
 }
 
 Map<String, Object?> _catalog(String language) =>

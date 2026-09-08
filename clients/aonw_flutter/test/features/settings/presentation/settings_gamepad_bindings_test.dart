@@ -6,6 +6,7 @@ import 'package:aonw_flutter/features/map/infrastructure/gamepad_map_input_sourc
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/settings/application/client_gamepad_settings.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
+import 'package:aonw_flutter/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,6 +21,7 @@ void main() {
     (Locale('pl'), 'Bez przypisania', 'Przypisano do:', 'Lewy drążek X'),
     (Locale('fr'), 'Non affecté', 'Affecté à :', 'Stick gauche, axe X'),
     (Locale('de'), 'Nicht belegt', 'Belegt mit:', 'Linker Stick X'),
+    (Locale('es'), 'Sin asignar', 'Asignado a:', 'Palanca izquierda X'),
   ]) {
     testWidgets(
       'edits and resets bindings with visible displaced actions in $locale',
@@ -134,7 +136,12 @@ void main() {
     await h.unmount(tester);
   });
 
-  for (final locale in const [Locale('pl'), Locale('fr'), Locale('de')]) {
+  for (final locale in const [
+    Locale('pl'),
+    Locale('fr'),
+    Locale('de'),
+    Locale('es'),
+  ]) {
     testWidgets(
       '$locale bindings and picker fit a narrow viewport with larger text',
       (tester) async {
@@ -216,9 +223,7 @@ final class _Harness {
     await tester.tap(
       find.descendant(
         of: section,
-        matching: find.text(
-          locale.languageCode == 'fr' ? 'Manette' : 'Gamepad',
-        ),
+        matching: find.text(lookupAonwLocalizations(locale).gamepadSettings),
       ),
     );
     await tester.pumpAndSettle();
