@@ -47,7 +47,7 @@ final class RecipientTurnView {
 
   bool get canEndTurn =>
       !outcome.isTerminal &&
-      pendingAction == null &&
+      (pendingAction == null || pendingAction is PendingUnitTurnSkipView) &&
       ownState == RecipientTurnStateView.active &&
       !ownSubmitted;
 }

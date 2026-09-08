@@ -3,6 +3,28 @@ import 'package:aonw_flutter/features/turns/read_model/recipient_turn_view.dart'
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'undoable unit skip permits ending while turn ownership still applies',
+    () {
+      const skip = PendingUnitTurnSkipView(
+        unitId: 'unit',
+        restoreMovementUnits: 12,
+      );
+      expect(_turn(pendingAction: skip).canEndTurn, isTrue);
+      expect(
+        _turn(pendingAction: skip, ownSubmitted: true).canEndTurn,
+        isFalse,
+      );
+      expect(
+        _turn(
+          pendingAction: skip,
+          ownState: RecipientTurnStateView.finished,
+        ).canEndTurn,
+        isFalse,
+      );
+    },
+  );
+
   test('end-turn presentation gate uses only recipient-safe fields', () {
     expect(_turn().canEndTurn, isTrue);
     expect(

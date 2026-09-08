@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
+import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings_store.dart';
@@ -249,6 +250,52 @@ void main() {
       expect(old.session.endTurnCalls, 0);
     },
   );
+
+  testWidgets('automatic ending dispatches after skipping the final unit', (
+    tester,
+  ) async {
+    final player = PlayerMapView.preview(
+      actorPlayerId: 'preview-player',
+      stamp: testSessionStamp(revision: 1),
+      turn: 1,
+      pendingAction: const PendingUnitTurnSkipView(
+        unitId: 'preview-commander',
+        restoreMovementUnits: 12,
+      ),
+      units: [testVisibleUnit(movementUnits: 0)],
+    );
+    final h = _Harness(
+      unitResult: UnitActionResultView.accepted(
+        action: UnitActionKindView.skip,
+        unitId: 'preview-commander',
+        player: player,
+      ),
+    );
+    h.store.value = ClientSettings.defaults.copyWith(
+      automation: const ClientAutomationSettings(endTurn: true),
+    );
+    h.session.pendingTurnActionsHandler = (revision) async =>
+        PendingTurnActionsView(
+          stamp: revision == 0 ? h.scene.player.stamp : player.stamp,
+          actorPlayerId: player.actorPlayerId,
+          canActivate: true,
+          actions: revision == 0 ? [_unit] : [],
+        );
+    await h.mount(tester);
+    expect(h.session.endTurnCalls, 0);
+    h.controller.executeUnitAction(UnitActionKindView.skip);
+    for (var frame = 0; frame < 20; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(h.session.unitActionCalls, 1);
+    expect(h.session.endTurnCalls, 1);
+    expect(h.session.lastEndTurnExpectedRevision, 1);
+    expect(h.ready.turnAction.failure, isNotNull);
+    final queries = h.session.pendingTurnActionsRevisions.length;
+    await tester.pump(const Duration(seconds: 10));
+    expect(h.session.endTurnCalls, 1);
+    expect(h.session.pendingTurnActionsRevisions, hasLength(queries));
+  });
 }
 
 final class _Harness {
