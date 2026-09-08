@@ -2547,6 +2547,24 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Show the current zoom while the map is open.'**
   String get showMapZoomDescription;
+
+  /// No description provided for @aiSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get aiSettings;
+
+  /// No description provided for @aiBatterySaver.
+  ///
+  /// In en, this message translates to:
+  /// **'AI battery saver'**
+  String get aiBatterySaver;
+
+  /// No description provided for @aiBatterySaverDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduces tactical search work during local AI turns.'**
+  String get aiBatterySaverDescription;
 }
 
 class _AonwLocalizationsDelegate

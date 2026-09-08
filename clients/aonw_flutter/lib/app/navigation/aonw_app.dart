@@ -6,6 +6,7 @@ import '../../design_system/aonw_text_scaler.dart';
 import '../../design_system/aonw_theme.dart';
 import '../../features/audio/application/game_audio_port.dart';
 import '../../features/audio/presentation/game_audio_host.dart';
+import '../../features/local_game/application/local_game_session_port.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
@@ -86,6 +87,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.mapController != widget.mapController) {
       oldWidget.mapController.dispose();
+      _synchronizeClientConfiguration();
     }
     if (oldWidget.replayController != widget.replayController) {
       oldWidget.replayController?.dispose();
@@ -101,7 +103,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     if (oldWidget.mapInputSource != widget.mapInputSource) {
       _setInputActive(oldWidget.mapInputSource, false);
       unawaited(oldWidget.mapInputSource?.close());
-      _synchronizeGamepadConfiguration();
+      _synchronizeClientConfiguration();
       _synchronizeInputLifecycle();
     }
     if (oldWidget.settingsController != widget.settingsController) {
@@ -215,12 +217,17 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   void _installSettingsController() {
     _settingsController =
         widget.settingsController ?? ClientSettingsController.ephemeral();
-    _settingsController.addListener(_synchronizeGamepadConfiguration);
-    _synchronizeGamepadConfiguration();
+    _settingsController.addListener(_synchronizeClientConfiguration);
+    _synchronizeClientConfiguration();
     _settingsReady = _settingsController.load();
   }
 
-  void _synchronizeGamepadConfiguration() {
+  void _synchronizeClientConfiguration() {
+    widget.mapController.configureAiRuntimeProfile(
+      _settingsController.settings.ai.batterySaver
+          ? LocalAiRuntimeProfileView.batterySaver
+          : LocalAiRuntimeProfileView.standard,
+    );
     if (widget.mapInputSource case final ConfigurableGamepadInput source) {
       source.configureGamepad(_settingsController.settings.gamepad);
     }

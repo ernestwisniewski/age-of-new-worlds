@@ -2621,4 +2621,14 @@ class AonwLocalizationsEs extends AonwLocalizations {
   @override
   String get showMapZoomDescription =>
       'Mostrar el zoom actual mientras el mapa está abierto.';
+
+  @override
+  String get aiSettings => 'IA';
+
+  @override
+  String get aiBatterySaver => 'Ahorro de batería de IA';
+
+  @override
+  String get aiBatterySaverDescription =>
+      'Reduce la búsqueda táctica durante los turnos locales de la IA.';
 }

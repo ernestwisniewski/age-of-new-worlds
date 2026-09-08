@@ -1107,5 +1107,8 @@
   "showFps": "FPS anzeigen",
   "showFpsDescription": "Die Bildrate in der gesamten App anzeigen.",
   "showMapZoom": "Kartenzoom anzeigen",
-  "showMapZoomDescription": "Den aktuellen Zoom bei geöffneter Karte anzeigen."
+  "showMapZoomDescription": "Den aktuellen Zoom bei geöffneter Karte anzeigen.",
+  "aiSettings": "KI",
+  "aiBatterySaver": "KI-Akkusparmodus",
+  "aiBatterySaverDescription": "Reduziert die taktische Suche während lokaler KI-Züge."
 }

@@ -91,6 +91,10 @@ final class MapPresentationController extends ChangeNotifier {
 
   void silencePendingInteractionSounds() => _interactionAudio.cancelPending();
 
+  void configureAiRuntimeProfile(LocalAiRuntimeProfileView profile) {
+    if (!_disposed) _coordinator.aiRuntimeProfile = profile;
+  }
+
   GameSessionState get state => _coordinator.state;
 
   void bindCommandEffects(Future<void> Function()? wait) {

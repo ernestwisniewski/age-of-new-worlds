@@ -104,7 +104,7 @@ final class NativeTurnAutomationProbe {
     await idle();
   }
 
-  Future<void> selectResearch() async {
+  Future<void> selectResearch({bool dismissAfterSelection = true}) async {
     if (find.byKey(const ValueKey('close-research')).evaluate().isEmpty) {
       await tap(const ValueKey('open-research'));
     }
@@ -129,10 +129,13 @@ final class NativeTurnAutomationProbe {
     );
     await tap(ValueKey(('select-technology', technology!)));
     await until(
-      () => ready.recipient.research.activeTechnologyId == technology,
+      () =>
+          ready.recipient.research.activeTechnologyId == technology ||
+          (!dismissAfterSelection && ready.localHandoff.blocksGameplay),
       'native research selection',
     );
-    if (find.byKey(const ValueKey('close-research')).evaluate().isNotEmpty) {
+    if (dismissAfterSelection &&
+        find.byKey(const ValueKey('close-research')).evaluate().isNotEmpty) {
       await tap(const ValueKey('close-research'));
     }
   }
@@ -282,6 +285,10 @@ final class _RecordedSession implements AonwEngineSession {
         (body['command'] ?? body['query'] ?? body) as Map<String, dynamic>;
     requests.add({
       'type': action['type'],
+      if (action['type'] == 'advanceAiTurn') ...{
+        'runtimeProfile': action['runtimeProfile'],
+        'commandBudget': action['commandBudget'],
+      },
       if (action.containsKey('expectedRevision'))
         'revision': action['expectedRevision'],
     });

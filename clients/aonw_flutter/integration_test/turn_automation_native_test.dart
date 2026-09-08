@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'support/native_ai_settings_probe.dart';
 import 'support/native_hotseat_automation_probe.dart';
 import 'support/native_turn_automation_probe.dart';
 import 'support/native_window_automation_probe.dart';
@@ -27,6 +28,26 @@ void main() {
         binding.reportData ??= <String, dynamic>{};
         binding.reportData![mode.name] = report;
         debugPrint(jsonEncode(report));
+      } finally {
+        await probe.close();
+      }
+    });
+    testWidgets('applies native ${mode.name} AI settings to successive turns', (
+      tester,
+    ) async {
+      final probe = NativeTurnAutomationProbe(tester);
+      try {
+        await probe.start(mode);
+        await probe.skipAndDismissResearch();
+        await probe.toggleAiBatterySaver(true);
+        await probe.selectResearchAndEndTurn();
+        await probe.toggleAiBatterySaver(false);
+        await probe.skipNextTurn();
+        probe.expectAiProfiles();
+        final report = probe.report(mode);
+        binding.reportData ??= <String, dynamic>{};
+        binding.reportData!['${mode.name}AiProfile'] = report;
+        debugPrint(jsonEncode({'aiProfile': report}));
       } finally {
         await probe.close();
       }

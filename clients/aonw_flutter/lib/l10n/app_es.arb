@@ -1107,5 +1107,8 @@
   "showFps": "Mostrar FPS",
   "showFpsDescription": "Mostrar los fotogramas por segundo en toda la aplicación.",
   "showMapZoom": "Mostrar zoom del mapa",
-  "showMapZoomDescription": "Mostrar el zoom actual mientras el mapa está abierto."
+  "showMapZoomDescription": "Mostrar el zoom actual mientras el mapa está abierto.",
+  "aiSettings": "IA",
+  "aiBatterySaver": "Ahorro de batería de IA",
+  "aiBatterySaverDescription": "Reduce la búsqueda táctica durante los turnos locales de la IA."
 }

@@ -1,3 +1,4 @@
+import 'client_ai_settings.dart';
 import 'client_audio_settings.dart';
 import 'client_automation_settings.dart';
 import 'client_gamepad_settings.dart';
@@ -5,6 +6,7 @@ import 'client_language.dart';
 import 'client_performance_settings.dart';
 import 'client_text_scale.dart';
 
+export 'client_ai_settings.dart';
 export 'client_audio_settings.dart';
 export 'client_automation_settings.dart';
 export 'client_gamepad_settings.dart';
@@ -18,6 +20,7 @@ final class ClientSettings {
     this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
+    this.ai = const ClientAiSettings(),
     this.automation = const ClientAutomationSettings(),
     this.performance = const ClientPerformanceSettings(),
     required this.cameraSensitivity,
@@ -55,6 +58,7 @@ final class ClientSettings {
   final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
+  final ClientAiSettings ai;
   final ClientAutomationSettings automation;
   final ClientPerformanceSettings performance;
   final double cameraSensitivity;
@@ -81,6 +85,7 @@ final class ClientSettings {
     ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
+    ClientAiSettings? ai,
     ClientAutomationSettings? automation,
     ClientPerformanceSettings? performance,
     double? cameraSensitivity,
@@ -106,6 +111,7 @@ final class ClientSettings {
     textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
+    ai: ai ?? this.ai,
     automation: automation ?? this.automation,
     performance: performance ?? this.performance,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
@@ -146,6 +152,7 @@ final class ClientSettings {
       other.language == language &&
       other.gamepad == gamepad &&
       other.audio == audio &&
+      other.ai == ai &&
       other.automation == automation &&
       other.performance == performance;
 
@@ -181,6 +188,7 @@ final class ClientSettings {
     textScale,
     gamepad,
     audio,
+    ai,
     automation,
     performance,
     cameraSensitivity,

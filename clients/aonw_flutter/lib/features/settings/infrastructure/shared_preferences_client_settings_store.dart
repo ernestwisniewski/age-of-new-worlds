@@ -4,6 +4,7 @@ import '../application/client_settings.dart';
 import '../application/client_settings_store.dart';
 import 'gamepad_bindings_codec.dart';
 
+part 'shared_preferences_ai_settings.dart';
 part 'shared_preferences_audio_settings.dart';
 part 'shared_preferences_automation_settings.dart';
 part 'shared_preferences_performance_settings.dart';
@@ -46,7 +47,6 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<ClientSettings> load() async {
-    final audio = await _loadAudio();
     final cameraSensitivity = await _preferences.getDouble(
       _cameraSensitivityKey,
     );
@@ -80,7 +80,8 @@ final class SharedPreferencesClientSettingsStore
       followOwnUnitMovement: camera.followOwnUnitMovement,
       focusForeignUnitMovement: camera.focusForeignUnitMovement,
       followForeignUnitMovement: camera.followForeignUnitMovement,
-      audio: audio,
+      audio: await _loadAudio(),
+      ai: await _loadAi(),
       automation: await _loadAutomation(),
       performance: await _loadPerformance(),
       cameraSensitivity: _bounded(
@@ -112,6 +113,7 @@ final class SharedPreferencesClientSettingsStore
     await _saveCamera(settings);
     await _saveAnimations(settings);
     await _saveAudio(settings.audio);
+    await _saveAi(settings.ai);
     await _saveAutomation(settings.automation);
     await _savePerformance(settings.performance);
     await _saveGamepad(settings.gamepad);

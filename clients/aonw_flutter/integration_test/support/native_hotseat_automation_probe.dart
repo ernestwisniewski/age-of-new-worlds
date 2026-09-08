@@ -61,6 +61,6 @@ extension NativeHotseatAutomationProbe on NativeTurnAutomationProbe {
       () => ready.interaction.researchFocused,
       'research focus for the next human participant',
     );
-    await selectResearch();
+    await selectResearch(dismissAfterSelection: false);
   }
 }

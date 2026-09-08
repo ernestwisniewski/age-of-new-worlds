@@ -82,6 +82,8 @@ UnitActionWorkflow _unitActionWorkflow(
 
 final class MapCoordinator {
   Future<void> Function()? waitForCommandEffects;
+  LocalAiRuntimeProfileView aiRuntimeProfile =
+      LocalAiRuntimeProfileView.standard;
   MapCoordinator({
     required GameSessionCapabilities capabilities,
     LocalSaveStore? saveStore,

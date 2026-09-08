@@ -15,6 +15,7 @@ import 'window_settings_host.dart';
 
 part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
+part 'settings_ai.dart';
 part 'settings_audio.dart';
 part 'settings_automation.dart';
 part 'settings_performance.dart';
@@ -109,6 +110,11 @@ final class _SettingsForm extends StatelessWidget {
       ),
       const SizedBox(height: AonwSpacing.md),
       ..._accessibilitySections(context),
+      _SettingsSection(
+        title: l10n.aiSettings,
+        child: _AiSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
       _SettingsSection(
         title: l10n.performanceSettings,
         child: _PerformanceSettings(settings: settings, onChanged: onChanged),

@@ -2622,4 +2622,14 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String get showMapZoomDescription =>
       'Afficher le zoom actuel lorsque la carte est ouverte.';
+
+  @override
+  String get aiSettings => 'IA';
+
+  @override
+  String get aiBatterySaver => 'Économie de batterie pour l’IA';
+
+  @override
+  String get aiBatterySaverDescription =>
+      'Réduit le travail de recherche tactique pendant les tours locaux de l’IA.';
 }

@@ -2617,4 +2617,14 @@ class AonwLocalizationsNl extends AonwLocalizations {
   @override
   String get showMapZoomDescription =>
       'Toon de huidige zoom wanneer de kaart geopend is.';
+
+  @override
+  String get aiSettings => 'AI';
+
+  @override
+  String get aiBatterySaver => 'AI-batterijbesparing';
+
+  @override
+  String get aiBatterySaverDescription =>
+      'Vermindert tactisch zoekwerk tijdens lokale AI-beurten.';
 }

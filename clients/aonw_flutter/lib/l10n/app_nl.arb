@@ -1107,5 +1107,8 @@
   "showFps": "FPS tonen",
   "showFpsDescription": "Toon de beeldsnelheid in de hele app.",
   "showMapZoom": "Toon kaartzoom",
-  "showMapZoomDescription": "Toon de huidige zoom wanneer de kaart geopend is."
+  "showMapZoomDescription": "Toon de huidige zoom wanneer de kaart geopend is.",
+  "aiSettings": "AI",
+  "aiBatterySaver": "AI-batterijbesparing",
+  "aiBatterySaverDescription": "Vermindert tactisch zoekwerk tijdens lokale AI-beurten."
 }

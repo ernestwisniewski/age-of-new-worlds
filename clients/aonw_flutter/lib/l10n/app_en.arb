@@ -636,5 +636,8 @@
   "showFps": "Show FPS",
   "showFpsDescription": "Show the frame rate throughout the app.",
   "showMapZoom": "Show map zoom",
-  "showMapZoomDescription": "Show the current zoom while the map is open."
+  "showMapZoomDescription": "Show the current zoom while the map is open.",
+  "aiSettings": "AI",
+  "aiBatterySaver": "AI battery saver",
+  "aiBatterySaverDescription": "Reduces tactical search work during local AI turns."
 }

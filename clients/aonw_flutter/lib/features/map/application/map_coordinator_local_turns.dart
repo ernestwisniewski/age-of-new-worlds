@@ -57,6 +57,7 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
         LocalAiTurnRequestView(
           aiPlayerId: aiPlayerId,
           humanPlayerId: humanPlayerId,
+          runtimeProfile: aiRuntimeProfile,
         ),
       );
       if (!_isCurrent(generation)) return null;

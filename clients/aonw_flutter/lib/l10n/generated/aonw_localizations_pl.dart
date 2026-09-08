@@ -2545,4 +2545,14 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get showMapZoomDescription =>
       'Pokazuj bieżące powiększenie podczas wyświetlania mapy.';
+
+  @override
+  String get aiSettings => 'AI';
+
+  @override
+  String get aiBatterySaver => 'Oszczędzanie baterii AI';
+
+  @override
+  String get aiBatterySaverDescription =>
+      'Ogranicza wyszukiwanie taktyczne podczas lokalnych tur AI.';
 }

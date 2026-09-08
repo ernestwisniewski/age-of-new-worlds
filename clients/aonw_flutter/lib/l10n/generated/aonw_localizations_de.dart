@@ -2639,4 +2639,14 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String get showMapZoomDescription =>
       'Den aktuellen Zoom bei geöffneter Karte anzeigen.';
+
+  @override
+  String get aiSettings => 'KI';
+
+  @override
+  String get aiBatterySaver => 'KI-Akkusparmodus';
+
+  @override
+  String get aiBatterySaverDescription =>
+      'Reduziert die taktische Suche während lokaler KI-Züge.';
 }

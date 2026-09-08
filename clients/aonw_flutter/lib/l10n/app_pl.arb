@@ -493,5 +493,8 @@
   "showFps": "Pokaż FPS",
   "showFpsDescription": "Pokazuj liczbę klatek na sekundę w całej aplikacji.",
   "showMapZoom": "Pokaż zbliżenie mapy",
-  "showMapZoomDescription": "Pokazuj bieżące powiększenie podczas wyświetlania mapy."
+  "showMapZoomDescription": "Pokazuj bieżące powiększenie podczas wyświetlania mapy.",
+  "aiSettings": "AI",
+  "aiBatterySaver": "Oszczędzanie baterii AI",
+  "aiBatterySaverDescription": "Ogranicza wyszukiwanie taktyczne podczas lokalnych tur AI."
 }

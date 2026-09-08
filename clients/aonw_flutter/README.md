@@ -67,9 +67,14 @@ scenario covers both directions of a private handoff with fog enabled: an
 opaque, non-dismissible curtain blocks the map and automation until the next
 human confirms, then automatic action focus resumes for that participant.
 Native automation tests restore their window when it loses foreground activity.
+Window pause probes require an unlocked desktop that allows the app to gain focus;
+they report the actual window and lifecycle state when this prerequisite fails.
 Dedicated sequential and simultaneous cases minimize the window during an AI
 animation, verify that the renderer and commands stay paused, then restore it
 and verify that the human turn resumes without duplicate commands.
+The AI settings cases enable battery saver through Settings before one AI turn,
+then disable it before the next turn. Both turn modes must send the selected
+Client API profile while retaining the complete-turn command budget.
 
 ## Documentation
 

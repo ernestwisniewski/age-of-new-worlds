@@ -10,6 +10,7 @@ extension NativeWindowAutomationProbe on NativeTurnAutomationProbe {
     final game = tester
         .widget<FlameMapViewport>(find.byType(FlameMapViewport))
         .game;
+    await _requireFocusedWindow();
     await selectResearch();
     await enableAutomaticEnds();
     await until(
@@ -20,7 +21,10 @@ extension NativeWindowAutomationProbe on NativeTurnAutomationProbe {
     final timer = Stopwatch()..start();
     while (game.debugViewportActive) {
       if (timer.elapsed > const Duration(seconds: 5)) {
-        fail('Minimized native window did not suspend the viewport');
+        fail(
+          'Minimized native window did not suspend the viewport: '
+          '${await _windowState()}',
+        );
       }
       await Future<void>.delayed(const Duration(milliseconds: 100));
     }
@@ -54,5 +58,25 @@ extension NativeWindowAutomationProbe on NativeTurnAutomationProbe {
     expect(count('endTurn'), 1);
     expect(count('advanceAiTurn'), 1);
     await idle();
+  }
+}
+
+Future<String> _windowState() async =>
+    'Native pause window: minimized=${await windowManager.isMinimized()}, '
+    'fullscreen=${await windowManager.isFullScreen()}, '
+    'visible=${await windowManager.isVisible()}, '
+    'focused=${await windowManager.isFocused()}, '
+    'lifecycle=${WidgetsBinding.instance.lifecycleState}';
+
+Future<void> _requireFocusedWindow() async {
+  final timer = Stopwatch()..start();
+  while (!await windowManager.isFocused()) {
+    if (timer.elapsed > const Duration(seconds: 5)) {
+      fail(
+        'Window pause probe requires an unlocked desktop and a focused window: '
+        '${await _windowState()}',
+      );
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 100));
   }
 }
