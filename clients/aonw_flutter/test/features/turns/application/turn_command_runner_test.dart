@@ -4,6 +4,8 @@ import 'package:aonw_flutter/features/turns/application/turn_session_port.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../support/pending_turn_actions_test_fixture.dart';
+
 void main() {
   test('maps a typed turn transport failure and reports its cause', () async {
     final cause = StateError('private transport details');
@@ -41,8 +43,10 @@ void main() {
   });
 }
 
-final class _FailingTurnSession implements TurnSessionPort {
-  const _FailingTurnSession(this.error);
+final class _FailingTurnSession
+    with FakePendingTurnActionsSession
+    implements TurnSessionPort {
+  _FailingTurnSession(this.error);
 
   final Object error;
 

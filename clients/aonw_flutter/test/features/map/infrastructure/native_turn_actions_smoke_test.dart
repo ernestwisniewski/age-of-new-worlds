@@ -1,9 +1,29 @@
 import 'dart:io';
 
 import 'package:aonw_engine_client/aonw_engine_client.dart';
+import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
+import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('loads pending work through the native application turn port', () async {
+    final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
+    addTearDown(gateway.close);
+    final scene = await gateway.load(MapAssetPaths.starter);
+    final view = await gateway.capabilities.turns.pendingTurnActions(
+      expectedRevision: scene.player.stamp.revision,
+    );
+    expect(view.actorPlayerId, scene.player.actorPlayerId);
+    expect(view.stamp.stateDigest, scene.player.stamp.stateDigest);
+    expect(view.canActivate, isTrue);
+    expect(view.actions.last, isA<PendingResearchTurnActionView>());
+    final unit = view.actions.whereType<PendingUnitTurnActionView>().single;
+    expect(unit.unitId, scene.player.units.single.id);
+    expect(unit.coordinate, scene.player.units.single.coordinate);
+  });
+
   test(
     'native pending work preserves state and refreshes after a unit order',
     () async {
@@ -74,4 +94,12 @@ void main() {
       expect(updated.actions.length, result.actions.length - 1);
     },
   );
+}
+
+final class _FileAssetBundle extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async {
+    final bytes = await File(key).readAsBytes();
+    return ByteData.sublistView(Uint8List.fromList(bytes));
+  }
 }

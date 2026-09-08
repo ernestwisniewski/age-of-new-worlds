@@ -25,3 +25,11 @@ GameSessionCapabilities testGameSessionCapabilities(
   localGame: session,
   save: save,
 );
+
+SessionStampView testSessionStamp({int revision = 0, String? stateDigest}) =>
+    SessionStampView(
+      revision: revision,
+      stateDigest: stateDigest ?? 'b' * 64,
+      mapHash: 'a' * 64,
+      rulesetHash: 'c' * 64,
+    );

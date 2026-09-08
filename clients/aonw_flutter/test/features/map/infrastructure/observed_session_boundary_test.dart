@@ -174,7 +174,7 @@ final class _Fixture {
 
   Future<void> startAndEndHumanTurn() async {
     final scene = await gateway.startLocalMatch(_setup());
-    final result = await gateway.endTurn(
+    final result = await gateway.capabilities.turns.endTurn(
       expectedRevision: scene.player.stamp.revision,
     );
     expect(result.accepted, isTrue);

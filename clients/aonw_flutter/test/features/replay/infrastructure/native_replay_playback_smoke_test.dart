@@ -13,7 +13,7 @@ void main() {
     final assets = LocalGameCatalog.entries.first.assets;
     final replay = gateway.replaySession;
     final initial = await gateway.startLocalMatch(_setup());
-    final turn = await gateway.endTurn(
+    final turn = await gateway.capabilities.turns.endTurn(
       expectedRevision: initial.player.stamp.revision,
     );
     expect(turn.accepted, isTrue);

@@ -7,6 +7,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('requires pending turn actions before opening gameplay', () async {
+    final assets = _GuardedAssetBundle();
+    final session = _IncompleteEngineSession(
+      features: [
+        for (final feature in AonwClientFeature.values)
+          if (feature != AonwClientFeature.pendingTurnActions) feature.name,
+      ],
+    );
+    final gateway = EngineGameSessionGateway(
+      assets: assets,
+      sessionFactory: () async => session,
+    );
+    await expectLater(
+      gateway.load(MapAssetPaths.starter),
+      throwsA(
+        isA<MapLoadException>()
+            .having((error) => error.code, 'code', 'engine_capability_mismatch')
+            .having(
+              (error) => error.diagnosticCause.toString(),
+              'diagnostic',
+              contains('pendingTurnActions'),
+            ),
+      ),
+    );
+    expect(session.requestTypes, ['capabilities']);
+    expect(session.closeCalls, 1);
+    expect(assets.loadCalls, 0);
+  });
+
   test('rejects missing capabilities before loading map assets', () async {
     final assets = _GuardedAssetBundle();
     final session = _IncompleteEngineSession();
@@ -35,6 +64,10 @@ void main() {
 }
 
 final class _IncompleteEngineSession implements AonwEngineSession {
+  _IncompleteEngineSession({
+    this.features = const ['inspectMap', 'snapshot', 'reachable', 'routePlan'],
+  });
+  final List<String> features;
   final requestTypes = <String>[];
   var closeCalls = 0;
 
@@ -47,10 +80,7 @@ final class _IncompleteEngineSession implements AonwEngineSession {
       'apiVersion': aonwClientApiVersion,
       'outcome': {
         'status': 'success',
-        'response': {
-          'type': 'capabilities',
-          'features': ['inspectMap', 'snapshot', 'reachable', 'routePlan'],
-        },
+        'response': {'type': 'capabilities', 'features': features},
       },
     });
   }

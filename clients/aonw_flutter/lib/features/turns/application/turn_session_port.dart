@@ -1,7 +1,12 @@
 import '../../map/read_model/player_map_view.dart';
+import '../read_model/pending_turn_actions_view.dart';
 import '../read_model/turn_command_view.dart';
 
 abstract interface class TurnSessionPort {
+  Future<PendingTurnActionsView> pendingTurnActions({
+    required int expectedRevision,
+  });
+
   Future<TurnCommandResultView> endTurn({required int expectedRevision});
 }
 

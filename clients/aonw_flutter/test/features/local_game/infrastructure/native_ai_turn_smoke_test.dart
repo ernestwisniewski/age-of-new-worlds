@@ -15,7 +15,7 @@ void main() {
       addTearDown(gateway.close);
       final scene = await gateway.startLocalMatch(_setup());
 
-      final humanTurn = await gateway.endTurn(
+      final humanTurn = await gateway.capabilities.turns.endTurn(
         expectedRevision: scene.player.stamp.revision,
       );
       expect(humanTurn.accepted, isTrue);
@@ -91,7 +91,7 @@ void main() {
       for (var turn = 0; turn < 12; turn += 1) {
         if (player.turnView.outcome.isTerminal) break;
         final previousRevision = player.stamp.revision;
-        final humanTurn = await gateway.endTurn(
+        final humanTurn = await gateway.capabilities.turns.endTurn(
           expectedRevision: previousRevision,
         );
         expect(humanTurn.accepted, isTrue);

@@ -267,6 +267,7 @@ final class _LifecycleMapInputSource
 }
 
 final class _LifecycleGameSession
+    with FakePendingTurnActionsSession
     implements
         MapSessionPort,
         MovementSessionPort,

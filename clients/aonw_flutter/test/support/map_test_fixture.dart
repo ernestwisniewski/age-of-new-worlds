@@ -33,6 +33,9 @@ import 'package:aonw_flutter/features/workers/application/worker_session_port.da
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
 import 'hex_inspection_test_fixture.dart';
+import 'pending_turn_actions_test_fixture.dart';
+
+export 'pending_turn_actions_test_fixture.dart';
 
 part 'city_test_fixture.dart';
 part 'map_research_test_fixture.dart';
@@ -142,14 +145,6 @@ MapScene testMapScene({
   );
 }
 
-SessionStampView testSessionStamp({int revision = 0, String? stateDigest}) =>
-    SessionStampView(
-      revision: revision,
-      stateDigest: stateDigest ?? 'b' * 64,
-      mapHash: 'a' * 64,
-      rulesetHash: 'c' * 64,
-    );
-
 RoutePlanView testRoutePlanView({
   String unitId = 'preview-commander',
   MapHexCoordinate origin = (col: 0, row: 0),
@@ -197,7 +192,7 @@ MoveUnitExecutionView testMoveUnitExecutionView({
 );
 
 final class FakeGameSession
-    with FakeLocalGameSessionFixture
+    with FakeLocalGameSessionFixture, FakePendingTurnActionsSession
     implements
         MapSessionPort,
         MovementSessionPort,

@@ -74,7 +74,7 @@ void main() {
     () async {
       final first = EngineGameSessionGateway(assets: _FileAssetBundle());
       final initial = await first.startLocalMatch(_setup());
-      final humanTurn = await first.endTurn(
+      final humanTurn = await first.capabilities.turns.endTurn(
         expectedRevision: initial.player.stamp.revision,
       );
       expect(humanTurn.accepted, isTrue);

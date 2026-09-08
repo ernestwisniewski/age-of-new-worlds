@@ -1,6 +1,7 @@
 part of 'map_coordinator_test.dart';
 
 final class _CompletingGameSession
+    with FakePendingTurnActionsSession
     implements
         MapSessionPort,
         MovementSessionPort,

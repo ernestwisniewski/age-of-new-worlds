@@ -50,7 +50,13 @@ void main() {
       expect(inspection.coordinate, (col: 2, row: 1));
       expect(inspection.stamp.stateDigest, scene.player.stamp.stateDigest);
       expect(inspection.stamp.revision, scene.player.stamp.revision);
-      expect(remote.requestTypes, ['snapshot', 'query', 'query']);
+      final actions = await gateway.capabilities.turns.pendingTurnActions(
+        expectedRevision: scene.player.stamp.revision,
+      );
+      expect(actions.actorPlayerId, scene.player.actorPlayerId);
+      expect(actions.stamp.stateDigest, scene.player.stamp.stateDigest);
+      expect(actions.actions, isNotEmpty);
+      expect(remote.requestTypes, ['snapshot', 'query', 'query', 'query']);
       await gateway.close();
       expect(remote.closeCalls, 1);
     },

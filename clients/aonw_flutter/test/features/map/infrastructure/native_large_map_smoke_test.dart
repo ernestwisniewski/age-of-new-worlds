@@ -283,7 +283,7 @@ void main() {
       var player = (await gateway.load(MapAssetPaths.starter)).player;
       final identities = <TurnActivityIdentityView>{};
       for (var step = 0; step < 3; step++) {
-        final result = await gateway.endTurn(
+        final result = await gateway.capabilities.turns.endTurn(
           expectedRevision: player.stamp.revision,
         );
         expect(result.accepted, isTrue);

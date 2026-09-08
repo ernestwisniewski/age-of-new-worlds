@@ -28,7 +28,9 @@ import '../../research/infrastructure/engine_research_gateway.dart';
 import '../../research/read_model/research_view.dart';
 import '../../save_game/application/game_save_session_port.dart';
 import '../../turns/application/turn_session_port.dart';
+import '../../turns/infrastructure/engine_pending_turn_actions_gateway.dart';
 import '../../turns/infrastructure/engine_turn_gateway.dart';
+import '../../turns/read_model/pending_turn_actions_view.dart';
 import '../../turns/read_model/turn_command_view.dart';
 import '../../unit_actions/application/unit_action_session_port.dart';
 import '../../unit_actions/infrastructure/engine_unit_action_gateway.dart';
@@ -66,6 +68,7 @@ part 'engine_game_save_session.dart';
 part 'engine_game_remote_session.dart';
 part 'engine_game_session_gateway_support.dart';
 part 'engine_game_worker_session.dart';
+part 'engine_game_turn_session.dart';
 
 final class EngineGameSessionGateway
     implements
@@ -75,7 +78,6 @@ final class EngineGameSessionGateway
         UnitLogisticsSessionPort,
         ResearchSessionPort,
         DiplomacySessionPort,
-        TurnSessionPort,
         UnitActionSessionPort,
         LocalGameSessionPort {
   EngineGameSessionGateway({
@@ -125,6 +127,7 @@ final class EngineGameSessionGateway
     artifactSession = _EngineGameArtifactSession(this);
     replaySession = _EngineGameReplaySession(this);
     saveSession = _EngineGameSaveSession(this);
+    turnSession = _EngineGameTurnSession(this);
   }
 
   final EngineGameSessionLoader _loader;
@@ -148,6 +151,7 @@ final class EngineGameSessionGateway
   late final ArtifactSessionPort artifactSession;
   late final ReplaySessionPort replaySession;
   late final GameSaveSessionPort saveSession;
+  late final TurnSessionPort turnSession;
 
   GameSessionCapabilities get capabilities => GameSessionCapabilities(
     map: this,
@@ -162,7 +166,7 @@ final class EngineGameSessionGateway
     research: this,
     diplomacy: this,
     unitActions: this,
-    turns: this,
+    turns: turnSession,
     localGame: this,
     save: saveSession,
   );
@@ -375,17 +379,6 @@ final class EngineGameSessionGateway
       );
     }
   });
-
-  @override
-  Future<TurnCommandResultView> endTurn({required int expectedRevision}) =>
-      _serialize(
-        () => _turnGateway.execute(
-          readContext: _context,
-          expectedRevision: expectedRevision,
-          send: _send,
-          applyPatch: _applyCommandPatch,
-        ),
-      );
 
   @override
   Future<LocalAiTurnExecutionView> advanceAiTurn(
