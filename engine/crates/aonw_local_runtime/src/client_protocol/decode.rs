@@ -5,11 +5,11 @@ use aonw_contracts::{CityConquestActionDto, CoordinateDto, MatchIdentityDto};
 use aonw_domain::{ArtifactId, CityConquestAction, CityId, HexCoord, PlayerId};
 
 use crate::{
-    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest, DetachTroopRequest,
-    DiplomacyRequest, FoundCityRequest, MerchantCityRequest, MoveUnitRequest, OpenSession,
-    ProductionCommandRequest, SelectCityExpansionHexRequest, SelectTechnologyRequest,
-    ToggleWorkedHexRequest, TurnCommandRequest, UnitActionRequest, WorkerImprovementRequest,
-    WorkerUnitRequest,
+    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest,
+    CancelResearchSelectionRequest, DetachTroopRequest, DiplomacyRequest, FoundCityRequest,
+    MerchantCityRequest, MoveUnitRequest, OpenSession, ProductionCommandRequest,
+    SelectCityExpansionHexRequest, SelectTechnologyRequest, ToggleWorkedHexRequest,
+    TurnCommandRequest, UnitActionRequest, WorkerImprovementRequest, WorkerUnitRequest,
 };
 
 use super::ClientDecodeError;
@@ -22,6 +22,7 @@ pub(super) use query::query;
 use identity::{decode_city_id, decode_unit_id};
 
 pub(super) enum DecodedCommand {
+    CancelResearchSelection(CancelResearchSelectionRequest),
     SelectTechnology(SelectTechnologyRequest),
     Diplomacy(DiplomacyRequest),
     Artifact(ArtifactCommandRequest),
@@ -102,6 +103,11 @@ pub(super) fn map_document(document: &str) -> Result<MapDocument, ClientDecodeEr
 #[allow(clippy::too_many_lines)]
 pub(super) fn command(command: ClientCommandDto) -> Result<DecodedCommand, ClientDecodeError> {
     match command {
+        ClientCommandDto::CancelResearchSelection { expected_revision } => {
+            Ok(DecodedCommand::CancelResearchSelection(
+                CancelResearchSelectionRequest { expected_revision },
+            ))
+        }
         ClientCommandDto::SelectTechnology {
             expected_revision,
             technology_id,

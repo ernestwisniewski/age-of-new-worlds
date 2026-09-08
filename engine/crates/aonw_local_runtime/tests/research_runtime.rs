@@ -1,5 +1,8 @@
 //! Research protocol, runtime, and replay coverage.
 
+#[path = "research_runtime/cancellation.rs"]
+mod cancellation;
+
 use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};

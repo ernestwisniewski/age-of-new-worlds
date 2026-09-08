@@ -12,12 +12,13 @@ pub use crate::persistence_error::PersistenceError;
 use crate::persistence_validation::validate_save_header;
 use crate::session::Session;
 use crate::{
-    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest, CommandResult,
-    DetachTroopRequest, DiplomacyRequest, FinalizeTimedOutTurnRequest, FoundCityRequest,
-    KickParticipantRequest, LocalRuntime, MerchantCityRequest, MoveUnitRequest, OpenSession,
-    ProductionCommandRequest, ResignParticipantRequest, SelectCityExpansionHexRequest,
-    SelectTechnologyRequest, SessionStamp, ToggleWorkedHexRequest, TurnCommandRequest,
-    UnitActionRequest, WorkerImprovementRequest, WorkerUnitRequest,
+    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest,
+    CancelResearchSelectionRequest, CommandResult, DetachTroopRequest, DiplomacyRequest,
+    FinalizeTimedOutTurnRequest, FoundCityRequest, KickParticipantRequest, LocalRuntime,
+    MerchantCityRequest, MoveUnitRequest, OpenSession, ProductionCommandRequest,
+    ResignParticipantRequest, SelectCityExpansionHexRequest, SelectTechnologyRequest, SessionStamp,
+    ToggleWorkedHexRequest, TurnCommandRequest, UnitActionRequest, WorkerImprovementRequest,
+    WorkerUnitRequest,
 };
 
 mod evidence;
@@ -296,6 +297,7 @@ fn replay_result(result: &CommandResult, session: &Session) -> ReplayResultDto {
 }
 
 enum ReplayRuntimeCommand {
+    CancelResearchSelection(CancelResearchSelectionRequest),
     SelectTechnology(SelectTechnologyRequest),
     Diplomacy(DiplomacyRequest),
     Artifact(ArtifactCommandRequest),

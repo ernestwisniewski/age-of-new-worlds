@@ -2,12 +2,12 @@ use aonw_contracts::client::ClientCommandDto;
 use aonw_domain::HexCoord;
 use aonw_engine::{
     AssignWorkerToHexCommand, AutomateWorkerCommand, BuildRoadCommand,
-    CancelWorkerAssignmentCommand, CancelWorkerJobCommand, ConfirmWorkerImprovementCommand,
-    FoundCityCommand, PlayerCommand, RushProductionCommand, SelectCityExpansionHexCommand,
-    SelectTechnologyCommand, SelectWorkerImprovementCommand, SetCitySpecializationCommand,
-    StartArtifactExcavationCommand, StartBuildingCommand, StartCityProjectCommand,
-    StartUnitProductionCommand, StartWonderCommand, StoreArtifactInCityCommand,
-    ToggleWorkedHexCommand, TradeArtifactCommand,
+    CancelResearchSelectionCommand, CancelWorkerAssignmentCommand, CancelWorkerJobCommand,
+    ConfirmWorkerImprovementCommand, FoundCityCommand, PlayerCommand, RushProductionCommand,
+    SelectCityExpansionHexCommand, SelectTechnologyCommand, SelectWorkerImprovementCommand,
+    SetCitySpecializationCommand, StartArtifactExcavationCommand, StartBuildingCommand,
+    StartCityProjectCommand, StartUnitProductionCommand, StartWonderCommand,
+    StoreArtifactInCityCommand, ToggleWorkedHexCommand, TradeArtifactCommand,
 };
 
 use super::{PlayerCommandMappingError, value};
@@ -18,6 +18,11 @@ pub(super) fn decode<R>(
     apply: impl for<'command> FnOnce(PlayerCommand<'command>) -> R,
 ) -> Result<R, PlayerCommandMappingError> {
     match command {
+        ClientCommandDto::CancelResearchSelection { expected_revision } => {
+            Ok(apply(PlayerCommand::CancelResearchSelection(
+                CancelResearchSelectionCommand::new(expected_revision),
+            )))
+        }
         ClientCommandDto::SelectTechnology {
             expected_revision,
             technology_id,

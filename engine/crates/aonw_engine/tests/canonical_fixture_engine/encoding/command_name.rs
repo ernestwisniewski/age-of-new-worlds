@@ -6,6 +6,7 @@ pub(crate) const fn command_name(command: &ReplayCommandDto) -> &'static str {
         ReplayCommandDto::SendGoldGift { .. } => "SendGoldGift",
         ReplayCommandDto::OpenResourceTrade { .. } => "OpenResourceTrade",
         ReplayCommandDto::OpenResourceExchange { .. } => "OpenResourceExchange",
+        ReplayCommandDto::CancelResearchSelection { .. } => "CancelResearchSelection",
         ReplayCommandDto::SelectTechnology { .. } => "SelectTechnology",
         ReplayCommandDto::SendDiplomaticProposal { .. } => "SendDiplomaticProposal",
         ReplayCommandDto::RespondDiplomaticProposal { .. } => "RespondDiplomaticProposal",

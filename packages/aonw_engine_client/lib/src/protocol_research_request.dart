@@ -11,6 +11,15 @@ abstract final class AonwResearchRequest {
         },
       });
 
+  static AonwClientRequest cancelSelection({required int expectedRevision}) =>
+      AonwClientRequest._({
+        'type': 'dispatch',
+        'command': {
+          'type': 'cancelResearchSelection',
+          'expectedRevision': expectedRevision,
+        },
+      });
+
   static AonwClientRequest select({
     required int expectedRevision,
     required AonwTechnologyId technology,

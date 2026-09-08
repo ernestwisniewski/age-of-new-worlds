@@ -56,6 +56,17 @@ void main() {
     );
   });
 
+  test('serializes cancellation without a caller-supplied actor', () {
+    final request = AonwResearchRequest.cancelSelection(expectedRevision: 8);
+    expect(jsonDecode(request.toJson()), {
+      'apiVersion': aonwClientApiVersion,
+      'request': {
+        'type': 'dispatch',
+        'command': {'type': 'cancelResearchSelection', 'expectedRevision': 8},
+      },
+    });
+  });
+
   test('parses complete engine-owned research options exactly', () {
     final result =
         AonwQueryResult.fromJson({

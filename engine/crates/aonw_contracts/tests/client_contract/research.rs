@@ -9,8 +9,45 @@ use aonw_contracts::client::{
 
 use super::stamp;
 
-pub(super) fn requests() -> [ClientRequestBodyDto; 2] {
+#[test]
+fn cancellation_accepts_only_a_revision_bound_actor_free_payload() {
+    let command = serde_json::json!({
+        "type": "cancelResearchSelection",
+        "expectedRevision": 8,
+    });
+    assert!(serde_json::from_value::<ClientCommandDto>(command.clone()).is_ok());
+    for field in ["actorPlayerId", "playerId", "technologyId", "unexpected"] {
+        let mut invalid = command.clone();
+        invalid[field] = serde_json::json!("player-1");
+        assert!(serde_json::from_value::<ClientCommandDto>(invalid).is_err());
+    }
+    for revision in [
+        serde_json::Value::Null,
+        serde_json::json!(-1),
+        serde_json::json!("8"),
+    ] {
+        let mut invalid = command.clone();
+        invalid["expectedRevision"] = revision;
+        assert!(serde_json::from_value::<ClientCommandDto>(invalid).is_err());
+    }
+    assert!(
+        serde_json::from_str::<ClientCommandDto>(r#"{"type":"cancelResearchSelection"}"#,).is_err()
+    );
+    assert!(
+        serde_json::from_str::<ClientCommandDto>(
+            r#"{"type":"cancelResearchSelection","expectedRevision":8,"expectedRevision":8}"#,
+        )
+        .is_err()
+    );
+}
+
+pub(super) fn requests() -> [ClientRequestBodyDto; 3] {
     [
+        ClientRequestBodyDto::Dispatch {
+            command: ClientCommandDto::CancelResearchSelection {
+                expected_revision: 8,
+            },
+        },
         ClientRequestBodyDto::Query {
             query: ClientQueryDto::ResearchOptions {
                 expected_revision: 8,

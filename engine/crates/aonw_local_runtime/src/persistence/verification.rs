@@ -151,6 +151,9 @@ fn dispatch_replay(
     command: ReplayRuntimeCommand,
 ) -> Result<crate::CommandResult, PersistenceError> {
     match command {
+        ReplayRuntimeCommand::CancelResearchSelection(command) => {
+            runtime.cancel_research_selection(command)
+        }
         ReplayRuntimeCommand::SelectTechnology(value) => runtime.select_technology(value),
         ReplayRuntimeCommand::Diplomacy(value) => runtime.diplomacy(&value),
         ReplayRuntimeCommand::Artifact(value) => runtime.artifact(&value),

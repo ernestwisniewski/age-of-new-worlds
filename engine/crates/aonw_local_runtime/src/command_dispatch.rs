@@ -18,8 +18,8 @@ pub(crate) use aonw_projection::{ProjectedView, RecipientDisclosure, diff_view, 
 pub(crate) use diplomacy::dispatch_diplomacy;
 pub use production::ProductionCommandRequest;
 pub(crate) use production::dispatch_production;
-pub use research::SelectTechnologyRequest;
-pub(crate) use research::dispatch_select_technology;
+pub use research::{CancelResearchSelectionRequest, SelectTechnologyRequest};
+pub(crate) use research::{dispatch_cancel_research_selection, dispatch_select_technology};
 pub(crate) use worker::{
     RuntimeWorkerCommandKind, dispatch_confirm_worker_improvement,
     dispatch_select_worker_improvement, dispatch_worker_unit,

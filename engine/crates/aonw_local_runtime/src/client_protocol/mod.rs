@@ -400,6 +400,9 @@ fn serialization_failure() -> String {
 
 fn dispatch_command(runtime: &mut LocalRuntime, command: DecodedCommand) -> ClientResponseDto {
     let result = match command {
+        DecodedCommand::CancelResearchSelection(command) => {
+            runtime.cancel_research_selection(command)
+        }
         DecodedCommand::SelectTechnology(command) => runtime.select_technology(command),
         DecodedCommand::Diplomacy(command) => runtime.diplomacy(&command),
         DecodedCommand::Artifact(command) => runtime.artifact(&command),

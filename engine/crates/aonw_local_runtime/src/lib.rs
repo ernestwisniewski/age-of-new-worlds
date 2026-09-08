@@ -23,11 +23,11 @@ pub use aonw_projection::{
 };
 pub use client_protocol::ClientProtocol;
 pub use command_dispatch::{
-    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest, CommandResult,
-    DetachTroopRequest, DiplomacyRequest, FoundCityRequest, MerchantCityRequest, MoveUnitRequest,
-    PlayerViewPatch, ProductionCommandRequest, SelectCityExpansionHexRequest,
-    SelectTechnologyRequest, ToggleWorkedHexRequest, UnitActionRequest, WorkerImprovementRequest,
-    WorkerUnitRequest,
+    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest,
+    CancelResearchSelectionRequest, CommandResult, DetachTroopRequest, DiplomacyRequest,
+    FoundCityRequest, MerchantCityRequest, MoveUnitRequest, PlayerViewPatch,
+    ProductionCommandRequest, SelectCityExpansionHexRequest, SelectTechnologyRequest,
+    ToggleWorkedHexRequest, UnitActionRequest, WorkerImprovementRequest, WorkerUnitRequest,
 };
 pub use persistence::{PersistenceError, ReplayVerification};
 pub use persistence_file::{PersistenceFileError, PersistenceFileStore, PersistenceRestoreSource};

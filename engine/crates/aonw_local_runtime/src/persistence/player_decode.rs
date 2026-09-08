@@ -11,8 +11,9 @@ use super::{
     decode_worker_unit,
 };
 use crate::{
-    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest, DetachTroopRequest,
-    DiplomacyRequest, MoveUnitRequest, SelectTechnologyRequest,
+    ArtifactCommandRequest, AttackHexRequest, AutoExploreUnitRequest,
+    CancelResearchSelectionRequest, DetachTroopRequest, DiplomacyRequest, MoveUnitRequest,
+    SelectTechnologyRequest,
 };
 use crate::{ProductionCommandRequest, TurnCommandRequest};
 
@@ -20,7 +21,8 @@ pub(super) fn decode_command(
     command: &ReplayCommandDto,
 ) -> Result<ReplayRuntimeCommand, PersistenceError> {
     match command {
-        command @ ReplayCommandDto::SelectTechnology { .. } => Ok(decode_research_command(command)),
+        command @ (ReplayCommandDto::CancelResearchSelection { .. }
+        | ReplayCommandDto::SelectTechnology { .. }) => Ok(decode_research_command(command)),
         command @ (ReplayCommandDto::DeclareWar { .. }
         | ReplayCommandDto::SendGoldGift { .. }
         | ReplayCommandDto::OpenResourceTrade { .. }
@@ -119,17 +121,21 @@ pub(super) fn decode_command(
 }
 
 fn decode_research_command(command: &ReplayCommandDto) -> ReplayRuntimeCommand {
-    let ReplayCommandDto::SelectTechnology {
-        expected_revision,
-        technology_id,
-    } = command
-    else {
-        unreachable!("research decoder receives only research commands")
-    };
-    ReplayRuntimeCommand::SelectTechnology(SelectTechnologyRequest {
-        expected_revision: *expected_revision,
-        technology: aonw_contract_mapping::decode_technology(*technology_id),
-    })
+    match command {
+        ReplayCommandDto::CancelResearchSelection { expected_revision } => {
+            ReplayRuntimeCommand::CancelResearchSelection(CancelResearchSelectionRequest {
+                expected_revision: *expected_revision,
+            })
+        }
+        ReplayCommandDto::SelectTechnology {
+            expected_revision,
+            technology_id,
+        } => ReplayRuntimeCommand::SelectTechnology(SelectTechnologyRequest {
+            expected_revision: *expected_revision,
+            technology: aonw_contract_mapping::decode_technology(*technology_id),
+        }),
+        _ => unreachable!("research decoder receives only research commands"),
+    }
 }
 
 fn decode_diplomacy_command(

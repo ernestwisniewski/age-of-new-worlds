@@ -1,7 +1,8 @@
 use aonw_contract_mapping::decode_technology;
 use aonw_contracts::ReplayCommandDto;
 use aonw_engine::{
-    DomainTransition, EngineContext, GameEngine, PlayerCommand, SelectTechnologyCommand,
+    CancelResearchSelectionCommand, DomainTransition, EngineContext, GameEngine, PlayerCommand,
+    SelectTechnologyCommand,
 };
 
 use super::{ExecutionError, display_error};
@@ -11,6 +12,16 @@ pub(super) fn apply(
     context: EngineContext<'_>,
     command: &ReplayCommandDto,
 ) -> Result<DomainTransition, ExecutionError> {
+    if let ReplayCommandDto::CancelResearchSelection { expected_revision } = command {
+        return GameEngine::apply_player_owned(
+            state,
+            context,
+            PlayerCommand::CancelResearchSelection(CancelResearchSelectionCommand::new(
+                *expected_revision,
+            )),
+        )
+        .map_err(display_error);
+    }
     let ReplayCommandDto::SelectTechnology {
         expected_revision,
         technology_id,

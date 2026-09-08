@@ -164,6 +164,8 @@ pub enum ClientCommandDto {
         duration_turns: i64,
         agreement_id: Option<String>,
     },
+    /// Dismisses the authenticated actor's pending research choice.
+    CancelResearchSelection { expected_revision: u64 },
     /// Selects one currently available research target.
     SelectTechnology {
         expected_revision: u64,

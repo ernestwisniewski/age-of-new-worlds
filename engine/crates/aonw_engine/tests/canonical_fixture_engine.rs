@@ -95,9 +95,8 @@ fn apply_command(
     command: &ReplayCommandDto,
 ) -> Result<aonw_engine::DomainTransition, ExecutionError> {
     match command {
-        command @ ReplayCommandDto::SelectTechnology { .. } => {
-            research::apply(state, context, command)
-        }
+        command @ (ReplayCommandDto::CancelResearchSelection { .. }
+        | ReplayCommandDto::SelectTechnology { .. }) => research::apply(state, context, command),
         command @ (ReplayCommandDto::DeclareWar { .. }
         | ReplayCommandDto::SendGoldGift { .. }
         | ReplayCommandDto::OpenResourceTrade { .. }

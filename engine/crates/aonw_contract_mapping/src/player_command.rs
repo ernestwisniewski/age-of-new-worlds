@@ -60,7 +60,8 @@ pub fn decode_client_player_command<R>(
         | ClientCommandDto::RespondDiplomaticProposal { .. }
         | ClientCommandDto::SendDiplomaticMessage { .. }
         | ClientCommandDto::RespondDiplomaticMessage { .. }) => diplomacy::decode(command, apply),
-        command @ (ClientCommandDto::SelectTechnology { .. }
+        command @ (ClientCommandDto::CancelResearchSelection { .. }
+        | ClientCommandDto::SelectTechnology { .. }
         | ClientCommandDto::StartArtifactExcavation { .. }
         | ClientCommandDto::StoreArtifactInCity { .. }
         | ClientCommandDto::TradeArtifact { .. }

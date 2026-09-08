@@ -1,6 +1,6 @@
 use aonw_contracts::{ReplayCommandDto, ReplayRecordDto};
 use aonw_domain::TechnologyId;
-use aonw_engine::{PlayerCommand, SelectTechnologyCommand};
+use aonw_engine::{CancelResearchSelectionCommand, PlayerCommand, SelectTechnologyCommand};
 
 use super::{CommandResult, dispatch_player};
 use crate::RuntimeError;
@@ -29,6 +29,30 @@ pub(crate) fn dispatch_select_technology(
             command: ReplayCommandDto::SelectTechnology {
                 expected_revision: command.expected_revision,
                 technology_id: aonw_contract_mapping::encode_technology(command.technology),
+            },
+        },
+    )
+}
+
+/// Revision-bound dismissal of a pending research choice.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub struct CancelResearchSelectionRequest {
+    /// Expected canonical revision.
+    pub expected_revision: u64,
+}
+
+pub(crate) fn dispatch_cancel_research_selection(
+    session: &mut Session,
+    command: CancelResearchSelectionRequest,
+) -> Result<CommandResult, RuntimeError> {
+    dispatch_player(
+        session,
+        PlayerCommand::CancelResearchSelection(CancelResearchSelectionCommand::new(
+            command.expected_revision,
+        )),
+        ReplayRecordDto::Player {
+            command: ReplayCommandDto::CancelResearchSelection {
+                expected_revision: command.expected_revision,
             },
         },
     )
