@@ -28,6 +28,7 @@ import '../../read_model/map_scene.dart';
 import '../../read_model/map_view.dart';
 import '../geometry/odd_q_flat_top_geometry.dart';
 import '../input/map_action_palette_intent.dart';
+import '../input/map_gamepad_cursor.dart';
 import '../input/map_gamepad_input.dart';
 import '../input/map_gamepad_navigation.dart';
 import '../input/map_hex_selection_palette_intent.dart';
@@ -50,6 +51,7 @@ part 'map_screen_action_palette.dart';
 part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_lifecycle.dart';
 part 'map_screen_gamepad.dart';
+part 'map_screen_cursor.dart';
 part 'map_screen_ready.dart';
 part 'map_screen_scene.dart';
 
@@ -88,6 +90,7 @@ final class _MapScreenState extends State<MapScreen>
   var _flameGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
   StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
+  final _gamepadCursor = MapGamepadCursor();
   MapGamepadInput _gamepadInput = MapGamepadInput.idle;
   MapGamepadFrameController _gamepadFrames = MapGamepadFrameController();
   Duration? _lastGamepadElapsed;
@@ -135,6 +138,7 @@ final class _MapScreenState extends State<MapScreen>
   void didUpdateWidget(MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
+      _gamepadCursor.reset();
       _gamepadNavigation.setAvailable(false);
       oldWidget.controller.bindCommandEffects(null);
       oldWidget.controller.bindInteractionSounds(null);
@@ -288,6 +292,7 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _installFreshFlameGame() {
+    _gamepadCursor.reset();
     widget.controller.silencePendingInteractionSounds();
     _flameGame.setSoundSink(null);
     _flameGame.skipEffects();
@@ -315,13 +320,8 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _handleInput(MapInputCommand command) {
-    if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
-    final state = widget.controller.state;
-    if (state is! GameSessionReady) return;
-    if (widget.controller.networkConnection.blocksGameplay) return;
-    if (state.localHandoff.blocksGameplay) return;
-    if (_gamepadNavigation.handleCommand(command)) return;
-    _handleReadyInput(state, command);
+    final state = _mapInputReady(command);
+    if (state != null) _handleReadyInput(state, command);
   }
 
   void _handleReadyInput(GameSessionReady state, MapInputCommand command) {

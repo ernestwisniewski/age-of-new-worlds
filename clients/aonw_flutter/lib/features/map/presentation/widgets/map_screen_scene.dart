@@ -2,6 +2,7 @@ part of 'map_screen.dart';
 
 extension _MapScreenScene on _MapScreenState {
   void _synchronizeFlameScene() {
+    _gamepadCursor.observe(widget.controller.state);
     _synchronizeGamepadAvailability();
     switch (widget.controller.state) {
       case GameSessionReady(

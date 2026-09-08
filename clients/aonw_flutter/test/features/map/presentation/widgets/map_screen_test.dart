@@ -408,7 +408,7 @@ void main() {
     input.add(MapInputCommand.activate);
     await tester.pumpAndSettle();
     final interaction = (controller.state as GameSessionReady).interaction;
-    expect(controller.cursor.value, (col: 1, row: 0));
+    expect(controller.cursor.value, isNull);
     expect(interaction.selected, (col: 1, row: 0));
 
     input.add(MapInputCommand.toggleMapViewMode);

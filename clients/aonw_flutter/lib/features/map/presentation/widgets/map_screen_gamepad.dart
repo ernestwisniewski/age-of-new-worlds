@@ -4,7 +4,7 @@ extension _MapScreenGamepad on _MapScreenState {
   void _listenToInput(MapInputSource? source) {
     unawaited(_inputSubscription?.cancel());
     unawaited(_continuousInputSubscription?.cancel());
-    _inputSubscription = source?.commands.listen(_handleInput);
+    _inputSubscription = source?.commands.listen(_handleGamepadCommand);
     _gamepadInput = MapGamepadInput.idle;
     _gamepadFrames.prime(_gamepadInput);
     _continuousInputSubscription = switch (source) {
@@ -64,14 +64,16 @@ extension _MapScreenGamepad on _MapScreenState {
         !_gamepadNavigation.handleFrame(frame)) {
       _flameGame.applyGamepadCameraFrame(frame, dt);
       final cursorStep = frame.cursorStep;
-      if (cursorStep != null) _handleInput(cursorStep);
-      if (frame.cancelPressed) _handleInput(MapInputCommand.cancel);
+      if (cursorStep != null) _handleGamepadCommand(cursorStep);
+      if (frame.cancelPressed) _handleGamepadCommand(MapInputCommand.cancel);
       if (frame.toggleMoveTargetingPressed) {
-        _handleInput(MapInputCommand.toggleMoveTargeting);
+        _handleGamepadCommand(MapInputCommand.toggleMoveTargeting);
       }
-      if (frame.activatePressed) _handleInput(MapInputCommand.activate);
+      if (frame.activatePressed) {
+        _handleGamepadCommand(MapInputCommand.activate);
+      }
       if (frame.toggleMapViewModePressed) {
-        _handleInput(MapInputCommand.toggleMapViewMode);
+        _handleGamepadCommand(MapInputCommand.toggleMapViewMode);
       }
     }
     _synchronizeGamepadTicker();
