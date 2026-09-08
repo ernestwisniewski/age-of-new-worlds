@@ -37,6 +37,7 @@ final class NativeTurnAutomationProbe {
   late final EngineGameSessionGateway gateway;
   late final MapPresentationController controller;
   Size? _windowSize;
+  var foregroundRestorations = 0;
   String? technology;
   GameSessionReady get ready => controller.state as GameSessionReady;
 
@@ -164,15 +165,38 @@ final class NativeTurnAutomationProbe {
     final target = find.byKey(key);
     await until(() => target.evaluate().isNotEmpty, 'visible $key');
     await tester.ensureVisible(target);
-    await tester.pump();
+    await pumpFrame();
     await tester.tap(target);
-    await tester.pump();
+    await pumpFrame();
+  }
+
+  Future<void> pumpFrame() async {
+    final lifecycle = tester.binding.lifecycleState;
+    if (lifecycle != null && lifecycle != AppLifecycleState.resumed) {
+      await _restoreForeground();
+    }
+    final frame = tester.pump(const Duration(milliseconds: 100));
+    await frame.timeout(
+      const Duration(seconds: 2),
+      onTimeout: () async {
+        await _restoreForeground();
+        await frame.timeout(const Duration(seconds: 5));
+      },
+    );
+  }
+
+  Future<void> _restoreForeground() async {
+    foregroundRestorations++;
+    debugPrint('Restoring native test window: ${_diagnostics()}');
+    if (await windowManager.isMinimized()) await windowManager.restore();
+    await windowManager.show();
+    await windowManager.focus();
   }
 
   Future<void> until(bool Function() complete, String stage) async {
     final timer = Stopwatch()..start();
     do {
-      await tester.pump(const Duration(milliseconds: 100));
+      await pumpFrame();
       expect(tester.takeException(), isNull, reason: stage);
       if (controller.state case GameSessionReady(
         :final turnAction,
@@ -211,11 +235,11 @@ final class NativeTurnAutomationProbe {
 
   Future<void> idle() async {
     for (var frame = 0; frame < 10; frame++) {
-      await tester.pump(const Duration(milliseconds: 100));
+      await pumpFrame();
     }
     final before = requests.length;
     for (var frame = 0; frame < 30; frame++) {
-      await tester.pump(const Duration(milliseconds: 100));
+      await pumpFrame();
     }
     expect(
       requests.length,
@@ -235,6 +259,7 @@ final class NativeTurnAutomationProbe {
     'unitSkips': count('skipUnitTurn'),
     'automaticEnds': count('endTurn'),
     'aiTurns': count('advanceAiTurn'),
+    'foregroundRestorations': foregroundRestorations,
     'requests': requests,
   };
 

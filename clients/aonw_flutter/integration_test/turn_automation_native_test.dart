@@ -7,6 +7,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'support/native_hotseat_automation_probe.dart';
 import 'support/native_turn_automation_probe.dart';
+import 'support/native_window_automation_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,22 @@ void main() {
         binding.reportData ??= <String, dynamic>{};
         binding.reportData![mode.name] = report;
         debugPrint(jsonEncode(report));
+      } finally {
+        await probe.close();
+      }
+    });
+    testWidgets('resumes native ${mode.name} AI after minimizing the window', (
+      tester,
+    ) async {
+      final probe = NativeTurnAutomationProbe(tester);
+      try {
+        await probe.start(mode);
+        await probe.skipAndDismissResearch();
+        await probe.pauseAiAndResume();
+        final report = probe.report(mode);
+        binding.reportData ??= <String, dynamic>{};
+        binding.reportData!['${mode.name}Window'] = report;
+        debugPrint(jsonEncode({'windowResume': report}));
       } finally {
         await probe.close();
       }

@@ -66,6 +66,10 @@ checks that an idle map sends no repeated queries or commands. The Hotseat
 scenario covers both directions of a private handoff with fog enabled: an
 opaque, non-dismissible curtain blocks the map and automation until the next
 human confirms, then automatic action focus resumes for that participant.
+Native automation tests restore their window when it loses foreground activity.
+Dedicated sequential and simultaneous cases minimize the window during an AI
+animation, verify that the renderer and commands stay paused, then restore it
+and verify that the human turn resumes without duplicate commands.
 
 ## Documentation
 
