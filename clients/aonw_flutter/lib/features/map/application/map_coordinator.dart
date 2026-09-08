@@ -51,6 +51,7 @@ import 'network_game_session_port.dart';
 import 'unit_action_workflow.dart';
 
 part 'map_coordinator_actions.dart';
+part 'map_coordinator_cancellation.dart';
 part 'map_coordinator_local_save.dart';
 part 'map_coordinator_local_turns.dart';
 part 'map_coordinator_network.dart';

@@ -49,11 +49,15 @@ final class CityWorkflow {
     required CityDisposed isDisposed,
   }) {
     final ready = _selectedUnit(readState(), founderUnitId);
-    if (ready == null) return;
+    if (ready == null || ready.interaction.city?.commandPending == true) return;
     publish(
       ready.withInteraction(
         ready.interaction.copyWith(
-          city: CityState.loadingFounding(founderUnitId),
+          city: CityState(
+            founderUnitId: founderUnitId,
+            loading: true,
+            correlationId: ++_correlationId,
+          ),
           clearRoute: true,
           clearCombat: true,
         ),

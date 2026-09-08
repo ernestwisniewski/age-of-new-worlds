@@ -23,9 +23,15 @@ GameSessionReady? _selectedUnitAtRevision(
   GameSessionState state,
   String unitId,
   int revision,
+  int correlationId,
 ) {
   final ready = _selectedUnit(state, unitId);
-  return ready?.recipient.stamp.revision == revision ? ready : null;
+  final city = ready?.interaction.city;
+  return ready?.recipient.stamp.revision == revision &&
+          city?.founderUnitId == unitId &&
+          city?.correlationId == correlationId
+      ? ready
+      : null;
 }
 
 GameSessionReady? _executable(GameSessionState state, CityActionView action) {
@@ -144,3 +150,18 @@ CityFailureCode _failureCode(String code) => switch (code) {
   'session_not_open' => CityFailureCode.sessionUnavailable,
   _ => CityFailureCode.requestFailed,
 };
+
+GameSessionReady? _selectedLoadSubject(
+  GameSessionState state,
+  String subjectId,
+  int expectedRevision,
+  bool founding,
+  int? correlationId,
+) => founding
+    ? _selectedUnitAtRevision(
+        state,
+        subjectId,
+        expectedRevision,
+        correlationId ?? -1,
+      )
+    : _selectedCityAtRevision(state, subjectId, expectedRevision);

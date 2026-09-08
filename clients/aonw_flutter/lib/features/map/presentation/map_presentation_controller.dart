@@ -149,6 +149,8 @@ final class MapPresentationController extends ChangeNotifier {
 
   void confirmMove() => _coordinator.confirmMove();
 
+  void cancelInteraction() => _coordinator.cancelInteraction();
+
   void executeUnitAction(UnitActionKindView action) =>
       _coordinator.executeUnitAction(action);
 

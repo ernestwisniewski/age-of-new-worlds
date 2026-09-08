@@ -373,12 +373,7 @@ final class _MapScreenState extends State<MapScreen>
               MapInputCursor.initial(state.scene.map),
         );
       case MapInputCommand.cancel:
-        if (state.interaction.worker?.actionsOpen == true) {
-          widget.controller.setWorkerActionsOpen(false);
-        } else {
-          widget.controller.hover(null);
-          widget.controller.select(null);
-        }
+        widget.controller.cancelInteraction();
       case MapInputCommand.toggleMapViewMode:
         widget.controller.toggleMapViewMode();
       case MapInputCommand.cursorUp:
