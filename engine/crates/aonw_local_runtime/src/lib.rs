@@ -35,9 +35,9 @@ pub use query_cache::QueryCacheStats;
 pub use query_dispatch::{
     AutoExploreOptionView, CityExpansionOptionsRequest, CityFoundingOptionsRequest,
     CityWorkedHexOptionsRequest, CityYieldRequest, CombatPreviewRequest, DetachmentOptionView,
-    MerchantDestinationView, MovementStepView, ProductionOptionsRequest, ReachableRequest,
-    ReachableResult, ReachableTileView, ResearchOptionsRequest, RoutePlanRequest, RoutePlanResult,
-    RuntimeQuery, RuntimeQueryResult, StrategicResourceProjectionRequest,
+    HexInspectionRequest, MerchantDestinationView, MovementStepView, ProductionOptionsRequest,
+    ReachableRequest, ReachableResult, ReachableTileView, ResearchOptionsRequest, RoutePlanRequest,
+    RoutePlanResult, RuntimeQuery, RuntimeQueryResult, StrategicResourceProjectionRequest,
     UnitLogisticsOptionsRequest, UnitLogisticsOptionsResult, WorkerOptionsRequest,
 };
 pub use session::{

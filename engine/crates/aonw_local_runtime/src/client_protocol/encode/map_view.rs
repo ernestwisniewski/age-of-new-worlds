@@ -1,11 +1,10 @@
-use aonw_content::{
-    GridLayout, MapDocument, MapObjective, MapObjectiveType, ResourceType, TerrainType,
-    TileDefinition,
+use aonw_content::{GridLayout, MapDocument, MapObjective, MapObjectiveType, TileDefinition};
+pub(super) use aonw_contract_mapping::{
+    encode_map_resource as resource, encode_map_terrain as terrain,
 };
 use aonw_contracts::CoordinateDto;
 use aonw_contracts::client::{
-    MapGridLayoutDto, MapObjectiveTypeDto, MapObjectiveViewDto, MapResourceDto, MapTerrainDto,
-    MapTileViewDto, MapViewDto,
+    MapGridLayoutDto, MapObjectiveTypeDto, MapObjectiveViewDto, MapTileViewDto, MapViewDto,
 };
 use aonw_domain::HexCoord;
 
@@ -54,59 +53,6 @@ fn objective(value: &MapObjective) -> MapObjectiveViewDto {
         required_hold_turns: value.required_hold_turns(),
         victory_points: value.victory_points(),
         gold_per_turn: value.gold_per_turn(),
-    }
-}
-
-pub(super) const fn terrain(value: TerrainType) -> MapTerrainDto {
-    match value {
-        TerrainType::Ocean => MapTerrainDto::Ocean,
-        TerrainType::Coast => MapTerrainDto::Coast,
-        TerrainType::Lake => MapTerrainDto::Lake,
-        TerrainType::Plains => MapTerrainDto::Plains,
-        TerrainType::Grassland => MapTerrainDto::Grassland,
-        TerrainType::Desert => MapTerrainDto::Desert,
-        TerrainType::Tundra => MapTerrainDto::Tundra,
-        TerrainType::Snow => MapTerrainDto::Snow,
-        TerrainType::Mountain => MapTerrainDto::Mountain,
-        TerrainType::Hills => MapTerrainDto::Hills,
-        TerrainType::Wetlands => MapTerrainDto::Wetlands,
-        TerrainType::Jungle => MapTerrainDto::Jungle,
-        TerrainType::Forest => MapTerrainDto::Forest,
-        TerrainType::River => MapTerrainDto::River,
-    }
-}
-
-pub(super) const fn resource(value: ResourceType) -> MapResourceDto {
-    match value {
-        ResourceType::Wheat => MapResourceDto::Wheat,
-        ResourceType::Fish => MapResourceDto::Fish,
-        ResourceType::Deer => MapResourceDto::Deer,
-        ResourceType::Sheep => MapResourceDto::Sheep,
-        ResourceType::Rice => MapResourceDto::Rice,
-        ResourceType::Cow => MapResourceDto::Cow,
-        ResourceType::Apple => MapResourceDto::Apple,
-        ResourceType::Banana => MapResourceDto::Banana,
-        ResourceType::Citrus => MapResourceDto::Citrus,
-        ResourceType::Gold => MapResourceDto::Gold,
-        ResourceType::Silver => MapResourceDto::Silver,
-        ResourceType::Gems => MapResourceDto::Gems,
-        ResourceType::Silk => MapResourceDto::Silk,
-        ResourceType::Spices => MapResourceDto::Spices,
-        ResourceType::Cotton => MapResourceDto::Cotton,
-        ResourceType::Grapes => MapResourceDto::Grapes,
-        ResourceType::Ivory => MapResourceDto::Ivory,
-        ResourceType::Pearls => MapResourceDto::Pearls,
-        ResourceType::Coffee => MapResourceDto::Coffee,
-        ResourceType::Cocoa => MapResourceDto::Cocoa,
-        ResourceType::Tobacco => MapResourceDto::Tobacco,
-        ResourceType::Sugar => MapResourceDto::Sugar,
-        ResourceType::Iron => MapResourceDto::Iron,
-        ResourceType::Coal => MapResourceDto::Coal,
-        ResourceType::Oil => MapResourceDto::Oil,
-        ResourceType::Aluminium => MapResourceDto::Aluminium,
-        ResourceType::Uranium => MapResourceDto::Uranium,
-        ResourceType::Horses => MapResourceDto::Horses,
-        ResourceType::Marble => MapResourceDto::Marble,
     }
 }
 

@@ -8,6 +8,7 @@ const MAX_QUERY_CACHE_ENTRIES: usize = 64;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 enum QueryKind {
+    HexInspection(HexCoord),
     ResearchOptions,
     CityFoundingOptions,
     CityWorkedHexOptions,
@@ -43,6 +44,11 @@ struct QueryCacheKey {
 impl QueryCacheKey {
     fn new(stamp: SessionStamp, request: &RuntimeQuery) -> Self {
         let (expected_revision, subject, kind) = match request {
+            RuntimeQuery::HexInspection(request) => (
+                request.expected_revision,
+                QuerySubject::Actor,
+                QueryKind::HexInspection(request.coordinate),
+            ),
             RuntimeQuery::ResearchOptions(request) => (
                 request.expected_revision,
                 QuerySubject::Actor,

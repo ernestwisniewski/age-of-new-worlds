@@ -25,6 +25,9 @@ use super::research::research_options;
 
 pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
     match value {
+        RuntimeQueryResult::HexInspection { stamp, inspection } => {
+            aonw_contract_mapping::encode_hex_inspection(*stamp, inspection)
+        }
         RuntimeQueryResult::ResearchOptions {
             stamp: value_stamp,
             options,

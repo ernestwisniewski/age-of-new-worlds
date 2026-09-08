@@ -14,6 +14,8 @@ use crate::{
 /// Read-only game query family.
 #[derive(Clone, Copy, Debug)]
 pub enum GameQuery<'query> {
+    /// Disclosed terrain, resource assessment, and improvement context.
+    HexInspection(crate::HexInspectionQuery),
     /// Returns founding legality and engine-owned initial territory choices.
     CityFoundingOptions(CityFoundingOptionsQuery<'query>),
     /// Returns controlled/manual/effective worked coordinates.
@@ -45,6 +47,8 @@ pub enum GameQuery<'query> {
 /// Typed query result.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum QueryResult {
+    /// Actor-filtered profile of one map hex.
+    HexInspection(crate::HexInspection),
     /// Legal initial territory for one founder.
     CityFoundingOptions(CityFoundingOptions),
     /// Legal worked-hex state for one city.
@@ -76,6 +80,8 @@ pub enum QueryResult {
 /// Failure from a canonical read-only query.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CanonicalQueryError {
+    /// Hex inspection failed validation or arithmetic.
+    HexInspection(crate::HexInspectionError),
     /// City query was rejected by deterministic city rules.
     City(crate::CommandRejectionCode),
     /// City query referenced incomplete technology content.
@@ -103,6 +109,7 @@ impl CanonicalQueryError {
     #[must_use]
     pub const fn code(&self) -> &'static str {
         match self {
+            Self::HexInspection(error) => error.code(),
             Self::Technology(_) => "technology_query_invalid",
             Self::Economy(error) => error.code(),
             Self::Production(error) => error.code(),
@@ -120,6 +127,7 @@ impl CanonicalQueryError {
 impl core::fmt::Display for CanonicalQueryError {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
+            Self::HexInspection(source) => source.fmt(formatter),
             Self::Technology(source) => source.fmt(formatter),
             Self::Economy(source) => source.fmt(formatter),
             Self::Production(source) => source.fmt(formatter),
@@ -164,6 +172,11 @@ impl GameEngine {
     ) -> Result<QueryResult, CanonicalQueryError> {
         let context = context.with_world(state);
         match query {
+            GameQuery::HexInspection(query) => {
+                crate::hex_inspection::query::inspect(state, context, query)
+                    .map(QueryResult::HexInspection)
+                    .map_err(CanonicalQueryError::HexInspection)
+            }
             GameQuery::CityFoundingOptions(query) => {
                 crate::city::query_founding(state, context, query)
                     .map(QueryResult::CityFoundingOptions)

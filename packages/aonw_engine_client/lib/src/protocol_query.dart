@@ -2,13 +2,16 @@ import 'package:aonw_engine_client/src/protocol_city_view.dart';
 import 'package:aonw_engine_client/src/protocol_coordinate.dart';
 import 'package:aonw_engine_client/src/protocol_evidence.dart';
 import 'package:aonw_engine_client/src/protocol_execution.dart';
+import 'package:aonw_engine_client/src/protocol_hex_values.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
+import 'package:aonw_engine_client/src/protocol_map.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
 import 'package:aonw_engine_client/src/protocol_player_view.dart';
 import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
 part 'protocol_city_query.dart';
+part 'protocol_hex_query.dart';
 part 'protocol_production_query.dart';
 part 'protocol_research_query.dart';
 part 'protocol_worker_query.dart';
@@ -18,26 +21,33 @@ sealed class AonwQueryResult {
 
   factory AonwQueryResult.fromJson(Object? source) {
     final value = readObject(source, 'query result');
-    return switch (value['type']) {
-      'reachable' => AonwReachableResult.fromJson(value),
-      'routePlan' => AonwRoutePlanResult.fromJson(value),
-      'unitLogisticsOptions' => AonwUnitLogisticsOptionsResult.fromJson(value),
-      'combatPreview' => AonwCombatPreviewResult.fromJson(value),
-      'cityFoundingOptions' => AonwCityFoundingOptionsResult.fromJson(value),
-      'cityWorkedHexOptions' => AonwCityWorkedHexOptionsResult.fromJson(value),
-      'cityExpansionOptions' => AonwCityExpansionOptionsResult.fromJson(value),
-      'cityYield' => AonwCityYieldResult.fromJson(value),
-      'strategicResourceProjection' =>
-        AonwStrategicResourceProjectionResult.fromJson(value),
-      'productionOptions' => AonwProductionOptionsResult.fromJson(value),
-      'researchOptions' => AonwResearchOptionsResult.fromJson(value),
-      'workerOptions' => AonwWorkerOptionsResult.fromJson(value),
-      final Object? type => throw FormatException(
-        'Unknown AoNW query result $type.',
-      ),
-    };
+    final type = readString(value['type'], 'query result type');
+    final parser = _queryResultParsers[type];
+    if (parser == null) {
+      throw FormatException('Unknown AoNW query result $type.');
+    }
+    return parser(value);
   }
 }
+
+typedef _QueryResultParser =
+    AonwQueryResult Function(Map<String, Object?> value);
+
+final Map<String, _QueryResultParser> _queryResultParsers = {
+  'hexInspection': AonwHexInspectionResult.fromJson,
+  'reachable': AonwReachableResult.fromJson,
+  'routePlan': AonwRoutePlanResult.fromJson,
+  'unitLogisticsOptions': AonwUnitLogisticsOptionsResult.fromJson,
+  'combatPreview': AonwCombatPreviewResult.fromJson,
+  'cityFoundingOptions': AonwCityFoundingOptionsResult.fromJson,
+  'cityWorkedHexOptions': AonwCityWorkedHexOptionsResult.fromJson,
+  'cityExpansionOptions': AonwCityExpansionOptionsResult.fromJson,
+  'cityYield': AonwCityYieldResult.fromJson,
+  'strategicResourceProjection': AonwStrategicResourceProjectionResult.fromJson,
+  'productionOptions': AonwProductionOptionsResult.fromJson,
+  'researchOptions': AonwResearchOptionsResult.fromJson,
+  'workerOptions': AonwWorkerOptionsResult.fromJson,
+};
 
 final class AonwCombatPreviewResult extends AonwQueryResult {
   const AonwCombatPreviewResult({required this.stamp, required this.preview});

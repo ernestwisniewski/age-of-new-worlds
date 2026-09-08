@@ -7,6 +7,9 @@ use aonw_engine::{
     TerrainMovementQuery, WorkerOptions,
 };
 
+mod hex_inspection;
+pub use hex_inspection::HexInspectionRequest;
+use hex_inspection::dispatch_hex_inspection;
 mod logistics;
 mod movement;
 mod read_models;
@@ -102,6 +105,8 @@ pub struct UnitLogisticsOptionsRequest {
 /// Versioned local query family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQuery {
+    /// Disclosed profile of one map hex.
+    HexInspection(HexInspectionRequest),
     /// Complete actor-owned research selection choices.
     ResearchOptions(ResearchOptionsRequest),
     /// Legal initial territory choices.
@@ -177,6 +182,13 @@ pub struct UnitLogisticsOptionsResult {
 /// Versioned local query response family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQueryResult {
+    /// Disclosed profile of one map hex.
+    HexInspection {
+        /// Version and authoritative identity metadata.
+        stamp: SessionStamp,
+        /// Actor-filtered query result.
+        inspection: aonw_engine::HexInspection,
+    },
     /// Complete actor-owned research selection choices.
     ResearchOptions {
         /// Version and authoritative identity metadata.
@@ -254,6 +266,9 @@ pub(crate) fn dispatch_query(
     workspace: &mut MovementSearchWorkspace,
 ) -> Result<RuntimeQueryResult, RuntimeError> {
     match request {
+        RuntimeQuery::HexInspection(request) => {
+            dispatch_hex_inspection(session, request, workspace)
+        }
         RuntimeQuery::ResearchOptions(request) => {
             dispatch_research_query(session, request, workspace)
         }

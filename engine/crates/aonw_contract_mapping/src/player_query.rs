@@ -5,7 +5,9 @@ use aonw_projection::SessionStamp;
 
 mod decode;
 mod encode;
+mod hex_inspection;
 mod research;
+pub use hex_inspection::encode_hex_inspection;
 
 /// Invalid opaque identity found while mapping one strict client query.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -51,6 +53,15 @@ pub fn decode_client_player_query<R>(
     execute: impl for<'query> FnOnce(GameQuery<'query>) -> R,
 ) -> Result<R, PlayerQueryMappingError> {
     match query {
+        ClientQueryDto::HexInspection {
+            expected_revision,
+            coordinate,
+        } => Ok(execute(GameQuery::HexInspection(
+            aonw_engine::HexInspectionQuery::new(
+                expected_revision,
+                aonw_domain::HexCoord::new(coordinate.col, coordinate.row),
+            ),
+        ))),
         ClientQueryDto::ResearchOptions { expected_revision } => Ok(execute(
             GameQuery::ResearchOptions(ResearchOptionsQuery::new(expected_revision)),
         )),

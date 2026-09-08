@@ -1,1 +1,1 @@
-{"apiVersion":19,"request":{"type":"dispatch","command":{"type":"moveUnit","expectedRevision":7,"unitId":"unit-1","target":{"col":3,"row":4}}}}
+{"apiVersion":20,"request":{"type":"dispatch","command":{"type":"moveUnit","expectedRevision":7,"unitId":"unit-1","target":{"col":3,"row":4}}}}

@@ -1,7 +1,7 @@
 mod improvements;
 mod kind;
 mod model;
-mod query;
+pub(crate) mod query;
 mod recommendation;
 mod score;
 

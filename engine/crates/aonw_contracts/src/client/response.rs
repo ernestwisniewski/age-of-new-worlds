@@ -9,6 +9,11 @@ mod city;
 mod diplomacy;
 mod economy;
 mod event;
+mod hex_inspection;
+pub use hex_inspection::{
+    HexAssessmentKindDto, HexAssessmentScoreDto, HexAssessmentTagDto, HexImprovementAccessDto,
+    HexImprovementOptionDto, HexInspectionDto, HexRecommendationDto,
+};
 mod logistics;
 mod observation;
 mod production;
@@ -212,6 +217,8 @@ pub enum ClientFeatureDto {
     Combat,
     /// Stateless strict map inspection.
     InspectMap,
+    /// Actor-filtered hex assessment and improvement context.
+    HexInspection,
     /// Atomic participant, lifecycle, and fog initialization.
     MatchStart,
     /// Local hot-seat recipient handoff.

@@ -22,9 +22,7 @@
       "declarations": {},
       "callableLines": {},
       "nesting": {},
-      "cyclomaticComplexity": {
-        "packages/aonw_engine_client/lib/src/protocol_query.dart::class:AonwQueryResult/constructor:fromJson": 14
-      },
+      "cyclomaticComplexity": {},
       "cognitiveComplexity": {}
     },
     "engine_client_test": {

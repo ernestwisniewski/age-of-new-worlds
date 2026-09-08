@@ -1,0 +1,96 @@
+{
+  "apiVersion": 20,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "hexInspection",
+        "stamp": {
+          "revision": 0,
+          "stateDigest": "cdae0aecc409569cfd02597b64418afc281ac8a3cc4a3a2028be13b7a925c78a",
+          "mapHash": "8589bbd8c88e5d3d23976ae3dbc9b8ee7f92f67a8000e76b8f35472c50c2f765",
+          "rulesetHash": "c8bec5b750ded25f60e989dd0e87c6a1a1a7ab87914d574aea830856441ad7ed"
+        },
+        "inspection": {
+          "coordinate": {
+            "col": 0,
+            "row": 0
+          },
+          "baseTerrain": "forest",
+          "terrainTags": [
+            "forest"
+          ],
+          "resources": [
+            "deer",
+            "coal"
+          ],
+          "height": 0,
+          "hasRiver": false,
+          "canFoundCityOnTerrain": true,
+          "yieldValue": {
+            "food": 2,
+            "production": 2,
+            "gold": 0,
+            "defense": 0
+          },
+          "score": {
+            "city": 5,
+            "defense": 5,
+            "economy": 4
+          },
+          "kind": "forestForge",
+          "recommendation": "defendHere",
+          "tags": [
+            "fertile",
+            "defense",
+            "production",
+            "strategic",
+            "city"
+          ],
+          "improvementAccess": {
+            "kind": "outsideControlledCity"
+          },
+          "improvements": [
+            {
+              "kind": "lumberMill",
+              "requiredTechnology": "woodworking",
+              "technologyUnlocked": false,
+              "buildTurns": 3,
+              "yieldDelta": {
+                "food": 0,
+                "production": 1,
+                "gold": 0,
+                "defense": 0
+              }
+            },
+            {
+              "kind": "camp",
+              "requiredTechnology": "hunting",
+              "technologyUnlocked": false,
+              "buildTurns": 4,
+              "yieldDelta": {
+                "food": 1,
+                "production": 1,
+                "gold": 0,
+                "defense": 0
+              }
+            },
+            {
+              "kind": "coalShaft",
+              "requiredTechnology": "coalMining",
+              "technologyUnlocked": true,
+              "buildTurns": 5,
+              "yieldDelta": {
+                "food": 0,
+                "production": 3,
+                "gold": 0,
+                "defense": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

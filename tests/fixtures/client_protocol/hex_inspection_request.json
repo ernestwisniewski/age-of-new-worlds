@@ -1,0 +1,14 @@
+{
+  "apiVersion": 20,
+  "request": {
+    "type": "query",
+    "query": {
+      "type": "hexInspection",
+      "expectedRevision": 0,
+      "coordinate": {
+        "col": 0,
+        "row": 0
+      }
+    }
+  }
+}

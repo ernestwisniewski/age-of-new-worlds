@@ -119,6 +119,13 @@ pub enum ClientEvidenceDto {
     deny_unknown_fields
 )]
 pub enum ClientQueryResultDto {
+    /// Actor-filtered profile of one map hex.
+    HexInspection {
+        /// Identity of the queried state.
+        stamp: ClientSessionStampDto,
+        /// Terrain, resources, assessment and improvement context.
+        inspection: super::HexInspectionDto,
+    },
     /// Complete engine-owned research selection choices.
     ResearchOptions {
         /// Identity of the queried state.

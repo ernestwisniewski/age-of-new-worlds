@@ -216,7 +216,7 @@ engine-quality-check: engine-check engine-client-test engine-performance-check
 
 engine-client-test: engine-client-dependencies flutter-client-dependencies
 	@cd packages/aonw_engine_client && $(DART) test
-	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/features/map/infrastructure/native_large_map_smoke_test.dart
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub test/features/map/infrastructure/native_large_map_smoke_test.dart test/features/map/infrastructure/native_hex_inspection_smoke_test.dart
 
 godot-check:
 	@command -v "$(GODOT_BIN)" >/dev/null || { echo "Godot is required."; exit 1; }

@@ -19,6 +19,7 @@ export 'protocol_diplomacy.dart';
 export 'protocol_event.dart';
 export 'protocol_evidence.dart';
 export 'protocol_execution.dart';
+export 'protocol_hex_values.dart';
 export 'protocol_map.dart';
 export 'protocol_match.dart';
 export 'protocol_outcome.dart';
@@ -94,6 +95,18 @@ final class AonwClientRequest {
 
   factory AonwClientRequest.snapshot() =>
       AonwClientRequest._(const {'type': 'snapshot'});
+
+  factory AonwClientRequest.inspectHex({
+    required int expectedRevision,
+    required AonwCoordinate coordinate,
+  }) => AonwClientRequest._({
+    'type': 'query',
+    'query': {
+      'type': 'hexInspection',
+      'expectedRevision': expectedRevision,
+      'coordinate': {'col': coordinate.col, 'row': coordinate.row},
+    },
+  });
 
   factory AonwClientRequest.reachable({
     required int expectedRevision,
