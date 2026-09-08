@@ -614,5 +614,17 @@
   "textScaleLarge": "Large (115%)",
   "textScaleExtraLarge": "Extra large (130%)",
   "languageSettings": "Language",
-  "languageSystem": "System language"
+  "languageSystem": "System language",
+  "windowSettingsTitle": "Window",
+  "windowModeFullscreen": "Full screen",
+  "windowModeWindowed": "Windowed",
+  "windowSettingsBusy": "Changing window mode…",
+  "windowSettingsFailure": "{failure, select, load{Window preferences could not be loaded. The default mode was requested.} apply{The window mode could not be changed. Try choosing a mode again.} save{The window preference could not be saved. Try choosing a mode again.} restore{The previous window mode could not be restored. Choose a mode again.} other{The window operation could not be completed.}}",
+  "@windowSettingsFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  }
 }

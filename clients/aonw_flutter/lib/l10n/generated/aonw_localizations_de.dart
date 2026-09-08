@@ -2578,4 +2578,32 @@ class AonwLocalizationsDe extends AonwLocalizations {
 
   @override
   String get languageSystem => 'Systemsprache';
+
+  @override
+  String get windowSettingsTitle => 'Fenster';
+
+  @override
+  String get windowModeFullscreen => 'Vollbild';
+
+  @override
+  String get windowModeWindowed => 'Im Fenster';
+
+  @override
+  String get windowSettingsBusy => 'Fenstermodus wird geändert…';
+
+  @override
+  String windowSettingsFailure(String failure) {
+    String _temp0 = intl.Intl.selectLogic(failure, {
+      'load':
+          'Die Fenstereinstellungen konnten nicht geladen werden. Der Standardmodus wurde angefordert.',
+      'apply':
+          'Der Fenstermodus konnte nicht geändert werden. Wähle erneut einen Modus.',
+      'save':
+          'Die Fenstereinstellung konnte nicht gespeichert werden. Wähle erneut einen Modus.',
+      'restore':
+          'Der vorherige Fenstermodus konnte nicht wiederhergestellt werden. Wähle erneut einen Modus.',
+      'other': 'Der Fenstervorgang konnte nicht abgeschlossen werden.',
+    });
+    return '$_temp0';
+  }
 }

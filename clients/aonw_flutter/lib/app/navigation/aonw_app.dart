@@ -14,6 +14,8 @@ import '../../features/replay/presentation/replay_presentation_controller.dart';
 import '../../features/settings/application/configurable_gamepad_input.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
+import '../../features/settings/presentation/window_settings_controller.dart';
+import '../../features/settings/presentation/window_settings_host.dart';
 import '../../game/aonw_flame_game.dart';
 import '../../l10n/aonw_locale_resolution.dart';
 import '../../l10n/l10n.dart';
@@ -28,6 +30,7 @@ final class AonwApp extends StatefulWidget {
     this.mapInputSource,
     this.flameGameFactory = AonwFlameGame.new,
     this.settingsController,
+    this.windowSettingsController,
     this.audio,
     this.replayController,
     this.multiplayerAccessController,
@@ -44,6 +47,7 @@ final class AonwApp extends StatefulWidget {
   final MapInputSource? mapInputSource;
   final AonwFlameGame Function() flameGameFactory;
   final ClientSettingsController? settingsController;
+  final WindowSettingsController? windowSettingsController;
   final GameAudioPort? audio;
   final ReplayPresentationController? replayController;
   final MultiplayerAccessController? multiplayerAccessController;
@@ -150,46 +154,49 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       openExternalUri: widget.openExternalUri,
       autoLoadMap: widget.initialRoute == AonwRoute.map,
     );
-    return GameAudioHost(
-      audio: widget.audio,
-      settings: _settingsController,
-      settingsReady: _settingsReady,
-      child: ClientSettingsScope(
-        controller: _settingsController,
-        child: ListenableBuilder(
-          listenable: _settingsController,
-          builder: (context, child) => MaterialApp(
-            key: ValueKey(widget.mapController),
-            onGenerateTitle: (context) => context.aonwL10n.appTitle,
-            debugShowCheckedModeBanner: false,
-            theme: AonwTheme.darkFor(
-              highContrast: _settingsController.settings.highContrast,
-            ),
-            locale: widget.locale ?? _settingsLocale,
-            localeListResolutionCallback: resolveAonwLocale,
-            localizationsDelegates: AonwLocalizations.localizationsDelegates,
-            supportedLocales: AonwLocalizations.supportedLocales,
-            initialRoute: widget.initialRoute.location,
-            onGenerateRoute: router.onGenerateRoute,
-            navigatorObservers: [_routeObserver],
-            builder: (context, child) {
-              final media = MediaQuery.of(context);
-              return MediaQuery(
-                data: media.copyWith(
-                  textScaler: AonwTextScaler(
-                    system: media.textScaler,
-                    factor: _settingsController.settings.textScale.factor,
+    return WindowSettingsHost(
+      controller: widget.windowSettingsController,
+      child: GameAudioHost(
+        audio: widget.audio,
+        settings: _settingsController,
+        settingsReady: _settingsReady,
+        child: ClientSettingsScope(
+          controller: _settingsController,
+          child: ListenableBuilder(
+            listenable: _settingsController,
+            builder: (context, child) => MaterialApp(
+              key: ValueKey(widget.mapController),
+              onGenerateTitle: (context) => context.aonwL10n.appTitle,
+              debugShowCheckedModeBanner: false,
+              theme: AonwTheme.darkFor(
+                highContrast: _settingsController.settings.highContrast,
+              ),
+              locale: widget.locale ?? _settingsLocale,
+              localeListResolutionCallback: resolveAonwLocale,
+              localizationsDelegates: AonwLocalizations.localizationsDelegates,
+              supportedLocales: AonwLocalizations.supportedLocales,
+              initialRoute: widget.initialRoute.location,
+              onGenerateRoute: router.onGenerateRoute,
+              navigatorObservers: [_routeObserver],
+              builder: (context, child) {
+                final media = MediaQuery.of(context);
+                return MediaQuery(
+                  data: media.copyWith(
+                    textScaler: AonwTextScaler(
+                      system: media.textScaler,
+                      factor: _settingsController.settings.textScale.factor,
+                    ),
+                    disableAnimations:
+                        media.disableAnimations ||
+                        _settingsController.settings.reducedMotion,
+                    highContrast:
+                        media.highContrast ||
+                        _settingsController.settings.highContrast,
                   ),
-                  disableAnimations:
-                      media.disableAnimations ||
-                      _settingsController.settings.reducedMotion,
-                  highContrast:
-                      media.highContrast ||
-                      _settingsController.settings.highContrast,
-                ),
-                child: child ?? const SizedBox.shrink(),
-              );
-            },
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -2485,4 +2485,30 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get languageSystem => 'Język systemowy';
+
+  @override
+  String get windowSettingsTitle => 'Okno';
+
+  @override
+  String get windowModeFullscreen => 'Pełny ekran';
+
+  @override
+  String get windowModeWindowed => 'W oknie';
+
+  @override
+  String get windowSettingsBusy => 'Zmienianie trybu okna…';
+
+  @override
+  String windowSettingsFailure(String failure) {
+    String _temp0 = intl.Intl.selectLogic(failure, {
+      'load': 'Nie udało się wczytać ustawień okna. Wybrano tryb domyślny.',
+      'apply': 'Nie udało się zmienić trybu okna. Spróbuj wybrać go ponownie.',
+      'save':
+          'Nie udało się zapisać ustawienia okna. Spróbuj wybrać tryb ponownie.',
+      'restore':
+          'Nie udało się przywrócić poprzedniego trybu okna. Wybierz tryb ponownie.',
+      'other': 'Nie udało się zakończyć operacji okna.',
+    });
+    return '$_temp0';
+  }
 }

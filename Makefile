@@ -144,6 +144,7 @@ flutter-client-coverage-report: flutter-client-dependencies
 flutter-client-device-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-pub integration_test/inspect_map_native_test.dart
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/game_audio_playback_test.dart
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/window_mode_native_test.dart
 
 flutter-client-performance-check: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/flame_gameplay_performance_test.dart

@@ -25,8 +25,12 @@ import '../../features/save_game/application/local_save_transfer.dart';
 import '../../features/save_game/infrastructure/atomic_local_save_store.dart';
 import '../../features/save_game/infrastructure/platform_local_save_transfer.dart';
 import '../../features/settings/application/client_settings_store.dart';
+import '../../features/settings/application/window_settings_coordinator.dart';
+import '../../features/settings/infrastructure/platform_game_window.dart';
 import '../../features/settings/infrastructure/shared_preferences_client_settings_store.dart';
+import '../../features/settings/infrastructure/shared_preferences_window_settings_store.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
+import '../../features/settings/presentation/window_settings_controller.dart';
 import '../../game/aonw_flame_game.dart';
 import '../navigation/aonw_app.dart';
 import '../navigation/aonw_router.dart';
@@ -41,6 +45,7 @@ final class AppComposition {
     ReplayPresentationController? replayController,
     MapInputSource? mapInputSource,
     ClientSettingsStore? settingsStore,
+    WindowSettingsController? windowSettingsController,
     GameAudioPort? audio,
     AonwFlameGame Function() flameGameFactory = AonwFlameGame.new,
     ClientTelemetry telemetry = const NoOpClientTelemetry(),
@@ -58,6 +63,7 @@ final class AppComposition {
          ),
          mapInputSource: mapInputSource,
          audio: audio,
+         windowSettingsController: windowSettingsController,
          flameGameFactory: flameGameFactory,
          telemetry: telemetry,
          multiplayerAccessController: multiplayerAccessController,
@@ -105,6 +111,12 @@ final class AppComposition {
       replayController: replayController,
       mapInputSource: GamepadMapInputSource(),
       settingsStore: SharedPreferencesClientSettingsStore(),
+      windowSettingsController: WindowSettingsController(
+        WindowSettingsCoordinator(
+          window: PlatformGameWindow(),
+          store: SharedPreferencesWindowSettingsStore(),
+        ),
+      ),
       audio: GameAudioRuntime(device: AudioplayersDevice()),
       multiplayerAccessController: multiplayerAccessController,
       multiplayerController: multiplayerController,

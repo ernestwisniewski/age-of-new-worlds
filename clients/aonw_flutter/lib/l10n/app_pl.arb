@@ -471,5 +471,17 @@
   "textScaleLarge": "Duży (115%)",
   "textScaleExtraLarge": "Bardzo duży (130%)",
   "languageSettings": "Język",
-  "languageSystem": "Język systemowy"
+  "languageSystem": "Język systemowy",
+  "windowSettingsTitle": "Okno",
+  "windowModeFullscreen": "Pełny ekran",
+  "windowModeWindowed": "W oknie",
+  "windowSettingsBusy": "Zmienianie trybu okna…",
+  "windowSettingsFailure": "{failure, select, load{Nie udało się wczytać ustawień okna. Wybrano tryb domyślny.} apply{Nie udało się zmienić trybu okna. Spróbuj wybrać go ponownie.} save{Nie udało się zapisać ustawienia okna. Spróbuj wybrać tryb ponownie.} restore{Nie udało się przywrócić poprzedniego trybu okna. Wybierz tryb ponownie.} other{Nie udało się zakończyć operacji okna.}}",
+  "@windowSettingsFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  }
 }

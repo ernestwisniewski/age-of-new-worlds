@@ -1085,5 +1085,17 @@
   "textScaleLarge": "Grande (115%)",
   "textScaleExtraLarge": "Muy grande (130%)",
   "languageSettings": "Idioma",
-  "languageSystem": "Idioma del sistema"
+  "languageSystem": "Idioma del sistema",
+  "windowSettingsTitle": "Ventana",
+  "windowModeFullscreen": "Pantalla completa",
+  "windowModeWindowed": "En ventana",
+  "windowSettingsBusy": "Cambiando el modo de ventana…",
+  "windowSettingsFailure": "{failure, select, load{No se han podido cargar las preferencias de ventana. Se ha solicitado el modo predeterminado.} apply{No se ha podido cambiar el modo de ventana. Vuelve a elegir un modo.} save{No se ha podido guardar la preferencia de ventana. Vuelve a elegir un modo.} restore{No se ha podido restaurar el modo de ventana anterior. Vuelve a elegir un modo.} other{No se ha podido completar la operación de ventana.}}",
+  "@windowSettingsFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  }
 }

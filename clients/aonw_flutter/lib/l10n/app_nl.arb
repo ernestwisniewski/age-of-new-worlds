@@ -1085,5 +1085,17 @@
   "textScaleLarge": "Groot (115%)",
   "textScaleExtraLarge": "Extra groot (130%)",
   "languageSettings": "Taal",
-  "languageSystem": "Systeemtaal"
+  "languageSystem": "Systeemtaal",
+  "windowSettingsTitle": "Venster",
+  "windowModeFullscreen": "Volledig scherm",
+  "windowModeWindowed": "In venster",
+  "windowSettingsBusy": "Venstermodus wordt gewijzigd…",
+  "windowSettingsFailure": "{failure, select, load{De venstervoorkeuren konden niet worden geladen. De standaardmodus is aangevraagd.} apply{De venstermodus kon niet worden gewijzigd. Kies opnieuw een modus.} save{De venstervoorkeur kon niet worden opgeslagen. Kies opnieuw een modus.} restore{De vorige venstermodus kon niet worden hersteld. Kies opnieuw een modus.} other{De vensterbewerking kon niet worden voltooid.}}",
+  "@windowSettingsFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  }
 }

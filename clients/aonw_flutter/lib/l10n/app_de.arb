@@ -1085,5 +1085,17 @@
   "textScaleLarge": "Groß (115%)",
   "textScaleExtraLarge": "Sehr groß (130%)",
   "languageSettings": "Sprache",
-  "languageSystem": "Systemsprache"
+  "languageSystem": "Systemsprache",
+  "windowSettingsTitle": "Fenster",
+  "windowModeFullscreen": "Vollbild",
+  "windowModeWindowed": "Im Fenster",
+  "windowSettingsBusy": "Fenstermodus wird geändert…",
+  "windowSettingsFailure": "{failure, select, load{Die Fenstereinstellungen konnten nicht geladen werden. Der Standardmodus wurde angefordert.} apply{Der Fenstermodus konnte nicht geändert werden. Wähle erneut einen Modus.} save{Die Fenstereinstellung konnte nicht gespeichert werden. Wähle erneut einen Modus.} restore{Der vorherige Fenstermodus konnte nicht wiederhergestellt werden. Wähle erneut einen Modus.} other{Der Fenstervorgang konnte nicht abgeschlossen werden.}}",
+  "@windowSettingsFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  }
 }

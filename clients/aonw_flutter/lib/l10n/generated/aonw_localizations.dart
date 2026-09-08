@@ -2457,6 +2457,36 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'System language'**
   String get languageSystem;
+
+  /// No description provided for @windowSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Window'**
+  String get windowSettingsTitle;
+
+  /// No description provided for @windowModeFullscreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full screen'**
+  String get windowModeFullscreen;
+
+  /// No description provided for @windowModeWindowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Windowed'**
+  String get windowModeWindowed;
+
+  /// No description provided for @windowSettingsBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing window mode…'**
+  String get windowSettingsBusy;
+
+  /// No description provided for @windowSettingsFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'{failure, select, load{Window preferences could not be loaded. The default mode was requested.} apply{The window mode could not be changed. Try choosing a mode again.} save{The window preference could not be saved. Try choosing a mode again.} restore{The previous window mode could not be restored. Choose a mode again.} other{The window operation could not be completed.}}'**
+  String windowSettingsFailure(String failure);
 }
 
 class _AonwLocalizationsDelegate

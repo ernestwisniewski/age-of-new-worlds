@@ -8,7 +8,10 @@ import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../audio/presentation/game_audio_actions.dart';
 import '../application/client_settings.dart';
+import '../application/window_settings.dart';
 import 'client_settings_controller.dart';
+import 'window_settings_controller.dart';
+import 'window_settings_host.dart';
 
 part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
@@ -17,6 +20,7 @@ part 'settings_gamepad.dart';
 part 'settings_keyboard.dart';
 part 'settings_text_scale.dart';
 part 'settings_language.dart';
+part 'settings_window.dart';
 part 'settings_gamepad_bindings.dart';
 part 'settings_gamepad_labels.dart';
 
@@ -35,11 +39,16 @@ final class SettingsScreen extends StatelessWidget {
         builder: (context, child) => _SettingsForm(
           settings: controller.settings,
           onChanged: (settings) => unawaited(controller.update(settings)),
-          onReset: () => unawaited(controller.reset()),
+          onReset: () => _reset(context),
         ),
       ),
     ),
   );
+
+  void _reset(BuildContext context) {
+    unawaited(controller.reset());
+    unawaited(WindowSettingsScope.of(context)?.reset());
+  }
 }
 
 final class _SettingsForm extends StatelessWidget {
@@ -102,6 +111,7 @@ final class _SettingsForm extends StatelessWidget {
         child: _LanguageSetting(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
+      const _WindowSettings(),
       _GamepadSettings(settings: settings, onChanged: onChanged),
       const SizedBox(height: AonwSpacing.md),
       const _KeyboardSettings(),

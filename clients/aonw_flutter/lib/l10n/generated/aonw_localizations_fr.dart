@@ -2560,4 +2560,32 @@ class AonwLocalizationsFr extends AonwLocalizations {
 
   @override
   String get languageSystem => 'Langue du système';
+
+  @override
+  String get windowSettingsTitle => 'Fenêtre';
+
+  @override
+  String get windowModeFullscreen => 'Plein écran';
+
+  @override
+  String get windowModeWindowed => 'En fenêtre';
+
+  @override
+  String get windowSettingsBusy => 'Changement du mode de fenêtre…';
+
+  @override
+  String windowSettingsFailure(String failure) {
+    String _temp0 = intl.Intl.selectLogic(failure, {
+      'load':
+          'Les préférences de fenêtre n’ont pas pu être chargées. Le mode par défaut a été demandé.',
+      'apply':
+          'Le mode de fenêtre n’a pas pu être modifié. Réessayez de choisir un mode.',
+      'save':
+          'La préférence de fenêtre n’a pas pu être enregistrée. Réessayez de choisir un mode.',
+      'restore':
+          'Le mode de fenêtre précédent n’a pas pu être rétabli. Choisissez à nouveau un mode.',
+      'other': 'L’opération sur la fenêtre n’a pas pu être effectuée.',
+    });
+    return '$_temp0';
+  }
 }

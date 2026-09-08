@@ -2559,4 +2559,32 @@ class AonwLocalizationsEs extends AonwLocalizations {
 
   @override
   String get languageSystem => 'Idioma del sistema';
+
+  @override
+  String get windowSettingsTitle => 'Ventana';
+
+  @override
+  String get windowModeFullscreen => 'Pantalla completa';
+
+  @override
+  String get windowModeWindowed => 'En ventana';
+
+  @override
+  String get windowSettingsBusy => 'Cambiando el modo de ventana…';
+
+  @override
+  String windowSettingsFailure(String failure) {
+    String _temp0 = intl.Intl.selectLogic(failure, {
+      'load':
+          'No se han podido cargar las preferencias de ventana. Se ha solicitado el modo predeterminado.',
+      'apply':
+          'No se ha podido cambiar el modo de ventana. Vuelve a elegir un modo.',
+      'save':
+          'No se ha podido guardar la preferencia de ventana. Vuelve a elegir un modo.',
+      'restore':
+          'No se ha podido restaurar el modo de ventana anterior. Vuelve a elegir un modo.',
+      'other': 'No se ha podido completar la operación de ventana.',
+    });
+    return '$_temp0';
+  }
 }
