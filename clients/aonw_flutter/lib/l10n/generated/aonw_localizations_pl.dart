@@ -2511,4 +2511,21 @@ class AonwLocalizationsPl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automationSettings => 'Automatyzacja';
+
+  @override
+  String get advanceActions => 'Przechodź do następnej czynności';
+
+  @override
+  String get advanceActionsDescription =>
+      'Po wykonaniu czynności wybierz następną jednostkę, miasto lub badanie wymagające uwagi.';
+
+  @override
+  String get automaticEndTurn => 'Kończ tury automatycznie';
+
+  @override
+  String get automaticEndTurnDescription =>
+      'Zakończ turę, gdy nie ma już czynności do wykonania. Ręczny wybór i otwarte panele wstrzymują automatyzację.';
 }

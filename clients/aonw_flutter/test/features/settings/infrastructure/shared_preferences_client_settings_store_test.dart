@@ -5,6 +5,68 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'automation options persist independently across restart and reset',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      expect((await store.load()).automation, const ClientAutomationSettings());
+      for (final actions in [true, false]) {
+        for (final end in [false, true]) {
+          final automation = ClientAutomationSettings(
+            advanceActions: actions,
+            endTurn: end,
+          );
+          final settings = ClientSettings.defaults.copyWith(
+            automation: automation,
+            highContrast: true,
+          );
+          await store.save(settings);
+          final restored = await SharedPreferencesClientSettingsStore(
+            preferences: preferences,
+          ).load();
+          expect(restored, settings);
+          expect(restored.hashCode, settings.hashCode);
+          expect(restored.automation.advanceActions, actions);
+          expect(restored.automation.endTurn, end);
+          expect(restored.highContrast, isTrue);
+        }
+      }
+      await store.save(ClientSettings.defaults);
+      expect((await store.load()).automation, const ClientAutomationSettings());
+      expect(
+        preferences.values['aonw.settings.automation.advanceActions'],
+        isTrue,
+      );
+      expect(preferences.values['aonw.settings.automation.endTurn'], isFalse);
+    },
+  );
+
+  test(
+    'changing one automation option preserves the other and notifies equality',
+    () {
+      const original = ClientAutomationSettings(
+        advanceActions: false,
+        endTurn: true,
+      );
+      expect(original.copyWith(), original);
+      expect(original.copyWith(advanceActions: true).endTurn, isTrue);
+      expect(original.copyWith(endTurn: false).advanceActions, isFalse);
+      expect(
+        ClientSettings.defaults.copyWith(automation: original),
+        isNot(ClientSettings.defaults),
+      );
+      expect(
+        ClientSettings.defaults.copyWith(
+          automation: const ClientAutomationSettings(endTurn: true),
+        ),
+        isNot(ClientSettings.defaults),
+      );
+    },
+  );
+
+  test(
     'language survives restart and returning to system persists explicitly',
     () async {
       final preferences = _Preferences();

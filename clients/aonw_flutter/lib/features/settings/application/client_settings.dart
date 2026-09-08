@@ -1,9 +1,11 @@
 import 'client_audio_settings.dart';
+import 'client_automation_settings.dart';
 import 'client_gamepad_settings.dart';
 import 'client_language.dart';
 import 'client_text_scale.dart';
 
 export 'client_audio_settings.dart';
+export 'client_automation_settings.dart';
 export 'client_gamepad_settings.dart';
 export 'client_language.dart';
 export 'client_text_scale.dart';
@@ -14,6 +16,7 @@ final class ClientSettings {
     this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
+    this.automation = const ClientAutomationSettings(),
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
@@ -49,6 +52,7 @@ final class ClientSettings {
   final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
+  final ClientAutomationSettings automation;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
   final bool cinematicCamera;
@@ -73,6 +77,7 @@ final class ClientSettings {
     ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
+    ClientAutomationSettings? automation,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
     bool? cinematicCamera,
@@ -96,6 +101,7 @@ final class ClientSettings {
     textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
+    automation: automation ?? this.automation,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     cinematicCamera: cinematicCamera ?? this.cinematicCamera,
@@ -126,6 +132,7 @@ final class ClientSettings {
       other.language == language &&
       other.gamepad == gamepad &&
       other.audio == audio &&
+      other.automation == automation &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
       _sameAnimations(other) &&
@@ -164,6 +171,7 @@ final class ClientSettings {
     textScale,
     gamepad,
     audio,
+    automation,
     cameraSensitivity,
     smoothCameraMovement,
     cinematicCamera,

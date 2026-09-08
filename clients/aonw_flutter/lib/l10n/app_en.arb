@@ -626,5 +626,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "automationSettings": "Automation",
+  "advanceActions": "Advance to the next action",
+  "advanceActionsDescription": "After completing an action, select the next unit, city or research that needs your attention.",
+  "automaticEndTurn": "End turns automatically",
+  "automaticEndTurnDescription": "End your turn when no actions remain. Manual choices and open panels pause automation."
 }

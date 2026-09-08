@@ -1097,5 +1097,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "automationSettings": "Automatisation",
+  "advanceActions": "Passer à l’action suivante",
+  "advanceActionsDescription": "Après une action, sélectionner la prochaine unité, ville ou recherche nécessitant votre attention.",
+  "automaticEndTurn": "Terminer les tours automatiquement",
+  "automaticEndTurnDescription": "Terminer votre tour lorsqu’il ne reste plus d’actions. Les choix manuels et les panneaux ouverts suspendent l’automatisation."
 }

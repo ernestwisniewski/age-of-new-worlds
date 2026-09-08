@@ -1097,5 +1097,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "automationSettings": "Automatisierung",
+  "advanceActions": "Zur nächsten Aktion wechseln",
+  "advanceActionsDescription": "Nach einer Aktion die nächste Einheit, Stadt oder Forschung auswählen, die deine Aufmerksamkeit benötigt.",
+  "automaticEndTurn": "Züge automatisch beenden",
+  "automaticEndTurnDescription": "Deinen Zug beenden, wenn keine Aktionen mehr ausstehen. Manuelle Entscheidungen und geöffnete Fenster pausieren die Automatisierung."
 }

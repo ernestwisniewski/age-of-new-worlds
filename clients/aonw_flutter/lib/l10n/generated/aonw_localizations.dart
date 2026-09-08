@@ -2487,6 +2487,36 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{failure, select, load{Window preferences could not be loaded. The default mode was requested.} apply{The window mode could not be changed. Try choosing a mode again.} save{The window preference could not be saved. Try choosing a mode again.} restore{The previous window mode could not be restored. Choose a mode again.} other{The window operation could not be completed.}}'**
   String windowSettingsFailure(String failure);
+
+  /// No description provided for @automationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation'**
+  String get automationSettings;
+
+  /// No description provided for @advanceActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Advance to the next action'**
+  String get advanceActions;
+
+  /// No description provided for @advanceActionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'After completing an action, select the next unit, city or research that needs your attention.'**
+  String get advanceActionsDescription;
+
+  /// No description provided for @automaticEndTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'End turns automatically'**
+  String get automaticEndTurn;
+
+  /// No description provided for @automaticEndTurnDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'End your turn when no actions remain. Manual choices and open panels pause automation.'**
+  String get automaticEndTurnDescription;
 }
 
 class _AonwLocalizationsDelegate

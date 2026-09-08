@@ -2588,4 +2588,21 @@ class AonwLocalizationsFr extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automationSettings => 'Automatisation';
+
+  @override
+  String get advanceActions => 'Passer à l’action suivante';
+
+  @override
+  String get advanceActionsDescription =>
+      'Après une action, sélectionner la prochaine unité, ville ou recherche nécessitant votre attention.';
+
+  @override
+  String get automaticEndTurn => 'Terminer les tours automatiquement';
+
+  @override
+  String get automaticEndTurnDescription =>
+      'Terminer votre tour lorsqu’il ne reste plus d’actions. Les choix manuels et les panneaux ouverts suspendent l’automatisation.';
 }

@@ -2606,4 +2606,21 @@ class AonwLocalizationsDe extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automationSettings => 'Automatisierung';
+
+  @override
+  String get advanceActions => 'Zur nächsten Aktion wechseln';
+
+  @override
+  String get advanceActionsDescription =>
+      'Nach einer Aktion die nächste Einheit, Stadt oder Forschung auswählen, die deine Aufmerksamkeit benötigt.';
+
+  @override
+  String get automaticEndTurn => 'Züge automatisch beenden';
+
+  @override
+  String get automaticEndTurnDescription =>
+      'Deinen Zug beenden, wenn keine Aktionen mehr ausstehen. Manuelle Entscheidungen und geöffnete Fenster pausieren die Automatisierung.';
 }

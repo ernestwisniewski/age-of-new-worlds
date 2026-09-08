@@ -1097,5 +1097,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "automationSettings": "Automatización",
+  "advanceActions": "Pasar a la siguiente acción",
+  "advanceActionsDescription": "Tras completar una acción, seleccionar la siguiente unidad, ciudad o investigación que requiera tu atención.",
+  "automaticEndTurn": "Terminar turnos automáticamente",
+  "automaticEndTurnDescription": "Terminar tu turno cuando no queden acciones. Las decisiones manuales y los paneles abiertos pausan la automatización."
 }

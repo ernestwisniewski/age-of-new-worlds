@@ -2584,4 +2584,21 @@ class AonwLocalizationsNl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automationSettings => 'Automatisering';
+
+  @override
+  String get advanceActions => 'Naar de volgende actie gaan';
+
+  @override
+  String get advanceActionsDescription =>
+      'Na een actie de volgende eenheid, stad of onderzoek selecteren die je aandacht nodig heeft.';
+
+  @override
+  String get automaticEndTurn => 'Beurten automatisch beëindigen';
+
+  @override
+  String get automaticEndTurnDescription =>
+      'Je beurt beëindigen wanneer er geen acties meer over zijn. Handmatige keuzes en geopende panelen pauzeren de automatisering.';
 }

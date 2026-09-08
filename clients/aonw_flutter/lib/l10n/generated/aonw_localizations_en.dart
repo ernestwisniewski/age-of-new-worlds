@@ -2505,4 +2505,21 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automationSettings => 'Automation';
+
+  @override
+  String get advanceActions => 'Advance to the next action';
+
+  @override
+  String get advanceActionsDescription =>
+      'After completing an action, select the next unit, city or research that needs your attention.';
+
+  @override
+  String get automaticEndTurn => 'End turns automatically';
+
+  @override
+  String get automaticEndTurnDescription =>
+      'End your turn when no actions remain. Manual choices and open panels pause automation.';
 }

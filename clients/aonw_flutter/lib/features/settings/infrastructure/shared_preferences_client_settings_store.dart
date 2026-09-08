@@ -5,6 +5,7 @@ import '../application/client_settings_store.dart';
 import 'gamepad_bindings_codec.dart';
 
 part 'shared_preferences_audio_settings.dart';
+part 'shared_preferences_automation_settings.dart';
 part 'shared_preferences_gamepad_settings.dart';
 
 final class SharedPreferencesClientSettingsStore
@@ -79,6 +80,7 @@ final class SharedPreferencesClientSettingsStore
       focusForeignUnitMovement: camera.focusForeignUnitMovement,
       followForeignUnitMovement: camera.followForeignUnitMovement,
       audio: audio,
+      automation: await _loadAutomation(),
       cameraSensitivity: _bounded(
         cameraSensitivity,
         minimum: 0.5,
@@ -108,6 +110,7 @@ final class SharedPreferencesClientSettingsStore
     await _saveCamera(settings);
     await _saveAnimations(settings);
     await _saveAudio(settings.audio);
+    await _saveAutomation(settings.automation);
     await _saveGamepad(settings.gamepad);
     await _preferences.setDouble(
       _cameraSensitivityKey,
