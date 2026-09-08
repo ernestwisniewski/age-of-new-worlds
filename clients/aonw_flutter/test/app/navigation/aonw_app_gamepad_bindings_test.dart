@@ -5,6 +5,7 @@ import 'package:aonw_flutter/app/navigation/aonw_router.dart';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/infrastructure/gamepad_map_input_source.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
+import 'package:aonw_flutter/features/settings/application/client_automation_settings.dart';
 import 'package:aonw_flutter/features/settings/application/client_gamepad_settings.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
 import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view.dart';
@@ -58,6 +59,7 @@ void main() {
       addTearDown(h.events.close);
       await h.settings.update(
         h.settings.settings.copyWith(
+          automation: const ClientAutomationSettings(advanceActions: false),
           gamepad: ClientGamepadSettings(
             bindings: GamepadBindings.defaults.bindButton(
               GamepadButtonAction.primaryAction,

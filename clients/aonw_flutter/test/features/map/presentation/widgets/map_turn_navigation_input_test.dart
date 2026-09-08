@@ -5,6 +5,9 @@ import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_input.d
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
+import 'package:aonw_flutter/features/settings/application/client_settings.dart';
+import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
+import 'package:aonw_flutter/features/settings/presentation/client_settings_scope.dart';
 import 'package:aonw_flutter/features/turns/application/turn_session_port.dart';
 import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -142,15 +145,26 @@ final class _Harness {
     final h = _Harness();
     addTearDown(h.controller.dispose);
     addTearDown(h.input.close);
+    final settings = ClientSettingsController.ephemeral();
+    addTearDown(settings.dispose);
+    await settings.update(
+      ClientSettings.defaults.copyWith(
+        automation: const ClientAutomationSettings(advanceActions: false),
+      ),
+    );
+    await settings.load();
     await tester.binding.setSurfaceSize(const Size(1000, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
-      LocalizedTestApp(
-        home: Scaffold(
-          body: MapScreen(
-            controller: h.controller,
-            inputSource: h.input,
-            flameGameFactory: () => h.game,
+      ClientSettingsScope(
+        controller: settings,
+        child: LocalizedTestApp(
+          home: Scaffold(
+            body: MapScreen(
+              controller: h.controller,
+              inputSource: h.input,
+              flameGameFactory: () => h.game,
+            ),
           ),
         ),
       ),

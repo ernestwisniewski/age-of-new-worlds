@@ -37,6 +37,7 @@ extension _MapScreenScene on _MapScreenState {
       case GameSessionLoading() || GameSessionFailure():
         _flameGame.sceneSink.clearScene();
     }
+    _observeAutomaticTurn();
   }
 
   void _synchronizeFlameCursor() {

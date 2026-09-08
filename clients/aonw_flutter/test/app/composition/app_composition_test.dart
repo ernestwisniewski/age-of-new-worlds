@@ -27,6 +27,7 @@ import 'package:aonw_flutter/features/production/read_model/production_view.dart
 import 'package:aonw_flutter/features/research/application/research_session_port.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:aonw_flutter/features/turns/application/turn_session_port.dart';
+import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
 import 'package:aonw_flutter/features/unit_actions/application/unit_action_session_port.dart';
 import 'package:aonw_flutter/features/unit_actions/read_model/unit_action_view.dart';
@@ -281,6 +282,16 @@ final class _LifecycleGameSession
         DiplomacySessionPort,
         TurnSessionPort,
         UnitActionSessionPort {
+  _LifecycleGameSession() {
+    final scene = testMapScene();
+    pendingTurnActionsResult = PendingTurnActionsView(
+      stamp: scene.player.stamp,
+      actorPlayerId: scene.player.actorPlayerId,
+      canActivate: true,
+      actions: const [],
+    );
+  }
+
   var loadCalls = 0;
   var closeCalls = 0;
 

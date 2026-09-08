@@ -18,6 +18,7 @@ import '../../save_game/application/local_save_state.dart';
 import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
 import '../../save_game/application/local_save_transfer.dart';
+import '../../turns/application/automatic_turn_policy.dart';
 import '../../turns/read_model/pending_turn_actions_view.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/read_model/worker_view.dart';
@@ -233,11 +234,13 @@ final class MapPresentationController extends ChangeNotifier {
   Future<void> navigateTurnActions({
     required int step,
     bool endWhenEmpty = false,
+    AutomaticTurnPolicyBuilder? automatic,
     required bool Function() inputAvailable,
     void Function(MapHexCoordinate)? onFocus,
   }) => _coordinator.navigateTurnActions(
     step: step,
     endWhenEmpty: endWhenEmpty,
+    automatic: automatic,
     inputAvailable: inputAvailable,
     onFocused: (action) {
       switch (action) {

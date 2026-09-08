@@ -25,6 +25,7 @@ import 'package:aonw_flutter/features/research/application/research_session_port
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:aonw_flutter/features/save_game/application/game_save_session_port.dart';
 import 'package:aonw_flutter/features/turns/application/turn_session_port.dart';
+import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/recipient_turn_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
 import 'package:aonw_flutter/features/unit_actions/application/unit_action_session_port.dart';
@@ -38,6 +39,7 @@ import 'pending_turn_actions_test_fixture.dart';
 export 'pending_turn_actions_test_fixture.dart';
 
 part 'city_test_fixture.dart';
+part 'pending_turn_actions_game_fixture.dart';
 part 'map_research_test_fixture.dart';
 part 'game_session_capabilities_test_fixture.dart';
 part 'local_game_test_fixture.dart';
@@ -244,7 +246,9 @@ final class FakeGameSession
     this.aiTurnResults = const [],
     this.aiTurnFailure,
     this.handoffPlayers = const {},
-  }) : failure = null;
+  }) : failure = null {
+    pendingTurnActionsFallback = _emptyPendingTurnActions;
+  }
   FakeGameSession.failure(this.failure)
     : scene = null,
       reachableResult = null,
@@ -283,7 +287,9 @@ final class FakeGameSession
       aiTurnFailure = null,
       handoffPlayers = const {};
 
+  @override
   final MapScene? scene;
+  @override
   final MapLoadException? failure;
   ReachableView? reachableResult;
   final RoutePlanView? routeResult;
@@ -363,7 +369,9 @@ final class FakeGameSession
   var cityInspectionCalls = 0;
   var cityCommandCalls = 0;
   CityActionView? lastCityAction;
+  @override
   var localStartCalls = 0;
+  @override
   LocalMatchSetupView? lastLocalMatchSetup;
   @override
   var aiTurnCalls = 0;
@@ -377,22 +385,6 @@ final class FakeGameSession
   Future<MapScene> load(MapAssetPaths assets) async {
     final error = failure;
     if (error != null) throw error;
-    return scene!;
-  }
-
-  @override
-  Future<MapScene> startLocalMatch(LocalMatchSetupView setup) async {
-    localStartCalls += 1;
-    lastLocalMatchSetup = setup;
-    final error = failure;
-    if (error != null) {
-      throw LocalGameSessionException(
-        code: error.code,
-        message: error.message,
-        diagnosticCause: error.diagnosticCause,
-        diagnosticStackTrace: error.diagnosticStackTrace,
-      );
-    }
     return scene!;
   }
 

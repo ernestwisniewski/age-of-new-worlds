@@ -29,6 +29,7 @@ import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
 import '../../save_game/application/local_save_transfer.dart';
 import '../../save_game/application/local_save_workflow.dart';
+import '../../turns/application/automatic_turn_policy.dart';
 import '../../turns/application/pending_turn_navigation.dart';
 import '../../turns/application/turn_action_state.dart';
 import '../../turns/application/turn_session_port.dart';

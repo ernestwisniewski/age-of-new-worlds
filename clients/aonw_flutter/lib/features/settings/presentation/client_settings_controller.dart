@@ -22,10 +22,18 @@ final class ClientSettingsController extends ChangeNotifier {
   final ClientSettingsCoordinator _coordinator;
   late final StreamSubscription<ClientSettings> _subscription;
   var _disposed = false;
+  var _isLoaded = false;
 
   ClientSettings get settings => _coordinator.settings;
 
-  Future<void> load() => _coordinator.load();
+  bool get isLoaded => _isLoaded;
+
+  Future<void> load() async {
+    await _coordinator.load();
+    if (_disposed || _isLoaded) return;
+    _isLoaded = true;
+    notifyListeners();
+  }
 
   Future<void> update(ClientSettings settings) => _coordinator.update(settings);
 

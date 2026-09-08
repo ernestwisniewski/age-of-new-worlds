@@ -4,6 +4,12 @@ import '../../map/application/map_interaction_state.dart';
 import '../../map/read_model/pending_action_view.dart';
 import '../read_model/pending_turn_actions_view.dart';
 
+typedef AutomaticTurnPolicyBuilder =
+    AutomaticTurnPolicy Function(
+      PendingTurnActionsView work,
+      GameSessionReady state,
+    );
+
 /// Chooses when automatic navigation may use the engine's pending-work list.
 /// Input ownership, lifecycle and animation guards remain with the caller.
 final class AutomaticTurnPolicy {

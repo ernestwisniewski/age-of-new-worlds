@@ -364,7 +364,7 @@ final class _Harness {
   }) => navigation.navigate(
     step: step,
     endWhenEmpty: endWhenEmpty,
-    automatic: automatic,
+    automatic: automatic == null ? null : (_, _) => automatic,
     inputAvailable: () => available,
   );
 

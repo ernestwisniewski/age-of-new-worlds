@@ -18,6 +18,7 @@ import '../../../research/application/research_state.dart';
 import '../../../save_game/application/local_save_state.dart';
 import '../../../settings/application/client_gamepad_settings.dart';
 import '../../../settings/presentation/client_settings_scope.dart';
+import '../../../turns/application/automatic_turn_flow.dart';
 import '../../../turns/application/turn_action_state.dart';
 import '../../../turns/application/turn_presentation_queue.dart';
 import '../../../turns/presentation/turn_banner.dart';
@@ -52,6 +53,7 @@ import 'map_status.dart';
 import 'network_game_status_overlay.dart';
 
 part 'map_screen_action_palette.dart';
+part 'map_screen_automation.dart';
 part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_lifecycle.dart';
 part 'map_screen_gamepad.dart';
@@ -103,6 +105,14 @@ final class _MapScreenState extends State<MapScreen>
   MapGamepadFrameController _gamepadFrames = MapGamepadFrameController();
   Duration? _lastGamepadElapsed;
   AonwLocalizations? _localizations;
+  final _automaticFlow = AutomaticTurnFlow();
+  Object? _automaticObserved;
+  var _automaticGeneration = 0;
+  var _automaticQueued = false;
+  Object? _automaticOperation;
+  var _automaticDirty = false;
+  var _automaticDisposed = false;
+  var _automaticSettingsReady = false;
 
   @override
   void initState() {
@@ -116,6 +126,8 @@ final class _MapScreenState extends State<MapScreen>
     _gamepadNavigation = MapGamepadNavigation(
       onOwnerChanged: () {
         _gamepadOwnerGeneration += 1;
+        _automaticGeneration += 1;
+        _requestAutomaticTurn();
         _flameGame.setKeyboardPanDirection(x: 0, y: 0);
         _gamepadFrames.prime(_gamepadInput);
       },
@@ -151,6 +163,8 @@ final class _MapScreenState extends State<MapScreen>
   void didUpdateWidget(MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
+      _automaticOperation = null;
+      _automaticGeneration += 1;
       _gamepadCursor.reset();
       _gamepadNavigation.setAvailable(false);
       oldWidget.controller.bindCommandEffects(null);
@@ -185,6 +199,8 @@ final class _MapScreenState extends State<MapScreen>
 
   @override
   void dispose() {
+    _automaticDisposed = true;
+    _automaticGeneration += 1;
     widget.controller.bindInteractionSounds(null);
     widget.controller.bindCommandEffects(null);
     _flameGame.skipEffects();
@@ -307,6 +323,13 @@ final class _MapScreenState extends State<MapScreen>
       ),
     );
     _synchronizeGamepadSettings(settings.gamepad);
+    final ready = ClientSettingsScope.isLoadedOf(context);
+    final changed = _automaticFlow.configure(settings.automation);
+    if (changed || ready != _automaticSettingsReady) {
+      _automaticSettingsReady = ready;
+      _automaticGeneration += 1;
+      _requestAutomaticTurn();
+    }
   }
 
   void _installFreshFlameGame() {

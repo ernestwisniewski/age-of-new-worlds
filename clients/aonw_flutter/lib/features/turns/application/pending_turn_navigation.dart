@@ -28,7 +28,7 @@ final class PendingTurnNavigation {
   Future<void> navigate({
     required int step,
     bool endWhenEmpty = false,
-    AutomaticTurnPolicy? automatic,
+    AutomaticTurnPolicyBuilder? automatic,
     required bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   }) {
@@ -56,7 +56,7 @@ final class PendingTurnNavigation {
     _NavigationBatch batch,
     int step,
     bool endWhenEmpty,
-    AutomaticTurnPolicy? automatic,
+    AutomaticTurnPolicyBuilder? automatic,
     bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   ) async {
@@ -114,7 +114,7 @@ final class PendingTurnNavigation {
     GameSessionReady state,
     int step,
     bool endWhenEmpty,
-    AutomaticTurnPolicy? automatic,
+    AutomaticTurnPolicyBuilder? automatic,
     bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   ) async {
@@ -122,9 +122,10 @@ final class PendingTurnNavigation {
       batch.cancelled = true;
       return;
     }
-    if (automatic != null && !automatic.canAdvance(work, state)) return;
+    final policy = automatic?.call(work, state);
+    if (policy != null && !policy.canAdvance(work, state)) return;
     if (work.actions.isEmpty) {
-      if (automatic?.endTurn ?? endWhenEmpty) {
+      if (policy?.endTurn ?? endWhenEmpty) {
         batch.cancelled = true;
         endTurn();
       }

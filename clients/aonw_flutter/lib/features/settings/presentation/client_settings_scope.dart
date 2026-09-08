@@ -11,6 +11,20 @@ final class ClientSettingsScope
     super.key,
   }) : super(notifier: controller);
 
+  static bool isLoadedOf(BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<ClientSettingsScope>()
+          ?.notifier
+          ?.isLoaded ??
+      true;
+
+  static ClientSettings currentSettingsOf(BuildContext context) =>
+      context
+          .getInheritedWidgetOfExactType<ClientSettingsScope>()
+          ?.notifier
+          ?.settings ??
+      ClientSettings.defaults;
+
   static ClientSettings settingsOf(BuildContext context) =>
       context
           .dependOnInheritedWidgetOfExactType<ClientSettingsScope>()

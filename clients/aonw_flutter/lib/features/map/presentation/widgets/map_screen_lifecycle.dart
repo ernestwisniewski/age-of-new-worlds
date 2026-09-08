@@ -18,6 +18,8 @@ extension _MapScreenLifecycle on _MapScreenState {
   }
 
   void _synchronizeFlameLifecycle() {
+    _automaticGeneration += 1;
+    _requestAutomaticTurn();
     final available =
         _routeVisible && _lifecycleState == AppLifecycleState.resumed;
     if (_gamepadAvailable != available) {

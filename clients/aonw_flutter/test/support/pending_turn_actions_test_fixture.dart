@@ -2,6 +2,7 @@ import 'package:aonw_flutter/features/turns/read_model/pending_turn_actions_view
 
 mixin FakePendingTurnActionsSession {
   PendingTurnActionsView? pendingTurnActionsResult;
+  PendingTurnActionsView Function(int)? pendingTurnActionsFallback;
   Object? pendingTurnActionsFailure;
   Future<PendingTurnActionsView> Function(int)? pendingTurnActionsHandler;
   final pendingTurnActionsRevisions = <int>[];
@@ -15,6 +16,7 @@ mixin FakePendingTurnActionsSession {
     final error = pendingTurnActionsFailure;
     if (error != null) throw error;
     return pendingTurnActionsResult ??
+        pendingTurnActionsFallback?.call(expectedRevision) ??
         (throw StateError('No pending turn actions fixture.'));
   }
 }

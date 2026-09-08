@@ -1,6 +1,29 @@
 part of 'map_test_fixture.dart';
 
 mixin FakeLocalGameSessionFixture implements LocalGameSessionPort {
+  MapScene? get scene;
+  MapLoadException? get failure;
+  int get localStartCalls;
+  set localStartCalls(int value);
+  LocalMatchSetupView? get lastLocalMatchSetup;
+  set lastLocalMatchSetup(LocalMatchSetupView? value);
+
+  @override
+  Future<MapScene> startLocalMatch(LocalMatchSetupView setup) async {
+    localStartCalls += 1;
+    lastLocalMatchSetup = setup;
+    final error = failure;
+    if (error != null) {
+      throw LocalGameSessionException(
+        code: error.code,
+        message: error.message,
+        diagnosticCause: error.diagnosticCause,
+        diagnosticStackTrace: error.diagnosticStackTrace,
+      );
+    }
+    return scene!;
+  }
+
   List<LocalAiTurnExecutionView> get aiTurnResults;
 
   LocalGameSessionException? get aiTurnFailure;

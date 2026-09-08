@@ -4,11 +4,13 @@ extension MapCoordinatorTurnNavigation on MapCoordinator {
   Future<void> navigateTurnActions({
     required int step,
     bool endWhenEmpty = false,
+    AutomaticTurnPolicyBuilder? automatic,
     required bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   }) => _turnNavigation.navigate(
     step: step,
     endWhenEmpty: endWhenEmpty,
+    automatic: automatic,
     inputAvailable: inputAvailable,
     onFocused: onFocused,
   );
