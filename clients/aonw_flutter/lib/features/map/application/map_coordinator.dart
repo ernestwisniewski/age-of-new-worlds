@@ -44,6 +44,7 @@ import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
 import 'game_session_capabilities.dart';
 import 'game_session_state.dart';
+import 'hex_inspection_workflow.dart';
 import 'map_interaction_state.dart';
 import 'map_session_port.dart';
 import 'movement_command_runner.dart';
@@ -134,6 +135,10 @@ final class MapCoordinator {
        _diagnosticReporter = diagnosticReporter ?? _ignoreDiagnostic;
 
   final MapSessionPort _session;
+  late final HexInspectionWorkflow _hexInspection = HexInspectionWorkflow(
+    session: _capabilities.hexInspection,
+    diagnosticReporter: _diagnosticReporter,
+  );
   LocalGameCatalogEntryView? _localGameEntry;
   LocalSaveSlotView? _localSaveSlot;
   LocalMatchControlPlanView? _localControlPlan;
@@ -253,6 +258,22 @@ final class MapCoordinator {
       return false;
     }
   }
+
+  void inspectHex(MapHexCoordinate coordinate) {
+    if (!_gameplayActive()) return;
+    final generation = _loadGeneration;
+    unawaited(
+      _hexInspection.inspect(
+        coordinate: coordinate,
+        readState: () => _state,
+        publish: _setState,
+        isDisposed: () => !_isCurrent(generation),
+      ),
+    );
+  }
+
+  void closeHexInspection() =>
+      _hexInspection.close(readState: () => _state, publish: _setState);
 
   void hover(MapHexCoordinate? coordinate) {
     final current = _state;

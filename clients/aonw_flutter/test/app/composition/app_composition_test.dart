@@ -36,6 +36,7 @@ import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/hex_inspection_test_fixture.dart';
 import '../../support/map_test_fixture.dart';
 
 void main() {
@@ -223,6 +224,7 @@ final class _RecordingClientTelemetry implements ClientTelemetry {
 GameSessionCapabilities _capabilities(_LifecycleGameSession session) =>
     GameSessionCapabilities(
       map: session,
+      hexInspection: FakeHexInspectionSession(scene: testMapScene()),
       movement: session,
       combat: session,
       cities: session,

@@ -33,6 +33,7 @@ import 'package:aonw_flutter/features/workers/application/worker_session_port.da
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../support/hex_inspection_test_fixture.dart';
 import '../../../support/map_test_fixture.dart';
 import '../../../support/unsupported_city_session.dart';
 
@@ -93,6 +94,7 @@ void main() {
     final controller = MapCoordinator(
       capabilities: GameSessionCapabilities(
         map: session,
+        hexInspection: FakeHexInspectionSession(scene: testMapScene()),
         movement: session,
         combat: session,
         cities: const UnsupportedCitySession(),

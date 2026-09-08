@@ -8,6 +8,7 @@ import '../../turns/application/turn_presentation_queue.dart';
 import '../read_model/map_command_frame_view.dart';
 import '../read_model/map_scene.dart';
 import '../read_model/player_map_view.dart';
+import 'hex_inspection_state.dart';
 import 'map_interaction_state.dart';
 
 sealed class GameSessionState {
@@ -30,6 +31,7 @@ final class GameSessionReady extends GameSessionState {
     required this.localHandoff,
     required this.localSave,
     this.commandFrame,
+    this.inspection,
   });
 
   factory GameSessionReady.initial(MapScene scene) => GameSessionReady(
@@ -44,6 +46,7 @@ final class GameSessionReady extends GameSessionState {
     localSave: const LocalSaveState.idle(),
   );
 
+  final HexInspectionState? inspection;
   final MapScene scene;
   final MapInteractionState interaction;
   final TurnPresentationQueue turnPresentations;
@@ -57,6 +60,21 @@ final class GameSessionReady extends GameSessionState {
 
   PlayerMapView get recipient => scene.player;
 
+  GameSessionReady withInspection(HexInspectionState? value) =>
+      GameSessionReady(
+        scene: scene,
+        interaction: interaction,
+        turnPresentations: turnPresentations,
+        turnAction: turnAction,
+        research: research,
+        diplomacy: diplomacy,
+        localAiTurn: localAiTurn,
+        localHandoff: localHandoff,
+        localSave: localSave,
+        commandFrame: commandFrame,
+        inspection: value,
+      );
+
   GameSessionReady withInteraction(MapInteractionState value) =>
       GameSessionReady(
         scene: scene,
@@ -69,6 +87,7 @@ final class GameSessionReady extends GameSessionState {
         localHandoff: localHandoff,
         localSave: localSave,
         commandFrame: commandFrame,
+        inspection: inspection,
       );
 
   GameSessionReady withRecipient(
@@ -76,11 +95,20 @@ final class GameSessionReady extends GameSessionState {
     MapCommandFrameView? commandFrame,
   }) {
     final identityChanged =
-        value.actorPlayerId != recipient.actorPlayerId ||
-        value.stamp.revision != recipient.stamp.revision ||
-        value.stamp.stateDigest != recipient.stamp.stateDigest ||
-        value.stamp.mapHash != recipient.stamp.mapHash ||
-        value.stamp.rulesetHash != recipient.stamp.rulesetHash;
+        (
+          value.actorPlayerId,
+          value.stamp.revision,
+          value.stamp.stateDigest,
+          value.stamp.mapHash,
+          value.stamp.rulesetHash,
+        ) !=
+        (
+          recipient.actorPlayerId,
+          recipient.stamp.revision,
+          recipient.stamp.stateDigest,
+          recipient.stamp.mapHash,
+          recipient.stamp.rulesetHash,
+        );
     return GameSessionReady(
       scene: scene.withPlayer(value),
       interaction: identityChanged
@@ -102,6 +130,7 @@ final class GameSessionReady extends GameSessionState {
       localHandoff: localHandoff,
       localSave: localSave,
       commandFrame: commandFrame,
+      inspection: identityChanged ? null : inspection,
     );
   }
 
@@ -117,6 +146,7 @@ final class GameSessionReady extends GameSessionState {
         localHandoff: localHandoff,
         localSave: localSave,
         commandFrame: commandFrame,
+        inspection: inspection,
       );
 
   GameSessionReady withTurnAction(TurnActionState value) => GameSessionReady(
@@ -130,6 +160,7 @@ final class GameSessionReady extends GameSessionState {
     localHandoff: localHandoff,
     localSave: localSave,
     commandFrame: commandFrame,
+    inspection: inspection,
   );
 
   GameSessionReady withResearch(ResearchState value) => GameSessionReady(
@@ -143,6 +174,7 @@ final class GameSessionReady extends GameSessionState {
     localHandoff: localHandoff,
     localSave: localSave,
     commandFrame: commandFrame,
+    inspection: inspection,
   );
 
   GameSessionReady withDiplomacy(DiplomacyState value) => GameSessionReady(
@@ -156,6 +188,7 @@ final class GameSessionReady extends GameSessionState {
     localHandoff: localHandoff,
     localSave: localSave,
     commandFrame: commandFrame,
+    inspection: inspection,
   );
 
   GameSessionReady withLocalAiTurn(LocalAiTurnState value) => GameSessionReady(
@@ -169,6 +202,7 @@ final class GameSessionReady extends GameSessionState {
     localHandoff: localHandoff,
     localSave: localSave,
     commandFrame: commandFrame,
+    inspection: value.blocksGameplay ? null : inspection,
   );
 
   GameSessionReady withLocalHandoff(LocalHandoffState value) =>
@@ -183,6 +217,7 @@ final class GameSessionReady extends GameSessionState {
         localHandoff: value,
         localSave: localSave,
         commandFrame: commandFrame,
+        inspection: value.blocksGameplay ? null : inspection,
       );
 
   GameSessionReady withLocalSave(LocalSaveState value) => GameSessionReady(
@@ -196,6 +231,7 @@ final class GameSessionReady extends GameSessionState {
     localHandoff: localHandoff,
     localSave: value,
     commandFrame: commandFrame,
+    inspection: inspection,
   );
 
   GameSessionReady completeTurnPresentation() =>

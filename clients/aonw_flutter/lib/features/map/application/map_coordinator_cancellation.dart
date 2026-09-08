@@ -3,7 +3,16 @@ part of 'map_coordinator.dart';
 extension MapCoordinatorCancellation on MapCoordinator {
   void cancelInteraction() {
     final current = _state;
-    if (current is! GameSessionReady || !_gameplayActive()) return;
+    if (current is! GameSessionReady) return;
+    if (current.inspection != null) {
+      closeHexInspection();
+      return;
+    }
+    _cancelMapInteraction(current);
+  }
+
+  void _cancelMapInteraction(GameSessionReady current) {
+    if (!_gameplayActive()) return;
     if (_cancellationBlocked(current)) return;
     final interaction = current.interaction;
     if (interaction.city?.founderUnitId != null) {

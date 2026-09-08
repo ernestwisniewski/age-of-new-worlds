@@ -10,6 +10,7 @@ import 'package:aonw_flutter/features/local_game/application/local_game_session_
 import 'package:aonw_flutter/features/logistics/application/unit_logistics_session_port.dart';
 import 'package:aonw_flutter/features/logistics/read_model/unit_logistics_view.dart';
 import 'package:aonw_flutter/features/map/application/game_session_capabilities.dart';
+import 'package:aonw_flutter/features/map/application/hex_inspection_session_port.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/application/movement_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_reference_bundle.dart';
@@ -31,7 +32,10 @@ import 'package:aonw_flutter/features/unit_actions/read_model/unit_action_view.d
 import 'package:aonw_flutter/features/workers/application/worker_session_port.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
+import 'hex_inspection_test_fixture.dart';
+
 part 'city_test_fixture.dart';
+part 'map_research_test_fixture.dart';
 part 'game_session_capabilities_test_fixture.dart';
 part 'local_game_test_fixture.dart';
 part 'map_combat_test_fixture.dart';
@@ -42,36 +46,6 @@ typedef ProductionOverviewFixture = ({
   ProductionOptionsView options,
   StrategicResourceProjectionView resources,
 });
-
-ResearchOptionsView testResearchOptionsView({
-  int revision = 0,
-  TechnologyIdView? activeTechnology,
-}) => ResearchOptionsView(
-  stamp: testSessionStamp(revision: revision),
-  playerId: 'preview-player',
-  activeTechnology: activeTechnology,
-  scienceOverflow: 0,
-  scienceYield: ScienceYieldBreakdownView(
-    total: 0,
-    byCityId: const {},
-    sources: const [],
-  ),
-  options: [
-    for (final technology in TechnologyIdView.values)
-      ResearchOptionView(
-        technology: technology,
-        availability: technology == activeTechnology
-            ? TechnologyAvailabilityView.active
-            : TechnologyAvailabilityView.available,
-        effectiveCost: 1,
-        progress: 0,
-        boostDiscountBasisPoints: 0,
-        prerequisites: const [],
-        blockedBy: const [],
-        unlocks: const [],
-      ),
-  ],
-);
 
 MapScene testMapScene({
   int cols = 3,

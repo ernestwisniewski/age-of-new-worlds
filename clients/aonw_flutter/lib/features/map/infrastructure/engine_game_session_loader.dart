@@ -371,6 +371,7 @@ final class EngineGameSessionLoader {
 }
 
 const _requiredClientFeatures = <AonwClientFeature>{
+  AonwClientFeature.hexInspection,
   AonwClientFeature.inspectMap,
   AonwClientFeature.snapshot,
   AonwClientFeature.reachable,

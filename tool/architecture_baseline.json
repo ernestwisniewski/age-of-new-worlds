@@ -102,7 +102,7 @@
     },
     "flutter_client_test": {
       "files": {
-        "clients/aonw_flutter/test/support/map_test_fixture.dart": 719
+        "clients/aonw_flutter/test/support/map_test_fixture.dart": 693
       },
       "declarations": {
         "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 495

@@ -1,9 +1,30 @@
 import 'dart:io';
 
 import 'package:aonw_engine_client/aonw_engine_client.dart';
+import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'loads independent inspection through the native application port',
+    () async {
+      final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
+      addTearDown(gateway.close);
+      final scene = await gateway.load(MapAssetPaths.starter);
+      final view = await gateway.capabilities.hexInspection.inspectHex(
+        expectedRevision: scene.player.stamp.revision,
+        coordinate: (col: 2, row: 1),
+      );
+      expect(view.coordinate, (col: 2, row: 1));
+      expect(view.stamp.stateDigest, scene.player.stamp.stateDigest);
+      expect(view.stamp.revision, scene.player.stamp.revision);
+      expect(view.baseTerrain, scene.map.tileAt(view.coordinate)!.yieldTerrain);
+      expect(view.terrainTags, scene.map.tileAt(view.coordinate)!.terrainTags);
+    },
+  );
+
   test(
     'native hex inspection preserves state and rejects stale queries',
     () async {
@@ -64,4 +85,12 @@ void main() {
       );
     },
   );
+}
+
+final class _FileAssetBundle extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async {
+    final bytes = await File(key).readAsBytes();
+    return ByteData.sublistView(Uint8List.fromList(bytes));
+  }
 }

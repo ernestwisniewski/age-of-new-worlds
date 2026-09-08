@@ -38,8 +38,10 @@ import '../../workers/application/worker_session_port.dart';
 import '../../workers/infrastructure/engine_worker_gateway.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../application/game_session_capabilities.dart';
+import '../application/hex_inspection_session_port.dart';
 import '../application/map_session_port.dart';
 import '../application/movement_session_port.dart';
+import '../read_model/hex_inspection_view.dart';
 import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
 import '../read_model/movement_view.dart';
@@ -47,6 +49,7 @@ import '../read_model/player_map_view.dart';
 import 'engine_game_session_context.dart';
 import 'engine_game_session_loader.dart';
 import 'engine_game_session_operations.dart';
+import 'engine_hex_inspection_gateway.dart';
 import 'engine_movement_gateway.dart';
 import 'map_feedback_mapper.dart';
 import 'map_view_mapper.dart';
@@ -56,6 +59,7 @@ import 'recipient_projection_cache.dart';
 
 part 'engine_game_artifact_session.dart';
 part 'engine_game_city_session.dart';
+part 'engine_game_hex_inspection_session.dart';
 part 'engine_game_production_session.dart';
 part 'engine_game_replay_session.dart';
 part 'engine_game_save_session.dart';
@@ -115,6 +119,7 @@ final class EngineGameSessionGateway
          mapper: unitActionMapper,
        ) {
     citySession = _EngineGameCitySession(this);
+    hexInspectionSession = _EngineGameHexInspectionSession(this);
     workerSession = _EngineGameWorkerSession(this);
     productionSession = _EngineGameProductionSession(this);
     artifactSession = _EngineGameArtifactSession(this);
@@ -137,6 +142,7 @@ final class EngineGameSessionGateway
   final LocalMatchMapper _localMatchMapper;
   final EngineUnitActionGateway _unitActions;
   late final CitySessionPort citySession;
+  late final HexInspectionSessionPort hexInspectionSession;
   late final WorkerSessionPort workerSession;
   late final ProductionSessionPort productionSession;
   late final ArtifactSessionPort artifactSession;
@@ -145,6 +151,7 @@ final class EngineGameSessionGateway
 
   GameSessionCapabilities get capabilities => GameSessionCapabilities(
     map: this,
+    hexInspection: hexInspectionSession,
     movement: this,
     combat: this,
     cities: citySession,

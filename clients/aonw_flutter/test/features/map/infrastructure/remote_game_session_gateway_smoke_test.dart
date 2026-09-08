@@ -43,7 +43,14 @@ void main() {
 
       expect(scene.player.stamp.mapHash, scene.map.contentHash);
       expect(reachable.unitId, 'preview-commander');
-      expect(remote.requestTypes, ['snapshot', 'query']);
+      final inspection = await gateway.capabilities.hexInspection.inspectHex(
+        expectedRevision: scene.player.stamp.revision,
+        coordinate: (col: 2, row: 1),
+      );
+      expect(inspection.coordinate, (col: 2, row: 1));
+      expect(inspection.stamp.stateDigest, scene.player.stamp.stateDigest);
+      expect(inspection.stamp.revision, scene.player.stamp.revision);
+      expect(remote.requestTypes, ['snapshot', 'query', 'query']);
       await gateway.close();
       expect(remote.closeCalls, 1);
     },
