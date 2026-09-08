@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'queries and selects research through the native engine session',
+    'queries selects and cancels research through the native engine session',
     () async {
       final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
       addTearDown(gateway.close);
@@ -33,6 +33,20 @@ void main() {
       );
       expect(selected.accepted, isTrue);
       expect(selected.player?.stamp.revision, options.stamp.revision + 1);
+
+      final cancelled = await gateway.cancelResearchSelection(
+        expectedRevision: selected.player!.stamp.revision,
+      );
+      expect(cancelled.accepted, isTrue);
+      expect(cancelled.player?.stamp.revision, selected.player!.stamp.revision);
+      expect(
+        cancelled.player?.stamp.stateDigest,
+        selected.player!.stamp.stateDigest,
+      );
+      expect(
+        cancelled.player?.research.activeTechnologyId,
+        available.technology.name,
+      );
 
       final refreshed = await gateway.researchOptions(
         expectedRevision: selected.player!.stamp.revision,

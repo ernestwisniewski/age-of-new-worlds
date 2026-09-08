@@ -4,6 +4,10 @@ import '../read_model/research_view.dart';
 abstract interface class ResearchSessionPort {
   Future<ResearchOptionsView> researchOptions({required int expectedRevision});
 
+  Future<ResearchCommandResultView> cancelResearchSelection({
+    required int expectedRevision,
+  });
+
   Future<ResearchCommandResultView> selectTechnology({
     required int expectedRevision,
     required TechnologyIdView technology,

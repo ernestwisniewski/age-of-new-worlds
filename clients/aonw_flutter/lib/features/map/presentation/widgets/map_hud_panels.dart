@@ -64,6 +64,8 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   bool get _researchSelectionRequired =>
       widget.scene.player.pendingAction is PendingResearchSelectionView;
 
+  bool get _panelsLocked => _terminal || widget.research.commandPending;
+
   bool get _terminal => widget.scene.player.turnView.outcome.isTerminal;
 
   @override
@@ -80,10 +82,23 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
         _researchSelectionRequired;
     final matchBecameTerminal =
         !oldWidget.scene.player.turnView.outcome.isTerminal && _terminal;
+    if (_completedResearchCancellation(oldWidget, sceneChanged)) {
+      context.playGameSound(GameSoundCue.uiPanelClose);
+    }
     if (sceneChanged || selectionBecameRequired || matchBecameTerminal) {
       _openPanel = null;
     }
   }
+
+  bool _completedResearchCancellation(
+    MapHudPanels previous,
+    bool sceneChanged,
+  ) =>
+      !sceneChanged &&
+      !_terminal &&
+      previous.research.cancellingSelection &&
+      !widget.research.commandPending &&
+      !_researchSelectionRequired;
 
   void _synchronizeController(MapPresentationController previous) {
     if (identical(previous, widget.controller)) return;
@@ -97,7 +112,9 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   void _observeWorkerActions() {
     if (_researchWasFocused != _researchFocused) {
       _researchWasFocused = _researchFocused;
-      setState(() => _openPanel = null);
+      if (_researchFocused || !_researchSelectionRequired) {
+        setState(() => _openPanel = null);
+      }
       if (_researchFocused) context.playGameSound(GameSoundCue.technology);
     }
     final becameOpen = !_workerActionsWereOpen && _workerActionsOpen;
@@ -109,7 +126,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
 
   @override
   Widget build(BuildContext context) {
-    final locked = _researchSelectionRequired || _terminal;
+    final locked = _panelsLocked;
     final effectivePanel = _researchSelectionRequired || _researchFocused
         ? _MapHudPanel.research
         : _terminal
@@ -149,8 +166,17 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     );
   }
 
+  void _cancelResearchFor(_MapHudPanel panel, bool open) {
+    setState(() => _openPanel = open ? panel : null);
+    widget.controller.cancelResearchSelection();
+  }
+
   void _setOpen(_MapHudPanel panel, bool open) {
-    if (_researchSelectionRequired || _terminal) return;
+    if (_panelsLocked) return;
+    if (_researchSelectionRequired) {
+      _cancelResearchFor(panel, open);
+      return;
+    }
     if (_researchFocused) {
       widget.controller.closeTurnResearch();
       if (!open) {

@@ -1,4 +1,5 @@
 import '../../map/application/game_session_state.dart';
+import '../../map/read_model/pending_action_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../../settings/application/client_automation_settings.dart';
 import '../read_model/pending_turn_actions_view.dart';
@@ -19,6 +20,7 @@ final class AutomaticTurnFlow {
   var _selectedNeededOrder = false;
   var _selectedDecisionOpen = false;
   var _researchFocused = false;
+  var _researchSelectionRequired = false;
   var _researchDismissed = false;
   var _primed = false;
 
@@ -63,14 +65,25 @@ final class AutomaticTurnFlow {
       _primed = firstContext && _settings.advanceActions;
     }
     _observeSelection(state);
-    final focused = state.interaction.researchFocused;
+    _observeResearch(state);
+    _stamp = state.recipient.stamp;
+  }
+
+  void _observeResearch(GameSessionReady state) {
+    final required =
+        state.recipient.pendingAction is PendingResearchSelectionView;
+    final focused = state.interaction.researchFocused || required;
+    final cancelled =
+        _researchSelectionRequired &&
+        !required &&
+        state.recipient.research.activeTechnologyId == null;
     if (_researchFocused &&
         !focused &&
-        _sameStamp(_stamp, state.recipient.stamp)) {
+        (_sameStamp(_stamp, state.recipient.stamp) || cancelled)) {
       _researchDismissed = true;
     }
     _researchFocused = focused;
-    _stamp = state.recipient.stamp;
+    _researchSelectionRequired = required;
   }
 
   void _observeSelection(GameSessionReady state) {
@@ -137,6 +150,7 @@ final class AutomaticTurnFlow {
     _selectedNeededOrder = false;
     _selectedDecisionOpen = false;
     _researchFocused = false;
+    _researchSelectionRequired = false;
     _researchDismissed = false;
     _primed = false;
   }

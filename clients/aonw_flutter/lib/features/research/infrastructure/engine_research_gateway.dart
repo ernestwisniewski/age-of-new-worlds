@@ -43,6 +43,22 @@ final class EngineResearchGateway {
     }
   }
 
+  Future<ResearchCommandResultView> cancelSelection({
+    required EngineGameSessionContextReader readContext,
+    required int expectedRevision,
+    required EngineRequestSender send,
+    required EnginePatchApplier applyPatch,
+  }) => _command(
+    readContext: readContext,
+    expectedRevision: expectedRevision,
+    send: send,
+    applyPatch: applyPatch,
+    allowUnchangedRevision: true,
+    request: AonwResearchRequest.cancelSelection(
+      expectedRevision: expectedRevision,
+    ),
+  );
+
   Future<ResearchCommandResultView> select({
     required EngineGameSessionContextReader readContext,
     required int expectedRevision,
@@ -50,21 +66,37 @@ final class EngineResearchGateway {
     required EngineRequestSender send,
     required EnginePatchApplier applyPatch,
   }) async {
+    return _command(
+      readContext: readContext,
+      expectedRevision: expectedRevision,
+      send: send,
+      applyPatch: applyPatch,
+      allowUnchangedRevision: false,
+      request: AonwResearchRequest.select(
+        expectedRevision: expectedRevision,
+        technology: AonwTechnologyId.values.byName(technology.name),
+      ),
+    );
+  }
+
+  Future<ResearchCommandResultView> _command({
+    required EngineGameSessionContextReader readContext,
+    required int expectedRevision,
+    required EngineRequestSender send,
+    required EnginePatchApplier applyPatch,
+    required AonwClientRequest request,
+    required bool allowUnchangedRevision,
+  }) async {
     try {
       final context = readContext();
-      final response = await send(
-        context,
-        AonwResearchRequest.select(
-          expectedRevision: expectedRevision,
-          technology: AonwTechnologyId.values.byName(technology.name),
-        ),
-      );
+      final response = await send(context, request);
       final command = response.require<AonwCommandResponse>().result;
       final rejection = _mapper.command(
         command,
         map: context.map,
         expectedRevision: expectedRevision,
         currentRevision: context.player.stamp.revision,
+        allowUnchangedRevision: allowUnchangedRevision,
       );
       final player = await applyPatch(context, command);
       return rejection == null

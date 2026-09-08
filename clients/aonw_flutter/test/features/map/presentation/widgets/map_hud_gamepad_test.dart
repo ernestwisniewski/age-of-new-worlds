@@ -158,30 +158,39 @@ void main() {
     });
   }
 
-  testWidgets(
-    'required research captures B and allows one technology command',
-    (tester) async {
-      final harness = await _Harness.mount(tester, requiredResearch: true);
-      expect(
-        find.byKey(const ValueKey('research-selection-required')),
-        findsOneWidget,
-      );
-      await harness.press(tester, GamepadButton.b);
-      expect(harness.navigation(tester).capturesInput, isTrue);
-      expect(
-        find.byKey(const ValueKey('research-selection-required')),
-        findsOneWidget,
-      );
-      expect(harness.session.researchCommandCalls, 0);
-      await harness.press(tester, GamepadButton.a, hold: true);
-      expect(harness.session.researchCommandCalls, 1);
-      expect(harness.ready.interaction.selected, isNull);
-      expect(harness.session.endTurnCalls, 0);
-      harness.release(GamepadButton.a);
-      await tester.pump();
-      expect(tester.takeException(), isNull);
-    },
-  );
+  testWidgets('required research allows one technology command', (
+    tester,
+  ) async {
+    final harness = await _Harness.mount(tester, requiredResearch: true);
+    expect(
+      find.byKey(const ValueKey('research-selection-required')),
+      findsOneWidget,
+    );
+    expect(harness.session.researchCommandCalls, 0);
+    await harness.press(tester, GamepadButton.dpadDown);
+    await harness.press(tester, GamepadButton.a, hold: true);
+    expect(harness.session.researchCommandCalls, 1);
+    expect(harness.ready.interaction.selected, isNull);
+    expect(harness.session.endTurnCalls, 0);
+    harness.release(GamepadButton.a);
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('B cancels required research through the authoritative command', (
+    tester,
+  ) async {
+    final harness = await _Harness.mount(tester, requiredResearch: true);
+    await harness.press(tester, GamepadButton.b, hold: true);
+    for (var frame = 0; frame < 20; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(harness.session.researchCancellationCalls, 1);
+    expect(harness.session.researchCommandCalls, 0);
+    expect(harness.ready.recipient.pendingAction, isNull);
+    expect(find.byKey(const ValueKey('close-research')), findsNothing);
+    harness.release(GamepadButton.b);
+  });
 
   testWidgets('releases HUD on route suspension and primes held A on return', (
     tester,

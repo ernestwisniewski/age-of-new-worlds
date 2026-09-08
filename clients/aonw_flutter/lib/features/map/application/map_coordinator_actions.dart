@@ -165,6 +165,15 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
+  void cancelResearchSelection() {
+    if (!_gameplayActive()) return;
+    _research.cancelSelection(
+      readState: () => _state,
+      publish: _setState,
+      isDisposed: () => _disposed,
+    );
+  }
+
   void selectTechnology(TechnologyIdView technology) {
     if (!_gameplayActive()) return;
     _research.select(

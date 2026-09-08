@@ -49,33 +49,39 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('forces required selection open and prevents closing it', (
-    tester,
-  ) async {
-    await tester.binding.setSurfaceSize(const Size(900, 900));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await tester.pumpWidget(
-      _app(
-        _ResearchHarness(
-          state: ResearchState(
-            requestedRevision: 0,
-            options: testResearchOptionsView(),
+  testWidgets(
+    'keeps required selection open when cancellation is unavailable',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(900, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        _app(
+          _ResearchHarness(
+            state: ResearchState(
+              requestedRevision: 0,
+              options: testResearchOptionsView(),
+            ),
+            selectionRequired: true,
+            onSelect: (_) {},
+            onRetry: () {},
           ),
-          selectionRequired: true,
-          onSelect: (_) {},
-          onRetry: () {},
         ),
-      ),
-    );
+      );
 
-    expect(
-      find.byKey(const ValueKey('research-selection-required')),
-      findsOneWidget,
-    );
-    expect(find.byKey(const ValueKey('close-research')), findsNothing);
-    expect(find.byKey(const ValueKey('research-options')), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(
+        find.byKey(const ValueKey('research-selection-required')),
+        findsOneWidget,
+      );
+      expect(
+        tester
+            .widget<IconButton>(find.byKey(const ValueKey('close-research')))
+            .onPressed,
+        isNull,
+      );
+      expect(find.byKey(const ValueKey('research-options')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('virtualizes the catalog and supports keyboard selection', (
     tester,

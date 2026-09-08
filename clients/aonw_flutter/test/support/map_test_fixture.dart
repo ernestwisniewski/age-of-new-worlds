@@ -194,7 +194,10 @@ MoveUnitExecutionView testMoveUnitExecutionView({
 );
 
 final class FakeGameSession
-    with FakeLocalGameSessionFixture, FakePendingTurnActionsSession
+    with
+        FakeLocalGameSessionFixture,
+        FakePendingTurnActionsSession,
+        FakeResearchSessionFixture
     implements
         MapSessionPort,
         MovementSessionPort,
@@ -315,8 +318,11 @@ final class FakeGameSession
   final ProductionSessionException? productionFailure;
   final ArtifactCommandResultView? artifactResult;
   final ArtifactSessionException? artifactFailure;
+  @override
   final ResearchOptionsView? researchOptionsResult;
+  @override
   final ResearchCommandResultView? researchResult;
+  @override
   final ResearchSessionException? researchFailure;
   final DiplomacyCommandResultView? diplomacyResult;
   final DiplomacySessionException? diplomacyFailure;
@@ -354,10 +360,6 @@ final class FakeGameSession
   var artifactCommandCalls = 0;
   ArtifactActionView? lastArtifactAction;
   int? lastArtifactExpectedRevision;
-  var researchOptionCalls = 0;
-  var researchCommandCalls = 0;
-  int? lastResearchExpectedRevision;
-  TechnologyIdView? lastResearchTechnology;
   var diplomacyCommandCalls = 0;
   int? lastDiplomacyExpectedRevision;
   DiplomacyActionView? lastDiplomacyAction;
@@ -634,31 +636,6 @@ final class FakeGameSession
     final error = artifactFailure;
     if (error != null) throw error;
     return artifactResult ?? (throw StateError('No artifact result fixture.'));
-  }
-
-  @override
-  Future<ResearchOptionsView> researchOptions({
-    required int expectedRevision,
-  }) async {
-    researchOptionCalls += 1;
-    lastResearchExpectedRevision = expectedRevision;
-    final error = researchFailure;
-    if (error != null) throw error;
-    return researchOptionsResult ??
-        testResearchOptionsView(revision: expectedRevision);
-  }
-
-  @override
-  Future<ResearchCommandResultView> selectTechnology({
-    required int expectedRevision,
-    required TechnologyIdView technology,
-  }) async {
-    researchCommandCalls += 1;
-    lastResearchExpectedRevision = expectedRevision;
-    lastResearchTechnology = technology;
-    final error = researchFailure;
-    if (error != null) throw error;
-    return researchResult ?? (throw StateError('No research result fixture.'));
   }
 
   @override

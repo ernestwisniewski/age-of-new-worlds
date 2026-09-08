@@ -401,6 +401,11 @@ final class _LifecycleGameSession
   }) async => testResearchOptionsView(revision: expectedRevision);
 
   @override
+  Future<ResearchCommandResultView> cancelResearchSelection({
+    required int expectedRevision,
+  }) => throw UnimplementedError();
+
+  @override
   Future<ResearchCommandResultView> selectTechnology({
     required int expectedRevision,
     required TechnologyIdView technology,

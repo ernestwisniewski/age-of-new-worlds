@@ -42,7 +42,7 @@ final class ResearchOverlay extends StatelessWidget {
             child: MapGamepadRegion(
               section: MapHudSection.globalActions,
               priority: MapGamepadPriority.panel,
-              onCancel: selectionRequired
+              onCancel: onOpenChanged == null
                   ? null
                   : () => onOpenChanged?.call(false),
               child: SafeArea(
@@ -88,13 +88,12 @@ final class ResearchOverlay extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      if (!selectionRequired)
-        IconButton(
-          key: const ValueKey('close-research'),
-          tooltip: copy.text(ResearchText.close),
-          onPressed: () => onOpenChanged?.call(false),
-          icon: const Icon(Icons.close),
-        ),
+      IconButton(
+        key: const ValueKey('close-research'),
+        tooltip: copy.text(ResearchText.close),
+        onPressed: onOpenChanged == null ? null : () => onOpenChanged!(false),
+        icon: const Icon(Icons.close),
+      ),
     ],
   );
 
@@ -105,9 +104,7 @@ final class ResearchOverlay extends StatelessWidget {
         child: AonwHudIconButton(
           key: const ValueKey('open-research'),
           tooltip: copy.text(ResearchText.open),
-          onPressed: selectionRequired || onOpenChanged == null
-              ? null
-              : () => onOpenChanged!(!open),
+          onPressed: onOpenChanged == null ? null : () => onOpenChanged!(!open),
           active: open,
           icon: const Icon(Icons.science),
         ),

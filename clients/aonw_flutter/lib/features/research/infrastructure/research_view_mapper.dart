@@ -64,11 +64,18 @@ final class ResearchViewMapper {
     required MapView map,
     required int expectedRevision,
     required int currentRevision,
+    bool allowUnchangedRevision = false,
   }) {
     _validateStamp(
       wire.stamp,
       map: map,
-      revision: wire.accepted ? expectedRevision + 1 : currentRevision,
+      revision: wire.accepted
+          ? _acceptedRevision(
+              expectedRevision,
+              wire.stamp.revision,
+              allowUnchangedRevision,
+            )
+          : currentRevision,
     );
     if (wire.accepted) {
       if (wire.rejection != null ||
@@ -206,3 +213,6 @@ const _rejections = <AonwCommandRejectionCode, ResearchRejectionCodeView>{
   AonwCommandRejectionCode.stateRevisionOverflow:
       ResearchRejectionCodeView.stateRevisionOverflow,
 };
+
+int _acceptedRevision(int expected, int actual, bool allowUnchanged) =>
+    allowUnchanged && actual == expected ? expected : expected + 1;

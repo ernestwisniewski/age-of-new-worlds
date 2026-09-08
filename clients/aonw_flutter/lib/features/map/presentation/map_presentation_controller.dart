@@ -190,6 +190,8 @@ final class MapPresentationController extends ChangeNotifier {
   void executeArtifactAction(ArtifactActionView action) =>
       _coordinator.executeArtifactAction(action);
 
+  void cancelResearchSelection() => _coordinator.cancelResearchSelection();
+
   void selectTechnology(TechnologyIdView technology) =>
       _coordinator.selectTechnology(technology);
 

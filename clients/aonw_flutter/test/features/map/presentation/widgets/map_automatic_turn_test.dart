@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
+import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/features/research/application/research_session_port.dart';
+import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings_store.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
@@ -19,6 +22,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../../support/localized_test_app.dart';
 import '../../../../support/map_test_fixture.dart';
 
+part 'map_research_cancellation_checks.dart';
+
 const _unit = PendingUnitTurnActionView(
   unitId: 'preview-commander',
   coordinate: (col: 0, row: 0),
@@ -26,6 +31,7 @@ const _unit = PendingUnitTurnActionView(
 const _research = PendingResearchTurnActionView();
 
 void main() {
+  researchCancellationTests();
   testWidgets('automatically focuses pending work once without gamepad input', (
     tester,
   ) async {
@@ -302,7 +308,16 @@ final class _Harness {
   _Harness({
     List<PendingTurnActionView> actions = const [_unit, _research],
     UnitActionResultView? unitResult,
+    bool requiredResearch = false,
   }) {
+    scene = testMapScene(
+      cols: 7,
+      rows: 7,
+      units: [testVisibleUnit()],
+      pendingAction: requiredResearch
+          ? const PendingResearchSelectionView()
+          : null,
+    );
     session = FakeGameSession.success(
       scene,
       reachableResult: testReachableView(),
@@ -317,7 +332,7 @@ final class _Harness {
       capabilities: testGameSessionCapabilities(session),
     );
   }
-  final scene = testMapScene(cols: 7, rows: 7, units: [testVisibleUnit()]);
+  late final MapScene scene;
   final store = _Store();
   late final settings = ClientSettingsController(store: store);
   final game = AonwFlameGame();
@@ -333,7 +348,11 @@ final class _Harness {
         actions: actions,
       );
 
-  Future<void> mount(WidgetTester tester, {bool waitForSettings = true}) async {
+  Future<void> mount(
+    WidgetTester tester, {
+    bool waitForSettings = true,
+    bool settle = true,
+  }) async {
     addTearDown(controller.dispose);
     addTearDown(settings.dispose);
     final loading = settings.load();
@@ -353,7 +372,11 @@ final class _Harness {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    if (settle) {
+      await tester.pumpAndSettle();
+    } else {
+      await _pumpResearchUi(tester);
+    }
   }
 }
 

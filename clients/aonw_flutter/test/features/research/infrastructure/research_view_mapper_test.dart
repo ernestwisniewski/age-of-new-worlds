@@ -72,6 +72,39 @@ void main() {
     );
   });
 
+  test('only cancellation accepts an unchanged authoritative revision', () {
+    final map = testMapScene().map;
+    expect(
+      () => mapper.command(
+        _accepted(revision: 0),
+        map: map,
+        expectedRevision: 0,
+        currentRevision: 0,
+      ),
+      throwsFormatException,
+    );
+    expect(
+      mapper.command(
+        _accepted(revision: 0),
+        map: map,
+        expectedRevision: 0,
+        currentRevision: 0,
+        allowUnchangedRevision: true,
+      ),
+      isNull,
+    );
+    expect(
+      () => mapper.command(
+        _accepted(revision: 2),
+        map: map,
+        expectedRevision: 0,
+        currentRevision: 0,
+        allowUnchangedRevision: true,
+      ),
+      throwsFormatException,
+    );
+  });
+
   test('accepts only research command shape and rejection family', () {
     final map = testMapScene().map;
 
@@ -151,12 +184,12 @@ List<AonwResearchOption> _options() => [
     ),
 ];
 
-AonwCommandResult _accepted() => AonwCommandResult(
-  stamp: _stamp(revision: 1),
+AonwCommandResult _accepted({int revision = 1}) => AonwCommandResult(
+  stamp: _stamp(revision: revision),
   outcome: const AonwCommandAccepted(),
   events: const [],
   evidence: null,
-  viewPatch: _patch(toRevision: 1),
+  viewPatch: _patch(toRevision: revision),
 );
 
 AonwCommandResult _rejected(AonwCommandRejectionCode code) => AonwCommandResult(

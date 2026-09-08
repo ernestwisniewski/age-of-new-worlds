@@ -270,6 +270,18 @@ final class EngineGameSessionGateway
   );
 
   @override
+  Future<ResearchCommandResultView> cancelResearchSelection({
+    required int expectedRevision,
+  }) => _serialize(
+    () => _researchGateway.cancelSelection(
+      readContext: _context,
+      expectedRevision: expectedRevision,
+      send: _send,
+      applyPatch: _applyCommandPatch,
+    ),
+  );
+
+  @override
   Future<ResearchCommandResultView> selectTechnology({
     required int expectedRevision,
     required TechnologyIdView technology,

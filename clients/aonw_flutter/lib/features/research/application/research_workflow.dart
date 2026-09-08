@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../map/application/game_session_state.dart';
+import '../../map/read_model/pending_action_view.dart';
 import '../read_model/research_view.dart';
 import 'research_session_port.dart';
 import 'research_state.dart';
@@ -36,8 +37,21 @@ final class ResearchWorkflow {
     required ResearchStatePublisher publish,
     required ResearchDisposed isDisposed,
   }) => unawaited(
-    _select(
+    _command(
       technology: technology,
+      readState: readState,
+      publish: publish,
+      isDisposed: isDisposed,
+    ),
+  );
+
+  void cancelSelection({
+    required ResearchStateReader readState,
+    required ResearchStatePublisher publish,
+    required ResearchDisposed isDisposed,
+  }) => unawaited(
+    _command(
+      technology: null,
       readState: readState,
       publish: publish,
       isDisposed: isDisposed,
@@ -101,44 +115,33 @@ final class ResearchWorkflow {
     }
   }
 
-  Future<void> _select({
-    required TechnologyIdView technology,
+  Future<void> _command({
+    required TechnologyIdView? technology,
     required ResearchStateReader readState,
     required ResearchStatePublisher publish,
     required ResearchDisposed isDisposed,
   }) async {
-    final current = _selectable(readState(), technology);
+    final current = _commandState(readState(), technology);
     if (current == null) return;
     final correlationId = ++_correlationId;
     publish(
       current.withResearch(
         current.research.copyWith(
+          loading: false,
           correlationId: correlationId,
+          cancellingSelection: technology == null,
           inFlightTechnology: technology,
           clearFailure: true,
         ),
       ),
     );
     try {
-      final result = await _session.selectTechnology(
-        expectedRevision: current.recipient.stamp.revision,
-        technology: technology,
-      );
+      final revision = current.recipient.stamp.revision;
+      final result = await _dispatch(revision, technology);
       if (isDisposed()) return;
       final ready = _correlated(readState(), correlationId);
       if (ready == null) return;
-      if (!result.accepted) {
-        publish(
-          ready.withResearch(
-            ready.research.copyWith(
-              clearInFlightTechnology: true,
-              failure: ResearchFailureView.rejected(result.rejectionCode!),
-            ),
-          ),
-        );
-        return;
-      }
-      publish(ready.withRecipient(result.player!));
+      publish(_afterCommand(ready, result, cancelled: technology == null));
     } on ResearchSessionException catch (error, stackTrace) {
       if (isDisposed()) return;
       _report(error, stackTrace);
@@ -153,6 +156,7 @@ final class ResearchWorkflow {
           ready.withResearch(
             ready.research.copyWith(
               clearInFlightTechnology: true,
+              cancellingSelection: false,
               failure: const ResearchFailureView(
                 ResearchFailureCode.requestFailed,
               ),
@@ -162,6 +166,16 @@ final class ResearchWorkflow {
       }
     }
   }
+
+  Future<ResearchCommandResultView> _dispatch(
+    int revision,
+    TechnologyIdView? technology,
+  ) => technology == null
+      ? _session.cancelResearchSelection(expectedRevision: revision)
+      : _session.selectTechnology(
+          expectedRevision: revision,
+          technology: technology,
+        );
 
   void _report(ResearchSessionException error, StackTrace stackTrace) {
     final cause = error.diagnosticCause;
@@ -179,6 +193,16 @@ bool _canLoadResearch(GameSessionReady current) =>
     !current.localAiTurn.inFlight &&
     current.research.loading &&
     current.research.requestedRevision == current.recipient.stamp.revision;
+
+GameSessionReady? _cancellable(GameSessionState state) =>
+    state is GameSessionReady &&
+        state.recipient.pendingAction is PendingResearchSelectionView &&
+        !state.research.commandPending &&
+        !state.diplomacy.commandPending &&
+        !state.turnAction.inFlight &&
+        !_interactionCommandPending(state)
+    ? state
+    : null;
 
 GameSessionReady? _selectable(
   GameSessionState state,
@@ -248,3 +272,31 @@ ResearchFailureCode _failureCode(String code) => switch (code) {
   'session_not_open' => ResearchFailureCode.sessionUnavailable,
   _ => ResearchFailureCode.requestFailed,
 };
+
+GameSessionReady _afterCommand(
+  GameSessionReady ready,
+  ResearchCommandResultView result, {
+  required bool cancelled,
+}) {
+  final finished = ready.withResearch(
+    ready.research.copyWith(
+      clearInFlightTechnology: true,
+      cancellingSelection: false,
+      failure: result.accepted
+          ? null
+          : ResearchFailureView.rejected(result.rejectionCode!),
+    ),
+  );
+  if (!result.accepted) return finished;
+  final updated = finished.withRecipient(result.player!);
+  return cancelled
+      ? updated.withInteraction(
+          updated.interaction.copyWith(researchFocused: false),
+        )
+      : updated;
+}
+
+GameSessionReady? _commandState(
+  GameSessionState state,
+  TechnologyIdView? technology,
+) => technology == null ? _cancellable(state) : _selectable(state, technology);

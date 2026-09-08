@@ -24,6 +24,7 @@ final class ResearchState {
     this.options,
     this.correlationId = 0,
     this.inFlightTechnology,
+    this.cancellingSelection = false,
     this.failure,
   });
 
@@ -33,6 +34,7 @@ final class ResearchState {
       options = null,
       correlationId = 0,
       inFlightTechnology = null,
+      cancellingSelection = false,
       failure = null;
 
   final bool loading;
@@ -40,9 +42,10 @@ final class ResearchState {
   final ResearchOptionsView? options;
   final int correlationId;
   final TechnologyIdView? inFlightTechnology;
+  final bool cancellingSelection;
   final ResearchFailureView? failure;
 
-  bool get commandPending => inFlightTechnology != null;
+  bool get commandPending => inFlightTechnology != null || cancellingSelection;
 
   ResearchState copyWith({
     bool? loading,
@@ -52,6 +55,7 @@ final class ResearchState {
     int? correlationId,
     TechnologyIdView? inFlightTechnology,
     bool clearInFlightTechnology = false,
+    bool? cancellingSelection,
     ResearchFailureView? failure,
     bool clearFailure = false,
   }) => ResearchState(
@@ -62,6 +66,7 @@ final class ResearchState {
     inFlightTechnology: clearInFlightTechnology
         ? null
         : inFlightTechnology ?? this.inFlightTechnology,
+    cancellingSelection: cancellingSelection ?? this.cancellingSelection,
     failure: clearFailure ? null : failure ?? this.failure,
   );
 }
