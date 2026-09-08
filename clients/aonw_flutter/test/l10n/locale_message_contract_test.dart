@@ -48,6 +48,27 @@ void main() {
       'Fouilles en 2, 4 · 3 tours restants',
     );
   });
+
+  test('German plural messages preserve zero, one and larger counts', () {
+    final german = lookupAonwLocalizations(
+      AonwLocalizations.supportedLocales.singleWhere(
+        (l) => l.languageCode == 'de',
+      ),
+    );
+    expect(german.moveTurnCost(0), '0 Runden');
+    expect(german.moveTurnCost(1), '1 Runde');
+    expect(german.moveTurnCost(2), '2 Runden');
+    expect(german.hexInspectionBuildTurns(1), 'Bauzeit: 1 Runde');
+    expect(german.hexInspectionBuildTurns(3), 'Bauzeit: 3 Runden');
+    expect(
+      german.artifactExcavationAt(2, 4, 1),
+      'Ausgrabung bei 2, 4 · 1 Runde verbleibend',
+    );
+    expect(
+      german.artifactExcavationAt(2, 4, 3),
+      'Ausgrabung bei 2, 4 · 3 Runden verbleibend',
+    );
+  });
 }
 
 Map<String, Object?> _catalog(String language) =>

@@ -14,6 +14,7 @@ final class _LanguageSetting extends StatelessWidget {
       ClientLanguage.polish: 'Polski',
       ClientLanguage.english: 'English',
       ClientLanguage.french: 'Français',
+      ClientLanguage.german: 'Deutsch',
     };
     return DropdownButtonHideUnderline(
       child: DropdownButton<ClientLanguage>(

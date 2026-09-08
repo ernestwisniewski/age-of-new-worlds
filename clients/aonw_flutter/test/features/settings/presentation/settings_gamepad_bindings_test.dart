@@ -19,6 +19,7 @@ void main() {
     (Locale('en'), 'Unassigned', 'Assigned to:', 'Left stick X'),
     (Locale('pl'), 'Bez przypisania', 'Przypisano do:', 'Lewy drążek X'),
     (Locale('fr'), 'Non affecté', 'Affecté à :', 'Stick gauche, axe X'),
+    (Locale('de'), 'Nicht belegt', 'Belegt mit:', 'Linker Stick X'),
   ]) {
     testWidgets(
       'edits and resets bindings with visible displaced actions in $locale',
@@ -133,7 +134,7 @@ void main() {
     await h.unmount(tester);
   });
 
-  for (final locale in const [Locale('pl'), Locale('fr')]) {
+  for (final locale in const [Locale('pl'), Locale('fr'), Locale('de')]) {
     testWidgets(
       '$locale bindings and picker fit a narrow viewport with larger text',
       (tester) async {

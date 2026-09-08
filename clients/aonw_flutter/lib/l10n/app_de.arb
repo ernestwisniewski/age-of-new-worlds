@@ -1,0 +1,1089 @@
+{
+  "@@locale": "de",
+  "moveTargeting": "Bewegen",
+  "appTitle": "Age of New Worlds",
+  "mainMenuTitle": "Hauptmenü",
+  "mainMenuWelcome": "Willkommen in Age of New Worlds. Gründe Städte, führe Kommandanten, entdecke neue Länder und schreibe die Geschichte deiner Zivilisation.",
+  "mainMenuSynopsisTitle": "Bauen · Forschen · Befehlen",
+  "mainMenuWhatsNew": "Neuigkeiten",
+  "singlePlayer": "Einzelspieler",
+  "singlePlayerSublabel": "Gegen den Computer spielen",
+  "multiplayerSublabel": "Online spielen",
+  "hotseat": "Hotseat",
+  "hotseatSublabel": "Mehrere Spieler an einem Gerät",
+  "hotseatUnavailable": "Die Hotseat-Einrichtung ist noch nicht verfügbar.",
+  "hotseatHandoffTitle": "Gib das Gerät weiter",
+  "hotseatHandoffBody": "Gib das Gerät an {name}. Die Karte bleibt bis zur Bestätigung verborgen.",
+  "@hotseatHandoffBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hotseatContinueAs": "Als {name} fortfahren",
+  "@hotseatContinueAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hotseatHandoffSwitching": "Der nächste Spieler wird vorbereitet",
+  "hotseatHandoffFailure": "Die Sitzung des nächsten lokalen Spielers konnte nicht sicher geöffnet werden.",
+  "loadGame": "Spiel laden",
+  "loadGameSublabel": "Spielstände und Wiederholungen",
+  "exitGame": "Beenden",
+  "instructions": "Handbuch",
+  "creditsTitle": "Mitwirkende",
+  "creditsCreatedBy": "Erstellt von {name}",
+  "@creditsCreatedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devlogLinkLabel": "Entwicklungstagebuch: ernest.dev",
+  "feedbackTitle": "Feedback",
+  "feedbackDescription": "Teile Ideen, melde Probleme und verfolge die Entwicklung mit der Community von Age of New Worlds.",
+  "openFeedback": "r/aonw öffnen",
+  "externalLinkUnavailable": "Externe Links sind auf dieser Plattform nicht verfügbar.",
+  "serverUpdateSoon": "Eine neue Version ist fertig und wird bald auf dieser Plattform verfügbar sein. Sieh in Kürze erneut im Store oder Launcher nach.",
+  "continueGame": "Fortsetzen",
+  "resumingGame": "Spiel wird fortgesetzt",
+  "newGame": "Neues Spiel",
+  "multiplayerTitle": "Mehrspieler",
+  "multiplayerUnavailable": "Mehrspieler ist in dieser Version nicht verfügbar.",
+  "loadingMultiplayer": "Verbindung zum Mehrspielermodus wird hergestellt",
+  "multiplayerAuthenticationTitle": "AoNW-Konto",
+  "emailLabel": "E-Mail",
+  "passwordLabel": "Passwort",
+  "displayNameLabel": "Anzeigename",
+  "invalidEmail": "Gib eine gültige E-Mail-Adresse ein.",
+  "invalidPassword": "Verwende mindestens 12 Zeichen.",
+  "invalidDisplayName": "Gib einen Anzeigenamen ein.",
+  "signIn": "Anmelden",
+  "signOut": "Abmelden",
+  "createAccount": "Konto erstellen",
+  "createNewAccount": "Neues Konto erstellen",
+  "useExistingAccount": "Vorhandenes Konto verwenden",
+  "multiplayerLobbyTitle": "Spiellobby",
+  "signedInAccount": "Konto: {userId}",
+  "@signedInAccount": {
+    "placeholders": {
+      "userId": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerSetupTitle": "Online-Spiel erstellen",
+  "multiplayerSetupIntro": "Wähle deine Zivilisation und Karte, bevor du den vom Server verwalteten Warteraum öffnest.",
+  "multiplayerTurnModeDescription": "Alle Spieler handeln in einer gemeinsamen Runde. Die Spielengine wertet sie nach allen erforderlichen Bestätigungen oder nach Ablauf der serverseitigen Frist aus.",
+  "continueToLobby": "Weiter zur Lobby",
+  "createMultiplayerMatch": "Partie erstellen",
+  "joinMultiplayerMatch": "Partie beitreten",
+  "matchIdLabel": "Partie-ID",
+  "playerSeatLabel": "Spielerplatz",
+  "playerSeatOne": "Spieler eins",
+  "playerSeatTwo": "Spieler zwei",
+  "playerSeatNumber": "Spieler {number}",
+  "@playerSeatNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "refreshMatches": "Partien aktualisieren",
+  "yourMatches": "Deine Partien",
+  "noMultiplayerMatches": "Du bist noch keiner Partie beigetreten.",
+  "matchRevision": "Revision {revision} · Ereignisposition {eventOffset}",
+  "@matchRevision": {
+    "placeholders": {
+      "revision": {
+        "type": "int"
+      },
+      "eventOffset": {
+        "type": "int"
+      }
+    }
+  },
+  "multiplayerMatchPhase": "Status: {phase, select, lobby{Warteraum} running{läuft} finished{beendet} abandoned{abgebrochen} other{unbekannt}}",
+  "@multiplayerMatchPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerWaitingRoomTitle": "Warteraum der Partie",
+  "multiplayerReady": "Bereit",
+  "multiplayerNotReady": "Nicht bereit",
+  "multiplayerSeatOpen": "Freier Spielerplatz",
+  "multiplayerHumanSeat": "Mensch",
+  "multiplayerAiSeat": "Computer",
+  "multiplayerHost": "Gastgeber",
+  "multiplayerCurrentPlayer": "Du",
+  "markReady": "Bereitschaft bestätigen",
+  "markNotReady": "Bereitschaft zurücknehmen",
+  "waitingForPlayers": "Alle menschlichen Spielerplätze müssen belegt und bereit sein, bevor die Partie beginnt.",
+  "refreshMatch": "Partie aktualisieren",
+  "leaveMultiplayerMatch": "Partie verlassen",
+  "multiplayerResignTitle": "Diese Partie aufgeben?",
+  "multiplayerResignBody": "Deine Teilnahme endet sofort. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "multiplayerResignConfirm": "Aufgeben",
+  "multiplayerMatchTitle": "Online-Partie",
+  "multiplayerParticipants": "Teilnehmer",
+  "multiplayerRemoveParticipant": "Entfernen",
+  "multiplayerRemoveParticipantTitle": "Teilnehmer entfernen?",
+  "multiplayerRemoveParticipantBody": "{name} aus dieser Partie entfernen? Eine erneute Verbindung ist danach nicht mehr möglich.",
+  "@multiplayerRemoveParticipantBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelDialog": "Abbrechen",
+  "matchIdentifier": "Partie: {matchId}",
+  "@matchIdentifier": {
+    "placeholders": {
+      "matchId": {
+        "type": "String"
+      }
+    }
+  },
+  "playerIdentifier": "Spieler: {playerId}",
+  "@playerIdentifier": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      }
+    }
+  },
+  "multiplayerTurn": "Runde {turn}",
+  "@multiplayerTurn": {
+    "placeholders": {
+      "turn": {
+        "type": "int"
+      }
+    }
+  },
+  "multiplayerSubmissionProgress": "Bestätigt: {submitted} von {required}",
+  "@multiplayerSubmissionProgress": {
+    "placeholders": {
+      "submitted": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "visibleUnits": "Sichtbare Einheiten: {count}",
+  "@visibleUnits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "networkPhase": "Verbindung: {phase, select, connecting{wird hergestellt} ready{online} reconnecting{wird wiederhergestellt} resyncing{wird synchronisiert} failed{offline} closed{geschlossen} other{nicht verfügbar}}",
+  "@networkPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "submitTurn": "Runde bestätigen",
+  "reconnect": "Erneut verbinden",
+  "backToLobby": "Zurück zur Lobby",
+  "multiplayerFailure": "{code, select, client_update_required{Aktualisiere den Client, bevor du eine Verbindung herstellst.} authentication_required{Melde dich erneut an, um fortzufahren.} invalid_authentication_response{Die Anmeldeantwort war ungültig.} authentication_identity_changed{Die Kontoidentität hat sich während der Aktualisierung geändert.} connection_interrupted{Die Verbindung wurde unterbrochen. Verbinde dich erneut, um die Partie zu synchronisieren.} invalid_server_response{Die Serverantwort hat die Prüfung nicht bestanden.} invalid_command_sequence{Die Befehlsfolge war nicht lückenlos.} invalid_resync_sequence{Der synchronisierte Zustand ist auf einen älteren Stand zurückgefallen.} invalid_match_lifecycle{Die Antwort zum Verlauf der Partie war widersprüchlich.} match_not_found{Die Partie wurde nicht gefunden.} match_not_started{Der Gastgeber hat die Partie noch nicht gestartet.} match_already_started{Die Partie hat bereits begonnen.} host_required{Nur der Gastgeber kann diese Aktion ausführen.} lobby_not_ready{Alle menschlichen Spieler müssen beitreten und bereit sein.} participant_not_claimable{Computergesteuerte Plätze können nicht übernommen werden.} participant_not_active{Dieser Teilnehmer ist nicht mehr aktiv.} invalid_kick_target{Der Gastgeber kann sich nicht selbst entfernen.} player_seat_taken{Dieser Spielerplatz ist bereits belegt.} other{Die Mehrspieler-Anfrage konnte nicht abgeschlossen werden.}}",
+  "@multiplayerFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "helpTitle": "Spielanleitung",
+  "helpIntroduction": "Baue Runde für Runde eine Zivilisation auf. Die Spielengine setzt alle Regeln um; diese Anleitung erklärt die Entscheidungen, die dir im Client zur Verfügung stehen.",
+  "helpObjectiveTitle": "Verfolge dein Ziel",
+  "helpObjectiveBody": "Erweitere dein Reich, entwickle Städte und erfülle die Szenarioziele vor deinem Gegner. Öffne die strategischen Ziele auf der Karte, um die festgelegten Aufgaben anzusehen.",
+  "helpMapTitle": "Erkunde und befehlige",
+  "helpMapBody": "Wähle ein sichtbares Hexfeld, um es zu untersuchen. Wähle deine Einheit, ein hervorgehobenes Ziel und bestätige die Route. Tastatur, Gamepad und Touchsteuerung verwenden dieselben Befehle.",
+  "helpDevelopmentTitle": "Entwickle deine Zivilisation",
+  "helpDevelopmentBody": "Nutze die Bereiche für Städte, Forschung, Produktion, Arbeiter, Logistik, Artefakte und Diplomatie, sobald ihre Aktionen verfügbar werden.",
+  "helpTurnTitle": "Beende die Runde bewusst",
+  "helpTurnBody": "Schließe deine Aktionen ab und beende dann die Runde. Der Computer führt seine von der Spielengine geprüfte Runde aus, bevor du wieder an der Reihe bist.",
+  "helpSaveReplayTitle": "Speichern und nachverfolgen",
+  "helpSaveReplayBody": "Speichere auf der Karte. Fortsetzen öffnet den letzten gültigen Spielstand. Eine Wiederholung zeigt den Verlauf der bestätigten Befehle, ohne das Spiel zu verändern.",
+  "startOnboarding": "Geführte Einführung starten",
+  "onboardingTitle": "Geführte Einführung",
+  "onboardingProgress": "Schritt {step} von {count}",
+  "@onboardingProgress": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingExploreTitle": "Lies die Karte",
+  "onboardingExploreBody": "Die Karte zeigt nur Informationen, die dein Spieler sehen darf. Wähle Hexfelder, um Gelände, Städte und Einheiten zu untersuchen. Verschiebe oder zoome anschließend die Ansicht, um deine nächste Aktion zu planen.",
+  "onboardingCommandTitle": "Gib genaue Befehle",
+  "onboardingCommandBody": "Die Spielengine liefert die verfügbaren Ziele und Aktionen. Wähle eine Möglichkeit, prüfe die Vorschau und bestätige sie. Abgelehnte oder veraltete Befehle verändern die Partie niemals.",
+  "onboardingDevelopTitle": "Baue einen langfristigen Vorteil auf",
+  "onboardingDevelopBody": "Städte, Produktion, Forschung, Arbeiter, Logistik, Artefakte und Diplomatie prägen deine Strategie. Ihre Bereiche zeigen nur Aktionen, die die Spielengine derzeit erlaubt.",
+  "onboardingContinueTitle": "Setze dein Spiel sicher fort",
+  "onboardingContinueBody": "Speichere den bestätigten Spielstand, bevor du das Spiel verlässt. Fortsetzen prüft ihn in einer neuen Sitzung der Spielengine. Eine Wiederholung zeigt denselben Verlauf, ohne ihn zu verändern.",
+  "previousOnboardingStep": "Zurück",
+  "nextOnboardingStep": "Weiter",
+  "skipOnboarding": "Überspringen",
+  "finishOnboarding": "Spiel erstellen",
+  "newGameTitle": "Lokales Spiel erstellen",
+  "singlePlayerSetupTitle": "Gegen den Computer spielen",
+  "singlePlayerSetupIntro": "Wähle deine Zivilisation und richte eine von der Spielengine verwaltete lokale Partie ein.",
+  "hotseatSetupTitle": "Im Hotseat-Modus spielen",
+  "hotseatSetupIntro": "Teilt euch ein Gerät. Die Ansicht jedes menschlichen Spielers bleibt verborgen, bis der nächste Spieler die Übergabe bestätigt.",
+  "chooseCivilizationTitle": "Zivilisation wählen",
+  "gameSetupTitle": "Spieleinstellungen",
+  "turnModeTitle": "Rundenmodus",
+  "turnModeName": "{value, select, sequential{Traditionell} simultaneous{Gleichzeitig} other{Unbekannt}}",
+  "@turnModeName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "turnModeSequentialDescription": "Die Zivilisationen führen ihre Runden nacheinander aus und werten sie aus.",
+  "turnModeSimultaneousDescription": "Du und der Computer handeln in einer gemeinsamen Runde, bevor die Spielengine deren gemeinsame Phasen auswertet.",
+  "opponentsTitle": "Gegner",
+  "opponentControlLabel": "Gegnersteuerung",
+  "opponentNumberLabel": "Gegner {number}",
+  "@opponentNumberLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "humanOpponent": "Menschlicher Spieler",
+  "aiOpponent": "Computer",
+  "mapSetupTitle": "Karte",
+  "mapSetupBody": "Eine kompakte, gestaltete Karte mit 7 × 7 Feldern für eine Partie mit zwei Zivilisationen.",
+  "mapSetupDetails": "{mapName} · {columns} × {rows} · {players} Zivilisationen",
+  "@mapSetupDetails": {
+    "placeholders": {
+      "mapName": {
+        "type": "String"
+      },
+      "columns": {
+        "type": "int"
+      },
+      "rows": {
+        "type": "int"
+      },
+      "players": {
+        "type": "int"
+      }
+    }
+  },
+  "victoryPathsTitle": "Wege zum Sieg",
+  "victoryPathsBody": "Eroberung, Vorherrschaft, Kultur und Punkte werden von der Spielengine ausgewertet.",
+  "settlementToEmpireTitle": "Von der Siedlung zum Reich",
+  "settlementToEmpireBody": "Erkunde, gründe Städte, forsche, stelle Armeen auf und verschaffe dir dauerhafte Vorteile.",
+  "continueToSummary": "Weiter zur Übersicht",
+  "gameSummaryTitle": "Die Expedition ist bereit",
+  "gameSummaryIntro": "Prüfe alle lokalen Teilnehmer, bevor du die Partie erstellst.",
+  "summaryModeLabel": "Modus",
+  "summaryTurnModeLabel": "Runden",
+  "summaryCivilizationLabel": "Deine Zivilisation",
+  "summaryOpponentLabel": "Gegner",
+  "summaryMapLabel": "Karte",
+  "summaryFogLabel": "Nebel des Krieges",
+  "summaryAiLabel": "Computerprofil",
+  "changeSetup": "Einstellungen ändern",
+  "localModeName": "{value, select, singlePlayer{Einzelspieler} hotseat{Hotseat} other{Lokales Spiel}}",
+  "@localModeName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "participantControlName": "{value, select, human{Mensch} ai{Computer} other{Unbekannt}}",
+  "@participantControlName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "fogSettingName": "{value, select, enabled{Aktiviert} disabled{Deaktiviert} other{Unbekannt}}",
+  "@fogSettingName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultSecondPlayerName": "Spieler 2",
+  "defaultNumberedPlayerName": "Spieler {number}",
+  "@defaultNumberedPlayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultNumberedAiName": "Computer {number}",
+  "@defaultNumberedAiName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "scenarioLabel": "Karte",
+  "localScenarioName": "{value, select, starterDuel{Einstieg} dravonia{Dravonia} myranth{Myranth} terenos{Terenos} verdantia{Verdantia} other{Lokale Karte}}",
+  "@localScenarioName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "humanCountryLabel": "Dein Land",
+  "aiCountryLabel": "Land der KI",
+  "aiDifficultyLabel": "KI-Schwierigkeit",
+  "aiPersonaLabel": "KI-Persönlichkeit",
+  "fogOfWarLabel": "Nebel des Krieges",
+  "startGame": "Spiel starten",
+  "startingGame": "Spiel wird gestartet",
+  "localGameStartFailed": "Das lokale Spiel konnte nicht gestartet werden.",
+  "saveGame": "Spiel speichern",
+  "savingGame": "Spiel wird gespeichert",
+  "gameSaved": "Spiel gespeichert",
+  "saveFailure": "{value, select, unavailable{Speichern ist für diese Sitzung nicht verfügbar.} exportFailed{Das Spiel konnte nicht exportiert werden.} writeFailed{Die Spielstandsdatei konnte nicht gespeichert werden.} other{Das Spiel konnte nicht gespeichert werden.}}",
+  "@saveFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "resumeFailure": "{value, select, unavailable{Spielstände sind auf dieser Plattform nicht verfügbar.} missing{Es wurde kein Spielstand gefunden.} unreadable{Der Spielstand konnte nicht gelesen werden.} incompatible{Der Spielstand ist ungültig oder mit dem aktuellen Spiel nicht kompatibel.} other{Der Spielstand konnte nicht fortgesetzt werden.}}",
+  "@resumeFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "loadGameTitle": "Spiel laden",
+  "loadGameEmpty": "Es wurden keine Spielstände gefunden.",
+  "loadGameSingleLabel": "Einzelspieler · {scenario}",
+  "@loadGameSingleLabel": {
+    "placeholders": {
+      "scenario": {
+        "type": "String"
+      }
+    }
+  },
+  "importSave": "Spielstand importieren",
+  "exportSave": "Exportieren",
+  "saveTransferUnavailable": "Der Import und Export von Spielständen ist auf dieser Plattform nicht verfügbar.",
+  "saveImportCompleted": "{map} wurde als separater Spielstand importiert.",
+  "@saveImportCompleted": {
+    "placeholders": {
+      "map": {
+        "type": "String"
+      }
+    }
+  },
+  "saveExportCompleted": "{map} wurde exportiert.",
+  "@saveExportCompleted": {
+    "placeholders": {
+      "map": {
+        "type": "String"
+      }
+    }
+  },
+  "saveTransferFailure": "{value, select, unavailable{Die Übertragung von Spielständen ist auf dieser Plattform nicht verfügbar.} unreadable{Die gewählte Spielstandsdatei konnte nicht gelesen werden.} tooLarge{Die gewählte Spielstandsdatei überschreitet die Grenze von 16 MiB.} incompatible{Der gewählte Spielstand ist ungültig oder passt nicht zu einer installierten Karte, einem Regelwerk oder der Version der Spielengine.} missing{Der gewählte Spielstand existiert nicht mehr.} writeFailed{Der importierte Spielstand konnte nicht gespeichert werden.} exportFailed{Die Spielstandsdatei konnte nicht exportiert werden.} other{Die Übertragung des Spielstands konnte nicht abgeschlossen werden.}}",
+  "@saveTransferFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "replayTitle": "Wiederholung",
+  "loadingReplay": "Wiederholung wird geladen",
+  "replayUnavailable": "Die Wiedergabe von Wiederholungen ist nicht verfügbar.",
+  "replayFailure": "{value, select, unavailable{Die Wiedergabe von Wiederholungen ist auf dieser Plattform nicht verfügbar.} missing{Es wurde keine Wiederholung gefunden. Speichere zuerst ein lokales Spiel.} unreadable{Die Wiederholungsdatei konnte nicht gelesen werden.} incompatible{Die Wiederholung ist ungültig oder mit dem aktuellen Spiel nicht kompatibel.} seekFailed{Der gewünschte Schritt der Wiederholung konnte nicht geladen werden.} other{Die Wiederholung konnte nicht geöffnet werden.}}",
+  "@replayFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "replayMapLabel": "Karte der Wiederholung",
+  "replayControls": "Wiedergabesteuerung",
+  "playReplay": "Wiederholung abspielen",
+  "pauseReplay": "Wiederholung pausieren",
+  "backToMenu": "Zurück zum Hauptmenü",
+  "replayProgress": "{position} von {entryCount}",
+  "@replayProgress": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "entryCount": {
+        "type": "int"
+      }
+    }
+  },
+  "replaySpeed": "Geschwindigkeit {value}×",
+  "@replaySpeed": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiTurnRunning": "Der Computer ist am Zug.",
+  "aiTurnFailure": "{value, select, requestFailed{Die Runde des Computers konnte nicht abgeschlossen werden.} responseIncompatible{Die Antwort auf die Computerrunde ist mit diesem Client nicht kompatibel.} incomplete{Der Computer hat seine Runde nicht innerhalb der sicheren Befehlsgrenze abgeschlossen.} other{Die Runde des Computers konnte nicht abgeschlossen werden.}}",
+  "@aiTurnFailure": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultPlayerName": "Spieler",
+  "defaultAiName": "Computer",
+  "countryName": "{value, select, poland{Polen} ukraine{Ukraine} germany{Deutschland} france{Frankreich} unitedKingdom{Vereinigtes Königreich} italy{Italien} spain{Spanien} netherlands{Niederlande} sweden{Schweden} russia{Russland} unitedStates{Vereinigte Staaten} canada{Kanada} china{China} korea{Korea} japan{Japan} portugal{Portugal} india{Indien} brazil{Brasilien} indonesia{Indonesien} mexico{Mexiko} turkey{Türkei} saudiArabia{Saudi-Arabien} egypt{Ägypten} greece{Griechenland} other{Unbekanntes Land}}",
+  "@countryName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiDifficultyName": "{value, select, easy{Leicht} normal{Normal} hard{Schwer} veryHard{Sehr schwer} other{Unbekannte Schwierigkeit}}",
+  "@aiDifficultyName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiPersonaName": "{value, select, balanced{Ausgewogen} aggressive{Aggressiv} expansive{Expansiv} economic{Wirtschaftlich} scientific{Wissenschaftlich} other{Unbekannte Persönlichkeit}}",
+  "@aiPersonaName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "unknownRouteLabel": "Unbekannte Seite",
+  "pageUnavailable": "Seite nicht verfügbar",
+  "unknownRouteMessage": "Unbekannte Seite: {location}",
+  "@unknownRouteMessage": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "missingRouteLocation": "(fehlt)",
+  "mapSemanticsLabel": "Karte {mapId}, {cols} mal {rows} Hexfelder",
+  "@mapSemanticsLabel": {
+    "placeholders": {
+      "mapId": {
+        "type": "String"
+      },
+      "cols": {
+        "type": "int"
+      },
+      "rows": {
+        "type": "int"
+      }
+    }
+  },
+  "mapInputHint": "Verschiebe die Kamera mit WASD oder den Pfeiltasten. Wähle mit Eingabe aus, aktiviere mit M den Bewegungsmodus, untersuche mit I und wechsle mit R die Kartenansicht. Mit den eckigen Klammern wechselst du zwischen offenen Aktionen. Die Leertaste öffnet die nächste Aktion oder beendet die Runde. Mit Tab wechselst du zwischen Bedienelementen.",
+  "noHexSelected": "Kein Hexfeld ausgewählt",
+  "selectedHex": "Ausgewähltes Hexfeld {col}, {row}",
+  "@selectedHex": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "mapViewModeTooltip": "Kartenansicht wechseln",
+  "mapViewGraphicUnavailable": "Die grafische Ansicht ist für diese Karte nicht verfügbar.",
+  "mapViewModeGraphic": "Grafisch",
+  "mapViewModeTiles": "Kacheln",
+  "hexLabel": "Hexfeld {col}, {row}",
+  "selectionTerrain": "Gelände",
+  "@hexLabel": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "unitLabel": "Einheit {unitId}",
+  "@unitLabel": {
+    "placeholders": {
+      "unitId": {
+        "type": "String"
+      }
+    }
+  },
+  "routeSummary": "Route: {totalCost} Bewegungspunkte · {remaining} verbleibend",
+  "@routeSummary": {
+    "placeholders": {
+      "totalCost": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmMove": "Bewegung bestätigen",
+  "moveTurnCost": "{turns, plural, one{1 Runde} other{{turns} Runden}}",
+  "@moveTurnCost": {
+    "placeholders": {
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmMoveWithCost": "Bestätigen · {turnCost}",
+  "@confirmMoveWithCost": {
+    "placeholders": {
+      "turnCost": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseHighlightedDestination": "Wähle ein hervorgehobenes Ziel.",
+  "movingUnit": "Einheit wird bewegt",
+  "unitActionLabel": "{label, select, title{Einheitenaktionen} fortify{Befestigen} skip{Aussetzen} cancel{Aktion abbrechen} executing{Einheitenaktion wird ausgeführt} logisticsTitle{Logistik} logisticsLoading{Logistikoptionen werden geladen} logisticsEmpty{Derzeit sind keine Logistikaktionen verfügbar.} autoExplore{Automatisch erkunden} merchantRoute{Handelsroute zuweisen} merchantTravel{Zur Stadt bewegen} detachTroop{Trupp abtrennen} other{Einheitenaktion}}",
+  "@unitActionLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "unitActionFailure": "{failure, select, requestFailed{Die Anfrage für die Einheitenaktion konnte nicht abgeschlossen werden.} responseIncompatible{Die Antwort auf die Einheitenaktion ist mit diesem Client nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} stale{Der Spielzustand hat sich geändert. Prüfe die Einheit und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} unitUnavailable{Diese Einheit kann keine Befehle mehr empfangen.} unitBusy{Diese Einheit ist beschäftigt und kann die Aktion gerade nicht ausführen.} internal{Die Einheitenaktion konnte nicht angewendet werden. Versuche es erneut.} logisticsRequestFailed{Die Logistikanfrage konnte nicht abgeschlossen werden.} logisticsResponseIncompatible{Die Logistikantwort ist mit diesem Client nicht kompatibel.} logisticsOptionUnavailable{Diese Logistikoption ist nicht mehr verfügbar.} combatFailureRequestFailed{Die Kampfanfrage konnte nicht abgeschlossen werden.} combatFailureResponseIncompatible{Die Kampfantwort ist mit diesem Client nicht kompatibel.} combatFailureSessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} combatFailureTargetUnavailable{Für dieses Ziel ist keine Angriffsvorschau verfügbar.} combatFailureStaleRevision{Der Spielzustand hat sich geändert. Prüfe ihn und versuche es erneut.} combatFailureMatchFinished{Die Partie ist bereits beendet.} combatFailureAttackerNotFound{Die angreifende Einheit ist nicht mehr verfügbar.} combatFailureAttackerNotControlled{Dieser Spieler kontrolliert die angreifende Einheit nicht.} combatFailureAttackerUnavailable{Die angreifende Einheit ist nicht verfügbar.} combatFailureAttackerExhausted{Die angreifende Einheit ist erschöpft.} combatFailureAttackerOutOfBounds{Die angreifende Einheit befindet sich außerhalb der Karte.} combatFailureAttackerCannotAttack{Diese Einheit kann nicht angreifen.} combatFailureAttackTargetNotVisible{Das Ziel ist nicht sichtbar.} combatFailureAttackTargetOutOfBounds{Das Ziel befindet sich außerhalb der Karte.} combatFailureAttackTargetNotFound{Dort befindet sich kein Ziel.} combatFailureAttackTargetNotEnemy{Dieses Ziel ist kein Feind.} combatFailureAttackTargetProtectedByTreaty{Ein Vertrag schützt dieses Ziel.} combatFailureAttackTargetOutOfRange{Das Ziel ist außer Reichweite.} combatFailureAttackCityHasNoHealth{Diese Stadt kann nicht angegriffen werden.} other{Die Einheitenaktion konnte nicht abgeschlossen werden.}}",
+  "@unitActionFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  },
+  "turnSummary": "{kind, select, label{RUNDE {turn}} progress{Bereit: {submitted} von {required}} other{RUNDE {turn}}}",
+  "@turnSummary": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "turn": {
+        "type": "int"
+      },
+      "submitted": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "turnText": "{value, select, statusActive{Du bist am Zug} statusFinished{Runde beendet} statusSubmitted{Runde bestätigt} statusWaiting{Warten} statusPendingAction{Aktion erforderlich} actionEnd{Runde beenden} actionEnding{Runde wird beendet} outcomeConquest{Eroberungssieg} outcomeDomination{Vorherrschaftssieg} outcomeCultural{Kultursieg} outcomeScore{Punktesieg} outcomeResignation{Partie durch Aufgabe beendet} outcomeDraw{Unentschieden} outcomeOngoing{Partie läuft} activityTitle{Aktivität} activityArtifact{Artefaktaktivität} activityCity{Stadtaktivität} activityResearch{Forschungsfortschritt} activityObjective{Strategisches Ziel aktualisiert} activityOutcome{Spielergebnis aktualisiert} activityCombat{Kampfaktivität} activityDiplomacy{Diplomatische Aktivität} activityUnit{Einheitenaktivität} activityTurn{Runde aktualisiert} activityWorker{Arbeiterauftrag abgeschlossen} combatTitle{Kampf} combatLoading{Kampfvorschau wird geladen} combatTarget{Ziel} combatDistance{Entfernung} combatOutgoing{Verursachter Schaden} combatRetaliation{Vergeltungsschaden} combatNone{Keine} combatCapture{Stadt einnehmen} combatDestroy{Stadt zerstören} combatConfirm{Angriff bestätigen} combatExecuting{Kampf wird ausgewertet} combatResolved{Kampf ausgewertet} combatAttackerHp{Gesundheit des Angreifers} combatDefenderHp{Gesundheit des Verteidigers} combatEventUnitAttacked{Einheit angegriffen} combatEventCityAttacked{Stadt angegriffen} combatEventCombatResolved{Kampf ausgewertet} combatEventUnitGainedExperience{Einheit hat Erfahrung gesammelt} combatEventUnitKilled{Einheit besiegt} combatEventUnitRetreated{Einheit zurückgezogen} combatEventCityCaptured{Stadt eingenommen} combatEventCityDestroyed{Stadt zerstört} combatEventDiplomaticScoreChanged{Diplomatische Beziehung geändert} other{Spielaktivität}}",
+  "@turnText": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "turnFailure": "{failure, select, requestFailed{Die Rundenanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Rundenantwort ist mit diesem Client nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} stale_revision{Der Spielzustand hat sich geändert. Prüfe ihn und versuche es erneut.} match_finished{Die Partie ist bereits beendet.} turn_player_not_controlled{Dieser Spieler kann die aktuelle Runde nicht beenden.} turn_player_not_active{Dieser Spieler ist nicht aktiv.} turn_scope_invalid{Der Geltungsbereich der aktuellen Runde ist ungültig.} turn_processor_unsupported{Ein erforderlicher Rundenschritt ist nicht verfügbar.} turn_number_overflow{Die nächste Rundennummer überschreitet die zulässige Grenze.} state_revision_overflow{Die Spielrevision kann nicht weiter erhöht werden.} other{Die Runde konnte nicht abgeschlossen werden.}}",
+  "@turnFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "String"
+      }
+    }
+  },
+  "loadingMap": "Karte wird geladen",
+  "mapLoadingFailed": "Laden der Karte fehlgeschlagen",
+  "mapUnavailable": "Karte nicht verfügbar",
+  "mapAdapterUnavailable": "Der native Spieladapter ist auf dieser Plattform nicht verfügbar.",
+  "mapClientIncompatible": "Der native Spieladapter ist mit diesem Client nicht kompatibel.",
+  "mapLoadSuperseded": "Eine neuere Kartenanfrage hat diese ersetzt.",
+  "mapLoadFailure": "Die Karte konnte nicht geladen werden.",
+  "movementRequestFailed": "Die Bewegungsanfrage konnte nicht abgeschlossen werden.",
+  "movementResponseIncompatible": "Die Bewegungsantwort ist mit diesem Client nicht kompatibel.",
+  "movementSessionUnavailable": "Die lokale Spielsitzung ist nicht verfügbar.",
+  "moveRejectedStale": "Der Spielzustand hat sich geändert. Prüfe die aktuelle Position und versuche es erneut.",
+  "moveRejectedUnitUnavailable": "Diese Einheit steht nicht mehr für eine Bewegung zur Verfügung.",
+  "moveRejectedUnitBusy": "Diese Einheit ist beschäftigt und kann sich gerade nicht bewegen.",
+  "moveRejectedTargetUnavailable": "Dieses Ziel ist nicht verfügbar.",
+  "moveRejectedMovementInsufficient": "Die Einheit hat nicht genügend Bewegungspunkte übrig.",
+  "moveRejectedPathUnavailable": "Es gibt keine gültige Route zu diesem Ziel.",
+  "moveRejectedInternal": "Die Bewegung konnte nicht angewendet werden. Versuche es erneut.",
+  "retry": "Erneut versuchen",
+  "openSettings": "Einstellungen öffnen",
+  "settingsTitle": "Einstellungen",
+  "audioSettings": "Audio",
+  "cameraSettings": "Kamera",
+  "cameraSensitivity": "Zoomempfindlichkeit",
+  "animationSettings": "Animationen",
+  "showUnitMovementAnimations": "Bewegungsanimationen der Einheiten anzeigen",
+  "showUnitIdleAnimations": "Ruheanimationen der Einheiten anzeigen",
+  "showRouteAnimations": "Animationen geplanter Routen anzeigen",
+  "showCombatAnimations": "Kampfanimationen anzeigen",
+  "cinematicCamera": "Filmische Kamera",
+  "smoothCameraMovement": "Weiche Kamerabewegung",
+  "mapSettings": "Karte",
+  "mapGrid": "Hexfeldränder",
+  "mapGridDescription": "Schwarze Ränder um die Hexfelder der Karte anzeigen.",
+  "mapResourceIcons": "Ressourcensymbole",
+  "mapResourceIconsDescription": "Auf Hexfeldern verfügbare Ressourcen anzeigen.",
+  "mapTerrainIcons": "Geländesymbole",
+  "mapTerrainIconsDescription": "Die Geländemerkmale jedes Hexfelds anzeigen.",
+  "mapHeightBadges": "Höhenangaben",
+  "mapHeightBadgesDescription": "Die festgelegte Höhe erhöhter Hexfelder anzeigen.",
+  "mapElevationWalls": "Höhenwände",
+  "mapElevationWallsDescription": "Die Tiefe erhöhter Hexfelder unter Berücksichtigung ihrer Nachbarn anzeigen.",
+  "accessibilitySettings": "Barrierefreiheit",
+  "reducedMotion": "Bewegungen reduzieren",
+  "reducedMotionDescription": "Unwesentliche Animationen und Übergänge vermeiden.",
+  "highContrast": "Hoher Kontrast",
+  "highContrastDescription": "Den Kontrast der Benutzeroberfläche erhöhen.",
+  "resetSettings": "Standardwerte wiederherstellen",
+  "objectivesTitle": "Strategische Ziele",
+  "openObjectives": "Ziele öffnen",
+  "closeObjectives": "Ziele schließen",
+  "objectivesEmpty": "Diese Karte hat keine Ziele.",
+  "objectivesAuthoredRules": "Festgelegte Kartenanforderungen. Der aktuelle Fortschritt wird von der Spielengine verwaltet.",
+  "objectiveType": "{type, select, ruins{Ruinen} strategicPass{Strategischer Pass} holySite{Heilige Stätte} legendaryResource{Legendäre Ressource} other{Strategisches Ziel}}",
+  "@objectiveType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "objectiveDetails": "Hexfeld {col}, {row}\nErforderliche Halterunden: {holdTurns} · Siegpunkte: {victoryPoints} · Gold pro Runde: {goldPerTurn}",
+  "@objectiveDetails": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      },
+      "holdTurns": {
+        "type": "int"
+      },
+      "victoryPoints": {
+        "type": "int"
+      },
+      "goldPerTurn": {
+        "type": "int"
+      }
+    }
+  },
+  "matchFinishedTitle": "Partie beendet",
+  "outcomeWinner": "Sieger: {playerId}",
+  "@outcomeWinner": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      }
+    }
+  },
+  "outcomeNoWinner": "Kein Sieger",
+  "outcomeFinalScore": "Endstand",
+  "outcomeScoreLine": "{playerId}: {score}",
+  "@outcomeScoreLine": {
+    "placeholders": {
+      "playerId": {
+        "type": "String"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "cityText": "{key, select, title{Stadt} foundingTitle{Stadt gründen} loading{Stadtdetails werden geladen} owner{Besitzer} health{Gesundheit} population{Bevölkerung} territory{Gebiet} foundingSelection{Anfangsgebiet} foundingConfirm{Stadtgründung bestätigen} foundingCancel{Gründung abbrechen} executing{Stadtaktion wird angewendet} cityYield{Ertrag} food{Nahrung} production{Produktion} gold{Gold} defense{Verteidigung} workedHexes{Bewirtschaftete Hexfelder} workedHexSelect{Bewirtschaftete Hexfelder verwalten} workedHexHint{Wähle ein hervorgehobenes, kontrolliertes Hexfeld auf der Karte.} expansion{Bevorzugte Erweiterung} expansionSelect{Erweiterung wählen} expansionHint{Wähle ein hervorgehobenes Erweiterungsfeld auf der Karte.} managementCancel{Kartenauswahl beenden} foundingOpen{Stadt planen} other{Stadt}}",
+  "@cityText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "cityFailure": "{code, select, requestFailed{Die Stadtanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Stadtantwort ist mit diesem Client nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Der Spielzustand hat sich geändert. Prüfe die Stadt und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} cityFounderNotFound{Die Gründungseinheit ist nicht mehr verfügbar.} cityFounderNotControlled{Dieser Spieler kontrolliert die Gründungseinheit nicht.} cityFounderBusy{Die Gründungseinheit ist beschäftigt.} cityFounderInvalid{Diese Einheit kann keine Stadt gründen.} cityFounderNoSettlers{Die Gründungseinheit hat keine Siedler.} citySiteInvalid{An diesem Standort kann keine Stadt gegründet werden.} cityCenterOccupied{Das Stadtzentrum ist besetzt.} cityCenterClaimed{Das Stadtzentrum ist bereits beansprucht.} cityCenterTooClose{Das Stadtzentrum liegt zu nahe an einer anderen Stadt.} cityControlledHexesInvalid{Das ausgewählte Anfangsgebiet ist ungültig.} cityNotFound{Diese Stadt ist nicht mehr verfügbar.} cityNotControlled{Dieser Spieler kontrolliert diese Stadt nicht.} workedHexUnavailable{Dieses bewirtschaftete Hexfeld ist nicht verfügbar.} workedHexLimitReached{Die Stadt hat ihre Grenze für bewirtschaftete Hexfelder erreicht.} cityExpansionHexUnavailable{Dieses Erweiterungsfeld ist nicht verfügbar.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Stadtanfrage konnte nicht abgeschlossen werden.}}",
+  "@cityFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "workerText": "{key, select, title{Arbeiter} loading{Arbeiteroptionen werden geladen} empty{Derzeit ist keine Arbeiteraktion verfügbar.} executing{Arbeiteraktion wird angewendet} buildCharges{Bauaktionen} progress{Fortschritt} assigned{Zugewiesenes Hexfeld} openActions{Hexfeld verbessern} closeActions{Auswahl abbrechen} selectImprovement{Auswählen} confirmImprovement{Verbesserung bestätigen} cancelJob{Bau abbrechen} assign{Hexfeld zuweisen} cancelAssignment{Zuweisung aufheben} buildRoad{Straße bauen} automate{Automatisieren} automationEvidence{Planungsgrundlagen} other{Arbeiter}}",
+  "@workerText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "workerFailure": "{code, select, requestFailed{Die Arbeiteranfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Arbeiterantwort ist mit diesem Client nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Der Spielzustand hat sich geändert. Prüfe den Arbeiter und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} workerNotFound{Der Arbeiter ist nicht mehr verfügbar.} workerNotControlled{Dieser Spieler kontrolliert den Arbeiter nicht.} workerUnavailable{Der Arbeiter ist nicht verfügbar.} workerNoMovementPoints{Der Arbeiter hat keine Bewegungspunkte.} workerQueuedPathActive{Der Arbeiter hat einen aktiven Bewegungsbefehl.} workerImprovementNotSelected{Wähle zuerst eine Verbesserung.} workerActionNotControlled{Die ausstehende Arbeiteraktion wird nicht von diesem Spieler kontrolliert.} workerImprovementUnavailable{Diese Verbesserung ist nicht verfügbar.} workerJobNotActive{Der Arbeiter hat keinen laufenden Bauauftrag.} workerAssignmentUnavailable{Der Arbeiter kann hier nicht zugewiesen werden.} workerAssignmentNotActive{Der Arbeiter hat keine aktive Zuweisung.} workerRoadUnavailable{Hier kann keine Straße gebaut werden.} roadConstructionExistingRoad{Hier existiert bereits eine Straße.} roadConstructionCity{Auf einem Stadtzentrum kann keine Straße gebaut werden.} roadConstructionEnemyTerritory{In feindlichem Gebiet kann keine Straße gebaut werden.} roadConstructionImpassableTerrain{Auf diesem Gelände kann keine Straße gebaut werden.} workerAutomationNotActive{Die Arbeiterautomatisierung ist nicht aktiv.} workerAutomationNoTarget{Die Arbeiterautomatisierung hat kein Ziel gefunden.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Arbeiteranfrage konnte nicht abgeschlossen werden.}}",
+  "@workerFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "productionText": "{key, select, title{Produktion und Ressourcen} loading{Produktionsoptionen werden geladen} executing{Stadtproduktion wird aktualisiert} current{Aktuelle Produktion} invested{Investiert} overflow{Überschuss} resources{Strategische Ressourcen} buildings{Gebäude} units{Einheiten} projects{Projekte} wonders{Wunder} specializations{Spezialisierungen} rush{Produktion beschleunigen} cost{Kosten} requires{benötigt} empty{Derzeit ist keine Option verfügbar.} other{Produktion}}",
+  "@productionText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "productionFailure": "{code, select, requestFailed{Die Produktionsanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Produktionsantwort ist nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Die Stadt hat sich geändert. Prüfe die Produktion und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} cityNotFound{Die Stadt ist nicht mehr verfügbar.} cityNotControlled{Dieser Spieler kontrolliert die Stadt nicht.} buildingNotAvailable{Dieses Gebäude ist nicht verfügbar.} unitProductionInvalidResourceOption{Diese Ressourcenoption ist ungültig.} unitProductionNotAvailable{Diese Einheit ist nicht verfügbar.} unitProductionRequiresResource{Wähle eine Ressourcenoption.} unitProductionMissingStrategicResource{Erforderliche Ressourcen fehlen.} unitProductionRequiresCoast{Diese Einheit benötigt eine Küstenstadt.} unitSupplyLimitReached{Die Versorgungsgrenze für Einheiten ist erreicht.} wonderNotAvailable{Dieses Wunder ist nicht verfügbar.} citySpecializationLocked{Diese Spezialisierung ist gesperrt.} citySpecializationUnchanged{Diese Spezialisierung ist bereits aktiv.} citySpecializationMissingBuilding{Ein erforderliches Gebäude fehlt.} productionQueueEmpty{Die Produktionswarteschlange ist leer.} projectCannotBeRushed{Ein fortlaufendes Projekt kann nicht beschleunigt werden.} rushProductionUnavailable{Die Produktionsbeschleunigung ist nicht verfügbar.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Produktionsanfrage konnte nicht abgeschlossen werden.}}",
+  "@productionFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactText": "{key, select, title{Weltartefakte} executing{Artefaktaktion wird angewendet} startExcavation{Ausgrabung starten} storeInCity{In Stadt lagern} trade{Artefakt handeln} targetPlayer{Zielspieler} offeredGold{Angebotenes Gold} onMap{Auf der Karte bei} carried{Getragen von} stored{Gelagert in} excavation{Ausgrabung bei} turnsRemaining{Runden verbleibend} other{Artefakt}}",
+  "@artifactText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactName": "{kind, select, ancientImperialCrown{Antike Kaiserkrone} astronomersTablets{Tafeln des Astronomen} prophetMask{Maske des Propheten} heroSword{Schwert des Helden} merchantsSeal{Siegel des Händlers} firstPeoplesChronicle{Chronik der ersten Völker} templeReliquary{Tempelreliquiar} queensMirror{Spiegel der Königin} other{Weltartefakt}}",
+  "@artifactName": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactOnMap": "Auf der Karte bei {col}, {row}",
+  "@artifactOnMap": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      }
+    }
+  },
+  "artifactCarriedBy": "Getragen von {unitName}",
+  "@artifactCarriedBy": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactStoredIn": "Gelagert in {cityName}",
+  "@artifactStoredIn": {
+    "placeholders": {
+      "cityName": {
+        "type": "String"
+      }
+    }
+  },
+  "artifactExcavationAt": "Ausgrabung bei {col}, {row} · {remainingTurns, plural, one{1 Runde verbleibend} other{{remainingTurns} Runden verbleibend}}",
+  "@artifactExcavationAt": {
+    "placeholders": {
+      "col": {
+        "type": "int"
+      },
+      "row": {
+        "type": "int"
+      },
+      "remainingTurns": {
+        "type": "int"
+      }
+    }
+  },
+  "artifactFailure": "{code, select, requestFailed{Die Artefaktanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Artefaktantwort ist nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Der Spielzustand hat sich geändert. Prüfe das Artefakt und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} unitNotFound{Die Einheit ist nicht mehr verfügbar.} unitNotControlled{Dieser Spieler kontrolliert die Einheit nicht.} unitUnavailable{Die Einheit ist nicht verfügbar.} unitAlreadyCarryingArtifact{Die Einheit trägt bereits ein Artefakt.} artifactNotFound{Das Artefakt ist nicht mehr verfügbar.} unitNotCarryingArtifact{Die Einheit trägt kein Artefakt.} cityNotFound{Die Stadt ist nicht mehr verfügbar.} cityNotControlled{Dieser Spieler kontrolliert die Stadt nicht.} unitNotInCity{Die Einheit befindet sich nicht in dieser Stadt.} cityArtifactSlotFull{Der Artefaktplatz der Stadt ist belegt.} artifactTradeActorUnavailable{Dieser Spieler kann keine Artefakte handeln.} artifactTradeTargetInvalid{Der Zielspieler ist ungültig.} artifactTradeGoldInvalid{Das Goldangebot ist ungültig.} artifactTradeBlockedByWar{Krieg verhindert den Artefakthandel.} artifactTradeGoldUnavailable{Das angebotene Gold ist nicht verfügbar.} offeredArtifactUnavailable{Das angebotene Artefakt ist nicht verfügbar.} targetArtifactSlotUnavailable{Der Empfänger hat keinen freien Artefaktplatz.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Artefaktanfrage konnte nicht abgeschlossen werden.}}",
+  "@artifactFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "researchText": "{key, select, title{Forschung} open{Forschung öffnen} close{Forschung schließen} loading{Forschungsoptionen werden geladen} retry{Erneut versuchen} selecting{Technologie wird ausgewählt} selectionRequired{Wähle eine Technologie, um fortzufahren} sciencePerTurn{Wissenschaft pro Runde} overflow{Gespeicherte Wissenschaft} active{Aktive Technologie} none{Keine} cost{Kosten} progress{Fortschritt} boost{Kostenreduktion durch Förderung} prerequisites{Voraussetzungen} blockedBy{Gesperrt durch} unlocks{Schaltet frei} choose{Auswählen} other{Forschung}}",
+  "@researchText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "researchAvailability": "{value, select, unlocked{Erforscht} active{Aktiv} available{Verfügbar} lockedByPrerequisites{Voraussetzungen erforderlich} lockedByTechnology{Durch Technologie gesperrt} other{Nicht verfügbar}}",
+  "@researchAvailability": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "researchUnlock": "{kind}: {target}",
+  "@researchUnlock": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "researchFailure": "{code, select, requestFailed{Die Forschungsanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Forschungsantwort ist nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Die Forschung hat sich geändert. Prüfe die Optionen und versuche es erneut.} technologyPlayerNotControlled{Dieser Spieler kann keine Forschung auswählen.} technologyNotAvailable{Diese Technologie ist nicht verfügbar.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Forschungsanfrage konnte nicht abgeschlossen werden.}}",
+  "@researchFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomacyText": "{key, select, title{Diplomatie} open{Diplomatie öffnen} close{Diplomatie schließen} noContacts{Keine Kontakte} compose{Neue Aktion} target{Gegenüber} action{Aktion} send{Senden} invalid{Prüfe die Bedingungen im Formular.} pending{Diplomatische Aktion wird gesendet} relations{Beziehungen} proposals{Vorschläge} messages{Private Nachrichten} agreements{Ressourcenabkommen} accept{Annehmen} reject{Ablehnen} amount{Menge} goldPerTurn{Gold pro Runde} duration{Runden} resource{Ressource} offered{Angebotene Ressource} requested{Gewünschte Ressource} topic{Thema} other{Diplomatie}}",
+  "@diplomacyText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomacyFailure": "{code, select, requestFailed{Die Diplomatieanfrage konnte nicht abgeschlossen werden.} responseIncompatible{Die Diplomatieantwort ist nicht kompatibel.} sessionUnavailable{Die lokale Spielsitzung ist nicht verfügbar.} staleRevision{Die diplomatische Lage hat sich geändert. Prüfe den aktuellen Stand und versuche es erneut.} matchFinished{Die Partie ist bereits beendet.} diplomacyPlayerNotControlled{Dieser Spieler kann keine diplomatischen Aktionen ausführen.} diplomacyTargetNotDiscovered{Dieses Gegenüber ist nicht verfügbar.} diplomacyProposalNotAllowed{Dieser Vorschlag ist nicht erlaubt.} diplomacyDuplicateProposal{Dieser Vorschlag existiert bereits.} diplomacyProposalNotFound{Dieser Vorschlag existiert nicht mehr.} diplomacyProposalPaymentUnavailable{Die Zahlung für den Vorschlag ist nicht verfügbar.} diplomacyMessageCooldown{Eine ähnliche Nachricht wurde erst vor Kurzem gesendet.} diplomacyDuplicateMessage{Diese Nachricht existiert bereits.} diplomacyMessageNotFound{Diese Nachricht existiert nicht mehr.} diplomacyMessageUnavailable{Diese Nachricht kann derzeit nicht verwendet werden.} diplomacyTruceActive{Ein Waffenstillstand ist aktiv.} diplomacyWarAlreadyActive{Es herrscht bereits Krieg.} diplomacyInvalidGoldAmount{Die Goldmenge ist ungültig.} diplomacyGoldGiftBlockedByRelation{Diese Beziehung verhindert Goldgeschenke.} diplomacyGoldUnavailable{Das benötigte Gold ist nicht verfügbar.} diplomacyGoldGiftUnavailable{Dieses Goldgeschenk ist nicht verfügbar.} invalidResourceTradeTarget{Der Handelspartner für den Ressourcenhandel ist ungültig.} invalidResourceTradeResource{Die gewählte Ressource ist ungültig.} invalidResourceTradeTerms{Die Bedingungen des Ressourcenhandels sind ungültig.} resourceTradeBlockedByWar{Krieg verhindert diesen Ressourcenhandel.} resourceTradeGoldUnavailable{Das Gold für den Handel ist nicht verfügbar.} resourceTradeAlreadyActive{Dieser Ressourcenhandel ist bereits aktiv.} invalidResourceTradeAgreementId{Die Kennung des Abkommens ist ungültig.} resourceTradeAgreementIdConflict{Die Kennung des Abkommens steht im Konflikt.} resourceTradeExportUnavailable{Der Ressourcenexport ist nicht verfügbar.} resourceTradeOfferUnavailable{Die angebotene Ressource ist nicht verfügbar.} resourceTradeRequestUnavailable{Die gewünschte Ressource ist nicht verfügbar.} stateRevisionOverflow{Der Spielzustand kann nicht weiter fortgeschrieben werden.} other{Die Diplomatieanfrage konnte nicht abgeschlossen werden.}}",
+  "@diplomacyFailure": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "presentationName": "{value, select, farm{Bauernhof} riverFarm{Flussbauernhof} mine{Mine} lumberMill{Sägewerk} pasture{Weide} camp{Lager} quarry{Steinbruch} fishingBoats{Fischerboote} orchard{Obstgarten} plantation{Plantage} vineyard{Weinberg} tradingPost{Handelsposten} prospectorCamp{Prospektorenlager} horseRanch{Pferdezucht} pearlDivers{Perlentaucher} coalShaft{Kohleschacht} oilWell{Ölquelle} bauxiteMine{Bauxitmine} uraniumMine{Uranmine} wheat{Weizen} fish{Fisch} deer{Hirsch} sheep{Schaf} rice{Reis} cow{Kuh} apple{Apfel} banana{Banane} citrus{Zitrusfrüchte} gold{Gold} silver{Silber} gems{Edelsteine} silk{Seide} spices{Gewürze} cotton{Baumwolle} grapes{Trauben} ivory{Elfenbein} pearls{Perlen} coffee{Kaffee} cocoa{Kakao} tobacco{Tabak} sugar{Zucker} iron{Eisen} coal{Kohle} oil{Öl} aluminium{Aluminium} uranium{Uran} horses{Pferde} marble{Marmor} commander{Kommandant} warrior{Krieger} archer{Bogenschütze} settler{Siedler} worker{Arbeiter} merchant{Händler} scout{Späher} spearman{Speerträger} cavalry{Kavallerie} catapult{Katapult} heavyInfantry{Schwere Infanterie} fieldCannon{Feldkanone} rifleman{Schütze} tank{Panzer} scoutShip{Erkundungsschiff} warship{Kriegsschiff} reconPlane{Aufklärungsflugzeug} building{Gebäude} improvement{Verbesserung} resourceVisibility{Ressourcensichtbarkeit} unit{Einheit} wonder{Wunder} friendly{Freundlich} neutral{Neutral} hostile{Feindselig} truce{Waffenstillstand} war{Krieg} warning{Warnung} complaint{Beschwerde} request{Bitte} praise{Lob} threat{Drohung} cooperation{Zusammenarbeit} troopsNearCities{Truppen nahe Städten} citiesTooClose{Städte zu nahe} blockedRoutes{Blockierte Routen} withdrawScouts{Späher zurückziehen} avoidEscalation{Eskalation vermeiden} commonEnemy{Gemeinsamer Feind} expansionProvocation{Provokation durch Expansion} peacefulPraise{Lob für friedliches Verhalten} conciliatory{Versöhnlich} evasive{Ausweichend} aggressive{Aggressiv} declareWar{Krieg erklären} goldGift{Goldgeschenk} friendshipProposal{Freundschaftsvorschlag} truceProposal{Waffenstillstandsvorschlag} message{Nachricht} resourceTrade{Ressourcenhandel} resourceExchange{Ressourcentausch} granary{Kornspeicher} workshop{Werkstatt} industry{Industrie} other{{value}}}",
+  "@presentationName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "technologyName": "{value, select, agriculture{Landwirtschaft} woodworking{Holzverarbeitung} mining{Bergbau} animalHusbandry{Viehzucht} hunting{Jagd} fishing{Fischerei} craftsmanship{Handwerk} trade{Handel} storage{Lagerhaltung} waterEngineering{Wasserbau} stoneworking{Steinbearbeitung} militaryOrganization{Militärorganisation} advancedTrade{Fortgeschrittener Handel} construction{Bauwesen} navigation{Navigation} irrigation{Bewässerung} banking{Bankwesen} engineering{Ingenieurwesen} metallurgy{Metallurgie} horsebackRiding{Reitkunst} ironWorking{Eisenverarbeitung} coalMining{Kohlebergbau} machinery{Maschinenbau} administration{Verwaltung} logistics{Logistik} shipbuilding{Schiffbau} tactics{Taktik} economy{Wirtschaft} urbanization{Urbanisierung} fortifications{Befestigungen} strategy{Strategie} specialization{Spezialisierung} writing{Schrift} mathematics{Mathematik} medicine{Medizin} civilService{Öffentlicher Dienst} siegecraft{Belagerungstechnik} cartography{Kartografie} guilds{Zünfte} law{Recht} education{Bildung} urbanPlanning{Stadtplanung} navalDoctrine{Marinedoktrin} steel{Stahl} bureaucracy{Bürokratie} nationalism{Nationalismus} scientificMethod{Wissenschaftliche Methode} steamPower{Dampfkraft} electricity{Elektrizität} combustion{Verbrennung} flight{Luftfahrt} massProduction{Massenproduktion} radio{Funk} nuclearPhysics{Kernphysik} other{{value}}}",
+  "@technologyName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "cityContentName": "{value, select, growth{Wachstum} industry{Industrie} commerce{Handel} science{Wissenschaft} military{Militär} wealth{Wohlstand} research{Forschung} granary{Kornspeicher} waterMill{Wassermühle} workshop{Werkstatt} storehouse{Lagerhaus} housing{Wohnhäuser} merchantHall{Handelshalle} stonemason{Steinmetz} barracks{Kaserne} marketplace{Marktplatz} port{Hafen} aqueduct{Aquädukt} forge{Schmiede} stable{Stall} bank{Bank} buildersGuild{Bauzunft} factory{Fabrik} lighthouse{Leuchtturm} trainingGrounds{Übungsplatz} townHall{Rathaus} monument{Monument} archive{Archiv} academy{Akademie} university{Universität} observatory{Observatorium} laboratory{Labor} reactor{Reaktor} courthouse{Gerichtsgebäude} court{Hof} governorsOffice{Statthalteramt} surveyorsOffice{Vermessungsamt} planningOffice{Planungsamt} apothecary{Apotheke} publicBaths{Öffentliche Bäder} hospital{Krankenhaus} ministries{Ministerien} walls{Stadtmauern} armory{Waffenkammer} siegeWorkshop{Belagerungswerkstatt} citadel{Zitadelle} warCollege{Kriegsakademie} conscriptionOffice{Wehramt} borderFort{Grenzfort} airfield{Flugplatz} artisansGuild{Handwerkszunft} masterWorkshop{Meisterwerkstatt} steelworks{Stahlwerk} railDepot{Bahndepot} powerPlant{Kraftwerk} assemblyPlant{Montagewerk} refinery{Raffinerie} mapRoom{Kartensaal} shipyard{Werft} dryDock{Trockendock} navalAcademy{Marineakademie} harborCustoms{Hafenzollamt} museum{Museum} parliament{Parlament} broadcastTower{Sendeturm} worldFairGrounds{Weltausstellungsgelände} greatLibrary{Große Bibliothek} hangingGardens{Hängende Gärten} greatWall{Große Mauer} petra{Petra} centralBank{Zentralbank} imperialUniversity{Kaiserliche Universität} grandCathedral{Große Kathedrale} motherFactory{Stammfabrik} nationalObservatory{Nationales Observatorium} svalbardSeedVault{Saatguttresor auf Spitzbergen} grandExposition{Große Ausstellung} other{Unbekannter Stadtinhalt}}",
+  "@cityContentName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "diplomaticProposalName": "{value, select, friendship{Freundschaft} truce{Waffenstillstand} other{Unbekannter Vorschlag}}",
+  "@diplomaticProposalName": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "mapFeedbackText": "{kind, select, roadCompleted{+Straße} unitKilled{KO} unitRetreated{Rückzug} artifactExcavationStarted{Ausgrabung} artifactCarried{Artefakt aufgenommen} artifactStored{Artefakt eingelagert} other{}}",
+  "@mapFeedbackText": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "mapYieldShort": "{kind, select, food{NAHR} production{PROD} gold{GOLD} defense{VERT} other{}}",
+  "@mapYieldShort": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "focusOwnUnitMovement": "Kamera auf Bewegungen meiner Einheiten richten",
+  "followOwnUnitMovement": "Bewegungen meiner Einheiten mit der Kamera verfolgen",
+  "focusForeignUnitMovement": "Kamera auf Bewegungen feindlicher Einheiten richten",
+  "followForeignUnitMovement": "Bewegungen feindlicher Einheiten mit der Kamera verfolgen",
+  "gameSoundsLabel": "Spielgeräusche",
+  "soundVolumeLabel": "Geräuschlautstärke",
+  "gameMusicLabel": "Spielmusik",
+  "musicVolumeLabel": "Musiklautstärke",
+  "natureSoundsLabel": "Naturgeräusche",
+  "natureVolumeLabel": "Lautstärke der Naturgeräusche",
+  "hexInspectionKind": "{value, select, idealCitySite{Idealer Stadtstandort} goodCitySite{Guter Stadtstandort} fertileField{Fruchtbares Feld} fertilePlains{Fruchtbare Ebenen} richPlain{Ertragreiche Ebene} strategicBorderland{Strategisches Grenzland} strategicField{Strategisches Feld} defensivePosition{Verteidigungsstellung} fertileForest{Fruchtbarer Wald} forestBackline{Bewaldetes Hinterland} forestForge{Industriewald} wildLand{Wildnis} richWilds{Ertragreiche Wildnis} exoticBackline{Exotisches Hinterland} difficultStrategicTerrain{Schwieriges strategisches Gelände} highGround{Anhöhe} riverHills{Flusshügel} industrialStronghold{Industriestützpunkt} richHills{Ertragreiche Hügel} barrenLand{Ödland} oasis{Oase} tradeOasis{Handelsoase} desertDeposits{Wüstenvorkommen} harshLand{Raues Land} coldPastures{Kalte Weiden} resourceOutpost{Ressourcenaußenposten} hostileLand{Unwirtliches Land} arcticDeposits{Arktische Vorkommen} coast{Küste} fishingCoast{Fischreiche Küste} richCoast{Ertragreiche Küste} riverPort{Flusshafen} regionalPortHeart{Regionales Hafenzentrum} openSea{Offenes Meer} naturalBarrier{Natürliche Barriere} promisingLand{Vielversprechendes Land} weakLand{Ertragsarmes Land} ordinaryLand{Gewöhnliches Land} mapTile{Kartenfeld} other{Kartenfeld}}",
+  "@hexInspectionKind": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionDescription": "{value, select, idealCitySite{Ein wertvoller Siedlungsstandort, der Nahrung, Wachstum und Expansionspotenzial vereint.} goodCitySite{Solides Gelände für ein Stadtzentrum mit genügend Grundwert für frühes Wachstum.} fertileField{Flussversorgtes Grasland, das Nahrung, Bevölkerungswachstum und Arbeiterverbesserungen begünstigt.} fertilePlains{Offene Ebenen an einem Fluss, geeignet für ein Gleichgewicht aus Nahrung und Produktion.} richPlain{Ein wertvolles offenes Feld mit Luxusressourcen oder Handelswert, das sich innerhalb der Grenzen lohnt.} strategicBorderland{Gutes Land mit strategischem Wert, das du vor deinen Rivalen beanspruchen solltest.} strategicField{Ein Ebenenfeld mit strategischen Ressourcen oder Einfluss auf die Grenzlage.} defensivePosition{Gelände, das die Verteidigung stärkt und hilft, benachbarte Zugänge zu halten.} fertileForest{Ein Wald an einem Fluss, der Wachstumspotenzial mit natürlicher Deckung verbindet.} forestBackline{Ein sichereres Waldfeld, das Wachstum oder jagdbezogene Verbesserungen unterstützen kann.} forestForge{Ein Wald mit industriellen Ressourcen, der nach der Verbesserung gute Produktion verspricht.} wildLand{Dichtes, schwieriges Gelände, das nur mit einem klaren Arbeiter- oder Expansionsplan sinnvoll ist.} richWilds{Wildes Gelände mit genügend Fruchtbarkeit oder Ressourcen für eine überlegte Erschließung.} exoticBackline{Ein Dschungel- oder Feuchtgebietsfeld mit Luxusressourcen für spätere Expansion und Handel.} difficultStrategicTerrain{Schwieriges Gelände mit strategischen Ressourcen, später mächtig, anfangs umständlich.} highGround{Hügel, die Verteidigung und Kartenkontrolle stärker begünstigen als schnelles Wachstum.} riverHills{Hügel neben einem Fluss, die Verteidigung mit besserem wirtschaftlichem Potenzial verbinden.} industrialStronghold{Hügel mit industriellen Ressourcen, ein starkes Produktionsziel für eine Stadt.} richHills{Hügel mit wertvollen Ressourcen, geeignet für eine auf Gold oder Produktion ausgerichtete Expansion.} barrenLand{Trockenes Land mit geringem unmittelbarem Nutzen, sofern spätere Technologien oder Grenzen den Plan nicht ändern.} oasis{Wüste mit Flusszugang, der schwaches Land zu einem nutzbaren Wachstumsfeld macht.} tradeOasis{Ein Handelsstandort in der Wüste, der mit der richtigen Verbesserung wertvoll werden kann.} desertDeposits{Schlechter Siedlungsboden mit einem strategischen Vorkommen, das in späteren Epochen wichtiger wird.} harshLand{Kaltes oder raues Land mit begrenzter früher Wirtschaft und langsamer Entwicklung.} coldPastures{Kaltes Gelände mit genügend Weidewert, um eine Grenzstadt zu unterstützen.} resourceOutpost{Entlegenes kaltes Land, das sich vor allem wegen seiner geschützten Ressource lohnt.} hostileLand{Unwirtlicher Boden mit geringem Siedlungswert und wenigen unmittelbaren Erträgen.} arcticDeposits{Schneebedecktes Ressourcenland, das schwer nutzbar ist, aber strategisch wichtig werden kann.} coast{Küstenland, das Zugang zur See und vielseitiges Stadtwachstum ermöglicht.} fishingCoast{Eine nahrungsreiche Küste, ein guter Grund, am Wasser zu wirtschaften oder zu siedeln.} richCoast{Luxusressourcen oder Handelswert an der Küste, die sich innerhalb der Stadtgrenzen lohnen.} riverPort{Eine Flussmündung mit Handels- und Bewegungsvorteilen für eine Küstenstadt.} regionalPortHeart{Ein starkes Küstenzentrum, in dem Fluss- und Ressourcenwert zusammenkommen.} openSea{Wasser, das für Schiffe und Erkundung nützlich ist, aber nicht für Landsiedlungen.} naturalBarrier{Unpassierbares Gelände, das Bewegung und Verteidigung statt Wirtschaft prägt.} promisingLand{Ein allgemein nützliches Feld, das eine Untersuchung vor dem Weiterziehen verdient.} weakLand{Ertragsarmes Gelände, das frühe Arbeiterzeit selten rechtfertigt.} ordinaryLand{Ein gewöhnliches Feld ohne besondere Stärke, das nützlich ist, wenn es zum Stadtplan passt.} mapTile{Ein einfaches Kartenfeld, zu dem nicht genügend Informationen für eine klare Einschätzung vorliegen.} other{Ein einfaches Kartenfeld, zu dem nicht genügend Informationen für eine klare Einschätzung vorliegen.}}",
+  "@hexInspectionDescription": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionRecommendation": "{value, select, foundCity{Guter Entwicklungsstandort} defendHere{Gute Verteidigungsstellung} exploitEconomy{Erschließung lohnt sich} avoid{Ohne Plan meiden} neutral{Vor der Bewegung untersuchen} other{Vor der Bewegung untersuchen}}",
+  "@hexInspectionRecommendation": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionRecommendationDetail": "{value, select, foundCity{Wenn die Grenzen frei sind, erwäge hier eine Stadt zu gründen oder einen Siedler hierher zu schicken.} defendHere{Nutze die Stellung für Einheiten, zum Grenzschutz oder zur Deckung benachbarter Städte.} exploitEconomy{Nimm das Feld in deine Grenzen auf und weise einen Arbeiter zu, sobald die Stadt davon profitieren kann.} avoid{Meide es anfangs, sofern nicht eine Ressource, Route oder militärische Notwendigkeit seinen Wert verändert.} neutral{Erkunde benachbarte Felder und vergleiche Ressourcen, bevor du einen Arbeiter oder Siedler einsetzt.} other{Erkunde benachbarte Felder und vergleiche Ressourcen, bevor du einen Arbeiter oder Siedler einsetzt.}}",
+  "@hexInspectionRecommendationDetail": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionText": "{value, select, title{Hexfeld untersuchen} close{Untersuchung schließen} loading{Hexfeld wird untersucht…} requestFailed{Das Hexfeld konnte nicht untersucht werden. Versuche es erneut.} responseIncompatible{Die Antwort auf die Hexfelduntersuchung ist nicht kompatibel.} sessionUnavailable{Die Spielsitzung ist nicht verfügbar.} description{Beschreibung} terrain{Gelände} resources{Ressourcen} none{Keine} height{Höhe} improvements{Mögliche Verbesserungen} noImprovements{Keine passenden Verbesserungen.} fromStart{Von Anfang an verfügbar} unlocked{Technologie freigeschaltet} locked{Technologie erforderlich} riverBonus{Flussbonus} defenseBonus{Verteidigungsgelände} outsideCity{Außerhalb kontrollierter Stadtgrenzen} cityCenter{Stadtzentrum} alreadyImproved{Dieses Hexfeld ist bereits verbessert} objective{Kartenziel} other{Hexfeld untersuchen}}",
+  "@hexInspectionText": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionCity": "Wird von {city} bewirtschaftet",
+  "@hexInspectionCity": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "hexInspectionBuildTurns": "Bauzeit: {turns, plural, one{1 Runde} other{{turns} Runden}}",
+  "@hexInspectionBuildTurns": {
+    "placeholders": {
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "hexInspectionTerrain": "{value, select, ocean{Ozean} coast{Küste} lake{See} plains{Ebene} grassland{Grasland} desert{Wüste} tundra{Tundra} snow{Schnee} mountain{Gebirge} hills{Hügel} wetlands{Feuchtgebiet} jungle{Dschungel} forest{Wald} river{Fluss} other{Ebene}}",
+  "@hexInspectionTerrain": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "gamepadSettings": "Gamepad",
+  "gamepadEnabled": "Gamepad-Eingabe",
+  "gamepadDeadzone": "Gamepad-Totzone",
+  "gamepadCameraSensitivity": "Kameraempfindlichkeit des Gamepads",
+  "gamepadInvertCameraY": "Y-Achse der Gamepad-Kamera umkehren",
+  "gamepadButtonBindings": "Tastenbelegung",
+  "gamepadAxisBindings": "Achsenbelegung",
+  "gamepadResetBindings": "Belegung zurücksetzen",
+  "gamepadUnassigned": "Nicht belegt",
+  "gamepadAssignedTo": "Belegt mit: {action}",
+  "gamepadActionConfirm": "Bestätigen",
+  "gamepadActionCancel": "Abbrechen",
+  "gamepadActionMoveMode": "Bewegungsmodus",
+  "gamepadActionInspect": "Hexfeld untersuchen",
+  "gamepadActionHudPrevious": "Vorheriger Oberflächenbereich",
+  "gamepadActionHudNext": "Nächster Oberflächenbereich",
+  "gamepadActionPrevious": "Vorherige offene Aktion",
+  "gamepadActionNext": "Nächste offene Aktion",
+  "gamepadActionPrimary": "Hauptaktion",
+  "gamepadActionUp": "Steuerkreuz oben",
+  "gamepadActionDown": "Steuerkreuz unten",
+  "gamepadActionLeft": "Steuerkreuz links",
+  "gamepadActionRight": "Steuerkreuz rechts",
+  "gamepadActionZoomIn": "Vergrößern",
+  "gamepadActionZoomOut": "Verkleinern",
+  "gamepadActionCursorX": "Cursor X",
+  "gamepadActionCursorY": "Cursor Y",
+  "gamepadActionCameraX": "Kamera X",
+  "gamepadActionCameraY": "Kamera Y",
+  "gamepadControlHome": "Home",
+  "gamepadControlTouchpad": "Touchpad",
+  "gamepadControlLeftStickX": "Linker Stick X",
+  "gamepadControlLeftStickY": "Linker Stick Y",
+  "gamepadControlRightStickX": "Rechter Stick X",
+  "gamepadControlRightStickY": "Rechter Stick Y",
+  "gamepadControlLeftTrigger": "Linker Trigger (LT)",
+  "gamepadControlRightTrigger": "Rechter Trigger (RT)",
+  "@gamepadAssignedTo": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "keyboardSettings": "Tastatur",
+  "keyboardScope": "Kartenkürzel funktionieren, wenn die Karte den Tastaturfokus hat. Klicke auf die Karte, um ihr den Fokus zurückzugeben.",
+  "keyboardPanKeys": "W / A / S / D oder Pfeiltasten",
+  "keyboardPan": "Kamera verschieben",
+  "keyboardSelect": "Hexfeld unter dem Mauszeiger oder die aktuelle Auswahl auswählen",
+  "keyboardMove": "Zielauswahl für die Bewegung der ausgewählten Einheit umschalten",
+  "keyboardInspect": "Hexfeld unter dem Mauszeiger, ausgewähltes Hexfeld oder die Mitte der Ansicht untersuchen",
+  "keyboardMapMode": "Zwischen grafischer Ansicht und Kachelansicht wechseln",
+  "keyboardPending": "Vorherige / nächste offene Rundenaktion",
+  "keyboardSpace": "Leertaste",
+  "keyboardPrimary": "Zur nächsten offenen Aktion wechseln; die Runde beenden, wenn keine mehr offen ist",
+  "keyboardCancel": "Aktiven Bereich schließen oder die aktuelle Interaktion abbrechen",
+  "keyboardFocus": "Nächstes / vorheriges Bedienelement fokussieren",
+  "textSize": "Textgröße",
+  "textSizeDescription": "Wird zusätzlich zur Textgröße des Systems angewendet.",
+  "textScaleStandard": "Standard (100%)",
+  "textScaleLarge": "Groß (115%)",
+  "textScaleExtraLarge": "Sehr groß (130%)",
+  "languageSettings": "Sprache",
+  "languageSystem": "Systemsprache"
+}

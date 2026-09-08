@@ -18,51 +18,84 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  testWidgets('French menu opens the local game wizard on a narrow screen', (
-    tester,
-  ) async {
-    await _Harness.mount(
-      tester,
-      initial: ClientLanguage.french,
-      route: AonwRoute.menu,
+  for (final (language, solo, load, title, country, choice) in const [
+    (
+      ClientLanguage.french,
+      'SOLO',
+      'CHARGER UNE PARTIE',
+      'Choisir une civilisation',
+      'Pologne',
+      'Arabie saoudite',
+    ),
+    (
+      ClientLanguage.german,
+      'EINZELSPIELER',
+      'SPIEL LADEN',
+      'Zivilisation wählen',
+      'Polen',
+      'Vereinigtes Königreich',
+    ),
+  ]) {
+    testWidgets(
+      '$language menu opens the local game wizard on a narrow screen',
+      (tester) async {
+        await _Harness.mount(tester, initial: language, route: AonwRoute.menu);
+        expect(find.text(solo), findsOneWidget);
+        expect(find.text(load), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.text(solo));
+        await tester.pumpAndSettle();
+        expect(find.text(title), findsOneWidget);
+        final field = find.text(country).first;
+        await Scrollable.ensureVisible(tester.element(field), alignment: 0.5);
+        await tester.pumpAndSettle();
+        await tester.tap(field);
+        await tester.pumpAndSettle();
+        await tester.scrollUntilVisible(
+          find.text(choice),
+          250,
+          scrollable: find.byType(Scrollable).last,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(choice).last);
+        await tester.pumpAndSettle();
+        expect(find.text(choice), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
     );
-    expect(find.text('SOLO'), findsOneWidget);
-    expect(find.text('CHARGER UNE PARTIE'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-    await tester.tap(find.text('SOLO'));
-    await tester.pumpAndSettle();
-    expect(find.text('Choisir une civilisation'), findsOneWidget);
-    final country = find.text('Pologne').first;
-    await Scrollable.ensureVisible(tester.element(country), alignment: 0.5);
-    await tester.pumpAndSettle();
-    await tester.tap(country);
-    await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(
-      find.text('Arabie saoudite'),
-      250,
-      scrollable: find.byType(Scrollable).last,
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Arabie saoudite').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Arabie saoudite'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+  }
 
-  testWidgets(
-    'selects French, persists it and resolves French regional locales',
-    (tester) async {
-      final h = await _Harness.mount(tester);
-      await h.choose(tester, 'Français');
-      expect(find.text('Paramètres'), findsOneWidget);
-      expect(h.store.value.language, ClientLanguage.french);
-      await h.choose(tester, 'Langue du système');
-      tester.platformDispatcher.localesTestValue = const [Locale('fr', 'CA')];
-      await tester.pumpAndSettle();
-      expect(find.text('Paramètres'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    },
-  );
+  for (final (language, label, title, system, locale) in const [
+    (
+      ClientLanguage.french,
+      'Français',
+      'Paramètres',
+      'Langue du système',
+      Locale('fr', 'CA'),
+    ),
+    (
+      ClientLanguage.german,
+      'Deutsch',
+      'Einstellungen',
+      'Systemsprache',
+      Locale('de', 'AT'),
+    ),
+  ]) {
+    testWidgets(
+      'selects $language, persists it and resolves regional locales',
+      (tester) async {
+        final h = await _Harness.mount(tester);
+        await h.choose(tester, label);
+        expect(find.text(title), findsOneWidget);
+        expect(h.store.value.language, language);
+        await h.choose(tester, system);
+        tester.platformDispatcher.localesTestValue = [locale];
+        await tester.pumpAndSettle();
+        expect(find.text(title), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('changes language live and reset restores system selection', (
     tester,
