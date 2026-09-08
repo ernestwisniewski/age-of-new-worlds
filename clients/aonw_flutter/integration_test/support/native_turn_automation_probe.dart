@@ -8,6 +8,7 @@ import 'package:aonw_flutter/features/local_game/application/local_game_session_
 import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
 import 'package:aonw_flutter/features/map/presentation/map_presentation_controller.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/flame_map_viewport.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings.dart';
 import 'package:aonw_flutter/features/settings/application/client_settings_store.dart';
@@ -39,7 +40,10 @@ final class NativeTurnAutomationProbe {
   String? technology;
   GameSessionReady get ready => controller.state as GameSessionReady;
 
-  Future<void> start(LocalTurnModeView mode) async {
+  Future<void> start(
+    LocalTurnModeView mode, {
+    LocalPlayerControlView opponent = LocalPlayerControlView.ai,
+  }) async {
     expect(aonwEngineClientAvailable, isTrue);
     await windowManager.ensureInitialized();
     _windowSize = await windowManager.getSize();
@@ -55,7 +59,10 @@ final class NativeTurnAutomationProbe {
     );
     await until(() => settings.isLoaded, 'settings loaded');
     final entry = LocalGameCatalog.entries.first;
-    expect(await controller.startLocalMatch(entry, _setup(mode)), isTrue);
+    expect(
+      await controller.startLocalMatch(entry, _setup(mode, opponent)),
+      isTrue,
+    );
     Navigator.of(
       tester.element(find.byKey(const ValueKey('single-player'))),
     ).pushNamed(AonwRoute.map.location);
@@ -87,7 +94,19 @@ final class NativeTurnAutomationProbe {
   }
 
   Future<void> selectResearchAndEndTurn() async {
-    await tap(const ValueKey('open-research'));
+    await selectResearch();
+    await enableAutomaticEnds();
+    await nextHumanTurn(2);
+    expect(count('endTurn'), 1);
+    expect(count('advanceAiTurn'), 1);
+    expect(count('selectTechnology'), 1);
+    await idle();
+  }
+
+  Future<void> selectResearch() async {
+    if (find.byKey(const ValueKey('close-research')).evaluate().isEmpty) {
+      await tap(const ValueKey('open-research'));
+    }
     await until(
       () => ready.research.options != null && !ready.research.loading,
       'research options',
@@ -115,17 +134,13 @@ final class NativeTurnAutomationProbe {
     if (find.byKey(const ValueKey('close-research')).evaluate().isNotEmpty) {
       await tap(const ValueKey('close-research'));
     }
-    await settings.update(
-      settings.settings.copyWith(
-        automation: const ClientAutomationSettings(endTurn: true),
-      ),
-    );
-    await nextHumanTurn(2);
-    expect(count('endTurn'), 1);
-    expect(count('advanceAiTurn'), 1);
-    expect(count('selectTechnology'), 1);
-    await idle();
   }
+
+  Future<void> enableAutomaticEnds() => settings.update(
+    settings.settings.copyWith(
+      automation: const ClientAutomationSettings(endTurn: true),
+    ),
+  );
 
   Future<void> skipNextTurn() async {
     await tap(const ValueKey(('unit-action', 'skip')));
@@ -167,9 +182,31 @@ final class NativeTurnAutomationProbe {
         expect(localAiTurn.failure, isNull, reason: stage);
       }
       if (timer.elapsed > const Duration(seconds: 45)) {
-        fail('$stage timed out; requests: $requests');
+        fail('$stage timed out; state: ${_diagnostics()}; requests: $requests');
       }
     } while (!complete());
+  }
+
+  Map<String, Object?> _diagnostics() {
+    final viewport = find.byType(FlameMapViewport);
+    final game = viewport.evaluate().isEmpty
+        ? null
+        : tester.widget<FlameMapViewport>(viewport).game;
+    return {
+      'lifecycle': tester.binding.lifecycleState?.name,
+      'viewportActive': game?.debugViewportActive,
+      'paused': game?.paused,
+      'effects': game?.hasActiveUnitEffects,
+      if (controller.state case final GameSessionReady state) ...{
+        'actor': state.recipient.actorPlayerId,
+        'turn': state.recipient.turnView.number,
+        'revision': state.recipient.stamp.revision,
+        'selectedUnit': state.interaction.selectedUnitId,
+        'turnCommand': state.turnAction.inFlight,
+        'ai': state.localAiTurn.phase.name,
+        'handoff': state.localHandoff.phase.name,
+      },
+    };
   }
 
   Future<void> idle() async {
@@ -241,9 +278,12 @@ final class _SettingsStore implements ClientSettingsStore {
   Future<void> save(ClientSettings settings) async => value = settings;
 }
 
-LocalMatchSetupView _setup(LocalTurnModeView mode) => LocalMatchSetupView(
+LocalMatchSetupView _setup(
+  LocalTurnModeView mode,
+  LocalPlayerControlView opponent,
+) => LocalMatchSetupView(
   assets: LocalGameCatalog.entries.first.assets,
-  fogEnabled: false,
+  fogEnabled: opponent == LocalPlayerControlView.human,
   turnMode: mode,
   participants: [
     LocalParticipantSetupView(
@@ -255,11 +295,13 @@ LocalMatchSetupView _setup(LocalTurnModeView mode) => LocalMatchSetupView(
     ),
     LocalParticipantSetupView(
       id: 'player-2',
-      name: 'AI',
+      name: 'Player 2',
       colorValue: 0xffee6c4d,
       country: LocalPlayerCountryView.japan,
-      control: LocalPlayerControlView.ai,
-      ai: const LocalAiProfileView(seed: 42),
+      control: opponent,
+      ai: opponent == LocalPlayerControlView.ai
+          ? const LocalAiProfileView(seed: 42)
+          : null,
     ),
   ],
 );

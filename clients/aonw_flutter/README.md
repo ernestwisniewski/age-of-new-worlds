@@ -62,7 +62,10 @@ The device gate exercises turn automation through the native Rust session and
 the production map screen. Its Single scenarios cover sequential and
 simultaneous turns with an AI opponent, unit skipping, research dismissal and
 selection, and automatic return to the human player. The request trace also
-checks that an idle map sends no repeated queries or commands.
+checks that an idle map sends no repeated queries or commands. The Hotseat
+scenario covers both directions of a private handoff with fog enabled: an
+opaque, non-dismissible curtain blocks the map and automation until the next
+human confirms, then automatic action focus resumes for that participant.
 
 ## Documentation
 

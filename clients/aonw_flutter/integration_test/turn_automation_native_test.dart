@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'support/native_hotseat_automation_probe.dart';
 import 'support/native_turn_automation_probe.dart';
 
 void main() {
@@ -28,4 +29,38 @@ void main() {
       }
     });
   }
+  testWidgets('pauses native automation for private hotseat handoffs', (
+    tester,
+  ) async {
+    final probe = NativeTurnAutomationProbe(tester);
+    try {
+      await probe.start(
+        LocalTurnModeView.sequential,
+        opponent: LocalPlayerControlView.human,
+      );
+      await probe.skipAndDismissResearch();
+      await probe.selectResearch();
+      await probe.enableAutomaticEnds();
+      await probe.awaitPrivateHandoff('player-2', 1);
+      expect(probe.ready.recipient.research.activeTechnologyId, isNull);
+      await probe.confirmPrivateHandoff('player-2');
+      await probe.skipAndChooseResearch();
+      await probe.awaitPrivateHandoff('player-1', 2);
+      expect(
+        probe.ready.recipient.research.activeTechnologyId,
+        probe.technology,
+      );
+      await probe.confirmPrivateHandoff('player-1');
+      expect(probe.count('skipUnitTurn'), 2);
+      expect(probe.count('selectTechnology'), 2);
+      expect(probe.count('endTurn'), 2);
+      expect(probe.count('advanceAiTurn'), 0);
+      final report = probe.report(LocalTurnModeView.sequential);
+      binding.reportData ??= <String, dynamic>{};
+      binding.reportData!['hotseat'] = report;
+      debugPrint(jsonEncode({'hotseat': report}));
+    } finally {
+      await probe.close();
+    }
+  });
 }
