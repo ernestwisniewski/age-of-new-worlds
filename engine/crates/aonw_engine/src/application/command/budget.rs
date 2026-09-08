@@ -60,7 +60,8 @@ impl PlayerCommand<'_> {
             | Self::AssignMerchantTradeRoute(_)
             | Self::MoveMerchantToCity(_)
             | Self::DetachTroop(_) => EventBudget::SINGLE,
-            Self::SelectTechnology(_)
+            Self::CancelResearchSelection(_)
+            | Self::SelectTechnology(_)
             | Self::OpenResourceTrade(_)
             | Self::OpenResourceExchange(_)
             | Self::FoundCity(_)

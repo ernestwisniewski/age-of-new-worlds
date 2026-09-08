@@ -154,7 +154,7 @@
     "engine/crates/aonw_content/tests/map_validation.rs": 537,
     "engine/crates/aonw_contract_mapping/tests/game_state_contract.rs": 1286,
     "engine/crates/aonw_domain/src/game_state/mod.rs": 689,
-    "engine/crates/aonw_engine/src/application/command.rs": 518,
+    "engine/crates/aonw_engine/src/application/command.rs": 503,
     "engine/crates/aonw_engine/src/combat/resolution.rs": 727,
     "engine/crates/aonw_engine/src/movement/route_search.rs": 551,
     "engine/crates/aonw_engine/src/state_digest/tests/state_completeness.rs": 640,

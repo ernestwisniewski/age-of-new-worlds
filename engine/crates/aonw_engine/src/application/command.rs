@@ -1,13 +1,14 @@
 use aonw_content::ContentHash;
-use aonw_domain::{GameState, PlayerId, PlayerTurnState};
+use aonw_domain::GameState;
 
 use super::{CommandRejectionCode, DomainTransition, ExecutionEvidence};
 use crate::unit_action::{UnitActionKind, apply_unit_action};
 use crate::{
     AssignMerchantTradeRouteCommand, AssignWorkerToHexCommand, AttackHexCommand,
-    AutoExploreUnitCommand, AutomateWorkerCommand, BuildRoadCommand, CancelWorkerAssignmentCommand,
-    CancelWorkerJobCommand, ConfirmWorkerImprovementCommand, DeclareWarCommand, DetachTroopCommand,
-    EngineContext, FoundCityCommand, GameEngine, MoveMerchantToCityCommand, MoveUnitCommand,
+    AutoExploreUnitCommand, AutomateWorkerCommand, BuildRoadCommand,
+    CancelResearchSelectionCommand, CancelWorkerAssignmentCommand, CancelWorkerJobCommand,
+    ConfirmWorkerImprovementCommand, DeclareWarCommand, DetachTroopCommand, EngineContext,
+    FoundCityCommand, GameEngine, MoveMerchantToCityCommand, MoveUnitCommand,
     OpenResourceExchangeCommand, OpenResourceTradeCommand, RespondDiplomaticMessageCommand,
     RespondDiplomaticProposalCommand, RushProductionCommand, SelectCityExpansionHexCommand,
     SelectTechnologyCommand, SelectWorkerImprovementCommand, SendDiplomaticMessageCommand,
@@ -20,6 +21,7 @@ use crate::{
 mod budget;
 mod canonical_transition;
 mod error;
+mod lifecycle;
 
 pub use budget::EventBudget;
 use canonical_transition::{
@@ -27,6 +29,7 @@ use canonical_transition::{
     apply_research, apply_worker,
 };
 pub use error::CanonicalEngineError;
+pub(crate) use lifecycle::player_action_lifecycle_rejection;
 
 /// Authoritative command family available to player-facing adapters.
 #[derive(Clone, Copy, Debug)]
@@ -49,6 +52,8 @@ pub enum PlayerCommand<'command> {
     RespondDiplomaticMessage(RespondDiplomaticMessageCommand<'command>),
     /// Selects one currently available technology for the authenticated actor.
     SelectTechnology(SelectTechnologyCommand),
+    /// Dismisses the actor's pending research choice without changing research.
+    CancelResearchSelection(CancelResearchSelectionCommand),
     /// Starts excavating the artifact at one controlled unit.
     StartArtifactExcavation(StartArtifactExcavationCommand<'command>),
     /// Stores the artifact carried by one controlled unit.
@@ -181,6 +186,11 @@ impl GameEngine {
             PlayerCommand::RespondDiplomaticMessage(command) => {
                 let mutation = crate::diplomacy::apply_respond_message(&state, context, command);
                 apply_diplomacy(state, mutation, map_hash, ruleset_hash)
+            }
+            PlayerCommand::CancelResearchSelection(command) => {
+                let mutation =
+                    crate::research::apply_cancel_research_selection(&state, context, command);
+                apply_research(state, mutation, map_hash, ruleset_hash)
             }
             PlayerCommand::SelectTechnology(command) => {
                 let mutation = crate::research::apply_select_technology(&state, context, command);
@@ -374,31 +384,6 @@ impl GameEngine {
     pub fn state_digest(state: &GameState) -> StateDigest {
         crate::state_digest::digest_state(state)
     }
-}
-
-pub(crate) fn player_action_lifecycle_rejection(
-    state: &GameState,
-    actor_player_id: &PlayerId,
-    boundary_can_act: bool,
-) -> Option<CommandRejectionCode> {
-    if !boundary_can_act {
-        return Some(CommandRejectionCode::TurnPlayerNotActive);
-    }
-    let lifecycle = state.match_lifecycle();
-    let identity = lifecycle.identity();
-    if identity.participants().is_empty() {
-        // Bare engine states predate match startup and remain useful for embedders and fixtures.
-        return None;
-    }
-    let turn = lifecycle.turn();
-    if !identity.contains(actor_player_id)
-        || turn.is_removed(actor_player_id)
-        || turn.submitted_player_ids().contains(actor_player_id)
-        || turn.turn_states_by_player_id().get(actor_player_id) != Some(&PlayerTurnState::Active)
-    {
-        return Some(CommandRejectionCode::TurnPlayerNotActive);
-    }
-    None
 }
 
 fn apply_worker_command<Command>(

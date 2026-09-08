@@ -52,9 +52,12 @@ pub(super) fn apply_research(
         }
         Err(error) => return Err(CanonicalEngineError::Research(error)),
     };
-    let next = state
-        .into_after_research(mutation.update)
-        .map_err(CanonicalEngineError::State)?;
+    let next = match mutation.update {
+        Some(update) => state
+            .into_after_research(update)
+            .map_err(CanonicalEngineError::State)?,
+        None => state,
+    };
     Ok(DomainTransition::accepted(
         next,
         Box::new([]),

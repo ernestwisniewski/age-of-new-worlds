@@ -29,6 +29,24 @@ impl SelectTechnologyCommand {
     }
 }
 
+/// Revision-bound dismissal of the actor's pending research choice.
+#[derive(Clone, Copy, Debug)]
+pub struct CancelResearchSelectionCommand {
+    expected_revision: u64,
+}
+
+impl CancelResearchSelectionCommand {
+    /// Creates a command whose actor comes from the authenticated context.
+    #[must_use]
+    pub const fn new(expected_revision: u64) -> Self {
+        Self { expected_revision }
+    }
+
+    pub(crate) const fn expected_revision(self) -> u64 {
+        self.expected_revision
+    }
+}
+
 /// Revision-bound query for all engine-owned technology choices of the actor.
 #[derive(Clone, Copy, Debug)]
 pub struct ResearchOptionsQuery {

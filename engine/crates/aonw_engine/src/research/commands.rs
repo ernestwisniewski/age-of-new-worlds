@@ -1,12 +1,12 @@
 use aonw_domain::{PendingInteraction, ResearchStateUpdate};
 
 use super::rules::{player_research, selection_cost, validate_revision};
-use super::{ResearchError, SelectTechnologyCommand};
+use super::{CancelResearchSelectionCommand, ResearchError, SelectTechnologyCommand};
 use crate::{CommandRejectionCode, EngineContext, TechnologyAvailability, TechnologyUnlockQuery};
 
 /// Atomic replacement produced by one research-selection command.
 pub(crate) struct ResearchMutation {
-    pub(crate) update: ResearchStateUpdate,
+    pub(crate) update: Option<ResearchStateUpdate>,
 }
 
 pub(crate) fn apply_select_technology(
@@ -42,10 +42,39 @@ pub(crate) fn apply_select_technology(
         .checked_next()
         .ok_or(CommandRejectionCode::StateRevisionOverflow)?;
     Ok(ResearchMutation {
-        update: ResearchStateUpdate {
+        update: Some(ResearchStateUpdate {
             revision,
             knowledge,
             interaction,
-        },
+        }),
+    })
+}
+
+/// Dismisses only the matching pending choice; active research is preserved.
+pub(crate) fn apply_cancel_research_selection(
+    state: &aonw_domain::GameState,
+    context: EngineContext<'_>,
+    command: CancelResearchSelectionCommand,
+) -> Result<ResearchMutation, ResearchError> {
+    validate_revision(state, command.expected_revision())?;
+    let actor = context.actor_player_id();
+    if !context.can_act() || !state.match_lifecycle().identity().contains(actor) {
+        return Err(CommandRejectionCode::TechnologyPlayerNotControlled.into());
+    }
+    if !matches!(state.interaction().pending(),
+        Some(PendingInteraction::ResearchSelection { owner_player_id }) if owner_player_id == actor
+    ) {
+        return Ok(ResearchMutation { update: None });
+    }
+    let revision = state
+        .revision()
+        .checked_next()
+        .ok_or(CommandRejectionCode::StateRevisionOverflow)?;
+    Ok(ResearchMutation {
+        update: Some(ResearchStateUpdate {
+            revision,
+            knowledge: state.knowledge().clone(),
+            interaction: state.interaction().clone().with_pending(None),
+        }),
     })
 }

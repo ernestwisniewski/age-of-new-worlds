@@ -1,5 +1,8 @@
 //! Research options and selection-command tests.
 
+#[path = "research/cancellation.rs"]
+mod cancellation;
+
 use std::collections::BTreeMap;
 
 use aonw_content::{
