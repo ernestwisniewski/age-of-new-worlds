@@ -9,6 +9,7 @@ import '../../../../design_system/widgets/aonw_panel.dart';
 import '../../../../game/aonw_flame_game.dart';
 import '../../../../game/map/map_display_options.dart';
 import '../../../../l10n/l10n.dart';
+import '../../../audio/presentation/game_audio_actions.dart';
 import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../local_game/application/local_ai_turn_state.dart';
 import '../../../local_game/application/local_handoff_state.dart';
@@ -45,6 +46,7 @@ import 'network_game_status_overlay.dart';
 
 part 'map_screen_action_palette.dart';
 part 'map_screen_hex_selection_palette.dart';
+part 'map_screen_lifecycle.dart';
 part 'map_screen_ready.dart';
 part 'map_screen_scene.dart';
 
@@ -103,6 +105,7 @@ final class _MapScreenState extends State<MapScreen>
     );
     widget.controller.addListener(_synchronizeFlameScene);
     widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
+    widget.controller.bindInteractionSounds(_playInteractionSound);
     widget.controller.cursor.addListener(_synchronizeFlameCursor);
     _listenToInput(widget.inputSource);
     if (widget.autoLoad) widget.controller.load();
@@ -124,11 +127,13 @@ final class _MapScreenState extends State<MapScreen>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.bindCommandEffects(null);
+      oldWidget.controller.bindInteractionSounds(null);
       _flameGame.skipEffects();
       oldWidget.controller.removeListener(_synchronizeFlameScene);
       oldWidget.controller.cursor.removeListener(_synchronizeFlameCursor);
       widget.controller.addListener(_synchronizeFlameScene);
       widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
+      widget.controller.bindInteractionSounds(_playInteractionSound);
       widget.controller.cursor.addListener(_synchronizeFlameCursor);
     }
     if (oldWidget.inputSource != widget.inputSource) {
@@ -153,6 +158,7 @@ final class _MapScreenState extends State<MapScreen>
 
   @override
   void dispose() {
+    widget.controller.bindInteractionSounds(null);
     widget.controller.bindCommandEffects(null);
     _flameGame.skipEffects();
     _flameGame.setViewportActive(false);
@@ -278,27 +284,6 @@ final class _MapScreenState extends State<MapScreen>
     _synchronizeGamepadTicker();
   }
 
-  void _subscribeToRoute() {
-    final route = ModalRoute.of(context);
-    if (route is! ModalRoute<void> || route == _subscribedRoute) return;
-    widget.routeObserver?.unsubscribe(this);
-    _subscribedRoute = route;
-    widget.routeObserver?.subscribe(this, route);
-  }
-
-  void _setRouteVisible(bool visible) {
-    if (_routeVisible == visible) return;
-    _routeVisible = visible;
-    _synchronizeFlameLifecycle();
-  }
-
-  void _synchronizeFlameLifecycle() {
-    _flameGame.setViewportActive(
-      _routeVisible && _lifecycleState == AppLifecycleState.resumed,
-    );
-    _synchronizeGamepadTicker();
-  }
-
   void _synchronizeGamepadSettings(double cameraSensitivity) {
     if (_gamepadFrames.cameraSensitivity == cameraSensitivity) return;
     _gamepadFrames = MapGamepadFrameController(
@@ -344,6 +329,7 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _installFreshFlameGame() {
+    widget.controller.silencePendingInteractionSounds();
     _flameGame.setSoundSink(null);
     _flameGame.skipEffects();
     _flameGame.setViewportActive(false);

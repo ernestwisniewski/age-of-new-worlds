@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../artifacts/read_model/artifact_view.dart';
+import '../../audio/application/game_audio_port.dart';
 import '../../cities/application/city_state.dart';
 import '../../cities/read_model/city_view.dart';
 import '../../combat/read_model/combat_view.dart';
@@ -26,6 +27,7 @@ import '../application/map_session_port.dart';
 import '../application/network_game_session_port.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
+import 'map_interaction_audio.dart';
 
 final class MapPresentationController extends ChangeNotifier {
   MapPresentationController({
@@ -51,10 +53,18 @@ final class MapPresentationController extends ChangeNotifier {
     this._coordinator, {
     NetworkGameSessionPort? networkGame,
   }) : _networkGame = networkGame {
-    _subscription = _coordinator.changes.listen((_) => notifyListeners());
-    _networkSubscription = networkGame?.connectionChanges.listen(
-      (_) => notifyListeners(),
+    _interactionAudio = MapInteractionAudio(
+      readState: () => state,
+      play: (cue) => _interactionSoundSink?.call(cue),
     );
+    _subscription = _coordinator.changes.listen((state) {
+      _interactionAudio.observe(state);
+      notifyListeners();
+    });
+    _networkSubscription = networkGame?.connectionChanges.listen((connection) {
+      if (connection.blocksGameplay) _interactionAudio.cancelPending();
+      notifyListeners();
+    });
     _cursor = ValueNotifier<MapHexCoordinate?>(_coordinator.hovered);
     _cursorSubscription = _coordinator.cursorChanges.listen((value) {
       _cursor.value = value;
@@ -68,6 +78,15 @@ final class MapPresentationController extends ChangeNotifier {
   late final ValueNotifier<MapHexCoordinate?> _cursor;
   late final StreamSubscription<MapHexCoordinate?> _cursorSubscription;
   var _disposed = false;
+  late final MapInteractionAudio _interactionAudio;
+  void Function(GameSoundCue)? _interactionSoundSink;
+
+  void bindInteractionSounds(void Function(GameSoundCue)? sink) {
+    _interactionAudio.cancelPending();
+    _interactionSoundSink = _disposed ? null : sink;
+  }
+
+  void silencePendingInteractionSounds() => _interactionAudio.cancelPending();
 
   GameSessionState get state => _coordinator.state;
 
@@ -115,11 +134,17 @@ final class MapPresentationController extends ChangeNotifier {
 
   void hover(MapHexCoordinate? coordinate) => _coordinator.hover(coordinate);
 
-  void select(MapHexCoordinate? coordinate) => _coordinator.select(coordinate);
+  void select(MapHexCoordinate? coordinate) => _interactionAudio.perform(
+    MapInteractionAudioAction.selectHex,
+    () => _coordinator.select(coordinate),
+  );
 
   void selectUnit(String unitId) => _coordinator.selectUnit(unitId);
 
-  void selectCity(String cityId) => _coordinator.selectCity(cityId);
+  void selectCity(String cityId) => _interactionAudio.perform(
+    MapInteractionAudioAction.selectCity,
+    () => _coordinator.selectCity(cityId),
+  );
 
   void confirmMove() => _coordinator.confirmMove();
 
@@ -151,10 +176,15 @@ final class MapPresentationController extends ChangeNotifier {
   void setCityConquestAction(CityConquestActionView action) =>
       _coordinator.setCityConquestAction(action);
 
-  void inspectSelectedCity(String cityId) =>
-      _coordinator.inspectSelectedCity(cityId);
+  void inspectSelectedCity(String cityId) => _interactionAudio.perform(
+    MapInteractionAudioAction.selectCity,
+    () => _coordinator.inspectSelectedCity(cityId),
+  );
 
-  void openCityFounding() => _coordinator.openCityFounding();
+  void openCityFounding() => _interactionAudio.perform(
+    MapInteractionAudioAction.foundCity,
+    _coordinator.openCityFounding,
+  );
 
   void toggleCityFoundingHex(MapHexCoordinate coordinate) =>
       _coordinator.toggleCityFoundingHex(coordinate);
@@ -164,7 +194,10 @@ final class MapPresentationController extends ChangeNotifier {
   void confirmCityFounding() => _coordinator.confirmCityFounding();
 
   void startCityManagement(CityManagementMode mode) =>
-      _coordinator.startCityManagement(mode);
+      _interactionAudio.perform(
+        MapInteractionAudioAction.manageCity,
+        () => _coordinator.startCityManagement(mode),
+      );
 
   void cancelCityManagement() => _coordinator.cancelCityManagement();
 
@@ -187,6 +220,7 @@ final class MapPresentationController extends ChangeNotifier {
   void dispose() {
     if (_disposed) return;
     _disposed = true;
+    bindInteractionSounds(null);
     unawaited(_subscription.cancel());
     unawaited(_networkSubscription?.cancel());
     unawaited(_cursorSubscription.cancel());

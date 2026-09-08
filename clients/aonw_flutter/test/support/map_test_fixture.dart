@@ -32,6 +32,7 @@ import 'package:aonw_flutter/features/workers/application/worker_session_port.da
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
 part 'city_test_fixture.dart';
+part 'game_session_capabilities_test_fixture.dart';
 part 'local_game_test_fixture.dart';
 part 'map_combat_test_fixture.dart';
 part 'map_unit_test_fixture.dart';
@@ -730,24 +731,3 @@ final class FakeGameSession
   @override
   Future<void> close() async {}
 }
-
-GameSessionCapabilities testGameSessionCapabilities(
-  FakeGameSession session, {
-  CitySessionPort? cities,
-  GameSaveSessionPort? save,
-}) => GameSessionCapabilities(
-  map: session,
-  movement: session,
-  combat: session,
-  cities: cities ?? session,
-  logistics: session,
-  workers: session,
-  production: session,
-  artifacts: session,
-  research: session,
-  diplomacy: session,
-  unitActions: session,
-  turns: session,
-  localGame: session,
-  save: save,
-);
