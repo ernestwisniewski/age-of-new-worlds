@@ -2649,4 +2649,10 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String get aiBatterySaverDescription =>
       'Reduziert die taktische Suche während lokaler KI-Züge.';
+
+  @override
+  String get mapAppearanceSettings => 'Kartendarstellung';
+
+  @override
+  String get mapMarkingsSettings => 'Kartenmarkierungen';
 }

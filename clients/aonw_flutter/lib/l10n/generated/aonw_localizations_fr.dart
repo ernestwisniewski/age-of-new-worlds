@@ -2632,4 +2632,10 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String get aiBatterySaverDescription =>
       'Réduit le travail de recherche tactique pendant les tours locaux de l’IA.';
+
+  @override
+  String get mapAppearanceSettings => 'Apparence de la carte';
+
+  @override
+  String get mapMarkingsSettings => 'Repères de la carte';
 }

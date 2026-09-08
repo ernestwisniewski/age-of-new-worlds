@@ -1110,5 +1110,7 @@
   "showMapZoomDescription": "Mostrar el zoom actual mientras el mapa está abierto.",
   "aiSettings": "IA",
   "aiBatterySaver": "Ahorro de batería de IA",
-  "aiBatterySaverDescription": "Reduce la búsqueda táctica durante los turnos locales de la IA."
+  "aiBatterySaverDescription": "Reduce la búsqueda táctica durante los turnos locales de la IA.",
+  "mapAppearanceSettings": "Aspecto del mapa",
+  "mapMarkingsSettings": "Marcadores del mapa"
 }

@@ -639,5 +639,7 @@
   "showMapZoomDescription": "Show the current zoom while the map is open.",
   "aiSettings": "AI",
   "aiBatterySaver": "AI battery saver",
-  "aiBatterySaverDescription": "Reduces tactical search work during local AI turns."
+  "aiBatterySaverDescription": "Reduces tactical search work during local AI turns.",
+  "mapAppearanceSettings": "Map appearance",
+  "mapMarkingsSettings": "Map markings"
 }

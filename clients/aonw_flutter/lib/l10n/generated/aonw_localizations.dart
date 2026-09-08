@@ -2565,6 +2565,18 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Reduces tactical search work during local AI turns.'**
   String get aiBatterySaverDescription;
+
+  /// No description provided for @mapAppearanceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Map appearance'**
+  String get mapAppearanceSettings;
+
+  /// No description provided for @mapMarkingsSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Map markings'**
+  String get mapMarkingsSettings;
 }
 
 class _AonwLocalizationsDelegate

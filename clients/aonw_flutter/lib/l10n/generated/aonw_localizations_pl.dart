@@ -2555,4 +2555,10 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get aiBatterySaverDescription =>
       'Ogranicza wyszukiwanie taktyczne podczas lokalnych tur AI.';
+
+  @override
+  String get mapAppearanceSettings => 'Wygląd mapy';
+
+  @override
+  String get mapMarkingsSettings => 'Oznaczenia mapy';
 }

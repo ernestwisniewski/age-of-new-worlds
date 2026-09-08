@@ -2627,4 +2627,10 @@ class AonwLocalizationsNl extends AonwLocalizations {
   @override
   String get aiBatterySaverDescription =>
       'Vermindert tactisch zoekwerk tijdens lokale AI-beurten.';
+
+  @override
+  String get mapAppearanceSettings => 'Kaartweergave';
+
+  @override
+  String get mapMarkingsSettings => 'Kaartmarkeringen';
 }

@@ -1110,5 +1110,7 @@
   "showMapZoomDescription": "Den aktuellen Zoom bei geöffneter Karte anzeigen.",
   "aiSettings": "KI",
   "aiBatterySaver": "KI-Akkusparmodus",
-  "aiBatterySaverDescription": "Reduziert die taktische Suche während lokaler KI-Züge."
+  "aiBatterySaverDescription": "Reduziert die taktische Suche während lokaler KI-Züge.",
+  "mapAppearanceSettings": "Kartendarstellung",
+  "mapMarkingsSettings": "Kartenmarkierungen"
 }

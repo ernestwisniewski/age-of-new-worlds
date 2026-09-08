@@ -1110,5 +1110,7 @@
   "showMapZoomDescription": "Toon de huidige zoom wanneer de kaart geopend is.",
   "aiSettings": "AI",
   "aiBatterySaver": "AI-batterijbesparing",
-  "aiBatterySaverDescription": "Vermindert tactisch zoekwerk tijdens lokale AI-beurten."
+  "aiBatterySaverDescription": "Vermindert tactisch zoekwerk tijdens lokale AI-beurten.",
+  "mapAppearanceSettings": "Kaartweergave",
+  "mapMarkingsSettings": "Kaartmarkeringen"
 }

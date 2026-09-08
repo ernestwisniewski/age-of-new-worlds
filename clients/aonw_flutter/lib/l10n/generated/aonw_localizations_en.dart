@@ -2548,4 +2548,10 @@ class AonwLocalizationsEn extends AonwLocalizations {
   @override
   String get aiBatterySaverDescription =>
       'Reduces tactical search work during local AI turns.';
+
+  @override
+  String get mapAppearanceSettings => 'Map appearance';
+
+  @override
+  String get mapMarkingsSettings => 'Map markings';
 }

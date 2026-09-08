@@ -24,7 +24,8 @@ void main() {
 
     expect(find.text('Audio'), findsOneWidget);
     expect(find.text('Camera'), findsOneWidget);
-    expect(find.text('Map'), findsOneWidget);
+    expect(find.text('Map appearance'), findsOneWidget);
+    expect(find.text('Map markings'), findsOneWidget);
     expect(find.text('Animations'), findsOneWidget);
     expect(find.text('Accessibility'), findsOneWidget);
 

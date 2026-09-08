@@ -13,6 +13,7 @@ import 'client_settings_controller.dart';
 import 'window_settings_controller.dart';
 import 'window_settings_host.dart';
 
+part 'settings_map.dart';
 part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
 part 'settings_ai.dart';
@@ -86,8 +87,13 @@ final class _SettingsForm extends StatelessWidget {
     return [
       ..._accessibilitySections(context),
       _SettingsSection(
-        title: l10n.mapSettings,
-        child: _MapSettings(settings: settings, onChanged: onChanged),
+        title: l10n.mapAppearanceSettings,
+        child: _MapAppearanceSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.mapMarkingsSettings,
+        child: _MapMarkingsSettings(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
       _SettingsSection(
@@ -148,62 +154,6 @@ final class _SettingsForm extends StatelessWidget {
       const SizedBox(height: AonwSpacing.md),
       const _WindowSettings(),
     ];
-  }
-}
-
-final class _MapSettings extends StatelessWidget {
-  const _MapSettings({required this.settings, required this.onChanged});
-
-  final ClientSettings settings;
-  final ValueChanged<ClientSettings> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    return Column(
-      children: [
-        _MapSetting(
-          key: const ValueKey('map-grid-setting'),
-          title: l10n.mapGrid,
-          description: l10n.mapGridDescription,
-          value: settings.showMapGrid,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapGrid: value)),
-        ),
-        _MapSetting(
-          key: const ValueKey('map-resource-icons-setting'),
-          title: l10n.mapResourceIcons,
-          description: l10n.mapResourceIconsDescription,
-          value: settings.showMapResourceIcons,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapResourceIcons: value)),
-        ),
-        _MapSetting(
-          key: const ValueKey('map-terrain-icons-setting'),
-          title: l10n.mapTerrainIcons,
-          description: l10n.mapTerrainIconsDescription,
-          value: settings.showMapTerrainIcons,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapTerrainIcons: value)),
-        ),
-        _MapSetting(
-          key: const ValueKey('map-height-badges-setting'),
-          title: l10n.mapHeightBadges,
-          description: l10n.mapHeightBadgesDescription,
-          value: settings.showMapHeightBadges,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapHeightBadges: value)),
-        ),
-        _MapSetting(
-          key: const ValueKey('map-elevation-walls-setting'),
-          title: l10n.mapElevationWalls,
-          description: l10n.mapElevationWallsDescription,
-          value: settings.showMapElevationWalls,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapElevationWalls: value)),
-        ),
-      ],
-    );
   }
 }
 
