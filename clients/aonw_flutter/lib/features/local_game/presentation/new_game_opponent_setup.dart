@@ -155,6 +155,9 @@ final class _OpponentCard extends StatelessWidget {
 
   Widget _countryField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalPlayerCountryView>(
+        isExpanded: true,
+        isDense: false,
+        itemHeight: null,
         key: ValueKey(('opponent-country', index, opponent.country)),
         initialValue: opponent.country,
         decoration: InputDecoration(
@@ -176,6 +179,9 @@ final class _OpponentCard extends StatelessWidget {
 
   Widget _difficultyField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalAiDifficultyView>(
+        isExpanded: true,
+        isDense: false,
+        itemHeight: null,
         key: ValueKey(('difficulty', index, opponent.difficulty)),
         initialValue: opponent.difficulty,
         decoration: InputDecoration(labelText: l10n.aiDifficultyLabel),
@@ -193,6 +199,9 @@ final class _OpponentCard extends StatelessWidget {
 
   Widget _personaField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalAiPersonaView>(
+        isExpanded: true,
+        isDense: false,
+        itemHeight: null,
         key: ValueKey(('persona', index, opponent.persona)),
         initialValue: opponent.persona,
         decoration: InputDecoration(labelText: l10n.aiPersonaLabel),

@@ -175,6 +175,9 @@ final class NewGameSetupStep extends StatelessWidget {
 
   Widget _scenarioField(BuildContext context, AonwLocalizations l10n) =>
       DropdownButtonFormField<LocalGameCatalogEntryView>(
+        isExpanded: true,
+        isDense: false,
+        itemHeight: null,
         key: ValueKey(('scenario', scenario.id)),
         initialValue: scenario,
         decoration: InputDecoration(labelText: l10n.scenarioLabel),
@@ -200,6 +203,9 @@ final class NewGameSetupStep extends StatelessWidget {
     required LocalPlayerCountryView value,
     required ValueChanged<LocalPlayerCountryView> onChanged,
   }) => DropdownButtonFormField<LocalPlayerCountryView>(
+    isExpanded: true,
+    isDense: false,
+    itemHeight: null,
     key: ValueKey((keyName, value)),
     initialValue: value,
     decoration: InputDecoration(labelText: label),

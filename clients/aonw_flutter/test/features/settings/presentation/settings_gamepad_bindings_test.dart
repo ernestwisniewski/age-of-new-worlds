@@ -15,22 +15,18 @@ import '../../../support/map_test_fixture.dart';
 import '../../../support/recording_game_audio.dart';
 
 void main() {
-  for (final locale in const [Locale('en'), Locale('pl')]) {
+  for (final (locale, none, assigned, stick) in const [
+    (Locale('en'), 'Unassigned', 'Assigned to:', 'Left stick X'),
+    (Locale('pl'), 'Bez przypisania', 'Przypisano do:', 'Lewy drążek X'),
+    (Locale('fr'), 'Non affecté', 'Affecté à :', 'Stick gauche, axe X'),
+  ]) {
     testWidgets(
       'edits and resets bindings with visible displaced actions in $locale',
       (tester) async {
         final h = await _Harness.mount(tester, locale: locale);
-        final none = locale.languageCode == 'pl'
-            ? 'Bez przypisania'
-            : 'Unassigned';
         expect(h.fieldText('button-cancel'), contains('B / Back'));
         await h.open(tester, 'button-confirm');
-        expect(
-          find.textContaining(
-            locale.languageCode == 'pl' ? 'Przypisano do:' : 'Assigned to:',
-          ),
-          findsWidgets,
-        );
+        expect(find.textContaining(assigned), findsWidgets);
         await tester.tap(find.text('B').last);
         await tester.pumpAndSettle();
         expect(
@@ -58,13 +54,7 @@ void main() {
         );
         expect(h.fieldText('button-cancel'), contains(none));
         await h.open(tester, 'axis-cameraX');
-        await tester.tap(
-          find
-              .text(
-                locale.languageCode == 'pl' ? 'Lewy drążek X' : 'Left stick X',
-              )
-              .last,
-        );
+        await tester.tap(find.text(stick).last);
         await tester.pumpAndSettle();
         expect(
           h.settings.settings.gamepad.bindings.axisFor(
@@ -143,25 +133,27 @@ void main() {
     await h.unmount(tester);
   });
 
-  testWidgets(
-    'Polish bindings and picker fit a narrow viewport with larger text',
-    (tester) async {
-      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
-      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      final h = await _Harness.mount(
-        tester,
-        locale: const Locale('pl'),
-        size: const Size(390, 844),
-      );
-      await h.open(tester, 'button-primaryAction');
-      expect(tester.takeException(), isNull);
-      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
-      await tester.pumpAndSettle();
-      await h.open(tester, 'axis-cameraY');
-      expect(tester.takeException(), isNull);
-      await h.unmount(tester);
-    },
-  );
+  for (final locale in const [Locale('pl'), Locale('fr')]) {
+    testWidgets(
+      '$locale bindings and picker fit a narrow viewport with larger text',
+      (tester) async {
+        tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final h = await _Harness.mount(
+          tester,
+          locale: locale,
+          size: const Size(390, 844),
+        );
+        await h.open(tester, 'button-primaryAction');
+        expect(tester.takeException(), isNull);
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+        await tester.pumpAndSettle();
+        await h.open(tester, 'axis-cameraY');
+        expect(tester.takeException(), isNull);
+        await h.unmount(tester);
+      },
+    );
+  }
 
   testWidgets('keyboard escape closes the picker without changing bindings', (
     tester,
@@ -221,7 +213,12 @@ final class _Harness {
     await tester.ensureVisible(section);
     await tester.pumpAndSettle();
     await tester.tap(
-      find.descendant(of: section, matching: find.text('Gamepad')),
+      find.descendant(
+        of: section,
+        matching: find.text(
+          locale.languageCode == 'fr' ? 'Manette' : 'Gamepad',
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     return h;

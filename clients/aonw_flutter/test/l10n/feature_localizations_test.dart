@@ -18,21 +18,22 @@ import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:aonw_flutter/features/workers/presentation/worker_copy.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations.dart';
-import 'package:aonw_flutter/l10n/generated/aonw_localizations_en.dart';
-import 'package:aonw_flutter/l10n/generated/aonw_localizations_pl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final localizations = <AonwLocalizations>[
-    AonwLocalizationsEn(),
-    AonwLocalizationsPl(),
-  ];
+  final localizations = AonwLocalizations.supportedLocales
+      .map(lookupAonwLocalizations)
+      .toList();
 
   test('every locale catalog has the complete template key set', () {
     final templateKeys = _messageKeys('lib/l10n/app_en.arb');
-    final polishKeys = _messageKeys('lib/l10n/app_pl.arb');
-
-    expect(polishKeys, templateKeys);
+    for (final locale in AonwLocalizations.supportedLocales) {
+      expect(
+        _messageKeys('lib/l10n/app_${locale.languageCode}.arb'),
+        templateKeys,
+        reason: locale.toString(),
+      );
+    }
   });
 
   test('every feature copy key has an ARB translation', () {

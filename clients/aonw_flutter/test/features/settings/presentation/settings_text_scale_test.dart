@@ -12,7 +12,11 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
-  for (final locale in ['en', 'pl']) {
+  for (final (locale, largeLabel) in const [
+    ('en', 'Extra large (130%)'),
+    ('pl', 'Bardzo duży (130%)'),
+    ('fr', 'Très grand (130%)'),
+  ]) {
     testWidgets('changes text size live, retains route and resets in $locale', (
       tester,
     ) async {
@@ -22,11 +26,7 @@ void main() {
       await _reveal(tester, field);
       await tester.tap(field);
       await tester.pumpAndSettle();
-      await tester.tap(
-        find
-            .text(locale == 'pl' ? 'Bardzo duży (130%)' : 'Extra large (130%)')
-            .last,
-      );
+      await tester.tap(find.text(largeLabel).last);
       await tester.pumpAndSettle();
       expect(h.store.value.textScale, ClientTextScale.extraLarge);
       expect(_scale(tester, field), closeTo(31.2, 1e-9));

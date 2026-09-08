@@ -6,7 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 void main() {
-  for (final locale in ['en', 'pl']) {
+  for (final (locale, title, space) in const [
+    ('en', 'Keyboard', 'Space'),
+    ('pl', 'Klawiatura', 'Spacja'),
+    ('fr', 'Clavier', 'Espace'),
+  ]) {
     testWidgets(
       'keyboard help starts collapsed and scales on mobile in $locale',
       (tester) async {
@@ -28,7 +32,7 @@ void main() {
         await Scrollable.ensureVisible(tester.element(section), alignment: 0.5);
         await tester.pumpAndSettle();
         expect(find.text('[ / ]'), findsNothing);
-        await tester.tap(find.text(locale == 'pl' ? 'Klawiatura' : 'Keyboard'));
+        await tester.tap(find.text(title));
         await tester.pumpAndSettle();
         for (final label in [
           'Enter',
@@ -36,7 +40,7 @@ void main() {
           'I',
           'R',
           '[ / ]',
-          locale == 'pl' ? 'Spacja' : 'Space',
+          space,
           'Esc',
           'Tab / Shift + Tab',
         ]) {

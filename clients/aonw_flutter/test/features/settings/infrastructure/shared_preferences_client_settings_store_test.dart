@@ -12,8 +12,9 @@ void main() {
         preferences: preferences,
       );
       for (final language in [
-        ClientLanguage.polish,
-        ClientLanguage.english,
+        ...ClientLanguage.values.where(
+          (value) => value != ClientLanguage.system,
+        ),
         ClientLanguage.system,
       ]) {
         final settings = ClientSettings.defaults.copyWith(

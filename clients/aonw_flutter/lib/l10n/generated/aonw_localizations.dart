@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'aonw_localizations_en.dart';
+import 'aonw_localizations_fr.dart';
 import 'aonw_localizations_pl.dart';
 
 // ignore_for_file: type=lint
@@ -95,6 +96,7 @@ abstract class AonwLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('fr'),
     Locale('pl'),
   ];
 
@@ -2464,7 +2466,7 @@ class _AonwLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'pl'].contains(locale.languageCode);
+      <String>['en', 'fr', 'pl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AonwLocalizationsDelegate old) => false;
@@ -2475,6 +2477,8 @@ AonwLocalizations lookupAonwLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AonwLocalizationsEn();
+    case 'fr':
+      return AonwLocalizationsFr();
     case 'pl':
       return AonwLocalizationsPl();
   }
