@@ -34,6 +34,7 @@ final class MapInteractionState {
     this.route,
     this.movementPending = false,
     this.moveTargeting = false,
+    this.researchFocused = false,
     this.movementError,
     this.lastMovementExecution,
     this.actionDeck,
@@ -52,6 +53,7 @@ final class MapInteractionState {
   final RoutePlanView? route;
   final bool movementPending;
   final bool moveTargeting;
+  final bool researchFocused;
   final MapMovementFailure? movementError;
   final MoveUnitExecutionView? lastMovementExecution;
   final ActionDeckViewState? actionDeck;
@@ -74,6 +76,7 @@ final class MapInteractionState {
     bool clearRoute = false,
     bool? movementPending,
     bool? moveTargeting,
+    bool? researchFocused,
     MapMovementFailure? movementError,
     bool clearMovementError = false,
     MoveUnitExecutionView? lastMovementExecution,
@@ -100,14 +103,13 @@ final class MapInteractionState {
     reachable: _replaceNullable(this.reachable, reachable, clearReachable),
     route: _replaceNullable(this.route, route, clearRoute),
     movementPending: movementPending ?? this.movementPending,
+    researchFocused: researchFocused ?? this.researchFocused,
     moveTargeting: clearSelectedUnit || clearReachable
         ? false
         : moveTargeting ?? this.moveTargeting,
-    movementError: _replaceNullable(
-      this.movementError,
-      movementError,
-      clearMovementError,
-    ),
+    movementError: clearMovementError
+        ? null
+        : movementError ?? this.movementError,
     lastMovementExecution: lastMovementExecution ?? this.lastMovementExecution,
     actionDeck: _replaceNullable(this.actionDeck, actionDeck, clearActionDeck),
     unitLogistics: _replaceNullable(

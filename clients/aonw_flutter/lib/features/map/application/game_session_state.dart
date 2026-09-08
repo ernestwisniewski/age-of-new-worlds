@@ -114,6 +114,7 @@ final class GameSessionReady extends GameSessionState {
       interaction: identityChanged
           ? interaction.copyWith(
               moveTargeting: false,
+              researchFocused: false,
               worker: interaction.worker?.copyWith(
                 actionsOpen: false,
                 clearPreview: true,

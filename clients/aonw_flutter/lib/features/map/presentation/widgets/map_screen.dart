@@ -90,6 +90,7 @@ final class _MapScreenState extends State<MapScreen>
   var _routeVisible = true;
   var _gamepadAvailable = true;
   var _flameGeneration = 0;
+  var _gamepadOwnerGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
   StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
   final _gamepadCursor = MapGamepadCursor();
@@ -107,7 +108,10 @@ final class _MapScreenState extends State<MapScreen>
     _gamepadTicker = createTicker(_tickGamepad);
     _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
     _gamepadNavigation = MapGamepadNavigation(
-      onOwnerChanged: () => _gamepadFrames.prime(_gamepadInput),
+      onOwnerChanged: () {
+        _gamepadOwnerGeneration += 1;
+        _gamepadFrames.prime(_gamepadInput);
+      },
       returnToMap: _flameFocusNode.requestFocus,
     );
     _flameGame = widget.flameGameFactory();

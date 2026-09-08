@@ -29,7 +29,12 @@ import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
 import '../../save_game/application/local_save_transfer.dart';
 import '../../save_game/application/local_save_workflow.dart';
+import '../../turns/application/pending_turn_navigation.dart';
+import '../../turns/application/turn_action_state.dart';
+import '../../turns/application/turn_session_port.dart';
 import '../../turns/application/turn_workflow.dart';
+import '../../turns/read_model/pending_turn_actions_view.dart';
+import '../../turns/read_model/recipient_turn_view.dart';
 import '../../unit_actions/application/action_deck_state.dart';
 import '../../unit_actions/application/unit_action_command_runner.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
@@ -58,6 +63,7 @@ part 'map_coordinator_local_turns.dart';
 part 'map_coordinator_network.dart';
 part 'map_coordinator_selection.dart';
 part 'map_coordinator_targeting.dart';
+part 'map_coordinator_turn_navigation.dart';
 part 'map_coordinator_movement.dart';
 
 typedef MapDiagnosticReporter =
@@ -134,6 +140,14 @@ final class MapCoordinator {
        _replayCapture = replayCapture,
        _diagnosticReporter = diagnosticReporter ?? _ignoreDiagnostic;
 
+  late final PendingTurnNavigation _turnNavigation = PendingTurnNavigation(
+    session: _capabilities.turns,
+    readState: _turnNavigationState,
+    readScope: _turnNavigationScope,
+    focus: _focusTurnAction,
+    endTurn: endTurn,
+    onFailure: _turnNavigationFailure,
+  );
   final MapSessionPort _session;
   late final HexInspectionWorkflow _hexInspection = HexInspectionWorkflow(
     session: _capabilities.hexInspection,

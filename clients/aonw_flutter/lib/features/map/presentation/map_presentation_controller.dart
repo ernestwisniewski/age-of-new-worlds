@@ -18,6 +18,7 @@ import '../../save_game/application/local_save_state.dart';
 import '../../save_game/application/local_save_store.dart';
 import '../../save_game/application/local_save_summary.dart';
 import '../../save_game/application/local_save_transfer.dart';
+import '../../turns/read_model/pending_turn_actions_view.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/read_model/worker_view.dart';
 import '../application/game_session_capabilities.dart';
@@ -228,6 +229,30 @@ final class MapPresentationController extends ChangeNotifier {
 
   void executeCityAction(CityActionView action) =>
       _coordinator.executeCityAction(action);
+
+  Future<void> navigateTurnActions({
+    required int step,
+    bool endWhenEmpty = false,
+    required bool Function() inputAvailable,
+    void Function(MapHexCoordinate)? onFocus,
+  }) => _coordinator.navigateTurnActions(
+    step: step,
+    endWhenEmpty: endWhenEmpty,
+    inputAvailable: inputAvailable,
+    onFocused: (action) {
+      switch (action) {
+        case PendingUnitTurnActionView(:final coordinate):
+          onFocus?.call(coordinate);
+        case PendingCityProductionTurnActionView(:final coordinate):
+          _interactionSoundSink?.call(GameSoundCue.city);
+          onFocus?.call(coordinate);
+        case PendingResearchTurnActionView():
+          break;
+      }
+    },
+  );
+
+  void closeTurnResearch() => _coordinator.closeTurnResearch();
 
   void endTurn() => _coordinator.endTurn();
 

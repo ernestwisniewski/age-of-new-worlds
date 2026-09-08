@@ -34,6 +34,12 @@ final class MapHudPanels extends StatefulWidget {
 final class _MapHudPanelsState extends State<MapHudPanels> {
   _MapHudPanel? _openPanel;
   var _workerActionsWereOpen = false;
+  var _researchWasFocused = false;
+
+  bool get _researchFocused => switch (widget.controller.state) {
+    GameSessionReady(:final interaction) => interaction.researchFocused,
+    _ => false,
+  };
 
   bool get _workerActionsOpen => switch (widget.controller.state) {
     GameSessionReady(:final interaction) =>
@@ -45,6 +51,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   void initState() {
     super.initState();
     _workerActionsWereOpen = _workerActionsOpen;
+    _researchWasFocused = _researchFocused;
     widget.controller.addListener(_observeWorkerActions);
   }
 
@@ -83,10 +90,16 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     previous.removeListener(_observeWorkerActions);
     widget.controller.addListener(_observeWorkerActions);
     _workerActionsWereOpen = _workerActionsOpen;
+    _researchWasFocused = _researchFocused;
     _openPanel = null;
   }
 
   void _observeWorkerActions() {
+    if (_researchWasFocused != _researchFocused) {
+      _researchWasFocused = _researchFocused;
+      setState(() => _openPanel = null);
+      if (_researchFocused) context.playGameSound(GameSoundCue.technology);
+    }
     final becameOpen = !_workerActionsWereOpen && _workerActionsOpen;
     _workerActionsWereOpen = _workerActionsOpen;
     if (!becameOpen || _openPanel == null) return;
@@ -97,7 +110,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   @override
   Widget build(BuildContext context) {
     final locked = _researchSelectionRequired || _terminal;
-    final effectivePanel = _researchSelectionRequired
+    final effectivePanel = _researchSelectionRequired || _researchFocused
         ? _MapHudPanel.research
         : _terminal
         ? null
@@ -138,6 +151,13 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
 
   void _setOpen(_MapHudPanel panel, bool open) {
     if (_researchSelectionRequired || _terminal) return;
+    if (_researchFocused) {
+      widget.controller.closeTurnResearch();
+      if (!open) {
+        context.playGameSound(GameSoundCue.uiPanelClose);
+        return;
+      }
+    }
     final next = open ? panel : (_openPanel == panel ? null : _openPanel);
     if (next == _openPanel) return;
     final cue = next == _MapHudPanel.research

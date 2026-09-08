@@ -145,6 +145,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   bool get debugViewportActive => _viewportActive;
   @visibleForTesting
   bool get debugEffectsActive => _effectsActive;
+
+  bool get hasActiveUnitEffects => _effectsActive;
   @visibleForTesting
   MapHexCoordinate? debugHexAtScreen(AonwPoint screenPoint) =>
       mapCamera.hexAtScreen(screenPoint);

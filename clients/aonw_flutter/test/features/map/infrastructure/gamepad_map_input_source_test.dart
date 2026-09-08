@@ -94,14 +94,35 @@ void main() {
     await events.close();
   });
 
-  test('ignores unrelated button state', () async {
+  test('Start emits one primary action per press', () async {
     final events = StreamController<NormalizedGamepadEvent>(sync: true);
     final source = GamepadMapInputSource(events: events.stream);
     final inputs = <MapGamepadInput>[];
     final subscription = source.continuousInputs.listen(inputs.add);
 
     events.add(_button(GamepadButton.start, 1));
-    expect(inputs, isEmpty);
+    final frames = MapGamepadFrameController();
+    expect(inputs.single.primaryAction, isTrue);
+    expect(
+      frames.advance(input: inputs.last, dt: 0).primaryActionPressed,
+      isTrue,
+    );
+    expect(
+      frames.advance(input: inputs.last, dt: 1).primaryActionPressed,
+      isFalse,
+    );
+    frames.prime(inputs.last);
+    expect(
+      frames.advance(input: inputs.last, dt: 1).primaryActionPressed,
+      isFalse,
+    );
+    events.add(_button(GamepadButton.start, 0));
+    frames.advance(input: inputs.last, dt: 0);
+    events.add(_button(GamepadButton.start, 1));
+    expect(
+      frames.advance(input: inputs.last, dt: 0).primaryActionPressed,
+      isTrue,
+    );
 
     await subscription.cancel();
     await source.close();

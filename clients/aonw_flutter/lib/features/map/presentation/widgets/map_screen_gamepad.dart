@@ -62,20 +62,73 @@ extension _MapScreenGamepad on _MapScreenState {
     if (!frame.isIdle &&
         _acceptsGamepadInput &&
         !_gamepadNavigation.handleFrame(frame)) {
-      _flameGame.applyGamepadCameraFrame(frame, dt);
-      final cursorStep = frame.cursorStep;
-      if (cursorStep != null) _handleGamepadCommand(cursorStep);
-      if (frame.cancelPressed) _handleGamepadCommand(MapInputCommand.cancel);
-      if (frame.toggleMoveTargetingPressed) {
-        _handleGamepadCommand(MapInputCommand.toggleMoveTargeting);
+      if (_navigateTurnFrame(frame)) {
+        _synchronizeGamepadTicker();
+        return;
       }
-      if (frame.activatePressed) {
-        _handleGamepadCommand(MapInputCommand.activate);
-      }
-      if (frame.inspectHexPressed) {
-        _handleGamepadCommand(MapInputCommand.inspectHex);
-      }
+      _applyMapFrame(frame, dt);
     }
     _synchronizeGamepadTicker();
   }
+
+  void _applyMapFrame(MapGamepadFrame frame, double dt) {
+    _flameGame.applyGamepadCameraFrame(frame, dt);
+    final cursorStep = frame.cursorStep;
+    if (cursorStep != null) _handleGamepadCommand(cursorStep);
+    if (frame.cancelPressed) _handleGamepadCommand(MapInputCommand.cancel);
+    if (frame.toggleMoveTargetingPressed) {
+      _handleGamepadCommand(MapInputCommand.toggleMoveTargeting);
+    }
+    if (frame.activatePressed) {
+      _handleGamepadCommand(MapInputCommand.activate);
+    }
+    if (frame.inspectHexPressed) {
+      _handleGamepadCommand(MapInputCommand.inspectHex);
+    }
+  }
+}
+
+extension _MapScreenTurnInput on _MapScreenState {
+  bool _navigateTurnFrame(MapGamepadFrame frame) {
+    if (!_hasTurnIntent(frame)) return false;
+    if (frame.focusPreviousPressed &&
+        frame.focusNextPressed &&
+        !frame.primaryActionPressed) {
+      return true;
+    }
+    final controller = widget.controller;
+    final generation = _flameGeneration;
+    final ownerGeneration = _gamepadOwnerGeneration;
+    bool available() =>
+        identical(controller, widget.controller) &&
+        generation == _flameGeneration &&
+        ownerGeneration == _gamepadOwnerGeneration &&
+        _turnInputAvailable;
+    unawaited(
+      controller.navigateTurnActions(
+        step: frame.primaryActionPressed || frame.focusNextPressed ? 1 : -1,
+        endWhenEmpty: frame.primaryActionPressed,
+        inputAvailable: available,
+        onFocus: _flameGame.mapCamera.centerOnHex,
+      ),
+    );
+    return true;
+  }
+
+  bool get _turnInputAvailable =>
+      mounted &&
+      _routeVisible &&
+      _lifecycleState == AppLifecycleState.resumed &&
+      _acceptsGamepadInput &&
+      !_gamepadNavigation.capturesInput &&
+      !_flameGame.hasActiveUnitEffects;
+
+  bool _hasTurnIntent(MapGamepadFrame frame) =>
+      !frame.cancelPressed &&
+      !frame.activatePressed &&
+      !frame.inspectHexPressed &&
+      !frame.toggleMoveTargetingPressed &&
+      (frame.primaryActionPressed ||
+          frame.focusPreviousPressed ||
+          frame.focusNextPressed);
 }

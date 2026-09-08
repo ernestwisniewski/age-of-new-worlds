@@ -21,6 +21,7 @@ final class MapGamepadInput {
     this.focusPrevious = false,
     this.focusNext = false,
     this.inspectHex = false,
+    this.primaryAction = false,
     this.toggleMoveTargeting = false,
   });
 
@@ -43,6 +44,7 @@ final class MapGamepadInput {
   final bool focusPrevious;
   final bool focusNext;
   final bool inspectHex;
+  final bool primaryAction;
   final bool toggleMoveTargeting;
 
   double get zoom => zoomIn - zoomOut;
@@ -67,6 +69,7 @@ final class MapGamepadInput {
     bool? focusPrevious,
     bool? focusNext,
     bool? inspectHex,
+    bool? primaryAction,
     bool? toggleMoveTargeting,
   }) => MapGamepadInput(
     cursorX: cursorX ?? this.cursorX,
@@ -86,6 +89,7 @@ final class MapGamepadInput {
     focusPrevious: focusPrevious ?? this.focusPrevious,
     focusNext: focusNext ?? this.focusNext,
     inspectHex: inspectHex ?? this.inspectHex,
+    primaryAction: primaryAction ?? this.primaryAction,
     toggleMoveTargeting: toggleMoveTargeting ?? this.toggleMoveTargeting,
   );
 
@@ -114,6 +118,7 @@ final class MapGamepadInput {
     focusPrevious,
     focusNext,
     inspectHex,
+    primaryAction,
     toggleMoveTargeting,
   );
 }
@@ -135,6 +140,7 @@ final class MapGamepadFrame {
     this.focusPreviousPressed = false,
     this.focusNextPressed = false,
     this.inspectHexPressed = false,
+    this.primaryActionPressed = false,
     this.toggleMoveTargetingPressed = false,
   });
 
@@ -151,6 +157,7 @@ final class MapGamepadFrame {
   final bool focusPreviousPressed;
   final bool focusNextPressed;
   final bool inspectHexPressed;
+  final bool primaryActionPressed;
   final bool toggleMoveTargetingPressed;
 
   bool get isIdle =>
@@ -165,6 +172,7 @@ final class MapGamepadFrame {
       activatePressed ||
       cancelPressed ||
       inspectHexPressed ||
+      primaryActionPressed ||
       toggleMoveTargetingPressed;
   bool get hasFocusAction =>
       hudFocusPreviousPressed ||
@@ -230,6 +238,10 @@ final class MapGamepadFrameController {
         _previous.toggleMoveTargeting,
       ),
       inspectHexPressed: _pressed(input.inspectHex, _previous.inspectHex),
+      primaryActionPressed: _pressed(
+        input.primaryAction,
+        _previous.primaryAction,
+      ),
     );
     _previous = input;
     return frame;

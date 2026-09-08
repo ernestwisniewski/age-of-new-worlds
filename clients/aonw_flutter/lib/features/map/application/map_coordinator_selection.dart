@@ -111,6 +111,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     _setState(
       current.withInteraction(
         current.interaction.copyWith(
+          researchFocused: false,
           clearSelected: true,
           clearSelectedUnit: true,
           clearReachable: true,
@@ -134,6 +135,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     _setState(
       current.withInteraction(
         current.interaction.copyWith(
+          researchFocused: false,
           selected: coordinate,
           clearSelectedUnit: true,
           clearReachable: true,
@@ -162,6 +164,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     _setState(
       current.withInteraction(
         current.interaction.copyWith(
+          researchFocused: false,
           selected: coordinate,
           clearSelectedUnit: true,
           clearReachable: true,
@@ -211,6 +214,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     _setState(
       current.withInteraction(
         current.interaction.copyWith(
+          researchFocused: false,
           selected: coordinate,
           selectedUnitId: unitId,
           actionDeck: ActionDeckViewState(unitId: unitId),
@@ -237,11 +241,10 @@ extension MapCoordinatorSelection on MapCoordinator {
         ),
       ),
     );
-    final reachable = _movement.reachable(
+    final completion = await _movement.reachable(
       expectedRevision: current.recipient.stamp.revision,
       unitId: unitId,
     );
-    final completion = await reachable;
     final ready = _currentInteraction(generation);
     if (ready == null) return;
     _publishSelectedUnitReachability(
