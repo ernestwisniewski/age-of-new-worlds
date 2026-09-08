@@ -4,6 +4,7 @@ mod query;
 mod transition;
 mod turn;
 
+pub(crate) use command::player_action_lifecycle_rejection;
 pub use command::{CanonicalEngineError, EventBudget, PlayerCommand};
 pub use logistics::{
     AutoExplorePlannedEvent, LogisticsExecution, MerchantRouteAssignedEvent,

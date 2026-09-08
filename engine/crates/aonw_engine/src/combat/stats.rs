@@ -1,3 +1,6 @@
+mod base;
+pub(super) use base::for_unit as base_for_unit;
+
 use aonw_content::{RulesetDefinition, TerrainType};
 use aonw_domain::{City, GameState, TroopKind, Unit, UnitKind, WorldArtifactLocation};
 
@@ -23,21 +26,7 @@ pub(super) fn for_unit(
 ) -> Option<EffectiveCombatStats> {
     let definition = ruleset.unit(unit.kind())?;
     let base = definition.combat();
-    let (mut base_attack, mut base_defense, mut base_hit_points) =
-        (base.attack(), base.defense(), base.hit_points());
-    if unit.kind() == UnitKind::Commander {
-        for troop in unit.army() {
-            let troop_stats = match troop.kind() {
-                TroopKind::Warrior => (2, 2, 3),
-                TroopKind::Archer => (2, 1, 2),
-                TroopKind::Settler => (0, 1, 1),
-            };
-            let count = troop.count();
-            base_attack += troop_stats.0 * i32::try_from(count).ok()?;
-            base_defense += troop_stats.1 * i32::try_from(count).ok()?;
-            base_hit_points = base_hit_points.checked_add(troop_stats.2 * count)?;
-        }
-    }
+    let (base_attack, base_defense, base_hit_points) = base_for_unit(ruleset, unit)?;
     let mut modifiers = Vec::new();
     terrain_modifiers(situation.terrain_tags, &mut modifiers);
     counter_modifiers(

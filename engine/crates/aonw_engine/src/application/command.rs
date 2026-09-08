@@ -376,7 +376,7 @@ impl GameEngine {
     }
 }
 
-fn player_action_lifecycle_rejection(
+pub(crate) fn player_action_lifecycle_rejection(
     state: &GameState,
     actor_player_id: &PlayerId,
     boundary_can_act: bool,

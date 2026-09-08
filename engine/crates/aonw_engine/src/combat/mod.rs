@@ -3,6 +3,7 @@ mod resolution;
 mod rng;
 mod stats;
 mod threat;
+mod unit_profile;
 
 pub use model::{
     AttackHexCommand, CombatExecution, CombatModifier, CombatModifierKind, CombatOutcome,
@@ -23,28 +24,8 @@ use crate::{CommandRejectionCode, DiplomacyPolicyQuery, DomainEvent, EngineConte
 
 use resolution::{refresh_batch_visibility, resolve, resolve_intended};
 
-/// Returns current authoritative maximum health, including persistent modifiers
-/// but independent of a particular opponent and terrain.
-#[must_use]
-pub fn unit_max_hit_points(
-    state: &GameState,
-    ruleset: &RulesetDefinition,
-    unit: &Unit,
-) -> Option<u32> {
-    stats::for_unit(
-        state,
-        ruleset,
-        unit,
-        stats::UnitCombatSituation {
-            opponent: None,
-            defended_city: None,
-            attacker: false,
-            terrain_tags: &[],
-            opponent_terrain_tags: &[],
-        },
-    )
-    .map(|stats| stats.hit_points)
-}
+pub(crate) use unit_profile::unit_base_attack;
+pub use unit_profile::unit_max_hit_points;
 
 pub(crate) struct CombatUpdate {
     pub revision: StateRevision,

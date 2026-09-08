@@ -9,6 +9,14 @@ const CITY_CENTER_VISION_RANGE: u32 = 2;
 const CONTROLLED_HEX_VISION_RANGE: u32 = 0;
 const MAX_VISION_RANGE: u32 = 3;
 
+pub(crate) fn visible_from_unit(map: &MapDefinition, unit: &Unit) -> Vec<HexCoord> {
+    let observer_height = map
+        .tile_at(unit.position())
+        .map_or(0, aonw_content::TileDefinition::height);
+    let range = (UNIT_VISION_RANGE + u32::from(observer_height / 2)).min(MAX_VISION_RANGE);
+    visible_from_source(map, unit.position(), range, observer_height)
+}
+
 pub(crate) fn recompute_after_move(
     current: &FogOfWar,
     map: &MapDefinition,
@@ -49,16 +57,7 @@ fn recompute_for_player<'unit>(
         .into_iter()
         .filter(|unit| unit.owner_player_id() == player_id)
     {
-        let observer_height = map
-            .tile_at(unit.position())
-            .map_or(0, aonw_content::TileDefinition::height);
-        let range = (UNIT_VISION_RANGE + u32::from(observer_height / 2)).min(MAX_VISION_RANGE);
-        visible.extend(visible_from_source(
-            map,
-            unit.position(),
-            range,
-            observer_height,
-        ));
+        visible.extend(visible_from_unit(map, unit));
     }
     for city in cities
         .iter()

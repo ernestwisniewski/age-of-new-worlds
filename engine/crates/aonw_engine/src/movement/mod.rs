@@ -5,6 +5,7 @@ mod compiled_map;
 mod cost;
 mod detachment;
 mod fog;
+pub(crate) use fog::visible_from_unit;
 mod logistics;
 mod merchant;
 mod metrics;

@@ -17,6 +17,7 @@ mod hex_inspection;
 mod match_start;
 mod movement;
 mod outcome;
+mod pending_turn_actions;
 mod production;
 mod research;
 mod state_digest;
@@ -93,6 +94,9 @@ pub use outcome::{
     CulturalVictoryProgress, DominationVictoryProgress, MapObjectiveProgress,
     OutcomeResolutionError, VictoryProgress, calculate_empire_scores, calculate_victory_progress,
     resolve_game_outcome,
+};
+pub use pending_turn_actions::{
+    PendingTurnAction, PendingTurnActions, PendingTurnActionsError, PendingTurnActionsQuery,
 };
 pub use production::{
     CitySpecializationOption, ProductionError, ProductionOption, ProductionOptions,
