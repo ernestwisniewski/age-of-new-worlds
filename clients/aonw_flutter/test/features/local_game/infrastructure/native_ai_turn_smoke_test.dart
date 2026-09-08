@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_engine_client/aonw_engine_client.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
 import 'package:aonw_flutter/features/map/infrastructure/engine_game_session_gateway.dart';
@@ -83,7 +85,14 @@ void main() {
   test(
     'completes a bounded multi-turn AI soak through the native client',
     () async {
-      final gateway = EngineGameSessionGateway(assets: _FileAssetBundle());
+      final requests = <Map<String, dynamic>>[];
+      final gateway = EngineGameSessionGateway(
+        assets: _FileAssetBundle(),
+        sessionFactory: () async {
+          final native = await createAonwEngineSession();
+          return native == null ? null : _RecordedAiSession(native, requests);
+        },
+      );
       addTearDown(gateway.close);
       var player = (await gateway.startLocalMatch(_setup())).player;
       var completedTurns = 0;
@@ -100,6 +109,7 @@ void main() {
           LocalAiTurnRequestView(
             aiPlayerId: 'player-2',
             humanPlayerId: 'player-1',
+            runtimeProfile: LocalAiRuntimeProfileView.values[turn % 2],
           ),
         );
         expect(execution.completedTurn, isTrue);
@@ -111,6 +121,14 @@ void main() {
       }
 
       expect(completedTurns, greaterThanOrEqualTo(4));
+      expect(requests.map((request) => request['runtimeProfile']), [
+        for (var turn = 0; turn < completedTurns; turn += 1)
+          LocalAiRuntimeProfileView.values[turn % 2].name,
+      ]);
+      expect(
+        requests.map((request) => request['commandBudget']),
+        everyElement(256),
+      );
     },
   );
 }
@@ -143,4 +161,22 @@ final class _FileAssetBundle extends CachingAssetBundle {
     final bytes = await File(key).readAsBytes();
     return ByteData.sublistView(Uint8List.fromList(bytes));
   }
+}
+
+final class _RecordedAiSession implements AonwEngineSession {
+  _RecordedAiSession(this.delegate, this.requests);
+  final AonwEngineSession delegate;
+  final List<Map<String, dynamic>> requests;
+
+  @override
+  Future<String> requestJson(String source) {
+    final request =
+        (jsonDecode(source) as Map<String, dynamic>)['request']
+            as Map<String, dynamic>;
+    if (request['type'] == 'advanceAiTurn') requests.add(request);
+    return delegate.requestJson(source);
+  }
+
+  @override
+  Future<void> close() => delegate.close();
 }

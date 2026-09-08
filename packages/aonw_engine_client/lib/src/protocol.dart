@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aonw_engine_client/src/api.dart';
 import 'package:aonw_engine_client/src/native_identity.dart';
+import 'package:aonw_engine_client/src/protocol_ai.dart';
 import 'package:aonw_engine_client/src/protocol_city_view.dart';
 import 'package:aonw_engine_client/src/protocol_coordinate.dart';
 import 'package:aonw_engine_client/src/protocol_diplomacy.dart';
@@ -12,6 +13,7 @@ import 'package:aonw_engine_client/src/protocol_research_values.dart';
 import 'package:aonw_engine_client/src/protocol_response.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
+export 'protocol_ai.dart';
 export 'protocol_artifact.dart';
 export 'protocol_city_view.dart';
 export 'protocol_coordinate.dart';
@@ -84,10 +86,12 @@ final class AonwClientRequest {
   factory AonwClientRequest.advanceAiTurn({
     required String actorPlayerId,
     required int commandBudget,
+    AonwAiRuntimeProfile runtimeProfile = AonwAiRuntimeProfile.standard,
   }) => AonwClientRequest._({
     'type': 'advanceAiTurn',
     'actorPlayerId': actorPlayerId,
     'commandBudget': commandBudget,
+    'runtimeProfile': runtimeProfile.name,
   });
 
   factory AonwClientRequest.closeSession() =>

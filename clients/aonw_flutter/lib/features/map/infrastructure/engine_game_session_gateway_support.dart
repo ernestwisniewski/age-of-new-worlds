@@ -53,6 +53,11 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
         AonwClientRequest.advanceAiTurn(
           actorPlayerId: request.aiPlayerId,
           commandBudget: request.commandBudget,
+          runtimeProfile: switch (request.runtimeProfile) {
+            LocalAiRuntimeProfileView.standard => AonwAiRuntimeProfile.standard,
+            LocalAiRuntimeProfileView.batterySaver =>
+              AonwAiRuntimeProfile.batterySaver,
+          },
         ),
       );
       _ensureCurrentSession(context);

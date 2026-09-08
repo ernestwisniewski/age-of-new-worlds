@@ -1,8 +1,8 @@
+mod ai_turn;
 mod decode;
 mod encode;
 mod persistence_open;
 
-use core::num::NonZeroU32;
 use std::fmt::Write as _;
 
 use aonw_contracts::MatchIdentityDto;
@@ -11,9 +11,10 @@ use aonw_contracts::client::{
     ClientRequestBodyDto, ClientRequestDto, ClientResponseBodyDto, ClientResponseDto,
 };
 
-use crate::{AiTurnDriver, LocalRuntime, MAX_AI_TURN_COMMAND_BUDGET, RuntimeError};
+use crate::{AiTurnDriver, LocalRuntime, RuntimeError};
 use sha2::{Digest, Sha256};
 
+use ai_turn::dispatch_ai_turn;
 use decode::DecodedCommand;
 
 /// Framework-neutral dispatcher for the shared Godot and Flutter client protocol.
@@ -114,7 +115,14 @@ impl ClientProtocol {
             ClientRequestBodyDto::AdvanceAiTurn {
                 actor_player_id,
                 command_budget,
-            } => dispatch_ai_turn(runtime, actor_player_id, command_budget, ai_driver),
+                runtime_profile,
+            } => dispatch_ai_turn(
+                runtime,
+                actor_player_id,
+                command_budget,
+                runtime_profile,
+                ai_driver,
+            ),
             ClientRequestBodyDto::Snapshot => match runtime.snapshot() {
                 Ok(snapshot) => success(ClientResponseBodyDto::Snapshot {
                     snapshot: encode::snapshot(&snapshot),
@@ -252,58 +260,6 @@ fn dispatch_handoff(runtime: &mut LocalRuntime, actor_player_id: String) -> Clie
             }),
             Err(error) => failure("actor_handoff_failed", error),
         },
-        Err(error) => failure("invalid_actor_player_id", error),
-    }
-}
-
-fn dispatch_ai_turn(
-    runtime: &mut LocalRuntime,
-    actor_player_id: String,
-    command_budget: u32,
-    ai_driver: Option<&mut dyn AiTurnDriver>,
-) -> ClientResponseDto {
-    let Some(driver) = ai_driver else {
-        return failure(
-            "ai_driver_unavailable",
-            "this protocol dispatcher has no AI driver",
-        );
-    };
-    let Some(command_budget) = NonZeroU32::new(command_budget) else {
-        return failure(
-            "invalid_ai_command_budget",
-            "command budget must be positive",
-        );
-    };
-    if command_budget.get() > MAX_AI_TURN_COMMAND_BUDGET {
-        return failure(
-            "invalid_ai_command_budget",
-            format!("command budget must not exceed {MAX_AI_TURN_COMMAND_BUDGET}"),
-        );
-    }
-    match aonw_domain::PlayerId::new(actor_player_id) {
-        Ok(actor) => {
-            let response_actor = actor.as_str().to_owned();
-            match runtime.advance_ai_turn_observed(
-                actor,
-                command_budget,
-                crate::AiRuntimeProfile::Standard,
-                driver,
-            ) {
-                Ok(observed) => success(ClientResponseBodyDto::AiTurnAdvanced {
-                    stamp: encode::stamp(observed.execution.stamp),
-                    actor_player_id: response_actor,
-                    recipient_player_id: observed.recipient_player_id.as_str().to_owned(),
-                    executed_commands: observed.execution.executed_commands,
-                    completed_turn: observed.execution.completed_turn,
-                    commands: observed
-                        .commands
-                        .iter()
-                        .map(encode::command_result)
-                        .collect(),
-                }),
-                Err(error) => failure("ai_turn_failed", error),
-            }
-        }
         Err(error) => failure("invalid_actor_player_id", error),
     }
 }

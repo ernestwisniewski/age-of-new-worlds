@@ -13,6 +13,7 @@ fn protocol_delivers_recipient_frames_for_ai_and_sequential_replay() {
     let request = request_json(ClientRequestBodyDto::AdvanceAiTurn {
         actor_player_id: "ai".to_owned(),
         command_budget: 3,
+        runtime_profile: aonw_contracts::client::ClientAiRuntimeProfileDto::Standard,
     });
     let json =
         ClientProtocol::dispatch_json_with_ai(&mut runtime, &request, &mut ScriptedDriver::new(3));

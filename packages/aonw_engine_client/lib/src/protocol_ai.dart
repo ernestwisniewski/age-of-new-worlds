@@ -1,0 +1,1 @@
+enum AonwAiRuntimeProfile { standard, batterySaver }

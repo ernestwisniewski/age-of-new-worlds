@@ -12,7 +12,8 @@ pub use map::{
     MapViewDto,
 };
 pub use request::{
-    ClientCommandDto, ClientFogModeDto, ClientQueryDto, ClientRequestBodyDto, ClientRequestDto,
+    ClientAiRuntimeProfileDto, ClientCommandDto, ClientFogModeDto, ClientQueryDto,
+    ClientRequestBodyDto, ClientRequestDto,
 };
 pub use response::{
     AutoExploreOptionDto, CityExpansionCandidateDto, CityFoundingDraftViewDto,
@@ -42,7 +43,7 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 22;
+pub const CLIENT_API_VERSION: u16 = 23;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

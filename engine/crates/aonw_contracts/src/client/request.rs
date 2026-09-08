@@ -68,6 +68,8 @@ pub enum ClientRequestBodyDto {
         actor_player_id: String,
         /// Maximum number of authoritative commands for this turn.
         command_budget: u32,
+        /// Deterministic planning effort for this request.
+        runtime_profile: ClientAiRuntimeProfileDto,
     },
     /// Returns a complete recipient-safe snapshot.
     Snapshot,
@@ -408,3 +410,13 @@ pub enum ClientCommandDto {
 
 mod query;
 pub use query::ClientQueryDto;
+
+/// Deterministic planning effort for a local AI turn.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ClientAiRuntimeProfileDto {
+    /// Reviewed search budget for the saved difficulty.
+    Standard,
+    /// Reduced search work with the same complete-turn command budget.
+    BatterySaver,
+}

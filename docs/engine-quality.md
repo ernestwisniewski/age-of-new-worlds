@@ -26,7 +26,9 @@ explicitly. Rejections leave canonical state unchanged.
 
 ## AI planning effort
 
-`AiRuntimeProfile` is an explicit input to each Rust AI turn. `Standard` keeps
+`AiRuntimeProfile` is an explicit input to each Rust AI turn. Client API 23
+requires `runtimeProfile` (`standard` or `batterySaver`) on `advanceAiTurn`;
+unknown, absent, or malformed values fail before actor handoff or execution. `Standard` keeps
 its difficulty's reviewed tactical budget. `BatterySaver` halves MCTS iterations,
 retained nodes, and depth, retaining at least one iteration, two nodes, and one
 level. Easy play continues without tactical search. Difficulty weights, persona,

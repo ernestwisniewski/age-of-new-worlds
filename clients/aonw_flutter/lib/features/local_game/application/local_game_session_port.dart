@@ -178,11 +178,14 @@ final class LocalMatchControlPlanView {
   }
 }
 
+enum LocalAiRuntimeProfileView { standard, batterySaver }
+
 final class LocalAiTurnRequestView {
   LocalAiTurnRequestView({
     required String aiPlayerId,
     required String humanPlayerId,
     int commandBudget = 256,
+    this.runtimeProfile = LocalAiRuntimeProfileView.standard,
   }) : aiPlayerId = _requireIdentifier(aiPlayerId, 'aiPlayerId'),
        humanPlayerId = _requireIdentifier(humanPlayerId, 'humanPlayerId'),
        commandBudget = _requirePositive(commandBudget, 'commandBudget');
@@ -190,6 +193,7 @@ final class LocalAiTurnRequestView {
   final String aiPlayerId;
   final String humanPlayerId;
   final int commandBudget;
+  final LocalAiRuntimeProfileView runtimeProfile;
 }
 
 final class LocalAiTurnExecutionView {
