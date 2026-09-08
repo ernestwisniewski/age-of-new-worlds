@@ -12,6 +12,7 @@ extension _MapScreenLifecycle on _MapScreenState {
 
   void _setRouteVisible(bool visible) {
     if (_routeVisible == visible) return;
+    _invalidateKeyboardInput();
     _routeVisible = visible;
     _synchronizeFlameLifecycle();
   }

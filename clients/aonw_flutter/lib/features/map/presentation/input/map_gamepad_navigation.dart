@@ -62,8 +62,19 @@ final class MapGamepadNavigation extends ChangeNotifier {
   FocusNode? get highlighted => _highlighted;
   bool get capturesInput => _capture != null || _active;
 
-  MapEntry<Object, MapGamepadRegionEntry>? get _capture {
-    if (!_available) return null;
+  bool get hasOpenPanel => _topPanel != null;
+
+  bool handlePanelKeyboardCommand(MapInputCommand command) {
+    final panel = _topPanel;
+    if (_disposed || panel == null) return false;
+    if (command == MapInputCommand.cancel) panel.value.onCancel?.call();
+    return true;
+  }
+
+  MapEntry<Object, MapGamepadRegionEntry>? get _capture =>
+      _available ? _topPanel : null;
+
+  MapEntry<Object, MapGamepadRegionEntry>? get _topPanel {
     MapEntry<Object, MapGamepadRegionEntry>? result;
     for (final entry in _entries.entries.toList().reversed) {
       if (entry.value.priority.index >
@@ -89,7 +100,7 @@ final class MapGamepadNavigation extends ChangeNotifier {
   }
 
   void _synchronizeOwner({bool force = false}) {
-    final next = _capture?.key ?? (_active ? this : null);
+    final next = _topPanel?.key ?? (_active ? this : null);
     if (!force && identical(next, _owner)) return;
     _restoreMapFocus =
         _available &&

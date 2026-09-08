@@ -906,7 +906,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get mapInputHint =>
-      'Use the arrow keys or D-pad to move the map cursor and Enter or A to select.';
+      'Use WASD or arrow keys to pan the camera, Enter to select, M for movement, I to inspect, R to switch map views, brackets for pending actions, and Space for the next action or to end the turn. Use Tab to focus controls.';
 
   @override
   String get noHexSelected => 'No hex selected';
@@ -2411,4 +2411,48 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get gamepadControlRightTrigger => 'Right trigger (RT)';
+
+  @override
+  String get keyboardSettings => 'Keyboard';
+
+  @override
+  String get keyboardScope =>
+      'Map shortcuts work while the map has keyboard focus. Click the map to return focus to it.';
+
+  @override
+  String get keyboardPanKeys => 'W / A / S / D or arrow keys';
+
+  @override
+  String get keyboardPan => 'Pan the camera';
+
+  @override
+  String get keyboardSelect =>
+      'Select the hex under the pointer, or the current selection';
+
+  @override
+  String get keyboardMove => 'Toggle movement targeting for the selected unit';
+
+  @override
+  String get keyboardInspect =>
+      'Inspect the hex under the pointer, the selected hex, or the center of the view';
+
+  @override
+  String get keyboardMapMode => 'Switch between graphic and tile map views';
+
+  @override
+  String get keyboardPending => 'Previous / next pending turn action';
+
+  @override
+  String get keyboardSpace => 'Space';
+
+  @override
+  String get keyboardPrimary =>
+      'Go to the next pending action; end the turn when none remain';
+
+  @override
+  String get keyboardCancel =>
+      'Close the active panel or cancel the current interaction';
+
+  @override
+  String get keyboardFocus => 'Focus the next / previous control';
 }

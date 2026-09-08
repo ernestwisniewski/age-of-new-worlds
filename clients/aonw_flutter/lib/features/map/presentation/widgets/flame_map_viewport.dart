@@ -11,12 +11,15 @@ import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/map_view_mode.dart';
 import '../input/map_input.dart';
+import '../input/map_keyboard_shortcuts.dart';
 
 final class FlameMapViewport extends StatefulWidget {
   const FlameMapViewport({
     required this.scene,
     required this.interaction,
     required this.onInput,
+    required this.onTurnShortcut,
+    required this.canPan,
     required this.game,
     required this.generation,
     required this.focusNode,
@@ -27,6 +30,8 @@ final class FlameMapViewport extends StatefulWidget {
   final MapScene scene;
   final MapInteractionState interaction;
   final ValueChanged<MapInputCommand> onInput;
+  final ValueChanged<MapTurnShortcut> onTurnShortcut;
+  final bool Function() canPan;
   final AonwFlameGame game;
   final int generation;
   final FocusNode focusNode;
@@ -47,13 +52,6 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
     LogicalKeyboardKey.arrowRight,
     LogicalKeyboardKey.keyD,
   };
-  static final _commandsByKey = <LogicalKeyboardKey, MapInputCommand>{
-    LogicalKeyboardKey.enter: MapInputCommand.activate,
-    LogicalKeyboardKey.space: MapInputCommand.activate,
-    LogicalKeyboardKey.escape: MapInputCommand.cancel,
-    LogicalKeyboardKey.keyR: MapInputCommand.toggleMapViewMode,
-  };
-
   final Set<LogicalKeyboardKey> _pressedPanKeys = {};
 
   @override
@@ -135,8 +133,13 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
 
   KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
     final key = event.logicalKey;
+    if (MapKeyboardShortcuts.hasModifiers) {
+      _pressedPanKeys.clear();
+      _synchronizeKeyboardPan();
+      return KeyEventResult.ignored;
+    }
     if (_panKeys.contains(key)) {
-      if (event is KeyUpEvent) {
+      if (!widget.canPan() || event is KeyUpEvent) {
         _pressedPanKeys.remove(key);
       } else if (event is KeyDownEvent || event is KeyRepeatEvent) {
         _pressedPanKeys.add(key);
@@ -144,10 +147,12 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
       _synchronizeKeyboardPan();
       return KeyEventResult.handled;
     }
-    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
-      return KeyEventResult.ignored;
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    if (MapKeyboardShortcuts.turns[key] case final shortcut?) {
+      widget.onTurnShortcut(shortcut);
+      return KeyEventResult.handled;
     }
-    final command = _commandsByKey[key];
+    final command = MapKeyboardShortcuts.commands[key];
     if (command == null) return KeyEventResult.ignored;
     widget.onInput(command);
     return KeyEventResult.handled;
@@ -160,6 +165,7 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
   }
 
   void _synchronizeKeyboardPan() {
+    if (!widget.canPan()) _pressedPanKeys.clear();
     final x = _axis(
       negative: const [LogicalKeyboardKey.keyA, LogicalKeyboardKey.arrowLeft],
       positive: const [LogicalKeyboardKey.keyD, LogicalKeyboardKey.arrowRight],

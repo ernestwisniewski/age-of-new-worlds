@@ -14,6 +14,7 @@ part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
 part 'settings_audio.dart';
 part 'settings_gamepad.dart';
+part 'settings_keyboard.dart';
 part 'settings_gamepad_bindings.dart';
 part 'settings_gamepad_labels.dart';
 
@@ -95,6 +96,8 @@ final class _SettingsForm extends StatelessWidget {
       ),
       const SizedBox(height: AonwSpacing.md),
       _GamepadSettings(settings: settings, onChanged: onChanged),
+      const SizedBox(height: AonwSpacing.md),
+      const _KeyboardSettings(),
       const SizedBox(height: AonwSpacing.lg),
       OutlinedButton.icon(
         key: const ValueKey('reset-settings'),

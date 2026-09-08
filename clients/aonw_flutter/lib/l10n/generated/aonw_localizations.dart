@@ -1367,7 +1367,7 @@ abstract class AonwLocalizations {
   /// No description provided for @mapInputHint.
   ///
   /// In en, this message translates to:
-  /// **'Use the arrow keys or D-pad to move the map cursor and Enter or A to select.'**
+  /// **'Use WASD or arrow keys to pan the camera, Enter to select, M for movement, I to inspect, R to switch map views, brackets for pending actions, and Space for the next action or to end the turn. Use Tab to focus controls.'**
   String get mapInputHint;
 
   /// No description provided for @noHexSelected.
@@ -2329,6 +2329,84 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Right trigger (RT)'**
   String get gamepadControlRightTrigger;
+
+  /// No description provided for @keyboardSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard'**
+  String get keyboardSettings;
+
+  /// No description provided for @keyboardScope.
+  ///
+  /// In en, this message translates to:
+  /// **'Map shortcuts work while the map has keyboard focus. Click the map to return focus to it.'**
+  String get keyboardScope;
+
+  /// No description provided for @keyboardPanKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'W / A / S / D or arrow keys'**
+  String get keyboardPanKeys;
+
+  /// No description provided for @keyboardPan.
+  ///
+  /// In en, this message translates to:
+  /// **'Pan the camera'**
+  String get keyboardPan;
+
+  /// No description provided for @keyboardSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the hex under the pointer, or the current selection'**
+  String get keyboardSelect;
+
+  /// No description provided for @keyboardMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle movement targeting for the selected unit'**
+  String get keyboardMove;
+
+  /// No description provided for @keyboardInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect the hex under the pointer, the selected hex, or the center of the view'**
+  String get keyboardInspect;
+
+  /// No description provided for @keyboardMapMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between graphic and tile map views'**
+  String get keyboardMapMode;
+
+  /// No description provided for @keyboardPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous / next pending turn action'**
+  String get keyboardPending;
+
+  /// No description provided for @keyboardSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Space'**
+  String get keyboardSpace;
+
+  /// No description provided for @keyboardPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to the next pending action; end the turn when none remain'**
+  String get keyboardPrimary;
+
+  /// No description provided for @keyboardCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the active panel or cancel the current interaction'**
+  String get keyboardCancel;
+
+  /// No description provided for @keyboardFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus the next / previous control'**
+  String get keyboardFocus;
 }
 
 class _AonwLocalizationsDelegate

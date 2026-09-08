@@ -35,6 +35,7 @@ import '../input/map_gamepad_input.dart';
 import '../input/map_gamepad_navigation.dart';
 import '../input/map_hex_selection_palette_intent.dart';
 import '../input/map_input.dart';
+import '../input/map_keyboard_shortcuts.dart';
 import '../input/map_viewport_intent.dart';
 import '../map_action_palette_view.dart';
 import '../map_audio.dart';
@@ -55,6 +56,7 @@ part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_lifecycle.dart';
 part 'map_screen_gamepad.dart';
 part 'map_screen_cursor.dart';
+part 'map_screen_keyboard.dart';
 part 'map_screen_ready.dart';
 part 'map_screen_scene.dart';
 
@@ -92,6 +94,7 @@ final class _MapScreenState extends State<MapScreen>
   var _gamepadAvailable = true;
   var _flameGeneration = 0;
   var _gamepadOwnerGeneration = 0;
+  var _keyboardInputGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
   StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
   final _gamepadCursor = MapGamepadCursor();
@@ -108,10 +111,12 @@ final class _MapScreenState extends State<MapScreen>
     _lifecycleState =
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     _gamepadTicker = createTicker(_tickGamepad);
-    _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
+    _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport')
+      ..addListener(_invalidateKeyboardInput);
     _gamepadNavigation = MapGamepadNavigation(
       onOwnerChanged: () {
         _gamepadOwnerGeneration += 1;
+        _flameGame.setKeyboardPanDirection(x: 0, y: 0);
         _gamepadFrames.prime(_gamepadInput);
       },
       returnToMap: _flameFocusNode.requestFocus,
@@ -202,6 +207,7 @@ final class _MapScreenState extends State<MapScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    _invalidateKeyboardInput();
     _lifecycleState = state;
     _synchronizeFlameLifecycle();
   }
@@ -261,6 +267,8 @@ final class _MapScreenState extends State<MapScreen>
           inspection: inspection,
           controller: widget.controller,
           onInput: _handleInput,
+          onTurnShortcut: _handleKeyboardTurnShortcut,
+          canPanKeyboard: () => _keyboardMapInputAvailable,
           onOpenSettings: widget.onOpenSettings,
           flameGame: _flameGame,
           flameGeneration: _flameGeneration,
@@ -331,7 +339,18 @@ final class _MapScreenState extends State<MapScreen>
 
   void _handleInput(MapInputCommand command) {
     final state = _mapInputReady(command);
-    if (state != null) _handleReadyInput(state, command);
+    if (state == null) return;
+    if (_gamepadNavigation.handlePanelKeyboardCommand(command)) return;
+    if (command == MapInputCommand.inspectHex) {
+      widget.controller.inspectHex(
+        widget.controller.cursor.value ??
+            state.interaction.selected ??
+            _viewportCenterHex ??
+            MapInputCursor.initial(state.scene.map),
+      );
+      return;
+    }
+    _handleReadyInput(state, command);
   }
 
   void _handleReadyInput(GameSessionReady state, MapInputCommand command) {

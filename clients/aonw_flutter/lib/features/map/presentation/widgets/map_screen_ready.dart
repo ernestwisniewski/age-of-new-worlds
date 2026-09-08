@@ -14,6 +14,8 @@ final class _ReadyMap extends StatelessWidget {
     required this.localSave,
     required this.controller,
     required this.onInput,
+    required this.onTurnShortcut,
+    required this.canPanKeyboard,
     required this.onOpenSettings,
     required this.flameGame,
     required this.flameGeneration,
@@ -34,6 +36,8 @@ final class _ReadyMap extends StatelessWidget {
   final LocalSaveState localSave;
   final MapPresentationController controller;
   final ValueChanged<MapInputCommand> onInput;
+  final ValueChanged<MapTurnShortcut> onTurnShortcut;
+  final bool Function() canPanKeyboard;
   final VoidCallback? onOpenSettings;
   final AonwFlameGame flameGame;
   final int flameGeneration;
@@ -49,6 +53,8 @@ final class _ReadyMap extends StatelessWidget {
           scene: scene,
           interaction: interaction,
           onInput: onInput,
+          onTurnShortcut: onTurnShortcut,
+          canPan: canPanKeyboard,
           game: flameGame,
           generation: flameGeneration,
           focusNode: flameFocusNode,

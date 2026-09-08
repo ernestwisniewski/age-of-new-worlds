@@ -219,7 +219,7 @@
   "unknownRouteMessage": "Nieznana trasa: {location}",
   "missingRouteLocation": "(brak)",
   "mapSemanticsLabel": "Mapa {mapId}, {cols} na {rows} heksów",
-  "mapInputHint": "Użyj strzałek lub krzyżaka, aby przesunąć kursor mapy, oraz Enter lub A, aby wybrać.",
+  "mapInputHint": "WASD lub strzałki przesuwają kamerę, Enter wybiera, M włącza ruch, I pokazuje inspekcję, R zmienia widok mapy, nawiasy kwadratowe przechodzą między czynnościami, a spacja wybiera następną czynność lub kończy turę. Tab przenosi fokus między kontrolkami.",
   "noHexSelected": "Nie wybrano heksa",
   "selectedHex": "Wybrany heks {col}, {row}",
   "mapViewModeTooltip": "Zmień tryb widoku mapy",
@@ -451,5 +451,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "keyboardSettings": "Klawiatura",
+  "keyboardScope": "Skróty mapy działają, gdy mapa ma fokus klawiatury. Kliknij mapę, aby przywrócić jej fokus.",
+  "keyboardPanKeys": "W / A / S / D lub strzałki",
+  "keyboardPan": "Przesuń kamerę",
+  "keyboardSelect": "Wybierz heks pod kursorem lub bieżące zaznaczenie",
+  "keyboardMove": "Włącz lub wyłącz wskazywanie celu ruchu zaznaczonej jednostki",
+  "keyboardInspect": "Sprawdź heks pod kursorem, zaznaczony heks lub środek widoku",
+  "keyboardMapMode": "Przełącz widok mapy między graficznym a kafelkowym",
+  "keyboardPending": "Poprzednia / następna czynność w turze",
+  "keyboardSpace": "Spacja",
+  "keyboardPrimary": "Przejdź do następnej czynności; zakończ turę, gdy nie ma już żadnej",
+  "keyboardCancel": "Zamknij aktywny panel lub anuluj bieżącą interakcję",
+  "keyboardFocus": "Przejdź do następnej / poprzedniej kontrolki"
 }

@@ -908,7 +908,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get mapInputHint =>
-      'Użyj strzałek lub krzyżaka, aby przesunąć kursor mapy, oraz Enter lub A, aby wybrać.';
+      'WASD lub strzałki przesuwają kamerę, Enter wybiera, M włącza ruch, I pokazuje inspekcję, R zmienia widok mapy, nawiasy kwadratowe przechodzą między czynnościami, a spacja wybiera następną czynność lub kończy turę. Tab przenosi fokus między kontrolkami.';
 
   @override
   String get noHexSelected => 'Nie wybrano heksa';
@@ -2417,4 +2417,50 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get gamepadControlRightTrigger => 'Prawy trigger (RT)';
+
+  @override
+  String get keyboardSettings => 'Klawiatura';
+
+  @override
+  String get keyboardScope =>
+      'Skróty mapy działają, gdy mapa ma fokus klawiatury. Kliknij mapę, aby przywrócić jej fokus.';
+
+  @override
+  String get keyboardPanKeys => 'W / A / S / D lub strzałki';
+
+  @override
+  String get keyboardPan => 'Przesuń kamerę';
+
+  @override
+  String get keyboardSelect =>
+      'Wybierz heks pod kursorem lub bieżące zaznaczenie';
+
+  @override
+  String get keyboardMove =>
+      'Włącz lub wyłącz wskazywanie celu ruchu zaznaczonej jednostki';
+
+  @override
+  String get keyboardInspect =>
+      'Sprawdź heks pod kursorem, zaznaczony heks lub środek widoku';
+
+  @override
+  String get keyboardMapMode =>
+      'Przełącz widok mapy między graficznym a kafelkowym';
+
+  @override
+  String get keyboardPending => 'Poprzednia / następna czynność w turze';
+
+  @override
+  String get keyboardSpace => 'Spacja';
+
+  @override
+  String get keyboardPrimary =>
+      'Przejdź do następnej czynności; zakończ turę, gdy nie ma już żadnej';
+
+  @override
+  String get keyboardCancel =>
+      'Zamknij aktywny panel lub anuluj bieżącą interakcję';
+
+  @override
+  String get keyboardFocus => 'Przejdź do następnej / poprzedniej kontrolki';
 }

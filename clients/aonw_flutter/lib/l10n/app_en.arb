@@ -261,7 +261,7 @@
       "rows": {"type": "int"}
     }
   },
-  "mapInputHint": "Use the arrow keys or D-pad to move the map cursor and Enter or A to select.",
+  "mapInputHint": "Use WASD or arrow keys to pan the camera, Enter to select, M for movement, I to inspect, R to switch map views, brackets for pending actions, and Space for the next action or to end the turn. Use Tab to focus controls.",
   "noHexSelected": "No hex selected",
   "selectedHex": "Selected hex {col}, {row}",
   "@selectedHex": {
@@ -594,5 +594,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "keyboardSettings": "Keyboard",
+  "keyboardScope": "Map shortcuts work while the map has keyboard focus. Click the map to return focus to it.",
+  "keyboardPanKeys": "W / A / S / D or arrow keys",
+  "keyboardPan": "Pan the camera",
+  "keyboardSelect": "Select the hex under the pointer, or the current selection",
+  "keyboardMove": "Toggle movement targeting for the selected unit",
+  "keyboardInspect": "Inspect the hex under the pointer, the selected hex, or the center of the view",
+  "keyboardMapMode": "Switch between graphic and tile map views",
+  "keyboardPending": "Previous / next pending turn action",
+  "keyboardSpace": "Space",
+  "keyboardPrimary": "Go to the next pending action; end the turn when none remain",
+  "keyboardCancel": "Close the active panel or cancel the current interaction",
+  "keyboardFocus": "Focus the next / previous control"
 }
