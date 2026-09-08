@@ -2,6 +2,7 @@ import '../../map/application/game_session_state.dart';
 import '../../map/read_model/pending_action_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../read_model/pending_turn_actions_view.dart';
+import 'automatic_turn_policy.dart';
 import 'turn_session_port.dart';
 
 /// Serializes navigation intents while allowing each successful focus to advance its scope.
@@ -27,6 +28,7 @@ final class PendingTurnNavigation {
   Future<void> navigate({
     required int step,
     bool endWhenEmpty = false,
+    AutomaticTurnPolicy? automatic,
     required bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   }) {
@@ -34,7 +36,14 @@ final class PendingTurnNavigation {
     final batch = _batch ??= _NavigationBatch(readScope());
     batch.pending += 1;
     final result = _tail.then(
-      (_) => _execute(batch, step, endWhenEmpty, inputAvailable, onFocused),
+      (_) => _execute(
+        batch,
+        step,
+        endWhenEmpty,
+        automatic,
+        inputAvailable,
+        onFocused,
+      ),
     );
     _tail = result.whenComplete(() {
       batch.pending -= 1;
@@ -47,6 +56,7 @@ final class PendingTurnNavigation {
     _NavigationBatch batch,
     int step,
     bool endWhenEmpty,
+    AutomaticTurnPolicy? automatic,
     bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   ) async {
@@ -64,17 +74,19 @@ final class PendingTurnNavigation {
       final work = await session.pendingTurnActions(
         expectedRevision: initial.recipient.stamp.revision,
       );
-      if (!current() || readState() == null) {
+      final latest = readState();
+      if (!current() || latest == null) {
         batch.cancelled = true;
         return;
       }
-      _validate(work, initial);
+      _validate(work, latest);
       await _activate(
         batch,
         work,
-        initial,
+        latest,
         step,
         endWhenEmpty,
+        automatic,
         inputAvailable,
         onFocused,
       );
@@ -99,9 +111,10 @@ final class PendingTurnNavigation {
   Future<void> _activate(
     _NavigationBatch batch,
     PendingTurnActionsView work,
-    GameSessionReady initial,
+    GameSessionReady state,
     int step,
     bool endWhenEmpty,
+    AutomaticTurnPolicy? automatic,
     bool Function() inputAvailable,
     void Function(PendingTurnActionView)? onFocused,
   ) async {
@@ -109,14 +122,15 @@ final class PendingTurnNavigation {
       batch.cancelled = true;
       return;
     }
+    if (automatic != null && !automatic.canAdvance(work, state)) return;
     if (work.actions.isEmpty) {
-      if (endWhenEmpty) {
+      if (automatic?.endTurn ?? endWhenEmpty) {
         batch.cancelled = true;
         endTurn();
       }
       return;
     }
-    final action = _next(work.actions, initial, step);
+    final action = _next(work.actions, state, step);
     if (!await focus(action)) {
       batch.cancelled = true;
       return;
