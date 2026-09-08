@@ -91,6 +91,10 @@ final class MapPresentationController extends ChangeNotifier {
 
   void silencePendingInteractionSounds() => _interactionAudio.cancelPending();
 
+  void bindInitialMapViewMode(MapViewModeReader? read) {
+    if (!_disposed) _coordinator.readInitialMapViewMode = read;
+  }
+
   void configureAiRuntimeProfile(LocalAiRuntimeProfileView profile) {
     if (!_disposed) _coordinator.aiRuntimeProfile = profile;
   }

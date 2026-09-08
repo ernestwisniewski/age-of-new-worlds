@@ -28,7 +28,9 @@ extension MapCoordinatorNetwork on MapCoordinator {
       final scene = await networkGame.reconnectNetworkMatch();
       if (!_isCurrent(generation)) return false;
       _setCursor(null);
-      _setState(GameSessionReady.initial(scene));
+      _setState(
+        GameSessionReady.initial(scene, viewMode: current.interaction.viewMode),
+      );
       return true;
     } on Object catch (error, stackTrace) {
       if (!_isCurrent(generation)) return false;

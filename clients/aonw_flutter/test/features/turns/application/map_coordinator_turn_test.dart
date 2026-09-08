@@ -8,6 +8,7 @@ import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_activity_view.dart';
 import 'package:aonw_flutter/features/turns/read_model/turn_command_view.dart';
@@ -206,6 +207,7 @@ void main() {
       _localSetup(secondControl: LocalPlayerControlView.human),
     );
 
+    controller.setMapViewMode(MapViewMode.tile);
     controller.endTurn();
     await Future<void>.delayed(Duration.zero);
     await Future<void>.delayed(Duration.zero);
@@ -222,6 +224,7 @@ void main() {
     controller.confirmLocalHandoff();
     ready = controller.state as GameSessionReady;
     expect(ready.localHandoff.phase, LocalHandoffPhase.idle);
+    expect(ready.interaction.viewMode, MapViewMode.tile);
   });
 
   test('advances AI before privately handing off to the next human', () async {

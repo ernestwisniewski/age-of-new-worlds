@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../local_game/application/local_game_catalog.dart';
+import '../../map/read_model/map_view_mode.dart';
 import '../application/local_replay_store.dart';
 import '../application/replay_capture.dart';
 import '../application/replay_session_port.dart';
@@ -44,6 +45,18 @@ final class ReplayPresentationController extends ChangeNotifier
   Future<void> Function()? waitForCommandEffects;
 
   ReplayState get state => _state;
+  MapViewModeReader? readInitialMapViewMode;
+  MapViewMode _viewMode = MapViewMode.graphic;
+  MapViewMode get viewMode => _viewMode;
+
+  Future<MapViewMode> _initialMapViewMode() async {
+    try {
+      return await readInitialMapViewMode?.call() ?? MapViewMode.graphic;
+    } on Object catch (error, stackTrace) {
+      _diagnosticReporter('replay_view_preference_failed', error, stackTrace);
+      return MapViewMode.graphic;
+    }
+  }
 
   Future<bool> hasReplayFor(LocalGameScenarioView scenario) =>
       _containsReplay(scenario);
@@ -102,11 +115,27 @@ final class ReplayPresentationController extends ChangeNotifier
     final generation = ++_generation;
     _waitingForEffects = false;
     _setState(const ReplayLoading());
+    final viewMode = await _initialMapViewMode();
+    if (!_isCurrent(generation)) {
+      return const ReplayOpenResultView.failed(
+        ReplayFailureViewCode.unavailable,
+      );
+    }
+    _viewMode = viewMode;
     final session = _session;
     final store = _store;
     if (session == null || store == null) {
       return _failOpen(generation, ReplayFailureViewCode.unavailable);
     }
+    return _openStoredEntries(entries, session, store, generation);
+  }
+
+  Future<ReplayOpenResultView> _openStoredEntries(
+    Iterable<LocalGameCatalogEntryView> entries,
+    ReplaySessionPort session,
+    LocalReplayStore store,
+    int generation,
+  ) async {
     var readFailed = false;
     var found = false;
     for (final entry in entries) {

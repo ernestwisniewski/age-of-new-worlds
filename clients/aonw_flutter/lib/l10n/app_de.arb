@@ -1112,5 +1112,7 @@
   "aiBatterySaver": "KI-Akkusparmodus",
   "aiBatterySaverDescription": "Reduziert die taktische Suche während lokaler KI-Züge.",
   "mapAppearanceSettings": "Kartendarstellung",
-  "mapMarkingsSettings": "Kartenmarkierungen"
+  "mapMarkingsSettings": "Kartenmarkierungen",
+  "preferredMapViewMode": "Standard-Kartenansicht",
+  "preferredMapViewModeDescription": "Wird beim Öffnen eines Spiels oder einer Wiederholung verwendet."
 }

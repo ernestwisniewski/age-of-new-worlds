@@ -1112,5 +1112,7 @@
   "aiBatterySaver": "AI-batterijbesparing",
   "aiBatterySaverDescription": "Vermindert tactisch zoekwerk tijdens lokale AI-beurten.",
   "mapAppearanceSettings": "Kaartweergave",
-  "mapMarkingsSettings": "Kaartmarkeringen"
+  "mapMarkingsSettings": "Kaartmarkeringen",
+  "preferredMapViewMode": "Standaardkaartweergave",
+  "preferredMapViewModeDescription": "Wordt gebruikt bij het openen van een spel of herhaling."
 }

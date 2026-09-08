@@ -3,6 +3,7 @@ import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/network_game_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
@@ -19,6 +20,7 @@ void main() {
     );
     addTearDown(coordinator.dispose);
 
+    coordinator.readInitialMapViewMode = () async => MapViewMode.tile;
     final opened = await coordinator.startNetworkMatch(
       const NetworkMatchSetupView(matchId: 'match-7', playerId: 'player-2'),
     );
@@ -27,6 +29,16 @@ void main() {
     expect(network.setups.single.matchId, 'match-7');
     expect(network.setups.single.playerId, 'player-2');
     expect((coordinator.state as GameSessionReady).scene, same(scene));
+    expect(
+      (coordinator.state as GameSessionReady).interaction.viewMode,
+      MapViewMode.tile,
+    );
+    coordinator.readInitialMapViewMode = () async => MapViewMode.graphic;
+    expect(await coordinator.reconnectNetworkMatch(), isTrue);
+    expect(
+      (coordinator.state as GameSessionReady).interaction.viewMode,
+      MapViewMode.tile,
+    );
   });
 
   test('fails closed when network gameplay is not composed', () async {

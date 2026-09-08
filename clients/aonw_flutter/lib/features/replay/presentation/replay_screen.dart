@@ -160,7 +160,9 @@ final class _ReplayScreenState extends State<ReplayScreen>
         _game.sceneSink.replaceScene(
           MapRenderSnapshot(
             map: frame.scene.map,
-            interaction: const MapInteractionState(),
+            interaction: MapInteractionState(
+              viewMode: widget.controller.viewMode,
+            ),
             reference: frame.scene.reference,
             player: frame.scene.player,
             commandFrame: frame.command,

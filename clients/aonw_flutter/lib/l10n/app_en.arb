@@ -641,5 +641,7 @@
   "aiBatterySaver": "AI battery saver",
   "aiBatterySaverDescription": "Reduces tactical search work during local AI turns.",
   "mapAppearanceSettings": "Map appearance",
-  "mapMarkingsSettings": "Map markings"
+  "mapMarkingsSettings": "Map markings",
+  "preferredMapViewMode": "Default map view",
+  "preferredMapViewModeDescription": "Used when opening a game or replay."
 }

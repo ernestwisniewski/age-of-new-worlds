@@ -2655,4 +2655,11 @@ class AonwLocalizationsDe extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Kartenmarkierungen';
+
+  @override
+  String get preferredMapViewMode => 'Standard-Kartenansicht';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Wird beim Öffnen eines Spiels oder einer Wiederholung verwendet.';
 }

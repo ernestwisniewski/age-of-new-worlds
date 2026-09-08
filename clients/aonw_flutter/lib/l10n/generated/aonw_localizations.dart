@@ -2577,6 +2577,18 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Map markings'**
   String get mapMarkingsSettings;
+
+  /// No description provided for @preferredMapViewMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Default map view'**
+  String get preferredMapViewMode;
+
+  /// No description provided for @preferredMapViewModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Used when opening a game or replay.'**
+  String get preferredMapViewModeDescription;
 }
 
 class _AonwLocalizationsDelegate

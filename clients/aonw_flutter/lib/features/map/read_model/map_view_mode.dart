@@ -16,3 +16,5 @@ enum MapViewMode {
     MapViewMode.tile => MapViewMode.graphic,
   };
 }
+
+typedef MapViewModeReader = Future<MapViewMode> Function();

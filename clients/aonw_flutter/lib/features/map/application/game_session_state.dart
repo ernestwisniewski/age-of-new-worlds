@@ -7,6 +7,7 @@ import '../../turns/application/turn_action_state.dart';
 import '../../turns/application/turn_presentation_queue.dart';
 import '../read_model/map_command_frame_view.dart';
 import '../read_model/map_scene.dart';
+import '../read_model/map_view_mode.dart';
 import '../read_model/player_map_view.dart';
 import 'hex_inspection_state.dart';
 import 'map_interaction_state.dart';
@@ -34,9 +35,12 @@ final class GameSessionReady extends GameSessionState {
     this.inspection,
   });
 
-  factory GameSessionReady.initial(MapScene scene) => GameSessionReady(
+  factory GameSessionReady.initial(
+    MapScene scene, {
+    MapViewMode viewMode = MapViewMode.graphic,
+  }) => GameSessionReady(
     scene: scene,
-    interaction: const MapInteractionState(),
+    interaction: MapInteractionState(viewMode: viewMode),
     turnPresentations: TurnPresentationQueue.start(scene.player.turn),
     turnAction: const TurnActionState(),
     research: ResearchState.loading(scene.player.stamp.revision),

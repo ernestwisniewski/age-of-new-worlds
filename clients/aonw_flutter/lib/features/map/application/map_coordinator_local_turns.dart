@@ -182,7 +182,9 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
       _setState(
         ready
             .withRecipient(player)
-            .withInteraction(const MapInteractionState())
+            .withInteraction(
+              MapInteractionState(viewMode: current.interaction.viewMode),
+            )
             .withLocalHandoff(
               LocalHandoffState.awaitingConfirmation(
                 playerId: participant.id,

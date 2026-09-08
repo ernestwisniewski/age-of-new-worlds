@@ -5,6 +5,7 @@ import 'package:aonw_flutter/features/local_game/application/local_game_catalog.
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/replay/application/local_replay_store.dart';
 import 'package:aonw_flutter/features/replay/application/replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
@@ -23,9 +24,11 @@ import '../../../support/map_test_fixture.dart';
 import '../../../support/recording_game_audio.dart';
 
 part 'replay_audio_tests.dart';
+part 'replay_view_mode_tests.dart';
 
 void main() {
   replayAudioTests();
+  replayViewModeTests();
   testWidgets(
     'replay applies animation settings live without changing its frame',
     (tester) async {

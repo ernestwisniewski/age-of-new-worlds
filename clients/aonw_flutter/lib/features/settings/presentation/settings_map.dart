@@ -14,6 +14,8 @@ final class _MapAppearanceSettings extends StatelessWidget {
     final l10n = context.aonwL10n;
     return Column(
       children: [
+        _PreferredMapViewSetting(settings: settings, onChanged: onChanged),
+        const SizedBox(height: AonwSpacing.md),
         _MapSetting(
           key: const ValueKey('map-grid-setting'),
           title: l10n.mapGrid,
@@ -69,6 +71,60 @@ final class _MapMarkingsSettings extends StatelessWidget {
           value: settings.showMapTerrainIcons,
           onChanged: (value) =>
               onChanged(settings.copyWith(showMapTerrainIcons: value)),
+        ),
+      ],
+    );
+  }
+}
+
+final class _PreferredMapViewSetting extends StatelessWidget {
+  const _PreferredMapViewSetting({
+    required this.settings,
+    required this.onChanged,
+  });
+
+  final ClientSettings settings;
+  final ValueChanged<ClientSettings> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.aonwL10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(l10n.preferredMapViewMode),
+        Text(
+          l10n.preferredMapViewModeDescription,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        DropdownButtonHideUnderline(
+          child: DropdownButton<MapViewMode>(
+            key: const ValueKey('preferred-map-view-setting'),
+            value: settings.preferredMapViewMode,
+            isExpanded: true,
+            itemHeight: null,
+            items: [
+              for (final mode in MapViewMode.values)
+                DropdownMenuItem(
+                  value: mode,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AonwSpacing.sm,
+                    ),
+                    child: Text(
+                      mode == MapViewMode.graphic
+                          ? l10n.mapViewModeGraphic
+                          : l10n.mapViewModeTiles,
+                    ),
+                  ),
+                ),
+            ],
+            onChanged: context.withGameSoundValue((mode) {
+              if (mode != null) {
+                onChanged(settings.copyWith(preferredMapViewMode: mode));
+              }
+            }),
+          ),
         ),
       ],
     );

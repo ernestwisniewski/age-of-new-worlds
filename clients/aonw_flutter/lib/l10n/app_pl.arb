@@ -498,5 +498,7 @@
   "aiBatterySaver": "Oszczędzanie baterii AI",
   "aiBatterySaverDescription": "Ogranicza wyszukiwanie taktyczne podczas lokalnych tur AI.",
   "mapAppearanceSettings": "Wygląd mapy",
-  "mapMarkingsSettings": "Oznaczenia mapy"
+  "mapMarkingsSettings": "Oznaczenia mapy",
+  "preferredMapViewMode": "Domyślny widok mapy",
+  "preferredMapViewModeDescription": "Używany przy otwieraniu gry lub powtórki."
 }

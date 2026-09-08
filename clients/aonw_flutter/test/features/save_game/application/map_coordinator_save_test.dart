@@ -5,6 +5,7 @@ import 'package:aonw_flutter/features/map/application/game_session_state.dart';
 import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
 import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/replay/application/replay_capture.dart';
 import 'package:aonw_flutter/features/save_game/application/game_save_session_port.dart';
@@ -17,8 +18,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 
 part 'map_coordinator_save_test_support.dart';
+part 'map_coordinator_resume_tests.dart';
 
 void main() {
+  resumeMapViewTests();
   test(
     'stores the authoritative engine document and publishes success',
     () async {
@@ -44,36 +47,6 @@ void main() {
       expect(store.primary, '{"engine":"save"}');
       expect(replay.entries, [_entry]);
       expect(ready.localSave.phase, LocalSavePhase.saved);
-    },
-  );
-
-  test(
-    'tries the backup in a candidate before replacing the open game',
-    () async {
-      final original = testMapScene();
-      final restored = testMapScene(mapId: 'restored-map');
-      final gameplay = FakeGameSession.success(original);
-      final saveSession = _FakeSaveSession(
-        exported: '{}',
-        opened: restored,
-        validDocument: 'valid-backup',
-      );
-      final store = _MemorySaveStore(
-        primary: 'truncated-primary',
-        backup: 'valid-backup',
-      );
-      final coordinator = _coordinator(gameplay, saveSession, store);
-      addTearDown(coordinator.dispose);
-      await coordinator.startLocalMatch(_entry, _setup());
-
-      final result = await coordinator.resumeLatestLocalGame();
-
-      expect(result.started, isTrue);
-      expect(saveSession.openedDocuments, [
-        'truncated-primary',
-        'valid-backup',
-      ]);
-      expect((coordinator.state as GameSessionReady).scene, same(restored));
     },
   );
 

@@ -2638,4 +2638,11 @@ class AonwLocalizationsFr extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Repères de la carte';
+
+  @override
+  String get preferredMapViewMode => 'Vue de carte par défaut';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Utilisée à l’ouverture d’une partie ou d’un replay.';
 }

@@ -1,3 +1,5 @@
+import '../../map/read_model/map_view_mode.dart';
+
 import 'client_ai_settings.dart';
 import 'client_audio_settings.dart';
 import 'client_automation_settings.dart';
@@ -16,6 +18,7 @@ export 'client_text_scale.dart';
 
 final class ClientSettings {
   const ClientSettings({
+    this.preferredMapViewMode = MapViewMode.graphic,
     this.language = ClientLanguage.system,
     this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
@@ -54,6 +57,7 @@ final class ClientSettings {
     showMapHeightBadges: false,
   );
 
+  final MapViewMode preferredMapViewMode;
   final ClientLanguage language;
   final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
@@ -81,6 +85,7 @@ final class ClientSettings {
   final bool showMapHeightBadges;
 
   ClientSettings copyWith({
+    MapViewMode? preferredMapViewMode,
     ClientLanguage? language,
     ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
@@ -107,6 +112,7 @@ final class ClientSettings {
     bool? showMapResourceIcons,
     bool? showMapHeightBadges,
   }) => ClientSettings(
+    preferredMapViewMode: preferredMapViewMode ?? this.preferredMapViewMode,
     language: language ?? this.language,
     textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
@@ -176,6 +182,7 @@ final class ClientSettings {
       other.followForeignUnitMovement == followForeignUnitMovement;
 
   bool _sameMapDisplay(ClientSettings other) =>
+      other.preferredMapViewMode == preferredMapViewMode &&
       other.showMapGrid == showMapGrid &&
       other.showMapElevationWalls == showMapElevationWalls &&
       other.showMapTerrainIcons == showMapTerrainIcons &&
@@ -184,6 +191,7 @@ final class ClientSettings {
 
   @override
   int get hashCode => Object.hashAll([
+    preferredMapViewMode,
     language,
     textScale,
     gamepad,

@@ -9,6 +9,7 @@ import '../../features/audio/presentation/game_audio_host.dart';
 import '../../features/local_game/application/local_game_session_port.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/map/presentation/map_presentation_controller.dart';
+import '../../features/map/read_model/map_view_mode.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
@@ -91,6 +92,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     }
     if (oldWidget.replayController != widget.replayController) {
       oldWidget.replayController?.dispose();
+      _synchronizeClientConfiguration();
     }
     if (oldWidget.multiplayerController != widget.multiplayerController) {
       oldWidget.multiplayerController?.dispose();
@@ -222,7 +224,20 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     _settingsReady = _settingsController.load();
   }
 
+  Future<MapViewMode> _readInitialMapViewMode() async {
+    while (mounted) {
+      final ready = _settingsReady;
+      await ready;
+      if (identical(ready, _settingsReady)) {
+        return _settingsController.settings.preferredMapViewMode;
+      }
+    }
+    return MapViewMode.graphic;
+  }
+
   void _synchronizeClientConfiguration() {
+    widget.mapController.bindInitialMapViewMode(_readInitialMapViewMode);
+    widget.replayController?.readInitialMapViewMode = _readInitialMapViewMode;
     widget.mapController.configureAiRuntimeProfile(
       _settingsController.settings.ai.batterySaver
           ? LocalAiRuntimeProfileView.batterySaver

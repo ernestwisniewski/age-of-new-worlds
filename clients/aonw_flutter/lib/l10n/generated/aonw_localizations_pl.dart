@@ -2561,4 +2561,11 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Oznaczenia mapy';
+
+  @override
+  String get preferredMapViewMode => 'Domyślny widok mapy';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Używany przy otwieraniu gry lub powtórki.';
 }

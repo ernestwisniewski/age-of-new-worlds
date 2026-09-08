@@ -1,9 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../map/read_model/map_view_mode.dart';
 import '../application/client_settings.dart';
 import '../application/client_settings_store.dart';
 import 'gamepad_bindings_codec.dart';
 
+part 'shared_preferences_map_settings.dart';
 part 'shared_preferences_ai_settings.dart';
 part 'shared_preferences_audio_settings.dart';
 part 'shared_preferences_automation_settings.dart';
@@ -22,13 +24,6 @@ final class SharedPreferencesClientSettingsStore
   static const _smoothCameraMovementKey = 'aonw.settings.smoothCameraMovement';
   static const _reducedMotionKey = 'aonw.settings.reducedMotion';
   static const _highContrastKey = 'aonw.settings.highContrast';
-  static const _showMapGridKey = 'aonw.settings.showMapGrid';
-  static const _showMapElevationWallsKey =
-      'aonw.settings.showMapElevationWalls';
-  static const _showMapTerrainIconsKey = 'aonw.settings.showMapTerrainIcons';
-  static const _showMapResourceIconsKey = 'aonw.settings.showMapResourceIcons';
-  static const _showMapHeightBadgesKey = 'aonw.settings.showMapHeightBadges';
-
   static const _focusOwnUnitMovementKey = 'aonw.settings.focusOwnUnitMovement';
   static const _followOwnUnitMovementKey =
       'aonw.settings.followOwnUnitMovement';
@@ -52,19 +47,7 @@ final class SharedPreferencesClientSettingsStore
     );
     final reducedMotion = await _preferences.getBool(_reducedMotionKey);
     final highContrast = await _preferences.getBool(_highContrastKey);
-    final showMapGrid = await _preferences.getBool(_showMapGridKey);
-    final showMapElevationWalls = await _preferences.getBool(
-      _showMapElevationWallsKey,
-    );
-    final showMapTerrainIcons = await _preferences.getBool(
-      _showMapTerrainIconsKey,
-    );
-    final showMapResourceIcons = await _preferences.getBool(
-      _showMapResourceIconsKey,
-    );
-    final showMapHeightBadges = await _preferences.getBool(
-      _showMapHeightBadgesKey,
-    );
+    final map = await _loadMap();
     final camera = await _loadCamera();
     final animations = await _loadAnimations();
     return ClientSettings(
@@ -93,16 +76,12 @@ final class SharedPreferencesClientSettingsStore
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
       smoothCameraMovement: camera.smoothCameraMovement,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
-      showMapGrid: showMapGrid ?? ClientSettings.defaults.showMapGrid,
-      showMapElevationWalls:
-          showMapElevationWalls ??
-          ClientSettings.defaults.showMapElevationWalls,
-      showMapTerrainIcons:
-          showMapTerrainIcons ?? ClientSettings.defaults.showMapTerrainIcons,
-      showMapResourceIcons:
-          showMapResourceIcons ?? ClientSettings.defaults.showMapResourceIcons,
-      showMapHeightBadges:
-          showMapHeightBadges ?? ClientSettings.defaults.showMapHeightBadges,
+      preferredMapViewMode: map.viewMode,
+      showMapGrid: map.grid,
+      showMapElevationWalls: map.walls,
+      showMapTerrainIcons: map.terrain,
+      showMapResourceIcons: map.resources,
+      showMapHeightBadges: map.heights,
     );
   }
 
@@ -123,23 +102,7 @@ final class SharedPreferencesClientSettingsStore
     );
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
     await _preferences.setBool(_highContrastKey, settings.highContrast);
-    await _preferences.setBool(_showMapGridKey, settings.showMapGrid);
-    await _preferences.setBool(
-      _showMapElevationWallsKey,
-      settings.showMapElevationWalls,
-    );
-    await _preferences.setBool(
-      _showMapTerrainIconsKey,
-      settings.showMapTerrainIcons,
-    );
-    await _preferences.setBool(
-      _showMapResourceIconsKey,
-      settings.showMapResourceIcons,
-    );
-    await _preferences.setBool(
-      _showMapHeightBadgesKey,
-      settings.showMapHeightBadges,
-    );
+    await _saveMap(settings);
   }
 
   Future<ClientLanguage> _loadLanguage() async {

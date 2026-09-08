@@ -2633,4 +2633,11 @@ class AonwLocalizationsNl extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Kaartmarkeringen';
+
+  @override
+  String get preferredMapViewMode => 'Standaardkaartweergave';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Wordt gebruikt bij het openen van een spel of herhaling.';
 }

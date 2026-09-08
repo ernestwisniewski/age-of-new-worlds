@@ -1112,5 +1112,7 @@
   "aiBatterySaver": "Économie de batterie pour l’IA",
   "aiBatterySaverDescription": "Réduit le travail de recherche tactique pendant les tours locaux de l’IA.",
   "mapAppearanceSettings": "Apparence de la carte",
-  "mapMarkingsSettings": "Repères de la carte"
+  "mapMarkingsSettings": "Repères de la carte",
+  "preferredMapViewMode": "Vue de carte par défaut",
+  "preferredMapViewModeDescription": "Utilisée à l’ouverture d’une partie ou d’un replay."
 }

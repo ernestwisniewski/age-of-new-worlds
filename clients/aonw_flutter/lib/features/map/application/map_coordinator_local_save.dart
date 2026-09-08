@@ -33,6 +33,12 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     _interactionGeneration += 1;
     _setCursor(null);
     _setState(const GameSessionLoading());
+    final viewMode = await _initialMapViewMode();
+    if (!_isCurrent(generation)) {
+      return const LocalResumeResultView.failed(
+        LocalResumeFailureViewCode.unavailable,
+      );
+    }
     final attempt = await resume();
     if (!_isCurrent(generation)) {
       return const LocalResumeResultView.failed(
@@ -43,7 +49,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
       _setState(previous);
       return LocalResumeResultView.failed(attempt.failure!);
     }
-    final ready = _restoredState(attempt);
+    final ready = _restoredState(attempt, viewMode);
     if (ready == null) {
       _setState(previous);
       return const LocalResumeResultView.failed(
@@ -57,8 +63,11 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     return const LocalResumeResultView.started();
   }
 
-  GameSessionReady? _restoredState(LocalResumeAttemptView attempt) {
-    final ready = GameSessionReady.initial(attempt.scene!);
+  GameSessionReady? _restoredState(
+    LocalResumeAttemptView attempt,
+    MapViewMode viewMode,
+  ) {
+    final ready = GameSessionReady.initial(attempt.scene!, viewMode: viewMode);
     final controlPlan = attempt.controlPlan!;
     if (!controlPlan.requiresPrivateHandoff) return ready;
     final actor = controlPlan.participant(ready.recipient.actorPlayerId);

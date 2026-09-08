@@ -2554,4 +2554,11 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Map markings';
+
+  @override
+  String get preferredMapViewMode => 'Default map view';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Used when opening a game or replay.';
 }

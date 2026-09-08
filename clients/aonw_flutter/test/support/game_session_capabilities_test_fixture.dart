@@ -2,12 +2,13 @@ part of 'map_test_fixture.dart';
 
 GameSessionCapabilities testGameSessionCapabilities(
   FakeGameSession session, {
+  MapSessionPort? map,
   HexInspectionSessionPort? hexInspection,
   CitySessionPort? cities,
   MovementSessionPort? movement,
   GameSaveSessionPort? save,
 }) => GameSessionCapabilities(
-  map: session,
+  map: map ?? session,
   hexInspection:
       hexInspection ??
       FakeHexInspectionSession(scene: session.scene ?? testMapScene()),

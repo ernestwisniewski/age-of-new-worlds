@@ -57,6 +57,7 @@ import 'movement_command_runner.dart';
 import 'network_game_session_port.dart';
 import 'unit_action_workflow.dart';
 
+part 'map_coordinator_view_mode.dart';
 part 'map_coordinator_actions.dart';
 part 'map_coordinator_cancellation.dart';
 part 'map_coordinator_local_save.dart';
@@ -82,6 +83,7 @@ UnitActionWorkflow _unitActionWorkflow(
 
 final class MapCoordinator {
   Future<void> Function()? waitForCommandEffects;
+  MapViewModeReader? readInitialMapViewMode;
   LocalAiRuntimeProfileView aiRuntimeProfile =
       LocalAiRuntimeProfileView.standard;
   MapCoordinator({
@@ -233,12 +235,14 @@ final class MapCoordinator {
     _setCursor(null);
     _setState(const GameSessionLoading());
     try {
-      final scene = await open();
-      if (!_isCurrent(generation)) return false;
+      final opened = await _openPreferredScene(open, generation);
+      if (opened == null) return false;
       _localGameEntry = localGameEntry;
       _localSaveSlot = null;
       _localControlPlan = controlPlan;
-      _setState(GameSessionReady.initial(scene));
+      _setState(
+        GameSessionReady.initial(opened.scene, viewMode: opened.viewMode),
+      );
       return true;
     } on MapLoadException catch (error, stackTrace) {
       if (!_isCurrent(generation)) return false;

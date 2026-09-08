@@ -2637,4 +2637,11 @@ class AonwLocalizationsEs extends AonwLocalizations {
 
   @override
   String get mapMarkingsSettings => 'Marcadores del mapa';
+
+  @override
+  String get preferredMapViewMode => 'Vista predeterminada del mapa';
+
+  @override
+  String get preferredMapViewModeDescription =>
+      'Se usa al abrir una partida o una repetición.';
 }
