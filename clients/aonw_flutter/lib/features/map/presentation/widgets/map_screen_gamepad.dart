@@ -72,8 +72,8 @@ extension _MapScreenGamepad on _MapScreenState {
       if (frame.activatePressed) {
         _handleGamepadCommand(MapInputCommand.activate);
       }
-      if (frame.toggleMapViewModePressed) {
-        _handleGamepadCommand(MapInputCommand.toggleMapViewMode);
+      if (frame.inspectHexPressed) {
+        _handleGamepadCommand(MapInputCommand.inspectHex);
       }
     }
     _synchronizeGamepadTicker();

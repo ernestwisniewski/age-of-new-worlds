@@ -16,7 +16,7 @@ enum MapHudSection {
   selectionActions,
 }
 
-enum MapGamepadPriority { hud, panel }
+enum MapGamepadPriority { hud, panel, popup }
 
 final class MapGamepadRegionEntry {
   const MapGamepadRegionEntry({
@@ -25,11 +25,13 @@ final class MapGamepadRegionEntry {
     required this.priority,
     required this.onCancel,
     this.bottomCommand = false,
+    this.scrollBeforeFocus = false,
     this.onScroll,
   });
 
   final bool Function(MapInputCommand)? onScroll;
   final bool bottomCommand;
+  final bool scrollBeforeFocus;
   final FocusScopeNode scope;
   final MapHudSection section;
   final MapGamepadPriority priority;
@@ -62,10 +64,14 @@ final class MapGamepadNavigation extends ChangeNotifier {
 
   MapEntry<Object, MapGamepadRegionEntry>? get _capture {
     if (!_available) return null;
+    MapEntry<Object, MapGamepadRegionEntry>? result;
     for (final entry in _entries.entries.toList().reversed) {
-      if (entry.value.priority == MapGamepadPriority.panel) return entry;
+      if (entry.value.priority.index >
+          (result?.value.priority.index ?? MapGamepadPriority.hud.index)) {
+        result = entry;
+      }
     }
-    return null;
+    return result;
   }
 
   void register(Object key, MapGamepadRegionEntry entry) {
@@ -119,9 +125,10 @@ final class MapGamepadNavigation extends ChangeNotifier {
     MapInputCommand.toggleMoveTargeting => const MapGamepadFrame(
       toggleMoveTargetingPressed: true,
     ),
-    MapInputCommand.toggleMapViewMode => const MapGamepadFrame(
-      toggleMapViewModePressed: true,
+    MapInputCommand.inspectHex => const MapGamepadFrame(
+      inspectHexPressed: true,
     ),
+    MapInputCommand.toggleMapViewMode => MapGamepadFrame.idle,
     _ => MapGamepadFrame(cursorStep: command),
   });
 
@@ -157,9 +164,20 @@ final class MapGamepadNavigation extends ChangeNotifier {
     final nodes = _nodes(entry);
     final focused = _ensureFocused(nodes);
     if (frame.cursorStep case final direction?) {
-      if (!_moveInPanel(nodes, direction)) entry.onScroll?.call(direction);
+      _moveInCapturedRegion(entry, nodes, direction);
     }
     if (focused && frame.activatePressed) _activate();
+  }
+
+  void _moveInCapturedRegion(
+    MapGamepadRegionEntry entry,
+    List<FocusNode> nodes,
+    MapInputCommand direction,
+  ) {
+    if (entry.scrollBeforeFocus && entry.onScroll?.call(direction) == true) {
+      return;
+    }
+    if (!_moveInPanel(nodes, direction)) entry.onScroll?.call(direction);
   }
 
   void setAvailable(bool available) {

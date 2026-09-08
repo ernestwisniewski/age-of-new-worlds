@@ -70,16 +70,13 @@ void main() {
     );
   });
 
-  test('dispatches the map view toggle only on the button edge', () {
+  test('dispatches hex inspection only on the button edge', () {
     final controller = MapGamepadFrameController();
-    const pressed = MapGamepadInput(toggleMapViewMode: true);
+    const pressed = MapGamepadInput(inspectHex: true);
 
+    expect(controller.advance(input: pressed, dt: 0).inspectHexPressed, isTrue);
     expect(
-      controller.advance(input: pressed, dt: 0).toggleMapViewModePressed,
-      isTrue,
-    );
-    expect(
-      controller.advance(input: pressed, dt: 0.1).toggleMapViewModePressed,
+      controller.advance(input: pressed, dt: 0.1).inspectHexPressed,
       isFalse,
     );
   });

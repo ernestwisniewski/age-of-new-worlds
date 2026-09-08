@@ -153,6 +153,11 @@ final class MapPresentationController extends ChangeNotifier {
 
   bool get canToggleMoveTargeting => _coordinator.canToggleMoveTargeting;
 
+  void inspectHex(MapHexCoordinate coordinate) =>
+      _coordinator.inspectHex(coordinate);
+
+  void closeHexInspection() => _coordinator.closeHexInspection();
+
   void toggleMoveTargeting() => _coordinator.toggleMoveTargeting();
 
   void moveMapCursor(MapHexCoordinate coordinate) =>

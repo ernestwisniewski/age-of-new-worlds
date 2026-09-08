@@ -38,6 +38,14 @@ extension _MapScreenCursor on _MapScreenState {
     }
   }
 
+  void _inspectCursor(GameSessionReady state) {
+    final coordinate = _gamepadCursor.current(
+      state,
+      viewportCenter: _viewportCenterHex,
+    );
+    if (coordinate != null) widget.controller.inspectHex(coordinate);
+  }
+
   MapHexCoordinate? get _viewportCenterHex {
     final center = _flameGame.mapCamera.viewportCenter;
     return center == null ? null : _flameGame.mapCamera.hexAtScreen(center);

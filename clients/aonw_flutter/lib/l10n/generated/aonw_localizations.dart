@@ -2059,6 +2059,54 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Nature volume'**
   String get natureVolumeLabel;
+
+  /// No description provided for @hexInspectionKind.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, idealCitySite{Ideal city site} goodCitySite{Good city site} fertileField{Fertile field} fertilePlains{Fertile plains} richPlain{Rich plain} strategicBorderland{Strategic borderland} strategicField{Strategic field} defensivePosition{Defensive position} fertileForest{Fertile forest} forestBackline{Forest backline} forestForge{Forest forge} wildLand{Wild land} richWilds{Rich wilds} exoticBackline{Exotic backline} difficultStrategicTerrain{Difficult strategic terrain} highGround{High ground} riverHills{River hills} industrialStronghold{Industrial stronghold} richHills{Rich hills} barrenLand{Barren land} oasis{Oasis} tradeOasis{Trade oasis} desertDeposits{Desert deposits} harshLand{Harsh land} coldPastures{Cold pastures} resourceOutpost{Resource outpost} hostileLand{Hostile land} arcticDeposits{Arctic deposits} coast{Coast} fishingCoast{Fishing coast} richCoast{Rich coast} riverPort{River port} regionalPortHeart{Regional port hub} openSea{Open sea} naturalBarrier{Natural barrier} promisingLand{Promising land} weakLand{Weak land} ordinaryLand{Ordinary land} mapTile{Map tile} other{Map tile}}'**
+  String hexInspectionKind(String value);
+
+  /// No description provided for @hexInspectionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, idealCitySite{A high-value settlement tile with food, growth, and expansion pressure already lined up.} goodCitySite{Solid terrain for a city center with enough baseline value to support early growth.} fertileField{River-fed grassland that favors food, population growth, and worker improvements.} fertilePlains{Open plains with river support, useful for balanced food and production.} richPlain{A valuable open tile with luxury or trade value worth bringing inside borders.} strategicBorderland{Good land with strategic value, useful for expansion before rivals claim it.} strategicField{A plains tile tied to strategic resources or pressure on the frontier.} defensivePosition{Terrain that improves defensive control and helps hold nearby approaches.} fertileForest{A forest with river support, mixing growth potential with natural cover.} forestBackline{A safer forest tile that can support growth or hunting-oriented improvements.} forestForge{Forest with industrial resource value, promising for production once improved.} wildLand{Dense terrain with friction; useful only when you have a clear worker or expansion plan.} richWilds{Wild terrain with enough fertility or resources to justify careful development.} exoticBackline{A jungle or wetland tile carrying luxury value for later borders and trade.} difficultStrategicTerrain{Hard terrain with strategic resource value; powerful later, awkward early.} highGround{Hills that favor defense and map control more than fast growth.} riverHills{Hills beside a river, combining defense with better economic potential.} industrialStronghold{Hills with industrial resources, a strong production target for a city.} richHills{Hills with wealth resources, useful for gold or production-focused expansion.} barrenLand{Dry land with little immediate value unless later tech or borders change the plan.} oasis{Desert softened by river access, turning weak land into a usable growth tile.} tradeOasis{A desert trade pocket that can become valuable with the right improvement.} desertDeposits{Poor settlement land with a strategic deposit that matters more in later eras.} harshLand{Cold or rough land with limited early economy and slow development.} coldPastures{Cold terrain with enough pasture value to support a border city.} resourceOutpost{Remote cold land worth claiming mainly for the resource it protects.} hostileLand{Unfriendly ground with weak settlement value and few immediate returns.} arcticDeposits{Snowy resource land that is hard to use but can matter strategically.} coast{Coastal land that opens naval access and flexible city growth.} fishingCoast{Coast with food value, a strong reason to work or settle near the water.} richCoast{Coastal luxury or trade value worth folding into city borders.} riverPort{A river mouth with trade and movement value for a coastal city.} regionalPortHeart{A strong coastal center where river and resource value stack together.} openSea{Water that is useful for ships and scouting, but not for land settlement.} naturalBarrier{Blocked terrain that shapes movement and defense rather than economy.} promisingLand{A generally useful tile with enough value to inspect before moving on.} weakLand{Low-return terrain that rarely deserves early worker time.} ordinaryLand{A normal tile with no standout strength, useful when it fits the city plan.} mapTile{A plain map tile without enough information to make a strong judgment.} other{A plain map tile without enough information to make a strong judgment.}}'**
+  String hexInspectionDescription(String value);
+
+  /// No description provided for @hexInspectionRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, foundCity{Good development site} defendHere{Good defensive position} exploitEconomy{Worth exploiting} avoid{Avoid without a plan} neutral{Inspect before moving} other{Inspect before moving}}'**
+  String hexInspectionRecommendation(String value);
+
+  /// No description provided for @hexInspectionRecommendationDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, foundCity{If borders are free, consider founding or steering a settler here.} defendHere{Use it to anchor units, protect borders, or cover nearby cities.} exploitEconomy{Bring it inside borders and assign a worker when the city can benefit.} avoid{Skip it early unless a resource, route, or military need changes the value.} neutral{Scout neighboring tiles and compare resources before committing a worker or settler.} other{Scout neighboring tiles and compare resources before committing a worker or settler.}}'**
+  String hexInspectionRecommendationDetail(String value);
+
+  /// No description provided for @hexInspectionText.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, title{Hex inspection} close{Close inspection} loading{Inspecting hex…} requestFailed{The hex could not be inspected. Try again.} responseIncompatible{The hex inspection response is incompatible.} sessionUnavailable{The game session is unavailable.} description{Description} terrain{Terrain} resources{Resources} none{None} height{Height} improvements{Possible improvements} noImprovements{No matching improvements.} fromStart{Available from the start} unlocked{Technology unlocked} locked{Technology required} riverBonus{River bonus} defenseBonus{Defensive terrain} outsideCity{Outside controlled city borders} cityCenter{City center} alreadyImproved{This hex is already improved} objective{Map objective} other{Hex inspection}}'**
+  String hexInspectionText(String value);
+
+  /// No description provided for @hexInspectionCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Works for {city}'**
+  String hexInspectionCity(String city);
+
+  /// No description provided for @hexInspectionBuildTurns.
+  ///
+  /// In en, this message translates to:
+  /// **'Build time: {turns} turns'**
+  String hexInspectionBuildTurns(int turns);
+
+  /// No description provided for @hexInspectionTerrain.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, ocean{Ocean} coast{Coast} lake{Lake} plains{Plains} grassland{Grassland} desert{Desert} tundra{Tundra} snow{Snow} mountain{Mountain} hills{Hills} wetlands{Wetlands} jungle{Jungle} forest{Forest} river{River} other{Plains}}'**
+  String hexInspectionTerrain(String value);
 }
 
 class _AonwLocalizationsDelegate

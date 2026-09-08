@@ -3,6 +3,7 @@ part of 'map_screen.dart';
 final class _ReadyMap extends StatelessWidget {
   const _ReadyMap({
     required this.scene,
+    required this.inspection,
     required this.interaction,
     required this.turnPresentations,
     required this.turnAction,
@@ -22,6 +23,7 @@ final class _ReadyMap extends StatelessWidget {
   });
 
   final MapScene scene;
+  final HexInspectionState? inspection;
   final MapInteractionState interaction;
   final TurnPresentationQueue turnPresentations;
   final TurnActionState turnAction;
@@ -75,6 +77,14 @@ final class _ReadyMap extends StatelessWidget {
         controller: controller,
       ),
       ..._featureOverlays(),
+      if (inspection case final value?)
+        HexInspectionOverlay(
+          state: value,
+          scene: scene,
+          anchor: flameGame.mapCamera.screenForHex(value.coordinate),
+          onClose: controller.closeHexInspection,
+          onRetry: () => controller.inspectHex(value.coordinate),
+        ),
       NetworkGameStatusOverlay(
         connection: controller.networkConnection,
         onReconnect: controller.reconnectNetworkMatch,

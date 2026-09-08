@@ -23,6 +23,7 @@ import '../../../turns/presentation/turn_banner.dart';
 import '../../../turns/presentation/turn_hud.dart';
 import '../../../workers/read_model/worker_view.dart';
 import '../../application/game_session_state.dart';
+import '../../application/hex_inspection_state.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/map_view.dart';
@@ -41,6 +42,7 @@ import '../map_hex_selection_palette_view.dart';
 import '../map_presentation_controller.dart';
 import '../map_render_snapshot.dart';
 import 'flame_map_viewport.dart';
+import 'hex_inspection_overlay.dart';
 import 'map_gamepad_region.dart';
 import 'map_hud_panels.dart';
 import 'map_selection_overlay.dart';
@@ -238,6 +240,7 @@ final class _MapScreenState extends State<MapScreen>
         :final localAiTurn,
         :final localHandoff,
         :final localSave,
+        :final inspection,
       ) =>
         _ReadyMap(
           scene: scene,
@@ -249,6 +252,7 @@ final class _MapScreenState extends State<MapScreen>
           localAiTurn: localAiTurn,
           localHandoff: localHandoff,
           localSave: localSave,
+          inspection: inspection,
           controller: widget.controller,
           onInput: _handleInput,
           onOpenSettings: widget.onOpenSettings,
@@ -334,6 +338,8 @@ final class _MapScreenState extends State<MapScreen>
         );
       case MapInputCommand.cancel:
         widget.controller.cancelInteraction();
+      case MapInputCommand.inspectHex:
+        _inspectCursor(state);
       case MapInputCommand.toggleMoveTargeting:
         widget.controller.toggleMoveTargeting();
       case MapInputCommand.toggleMapViewMode:

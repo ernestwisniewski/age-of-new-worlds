@@ -84,7 +84,7 @@ final class GamepadMapInputSource
     GamepadButton.a => input.copyWith(activate: pressed),
     GamepadButton.b || GamepadButton.back => input.copyWith(cancel: pressed),
     GamepadButton.x => input.copyWith(toggleMoveTargeting: pressed),
-    GamepadButton.y => input.copyWith(toggleMapViewMode: pressed),
+    GamepadButton.y => input.copyWith(inspectHex: pressed),
     _ => _applyFocusButton(input, button, pressed),
   };
 

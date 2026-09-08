@@ -2077,4 +2077,231 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get natureVolumeLabel => 'Głośność natury';
+
+  @override
+  String hexInspectionKind(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'idealCitySite': 'Idealne pod miasto',
+      'goodCitySite': 'Dobre pod miasto',
+      'fertileField': 'Żyzne pole',
+      'fertilePlains': 'Żyzna równina',
+      'richPlain': 'Bogata równina',
+      'strategicBorderland': 'Strategiczne pogranicze',
+      'strategicField': 'Pole strategiczne',
+      'defensivePosition': 'Pozycja obronna',
+      'fertileForest': 'Żyzny las',
+      'forestBackline': 'Leśne zaplecze',
+      'forestForge': 'Leśna kuźnia',
+      'wildLand': 'Dziki teren',
+      'richWilds': 'Bogata dzicz',
+      'exoticBackline': 'Egzotyczne zaplecze',
+      'difficultStrategicTerrain': 'Trudny teren strategiczny',
+      'highGround': 'Wysoka pozycja',
+      'riverHills': 'Wzgórza nad rzeką',
+      'industrialStronghold': 'Twierdza przemysłowa',
+      'richHills': 'Bogate wzgórza',
+      'barrenLand': 'Jałowy teren',
+      'oasis': 'Oaza',
+      'tradeOasis': 'Oaza handlowa',
+      'desertDeposits': 'Pustynne złoża',
+      'harshLand': 'Surowy teren',
+      'coldPastures': 'Zimne pastwiska',
+      'resourceOutpost': 'Surowcowa placówka',
+      'hostileLand': 'Nieprzyjazny teren',
+      'arcticDeposits': 'Arktyczne złoża',
+      'coast': 'Wybrzeże',
+      'fishingCoast': 'Rybackie wybrzeże',
+      'richCoast': 'Bogate wybrzeże',
+      'riverPort': 'Portowe ujście',
+      'regionalPortHeart': 'Portowe serce regionu',
+      'openSea': 'Otwarte morze',
+      'naturalBarrier': 'Naturalna bariera',
+      'promisingLand': 'Obiecujący teren',
+      'weakLand': 'Słaby teren',
+      'ordinaryLand': 'Zwykły teren',
+      'mapTile': 'Pole mapy',
+      'other': 'Pole mapy',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String hexInspectionDescription(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'idealCitySite':
+          'Bardzo mocne miejsce pod osadę: żywność, wzrost i przestrzeń rozwoju są już w jednym pakiecie.',
+      'goodCitySite':
+          'Solidny teren pod centrum miasta, z dość dobrą bazą pod wczesny rozwój.',
+      'fertileField':
+          'Trawiaste pole nad rzeką, dobre pod żywność, populację i pracę robotnika.',
+      'fertilePlains':
+          'Otwarte równiny z rzeką, przydatne do zbalansowania żywności i produkcji.',
+      'richPlain':
+          'Wartościowe otwarte pole z luksusem albo handlem, warte objęcia granicami.',
+      'strategicBorderland':
+          'Dobry teren o znaczeniu strategicznym, przydatny zanim zajmie go rywal.',
+      'strategicField':
+          'Równinne pole powiązane z zasobem strategicznym lub presją na granicy.',
+      'defensivePosition':
+          'Teren wzmacniający kontrolę obronną i utrzymanie pobliskich podejść.',
+      'fertileForest':
+          'Las z dostępem do rzeki, łączący potencjał wzrostu z naturalną osłoną.',
+      'forestBackline':
+          'Bezpieczniejszy leśny heks, dobry pod zaplecze lub ulepszenia łowieckie.',
+      'forestForge':
+          'Las z zasobem przemysłowym, obiecujący pod produkcję po ulepszeniu.',
+      'wildLand':
+          'Gęsty i trudniejszy teren; opłaca się dopiero z jasnym planem robotnika lub ekspansji.',
+      'richWilds':
+          'Dziki teren z dość dobrą żyznością albo zasobami, wart ostrożnego rozwoju.',
+      'exoticBackline':
+          'Dżungla lub mokradła z wartością luksusową dla późniejszych granic i handlu.',
+      'difficultStrategicTerrain':
+          'Trudny teren z zasobem strategicznym; mocny później, niewygodny na starcie.',
+      'highGround':
+          'Wzgórza lepsze do obrony i kontroli mapy niż do szybkiego wzrostu.',
+      'riverHills':
+          'Wzgórza nad rzeką, łączące obronę z lepszym potencjałem ekonomicznym.',
+      'industrialStronghold':
+          'Wzgórza z zasobami przemysłowymi, mocny cel produkcyjny dla miasta.',
+      'richHills':
+          'Bogate wzgórza przydatne pod złoto albo ekspansję nastawioną na produkcję.',
+      'barrenLand':
+          'Suchy teren o małej wartości natychmiastowej, chyba że plan zmienią technologie lub granice.',
+      'oasis':
+          'Pustynia złagodzona rzeką, zmieniająca słabe pole w użyteczny heks wzrostu.',
+      'tradeOasis':
+          'Pustynna kieszeń handlowa, która może zyskać wartość po właściwym ulepszeniu.',
+      'desertDeposits':
+          'Słaby teren osadniczy ze złożem strategicznym ważniejszym w późniejszych erach.',
+      'harshLand':
+          'Zimny albo surowy teren z ograniczoną ekonomią i wolnym rozwojem na starcie.',
+      'coldPastures':
+          'Zimny teren z pastwiskową wartością wystarczającą dla miasta granicznego.',
+      'resourceOutpost':
+          'Odległy zimny teren wart zajęcia głównie przez chroniony zasób.',
+      'hostileLand':
+          'Nieprzyjazny teren o słabej wartości osadniczej i małym zwrocie na starcie.',
+      'arcticDeposits':
+          'Śnieżne złoża trudne w użyciu, ale ważne strategicznie.',
+      'coast': 'Wybrzeże otwierające dostęp morski i elastyczny rozwój miasta.',
+      'fishingCoast':
+          'Wybrzeże z żywnością, dobry powód do pracy pola albo osady przy wodzie.',
+      'richCoast':
+          'Wybrzeże z luksusem lub handlem, warte włączenia do granic miasta.',
+      'riverPort':
+          'Ujście rzeki z wartością handlową i ruchową dla miasta nad wodą.',
+      'regionalPortHeart':
+          'Mocne centrum portowe, gdzie rzeka i zasoby nakładają się na siebie.',
+      'openSea':
+          'Woda przydatna dla statków i zwiadu, ale nie dla osadnictwa lądowego.',
+      'naturalBarrier':
+          'Blokujący teren, który kształtuje ruch i obronę bardziej niż ekonomię.',
+      'promisingLand':
+          'Ogólnie użyteczne pole z wartością, którą warto sprawdzić przed ruchem dalej.',
+      'weakLand':
+          'Nisko opłacalny teren, który rzadko zasługuje na wczesny czas robotnika.',
+      'ordinaryLand':
+          'Zwykłe pole bez wyraźnej przewagi, użyteczne gdy pasuje do planu miasta.',
+      'mapTile':
+          'Zwykłe pole mapy bez dość mocnych danych do jednoznacznej oceny.',
+      'other':
+          'Zwykłe pole mapy bez dość mocnych danych do jednoznacznej oceny.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String hexInspectionRecommendation(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'foundCity': 'Dobra lokacja pod rozwój',
+      'defendHere': 'Dobra pozycja obronna',
+      'exploitEconomy': 'Warto eksploatować',
+      'avoid': 'Lepiej ominąć bez planu',
+      'neutral': 'Sprawdź przed ruchem',
+      'other': 'Sprawdź przed ruchem',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String hexInspectionRecommendationDetail(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'foundCity':
+          'Jeśli granice są wolne, rozważ założenie miasta albo skierowanie tu osadnika.',
+      'defendHere':
+          'Użyj jako punktu oparcia dla jednostek, granic lub obrony pobliskiego miasta.',
+      'exploitEconomy':
+          'Warto objąć granicami i wysłać robotnika, gdy miasto może skorzystać z yieldu.',
+      'avoid':
+          'Na początku pomiń, chyba że zasób, trasa albo potrzeba militarna zmienia ocenę.',
+      'neutral':
+          'Odkryj sąsiednie pola i porównaj zasoby, zanim poświęcisz ruch lub robotnika.',
+      'other':
+          'Odkryj sąsiednie pola i porównaj zasoby, zanim poświęcisz ruch lub robotnika.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String hexInspectionText(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'title': 'Inspekcja heksu',
+      'close': 'Zamknij inspekcję',
+      'loading': 'Odczytywanie heksu…',
+      'requestFailed': 'Nie udało się odczytać heksu. Spróbuj ponownie.',
+      'responseIncompatible': 'Odpowiedź inspekcji heksu jest niezgodna.',
+      'sessionUnavailable': 'Sesja gry jest niedostępna.',
+      'description': 'Opis',
+      'terrain': 'Teren',
+      'resources': 'Zasoby',
+      'none': 'Brak',
+      'height': 'Wysokość',
+      'improvements': 'Możliwe ulepszenia',
+      'noImprovements': 'Brak pasujących ulepszeń.',
+      'fromStart': 'Dostępne od początku',
+      'unlocked': 'Technologia odkryta',
+      'locked': 'Wymagana technologia',
+      'riverBonus': 'Premia rzeki',
+      'defenseBonus': 'Teren obronny',
+      'outsideCity': 'Poza granicami kontrolowanego miasta',
+      'cityCenter': 'Centrum miasta',
+      'alreadyImproved': 'Ten heks jest już ulepszony',
+      'objective': 'Cel mapy',
+      'other': 'Inspekcja heksu',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String hexInspectionCity(String city) {
+    return 'Pracuje dla miasta $city';
+  }
+
+  @override
+  String hexInspectionBuildTurns(int turns) {
+    return 'Czas budowy: $turns tur';
+  }
+
+  @override
+  String hexInspectionTerrain(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'ocean': 'Ocean',
+      'coast': 'Wybrzeże',
+      'lake': 'Jezioro',
+      'plains': 'Równiny',
+      'grassland': 'Łąki',
+      'desert': 'Pustynia',
+      'tundra': 'Tundra',
+      'snow': 'Śnieg',
+      'mountain': 'Góra',
+      'hills': 'Wzgórza',
+      'wetlands': 'Mokradła',
+      'jungle': 'Dżungla',
+      'forest': 'Las',
+      'river': 'Rzeka',
+      'other': 'Równiny',
+    });
+    return '$_temp0';
+  }
 }

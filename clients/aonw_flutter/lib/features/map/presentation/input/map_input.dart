@@ -8,6 +8,7 @@ enum MapInputCommand {
   activate,
   cancel,
   toggleMapViewMode,
+  inspectHex,
   toggleMoveTargeting,
 }
 

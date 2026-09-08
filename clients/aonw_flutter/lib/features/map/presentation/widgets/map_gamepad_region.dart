@@ -32,10 +32,12 @@ final class MapGamepadRegion extends StatefulWidget {
     this.priority = MapGamepadPriority.hud,
     this.onCancel,
     this.bottomCommand = false,
+    this.scrollBeforeFocus = false,
     super.key,
   });
 
   final bool bottomCommand;
+  final bool scrollBeforeFocus;
   final MapHudSection section;
   final MapGamepadPriority priority;
   final VoidCallback? onCancel;
@@ -71,6 +73,7 @@ final class _MapGamepadRegionState extends State<MapGamepadRegion> {
     MapGamepadRegionEntry(
       scope: _scope,
       bottomCommand: widget.bottomCommand,
+      scrollBeforeFocus: widget.scrollBeforeFocus,
       section: widget.section,
       priority: widget.priority,
       onCancel: widget.onCancel,
