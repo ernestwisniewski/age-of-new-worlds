@@ -3,7 +3,9 @@
 use core::num::NonZeroU32;
 use std::collections::BTreeMap;
 
-use aonw_ai::{AiDifficulty, AiPersona, AiProfile, PlannedCommandFamily, StrategicPlanner};
+use aonw_ai::{
+    AiDifficulty, AiPersona, AiProfile, AiRuntimeProfile, PlannedCommandFamily, StrategicPlanner,
+};
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
     City, CityId, FogOfWar, GameLengthConfig, GameMode, GameOutcomeCondition, GameState, HexCoord,
@@ -25,8 +27,8 @@ struct FullGameEvidence {
 
 #[test]
 fn profiled_ai_actors_finish_an_exact_game_across_save_and_replay() {
-    let first = run_full_game();
-    let second = run_full_game();
+    let first = run_full_game(AiRuntimeProfile::Standard);
+    let second = run_full_game(AiRuntimeProfile::Standard);
 
     assert_eq!(first, second);
     assert!(first.checkpoint_stamps.len() >= 4);
@@ -45,14 +47,20 @@ fn profiled_ai_actors_finish_an_exact_game_across_save_and_replay() {
     }
 }
 
-fn run_full_game() -> FullGameEvidence {
+#[test]
+fn battery_saver_actors_complete_reproducible_games_across_save_and_replay() {
+    let first = run_full_game(AiRuntimeProfile::BatterySaver);
+    let second = run_full_game(AiRuntimeProfile::BatterySaver);
+    assert_eq!(first, second);
+    assert!(first.checkpoint_stamps.len() >= 4);
+    assert!(first.executed_commands >= 12);
+}
+
+fn run_full_game(runtime_profile: AiRuntimeProfile) -> FullGameEvidence {
     let map = map();
     let rules = RulesetDefinition::standard().clone();
     let players = [player("player-1"), player("player-2")];
-    let profiles = [
-        AiProfile::new(AiDifficulty::Hard, AiPersona::Expansive),
-        AiProfile::new(AiDifficulty::VeryHard, AiPersona::Scientific),
-    ];
+    let profiles = game_profiles(runtime_profile);
     let state = state(&map, &rules, &players);
     let mut runtime = LocalRuntime::default();
     runtime
@@ -149,6 +157,15 @@ fn run_full_game() -> FullGameEvidence {
         family_usage,
         executed_commands,
     }
+}
+
+fn game_profiles(runtime_profile: AiRuntimeProfile) -> [AiProfile; 2] {
+    [
+        AiProfile::new(AiDifficulty::Hard, AiPersona::Expansive)
+            .with_runtime_profile(runtime_profile),
+        AiProfile::new(AiDifficulty::VeryHard, AiPersona::Scientific)
+            .with_runtime_profile(runtime_profile),
+    ]
 }
 
 fn state(map: &MapDefinition, rules: &RulesetDefinition, players: &[PlayerId; 2]) -> GameState {

@@ -11,6 +11,7 @@ pub use capabilities::RuntimeCapabilities;
 pub use error::RuntimeError;
 pub use handoff::ActorHandoffError;
 pub use open::{OpenSession, OpenSessionError};
+pub use runtime::ai_turn::AiRuntimeProfile;
 pub use runtime::{
     AiTurnDriver, AiTurnError, AiTurnExecution, LocalRuntime, MAX_AI_TURN_COMMAND_BUDGET,
     ObservedAiTurn, ReplayFrame,

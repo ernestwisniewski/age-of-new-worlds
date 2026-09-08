@@ -56,6 +56,39 @@ fn aggressive_profile_declines_friendship_by_policy() {
 
 #[test]
 fn hard_profile_uses_bounded_search_only_under_visible_hostile_pressure() {
+    let mut easy = tactical_session();
+    let mut hard = tactical_session();
+
+    let easy_plan = profiled_plan(
+        &mut easy,
+        AiProfile::new(AiDifficulty::Easy, AiPersona::Balanced),
+    );
+    let hard_plan = profiled_plan(
+        &mut hard,
+        AiProfile::new(AiDifficulty::Hard, AiPersona::Balanced),
+    );
+    assert_eq!(easy_plan.command().family(), PlannedCommandFamily::Movement);
+    assert!(easy_plan.tactical_search().is_none());
+    let evidence = hard_plan.tactical_search().expect("hard tactical search");
+    assert_eq!(evidence.budget().iterations(), 16);
+    assert_eq!(evidence.stats().iterations(), 16);
+    assert_ne!(evidence.fingerprint().as_bytes(), &[0; 32]);
+}
+
+pub(super) fn profiled_plan(
+    runtime: &mut LocalRuntime,
+    profile: AiProfile,
+) -> Box<aonw_ai::StrategicPlan> {
+    let StrategicPlanningOutcome::Planned(plan) = StrategicPlanner
+        .plan_with_profile(runtime, profile)
+        .expect("profiled plan")
+    else {
+        panic!("planned command")
+    };
+    plan
+}
+
+pub(super) fn tactical_session() -> LocalRuntime {
     let world = World::new("ai-policy-selective-search", 5, 1);
     let actor = unit(
         "actor",
@@ -87,45 +120,14 @@ fn hard_profile_uses_bounded_search_only_under_visible_hostile_pressure() {
         )
         .try_build()
         .expect("state");
-    let mut easy = LocalRuntime::default();
-    easy.open(OpenSession::from_state(
-        world.map.clone(),
-        world.rules.clone(),
-        state.clone(),
-        world.actor.clone(),
-    ))
-    .expect("easy session");
-    let mut hard = LocalRuntime::default();
-    hard.open(OpenSession::from_state(
-        world.map,
-        world.rules,
-        state,
-        world.actor,
-    ))
-    .expect("hard session");
-
-    let easy_plan = profiled_plan(
-        &mut easy,
-        AiProfile::new(AiDifficulty::Easy, AiPersona::Balanced),
-    );
-    let hard_plan = profiled_plan(
-        &mut hard,
-        AiProfile::new(AiDifficulty::Hard, AiPersona::Balanced),
-    );
-    assert_eq!(easy_plan.command().family(), PlannedCommandFamily::Movement);
-    assert!(easy_plan.tactical_search().is_none());
-    let evidence = hard_plan.tactical_search().expect("hard tactical search");
-    assert_eq!(evidence.budget().iterations(), 16);
-    assert_eq!(evidence.stats().iterations(), 16);
-    assert_ne!(evidence.fingerprint().as_bytes(), &[0; 32]);
-}
-
-fn profiled_plan(runtime: &mut LocalRuntime, profile: AiProfile) -> Box<aonw_ai::StrategicPlan> {
-    let StrategicPlanningOutcome::Planned(plan) = StrategicPlanner
-        .plan_with_profile(runtime, profile)
-        .expect("profiled plan")
-    else {
-        panic!("planned command")
-    };
-    plan
+    let mut runtime = LocalRuntime::default();
+    runtime
+        .open(OpenSession::from_state(
+            world.map,
+            world.rules,
+            state,
+            world.actor,
+        ))
+        .expect("tactical session");
+    runtime
 }

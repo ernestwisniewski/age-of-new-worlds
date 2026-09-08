@@ -42,7 +42,7 @@ pub use query_dispatch::{
     WorkerOptionsRequest,
 };
 pub use session::{
-    ActorHandoffError, AiTurnDriver, AiTurnError, AiTurnExecution, LocalRuntime,
+    ActorHandoffError, AiRuntimeProfile, AiTurnDriver, AiTurnError, AiTurnExecution, LocalRuntime,
     MAX_AI_TURN_COMMAND_BUDGET, ObservedAiTurn, OpenSession, OpenSessionError, ReplayFrame,
     RuntimeCapabilities, RuntimeError, SessionStamp,
 };

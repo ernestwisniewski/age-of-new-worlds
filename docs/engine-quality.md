@@ -24,6 +24,18 @@ Pure engine crates do not read the filesystem, network, wall clock, system
 randomness, or presentation state. A command receives every authoritative input
 explicitly. Rejections leave canonical state unchanged.
 
+## AI planning effort
+
+`AiRuntimeProfile` is an explicit input to each Rust AI turn. `Standard` keeps
+its difficulty's reviewed tactical budget. `BatterySaver` halves MCTS iterations,
+retained nodes, and depth, retaining at least one iteration, two nodes, and one
+level. Easy play continues without tactical search. Difficulty weights, persona,
+seed, legal commands, and the complete-turn command budget retain their values.
+Each selected command still passes through the authoritative runtime. Save and
+replay preserve those commands and their outcomes; the runtime profile is not
+canonical match state. Tests check actual search work, deterministic decisions,
+profile changes between requests, and complete games across save and replay.
+
 ## Quality gates
 
 Run the focused checks from the repository root:

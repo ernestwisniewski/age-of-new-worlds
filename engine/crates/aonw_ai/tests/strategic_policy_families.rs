@@ -17,6 +17,8 @@ use aonw_domain::{
 };
 use aonw_local_runtime::{LocalRuntime, OpenSession};
 
+#[path = "strategic_policy_families/battery_saver.rs"]
+mod battery_saver;
 #[path = "strategic_policy_families/lifecycle.rs"]
 mod lifecycle;
 #[path = "strategic_policy_families/pending.rs"]

@@ -1,6 +1,7 @@
 mod disclosure;
 mod protocol;
 mod replay;
+mod runtime_profile;
 
 use std::collections::BTreeMap;
 use std::num::NonZeroU32;
@@ -25,10 +26,20 @@ fn observed_ai_commands_keep_the_human_projection_and_disclosure() {
     let (map, rules, mut runtime) = opened();
     let mut ordinary = runtime.clone();
     let result = runtime
-        .advance_ai_turn_observed(player("ai"), budget(3), &mut ScriptedDriver::new(3))
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(3),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(3),
+        )
         .expect("observed AI");
     let plain = ordinary
-        .advance_ai_turn(player("ai"), budget(3), &mut ScriptedDriver::new(3))
+        .advance_ai_turn(
+            player("ai"),
+            budget(3),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(3),
+        )
         .expect("ordinary AI");
     assert_eq!(result.execution, plain);
     assert_eq!(result.recipient_player_id, player("human"));
@@ -81,7 +92,12 @@ fn observed_ai_commands_keep_the_human_projection_and_disclosure() {
 fn replay_forward_frames_match_live_observation_and_random_seeks_are_silent() {
     let (map, rules, mut runtime) = opened();
     let observed = runtime
-        .advance_ai_turn_observed(player("ai"), budget(3), &mut ScriptedDriver::new(3))
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(3),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(3),
+        )
         .expect("AI");
     let replay = runtime.export_replay_json().expect("replay");
     let first = runtime
@@ -133,7 +149,12 @@ fn simulation_work_and_failed_batches_do_not_enter_later_observations() {
     let mut driver = ScriptedDriver::new(1);
     driver.simulate = true;
     let result = runtime
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut driver)
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut driver,
+        )
         .expect("AI with simulation");
     assert_eq!(result.commands.len(), 1);
     assert_eq!(result.commands[0].stamp.revision.get(), 1);
@@ -145,7 +166,12 @@ fn simulation_work_and_failed_batches_do_not_enter_later_observations() {
     failure.fail = true;
     assert!(
         runtime
-            .advance_ai_turn_observed(player("ai"), budget(1), &mut failure)
+            .advance_ai_turn_observed(
+                player("ai"),
+                budget(1),
+                crate::AiRuntimeProfile::Standard,
+                &mut failure
+            )
             .is_err()
     );
     runtime
@@ -153,14 +179,24 @@ fn simulation_work_and_failed_batches_do_not_enter_later_observations() {
         .expect("restore");
     assert!(
         runtime
-            .advance_ai_turn_observed(player("ai"), budget(1), &mut ScriptedDriver::new(0))
+            .advance_ai_turn_observed(
+                player("ai"),
+                budget(1),
+                crate::AiRuntimeProfile::Standard,
+                &mut ScriptedDriver::new(0)
+            )
             .expect("next batch")
             .commands
             .is_empty()
     );
     let (_, _, mut excessive) = opened();
     let error = excessive
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut ScriptedDriver::new(2))
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(2),
+        )
         .expect_err("bounded observation");
     assert!(
         error
@@ -174,6 +210,7 @@ struct ScriptedDriver {
     simulate: bool,
     fail: bool,
     target: Option<i32>,
+    runtime_profiles: Vec<crate::AiRuntimeProfile>,
 }
 
 impl ScriptedDriver {
@@ -183,6 +220,7 @@ impl ScriptedDriver {
             simulate: false,
             fail: false,
             target: None,
+            runtime_profiles: Vec::new(),
         }
     }
 }
@@ -193,7 +231,9 @@ impl AiTurnDriver for ScriptedDriver {
         runtime: &mut LocalRuntime,
         _: AiPlayer,
         _: NonZeroU32,
+        runtime_profile: crate::AiRuntimeProfile,
     ) -> Result<AiTurnExecution, Box<str>> {
+        self.runtime_profiles.push(runtime_profile);
         if self.simulate {
             let mut simulation = runtime.simulation_clone();
             for index in 0..3 {

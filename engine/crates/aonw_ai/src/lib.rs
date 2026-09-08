@@ -21,6 +21,7 @@ mod random_planner;
 mod rng;
 mod strategy;
 
+pub use aonw_local_runtime::AiRuntimeProfile;
 pub use baseline::{BaselinePlan, BaselinePlanner, BaselinePlanningOutcome};
 pub use budget::{PlanningBudget, PlanningBudgetError};
 pub use command::{PlannedCommand, PlannedCommandFamily};

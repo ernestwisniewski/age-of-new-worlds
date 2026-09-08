@@ -27,7 +27,7 @@ use aonw_projection::PlayerViewSnapshot;
 use super::{OpenSession, OpenSessionError, RuntimeError, Session, SessionStamp};
 
 mod actor_handoff;
-mod ai_turn;
+pub(super) mod ai_turn;
 mod observation;
 mod replay;
 

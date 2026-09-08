@@ -283,7 +283,12 @@ fn dispatch_ai_turn(
     match aonw_domain::PlayerId::new(actor_player_id) {
         Ok(actor) => {
             let response_actor = actor.as_str().to_owned();
-            match runtime.advance_ai_turn_observed(actor, command_budget, driver) {
+            match runtime.advance_ai_turn_observed(
+                actor,
+                command_budget,
+                crate::AiRuntimeProfile::Standard,
+                driver,
+            ) {
                 Ok(observed) => success(ClientResponseBodyDto::AiTurnAdvanced {
                     stamp: encode::stamp(observed.execution.stamp),
                     actor_player_id: response_actor,

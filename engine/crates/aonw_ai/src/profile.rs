@@ -1,4 +1,4 @@
-use crate::PlanningBudget;
+use crate::{AiRuntimeProfile, PlanningBudget};
 
 const BASIS_POINTS: u32 = 10_000;
 
@@ -136,6 +136,7 @@ pub struct AiProfile {
     persona: AiPersona,
     tactical_strategy: AiTacticalStrategy,
     base_seed: u32,
+    runtime_profile: AiRuntimeProfile,
 }
 
 impl Default for AiProfile {
@@ -161,6 +162,35 @@ impl AiProfile {
             persona,
             tactical_strategy: AiTacticalStrategy::Mcts,
             base_seed: 0xA10D_2000,
+            runtime_profile: AiRuntimeProfile::Standard,
+        }
+    }
+
+    /// Selects deterministic planning effort without changing difficulty or persona.
+    #[must_use]
+    pub const fn with_runtime_profile(mut self, runtime_profile: AiRuntimeProfile) -> Self {
+        self.runtime_profile = runtime_profile;
+        self
+    }
+
+    /// Returns the planning effort selected for this request.
+    #[must_use]
+    pub const fn runtime_profile(self) -> AiRuntimeProfile {
+        self.runtime_profile
+    }
+
+    /// Returns the difficulty budget adjusted for the selected planning effort.
+    #[must_use]
+    pub fn tactical_budget(self) -> Option<PlanningBudget> {
+        let budget = self.difficulty.tactical_budget()?;
+        match self.runtime_profile {
+            AiRuntimeProfile::Standard => Some(budget),
+            AiRuntimeProfile::BatterySaver => PlanningBudget::try_new(
+                (budget.iterations() / 2).max(1),
+                (budget.max_nodes() / 2).max(2),
+                (budget.max_depth() / 2).max(1),
+            )
+            .ok(),
         }
     }
 
@@ -211,7 +241,7 @@ const fn multiply_basis_points(left: u32, right: u32) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use super::{AiDifficulty, AiPersona, AiProfile, UtilityWeights};
+    use super::{AiDifficulty, AiPersona, AiProfile, AiRuntimeProfile, UtilityWeights};
 
     #[test]
     fn profile_weights_and_search_budgets_change_real_policy_inputs() {
@@ -248,6 +278,47 @@ mod tests {
         assert!(dominant[2].economy() > dominant[2].aggression());
         assert!(dominant[3].science() > dominant[3].expansion());
         assert_ne!(balanced.search_seed(3), balanced.search_seed(4));
+    }
+
+    #[test]
+    fn battery_saver_reduces_work_without_changing_policy_preferences_or_seed() {
+        for difficulty in [
+            AiDifficulty::Easy,
+            AiDifficulty::Normal,
+            AiDifficulty::Hard,
+            AiDifficulty::VeryHard,
+        ] {
+            let standard = AiProfile::new(difficulty, AiPersona::Scientific)
+                .with_runtime_configuration(super::AiTacticalStrategy::Mcts, 42);
+            let saver = standard.with_runtime_profile(AiRuntimeProfile::BatterySaver);
+            assert_eq!(standard.runtime_profile(), AiRuntimeProfile::Standard);
+            assert_eq!(standard.tactical_budget(), difficulty.tactical_budget());
+            assert_eq!(saver.difficulty(), difficulty);
+            assert_eq!(saver.persona(), standard.persona());
+            assert_eq!(saver.weights(), standard.weights());
+            assert_eq!(saver.search_seed(4), standard.search_seed(4));
+            assert_eq!(saver.tactical_strategy(), standard.tactical_strategy());
+            assert_eq!(
+                saver.with_runtime_profile(AiRuntimeProfile::Standard),
+                standard
+            );
+        }
+        let budgets = [
+            AiDifficulty::Easy,
+            AiDifficulty::Normal,
+            AiDifficulty::Hard,
+            AiDifficulty::VeryHard,
+        ]
+        .map(|difficulty| {
+            AiProfile::new(difficulty, AiPersona::Balanced)
+                .with_runtime_profile(AiRuntimeProfile::BatterySaver)
+                .tactical_budget()
+                .map(PlanningBudgetView::from)
+        });
+        assert_eq!(
+            budgets,
+            [None, Some((4, 3, 1)), Some((8, 5, 1)), Some((16, 8, 2))]
+        );
     }
 
     struct PlanningBudgetView;

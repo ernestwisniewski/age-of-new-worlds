@@ -7,6 +7,16 @@ use crate::{ActorHandoffError, CommandResult, LocalRuntime, RuntimeError, Sessio
 /// Largest reviewed number of authoritative commands in one AI turn request.
 pub const MAX_AI_TURN_COMMAND_BUDGET: u32 = 1_024;
 
+/// Per-request planning effort independent of saved participant difficulty.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub enum AiRuntimeProfile {
+    /// Full deterministic search budget for the configured difficulty.
+    #[default]
+    Standard,
+    /// Smaller deterministic search budget while still completing the turn.
+    BatterySaver,
+}
+
 /// Framework-neutral port used by the runtime client protocol to execute AI.
 ///
 /// The implementation lives in `aonw_ai`, keeping the dependency direction
@@ -22,6 +32,7 @@ pub trait AiTurnDriver {
         runtime: &mut LocalRuntime,
         configuration: AiPlayer,
         command_budget: NonZeroU32,
+        runtime_profile: AiRuntimeProfile,
     ) -> Result<AiTurnExecution, Box<str>>;
 }
 
@@ -117,6 +128,7 @@ impl LocalRuntime {
         &mut self,
         actor: PlayerId,
         command_budget: NonZeroU32,
+        runtime_profile: AiRuntimeProfile,
         driver: &mut dyn AiTurnDriver,
     ) -> Result<ObservedAiTurn, AiTurnError> {
         if command_budget.get() > MAX_AI_TURN_COMMAND_BUDGET {
@@ -132,7 +144,7 @@ impl LocalRuntime {
         let recipient_player_id = self
             .start_observing_recipient(maximum)
             .map_err(AiTurnError::Observation)?;
-        let execution = self.advance_ai_turn(actor, command_budget, driver);
+        let execution = self.advance_ai_turn(actor, command_budget, runtime_profile, driver);
         let commands = self.finish_observing_recipient();
         execution.map(|execution| ObservedAiTurn {
             recipient_player_id,
@@ -152,6 +164,7 @@ impl LocalRuntime {
         &mut self,
         actor: PlayerId,
         command_budget: NonZeroU32,
+        runtime_profile: AiRuntimeProfile,
         driver: &mut dyn AiTurnDriver,
     ) -> Result<AiTurnExecution, AiTurnError> {
         if command_budget.get() > MAX_AI_TURN_COMMAND_BUDGET {
@@ -183,7 +196,7 @@ impl LocalRuntime {
         self.handoff_hot_seat_actor(actor)
             .map_err(AiTurnError::Handoff)?;
         driver
-            .play_turn(self, configuration, command_budget)
+            .play_turn(self, configuration, command_budget, runtime_profile)
             .map_err(AiTurnError::Driver)
     }
 }

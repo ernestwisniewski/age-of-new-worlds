@@ -85,7 +85,7 @@ pub(super) fn movement_command(
                 };
             }
             AiTacticalStrategy::Mcts => {
-                if let Some(budget) = profile.difficulty().tactical_budget() {
+                if let Some(budget) = profile.tactical_budget() {
                     return match MctsPlanner::new(profile.search_seed(snapshot.turn()), budget)
                         .plan(runtime)?
                     {

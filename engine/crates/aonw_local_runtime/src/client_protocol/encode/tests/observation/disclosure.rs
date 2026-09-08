@@ -79,7 +79,12 @@ fn visible_endpoints_do_not_disclose_an_unseen_intermediate_path() {
     let mut driver = ScriptedDriver::new(1);
     driver.target = Some(5);
     let observed = runtime
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut driver)
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut driver,
+        )
         .expect("AI movement");
     let command = command_result(&observed.commands[0]);
     assert_eq!(command.events.len(), 1);
@@ -93,7 +98,12 @@ fn observed_movement_into_fog_hides_the_path_and_destination_event() {
     let mut driver = ScriptedDriver::new(1);
     driver.target = Some(5);
     let observed = runtime
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut driver)
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut driver,
+        )
         .expect("AI movement");
     let command = command_result(&observed.commands[0]);
     assert!(command.events.is_empty());
@@ -116,7 +126,12 @@ fn observed_movement_into_fog_hides_the_path_and_destination_event() {
 fn visible_foreign_units_do_not_disclose_private_logistics() {
     let (_, _, mut runtime) = opened();
     let observed = runtime
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut ScriptedDriver::new(1))
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(1),
+        )
         .expect("AI");
     let viewer = &observed.commands[0].recipient_disclosure;
     assert!(viewer.allows_unit(&unit_id("visible-ai")));
@@ -161,7 +176,12 @@ fn visible_foreign_units_do_not_disclose_private_logistics() {
 fn foreign_exploration_keeps_visible_motion_without_its_private_destination() {
     let (_, _, mut runtime) = opened();
     let observed = runtime
-        .advance_ai_turn_observed(player("ai"), budget(1), &mut ScriptedDriver::new(1))
+        .advance_ai_turn_observed(
+            player("ai"),
+            budget(1),
+            crate::AiRuntimeProfile::Standard,
+            &mut ScriptedDriver::new(1),
+        )
         .expect("AI");
     let frame = &observed.commands[0];
     let Some(ExecutionEvidence::UnitMovement(movement)) = &frame.evidence else {

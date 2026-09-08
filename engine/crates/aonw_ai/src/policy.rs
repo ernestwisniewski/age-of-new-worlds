@@ -7,7 +7,8 @@ use aonw_domain::{
 };
 use aonw_engine::{CommandRejectionCode, StateDigest};
 use aonw_local_runtime::{
-    AiTurnDriver, AiTurnExecution, CommandResult, LocalRuntime, RuntimeError, SessionStamp,
+    AiRuntimeProfile, AiTurnDriver, AiTurnExecution, CommandResult, LocalRuntime, RuntimeError,
+    SessionStamp,
 };
 
 use crate::{
@@ -244,6 +245,7 @@ impl AiTurnDriver for StrategicPlanner {
         runtime: &mut LocalRuntime,
         configuration: AiPlayer,
         command_budget: NonZeroU32,
+        runtime_profile: AiRuntimeProfile,
     ) -> Result<AiTurnExecution, Box<str>> {
         let profile = AiProfile::new(
             match configuration.difficulty() {
@@ -269,7 +271,8 @@ impl AiTurnDriver for StrategicPlanner {
                 | DomainAiStrategyId::Utility => AiTacticalStrategy::Direct,
             },
             configuration.seed(),
-        );
+        )
+        .with_runtime_profile(runtime_profile);
         match self.play_turn_with_profile(runtime, command_budget, profile) {
             Ok(report) => Ok(AiTurnExecution {
                 stamp: *report.final_stamp(),
