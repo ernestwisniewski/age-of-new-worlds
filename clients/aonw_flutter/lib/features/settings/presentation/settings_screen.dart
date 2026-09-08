@@ -84,9 +84,10 @@ final class _SettingsForm extends StatelessWidget {
   List<Widget> _sections(BuildContext context) {
     final l10n = context.aonwL10n;
     return [
+      ..._accessibilitySections(context),
       _SettingsSection(
-        title: l10n.audioSettings,
-        child: _AudioSettings(settings: settings, onChanged: onChanged),
+        title: l10n.mapSettings,
+        child: _MapSettings(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
       _SettingsSection(
@@ -105,11 +106,10 @@ final class _SettingsForm extends StatelessWidget {
       ),
       const SizedBox(height: AonwSpacing.md),
       _SettingsSection(
-        title: l10n.mapSettings,
-        child: _MapSettings(settings: settings, onChanged: onChanged),
+        title: l10n.audioSettings,
+        child: _AudioSettings(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
-      ..._accessibilitySections(context),
       _SettingsSection(
         title: l10n.aiSettings,
         child: _AiSettings(settings: settings, onChanged: onChanged),
