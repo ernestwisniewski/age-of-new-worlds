@@ -12,6 +12,7 @@ final class SharedPreferencesClientSettingsStore
   SharedPreferencesClientSettingsStore({SharedPreferencesAsync? preferences})
     : _preferences = preferences ?? SharedPreferencesAsync();
 
+  static const _languageKey = 'aonw.settings.language';
   static const _textScaleKey = 'aonw.settings.textScale';
   static const _cinematicCameraKey = 'aonw.settings.cinematicCamera';
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
@@ -65,6 +66,7 @@ final class SharedPreferencesClientSettingsStore
     final camera = await _loadCamera();
     final animations = await _loadAnimations();
     return ClientSettings(
+      language: await _loadLanguage(),
       textScale: await _loadTextScale(),
       gamepad: await _loadGamepad(),
       showUnitMovementAnimations: animations.movement,
@@ -101,6 +103,7 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<void> save(ClientSettings settings) async {
+    await _preferences.setString(_languageKey, settings.language.storageValue);
     await _preferences.setString(_textScaleKey, settings.textScale.name);
     await _saveCamera(settings);
     await _saveAnimations(settings);
@@ -128,6 +131,14 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(
       _showMapHeightBadgesKey,
       settings.showMapHeightBadges,
+    );
+  }
+
+  Future<ClientLanguage> _loadLanguage() async {
+    final value = await _preferences.getString(_languageKey);
+    return ClientLanguage.values.firstWhere(
+      (language) => language.storageValue == value,
+      orElse: () => ClientLanguage.system,
     );
   }
 

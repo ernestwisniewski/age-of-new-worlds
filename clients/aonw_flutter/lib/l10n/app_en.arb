@@ -612,5 +612,7 @@
   "textSizeDescription": "Applied in addition to your system text size.",
   "textScaleStandard": "Standard (100%)",
   "textScaleLarge": "Large (115%)",
-  "textScaleExtraLarge": "Extra large (130%)"
+  "textScaleExtraLarge": "Extra large (130%)",
+  "languageSettings": "Language",
+  "languageSystem": "System language"
 }

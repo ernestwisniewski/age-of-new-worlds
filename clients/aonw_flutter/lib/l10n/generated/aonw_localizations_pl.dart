@@ -2479,4 +2479,10 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get textScaleExtraLarge => 'Bardzo duży (130%)';
+
+  @override
+  String get languageSettings => 'Język';
+
+  @override
+  String get languageSystem => 'Język systemowy';
 }

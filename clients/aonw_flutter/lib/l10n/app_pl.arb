@@ -469,5 +469,7 @@
   "textSizeDescription": "Powiększenie stosowane dodatkowo do wielkości tekstu ustawionej w systemie.",
   "textScaleStandard": "Standardowy (100%)",
   "textScaleLarge": "Duży (115%)",
-  "textScaleExtraLarge": "Bardzo duży (130%)"
+  "textScaleExtraLarge": "Bardzo duży (130%)",
+  "languageSettings": "Język",
+  "languageSystem": "Język systemowy"
 }

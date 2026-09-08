@@ -2471,4 +2471,10 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get textScaleExtraLarge => 'Extra large (130%)';
+
+  @override
+  String get languageSettings => 'Language';
+
+  @override
+  String get languageSystem => 'System language';
 }

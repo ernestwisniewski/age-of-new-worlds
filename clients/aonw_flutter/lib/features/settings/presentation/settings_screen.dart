@@ -16,6 +16,7 @@ part 'settings_audio.dart';
 part 'settings_gamepad.dart';
 part 'settings_keyboard.dart';
 part 'settings_text_scale.dart';
+part 'settings_language.dart';
 part 'settings_gamepad_bindings.dart';
 part 'settings_gamepad_labels.dart';
 
@@ -94,6 +95,11 @@ final class _SettingsForm extends StatelessWidget {
       _SettingsSection(
         title: l10n.accessibilitySettings,
         child: _AccessibilitySettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _SettingsSection(
+        title: l10n.languageSettings,
+        child: _LanguageSetting(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
       _GamepadSettings(settings: settings, onChanged: onChanged),

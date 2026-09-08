@@ -1,13 +1,16 @@
 import 'client_audio_settings.dart';
 import 'client_gamepad_settings.dart';
+import 'client_language.dart';
 import 'client_text_scale.dart';
 
 export 'client_audio_settings.dart';
 export 'client_gamepad_settings.dart';
+export 'client_language.dart';
 export 'client_text_scale.dart';
 
 final class ClientSettings {
   const ClientSettings({
+    this.language = ClientLanguage.system,
     this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
@@ -42,6 +45,7 @@ final class ClientSettings {
     showMapHeightBadges: false,
   );
 
+  final ClientLanguage language;
   final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
@@ -65,6 +69,7 @@ final class ClientSettings {
   final bool showMapHeightBadges;
 
   ClientSettings copyWith({
+    ClientLanguage? language,
     ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
@@ -87,6 +92,7 @@ final class ClientSettings {
     bool? showMapResourceIcons,
     bool? showMapHeightBadges,
   }) => ClientSettings(
+    language: language ?? this.language,
     textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
@@ -117,15 +123,19 @@ final class ClientSettings {
   @override
   bool operator ==(Object other) =>
       other is ClientSettings &&
-      other.textScale == textScale &&
+      other.language == language &&
       other.gamepad == gamepad &&
       other.audio == audio &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
       _sameAnimations(other) &&
-      other.reducedMotion == reducedMotion &&
-      other.highContrast == highContrast &&
+      _sameAccessibility(other) &&
       _sameMapDisplay(other);
+
+  bool _sameAccessibility(ClientSettings other) =>
+      other.textScale == textScale &&
+      other.reducedMotion == reducedMotion &&
+      other.highContrast == highContrast;
 
   bool _sameAnimations(ClientSettings other) =>
       other.showUnitMovementAnimations == showUnitMovementAnimations &&
@@ -150,6 +160,7 @@ final class ClientSettings {
 
   @override
   int get hashCode => Object.hashAll([
+    language,
     textScale,
     gamepad,
     audio,

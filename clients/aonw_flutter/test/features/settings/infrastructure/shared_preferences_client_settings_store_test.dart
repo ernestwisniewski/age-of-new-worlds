@@ -5,6 +5,51 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'language survives restart and returning to system persists explicitly',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      for (final language in [
+        ClientLanguage.polish,
+        ClientLanguage.english,
+        ClientLanguage.system,
+      ]) {
+        final settings = ClientSettings.defaults.copyWith(
+          language: language,
+          textScale: ClientTextScale.large,
+        );
+        await store.save(settings);
+        final restored = await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load();
+        expect(restored, settings);
+        expect(restored.hashCode, settings.hashCode);
+        expect(
+          preferences.values['aonw.settings.language'],
+          language.storageValue,
+        );
+      }
+      await store.save(ClientSettings.defaults);
+      expect(await store.load(), ClientSettings.defaults);
+    },
+  );
+
+  test('missing or unsupported language follows the system', () async {
+    final preferences = _Preferences();
+    final store = SharedPreferencesClientSettingsStore(
+      preferences: preferences,
+    );
+    expect((await store.load()).language, ClientLanguage.system);
+    preferences.values['aonw.settings.language'] = 'unknown';
+    preferences.values['aonw.settings.highContrast'] = true;
+    final restored = await store.load();
+    expect(restored.language, ClientLanguage.system);
+    expect(restored.highContrast, isTrue);
+  });
+
+  test(
     'text size survives restart and resets without changing other options',
     () async {
       final preferences = _Preferences();

@@ -2437,6 +2437,18 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Extra large (130%)'**
   String get textScaleExtraLarge;
+
+  /// No description provided for @languageSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageSettings;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System language'**
+  String get languageSystem;
 }
 
 class _AonwLocalizationsDelegate

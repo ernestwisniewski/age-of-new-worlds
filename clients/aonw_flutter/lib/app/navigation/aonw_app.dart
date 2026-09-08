@@ -15,6 +15,7 @@ import '../../features/settings/application/configurable_gamepad_input.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
 import '../../game/aonw_flame_game.dart';
+import '../../l10n/aonw_locale_resolution.dart';
 import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
 import '../telemetry/client_telemetry.dart';
@@ -164,7 +165,8 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
             theme: AonwTheme.darkFor(
               highContrast: _settingsController.settings.highContrast,
             ),
-            locale: widget.locale,
+            locale: widget.locale ?? _settingsLocale,
+            localeListResolutionCallback: resolveAonwLocale,
             localizationsDelegates: AonwLocalizations.localizationsDelegates,
             supportedLocales: AonwLocalizations.supportedLocales,
             initialRoute: widget.initialRoute.location,
@@ -192,6 +194,11 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  Locale? get _settingsLocale {
+    final code = _settingsController.settings.language.languageCode;
+    return code == null ? null : Locale(code);
   }
 
   void _installSettingsController() {
