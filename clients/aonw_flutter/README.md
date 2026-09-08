@@ -58,6 +58,12 @@ Map assets are generated from `content/maps/` for both presentation clients.
 The contract gate verifies every packaged map without rewriting Flutter visual
 goldens.
 
+The device gate exercises turn automation through the native Rust session and
+the production map screen. Its Single scenarios cover sequential and
+simultaneous turns with an AI opponent, unit skipping, research dismissal and
+selection, and automatic return to the human player. The request trace also
+checks that an idle map sends no repeated queries or commands.
+
 ## Documentation
 
 Release qualification and privacy behavior are defined in
