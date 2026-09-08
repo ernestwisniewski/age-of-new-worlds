@@ -24,8 +24,10 @@ import '../../read_model/map_scene.dart';
 import '../../read_model/map_view.dart';
 import '../../read_model/pending_action_view.dart';
 import '../../read_model/player_map_view.dart';
+import '../input/map_gamepad_navigation.dart';
 import '../map_presentation_controller.dart';
 import 'map_failure_messages.dart';
+import 'map_gamepad_region.dart';
 
 part 'map_selection_feature_controls.dart';
 
@@ -47,39 +49,42 @@ final class MapSelectionOverlay extends StatelessWidget {
     if (selected == null) return const SizedBox.shrink();
     final selectedUnitId = interaction.selectedUnitId;
     return Positioned.fill(
-      child: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(10, 0, 10, 66),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: _MapSelectionPanel(
-            coordinate: selected,
-            interaction: interaction,
-            unit: selectedUnitId == null
-                ? null
-                : scene.player.controlledUnitById(selectedUnitId),
-            city: interaction.city?.cityId == null
-                ? scene.player.cityAt(selected)
-                : scene.player.cityById(interaction.city!.cityId!),
-            player: scene.player,
-            onConfirmMove: controller.confirmMove,
-            onUnitAction: controller.executeUnitAction,
-            onUnitLogistics: controller.executeUnitLogistics,
-            onWorkerAction: controller.executeWorkerAction,
-            onWorkerOpenChanged: controller.setWorkerActionsOpen,
-            onWorkerPreview: (kind) => controller.previewWorkerImprovement(
-              interaction.worker!.unitId,
-              kind,
+      child: MapGamepadRegion(
+        section: MapHudSection.selectionActions,
+        child: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(10, 0, 10, 66),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: _MapSelectionPanel(
+              coordinate: selected,
+              interaction: interaction,
+              unit: selectedUnitId == null
+                  ? null
+                  : scene.player.controlledUnitById(selectedUnitId),
+              city: interaction.city?.cityId == null
+                  ? scene.player.cityAt(selected)
+                  : scene.player.cityById(interaction.city!.cityId!),
+              player: scene.player,
+              onConfirmMove: controller.confirmMove,
+              onUnitAction: controller.executeUnitAction,
+              onUnitLogistics: controller.executeUnitLogistics,
+              onWorkerAction: controller.executeWorkerAction,
+              onWorkerOpenChanged: controller.setWorkerActionsOpen,
+              onWorkerPreview: (kind) => controller.previewWorkerImprovement(
+                interaction.worker!.unitId,
+                kind,
+              ),
+              onConfirmCombat: controller.confirmCombat,
+              onCityConquestAction: controller.setCityConquestAction,
+              onOpenCityFounding: controller.openCityFounding,
+              onToggleCityFoundingHex: controller.toggleCityFoundingHex,
+              onConfirmCityFounding: controller.confirmCityFounding,
+              onCancelCityFounding: controller.cancelCityFounding,
+              onStartCityManagement: controller.startCityManagement,
+              onCancelCityManagement: controller.cancelCityManagement,
+              onProductionAction: controller.executeProductionAction,
+              onArtifactAction: controller.executeArtifactAction,
             ),
-            onConfirmCombat: controller.confirmCombat,
-            onCityConquestAction: controller.setCityConquestAction,
-            onOpenCityFounding: controller.openCityFounding,
-            onToggleCityFoundingHex: controller.toggleCityFoundingHex,
-            onConfirmCityFounding: controller.confirmCityFounding,
-            onCancelCityFounding: controller.cancelCityFounding,
-            onStartCityManagement: controller.startCityManagement,
-            onCancelCityManagement: controller.cancelCityManagement,
-            onProductionAction: controller.executeProductionAction,
-            onArtifactAction: controller.executeArtifactAction,
           ),
         ),
       ),

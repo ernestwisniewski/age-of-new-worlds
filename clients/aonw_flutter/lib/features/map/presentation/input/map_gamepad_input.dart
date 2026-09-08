@@ -16,6 +16,10 @@ final class MapGamepadInput {
     this.dpadRight = false,
     this.activate = false,
     this.cancel = false,
+    this.hudFocusPrevious = false,
+    this.hudFocusNext = false,
+    this.focusPrevious = false,
+    this.focusNext = false,
     this.toggleMapViewMode = false,
   });
 
@@ -33,6 +37,10 @@ final class MapGamepadInput {
   final bool dpadRight;
   final bool activate;
   final bool cancel;
+  final bool hudFocusPrevious;
+  final bool hudFocusNext;
+  final bool focusPrevious;
+  final bool focusNext;
   final bool toggleMapViewMode;
 
   double get zoom => zoomIn - zoomOut;
@@ -52,6 +60,10 @@ final class MapGamepadInput {
     bool? dpadRight,
     bool? activate,
     bool? cancel,
+    bool? hudFocusPrevious,
+    bool? hudFocusNext,
+    bool? focusPrevious,
+    bool? focusNext,
     bool? toggleMapViewMode,
   }) => MapGamepadInput(
     cursorX: cursorX ?? this.cursorX,
@@ -66,6 +78,10 @@ final class MapGamepadInput {
     dpadRight: dpadRight ?? this.dpadRight,
     activate: activate ?? this.activate,
     cancel: cancel ?? this.cancel,
+    hudFocusPrevious: hudFocusPrevious ?? this.hudFocusPrevious,
+    hudFocusNext: hudFocusNext ?? this.hudFocusNext,
+    focusPrevious: focusPrevious ?? this.focusPrevious,
+    focusNext: focusNext ?? this.focusNext,
     toggleMapViewMode: toggleMapViewMode ?? this.toggleMapViewMode,
   );
 
@@ -89,6 +105,10 @@ final class MapGamepadInput {
     dpadRight,
     activate,
     cancel,
+    hudFocusPrevious,
+    hudFocusNext,
+    focusPrevious,
+    focusNext,
     toggleMapViewMode,
   );
 }
@@ -105,6 +125,10 @@ final class MapGamepadFrame {
     this.zoom = 0,
     this.activatePressed = false,
     this.cancelPressed = false,
+    this.hudFocusPreviousPressed = false,
+    this.hudFocusNextPressed = false,
+    this.focusPreviousPressed = false,
+    this.focusNextPressed = false,
     this.toggleMapViewModePressed = false,
   });
 
@@ -116,6 +140,10 @@ final class MapGamepadFrame {
   final double zoom;
   final bool activatePressed;
   final bool cancelPressed;
+  final bool hudFocusPreviousPressed;
+  final bool hudFocusNextPressed;
+  final bool focusPreviousPressed;
+  final bool focusNextPressed;
   final bool toggleMapViewModePressed;
 
   bool get isIdle =>
@@ -123,9 +151,16 @@ final class MapGamepadFrame {
       cameraX == 0 &&
       cameraY == 0 &&
       zoom == 0 &&
-      !activatePressed &&
-      !cancelPressed &&
-      !toggleMapViewModePressed;
+      !hasAction &&
+      !hasFocusAction;
+
+  bool get hasAction =>
+      activatePressed || cancelPressed || toggleMapViewModePressed;
+  bool get hasFocusAction =>
+      hudFocusPreviousPressed ||
+      hudFocusNextPressed ||
+      focusPreviousPressed ||
+      focusNextPressed;
 }
 
 final class MapGamepadFrameController {
@@ -170,6 +205,16 @@ final class MapGamepadFrameController {
       zoom: _applyDeadzone(input.zoom),
       activatePressed: _pressed(input.activate, _previous.activate),
       cancelPressed: _pressed(input.cancel, _previous.cancel),
+      hudFocusPreviousPressed: _pressed(
+        input.hudFocusPrevious,
+        _previous.hudFocusPrevious,
+      ),
+      hudFocusNextPressed: _pressed(input.hudFocusNext, _previous.hudFocusNext),
+      focusPreviousPressed: _pressed(
+        input.focusPrevious,
+        _previous.focusPrevious,
+      ),
+      focusNextPressed: _pressed(input.focusNext, _previous.focusNext),
       toggleMapViewModePressed: _pressed(
         input.toggleMapViewMode,
         _previous.toggleMapViewMode,

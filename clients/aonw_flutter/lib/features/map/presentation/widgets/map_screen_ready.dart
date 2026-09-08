@@ -17,6 +17,7 @@ final class _ReadyMap extends StatelessWidget {
     required this.flameGame,
     required this.flameGeneration,
     required this.flameFocusNode,
+    required this.gamepadNavigation,
     required this.onRetryFlame,
   });
 
@@ -35,6 +36,7 @@ final class _ReadyMap extends StatelessWidget {
   final AonwFlameGame flameGame;
   final int flameGeneration;
   final FocusNode flameFocusNode;
+  final MapGamepadNavigation gamepadNavigation;
   final VoidCallback onRetryFlame;
 
   @override
@@ -77,6 +79,9 @@ final class _ReadyMap extends StatelessWidget {
         connection: controller.networkConnection,
         onReconnect: controller.reconnectNetworkMatch,
       ),
+      Positioned.fill(
+        child: MapGamepadFocusRing(navigation: gamepadNavigation),
+      ),
     ],
   );
 
@@ -85,11 +90,14 @@ final class _ReadyMap extends StatelessWidget {
       Positioned(
         top: AonwHudSideMenuLayout.top(context),
         left: AonwHudSideMenuLayout.left(context),
-        child: AonwHudIconButton(
-          key: const ValueKey('open-settings'),
-          tooltip: context.aonwL10n.openSettings,
-          onPressed: openSettings,
-          icon: const Icon(Icons.settings),
+        child: MapGamepadRegion(
+          section: MapHudSection.menu,
+          child: AonwHudIconButton(
+            key: const ValueKey('open-settings'),
+            tooltip: context.aonwL10n.openSettings,
+            onPressed: openSettings,
+            icon: const Icon(Icons.settings),
+          ),
         ),
       ),
     Positioned(
@@ -103,33 +111,42 @@ final class _ReadyMap extends StatelessWidget {
     Positioned(
       top: AonwHudSideMenuLayout.actionTop(context, 3),
       left: AonwHudSideMenuLayout.left(context),
-      child: _SaveAction(
-        localSave: localSave,
-        localAiTurn: localAiTurn,
-        localHandoff: localHandoff,
-        onSave: controller.saveLocalGame,
+      child: MapGamepadRegion(
+        section: MapHudSection.globalActions,
+        child: _SaveAction(
+          localSave: localSave,
+          localAiTurn: localAiTurn,
+          localHandoff: localHandoff,
+          onSave: controller.saveLocalGame,
+        ),
       ),
     ),
     Positioned(
       top: AonwHudSideMenuLayout.actionTop(context, 4),
       left: AonwHudSideMenuLayout.left(context),
-      child: MapViewModeToggle(
-        value: interaction.viewMode.effectiveFor(
-          hasReference: scene.reference.pages.isNotEmpty,
+      child: MapGamepadRegion(
+        section: MapHudSection.globalActions,
+        child: MapViewModeToggle(
+          value: interaction.viewMode.effectiveFor(
+            hasReference: scene.reference.pages.isNotEmpty,
+          ),
+          allowGraphicMode: scene.reference.pages.isNotEmpty,
+          onChanged: controller.setMapViewMode,
         ),
-        allowGraphicMode: scene.reference.pages.isNotEmpty,
-        onChanged: controller.setMapViewMode,
       ),
     ),
   ];
 
   List<Widget> _featureOverlays() => [
     Positioned.fill(
-      child: MapHudPanels(
-        scene: scene,
-        research: research,
-        diplomacy: diplomacy,
-        controller: controller,
+      child: MapGamepadRegion(
+        section: MapHudSection.globalActions,
+        child: MapHudPanels(
+          scene: scene,
+          research: research,
+          diplomacy: diplomacy,
+          controller: controller,
+        ),
       ),
     ),
     Positioned.fill(

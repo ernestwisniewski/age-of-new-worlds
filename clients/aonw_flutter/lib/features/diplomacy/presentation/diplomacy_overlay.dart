@@ -4,6 +4,8 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
+import '../../map/presentation/input/map_gamepad_navigation.dart';
+import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../../map/read_model/map_view.dart';
 import '../application/diplomacy_state.dart';
 import '../read_model/diplomacy_view.dart';
@@ -40,41 +42,46 @@ final class DiplomacyOverlay extends StatelessWidget {
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
-            child: SafeArea(
-              child: AonwPanel(
-                semanticLabel: copy.title,
-                maxWidth: 720,
-                padding: const EdgeInsets.all(AonwSpacing.md),
-                child: SizedBox(
-                  width: 680,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              copy.title,
-                              style: Theme.of(context).textTheme.titleLarge,
+            child: MapGamepadRegion(
+              section: MapHudSection.globalActions,
+              priority: MapGamepadPriority.panel,
+              onCancel: () => onOpenChanged?.call(false),
+              child: SafeArea(
+                child: AonwPanel(
+                  semanticLabel: copy.title,
+                  maxWidth: 720,
+                  padding: const EdgeInsets.all(AonwSpacing.md),
+                  child: SizedBox(
+                    width: 680,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                copy.title,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            key: const ValueKey('close-diplomacy'),
-                            tooltip: copy.close,
-                            onPressed: () => onOpenChanged?.call(false),
-                            icon: const Icon(Icons.close),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: DiplomacyPanel(
-                          actorPlayerId: actorPlayerId,
-                          view: view,
-                          state: state,
-                          onAction: onAction,
+                            IconButton(
+                              key: const ValueKey('close-diplomacy'),
+                              tooltip: copy.close,
+                              onPressed: () => onOpenChanged?.call(false),
+                              icon: const Icon(Icons.close),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: DiplomacyPanel(
+                            actorPlayerId: actorPlayerId,
+                            view: view,
+                            state: state,
+                            onAction: onAction,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

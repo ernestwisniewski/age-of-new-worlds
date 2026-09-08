@@ -4,6 +4,8 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../map/presentation/input/map_gamepad_navigation.dart';
+import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../../map/read_model/map_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 
@@ -45,10 +47,15 @@ final class ObjectiveOverlay extends StatelessWidget {
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
-            child: SafeArea(
-              child: _ObjectivePanel(
-                objectives: objectives,
-                onClose: () => onOpenChanged?.call(false),
+            child: MapGamepadRegion(
+              section: MapHudSection.globalActions,
+              priority: MapGamepadPriority.panel,
+              onCancel: () => onOpenChanged?.call(false),
+              child: SafeArea(
+                child: _ObjectivePanel(
+                  objectives: objectives,
+                  onClose: () => onOpenChanged?.call(false),
+                ),
               ),
             ),
           ),

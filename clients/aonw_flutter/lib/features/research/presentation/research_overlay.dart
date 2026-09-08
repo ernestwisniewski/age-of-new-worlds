@@ -4,6 +4,8 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
+import '../../map/presentation/input/map_gamepad_navigation.dart';
+import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../application/research_state.dart';
 import '../read_model/research_view.dart';
 import 'research_copy.dart';
@@ -37,47 +39,38 @@ final class ResearchOverlay extends StatelessWidget {
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
-            child: SafeArea(
-              child: AonwPanel(
-                semanticLabel: copy.text(ResearchText.title),
-                liveRegion: selectionRequired,
-                maxWidth: 680,
-                padding: const EdgeInsets.all(AonwSpacing.md),
-                child: SizedBox(
-                  width: 640,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              copy.text(ResearchText.title),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
+            child: MapGamepadRegion(
+              section: MapHudSection.globalActions,
+              priority: MapGamepadPriority.panel,
+              onCancel: selectionRequired
+                  ? null
+                  : () => onOpenChanged?.call(false),
+              child: SafeArea(
+                child: AonwPanel(
+                  semanticLabel: copy.text(ResearchText.title),
+                  liveRegion: selectionRequired,
+                  maxWidth: 680,
+                  padding: const EdgeInsets.all(AonwSpacing.md),
+                  child: SizedBox(
+                    width: 640,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _header(context, copy),
+                        if (selectionRequired)
+                          Text(
+                            copy.text(ResearchText.selectionRequired),
+                            key: const ValueKey('research-selection-required'),
                           ),
-                          if (!selectionRequired)
-                            IconButton(
-                              key: const ValueKey('close-research'),
-                              tooltip: copy.text(ResearchText.close),
-                              onPressed: () => onOpenChanged?.call(false),
-                              icon: const Icon(Icons.close),
-                            ),
-                        ],
-                      ),
-                      if (selectionRequired)
-                        Text(
-                          copy.text(ResearchText.selectionRequired),
-                          key: const ValueKey('research-selection-required'),
+                        Expanded(
+                          child: ResearchPanel(
+                            state: state,
+                            onSelect: onSelect,
+                            onRetry: onRetry,
+                          ),
                         ),
-                      Expanded(
-                        child: ResearchPanel(
-                          state: state,
-                          onSelect: onSelect,
-                          onRetry: onRetry,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -86,6 +79,24 @@ final class ResearchOverlay extends StatelessWidget {
       ],
     );
   }
+
+  Widget _header(BuildContext context, ResearchCopy copy) => Row(
+    children: [
+      Expanded(
+        child: Text(
+          copy.text(ResearchText.title),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
+      if (!selectionRequired)
+        IconButton(
+          key: const ValueKey('close-research'),
+          tooltip: copy.text(ResearchText.close),
+          onPressed: () => onOpenChanged?.call(false),
+          icon: const Icon(Icons.close),
+        ),
+    ],
+  );
 
   Widget _trigger(BuildContext context, ResearchCopy copy, bool open) =>
       Positioned(

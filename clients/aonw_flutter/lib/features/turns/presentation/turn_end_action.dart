@@ -102,32 +102,49 @@ final class _EndTurnActionState extends State<_EndTurnAction>
           button: true,
           enabled: mode == _EndTurnMode.ready,
           label: visual.tooltip,
-          child: GestureDetector(
-            key: const ValueKey('end-turn'),
-            behavior: HitTestBehavior.opaque,
-            onTap: mode == _EndTurnMode.ready ? widget.onPressed : null,
-            child: AnimatedOpacity(
-              duration: duration,
-              opacity: mode == _EndTurnMode.waiting ? 0.62 : 1,
-              child: widget.turn.pendingAction == null
-                  ? button
-                  : AnimatedBuilder(
-                      animation: _pulse,
-                      child: button,
-                      builder: (context, child) => CustomPaint(
-                        foregroundPainter: _PulsingBorderPainter(
-                          progress: _pulse.value,
-                          color: visual.glow,
+          child: _interactive(
+            mode,
+            GestureDetector(
+              key: const ValueKey('end-turn'),
+              behavior: HitTestBehavior.opaque,
+              onTap: mode == _EndTurnMode.ready ? widget.onPressed : null,
+              child: AnimatedOpacity(
+                duration: duration,
+                opacity: mode == _EndTurnMode.waiting ? 0.62 : 1,
+                child: widget.turn.pendingAction == null
+                    ? button
+                    : AnimatedBuilder(
+                        animation: _pulse,
+                        child: button,
+                        builder: (context, child) => CustomPaint(
+                          foregroundPainter: _PulsingBorderPainter(
+                            progress: _pulse.value,
+                            color: visual.glow,
+                          ),
+                          child: child,
                         ),
-                        child: child,
                       ),
-                    ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  Widget _interactive(_EndTurnMode mode, Widget child) =>
+      FocusableActionDetector(
+        enabled: mode == _EndTurnMode.ready,
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) {
+              if (mode == _EndTurnMode.ready) widget.onPressed();
+              return null;
+            },
+          ),
+        },
+        child: child,
+      );
 
   Widget _button({
     required bool compact,

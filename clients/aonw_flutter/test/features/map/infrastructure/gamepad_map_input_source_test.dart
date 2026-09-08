@@ -27,13 +27,46 @@ void main() {
     await events.close();
   });
 
+  test('maps stick clicks and bumpers to HUD focus edges', () async {
+    final events = StreamController<NormalizedGamepadEvent>(sync: true);
+    final source = GamepadMapInputSource(events: events.stream);
+    final frames = MapGamepadFrameController();
+    final inputs = <MapGamepadInput>[];
+    final subscription = source.continuousInputs.listen(inputs.add);
+    for (final button in [
+      GamepadButton.leftStick,
+      GamepadButton.rightStick,
+      GamepadButton.leftBumper,
+      GamepadButton.rightBumper,
+    ]) {
+      events.add(_button(button, 1));
+      final pressed = frames.advance(input: inputs.last, dt: 0);
+      final expected = switch (button) {
+        GamepadButton.leftStick => pressed.hudFocusPreviousPressed,
+        GamepadButton.rightStick => pressed.hudFocusNextPressed,
+        GamepadButton.leftBumper => pressed.focusPreviousPressed,
+        _ => pressed.focusNextPressed,
+      };
+      expect(expected, isTrue);
+      expect(pressed.isIdle, isFalse);
+      expect(frames.advance(input: inputs.last, dt: 1).hasFocusAction, isFalse);
+      frames.prime(inputs.last);
+      expect(frames.advance(input: inputs.last, dt: 1).hasFocusAction, isFalse);
+      events.add(_button(button, 0));
+      frames.advance(input: inputs.last, dt: 0);
+    }
+    await subscription.cancel();
+    await source.close();
+    await events.close();
+  });
+
   test('ignores unrelated button state', () async {
     final events = StreamController<NormalizedGamepadEvent>(sync: true);
     final source = GamepadMapInputSource(events: events.stream);
     final inputs = <MapGamepadInput>[];
     final subscription = source.continuousInputs.listen(inputs.add);
 
-    events.add(_button(GamepadButton.leftBumper, 1));
+    events.add(_button(GamepadButton.x, 1));
     expect(inputs, isEmpty);
 
     await subscription.cancel();

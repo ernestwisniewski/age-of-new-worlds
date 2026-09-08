@@ -7,6 +7,8 @@ import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_hud_surface.dart';
 import '../../../l10n/l10n.dart';
 import '../../local_game/application/local_ai_turn_state.dart';
+import '../../map/presentation/input/map_gamepad_navigation.dart';
+import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../application/turn_action_state.dart';
 import '../application/turn_presentation_queue.dart';
 import '../read_model/recipient_turn_view.dart';
@@ -227,15 +229,7 @@ final class _TurnCommandDeck extends StatelessWidget {
               child: SizedBox(
                 key: const ValueKey('turn-hud'),
                 height: 48,
-                child: FocusTraversalGroup(
-                  policy: OrderedTraversalPolicy(),
-                  child: _EndTurnAction(
-                    turn: turn,
-                    action: action,
-                    aiTurn: localAiTurn,
-                    onPressed: onEndTurn,
-                  ),
-                ),
+                child: _command(),
               ),
             ),
           ),
@@ -252,6 +246,20 @@ final class _TurnCommandDeck extends StatelessWidget {
       ],
     );
   }
+
+  Widget _command() => FocusTraversalGroup(
+    policy: OrderedTraversalPolicy(),
+    child: MapGamepadRegion(
+      section: MapHudSection.selectionActions,
+      bottomCommand: true,
+      child: _EndTurnAction(
+        turn: turn,
+        action: action,
+        aiTurn: localAiTurn,
+        onPressed: onEndTurn,
+      ),
+    ),
+  );
 }
 
 final class _TurnFailure extends StatelessWidget {

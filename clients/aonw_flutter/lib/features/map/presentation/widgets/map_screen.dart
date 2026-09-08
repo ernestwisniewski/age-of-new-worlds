@@ -29,6 +29,7 @@ import '../../read_model/map_view.dart';
 import '../geometry/odd_q_flat_top_geometry.dart';
 import '../input/map_action_palette_intent.dart';
 import '../input/map_gamepad_input.dart';
+import '../input/map_gamepad_navigation.dart';
 import '../input/map_hex_selection_palette_intent.dart';
 import '../input/map_input.dart';
 import '../input/map_viewport_intent.dart';
@@ -39,6 +40,7 @@ import '../map_hex_selection_palette_view.dart';
 import '../map_presentation_controller.dart';
 import '../map_render_snapshot.dart';
 import 'flame_map_viewport.dart';
+import 'map_gamepad_region.dart';
 import 'map_hud_panels.dart';
 import 'map_selection_overlay.dart';
 import 'map_status.dart';
@@ -47,6 +49,7 @@ import 'network_game_status_overlay.dart';
 part 'map_screen_action_palette.dart';
 part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_lifecycle.dart';
+part 'map_screen_gamepad.dart';
 part 'map_screen_ready.dart';
 part 'map_screen_scene.dart';
 
@@ -78,8 +81,10 @@ final class _MapScreenState extends State<MapScreen>
   late FocusNode _flameFocusNode;
   late AppLifecycleState _lifecycleState;
   late Ticker _gamepadTicker;
+  late final MapGamepadNavigation _gamepadNavigation;
   ModalRoute<void>? _subscribedRoute;
   var _routeVisible = true;
+  var _gamepadAvailable = true;
   var _flameGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
   StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
@@ -96,6 +101,10 @@ final class _MapScreenState extends State<MapScreen>
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     _gamepadTicker = createTicker(_tickGamepad);
     _flameFocusNode = FocusNode(debugLabel: 'AoNW Flame viewport');
+    _gamepadNavigation = MapGamepadNavigation(
+      onOwnerChanged: () => _gamepadFrames.prime(_gamepadInput),
+      returnToMap: _flameFocusNode.requestFocus,
+    );
     _flameGame = widget.flameGameFactory();
     _flameGame.setSoundSink(context.playMapSound);
     _flameGame.setHexIntentSink(_handleHexIntent);
@@ -126,6 +135,7 @@ final class _MapScreenState extends State<MapScreen>
   void didUpdateWidget(MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
+      _gamepadNavigation.setAvailable(false);
       oldWidget.controller.bindCommandEffects(null);
       oldWidget.controller.bindInteractionSounds(null);
       _flameGame.skipEffects();
@@ -169,6 +179,7 @@ final class _MapScreenState extends State<MapScreen>
     unawaited(_inputSubscription?.cancel());
     unawaited(_continuousInputSubscription?.cancel());
     _gamepadTicker.dispose();
+    _gamepadNavigation.dispose();
     _flameGame.setHexIntentSink(null);
     _flameGame.setSoundSink(null);
     _flameGame.setActionPaletteIntentSink(null);
@@ -196,8 +207,13 @@ final class _MapScreenState extends State<MapScreen>
   void didPop() => _setRouteVisible(false);
 
   @override
-  Widget build(BuildContext context) =>
-      ListenableBuilder(listenable: widget.controller, builder: _buildState);
+  Widget build(BuildContext context) => MapGamepadNavigationScope(
+    navigation: _gamepadNavigation,
+    child: ListenableBuilder(
+      listenable: widget.controller,
+      builder: _buildState,
+    ),
+  );
 
   Widget _buildState(BuildContext context, Widget? child) {
     final state = widget.controller.state;
@@ -235,6 +251,7 @@ final class _MapScreenState extends State<MapScreen>
           flameGame: _flameGame,
           flameGeneration: _flameGeneration,
           flameFocusNode: _flameFocusNode,
+          gamepadNavigation: _gamepadNavigation,
           onRetryFlame: _retryFlame,
         ),
     };
@@ -270,64 +287,6 @@ final class _MapScreenState extends State<MapScreen>
     _synchronizeGamepadSettings(settings.cameraSensitivity);
   }
 
-  void _listenToInput(MapInputSource? source) {
-    unawaited(_inputSubscription?.cancel());
-    unawaited(_continuousInputSubscription?.cancel());
-    _inputSubscription = source?.commands.listen(_handleInput);
-    _gamepadInput = MapGamepadInput.idle;
-    _gamepadFrames.prime(_gamepadInput);
-    _continuousInputSubscription = switch (source) {
-      ContinuousMapInputSource(:final continuousInputs) =>
-        continuousInputs.listen(_handleContinuousInput),
-      _ => null,
-    };
-    _synchronizeGamepadTicker();
-  }
-
-  void _synchronizeGamepadSettings(double cameraSensitivity) {
-    if (_gamepadFrames.cameraSensitivity == cameraSensitivity) return;
-    _gamepadFrames = MapGamepadFrameController(
-      cameraSensitivity: cameraSensitivity,
-    )..prime(_gamepadInput);
-    _synchronizeGamepadTicker();
-  }
-
-  void _handleContinuousInput(MapGamepadInput input) {
-    _gamepadInput = input;
-    _synchronizeGamepadTicker();
-  }
-
-  void _synchronizeGamepadTicker() {
-    final available =
-        _routeVisible && _lifecycleState == AppLifecycleState.resumed;
-    if (!available || (_gamepadInput.isIdle && _gamepadFrames.isIdle)) {
-      _lastGamepadElapsed = null;
-      _gamepadTicker.stop();
-      return;
-    }
-    if (!_gamepadTicker.isActive) _gamepadTicker.start();
-  }
-
-  void _tickGamepad(Duration elapsed) {
-    final previous = _lastGamepadElapsed;
-    _lastGamepadElapsed = elapsed;
-    final dt = previous == null
-        ? 0.0
-        : (elapsed - previous).inMicroseconds / Duration.microsecondsPerSecond;
-    final frame = _gamepadFrames.advance(input: _gamepadInput, dt: dt);
-    if (!frame.isIdle) {
-      _flameGame.applyGamepadCameraFrame(frame, dt);
-      final cursorStep = frame.cursorStep;
-      if (cursorStep != null) _handleInput(cursorStep);
-      if (frame.activatePressed) _handleInput(MapInputCommand.activate);
-      if (frame.cancelPressed) _handleInput(MapInputCommand.cancel);
-      if (frame.toggleMapViewModePressed) {
-        _handleInput(MapInputCommand.toggleMapViewMode);
-      }
-    }
-    _synchronizeGamepadTicker();
-  }
-
   void _installFreshFlameGame() {
     widget.controller.silencePendingInteractionSounds();
     _flameGame.setSoundSink(null);
@@ -361,6 +320,7 @@ final class _MapScreenState extends State<MapScreen>
     if (state is! GameSessionReady) return;
     if (widget.controller.networkConnection.blocksGameplay) return;
     if (state.localHandoff.blocksGameplay) return;
+    if (_gamepadNavigation.handleCommand(command)) return;
     _handleReadyInput(state, command);
   }
 
