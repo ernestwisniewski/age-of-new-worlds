@@ -32,7 +32,11 @@ final class _GamepadSettings extends StatelessWidget {
               (value) => _update(gamepad.copyWith(enabled: value)),
             ),
           ),
-          if (gamepad.enabled) ..._controls(context),
+          if (gamepad.enabled) ...[
+            ..._controls(context),
+            const SizedBox(height: AonwSpacing.md),
+            _GamepadBindingsSettings(settings: gamepad, onChanged: _update),
+          ],
         ],
       ),
     );

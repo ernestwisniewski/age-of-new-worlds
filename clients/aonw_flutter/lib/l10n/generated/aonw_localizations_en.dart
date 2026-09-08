@@ -2313,4 +2313,102 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get gamepadInvertCameraY => 'Invert gamepad camera Y';
+
+  @override
+  String get gamepadButtonBindings => 'Button bindings';
+
+  @override
+  String get gamepadAxisBindings => 'Axis bindings';
+
+  @override
+  String get gamepadResetBindings => 'Reset bindings';
+
+  @override
+  String get gamepadUnassigned => 'Unassigned';
+
+  @override
+  String gamepadAssignedTo(String action) {
+    return 'Assigned to: $action';
+  }
+
+  @override
+  String get gamepadActionConfirm => 'Confirm';
+
+  @override
+  String get gamepadActionCancel => 'Cancel';
+
+  @override
+  String get gamepadActionMoveMode => 'Movement mode';
+
+  @override
+  String get gamepadActionInspect => 'Inspect hex';
+
+  @override
+  String get gamepadActionHudPrevious => 'Previous HUD section';
+
+  @override
+  String get gamepadActionHudNext => 'Next HUD section';
+
+  @override
+  String get gamepadActionPrevious => 'Previous pending action';
+
+  @override
+  String get gamepadActionNext => 'Next pending action';
+
+  @override
+  String get gamepadActionPrimary => 'Primary action';
+
+  @override
+  String get gamepadActionUp => 'D-pad up';
+
+  @override
+  String get gamepadActionDown => 'D-pad down';
+
+  @override
+  String get gamepadActionLeft => 'D-pad left';
+
+  @override
+  String get gamepadActionRight => 'D-pad right';
+
+  @override
+  String get gamepadActionZoomIn => 'Zoom in';
+
+  @override
+  String get gamepadActionZoomOut => 'Zoom out';
+
+  @override
+  String get gamepadActionCursorX => 'Cursor X';
+
+  @override
+  String get gamepadActionCursorY => 'Cursor Y';
+
+  @override
+  String get gamepadActionCameraX => 'Camera X';
+
+  @override
+  String get gamepadActionCameraY => 'Camera Y';
+
+  @override
+  String get gamepadControlHome => 'Home';
+
+  @override
+  String get gamepadControlTouchpad => 'Touchpad';
+
+  @override
+  String get gamepadControlLeftStickX => 'Left stick X';
+
+  @override
+  String get gamepadControlLeftStickY => 'Left stick Y';
+
+  @override
+  String get gamepadControlRightStickX => 'Right stick X';
+
+  @override
+  String get gamepadControlRightStickY => 'Right stick Y';
+
+  @override
+  String get gamepadControlLeftTrigger => 'Left trigger (LT)';
+
+  @override
+  String get gamepadControlRightTrigger => 'Right trigger (RT)';
 }

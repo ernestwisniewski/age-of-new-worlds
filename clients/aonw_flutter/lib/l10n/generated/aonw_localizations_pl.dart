@@ -2319,4 +2319,102 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get gamepadInvertCameraY => 'Odwróć oś Y kamery gamepada';
+
+  @override
+  String get gamepadButtonBindings => 'Przypisania przycisków';
+
+  @override
+  String get gamepadAxisBindings => 'Przypisania osi';
+
+  @override
+  String get gamepadResetBindings => 'Przywróć przypisania';
+
+  @override
+  String get gamepadUnassigned => 'Bez przypisania';
+
+  @override
+  String gamepadAssignedTo(String action) {
+    return 'Przypisano do: $action';
+  }
+
+  @override
+  String get gamepadActionConfirm => 'Potwierdź';
+
+  @override
+  String get gamepadActionCancel => 'Anuluj';
+
+  @override
+  String get gamepadActionMoveMode => 'Tryb ruchu';
+
+  @override
+  String get gamepadActionInspect => 'Inspekcja pola';
+
+  @override
+  String get gamepadActionHudPrevious => 'Poprzednia sekcja HUD';
+
+  @override
+  String get gamepadActionHudNext => 'Następna sekcja HUD';
+
+  @override
+  String get gamepadActionPrevious => 'Poprzednie oczekujące działanie';
+
+  @override
+  String get gamepadActionNext => 'Następne oczekujące działanie';
+
+  @override
+  String get gamepadActionPrimary => 'Główna akcja';
+
+  @override
+  String get gamepadActionUp => 'D-pad w górę';
+
+  @override
+  String get gamepadActionDown => 'D-pad w dół';
+
+  @override
+  String get gamepadActionLeft => 'D-pad w lewo';
+
+  @override
+  String get gamepadActionRight => 'D-pad w prawo';
+
+  @override
+  String get gamepadActionZoomIn => 'Przybliż';
+
+  @override
+  String get gamepadActionZoomOut => 'Oddal';
+
+  @override
+  String get gamepadActionCursorX => 'Kursor X';
+
+  @override
+  String get gamepadActionCursorY => 'Kursor Y';
+
+  @override
+  String get gamepadActionCameraX => 'Kamera X';
+
+  @override
+  String get gamepadActionCameraY => 'Kamera Y';
+
+  @override
+  String get gamepadControlHome => 'Home';
+
+  @override
+  String get gamepadControlTouchpad => 'Panel dotykowy';
+
+  @override
+  String get gamepadControlLeftStickX => 'Lewy drążek X';
+
+  @override
+  String get gamepadControlLeftStickY => 'Lewy drążek Y';
+
+  @override
+  String get gamepadControlRightStickX => 'Prawy drążek X';
+
+  @override
+  String get gamepadControlRightStickY => 'Prawy drążek Y';
+
+  @override
+  String get gamepadControlLeftTrigger => 'Lewy trigger (LT)';
+
+  @override
+  String get gamepadControlRightTrigger => 'Prawy trigger (RT)';
 }

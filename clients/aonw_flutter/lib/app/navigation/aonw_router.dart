@@ -30,6 +30,7 @@ import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
 import 'aonw_load_game_online.dart';
 import 'aonw_menu_navigation.dart';
+import 'aonw_menu_popup_routes.dart';
 
 enum AonwRoute {
   menu('/'),
@@ -70,6 +71,7 @@ final class AonwRouter {
     this.onExit,
     this.openExternalUri,
     this.autoLoadMap = false,
+    this.menuPopups,
   });
 
   final MapPresentationController mapController;
@@ -83,6 +85,7 @@ final class AonwRouter {
   final AppExitRequest? onExit;
   final ExternalUriOpen? openExternalUri;
   final bool autoLoadMap;
+  final AonwMenuPopupRoutes? menuPopups;
 
   Route<void> onGenerateRoute(RouteSettings settings) {
     final route = AonwRoute.fromLocation(settings.name);
@@ -105,7 +108,11 @@ final class AonwRouter {
       final ContinuousMapInputSource source => source.continuousInputs,
       _ => null,
     };
-    return AonwMenuNavigation(input: input, child: child);
+    return AonwMenuNavigation(
+      input: input,
+      popupRoutes: menuPopups,
+      child: child,
+    );
   }
 
   Map<AonwRoute, WidgetBuilder> get _routeBuilders => {

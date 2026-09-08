@@ -412,5 +412,44 @@
   "gamepadEnabled": "Wejście gamepada",
   "gamepadDeadzone": "Martwa strefa gamepada",
   "gamepadCameraSensitivity": "Czułość kamery gamepada",
-  "gamepadInvertCameraY": "Odwróć oś Y kamery gamepada"
+  "gamepadInvertCameraY": "Odwróć oś Y kamery gamepada",
+  "gamepadButtonBindings": "Przypisania przycisków",
+  "gamepadAxisBindings": "Przypisania osi",
+  "gamepadResetBindings": "Przywróć przypisania",
+  "gamepadUnassigned": "Bez przypisania",
+  "gamepadAssignedTo": "Przypisano do: {action}",
+  "gamepadActionConfirm": "Potwierdź",
+  "gamepadActionCancel": "Anuluj",
+  "gamepadActionMoveMode": "Tryb ruchu",
+  "gamepadActionInspect": "Inspekcja pola",
+  "gamepadActionHudPrevious": "Poprzednia sekcja HUD",
+  "gamepadActionHudNext": "Następna sekcja HUD",
+  "gamepadActionPrevious": "Poprzednie oczekujące działanie",
+  "gamepadActionNext": "Następne oczekujące działanie",
+  "gamepadActionPrimary": "Główna akcja",
+  "gamepadActionUp": "D-pad w górę",
+  "gamepadActionDown": "D-pad w dół",
+  "gamepadActionLeft": "D-pad w lewo",
+  "gamepadActionRight": "D-pad w prawo",
+  "gamepadActionZoomIn": "Przybliż",
+  "gamepadActionZoomOut": "Oddal",
+  "gamepadActionCursorX": "Kursor X",
+  "gamepadActionCursorY": "Kursor Y",
+  "gamepadActionCameraX": "Kamera X",
+  "gamepadActionCameraY": "Kamera Y",
+  "gamepadControlHome": "Home",
+  "gamepadControlTouchpad": "Panel dotykowy",
+  "gamepadControlLeftStickX": "Lewy drążek X",
+  "gamepadControlLeftStickY": "Lewy drążek Y",
+  "gamepadControlRightStickX": "Prawy drążek X",
+  "gamepadControlRightStickY": "Prawy drążek Y",
+  "gamepadControlLeftTrigger": "Lewy trigger (LT)",
+  "gamepadControlRightTrigger": "Prawy trigger (RT)",
+  "@gamepadAssignedTo": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  }
 }

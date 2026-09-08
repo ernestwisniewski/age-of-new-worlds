@@ -555,5 +555,44 @@
   "gamepadEnabled": "Gamepad input",
   "gamepadDeadzone": "Gamepad deadzone",
   "gamepadCameraSensitivity": "Gamepad camera sensitivity",
-  "gamepadInvertCameraY": "Invert gamepad camera Y"
+  "gamepadInvertCameraY": "Invert gamepad camera Y",
+  "gamepadButtonBindings": "Button bindings",
+  "gamepadAxisBindings": "Axis bindings",
+  "gamepadResetBindings": "Reset bindings",
+  "gamepadUnassigned": "Unassigned",
+  "gamepadAssignedTo": "Assigned to: {action}",
+  "gamepadActionConfirm": "Confirm",
+  "gamepadActionCancel": "Cancel",
+  "gamepadActionMoveMode": "Movement mode",
+  "gamepadActionInspect": "Inspect hex",
+  "gamepadActionHudPrevious": "Previous HUD section",
+  "gamepadActionHudNext": "Next HUD section",
+  "gamepadActionPrevious": "Previous pending action",
+  "gamepadActionNext": "Next pending action",
+  "gamepadActionPrimary": "Primary action",
+  "gamepadActionUp": "D-pad up",
+  "gamepadActionDown": "D-pad down",
+  "gamepadActionLeft": "D-pad left",
+  "gamepadActionRight": "D-pad right",
+  "gamepadActionZoomIn": "Zoom in",
+  "gamepadActionZoomOut": "Zoom out",
+  "gamepadActionCursorX": "Cursor X",
+  "gamepadActionCursorY": "Cursor Y",
+  "gamepadActionCameraX": "Camera X",
+  "gamepadActionCameraY": "Camera Y",
+  "gamepadControlHome": "Home",
+  "gamepadControlTouchpad": "Touchpad",
+  "gamepadControlLeftStickX": "Left stick X",
+  "gamepadControlLeftStickY": "Left stick Y",
+  "gamepadControlRightStickX": "Right stick X",
+  "gamepadControlRightStickY": "Right stick Y",
+  "gamepadControlLeftTrigger": "Left trigger (LT)",
+  "gamepadControlRightTrigger": "Right trigger (RT)",
+  "@gamepadAssignedTo": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -2137,6 +2137,198 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Invert gamepad camera Y'**
   String get gamepadInvertCameraY;
+
+  /// No description provided for @gamepadButtonBindings.
+  ///
+  /// In en, this message translates to:
+  /// **'Button bindings'**
+  String get gamepadButtonBindings;
+
+  /// No description provided for @gamepadAxisBindings.
+  ///
+  /// In en, this message translates to:
+  /// **'Axis bindings'**
+  String get gamepadAxisBindings;
+
+  /// No description provided for @gamepadResetBindings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset bindings'**
+  String get gamepadResetBindings;
+
+  /// No description provided for @gamepadUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned'**
+  String get gamepadUnassigned;
+
+  /// No description provided for @gamepadAssignedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to: {action}'**
+  String gamepadAssignedTo(String action);
+
+  /// No description provided for @gamepadActionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get gamepadActionConfirm;
+
+  /// No description provided for @gamepadActionCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get gamepadActionCancel;
+
+  /// No description provided for @gamepadActionMoveMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement mode'**
+  String get gamepadActionMoveMode;
+
+  /// No description provided for @gamepadActionInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect hex'**
+  String get gamepadActionInspect;
+
+  /// No description provided for @gamepadActionHudPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous HUD section'**
+  String get gamepadActionHudPrevious;
+
+  /// No description provided for @gamepadActionHudNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next HUD section'**
+  String get gamepadActionHudNext;
+
+  /// No description provided for @gamepadActionPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous pending action'**
+  String get gamepadActionPrevious;
+
+  /// No description provided for @gamepadActionNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next pending action'**
+  String get gamepadActionNext;
+
+  /// No description provided for @gamepadActionPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary action'**
+  String get gamepadActionPrimary;
+
+  /// No description provided for @gamepadActionUp.
+  ///
+  /// In en, this message translates to:
+  /// **'D-pad up'**
+  String get gamepadActionUp;
+
+  /// No description provided for @gamepadActionDown.
+  ///
+  /// In en, this message translates to:
+  /// **'D-pad down'**
+  String get gamepadActionDown;
+
+  /// No description provided for @gamepadActionLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'D-pad left'**
+  String get gamepadActionLeft;
+
+  /// No description provided for @gamepadActionRight.
+  ///
+  /// In en, this message translates to:
+  /// **'D-pad right'**
+  String get gamepadActionRight;
+
+  /// No description provided for @gamepadActionZoomIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom in'**
+  String get gamepadActionZoomIn;
+
+  /// No description provided for @gamepadActionZoomOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom out'**
+  String get gamepadActionZoomOut;
+
+  /// No description provided for @gamepadActionCursorX.
+  ///
+  /// In en, this message translates to:
+  /// **'Cursor X'**
+  String get gamepadActionCursorX;
+
+  /// No description provided for @gamepadActionCursorY.
+  ///
+  /// In en, this message translates to:
+  /// **'Cursor Y'**
+  String get gamepadActionCursorY;
+
+  /// No description provided for @gamepadActionCameraX.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera X'**
+  String get gamepadActionCameraX;
+
+  /// No description provided for @gamepadActionCameraY.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Y'**
+  String get gamepadActionCameraY;
+
+  /// No description provided for @gamepadControlHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get gamepadControlHome;
+
+  /// No description provided for @gamepadControlTouchpad.
+  ///
+  /// In en, this message translates to:
+  /// **'Touchpad'**
+  String get gamepadControlTouchpad;
+
+  /// No description provided for @gamepadControlLeftStickX.
+  ///
+  /// In en, this message translates to:
+  /// **'Left stick X'**
+  String get gamepadControlLeftStickX;
+
+  /// No description provided for @gamepadControlLeftStickY.
+  ///
+  /// In en, this message translates to:
+  /// **'Left stick Y'**
+  String get gamepadControlLeftStickY;
+
+  /// No description provided for @gamepadControlRightStickX.
+  ///
+  /// In en, this message translates to:
+  /// **'Right stick X'**
+  String get gamepadControlRightStickX;
+
+  /// No description provided for @gamepadControlRightStickY.
+  ///
+  /// In en, this message translates to:
+  /// **'Right stick Y'**
+  String get gamepadControlRightStickY;
+
+  /// No description provided for @gamepadControlLeftTrigger.
+  ///
+  /// In en, this message translates to:
+  /// **'Left trigger (LT)'**
+  String get gamepadControlLeftTrigger;
+
+  /// No description provided for @gamepadControlRightTrigger.
+  ///
+  /// In en, this message translates to:
+  /// **'Right trigger (RT)'**
+  String get gamepadControlRightTrigger;
 }
 
 class _AonwLocalizationsDelegate

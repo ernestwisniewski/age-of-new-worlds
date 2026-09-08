@@ -8,12 +8,19 @@ import '../../features/map/presentation/input/map_gamepad_input.dart';
 import '../../features/map/presentation/input/map_input.dart';
 import '../../features/settings/application/client_gamepad_settings.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
+import 'aonw_menu_popup_routes.dart';
 
 final class AonwMenuNavigation extends StatefulWidget {
-  const AonwMenuNavigation({required this.child, this.input, super.key});
+  const AonwMenuNavigation({
+    required this.child,
+    this.input,
+    this.popupRoutes,
+    super.key,
+  });
 
   final Stream<MapGamepadInput>? input;
   final Widget child;
+  final AonwMenuPopupRoutes? popupRoutes;
 
   @override
   State<AonwMenuNavigation> createState() => _AonwMenuNavigationState();
@@ -28,17 +35,20 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
   late final Ticker _ticker;
   var _input = MapGamepadInput.idle;
   Duration? _lastElapsed;
+  ModalRoute<dynamic>? _page;
 
   @override
   void initState() {
     super.initState();
     _ticker = createTicker(_tick);
     _subscribe();
+    widget.popupRoutes?.addListener(_primeForRouteChange);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _page = ModalRoute.of(context);
     final settings = ClientSettingsScope.settingsOf(context).gamepad;
     if (_gamepadSettings == settings) return;
     _gamepadSettings = settings;
@@ -51,10 +61,16 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
   void didUpdateWidget(AonwMenuNavigation oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!identical(oldWidget.input, widget.input)) _subscribe();
+    if (oldWidget.popupRoutes != widget.popupRoutes) {
+      oldWidget.popupRoutes?.removeListener(_primeForRouteChange);
+      widget.popupRoutes?.addListener(_primeForRouteChange);
+      _primeForRouteChange();
+    }
   }
 
   @override
   void dispose() {
+    widget.popupRoutes?.removeListener(_primeForRouteChange);
     unawaited(_subscription?.cancel());
     _ticker.dispose();
     _scopeNode.dispose();
@@ -102,7 +118,19 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
     _synchronizeTicker();
   }
 
-  bool _routeAcceptsInput() => ModalRoute.of(context)?.isCurrent ?? true;
+  void _primeForRouteChange() => _frames.prime(_input);
+
+  Route<dynamic>? get _popup => widget.popupRoutes?.popupFor(_page);
+
+  bool _routeAcceptsInput() => (_page?.isCurrent ?? true) || _popup != null;
+
+  FocusNode? get _ownedFocus {
+    final focused = FocusManager.instance.primaryFocus;
+    final focusContext = focused?.context;
+    if (focusContext == null) return null;
+    final route = ModalRoute.of(focusContext);
+    return identical(route, _popup ?? _page) ? focused : null;
+  }
 
   Object? _dismiss(DismissIntent intent) {
     unawaited(Navigator.of(context).maybePop());
@@ -110,9 +138,12 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
   }
 
   void _applyFrame(MapGamepadFrame frame) {
+    if (frame.cancelPressed) {
+      unawaited(Navigator.of(context).maybePop());
+      return;
+    }
     if (frame.cursorStep case final direction?) _navigate(direction);
     if (frame.activatePressed) _activate();
-    if (frame.cancelPressed) unawaited(Navigator.of(context).maybePop());
   }
 
   void _navigate(MapInputCommand direction) {
@@ -126,7 +157,7 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
         return;
     }
     if (_tryAdjust(direction)) return;
-    final focused = FocusManager.instance.primaryFocus;
+    final focused = _ownedFocus;
     if (focused?.context == null) {
       _focusBoundary(last: !forward);
       return;
@@ -143,21 +174,23 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
       MapInputCommand.cursorRight => 1,
       _ => 0,
     };
-    final focusContext = FocusManager.instance.primaryFocus?.context;
+    final focusContext = _ownedFocus?.context;
     if (delta == 0 || focusContext == null) return false;
     return Actions.maybeInvoke(focusContext, AonwMenuAdjustIntent(delta)) ==
         true;
   }
 
   void _activate() {
-    final focused = FocusManager.instance.primaryFocus ?? _focusBoundary();
+    final focused = _ownedFocus ?? _focusBoundary();
     final focusContext = focused?.context;
     if (focusContext == null) return;
     Actions.maybeInvoke(focusContext, const ActivateIntent());
   }
 
   FocusNode? _focusBoundary({bool last = false}) {
-    final moved = last ? _scopeNode.previousFocus() : _scopeNode.nextFocus();
+    final scope = _popup == null ? _scopeNode : _ownedFocus?.enclosingScope;
+    if (scope == null) return null;
+    final moved = last ? scope.previousFocus() : scope.nextFocus();
     if (!moved) return null;
     _scrollFocusedIntoView();
     return FocusManager.instance.primaryFocus;
@@ -165,7 +198,7 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
 
   void _scrollFocusedIntoView() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final focusContext = FocusManager.instance.primaryFocus?.context;
+      final focusContext = _ownedFocus?.context;
       if (focusContext == null || !focusContext.mounted) return;
       unawaited(
         Scrollable.ensureVisible(

@@ -106,6 +106,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _routeObserver.menuPopups.dispose();
     _setInputActive(widget.mapInputSource, false);
     widget.mapController.dispose();
     widget.replayController?.dispose();
@@ -138,6 +139,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       mapInputSource: widget.mapInputSource,
       flameGameFactory: widget.flameGameFactory,
       routeObserver: _routeObserver,
+      menuPopups: _routeObserver.menuPopups,
       settingsController: _settingsController,
       replayController: widget.replayController,
       multiplayerAccessController: widget.multiplayerAccessController,

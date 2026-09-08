@@ -14,6 +14,8 @@ part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
 part 'settings_audio.dart';
 part 'settings_gamepad.dart';
+part 'settings_gamepad_bindings.dart';
+part 'settings_gamepad_labels.dart';
 
 final class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.controller, super.key});
