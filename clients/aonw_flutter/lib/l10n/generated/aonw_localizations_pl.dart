@@ -2463,4 +2463,20 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get keyboardFocus => 'Przejdź do następnej / poprzedniej kontrolki';
+
+  @override
+  String get textSize => 'Wielkość tekstu';
+
+  @override
+  String get textSizeDescription =>
+      'Powiększenie stosowane dodatkowo do wielkości tekstu ustawionej w systemie.';
+
+  @override
+  String get textScaleStandard => 'Standardowy (100%)';
+
+  @override
+  String get textScaleLarge => 'Duży (115%)';
+
+  @override
+  String get textScaleExtraLarge => 'Bardzo duży (130%)';
 }

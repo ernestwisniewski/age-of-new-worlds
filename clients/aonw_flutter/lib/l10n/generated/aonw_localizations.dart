@@ -2407,6 +2407,36 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Focus the next / previous control'**
   String get keyboardFocus;
+
+  /// No description provided for @textSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Text size'**
+  String get textSize;
+
+  /// No description provided for @textSizeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied in addition to your system text size.'**
+  String get textSizeDescription;
+
+  /// No description provided for @textScaleStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard (100%)'**
+  String get textScaleStandard;
+
+  /// No description provided for @textScaleLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large (115%)'**
+  String get textScaleLarge;
+
+  /// No description provided for @textScaleExtraLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra large (130%)'**
+  String get textScaleExtraLarge;
 }
 
 class _AonwLocalizationsDelegate

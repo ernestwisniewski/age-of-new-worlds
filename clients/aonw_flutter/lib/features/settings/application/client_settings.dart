@@ -1,11 +1,14 @@
 import 'client_audio_settings.dart';
 import 'client_gamepad_settings.dart';
+import 'client_text_scale.dart';
 
 export 'client_audio_settings.dart';
 export 'client_gamepad_settings.dart';
+export 'client_text_scale.dart';
 
 final class ClientSettings {
   const ClientSettings({
+    this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
     required this.cameraSensitivity,
@@ -39,6 +42,7 @@ final class ClientSettings {
     showMapHeightBadges: false,
   );
 
+  final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
   final double cameraSensitivity;
@@ -61,6 +65,7 @@ final class ClientSettings {
   final bool showMapHeightBadges;
 
   ClientSettings copyWith({
+    ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
     double? cameraSensitivity,
@@ -82,6 +87,7 @@ final class ClientSettings {
     bool? showMapResourceIcons,
     bool? showMapHeightBadges,
   }) => ClientSettings(
+    textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
@@ -111,6 +117,7 @@ final class ClientSettings {
   @override
   bool operator ==(Object other) =>
       other is ClientSettings &&
+      other.textScale == textScale &&
       other.gamepad == gamepad &&
       other.audio == audio &&
       other.cameraSensitivity == cameraSensitivity &&
@@ -142,7 +149,8 @@ final class ClientSettings {
       other.showMapHeightBadges == showMapHeightBadges;
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
+    textScale,
     gamepad,
     audio,
     cameraSensitivity,
@@ -163,5 +171,5 @@ final class ClientSettings {
     showMapTerrainIcons,
     showMapResourceIcons,
     showMapHeightBadges,
-  );
+  ]);
 }

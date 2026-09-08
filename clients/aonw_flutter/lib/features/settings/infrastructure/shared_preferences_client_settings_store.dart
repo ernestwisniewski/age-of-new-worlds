@@ -12,6 +12,7 @@ final class SharedPreferencesClientSettingsStore
   SharedPreferencesClientSettingsStore({SharedPreferencesAsync? preferences})
     : _preferences = preferences ?? SharedPreferencesAsync();
 
+  static const _textScaleKey = 'aonw.settings.textScale';
   static const _cinematicCameraKey = 'aonw.settings.cinematicCamera';
   static const _cameraSensitivityKey = 'aonw.settings.cameraSensitivity';
   static const _smoothCameraMovementKey = 'aonw.settings.smoothCameraMovement';
@@ -64,6 +65,7 @@ final class SharedPreferencesClientSettingsStore
     final camera = await _loadCamera();
     final animations = await _loadAnimations();
     return ClientSettings(
+      textScale: await _loadTextScale(),
       gamepad: await _loadGamepad(),
       showUnitMovementAnimations: animations.movement,
       showCombatAnimations: animations.combat,
@@ -99,6 +101,7 @@ final class SharedPreferencesClientSettingsStore
 
   @override
   Future<void> save(ClientSettings settings) async {
+    await _preferences.setString(_textScaleKey, settings.textScale.name);
     await _saveCamera(settings);
     await _saveAnimations(settings);
     await _saveAudio(settings.audio);
@@ -125,6 +128,14 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(
       _showMapHeightBadgesKey,
       settings.showMapHeightBadges,
+    );
+  }
+
+  Future<ClientTextScale> _loadTextScale() async {
+    final value = await _preferences.getString(_textScaleKey);
+    return ClientTextScale.values.firstWhere(
+      (scale) => scale.name == value,
+      orElse: () => ClientTextScale.standard,
     );
   }
 

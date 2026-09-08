@@ -464,5 +464,10 @@
   "keyboardSpace": "Spacja",
   "keyboardPrimary": "Przejdź do następnej czynności; zakończ turę, gdy nie ma już żadnej",
   "keyboardCancel": "Zamknij aktywny panel lub anuluj bieżącą interakcję",
-  "keyboardFocus": "Przejdź do następnej / poprzedniej kontrolki"
+  "keyboardFocus": "Przejdź do następnej / poprzedniej kontrolki",
+  "textSize": "Wielkość tekstu",
+  "textSizeDescription": "Powiększenie stosowane dodatkowo do wielkości tekstu ustawionej w systemie.",
+  "textScaleStandard": "Standardowy (100%)",
+  "textScaleLarge": "Duży (115%)",
+  "textScaleExtraLarge": "Bardzo duży (130%)"
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../design_system/aonw_text_scaler.dart';
 import '../../design_system/aonw_theme.dart';
 import '../../features/audio/application/game_audio_port.dart';
 import '../../features/audio/presentation/game_audio_host.dart';
@@ -173,6 +174,10 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
               final media = MediaQuery.of(context);
               return MediaQuery(
                 data: media.copyWith(
+                  textScaler: AonwTextScaler(
+                    system: media.textScaler,
+                    factor: _settingsController.settings.textScale.factor,
+                  ),
                   disableAnimations:
                       media.disableAnimations ||
                       _settingsController.settings.reducedMotion,

@@ -5,6 +5,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'text size survives restart and resets without changing other options',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      for (final scale in ClientTextScale.values) {
+        final settings = ClientSettings.defaults.copyWith(
+          textScale: scale,
+          highContrast: true,
+          cameraSensitivity: 1.5,
+        );
+        await store.save(settings);
+        final restored = await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load();
+        expect(restored, settings);
+        expect(restored.hashCode, settings.hashCode);
+        expect(restored.textScale, scale);
+      }
+      await store.save(ClientSettings.defaults);
+      expect(await store.load(), ClientSettings.defaults);
+    },
+  );
+
+  test(
+    'unknown or absent text size uses standard while retaining preferences',
+    () async {
+      final preferences = _Preferences();
+      preferences.values['aonw.settings.highContrast'] = true;
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      expect((await store.load()).textScale, ClientTextScale.standard);
+      preferences.values['aonw.settings.textScale'] = 'unsupported';
+      final restored = await store.load();
+      expect(restored.textScale, ClientTextScale.standard);
+      expect(restored.highContrast, isTrue);
+    },
+  );
+
+  test(
     'persisted reassignment retains displaced and explicitly unbound actions',
     () async {
       final preferences = _Preferences();

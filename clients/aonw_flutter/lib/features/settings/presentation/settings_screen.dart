@@ -15,6 +15,7 @@ part 'settings_animations.dart';
 part 'settings_audio.dart';
 part 'settings_gamepad.dart';
 part 'settings_keyboard.dart';
+part 'settings_text_scale.dart';
 part 'settings_gamepad_bindings.dart';
 part 'settings_gamepad_labels.dart';
 
@@ -246,6 +247,8 @@ final class _AccessibilitySettings extends StatelessWidget {
     final l10n = context.aonwL10n;
     return Column(
       children: [
+        _TextScaleSetting(settings: settings, onChanged: onChanged),
+        const SizedBox(height: AonwSpacing.md),
         SwitchListTile.adaptive(
           key: const ValueKey('reduced-motion-setting'),
           contentPadding: EdgeInsets.zero,

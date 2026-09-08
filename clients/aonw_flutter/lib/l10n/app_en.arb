@@ -607,5 +607,10 @@
   "keyboardSpace": "Space",
   "keyboardPrimary": "Go to the next pending action; end the turn when none remain",
   "keyboardCancel": "Close the active panel or cancel the current interaction",
-  "keyboardFocus": "Focus the next / previous control"
+  "keyboardFocus": "Focus the next / previous control",
+  "textSize": "Text size",
+  "textSizeDescription": "Applied in addition to your system text size.",
+  "textScaleStandard": "Standard (100%)",
+  "textScaleLarge": "Large (115%)",
+  "textScaleExtraLarge": "Extra large (130%)"
 }

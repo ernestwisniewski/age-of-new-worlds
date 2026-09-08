@@ -2455,4 +2455,20 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get keyboardFocus => 'Focus the next / previous control';
+
+  @override
+  String get textSize => 'Text size';
+
+  @override
+  String get textSizeDescription =>
+      'Applied in addition to your system text size.';
+
+  @override
+  String get textScaleStandard => 'Standard (100%)';
+
+  @override
+  String get textScaleLarge => 'Large (115%)';
+
+  @override
+  String get textScaleExtraLarge => 'Extra large (130%)';
 }
