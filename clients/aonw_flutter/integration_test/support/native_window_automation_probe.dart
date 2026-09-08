@@ -28,11 +28,22 @@ extension NativeWindowAutomationProbe on NativeTurnAutomationProbe {
     expect(game.paused, isTrue);
     expect(ready.localAiTurn.inFlight, isTrue);
     final revision = ready.recipient.stamp.revision;
-    final updates = game.world.effectHost.debugActiveUpdateCount;
+    final completed = game.world.effectHost.debugCompletedMovementCount;
+    final positions = {
+      for (final unit in ready.recipient.units)
+        if (game.world.unitLayer.componentForUnit(unit.id) case final sprite?)
+          unit.id: sprite.visualCenter,
+    };
     final commands = requests.length;
     await Future<void>.delayed(const Duration(milliseconds: 600));
     expect(ready.recipient.stamp.revision, revision);
-    expect(game.world.effectHost.debugActiveUpdateCount, updates);
+    expect(game.world.effectHost.debugCompletedMovementCount, completed);
+    for (final entry in positions.entries) {
+      expect(
+        game.world.unitLayer.componentForUnit(entry.key)?.visualCenter,
+        entry.value,
+      );
+    }
     expect(requests.length, commands);
     final restorations = foregroundRestorations;
     await pumpFrame();

@@ -175,14 +175,7 @@ final class NativeTurnAutomationProbe {
     if (lifecycle != null && lifecycle != AppLifecycleState.resumed) {
       await _restoreForeground();
     }
-    final frame = tester.pump(const Duration(milliseconds: 100));
-    await frame.timeout(
-      const Duration(seconds: 2),
-      onTimeout: () async {
-        await _restoreForeground();
-        await frame.timeout(const Duration(seconds: 5));
-      },
-    );
+    await tester.pump(const Duration(milliseconds: 100));
   }
 
   Future<void> _restoreForeground() async {
@@ -191,6 +184,10 @@ final class NativeTurnAutomationProbe {
     if (await windowManager.isMinimized()) await windowManager.restore();
     await windowManager.show();
     await windowManager.focus();
+    debugPrint(
+      'Native window restored: focused=${await windowManager.isFocused()}, '
+      'visible=${await windowManager.isVisible()}',
+    );
   }
 
   Future<void> until(bool Function() complete, String stage) async {
@@ -264,7 +261,9 @@ final class NativeTurnAutomationProbe {
   };
 
   Future<void> close() async {
+    await pumpFrame();
     await tester.pumpWidget(const SizedBox.shrink());
+    await pumpFrame();
     await gateway.close();
     if (_windowSize case final original?) await windowManager.setSize(original);
   }

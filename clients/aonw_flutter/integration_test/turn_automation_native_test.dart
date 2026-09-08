@@ -11,6 +11,8 @@ import 'support/native_window_automation_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  // Use native frames so a pump remains a bounded wait when the window is hidden.
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.benchmarkLive;
   for (final mode in LocalTurnModeView.values) {
     testWidgets('automates native ${mode.name} turns with an AI opponent', (
       tester,
