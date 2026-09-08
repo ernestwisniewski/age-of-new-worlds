@@ -4,6 +4,9 @@ extension _GamepadPreferences on SharedPreferencesClientSettingsStore {
   Future<ClientGamepadSettings> _loadGamepad() async {
     const defaults = ClientGamepadSettings();
     return ClientGamepadSettings(
+      bindings: GamepadBindingsCodec.decode(
+        await _preferences.getString('aonw.settings.gamepad.bindings'),
+      ),
       enabled:
           await _preferences.getBool('aonw.settings.gamepad.enabled') ??
           defaults.enabled,
@@ -26,6 +29,10 @@ extension _GamepadPreferences on SharedPreferencesClientSettingsStore {
   }
 
   Future<void> _saveGamepad(ClientGamepadSettings gamepad) async {
+    await _preferences.setString(
+      'aonw.settings.gamepad.bindings',
+      GamepadBindingsCodec.encode(gamepad.bindings),
+    );
     await _preferences.setBool(
       'aonw.settings.gamepad.enabled',
       gamepad.enabled,

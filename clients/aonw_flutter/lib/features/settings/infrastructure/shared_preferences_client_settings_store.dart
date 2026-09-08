@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../application/client_settings.dart';
 import '../application/client_settings_store.dart';
+import 'gamepad_bindings_codec.dart';
 
 part 'shared_preferences_audio_settings.dart';
 part 'shared_preferences_gamepad_settings.dart';

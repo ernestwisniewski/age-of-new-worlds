@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:aonw_flutter/features/map/infrastructure/gamepad_map_input_source.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_input.dart';
+import 'package:aonw_flutter/features/settings/application/client_gamepad_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gamepads/gamepads.dart';
 
+part 'gamepad_binding_input_test_cases.dart';
+
 void main() {
+  bindingInputTests();
   test('publishes action button state for frame-edge dispatch', () async {
     final events = StreamController<NormalizedGamepadEvent>(sync: true);
     final source = GamepadMapInputSource(events: events.stream);

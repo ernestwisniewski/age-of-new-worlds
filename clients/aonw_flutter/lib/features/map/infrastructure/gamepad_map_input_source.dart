@@ -3,14 +3,18 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:gamepads/gamepads.dart';
 
+import '../../settings/application/client_gamepad_settings.dart';
+import '../../settings/application/configurable_gamepad_input.dart';
 import '../presentation/input/map_gamepad_input.dart';
 import '../presentation/input/map_input.dart';
+import 'gamepad_binding_mapper.dart';
 
 final class GamepadMapInputSource
     implements
         MapInputSource,
         ContinuousMapInputSource,
-        LifecycleAwareMapInputSource {
+        LifecycleAwareMapInputSource,
+        ConfigurableGamepadInput {
   GamepadMapInputSource({Stream<NormalizedGamepadEvent>? events}) {
     _subscription = (events ?? Gamepads.normalizedEvents).listen(
       _onEvent,
@@ -22,6 +26,7 @@ final class GamepadMapInputSource
     sync: true,
   );
   late final StreamSubscription<NormalizedGamepadEvent> _subscription;
+  final _bindings = GamepadBindingMapper();
   MapGamepadInput _continuousInput = MapGamepadInput.idle;
   String? _activeGamepadId;
   var _active = true;
@@ -34,8 +39,10 @@ final class GamepadMapInputSource
   Stream<MapGamepadInput> get continuousInputs => _continuousInputs.stream;
 
   void _onEvent(NormalizedGamepadEvent event) {
-    if (_closed || !_active || !_accepts(event)) return;
-    final next = _applyContinuousEvent(_continuousInput, event);
+    if (_closed || !_active || !event.value.isFinite || !_accepts(event)) {
+      return;
+    }
+    final next = _applyContinuousEvent(event);
     if (next == _continuousInput) return;
     _continuousInput = next;
     _continuousInputs.add(next);
@@ -50,104 +57,28 @@ final class GamepadMapInputSource
     if (current == event.gamepadId) return true;
     if (event.value.abs() <= 0.5) return false;
     _activeGamepadId = event.gamepadId;
+    _bindings.reset();
     _replaceContinuousInput(MapGamepadInput.idle);
     return true;
   }
 
-  MapGamepadInput _applyContinuousEvent(
-    MapGamepadInput input,
-    NormalizedGamepadEvent event,
-  ) {
-    final axis = event.axis;
-    if (axis != null) return _applyAxis(input, axis, event.value);
-    final pressed = event.value != 0;
-    final button = event.button;
-    if (button == null) return input;
-    return _applyButton(input, button, pressed);
+  MapGamepadInput _applyContinuousEvent(NormalizedGamepadEvent event) {
+    if (event.axis case final axis?) {
+      return _bindings.axis(_axisControls[axis]!, event.value);
+    }
+    if (event.button case final button?) {
+      return _bindings.button(_buttonControls[button]!, event.value != 0);
+    }
+    return _continuousInput;
   }
 
-  MapGamepadInput _applyButton(
-    MapGamepadInput input,
-    GamepadButton button,
-    bool pressed,
-  ) {
-    if (_isDpad(button)) return _applyDpadButton(input, button, pressed);
-    if (_isTrigger(button)) return _applyTriggerButton(input, button, pressed);
-    return _applyActionButton(input, button, pressed);
+  @override
+  void configureGamepad(ClientGamepadSettings settings) {
+    if (_closed) return;
+    if (_bindings.configure(settings)) {
+      _replaceContinuousInput(MapGamepadInput.idle);
+    }
   }
-
-  MapGamepadInput _applyActionButton(
-    MapGamepadInput input,
-    GamepadButton button,
-    bool pressed,
-  ) => switch (button) {
-    GamepadButton.a => input.copyWith(activate: pressed),
-    GamepadButton.b || GamepadButton.back => input.copyWith(cancel: pressed),
-    GamepadButton.x => input.copyWith(toggleMoveTargeting: pressed),
-    GamepadButton.y => input.copyWith(inspectHex: pressed),
-    GamepadButton.start => input.copyWith(primaryAction: pressed),
-    _ => _applyFocusButton(input, button, pressed),
-  };
-
-  MapGamepadInput _applyFocusButton(
-    MapGamepadInput input,
-    GamepadButton button,
-    bool pressed,
-  ) => switch (button) {
-    GamepadButton.leftStick => input.copyWith(hudFocusPrevious: pressed),
-    GamepadButton.rightStick => input.copyWith(hudFocusNext: pressed),
-    GamepadButton.leftBumper => input.copyWith(focusPrevious: pressed),
-    GamepadButton.rightBumper => input.copyWith(focusNext: pressed),
-    _ => input,
-  };
-
-  MapGamepadInput _applyTriggerButton(
-    MapGamepadInput input,
-    GamepadButton button,
-    bool pressed,
-  ) => switch (button) {
-    GamepadButton.rightTrigger => input.copyWith(zoomIn: pressed ? 1 : 0),
-    GamepadButton.leftTrigger => input.copyWith(zoomOut: pressed ? 1 : 0),
-    _ => input,
-  };
-
-  MapGamepadInput _applyDpadButton(
-    MapGamepadInput input,
-    GamepadButton button,
-    bool pressed,
-  ) => switch (button) {
-    GamepadButton.dpadUp => input.copyWith(dpadUp: pressed),
-    GamepadButton.dpadDown => input.copyWith(dpadDown: pressed),
-    GamepadButton.dpadLeft => input.copyWith(dpadLeft: pressed),
-    GamepadButton.dpadRight => input.copyWith(dpadRight: pressed),
-    _ => input,
-  };
-
-  bool _isDpad(GamepadButton button) => switch (button) {
-    GamepadButton.dpadUp ||
-    GamepadButton.dpadDown ||
-    GamepadButton.dpadLeft ||
-    GamepadButton.dpadRight => true,
-    _ => false,
-  };
-
-  bool _isTrigger(GamepadButton button) => switch (button) {
-    GamepadButton.leftTrigger || GamepadButton.rightTrigger => true,
-    _ => false,
-  };
-
-  MapGamepadInput _applyAxis(
-    MapGamepadInput input,
-    GamepadAxis axis,
-    double value,
-  ) => switch (axis) {
-    GamepadAxis.leftStickX => input.copyWith(cursorX: value),
-    GamepadAxis.leftStickY => input.copyWith(cursorY: value),
-    GamepadAxis.rightStickX => input.copyWith(cameraX: value),
-    GamepadAxis.rightStickY => input.copyWith(cameraY: value),
-    GamepadAxis.rightTrigger => input.copyWith(zoomIn: value),
-    GamepadAxis.leftTrigger => input.copyWith(zoomOut: value),
-  };
 
   void _replaceContinuousInput(MapGamepadInput input) {
     if (_continuousInput == input) return;
@@ -166,7 +97,10 @@ final class GamepadMapInputSource
   void setActive(bool active) {
     if (_closed || _active == active) return;
     _active = active;
-    if (!active) _replaceContinuousInput(MapGamepadInput.idle);
+    if (!active) {
+      _bindings.reset();
+      _replaceContinuousInput(MapGamepadInput.idle);
+    }
   }
 
   @override
@@ -177,3 +111,33 @@ final class GamepadMapInputSource
     await _continuousInputs.close();
   }
 }
+
+const _buttonControls = {
+  GamepadButton.a: GamepadButtonControl.a,
+  GamepadButton.b: GamepadButtonControl.b,
+  GamepadButton.x: GamepadButtonControl.x,
+  GamepadButton.y: GamepadButtonControl.y,
+  GamepadButton.leftBumper: GamepadButtonControl.leftBumper,
+  GamepadButton.rightBumper: GamepadButtonControl.rightBumper,
+  GamepadButton.leftTrigger: GamepadButtonControl.leftTrigger,
+  GamepadButton.rightTrigger: GamepadButtonControl.rightTrigger,
+  GamepadButton.back: GamepadButtonControl.back,
+  GamepadButton.start: GamepadButtonControl.start,
+  GamepadButton.home: GamepadButtonControl.home,
+  GamepadButton.leftStick: GamepadButtonControl.leftStick,
+  GamepadButton.rightStick: GamepadButtonControl.rightStick,
+  GamepadButton.dpadUp: GamepadButtonControl.dpadUp,
+  GamepadButton.dpadDown: GamepadButtonControl.dpadDown,
+  GamepadButton.dpadLeft: GamepadButtonControl.dpadLeft,
+  GamepadButton.dpadRight: GamepadButtonControl.dpadRight,
+  GamepadButton.touchpad: GamepadButtonControl.touchpad,
+};
+
+const _axisControls = {
+  GamepadAxis.leftStickX: GamepadAxisControl.leftStickX,
+  GamepadAxis.leftStickY: GamepadAxisControl.leftStickY,
+  GamepadAxis.rightStickX: GamepadAxisControl.rightStickX,
+  GamepadAxis.rightStickY: GamepadAxisControl.rightStickY,
+  GamepadAxis.leftTrigger: GamepadAxisControl.leftTrigger,
+  GamepadAxis.rightTrigger: GamepadAxisControl.rightTrigger,
+};

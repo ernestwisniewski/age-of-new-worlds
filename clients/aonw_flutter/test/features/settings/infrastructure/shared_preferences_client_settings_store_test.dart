@@ -5,6 +5,51 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'persisted reassignment retains displaced and explicitly unbound actions',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      final bindings = GamepadBindings.defaults
+          .bindButton(GamepadButtonAction.confirm, GamepadButtonControl.start)
+          .bindButton(GamepadButtonAction.cancel, null)
+          .bindAxis(GamepadAxisAction.cameraX, GamepadAxisControl.leftStickX);
+      final settings = ClientSettings.defaults.copyWith(
+        gamepad: ClientGamepadSettings(bindings: bindings, deadzone: 0.5),
+      );
+      await store.save(settings);
+      final restored = await SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      ).load();
+      expect(restored, settings);
+      expect(
+        restored.gamepad.bindings.buttonsFor(GamepadButtonAction.primaryAction),
+        isEmpty,
+      );
+      expect(
+        restored.gamepad.bindings.buttonsFor(GamepadButtonAction.cancel),
+        isEmpty,
+      );
+      expect(
+        restored.gamepad.bindings.axisFor(GamepadAxisAction.cursorX),
+        isNull,
+      );
+      await store.save(
+        restored.copyWith(
+          gamepad: restored.gamepad.copyWith(
+            bindings: GamepadBindings.defaults,
+          ),
+        ),
+      );
+      expect(
+        (await store.load()).gamepad,
+        const ClientGamepadSettings(deadzone: 0.5),
+      );
+    },
+  );
+
+  test(
     'gamepad defaults are independent of existing camera preferences',
     () async {
       final preferences = _Preferences();
@@ -254,6 +299,14 @@ void main() {
 
 final class _Preferences extends Fake implements SharedPreferencesAsync {
   final values = <String, Object>{};
+
+  @override
+  Future<String?> getString(String key) async => values[key] as String?;
+
+  @override
+  Future<void> setString(String key, String value) async {
+    values[key] = value;
+  }
 
   @override
   Future<bool?> getBool(String key) async => values[key] as bool?;

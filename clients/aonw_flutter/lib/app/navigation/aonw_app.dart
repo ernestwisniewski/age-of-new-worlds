@@ -10,6 +10,7 @@ import '../../features/map/presentation/map_presentation_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
+import '../../features/settings/application/configurable_gamepad_input.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
 import '../../game/aonw_flame_game.dart';
@@ -93,6 +94,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     if (oldWidget.mapInputSource != widget.mapInputSource) {
       _setInputActive(oldWidget.mapInputSource, false);
       unawaited(oldWidget.mapInputSource?.close());
+      _synchronizeGamepadConfiguration();
       _synchronizeInputLifecycle();
     }
     if (oldWidget.settingsController != widget.settingsController) {
@@ -188,7 +190,15 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
   void _installSettingsController() {
     _settingsController =
         widget.settingsController ?? ClientSettingsController.ephemeral();
+    _settingsController.addListener(_synchronizeGamepadConfiguration);
+    _synchronizeGamepadConfiguration();
     _settingsReady = _settingsController.load();
+  }
+
+  void _synchronizeGamepadConfiguration() {
+    if (widget.mapInputSource case final ConfigurableGamepadInput source) {
+      source.configureGamepad(_settingsController.settings.gamepad);
+    }
   }
 
   void _synchronizeInputLifecycle() {
