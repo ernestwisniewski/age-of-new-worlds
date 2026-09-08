@@ -407,5 +407,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "gamepadSettings": "Gamepad",
+  "gamepadEnabled": "Wejście gamepada",
+  "gamepadDeadzone": "Martwa strefa gamepada",
+  "gamepadCameraSensitivity": "Czułość kamery gamepada",
+  "gamepadInvertCameraY": "Odwróć oś Y kamery gamepada"
 }

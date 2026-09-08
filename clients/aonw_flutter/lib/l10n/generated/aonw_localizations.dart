@@ -2107,6 +2107,36 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{value, select, ocean{Ocean} coast{Coast} lake{Lake} plains{Plains} grassland{Grassland} desert{Desert} tundra{Tundra} snow{Snow} mountain{Mountain} hills{Hills} wetlands{Wetlands} jungle{Jungle} forest{Forest} river{River} other{Plains}}'**
   String hexInspectionTerrain(String value);
+
+  /// No description provided for @gamepadSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamepad'**
+  String get gamepadSettings;
+
+  /// No description provided for @gamepadEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamepad input'**
+  String get gamepadEnabled;
+
+  /// No description provided for @gamepadDeadzone.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamepad deadzone'**
+  String get gamepadDeadzone;
+
+  /// No description provided for @gamepadCameraSensitivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Gamepad camera sensitivity'**
+  String get gamepadCameraSensitivity;
+
+  /// No description provided for @gamepadInvertCameraY.
+  ///
+  /// In en, this message translates to:
+  /// **'Invert gamepad camera Y'**
+  String get gamepadInvertCameraY;
 }
 
 class _AonwLocalizationsDelegate

@@ -4,6 +4,7 @@ import '../application/client_settings.dart';
 import '../application/client_settings_store.dart';
 
 part 'shared_preferences_audio_settings.dart';
+part 'shared_preferences_gamepad_settings.dart';
 
 final class SharedPreferencesClientSettingsStore
     implements ClientSettingsStore {
@@ -62,6 +63,7 @@ final class SharedPreferencesClientSettingsStore
     final camera = await _loadCamera();
     final animations = await _loadAnimations();
     return ClientSettings(
+      gamepad: await _loadGamepad(),
       showUnitMovementAnimations: animations.movement,
       showCombatAnimations: animations.combat,
       showUnitIdleAnimations: animations.idle,
@@ -99,6 +101,7 @@ final class SharedPreferencesClientSettingsStore
     await _saveCamera(settings);
     await _saveAnimations(settings);
     await _saveAudio(settings.audio);
+    await _saveGamepad(settings.gamepad);
     await _preferences.setDouble(
       _cameraSensitivityKey,
       settings.cameraSensitivity,

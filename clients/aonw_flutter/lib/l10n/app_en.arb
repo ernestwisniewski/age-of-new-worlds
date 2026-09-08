@@ -550,5 +550,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "gamepadSettings": "Gamepad",
+  "gamepadEnabled": "Gamepad input",
+  "gamepadDeadzone": "Gamepad deadzone",
+  "gamepadCameraSensitivity": "Gamepad camera sensitivity",
+  "gamepadInvertCameraY": "Invert gamepad camera Y"
 }

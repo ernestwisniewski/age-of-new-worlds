@@ -13,6 +13,7 @@ import 'client_settings_controller.dart';
 part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
 part 'settings_audio.dart';
+part 'settings_gamepad.dart';
 
 final class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.controller, super.key});
@@ -90,6 +91,8 @@ final class _SettingsForm extends StatelessWidget {
         title: l10n.accessibilitySettings,
         child: _AccessibilitySettings(settings: settings, onChanged: onChanged),
       ),
+      const SizedBox(height: AonwSpacing.md),
+      _GamepadSettings(settings: settings, onChanged: onChanged),
       const SizedBox(height: AonwSpacing.lg),
       OutlinedButton.icon(
         key: const ValueKey('reset-settings'),

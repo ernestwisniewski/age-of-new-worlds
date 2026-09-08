@@ -15,11 +15,16 @@ extension _MapScreenGamepad on _MapScreenState {
     _synchronizeGamepadTicker();
   }
 
-  void _synchronizeGamepadSettings(double cameraSensitivity) {
-    if (_gamepadFrames.cameraSensitivity == cameraSensitivity) return;
+  void _synchronizeGamepadSettings(ClientGamepadSettings settings) {
+    if (_gamepadSettings == settings) return;
+    _gamepadSettings = settings;
+    _gamepadOwnerGeneration += 1;
     _gamepadFrames = MapGamepadFrameController(
-      cameraSensitivity: cameraSensitivity,
+      cameraSensitivity: settings.cameraSensitivity,
+      deadzone: settings.deadzone,
+      invertCameraY: settings.invertCameraY,
     )..prime(_gamepadInput);
+    _synchronizeGamepadAvailability();
     _synchronizeGamepadTicker();
   }
 
@@ -30,7 +35,9 @@ extension _MapScreenGamepad on _MapScreenState {
 
   void _synchronizeGamepadTicker() {
     final available =
-        _routeVisible && _lifecycleState == AppLifecycleState.resumed;
+        _gamepadSettings.enabled &&
+        _routeVisible &&
+        _lifecycleState == AppLifecycleState.resumed;
     if (!available || (_gamepadInput.isIdle && _gamepadFrames.isIdle)) {
       _lastGamepadElapsed = null;
       _gamepadTicker.stop();
@@ -47,7 +54,8 @@ extension _MapScreenGamepad on _MapScreenState {
 
   bool get _acceptsGamepadInput {
     final state = widget.controller.state;
-    return state is GameSessionReady &&
+    return _gamepadSettings.enabled &&
+        state is GameSessionReady &&
         !state.localHandoff.blocksGameplay &&
         !widget.controller.networkConnection.blocksGameplay;
   }

@@ -2298,4 +2298,19 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get gamepadSettings => 'Gamepad';
+
+  @override
+  String get gamepadEnabled => 'Gamepad input';
+
+  @override
+  String get gamepadDeadzone => 'Gamepad deadzone';
+
+  @override
+  String get gamepadCameraSensitivity => 'Gamepad camera sensitivity';
+
+  @override
+  String get gamepadInvertCameraY => 'Invert gamepad camera Y';
 }

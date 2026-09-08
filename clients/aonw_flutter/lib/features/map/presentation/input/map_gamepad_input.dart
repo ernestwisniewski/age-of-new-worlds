@@ -185,12 +185,14 @@ final class MapGamepadFrameController {
   MapGamepadFrameController({
     this.deadzone = 0.24,
     this.cameraSensitivity = 1,
+    this.invertCameraY = false,
     this.initialRepeatDelay = 0.28,
     this.repeatInterval = 0.11,
   });
 
   final double deadzone;
   final double cameraSensitivity;
+  final bool invertCameraY;
   final double initialRepeatDelay;
   final double repeatInterval;
 
@@ -219,7 +221,10 @@ final class MapGamepadFrameController {
     final frame = MapGamepadFrame(
       cursorStep: _advanceCursorRepeat(_cursorDirection(input), dt),
       cameraX: _applyDeadzone(input.cameraX) * cameraSensitivity,
-      cameraY: _applyDeadzone(input.cameraY) * cameraSensitivity,
+      cameraY:
+          _applyDeadzone(input.cameraY) *
+          cameraSensitivity *
+          (invertCameraY ? -1 : 1),
       zoom: _applyDeadzone(input.zoom),
       activatePressed: _pressed(input.activate, _previous.activate),
       cancelPressed: _pressed(input.cancel, _previous.cancel),

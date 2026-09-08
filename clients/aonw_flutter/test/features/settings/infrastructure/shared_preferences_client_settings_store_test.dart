@@ -5,6 +5,71 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test(
+    'gamepad defaults are independent of existing camera preferences',
+    () async {
+      final preferences = _Preferences();
+      preferences.values['aonw.settings.cameraSensitivity'] = 1.5;
+      final loaded = await SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      ).load();
+      expect(loaded.gamepad, const ClientGamepadSettings());
+      expect(loaded.cameraSensitivity, 1.5);
+    },
+  );
+
+  test(
+    'round trips gamepad options, retains disabled values and resets',
+    () async {
+      final preferences = _Preferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      for (final enabled in [true, false]) {
+        final settings = ClientSettings.defaults.copyWith(
+          cameraSensitivity: 1.5,
+          gamepad: ClientGamepadSettings(
+            enabled: enabled,
+            deadzone: 0.5,
+            cameraSensitivity: 0.2,
+            invertCameraY: true,
+          ),
+        );
+        await store.save(settings);
+        final loaded = await store.load();
+        expect(loaded, settings);
+        expect(loaded.hashCode, settings.hashCode);
+        expect(loaded, isNot(ClientSettings.defaults));
+      }
+      await store.save(ClientSettings.defaults);
+      expect(await store.load(), ClientSettings.defaults);
+    },
+  );
+
+  test('invalid gamepad ranges fall back independently', () async {
+    final preferences = _Preferences();
+    preferences.values['aonw.settings.gamepad.enabled'] = false;
+    preferences.values['aonw.settings.gamepad.invertCameraY'] = true;
+    for (final invalid in [double.nan, double.infinity, -1.0, 3.0]) {
+      preferences.values['aonw.settings.gamepad.deadzone'] = invalid;
+      preferences.values['aonw.settings.gamepad.cameraSensitivity'] = invalid;
+      final loaded = await SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      ).load();
+      expect(
+        loaded.gamepad,
+        const ClientGamepadSettings(enabled: false, invertCameraY: true),
+      );
+    }
+    preferences.values['aonw.settings.gamepad.deadzone'] = 0.6;
+    preferences.values['aonw.settings.gamepad.cameraSensitivity'] = 0.2;
+    final loaded = await SharedPreferencesClientSettingsStore(
+      preferences: preferences,
+    ).load();
+    expect(loaded.gamepad.deadzone, 0.6);
+    expect(loaded.gamepad.cameraSensitivity, 0.2);
+  });
+
+  test(
     'uses three audio defaults when channel preferences are absent',
     () async {
       final preferences = _Preferences();

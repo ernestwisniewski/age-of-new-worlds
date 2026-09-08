@@ -16,6 +16,7 @@ import '../../../local_game/application/local_handoff_state.dart';
 import '../../../local_game/presentation/local_handoff_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../save_game/application/local_save_state.dart';
+import '../../../settings/application/client_gamepad_settings.dart';
 import '../../../settings/presentation/client_settings_scope.dart';
 import '../../../turns/application/turn_action_state.dart';
 import '../../../turns/application/turn_presentation_queue.dart';
@@ -94,6 +95,7 @@ final class _MapScreenState extends State<MapScreen>
   StreamSubscription<MapInputCommand>? _inputSubscription;
   StreamSubscription<MapGamepadInput>? _continuousInputSubscription;
   final _gamepadCursor = MapGamepadCursor();
+  ClientGamepadSettings _gamepadSettings = const ClientGamepadSettings();
   MapGamepadInput _gamepadInput = MapGamepadInput.idle;
   MapGamepadFrameController _gamepadFrames = MapGamepadFrameController();
   Duration? _lastGamepadElapsed;
@@ -296,7 +298,7 @@ final class _MapScreenState extends State<MapScreen>
         showHeightBadges: settings.showMapHeightBadges,
       ),
     );
-    _synchronizeGamepadSettings(settings.cameraSensitivity);
+    _synchronizeGamepadSettings(settings.gamepad);
   }
 
   void _installFreshFlameGame() {

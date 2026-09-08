@@ -14,6 +14,7 @@ extension _MapScreenCursor on _MapScreenState {
   }
 
   void _handleGamepadCommand(MapInputCommand command) {
+    if (!_gamepadSettings.enabled) return;
     final state = _mapInputReady(command);
     if (state == null) return;
     switch (command) {

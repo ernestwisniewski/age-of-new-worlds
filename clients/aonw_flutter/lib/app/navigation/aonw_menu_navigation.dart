@@ -6,6 +6,8 @@ import 'package:flutter/scheduler.dart';
 import '../../design_system/widgets/aonw_menu_adjustable.dart';
 import '../../features/map/presentation/input/map_gamepad_input.dart';
 import '../../features/map/presentation/input/map_input.dart';
+import '../../features/settings/application/client_gamepad_settings.dart';
+import '../../features/settings/presentation/client_settings_scope.dart';
 
 final class AonwMenuNavigation extends StatefulWidget {
   const AonwMenuNavigation({required this.child, this.input, super.key});
@@ -20,7 +22,8 @@ final class AonwMenuNavigation extends StatefulWidget {
 final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
     with SingleTickerProviderStateMixin {
   final _scopeNode = FocusScopeNode(debugLabel: 'AoNW menu navigation');
-  final _frames = MapGamepadFrameController();
+  var _frames = MapGamepadFrameController();
+  var _gamepadSettings = const ClientGamepadSettings();
   StreamSubscription<MapGamepadInput>? _subscription;
   late final Ticker _ticker;
   var _input = MapGamepadInput.idle;
@@ -31,6 +34,17 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
     super.initState();
     _ticker = createTicker(_tick);
     _subscribe();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final settings = ClientSettingsScope.settingsOf(context).gamepad;
+    if (_gamepadSettings == settings) return;
+    _gamepadSettings = settings;
+    _frames = MapGamepadFrameController(deadzone: settings.deadzone)
+      ..prime(_input);
+    _synchronizeTicker();
   }
 
   @override
@@ -69,7 +83,7 @@ final class _AonwMenuNavigationState extends State<AonwMenuNavigation>
   }
 
   void _synchronizeTicker() {
-    if (_input.isIdle && _frames.isIdle) {
+    if (!_gamepadSettings.enabled || (_input.isIdle && _frames.isIdle)) {
       _lastElapsed = null;
       _ticker.stop();
       return;

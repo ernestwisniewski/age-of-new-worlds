@@ -3,6 +3,35 @@ import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'custom deadzone and inversion affect camera without reversing cursor or zoom',
+    () {
+      final controller = MapGamepadFrameController(
+        deadzone: 0.5,
+        cameraSensitivity: 0.2,
+        invertCameraY: true,
+      );
+      final neutral = controller.advance(
+        input: const MapGamepadInput(cursorY: 0.5, cameraY: 0.5, zoomIn: 0.5),
+        dt: 0,
+      );
+      expect(neutral.isIdle, isTrue);
+      final active = controller.advance(
+        input: const MapGamepadInput(
+          cursorY: 0.75,
+          cameraX: 0.75,
+          cameraY: 0.75,
+          zoomIn: 0.75,
+        ),
+        dt: 0,
+      );
+      expect(active.cursorStep, MapInputCommand.cursorUp);
+      expect(active.cameraX, closeTo(0.1, 1e-9));
+      expect(active.cameraY, closeTo(-0.1, 1e-9));
+      expect(active.zoom, closeTo(0.5, 1e-9));
+    },
+  );
+
   test('applies the original deadzone and camera sensitivity', () {
     final controller = MapGamepadFrameController(cameraSensitivity: 2);
 

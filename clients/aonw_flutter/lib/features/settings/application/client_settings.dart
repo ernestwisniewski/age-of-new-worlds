@@ -1,9 +1,12 @@
 import 'client_audio_settings.dart';
+import 'client_gamepad_settings.dart';
 
 export 'client_audio_settings.dart';
+export 'client_gamepad_settings.dart';
 
 final class ClientSettings {
   const ClientSettings({
+    this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
     required this.cameraSensitivity,
     required this.reducedMotion,
@@ -36,6 +39,7 @@ final class ClientSettings {
     showMapHeightBadges: false,
   );
 
+  final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
@@ -57,6 +61,7 @@ final class ClientSettings {
   final bool showMapHeightBadges;
 
   ClientSettings copyWith({
+    ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
@@ -77,6 +82,7 @@ final class ClientSettings {
     bool? showMapResourceIcons,
     bool? showMapHeightBadges,
   }) => ClientSettings(
+    gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
@@ -105,6 +111,7 @@ final class ClientSettings {
   @override
   bool operator ==(Object other) =>
       other is ClientSettings &&
+      other.gamepad == gamepad &&
       other.audio == audio &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
@@ -136,6 +143,7 @@ final class ClientSettings {
 
   @override
   int get hashCode => Object.hash(
+    gamepad,
     audio,
     cameraSensitivity,
     smoothCameraMovement,
