@@ -2604,4 +2604,21 @@ class AonwLocalizationsEs extends AonwLocalizations {
   @override
   String get automaticEndTurnDescription =>
       'Terminar tu turno cuando no queden acciones. Las decisiones manuales y los paneles abiertos pausan la automatización.';
+
+  @override
+  String get performanceSettings => 'Rendimiento';
+
+  @override
+  String get showFps => 'Mostrar FPS';
+
+  @override
+  String get showFpsDescription =>
+      'Mostrar los fotogramas por segundo en toda la aplicación.';
+
+  @override
+  String get showMapZoom => 'Mostrar zoom del mapa';
+
+  @override
+  String get showMapZoomDescription =>
+      'Mostrar el zoom actual mientras el mapa está abierto.';
 }

@@ -74,7 +74,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
     _hexSelectionPaletteIntentSink = onHexSelectionPaletteIntent;
     mapCamera = FlameMapCameraController(
       this.camera,
-      onZoomChanged: (zoom) => this.world.cityTerritoryLayer.setZoom(zoom),
+      onZoomChanged: _handleZoomChanged,
       onTransformChanged: _handleMapCameraTransform,
       onActivityChanged: _handleCameraActivity,
     );
@@ -99,6 +99,8 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
         _handleProductionActivity;
   }
   late final FlameMapCameraController mapCamera;
+  final _zoom = ValueNotifier<double?>(null);
+  ValueListenable<double?> get zoom => _zoom;
   late final FlameMapInputSurface inputSurface;
   MapHexIntentSink? _hexIntentSink;
   void Function(MapSoundKindView sound)? _soundSink;
@@ -172,6 +174,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   @override
   void clearScene() {
     world.clearScene();
+    _zoom.value = null;
     _setFoundingPreviewActive(false);
     mapCamera.clear();
     _lastCameraSelection = null;
@@ -198,12 +201,6 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       _longPressedHex = null;
       world.hexSelectionPaletteLayer.clearLayer();
     }
-    _synchronizeGameLoop();
-  }
-
-  void setContinuousRendering(bool enabled) {
-    if (_disposed || enabled == _continuousRendering) return;
-    _continuousRendering = enabled;
     _synchronizeGameLoop();
   }
 
@@ -387,6 +384,7 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
       _disposed = true;
       _soundSink = null;
       clearScene();
+      _zoom.dispose();
       dispose();
     }
     super.onDispose();

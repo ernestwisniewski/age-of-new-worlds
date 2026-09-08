@@ -1102,5 +1102,10 @@
   "advanceActions": "Pasar a la siguiente acción",
   "advanceActionsDescription": "Tras completar una acción, seleccionar la siguiente unidad, ciudad o investigación que requiera tu atención.",
   "automaticEndTurn": "Terminar turnos automáticamente",
-  "automaticEndTurnDescription": "Terminar tu turno cuando no queden acciones. Las decisiones manuales y los paneles abiertos pausan la automatización."
+  "automaticEndTurnDescription": "Terminar tu turno cuando no queden acciones. Las decisiones manuales y los paneles abiertos pausan la automatización.",
+  "performanceSettings": "Rendimiento",
+  "showFps": "Mostrar FPS",
+  "showFpsDescription": "Mostrar los fotogramas por segundo en toda la aplicación.",
+  "showMapZoom": "Mostrar zoom del mapa",
+  "showMapZoomDescription": "Mostrar el zoom actual mientras el mapa está abierto."
 }

@@ -1102,5 +1102,10 @@
   "advanceActions": "Naar de volgende actie gaan",
   "advanceActionsDescription": "Na een actie de volgende eenheid, stad of onderzoek selecteren die je aandacht nodig heeft.",
   "automaticEndTurn": "Beurten automatisch beëindigen",
-  "automaticEndTurnDescription": "Je beurt beëindigen wanneer er geen acties meer over zijn. Handmatige keuzes en geopende panelen pauzeren de automatisering."
+  "automaticEndTurnDescription": "Je beurt beëindigen wanneer er geen acties meer over zijn. Handmatige keuzes en geopende panelen pauzeren de automatisering.",
+  "performanceSettings": "Prestatie",
+  "showFps": "FPS tonen",
+  "showFpsDescription": "Toon de beeldsnelheid in de hele app.",
+  "showMapZoom": "Toon kaartzoom",
+  "showMapZoomDescription": "Toon de huidige zoom wanneer de kaart geopend is."
 }

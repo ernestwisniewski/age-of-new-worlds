@@ -1,13 +1,13 @@
 import 'package:aonw_flutter/features/settings/application/client_settings.dart';
 import 'package:aonw_flutter/features/settings/infrastructure/shared_preferences_client_settings_store.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../support/client_preferences_fixture.dart';
 
 void main() {
   test(
     'automation options persist independently across restart and reset',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -69,7 +69,7 @@ void main() {
   test(
     'language survives restart and returning to system persists explicitly',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -100,7 +100,7 @@ void main() {
   );
 
   test('missing or unsupported language follows the system', () async {
-    final preferences = _Preferences();
+    final preferences = MemoryClientPreferences();
     final store = SharedPreferencesClientSettingsStore(
       preferences: preferences,
     );
@@ -115,7 +115,7 @@ void main() {
   test(
     'text size survives restart and resets without changing other options',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -141,7 +141,7 @@ void main() {
   test(
     'unknown or absent text size uses standard while retaining preferences',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       preferences.values['aonw.settings.highContrast'] = true;
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
@@ -157,7 +157,7 @@ void main() {
   test(
     'persisted reassignment retains displaced and explicitly unbound actions',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -202,7 +202,7 @@ void main() {
   test(
     'gamepad defaults are independent of existing camera preferences',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       preferences.values['aonw.settings.cameraSensitivity'] = 1.5;
       final loaded = await SharedPreferencesClientSettingsStore(
         preferences: preferences,
@@ -215,7 +215,7 @@ void main() {
   test(
     'round trips gamepad options, retains disabled values and resets',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -241,7 +241,7 @@ void main() {
   );
 
   test('invalid gamepad ranges fall back independently', () async {
-    final preferences = _Preferences();
+    final preferences = MemoryClientPreferences();
     preferences.values['aonw.settings.gamepad.enabled'] = false;
     preferences.values['aonw.settings.gamepad.invertCameraY'] = true;
     for (final invalid in [double.nan, double.infinity, -1.0, 3.0]) {
@@ -267,7 +267,7 @@ void main() {
   test(
     'uses three audio defaults when channel preferences are absent',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -285,7 +285,7 @@ void main() {
   test(
     'persists independent channel switches and their retained volumes',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -320,7 +320,7 @@ void main() {
   test(
     'invalid volumes fall back independently without changing switches',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       preferences.values['aonw.settings.audio.musicEnabled'] = false;
       for (final invalid in [double.nan, double.infinity, -0.1, 1.1]) {
         for (final name in ['soundVolume', 'musicVolume', 'natureVolume']) {
@@ -345,7 +345,7 @@ void main() {
   test(
     'missing animation keys retain defaults for existing installations',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       preferences.values['aonw.settings.cameraSensitivity'] = 1.5;
       final settings = await SharedPreferencesClientSettingsStore(
         preferences: preferences,
@@ -362,7 +362,7 @@ void main() {
   );
 
   test('persists idle separately from motion and accessibility', () async {
-    final preferences = _Preferences();
+    final preferences = MemoryClientPreferences();
     final store = SharedPreferencesClientSettingsStore(
       preferences: preferences,
     );
@@ -388,7 +388,7 @@ void main() {
   test(
     'persists route animation independently across recreation and reset',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -419,7 +419,7 @@ void main() {
   test(
     'persists independent animation choices across store recreation and reset',
     () async {
-      final preferences = _Preferences();
+      final preferences = MemoryClientPreferences();
       final store = SharedPreferencesClientSettingsStore(
         preferences: preferences,
       );
@@ -445,32 +445,4 @@ void main() {
       expect(await store.load(), ClientSettings.defaults);
     },
   );
-}
-
-final class _Preferences extends Fake implements SharedPreferencesAsync {
-  final values = <String, Object>{};
-
-  @override
-  Future<String?> getString(String key) async => values[key] as String?;
-
-  @override
-  Future<void> setString(String key, String value) async {
-    values[key] = value;
-  }
-
-  @override
-  Future<bool?> getBool(String key) async => values[key] as bool?;
-
-  @override
-  Future<double?> getDouble(String key) async => values[key] as double?;
-
-  @override
-  Future<void> setBool(String key, bool value) async {
-    values[key] = value;
-  }
-
-  @override
-  Future<void> setDouble(String key, double value) async {
-    values[key] = value;
-  }
 }

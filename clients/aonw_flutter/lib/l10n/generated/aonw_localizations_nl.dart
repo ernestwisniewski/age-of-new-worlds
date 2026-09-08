@@ -2601,4 +2601,20 @@ class AonwLocalizationsNl extends AonwLocalizations {
   @override
   String get automaticEndTurnDescription =>
       'Je beurt beëindigen wanneer er geen acties meer over zijn. Handmatige keuzes en geopende panelen pauzeren de automatisering.';
+
+  @override
+  String get performanceSettings => 'Prestatie';
+
+  @override
+  String get showFps => 'FPS tonen';
+
+  @override
+  String get showFpsDescription => 'Toon de beeldsnelheid in de hele app.';
+
+  @override
+  String get showMapZoom => 'Toon kaartzoom';
+
+  @override
+  String get showMapZoomDescription =>
+      'Toon de huidige zoom wanneer de kaart geopend is.';
 }

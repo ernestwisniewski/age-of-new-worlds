@@ -1,6 +1,12 @@
 part of 'aonw_flame_game.dart';
 
 extension AonwFlameGameEffects on AonwFlameGame {
+  void setContinuousRendering(bool enabled) {
+    if (_disposed || enabled == _continuousRendering) return;
+    _continuousRendering = enabled;
+    _synchronizeGameLoop();
+  }
+
   Future<void> waitForCommandEffects() {
     if (_disposed || !_hasCommandEffects) return Future.value();
     return (_commandEffectsCompletion ??= Completer<void>()).future;

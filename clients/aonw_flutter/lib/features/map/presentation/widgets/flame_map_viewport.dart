@@ -12,6 +12,7 @@ import '../../read_model/map_scene.dart';
 import '../../read_model/map_view_mode.dart';
 import '../input/map_input.dart';
 import '../input/map_keyboard_shortcuts.dart';
+import 'map_zoom_reporter.dart';
 
 final class FlameMapViewport extends StatefulWidget {
   const FlameMapViewport({
@@ -72,42 +73,45 @@ final class _FlameMapViewportState extends State<FlameMapViewport> {
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
     final selection = widget.interaction.selected;
-    return Semantics(
-      key: const ValueKey('map-viewport'),
-      label: l10n.mapSemanticsLabel(
-        widget.scene.map.mapId,
-        widget.scene.map.cols,
-        widget.scene.map.rows,
-      ),
-      hint: l10n.mapInputHint,
-      value: selection == null
-          ? l10n.noHexSelected
-          : l10n.selectedHex(selection.col, selection.row),
-      focusable: true,
-      child: ClipRect(
-        key: const ValueKey('flame-viewport-clip'),
-        child: RepaintBoundary(
-          key: const ValueKey('flame-viewport-repaint-boundary'),
-          child: Focus(
-            focusNode: widget.focusNode,
-            autofocus: true,
-            onFocusChange: _onFocusChange,
-            onKeyEvent: _onKeyEvent,
-            child: MapViewportGestureLayer(
-              game: widget.game,
-              onPointerDown: widget.focusNode.requestFocus,
-              child: ColoredBox(
-                color: Theme.of(context).colorScheme.surface,
-                child: GameWidget<AonwFlameGame>(
-                  key: ValueKey(('flame-viewport', widget.generation)),
-                  game: widget.game,
-                  autofocus: false,
-                  addRepaintBoundary: false,
-                  behavior: HitTestBehavior.opaque,
-                  loadingBuilder: (_) => const SizedBox.expand(
-                    key: ValueKey('flame-viewport-loading'),
+    return MapZoomReporter(
+      zoom: widget.game.zoom,
+      child: Semantics(
+        key: const ValueKey('map-viewport'),
+        label: l10n.mapSemanticsLabel(
+          widget.scene.map.mapId,
+          widget.scene.map.cols,
+          widget.scene.map.rows,
+        ),
+        hint: l10n.mapInputHint,
+        value: selection == null
+            ? l10n.noHexSelected
+            : l10n.selectedHex(selection.col, selection.row),
+        focusable: true,
+        child: ClipRect(
+          key: const ValueKey('flame-viewport-clip'),
+          child: RepaintBoundary(
+            key: const ValueKey('flame-viewport-repaint-boundary'),
+            child: Focus(
+              focusNode: widget.focusNode,
+              autofocus: true,
+              onFocusChange: _onFocusChange,
+              onKeyEvent: _onKeyEvent,
+              child: MapViewportGestureLayer(
+                game: widget.game,
+                onPointerDown: widget.focusNode.requestFocus,
+                child: ColoredBox(
+                  color: Theme.of(context).colorScheme.surface,
+                  child: GameWidget<AonwFlameGame>(
+                    key: ValueKey(('flame-viewport', widget.generation)),
+                    game: widget.game,
+                    autofocus: false,
+                    addRepaintBoundary: false,
+                    behavior: HitTestBehavior.opaque,
+                    loadingBuilder: (_) => const SizedBox.expand(
+                      key: ValueKey('flame-viewport-loading'),
+                    ),
+                    errorBuilder: _buildError,
                   ),
-                  errorBuilder: _buildError,
                 ),
               ),
             ),

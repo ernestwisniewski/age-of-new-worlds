@@ -2,12 +2,14 @@ import 'client_audio_settings.dart';
 import 'client_automation_settings.dart';
 import 'client_gamepad_settings.dart';
 import 'client_language.dart';
+import 'client_performance_settings.dart';
 import 'client_text_scale.dart';
 
 export 'client_audio_settings.dart';
 export 'client_automation_settings.dart';
 export 'client_gamepad_settings.dart';
 export 'client_language.dart';
+export 'client_performance_settings.dart';
 export 'client_text_scale.dart';
 
 final class ClientSettings {
@@ -17,6 +19,7 @@ final class ClientSettings {
     this.gamepad = const ClientGamepadSettings(),
     this.audio = const ClientAudioSettings(),
     this.automation = const ClientAutomationSettings(),
+    this.performance = const ClientPerformanceSettings(),
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
@@ -53,6 +56,7 @@ final class ClientSettings {
   final ClientGamepadSettings gamepad;
   final ClientAudioSettings audio;
   final ClientAutomationSettings automation;
+  final ClientPerformanceSettings performance;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
   final bool cinematicCamera;
@@ -78,6 +82,7 @@ final class ClientSettings {
     ClientGamepadSettings? gamepad,
     ClientAudioSettings? audio,
     ClientAutomationSettings? automation,
+    ClientPerformanceSettings? performance,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
     bool? cinematicCamera,
@@ -102,6 +107,7 @@ final class ClientSettings {
     gamepad: gamepad ?? this.gamepad,
     audio: audio ?? this.audio,
     automation: automation ?? this.automation,
+    performance: performance ?? this.performance,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     cinematicCamera: cinematicCamera ?? this.cinematicCamera,
@@ -129,15 +135,19 @@ final class ClientSettings {
   @override
   bool operator ==(Object other) =>
       other is ClientSettings &&
-      other.language == language &&
-      other.gamepad == gamepad &&
-      other.audio == audio &&
-      other.automation == automation &&
+      _sameClientOptions(other) &&
       other.cameraSensitivity == cameraSensitivity &&
       _sameCamera(other) &&
       _sameAnimations(other) &&
       _sameAccessibility(other) &&
       _sameMapDisplay(other);
+
+  bool _sameClientOptions(ClientSettings other) =>
+      other.language == language &&
+      other.gamepad == gamepad &&
+      other.audio == audio &&
+      other.automation == automation &&
+      other.performance == performance;
 
   bool _sameAccessibility(ClientSettings other) =>
       other.textScale == textScale &&
@@ -172,6 +182,7 @@ final class ClientSettings {
     gamepad,
     audio,
     automation,
+    performance,
     cameraSensitivity,
     smoothCameraMovement,
     cinematicCamera,

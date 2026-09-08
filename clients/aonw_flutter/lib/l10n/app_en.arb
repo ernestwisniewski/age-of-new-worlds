@@ -631,5 +631,10 @@
   "advanceActions": "Advance to the next action",
   "advanceActionsDescription": "After completing an action, select the next unit, city or research that needs your attention.",
   "automaticEndTurn": "End turns automatically",
-  "automaticEndTurnDescription": "End your turn when no actions remain. Manual choices and open panels pause automation."
+  "automaticEndTurnDescription": "End your turn when no actions remain. Manual choices and open panels pause automation.",
+  "performanceSettings": "Performance",
+  "showFps": "Show FPS",
+  "showFpsDescription": "Show the frame rate throughout the app.",
+  "showMapZoom": "Show map zoom",
+  "showMapZoomDescription": "Show the current zoom while the map is open."
 }

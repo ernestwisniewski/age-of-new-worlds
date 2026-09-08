@@ -2528,4 +2528,21 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get automaticEndTurnDescription =>
       'Zakończ turę, gdy nie ma już czynności do wykonania. Ręczny wybór i otwarte panele wstrzymują automatyzację.';
+
+  @override
+  String get performanceSettings => 'Wydajność';
+
+  @override
+  String get showFps => 'Pokaż FPS';
+
+  @override
+  String get showFpsDescription =>
+      'Pokazuj liczbę klatek na sekundę w całej aplikacji.';
+
+  @override
+  String get showMapZoom => 'Pokaż zbliżenie mapy';
+
+  @override
+  String get showMapZoomDescription =>
+      'Pokazuj bieżące powiększenie podczas wyświetlania mapy.';
 }

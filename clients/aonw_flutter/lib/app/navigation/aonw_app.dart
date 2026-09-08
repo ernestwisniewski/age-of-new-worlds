@@ -12,6 +12,7 @@ import '../../features/multiplayer/presentation/multiplayer_access_controller.da
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/presentation/replay_presentation_controller.dart';
 import '../../features/settings/application/configurable_gamepad_input.dart';
+import '../../features/settings/presentation/client_performance_host.dart';
 import '../../features/settings/presentation/client_settings_controller.dart';
 import '../../features/settings/presentation/client_settings_scope.dart';
 import '../../features/settings/presentation/window_settings_controller.dart';
@@ -193,7 +194,10 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
                         media.highContrast ||
                         _settingsController.settings.highContrast,
                   ),
-                  child: child ?? const SizedBox.shrink(),
+                  child: ClientPerformanceHost(
+                    settings: _settingsController.settings.performance,
+                    child: child ?? const SizedBox.shrink(),
+                  ),
                 );
               },
             ),

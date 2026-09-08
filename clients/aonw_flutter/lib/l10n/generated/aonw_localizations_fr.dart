@@ -2605,4 +2605,21 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String get automaticEndTurnDescription =>
       'Terminer votre tour lorsqu’il ne reste plus d’actions. Les choix manuels et les panneaux ouverts suspendent l’automatisation.';
+
+  @override
+  String get performanceSettings => 'Performances';
+
+  @override
+  String get showFps => 'Afficher les FPS';
+
+  @override
+  String get showFpsDescription =>
+      'Afficher le nombre d’images par seconde dans toute l’application.';
+
+  @override
+  String get showMapZoom => 'Afficher le zoom de la carte';
+
+  @override
+  String get showMapZoomDescription =>
+      'Afficher le zoom actuel lorsque la carte est ouverte.';
 }

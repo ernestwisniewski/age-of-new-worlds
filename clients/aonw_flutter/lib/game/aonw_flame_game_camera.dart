@@ -1,6 +1,12 @@
 part of 'aonw_flame_game.dart';
 
 extension AonwFlameGameCamera on AonwFlameGame {
+  void _handleZoomChanged(double zoom) {
+    if (_disposed) return;
+    world.cityTerritoryLayer.setZoom(zoom);
+    _zoom.value = zoom;
+  }
+
   void _handleMapCameraTransform(MapCameraTransform transform) {
     world.cityProductionLayer.applyCamera(transform);
     _synchronizeAnimatedViewport();

@@ -17,6 +17,7 @@ part 'settings_movement_camera.dart';
 part 'settings_animations.dart';
 part 'settings_audio.dart';
 part 'settings_automation.dart';
+part 'settings_performance.dart';
 part 'settings_gamepad.dart';
 part 'settings_keyboard.dart';
 part 'settings_text_scale.dart';
@@ -107,6 +108,28 @@ final class _SettingsForm extends StatelessWidget {
         child: _MapSettings(settings: settings, onChanged: onChanged),
       ),
       const SizedBox(height: AonwSpacing.md),
+      ..._accessibilitySections(context),
+      _SettingsSection(
+        title: l10n.performanceSettings,
+        child: _PerformanceSettings(settings: settings, onChanged: onChanged),
+      ),
+      const SizedBox(height: AonwSpacing.md),
+      _GamepadSettings(settings: settings, onChanged: onChanged),
+      const SizedBox(height: AonwSpacing.md),
+      const _KeyboardSettings(),
+      const SizedBox(height: AonwSpacing.lg),
+      OutlinedButton.icon(
+        key: const ValueKey('reset-settings'),
+        onPressed: context.withGameSound(onReset),
+        icon: const Icon(Icons.restore),
+        label: Text(l10n.resetSettings),
+      ),
+    ];
+  }
+
+  List<Widget> _accessibilitySections(BuildContext context) {
+    final l10n = context.aonwL10n;
+    return [
       _SettingsSection(
         title: l10n.accessibilitySettings,
         child: _AccessibilitySettings(settings: settings, onChanged: onChanged),
@@ -118,16 +141,6 @@ final class _SettingsForm extends StatelessWidget {
       ),
       const SizedBox(height: AonwSpacing.md),
       const _WindowSettings(),
-      _GamepadSettings(settings: settings, onChanged: onChanged),
-      const SizedBox(height: AonwSpacing.md),
-      const _KeyboardSettings(),
-      const SizedBox(height: AonwSpacing.lg),
-      OutlinedButton.icon(
-        key: const ValueKey('reset-settings'),
-        onPressed: context.withGameSound(onReset),
-        icon: const Icon(Icons.restore),
-        label: Text(l10n.resetSettings),
-      ),
     ];
   }
 }

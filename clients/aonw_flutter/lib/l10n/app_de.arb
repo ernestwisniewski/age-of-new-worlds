@@ -1102,5 +1102,10 @@
   "advanceActions": "Zur nächsten Aktion wechseln",
   "advanceActionsDescription": "Nach einer Aktion die nächste Einheit, Stadt oder Forschung auswählen, die deine Aufmerksamkeit benötigt.",
   "automaticEndTurn": "Züge automatisch beenden",
-  "automaticEndTurnDescription": "Deinen Zug beenden, wenn keine Aktionen mehr ausstehen. Manuelle Entscheidungen und geöffnete Fenster pausieren die Automatisierung."
+  "automaticEndTurnDescription": "Deinen Zug beenden, wenn keine Aktionen mehr ausstehen. Manuelle Entscheidungen und geöffnete Fenster pausieren die Automatisierung.",
+  "performanceSettings": "Leistung",
+  "showFps": "FPS anzeigen",
+  "showFpsDescription": "Die Bildrate in der gesamten App anzeigen.",
+  "showMapZoom": "Kartenzoom anzeigen",
+  "showMapZoomDescription": "Den aktuellen Zoom bei geöffneter Karte anzeigen."
 }

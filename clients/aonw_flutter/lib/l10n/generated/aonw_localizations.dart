@@ -2517,6 +2517,36 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'End your turn when no actions remain. Manual choices and open panels pause automation.'**
   String get automaticEndTurnDescription;
+
+  /// No description provided for @performanceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance'**
+  String get performanceSettings;
+
+  /// No description provided for @showFps.
+  ///
+  /// In en, this message translates to:
+  /// **'Show FPS'**
+  String get showFps;
+
+  /// No description provided for @showFpsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the frame rate throughout the app.'**
+  String get showFpsDescription;
+
+  /// No description provided for @showMapZoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Show map zoom'**
+  String get showMapZoom;
+
+  /// No description provided for @showMapZoomDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the current zoom while the map is open.'**
+  String get showMapZoomDescription;
 }
 
 class _AonwLocalizationsDelegate

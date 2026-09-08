@@ -488,5 +488,10 @@
   "advanceActions": "Przechodź do następnej czynności",
   "advanceActionsDescription": "Po wykonaniu czynności wybierz następną jednostkę, miasto lub badanie wymagające uwagi.",
   "automaticEndTurn": "Kończ tury automatycznie",
-  "automaticEndTurnDescription": "Zakończ turę, gdy nie ma już czynności do wykonania. Ręczny wybór i otwarte panele wstrzymują automatyzację."
+  "automaticEndTurnDescription": "Zakończ turę, gdy nie ma już czynności do wykonania. Ręczny wybór i otwarte panele wstrzymują automatyzację.",
+  "performanceSettings": "Wydajność",
+  "showFps": "Pokaż FPS",
+  "showFpsDescription": "Pokazuj liczbę klatek na sekundę w całej aplikacji.",
+  "showMapZoom": "Pokaż zbliżenie mapy",
+  "showMapZoomDescription": "Pokazuj bieżące powiększenie podczas wyświetlania mapy."
 }

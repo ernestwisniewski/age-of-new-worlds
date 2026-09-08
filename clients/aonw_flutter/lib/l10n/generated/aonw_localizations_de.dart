@@ -2623,4 +2623,20 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String get automaticEndTurnDescription =>
       'Deinen Zug beenden, wenn keine Aktionen mehr ausstehen. Manuelle Entscheidungen und geöffnete Fenster pausieren die Automatisierung.';
+
+  @override
+  String get performanceSettings => 'Leistung';
+
+  @override
+  String get showFps => 'FPS anzeigen';
+
+  @override
+  String get showFpsDescription => 'Die Bildrate in der gesamten App anzeigen.';
+
+  @override
+  String get showMapZoom => 'Kartenzoom anzeigen';
+
+  @override
+  String get showMapZoomDescription =>
+      'Den aktuellen Zoom bei geöffneter Karte anzeigen.';
 }
