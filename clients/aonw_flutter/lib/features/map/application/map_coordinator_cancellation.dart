@@ -18,7 +18,7 @@ extension MapCoordinatorCancellation on MapCoordinator {
       setWorkerActionsOpen(false);
       return;
     }
-    if (_hasUnitPreview(interaction)) {
+    if (_hasUnitPreview(interaction) || interaction.moveTargeting) {
       _cancelUnitPreview(current);
       return;
     }
@@ -42,6 +42,7 @@ extension MapCoordinatorCancellation on MapCoordinator {
       current.withInteraction(
         current.interaction.copyWith(
           selected: unit.coordinate,
+          moveTargeting: false,
           clearRoute: true,
           clearCombat: true,
           movementPending: false,
@@ -50,7 +51,7 @@ extension MapCoordinatorCancellation on MapCoordinator {
       ),
     );
     if (current.interaction.combat != null) {
-      unawaited(_selectUnitById(unit.id));
+      unawaited(_selectUnitById(unit.id, startTargeting: false));
     }
   }
 }

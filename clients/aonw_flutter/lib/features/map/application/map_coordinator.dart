@@ -56,6 +56,8 @@ part 'map_coordinator_local_save.dart';
 part 'map_coordinator_local_turns.dart';
 part 'map_coordinator_network.dart';
 part 'map_coordinator_selection.dart';
+part 'map_coordinator_targeting.dart';
+part 'map_coordinator_movement.dart';
 
 typedef MapDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -279,43 +281,6 @@ final class MapCoordinator {
     unawaited(_confirmMove());
   }
 
-  Future<void> _confirmMove() async {
-    final current = _state;
-    if (current is! GameSessionReady ||
-        !_gameplayActive() ||
-        current.research.commandPending ||
-        current.diplomacy.commandPending ||
-        _interactionBusy(current.interaction)) {
-      return;
-    }
-    final route = current.interaction.route;
-    final unitId = current.interaction.selectedUnitId;
-    if (route == null || unitId == null) return;
-    final generation = ++_interactionGeneration;
-    _setState(
-      current.withInteraction(
-        current.interaction.copyWith(
-          movementPending: true,
-          clearMovementError: true,
-        ),
-      ),
-    );
-    final completion = await _movement.moveUnit(
-      expectedRevision: current.recipient.stamp.revision,
-      unitId: unitId,
-      target: route.target,
-    );
-    final ready = _currentInteraction(generation);
-    if (ready == null) return;
-    if (completion.failure != null) {
-      _setState(_movementFailureState(ready, completion));
-    } else {
-      _setState(
-        _moveResultState(ready, completion.result!, unitId, route.destination),
-      );
-    }
-  }
-
   void dispose() {
     if (_disposed) return;
     _disposed = true;
@@ -388,46 +353,6 @@ GameSessionReady _setMapViewModeState(
   GameSessionReady current,
   MapViewMode mode,
 ) => current.withInteraction(current.interaction.copyWith(viewMode: mode));
-
-GameSessionReady _moveResultState(
-  GameSessionReady current,
-  MoveUnitResultView result,
-  String unitId,
-  MapHexCoordinate routeDestination,
-) {
-  if (!result.accepted) {
-    return current.withInteraction(
-      current.interaction.copyWith(
-        movementPending: false,
-        movementError: MapMovementFailure.rejected(result.rejectionCode!),
-      ),
-    );
-  }
-  final player = result.player!;
-  var movedCoordinate = routeDestination;
-  for (final unit in player.units) {
-    if (unit.id == unitId) movedCoordinate = unit.coordinate;
-  }
-  return current
-      .withRecipient(player)
-      .withInteraction(
-        current.interaction.copyWith(
-          selected: movedCoordinate,
-          clearSelectedUnit: true,
-          clearReachable: true,
-          clearRoute: true,
-          clearActionDeck: true,
-          clearUnitLogistics: true,
-          clearWorker: true,
-          clearProduction: true,
-          clearArtifact: true,
-          clearCombat: true,
-          movementPending: false,
-          clearMovementError: true,
-          lastMovementExecution: result.execution,
-        ),
-      );
-}
 
 GameSessionReady _movementFailureState<T>(
   GameSessionReady current,

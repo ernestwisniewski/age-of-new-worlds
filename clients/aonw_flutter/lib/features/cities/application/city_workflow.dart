@@ -53,6 +53,7 @@ final class CityWorkflow {
     publish(
       ready.withInteraction(
         ready.interaction.copyWith(
+          moveTargeting: false,
           city: CityState(
             founderUnitId: founderUnitId,
             loading: true,

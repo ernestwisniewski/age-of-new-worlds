@@ -16,6 +16,7 @@ extension WorkerWorkflowSelection on WorkerWorkflow {
       current.withInteraction(
         current.interaction.copyWith(
           selected: open ? worker.options!.coordinate : null,
+          moveTargeting: open ? false : null,
           clearRoute: open,
           clearCombat: open,
           worker: worker.copyWith(

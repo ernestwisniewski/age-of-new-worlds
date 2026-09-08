@@ -33,6 +33,7 @@ final class MapInteractionState {
     this.reachable,
     this.route,
     this.movementPending = false,
+    this.moveTargeting = false,
     this.movementError,
     this.lastMovementExecution,
     this.actionDeck,
@@ -50,6 +51,7 @@ final class MapInteractionState {
   final ReachableView? reachable;
   final RoutePlanView? route;
   final bool movementPending;
+  final bool moveTargeting;
   final MapMovementFailure? movementError;
   final MoveUnitExecutionView? lastMovementExecution;
   final ActionDeckViewState? actionDeck;
@@ -71,6 +73,7 @@ final class MapInteractionState {
     RoutePlanView? route,
     bool clearRoute = false,
     bool? movementPending,
+    bool? moveTargeting,
     MapMovementFailure? movementError,
     bool clearMovementError = false,
     MoveUnitExecutionView? lastMovementExecution,
@@ -91,14 +94,15 @@ final class MapInteractionState {
     MapViewMode? viewMode,
   }) => MapInteractionState(
     selected: _replaceNullable(this.selected, selected, clearSelected),
-    selectedUnitId: _replaceNullable(
-      this.selectedUnitId,
-      selectedUnitId,
-      clearSelectedUnit,
-    ),
+    selectedUnitId: clearSelectedUnit
+        ? null
+        : selectedUnitId ?? this.selectedUnitId,
     reachable: _replaceNullable(this.reachable, reachable, clearReachable),
     route: _replaceNullable(this.route, route, clearRoute),
     movementPending: movementPending ?? this.movementPending,
+    moveTargeting: clearSelectedUnit || clearReachable
+        ? false
+        : moveTargeting ?? this.moveTargeting,
     movementError: _replaceNullable(
       this.movementError,
       movementError,

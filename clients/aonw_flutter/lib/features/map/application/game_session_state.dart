@@ -83,9 +83,10 @@ final class GameSessionReady extends GameSessionState {
         value.stamp.rulesetHash != recipient.stamp.rulesetHash;
     return GameSessionReady(
       scene: scene.withPlayer(value),
-      interaction: identityChanged && interaction.worker != null
+      interaction: identityChanged
           ? interaction.copyWith(
-              worker: interaction.worker!.copyWith(
+              moveTargeting: false,
+              worker: interaction.worker?.copyWith(
                 actionsOpen: false,
                 clearPreview: true,
               ),

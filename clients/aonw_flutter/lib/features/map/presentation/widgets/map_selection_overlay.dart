@@ -30,6 +30,7 @@ import 'map_failure_messages.dart';
 import 'map_gamepad_region.dart';
 
 part 'map_selection_feature_controls.dart';
+part 'map_selection_movement_controls.dart';
 
 final class MapSelectionOverlay extends StatelessWidget {
   const MapSelectionOverlay({
@@ -66,6 +67,9 @@ final class MapSelectionOverlay extends StatelessWidget {
                   : scene.player.cityById(interaction.city!.cityId!),
               player: scene.player,
               onConfirmMove: controller.confirmMove,
+              onToggleMoveTargeting: controller.canToggleMoveTargeting
+                  ? controller.toggleMoveTargeting
+                  : null,
               onUnitAction: controller.executeUnitAction,
               onUnitLogistics: controller.executeUnitLogistics,
               onWorkerAction: controller.executeWorkerAction,
@@ -100,6 +104,7 @@ final class _MapSelectionPanel extends StatelessWidget {
     required this.city,
     required this.player,
     required this.onConfirmMove,
+    required this.onToggleMoveTargeting,
     required this.onUnitAction,
     required this.onUnitLogistics,
     required this.onWorkerAction,
@@ -123,6 +128,7 @@ final class _MapSelectionPanel extends StatelessWidget {
   final CityView? city;
   final PlayerMapView player;
   final VoidCallback onConfirmMove;
+  final VoidCallback? onToggleMoveTargeting;
   final ValueChanged<UnitActionKindView> onUnitAction;
   final ValueChanged<UnitLogisticsActionView> onUnitLogistics;
   final ValueChanged<WorkerActionView> onWorkerAction;
@@ -165,6 +171,7 @@ final class _MapSelectionPanel extends StatelessWidget {
                   interaction: interaction,
                   unit: unit,
                   onConfirmMove: onConfirmMove,
+                  onToggleMoveTargeting: onToggleMoveTargeting,
                   onUnitAction: onUnitAction,
                   onUnitLogistics: onUnitLogistics,
                   onWorkerAction: onWorkerAction,
@@ -202,6 +209,7 @@ final class _SelectedUnitControls extends StatelessWidget {
     required this.interaction,
     required this.unit,
     required this.onConfirmMove,
+    required this.onToggleMoveTargeting,
     required this.onUnitAction,
     required this.onUnitLogistics,
     required this.onWorkerAction,
@@ -214,6 +222,7 @@ final class _SelectedUnitControls extends StatelessWidget {
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
   final VoidCallback onConfirmMove;
+  final VoidCallback? onToggleMoveTargeting;
   final ValueChanged<UnitActionKindView> onUnitAction;
   final ValueChanged<UnitLogisticsActionView> onUnitLogistics;
   final ValueChanged<WorkerActionView> onWorkerAction;
@@ -230,8 +239,25 @@ final class _SelectedUnitControls extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: AonwSpacing.xs),
-        Text(l10n.unitLabel(unitId)),
-        if (unit case final unit?) Text(l10n.presentationName(unit.kind.name)),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.unitLabel(unitId)),
+                  if (unit case final unit?)
+                    Text(l10n.presentationName(unit.kind.name)),
+                ],
+              ),
+            ),
+            if (!foundingActive && interaction.worker?.actionsOpen != true)
+              _MoveTargetingToggle(
+                active: interaction.moveTargeting,
+                onToggle: onToggleMoveTargeting,
+              ),
+          ],
+        ),
         _SelectedUnitMovement(
           interaction: interaction,
           foundingActive: foundingActive,
@@ -261,27 +287,6 @@ final class _SelectedUnitControls extends StatelessWidget {
       ],
     );
   }
-}
-
-final class _SelectedUnitMovement extends StatelessWidget {
-  const _SelectedUnitMovement({
-    required this.interaction,
-    required this.foundingActive,
-    required this.onConfirmMove,
-  });
-
-  final MapInteractionState interaction;
-  final bool foundingActive;
-  final VoidCallback onConfirmMove;
-
-  @override
-  Widget build(BuildContext context) =>
-      foundingActive || interaction.combat != null
-      ? const SizedBox.shrink()
-      : _MovementControls(
-          interaction: interaction,
-          onConfirmMove: onConfirmMove,
-        );
 }
 
 final class _SelectedUnitActionDeck extends StatelessWidget {
@@ -351,50 +356,6 @@ final class _SelectedWorkerControls extends StatelessWidget {
           !(interaction.production?.commandPending ?? false) &&
           !(interaction.artifact?.commandPending ?? false),
       onAction: onAction,
-    );
-  }
-}
-
-final class _MovementControls extends StatelessWidget {
-  const _MovementControls({
-    required this.interaction,
-    required this.onConfirmMove,
-  });
-
-  final MapInteractionState interaction;
-  final VoidCallback onConfirmMove;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    final route = interaction.route;
-    if (route == null) {
-      return interaction.movementPending
-          ? const SizedBox.shrink()
-          : Text(l10n.chooseHighlightedDestination);
-    }
-    final commandPending =
-        interaction.movementPending ||
-        (interaction.actionDeck?.commandPending ?? false) ||
-        (interaction.unitLogistics?.commandPending ?? false) ||
-        (interaction.worker?.commandPending ?? false) ||
-        (interaction.production?.commandPending ?? false) ||
-        (interaction.artifact?.commandPending ?? false);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.routeSummary(route.totalCostUnits, route.remainingMovementUnits),
-        ),
-        const SizedBox(height: AonwSpacing.sm),
-        FilledButton.icon(
-          key: const ValueKey('confirm-move'),
-          onPressed: commandPending ? null : onConfirmMove,
-          icon: const Icon(Icons.directions_walk),
-          label: Text(l10n.confirmMove),
-        ),
-      ],
     );
   }
 }

@@ -9,6 +9,9 @@ class AonwLocalizationsPl extends AonwLocalizations {
   AonwLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
+  String get moveTargeting => 'Ruch';
+
+  @override
   String get appTitle => 'Age of New Worlds';
 
   @override

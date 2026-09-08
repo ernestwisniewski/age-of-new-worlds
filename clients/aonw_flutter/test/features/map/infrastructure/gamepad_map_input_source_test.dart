@@ -60,13 +60,47 @@ void main() {
     await events.close();
   });
 
+  test('X toggles once per press and is primed across input owners', () async {
+    final events = StreamController<NormalizedGamepadEvent>(sync: true);
+    final source = GamepadMapInputSource(events: events.stream);
+    final inputs = <MapGamepadInput>[];
+    final subscription = source.continuousInputs.listen(inputs.add);
+    final frames = MapGamepadFrameController();
+    events.add(_button(GamepadButton.x, 1));
+    expect(inputs.last.toggleMoveTargeting, isTrue);
+    expect(
+      frames.advance(input: inputs.last, dt: 0).toggleMoveTargetingPressed,
+      isTrue,
+    );
+    expect(
+      frames.advance(input: inputs.last, dt: 1).toggleMoveTargetingPressed,
+      isFalse,
+    );
+    frames.prime(inputs.last);
+    expect(
+      frames.advance(input: inputs.last, dt: 1).toggleMoveTargetingPressed,
+      isFalse,
+    );
+    events.add(_button(GamepadButton.x, 0));
+    frames.advance(input: inputs.last, dt: 0);
+    expect(inputs.last, MapGamepadInput.idle);
+    events.add(_button(GamepadButton.x, 1));
+    expect(
+      frames.advance(input: inputs.last, dt: 0).toggleMoveTargetingPressed,
+      isTrue,
+    );
+    await subscription.cancel();
+    await source.close();
+    await events.close();
+  });
+
   test('ignores unrelated button state', () async {
     final events = StreamController<NormalizedGamepadEvent>(sync: true);
     final source = GamepadMapInputSource(events: events.stream);
     final inputs = <MapGamepadInput>[];
     final subscription = source.continuousInputs.listen(inputs.add);
 
-    events.add(_button(GamepadButton.x, 1));
+    events.add(_button(GamepadButton.start, 1));
     expect(inputs, isEmpty);
 
     await subscription.cancel();

@@ -201,23 +201,8 @@ extension MapCoordinatorActions on MapCoordinator {
       publish: _setState,
       isDisposed: () => _disposed,
       onSelectionRetained: (unitId) {
-        _logistics.load(
-          unitId: unitId,
-          readState: () => _state,
-          publish: _setState,
-          isDisposed: () => _disposed,
-        );
-        final state = _state;
-        if (state is GameSessionReady &&
-            state.recipient.controlledUnitById(unitId)?.kind ==
-                VisibleUnitKind.worker) {
-          _workers.load(
-            unitId: unitId,
-            readState: () => _state,
-            publish: _setState,
-            isDisposed: () => _disposed,
-          );
-        }
+        unawaited(_loadMovementAvailability(unitId));
+        _refreshUnitOptions(unitId);
       },
     );
   }

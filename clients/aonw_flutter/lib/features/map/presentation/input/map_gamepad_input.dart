@@ -21,6 +21,7 @@ final class MapGamepadInput {
     this.focusPrevious = false,
     this.focusNext = false,
     this.toggleMapViewMode = false,
+    this.toggleMoveTargeting = false,
   });
 
   static const idle = MapGamepadInput();
@@ -42,6 +43,7 @@ final class MapGamepadInput {
   final bool focusPrevious;
   final bool focusNext;
   final bool toggleMapViewMode;
+  final bool toggleMoveTargeting;
 
   double get zoom => zoomIn - zoomOut;
 
@@ -65,6 +67,7 @@ final class MapGamepadInput {
     bool? focusPrevious,
     bool? focusNext,
     bool? toggleMapViewMode,
+    bool? toggleMoveTargeting,
   }) => MapGamepadInput(
     cursorX: cursorX ?? this.cursorX,
     cursorY: cursorY ?? this.cursorY,
@@ -83,6 +86,7 @@ final class MapGamepadInput {
     focusPrevious: focusPrevious ?? this.focusPrevious,
     focusNext: focusNext ?? this.focusNext,
     toggleMapViewMode: toggleMapViewMode ?? this.toggleMapViewMode,
+    toggleMoveTargeting: toggleMoveTargeting ?? this.toggleMoveTargeting,
   );
 
   @override
@@ -110,6 +114,7 @@ final class MapGamepadInput {
     focusPrevious,
     focusNext,
     toggleMapViewMode,
+    toggleMoveTargeting,
   );
 }
 
@@ -130,6 +135,7 @@ final class MapGamepadFrame {
     this.focusPreviousPressed = false,
     this.focusNextPressed = false,
     this.toggleMapViewModePressed = false,
+    this.toggleMoveTargetingPressed = false,
   });
 
   static const idle = MapGamepadFrame();
@@ -145,6 +151,7 @@ final class MapGamepadFrame {
   final bool focusPreviousPressed;
   final bool focusNextPressed;
   final bool toggleMapViewModePressed;
+  final bool toggleMoveTargetingPressed;
 
   bool get isIdle =>
       cursorStep == null &&
@@ -155,7 +162,10 @@ final class MapGamepadFrame {
       !hasFocusAction;
 
   bool get hasAction =>
-      activatePressed || cancelPressed || toggleMapViewModePressed;
+      activatePressed ||
+      cancelPressed ||
+      toggleMapViewModePressed ||
+      toggleMoveTargetingPressed;
   bool get hasFocusAction =>
       hudFocusPreviousPressed ||
       hudFocusNextPressed ||
@@ -215,6 +225,10 @@ final class MapGamepadFrameController {
         _previous.focusPrevious,
       ),
       focusNextPressed: _pressed(input.focusNext, _previous.focusNext),
+      toggleMoveTargetingPressed: _pressed(
+        input.toggleMoveTargeting,
+        _previous.toggleMoveTargeting,
+      ),
       toggleMapViewModePressed: _pressed(
         input.toggleMapViewMode,
         _previous.toggleMapViewMode,

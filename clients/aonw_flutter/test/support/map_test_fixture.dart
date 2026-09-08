@@ -316,7 +316,7 @@ final class FakeGameSession
 
   final MapScene? scene;
   final MapLoadException? failure;
-  final ReachableView? reachableResult;
+  ReachableView? reachableResult;
   final RoutePlanView? routeResult;
   final MoveUnitResultView? moveResult;
   final MovementSessionException? moveFailure;

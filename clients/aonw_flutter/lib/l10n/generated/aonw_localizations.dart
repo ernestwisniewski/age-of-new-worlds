@@ -98,6 +98,12 @@ abstract class AonwLocalizations {
     Locale('pl'),
   ];
 
+  /// No description provided for @moveTargeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Move'**
+  String get moveTargeting;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

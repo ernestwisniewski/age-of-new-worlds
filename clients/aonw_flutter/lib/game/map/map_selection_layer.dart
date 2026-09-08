@@ -166,7 +166,7 @@ final class MapSelectionLayerComponent extends Component with HasVisibility {
         coordinate == null ||
         interaction == null ||
         player == null ||
-        interaction.selectedUnitId == null) {
+        !_hasHoverTargeting(interaction)) {
       _clearHover();
       return;
     }
@@ -316,3 +316,7 @@ void _paintAttackBadge(ui.Canvas canvas, ui.Offset center) {
     )
     ..drawCircle(center, 2.7, MapSelectionLayerComponent._badgeGlyphPaint);
 }
+
+bool _hasHoverTargeting(MapInteractionState interaction) =>
+    interaction.selectedUnitId != null &&
+    (interaction.moveTargeting || interaction.combat != null);

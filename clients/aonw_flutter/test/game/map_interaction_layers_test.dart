@@ -29,6 +29,7 @@ void main() {
       final interaction = MapInteractionState(
         selected: const (col: 0, row: 0),
         selectedUnitId: 'preview-commander',
+        moveTargeting: true,
         reachable: testReachableView(
           tiles: const [
             ReachableTileView(
@@ -61,6 +62,17 @@ void main() {
         MapHoverMarkerKind.attack,
       );
 
+      game.replaceScene(
+        _snapshot(scene, interaction.copyWith(moveTargeting: false)),
+      );
+      expect(game.world.selectionLayer.debugHoverIntent, isNull);
+      game.replaceCursor((col: 1, row: 0));
+      expect(game.world.selectionLayer.debugHoverIntent, isNull);
+      game.replaceScene(_snapshot(scene, interaction));
+      expect(
+        game.world.selectionLayer.debugHoverIntent,
+        MapHoverMarkerKind.move,
+      );
       game.replaceCursor((col: 3, row: 0));
       expect(game.world.selectionLayer.debugHoverIntent, isNull);
       expect(

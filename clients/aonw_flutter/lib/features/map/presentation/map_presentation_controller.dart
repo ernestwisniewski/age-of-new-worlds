@@ -151,6 +151,13 @@ final class MapPresentationController extends ChangeNotifier {
 
   void cancelInteraction() => _coordinator.cancelInteraction();
 
+  bool get canToggleMoveTargeting => _coordinator.canToggleMoveTargeting;
+
+  void toggleMoveTargeting() => _coordinator.toggleMoveTargeting();
+
+  void moveMapCursor(MapHexCoordinate coordinate) =>
+      _coordinator.moveMapCursor(coordinate);
+
   void executeUnitAction(UnitActionKindView action) =>
       _coordinator.executeUnitAction(action);
 

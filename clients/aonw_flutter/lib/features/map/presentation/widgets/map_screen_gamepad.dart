@@ -65,8 +65,11 @@ extension _MapScreenGamepad on _MapScreenState {
       _flameGame.applyGamepadCameraFrame(frame, dt);
       final cursorStep = frame.cursorStep;
       if (cursorStep != null) _handleInput(cursorStep);
-      if (frame.activatePressed) _handleInput(MapInputCommand.activate);
       if (frame.cancelPressed) _handleInput(MapInputCommand.cancel);
+      if (frame.toggleMoveTargetingPressed) {
+        _handleInput(MapInputCommand.toggleMoveTargeting);
+      }
+      if (frame.activatePressed) _handleInput(MapInputCommand.activate);
       if (frame.toggleMapViewModePressed) {
         _handleInput(MapInputCommand.toggleMapViewMode);
       }

@@ -116,6 +116,9 @@ final class MapGamepadNavigation extends ChangeNotifier {
   bool handleCommand(MapInputCommand command) => handleFrame(switch (command) {
     MapInputCommand.activate => const MapGamepadFrame(activatePressed: true),
     MapInputCommand.cancel => const MapGamepadFrame(cancelPressed: true),
+    MapInputCommand.toggleMoveTargeting => const MapGamepadFrame(
+      toggleMoveTargetingPressed: true,
+    ),
     MapInputCommand.toggleMapViewMode => const MapGamepadFrame(
       toggleMapViewModePressed: true,
     ),

@@ -36,6 +36,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/map_test_fixture.dart';
 import '../../../support/unsupported_city_session.dart';
 
+part 'map_coordinator_loading_fixture.dart';
+
 void main() {
   test('loads ready state and keeps interaction local', () async {
     final session = FakeGameSession.success(testMapScene());
@@ -189,13 +191,16 @@ void main() {
       ready = controller.state as GameSessionReady;
       expect(ready.interaction.route?.destination, (col: 1, row: 0));
 
+      session.reachableResult = testReachableView(revision: 1);
       controller.confirmMove();
       await pumpEventQueue();
       ready = controller.state as GameSessionReady;
       expect(ready.scene.player.stamp.revision, 1);
       expect(ready.scene.player.units.single.coordinate, (col: 1, row: 0));
       expect(ready.interaction.selected, (col: 1, row: 0));
-      expect(ready.interaction.selectedUnitId, isNull);
+      expect(ready.interaction.selectedUnitId, unit.id);
+      expect(ready.interaction.moveTargeting, isTrue);
+      expect(ready.interaction.reachable?.stamp.revision, 1);
       expect(ready.interaction.route, isNull);
       expect(
         ready.interaction.lastMovementExecution?.events.single.unitId,
@@ -318,6 +323,10 @@ void main() {
       await controller.load();
       controller.select(fortified.coordinate);
       await pumpEventQueue();
+      session.reachableResult = testReachableView(
+        revision: 1,
+        stateDigest: 'd' * 64,
+      );
       controller.executeUnitAction(UnitActionKindView.fortify);
       controller.executeUnitAction(UnitActionKindView.skip);
       await pumpEventQueue();
@@ -335,7 +344,9 @@ void main() {
       expect(ready.interaction.actionDeck?.commandPending, isFalse);
       expect(ready.interaction.actionDeck?.failure, isNull);
       expect(ready.interaction.selectedUnitId, fortified.id);
-      expect(ready.interaction.reachable, isNull);
+      expect(ready.interaction.reachable?.stamp.revision, 1);
+      expect(ready.interaction.moveTargeting, isFalse);
+      expect(controller.canToggleMoveTargeting, isTrue);
     },
   );
 
@@ -465,134 +476,4 @@ void main() {
     expect(session.combatAttackCalls, 0);
     expect(session.endTurnCalls, 0);
   });
-}
-
-final class _CompletingGameSession
-    implements
-        MapSessionPort,
-        MovementSessionPort,
-        CombatSessionPort,
-        UnitLogisticsSessionPort,
-        WorkerSessionPort,
-        ProductionSessionPort,
-        ArtifactSessionPort,
-        ResearchSessionPort,
-        DiplomacySessionPort,
-        TurnSessionPort,
-        UnitActionSessionPort {
-  final requests = <Completer<MapScene>>[];
-
-  @override
-  Future<MapScene> load(MapAssetPaths assets) {
-    final request = Completer<MapScene>();
-    requests.add(request);
-    return request.future;
-  }
-
-  @override
-  Future<ReachableView> reachable({
-    required int expectedRevision,
-    required String unitId,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<RoutePlanView> routePlan({
-    required int expectedRevision,
-    required String unitId,
-    required MapHexCoordinate target,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<MoveUnitResultView> moveUnit({
-    required int expectedRevision,
-    required String unitId,
-    required MapHexCoordinate target,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<CombatPreviewView> combatPreview({
-    required int expectedRevision,
-    required String attackerUnitId,
-    required MapHexCoordinate defender,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<CombatCommandResultView> attack({
-    required int expectedRevision,
-    required CombatAttackView attack,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<UnitLogisticsOptionsView> unitLogisticsOptions({
-    required int expectedRevision,
-    required String unitId,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<UnitLogisticsCommandResultView> executeUnitLogistics({
-    required int expectedRevision,
-    required UnitLogisticsActionView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<WorkerOptionsView> workerOptions({
-    required int expectedRevision,
-    required String unitId,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<WorkerCommandResultView> executeWorkerAction({
-    required int expectedRevision,
-    required WorkerActionView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<
-    ({ProductionOptionsView options, StrategicResourceProjectionView resources})
-  >
-  productionOverview({required int expectedRevision, required String cityId}) =>
-      throw UnimplementedError();
-
-  @override
-  Future<ProductionCommandResultView> executeProductionAction({
-    required int expectedRevision,
-    required ProductionActionView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<ArtifactCommandResultView> executeArtifactAction({
-    required int expectedRevision,
-    required ArtifactActionView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<ResearchOptionsView> researchOptions({
-    required int expectedRevision,
-  }) async => testResearchOptionsView(revision: expectedRevision);
-
-  @override
-  Future<ResearchCommandResultView> selectTechnology({
-    required int expectedRevision,
-    required TechnologyIdView technology,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<DiplomacyCommandResultView> executeDiplomacyAction({
-    required int expectedRevision,
-    required DiplomacyActionView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<UnitActionResultView> executeUnitAction({
-    required int expectedRevision,
-    required String unitId,
-    required UnitActionKindView action,
-  }) => throw UnimplementedError();
-
-  @override
-  Future<TurnCommandResultView> endTurn({required int expectedRevision}) =>
-      throw UnimplementedError();
-
-  @override
-  Future<void> close() async {}
 }

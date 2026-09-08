@@ -334,6 +334,8 @@ final class _MapScreenState extends State<MapScreen>
         );
       case MapInputCommand.cancel:
         widget.controller.cancelInteraction();
+      case MapInputCommand.toggleMoveTargeting:
+        widget.controller.toggleMoveTargeting();
       case MapInputCommand.toggleMapViewMode:
         widget.controller.toggleMapViewMode();
       case MapInputCommand.cursorUp:
@@ -344,7 +346,7 @@ final class _MapScreenState extends State<MapScreen>
             widget.controller.cursor.value ??
             state.interaction.selected ??
             MapInputCursor.initial(state.scene.map);
-        widget.controller.hover(
+        widget.controller.moveMapCursor(
           MapInputCursor.move(state.scene.map, current, command),
         );
     }

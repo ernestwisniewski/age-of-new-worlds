@@ -1,7 +1,10 @@
 part of 'map_coordinator.dart';
 
 extension MapCoordinatorSelection on MapCoordinator {
-  Future<void> _selectUnitById(String unitId) async {
+  Future<void> _selectUnitById(
+    String unitId, {
+    bool startTargeting = true,
+  }) async {
     final current = _availableSelectionState();
     if (current == null) return;
     final unit = current.recipient.visibleUnitById(unitId);
@@ -19,6 +22,7 @@ extension MapCoordinatorSelection on MapCoordinator {
       controlled,
       current.recipient.cityAt(controlled.coordinate),
       generation,
+      startTargeting: startTargeting,
     );
   }
 
@@ -67,7 +71,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     }
 
     final selectedUnitId = current.interaction.selectedUnitId;
-    if (selectedUnitId != null) {
+    if (selectedUnitId != null && current.interaction.moveTargeting) {
       if (_hasVisibleForeignTarget(current.recipient, next)) {
         _combat.preview(
           attackerUnitId: selectedUnitId,
@@ -119,6 +123,7 @@ extension MapCoordinatorSelection on MapCoordinator {
           clearCombat: true,
           clearCity: true,
           movementPending: false,
+          moveTargeting: false,
           clearMovementError: true,
         ),
       ),
@@ -141,6 +146,7 @@ extension MapCoordinatorSelection on MapCoordinator {
           clearCombat: true,
           clearCity: true,
           movementPending: false,
+          moveTargeting: false,
           clearMovementError: true,
         ),
       ),
@@ -171,6 +177,7 @@ extension MapCoordinatorSelection on MapCoordinator {
               ? CityState.loadingCity(city.id)
               : CityState(cityId: city.id),
           movementPending: false,
+          moveTargeting: false,
           clearMovementError: true,
         ),
       ),
@@ -196,8 +203,9 @@ extension MapCoordinatorSelection on MapCoordinator {
     MapHexCoordinate coordinate,
     VisibleUnitView unit,
     CityView? city,
-    int generation,
-  ) async {
+    int generation, {
+    bool startTargeting = true,
+  }) async {
     final unitId = unit.id;
     final isWorker = unit.kind == VisibleUnitKind.worker;
     _setState(
@@ -217,6 +225,7 @@ extension MapCoordinatorSelection on MapCoordinator {
           clearReachable: true,
           clearRoute: true,
           movementPending: true,
+          moveTargeting: false,
           clearMovementError: true,
           clearCombat: true,
           city: city == null
@@ -235,16 +244,10 @@ extension MapCoordinatorSelection on MapCoordinator {
     final completion = await reachable;
     final ready = _currentInteraction(generation);
     if (ready == null) return;
-    final failure = completion.failure;
-    _setState(
-      failure == null
-          ? ready.withInteraction(
-              ready.interaction.copyWith(
-                reachable: completion.result!,
-                movementPending: false,
-              ),
-            )
-          : _movementFailureState(ready, completion),
+    _publishSelectedUnitReachability(
+      ready,
+      completion,
+      startTargeting: startTargeting,
     );
 
     if (_currentInteraction(generation) == null) return;
@@ -276,6 +279,26 @@ extension MapCoordinatorSelection on MapCoordinator {
         isDisposed: () => _disposed,
       );
     }
+  }
+
+  void _publishSelectedUnitReachability(
+    GameSessionReady ready,
+    MovementCommandCompletion<ReachableView> completion, {
+    required bool startTargeting,
+  }) {
+    final failure = completion.failure;
+    _setState(
+      failure == null
+          ? ready.withInteraction(
+              ready.interaction.copyWith(
+                reachable: completion.result!,
+                moveTargeting:
+                    startTargeting && completion.result!.canStartTargeting,
+                movementPending: false,
+              ),
+            )
+          : _movementFailureState(ready, completion),
+    );
   }
 
   Future<void> _previewRoute(

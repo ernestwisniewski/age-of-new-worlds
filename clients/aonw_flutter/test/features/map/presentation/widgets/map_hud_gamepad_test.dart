@@ -67,8 +67,70 @@ void main() {
     expect(harness.navigation(tester).capturesInput, isFalse);
     expect(harness.ready.interaction.selectedUnitId, 'preview-commander');
     await harness.press(tester, GamepadButton.b);
+    expect(harness.ready.interaction.moveTargeting, isFalse);
+    expect(harness.ready.interaction.selectedUnitId, 'preview-commander');
+    await harness.press(tester, GamepadButton.b);
     expect(harness.ready.interaction.selectedUnitId, isNull);
     expect(harness.session.endTurnCalls, 0);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('X and the movement chip share targeting and cursor behavior', (
+    tester,
+  ) async {
+    final harness = await _Harness.mount(tester);
+    harness.controller.selectUnit('preview-commander');
+    await tester.pumpAndSettle();
+    final toggle = find.byKey(const ValueKey('unit-move-targeting'));
+    expect(tester.widget<FilterChip>(toggle).selected, isTrue);
+    await harness.press(tester, GamepadButton.x, hold: true);
+    expect(harness.ready.interaction.moveTargeting, isFalse);
+    expect(harness.ready.interaction.selectedUnitId, 'preview-commander');
+    expect(tester.widget<FilterChip>(toggle).selected, isFalse);
+    harness.release(GamepadButton.x);
+    await tester.pump();
+    await tester.tap(toggle);
+    await tester.pump();
+    expect(harness.ready.interaction.moveTargeting, isTrue);
+    await harness.press(tester, GamepadButton.dpadRight);
+    final target = harness.controller.cursor.value;
+    expect(target, isNot(harness.ready.interaction.selected));
+    expect(harness.ready.interaction.selectedUnitId, 'preview-commander');
+    expect(harness.ready.interaction.route, isNull);
+    await harness.press(tester, GamepadButton.x);
+    await harness.press(tester, GamepadButton.dpadLeft);
+    expect(harness.ready.interaction.selected, harness.controller.cursor.value);
+    expect(harness.ready.interaction.selectedUnitId, isNull);
+    expect(harness.ready.interaction.route, isNull);
+    harness.controller.moveMapCursor((col: 0, row: 0));
+    await tester.pump();
+    expect(harness.ready.interaction.selectedUnitId, isNull);
+    await harness.press(tester, GamepadButton.a);
+    await tester.pumpAndSettle();
+    expect(harness.ready.interaction.selectedUnitId, 'preview-commander');
+    expect(harness.ready.interaction.moveTargeting, isTrue);
+    expect(harness.audio.cues, isEmpty);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('HUD and panels consume X without toggling or moving focus', (
+    tester,
+  ) async {
+    final harness = await _Harness.mount(tester);
+    harness.controller.selectUnit('preview-commander');
+    await tester.pumpAndSettle();
+    await harness.press(tester, GamepadButton.leftStick);
+    final focus = harness.navigation(tester).highlighted;
+    await harness.press(tester, GamepadButton.x);
+    expect(harness.navigation(tester).highlighted, same(focus));
+    expect(harness.ready.interaction.moveTargeting, isTrue);
+    await tester.tap(find.byKey(const ValueKey('open-objectives')));
+    await tester.pumpAndSettle();
+    await harness.press(tester, GamepadButton.x, hold: true);
+    expect(harness.ready.interaction.moveTargeting, isTrue);
+    expect(find.byKey(const ValueKey('close-objectives')), findsOneWidget);
+    harness.release(GamepadButton.x);
+    await tester.pump();
     expect(tester.takeException(), isNull);
   });
 
