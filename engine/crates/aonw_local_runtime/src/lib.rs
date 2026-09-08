@@ -35,10 +35,11 @@ pub use query_cache::QueryCacheStats;
 pub use query_dispatch::{
     AutoExploreOptionView, CityExpansionOptionsRequest, CityFoundingOptionsRequest,
     CityWorkedHexOptionsRequest, CityYieldRequest, CombatPreviewRequest, DetachmentOptionView,
-    HexInspectionRequest, MerchantDestinationView, MovementStepView, ProductionOptionsRequest,
-    ReachableRequest, ReachableResult, ReachableTileView, ResearchOptionsRequest, RoutePlanRequest,
-    RoutePlanResult, RuntimeQuery, RuntimeQueryResult, StrategicResourceProjectionRequest,
-    UnitLogisticsOptionsRequest, UnitLogisticsOptionsResult, WorkerOptionsRequest,
+    HexInspectionRequest, MerchantDestinationView, MovementStepView, PendingTurnActionsRequest,
+    ProductionOptionsRequest, ReachableRequest, ReachableResult, ReachableTileView,
+    ResearchOptionsRequest, RoutePlanRequest, RoutePlanResult, RuntimeQuery, RuntimeQueryResult,
+    StrategicResourceProjectionRequest, UnitLogisticsOptionsRequest, UnitLogisticsOptionsResult,
+    WorkerOptionsRequest,
 };
 pub use session::{
     ActorHandoffError, AiTurnDriver, AiTurnError, AiTurnExecution, LocalRuntime,

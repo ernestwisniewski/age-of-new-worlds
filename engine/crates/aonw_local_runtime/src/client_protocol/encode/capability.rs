@@ -7,6 +7,7 @@ pub(crate) fn capabilities() -> ClientResponseBodyDto {
     let mut features = vec![
         ClientFeatureDto::InspectMap,
         ClientFeatureDto::HexInspection,
+        ClientFeatureDto::PendingTurnActions,
         ClientFeatureDto::MatchStart,
         ClientFeatureDto::ActorHandoff,
         ClientFeatureDto::AiTurns,

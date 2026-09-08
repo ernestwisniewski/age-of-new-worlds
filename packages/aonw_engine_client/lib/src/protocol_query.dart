@@ -12,6 +12,7 @@ import 'package:aonw_engine_client/src/protocol_values.dart';
 
 part 'protocol_city_query.dart';
 part 'protocol_hex_query.dart';
+part 'protocol_turn_actions_query.dart';
 part 'protocol_production_query.dart';
 part 'protocol_research_query.dart';
 part 'protocol_worker_query.dart';
@@ -35,6 +36,7 @@ typedef _QueryResultParser =
 
 final Map<String, _QueryResultParser> _queryResultParsers = {
   'hexInspection': AonwHexInspectionResult.fromJson,
+  'pendingTurnActions': AonwPendingTurnActionsResult.fromJson,
   'reachable': AonwReachableResult.fromJson,
   'routePlan': AonwRoutePlanResult.fromJson,
   'unitLogisticsOptions': AonwUnitLogisticsOptionsResult.fromJson,

@@ -24,6 +24,9 @@ use super::research::research_options;
 
 pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQueryResultDto {
     match value {
+        QueryResult::PendingTurnActions(actions) => {
+            super::encode_pending_turn_actions(stamp, actions)
+        }
         QueryResult::HexInspection(inspection) => super::encode_hex_inspection(stamp, inspection),
         QueryResult::ResearchOptions(options) => research_options(stamp, options),
         QueryResult::CityFoundingOptions(options) => city_founding_options(stamp, options),

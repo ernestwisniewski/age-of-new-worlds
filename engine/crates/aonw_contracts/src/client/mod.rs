@@ -26,7 +26,7 @@ pub use response::{
     HexAssessmentKindDto, HexAssessmentScoreDto, HexAssessmentTagDto, HexImprovementAccessDto,
     HexImprovementOptionDto, HexInspectionDto, HexRecommendationDto, MapObjectiveProgressDto,
     MerchantDestinationOptionDto, MovementSearchMetricsDto, MovementStepViewDto,
-    OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto,
+    OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto, PendingTurnActionDto,
     PlayerArtifactLocationViewDto, PlayerArtifactViewDto, PlayerCityViewDto,
     PlayerDiplomacyViewDto, PlayerDiplomaticMessageViewDto, PlayerDiplomaticProposalViewDto,
     PlayerDiplomaticRelationViewDto, PlayerEconomyViewDto, PlayerFogViewDto,
@@ -42,7 +42,7 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 20;
+pub const CLIENT_API_VERSION: u16 = 21;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

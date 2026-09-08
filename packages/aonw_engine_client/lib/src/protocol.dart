@@ -96,6 +96,16 @@ final class AonwClientRequest {
   factory AonwClientRequest.snapshot() =>
       AonwClientRequest._(const {'type': 'snapshot'});
 
+  factory AonwClientRequest.pendingTurnActions({
+    required int expectedRevision,
+  }) => AonwClientRequest._({
+    'type': 'query',
+    'query': {
+      'type': 'pendingTurnActions',
+      'expectedRevision': expectedRevision,
+    },
+  });
+
   factory AonwClientRequest.inspectHex({
     required int expectedRevision,
     required AonwCoordinate coordinate,

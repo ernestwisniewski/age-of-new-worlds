@@ -7,6 +7,8 @@ use aonw_engine::{
     TerrainMovementQuery, WorkerOptions,
 };
 
+mod pending_turn_actions;
+pub use pending_turn_actions::PendingTurnActionsRequest;
 mod hex_inspection;
 pub use hex_inspection::HexInspectionRequest;
 use hex_inspection::dispatch_hex_inspection;
@@ -105,6 +107,8 @@ pub struct UnitLogisticsOptionsRequest {
 /// Versioned local query family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQuery {
+    /// Ordered actor-owned manual turn work.
+    PendingTurnActions(PendingTurnActionsRequest),
     /// Disclosed profile of one map hex.
     HexInspection(HexInspectionRequest),
     /// Complete actor-owned research selection choices.
@@ -182,6 +186,13 @@ pub struct UnitLogisticsOptionsResult {
 /// Versioned local query response family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQueryResult {
+    /// Ordered actor-owned manual turn work.
+    PendingTurnActions {
+        /// Version and authoritative identity metadata.
+        stamp: SessionStamp,
+        /// Engine-owned targets and lifecycle availability.
+        actions: aonw_engine::PendingTurnActions,
+    },
     /// Disclosed profile of one map hex.
     HexInspection {
         /// Version and authoritative identity metadata.
@@ -266,6 +277,9 @@ pub(crate) fn dispatch_query(
     workspace: &mut MovementSearchWorkspace,
 ) -> Result<RuntimeQueryResult, RuntimeError> {
     match request {
+        RuntimeQuery::PendingTurnActions(request) => {
+            pending_turn_actions::dispatch(session, request, workspace)
+        }
         RuntimeQuery::HexInspection(request) => {
             dispatch_hex_inspection(session, request, workspace)
         }

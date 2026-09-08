@@ -14,6 +14,7 @@ void main() {
       'combat',
       'inspectMap',
       'hexInspection',
+      'pendingTurnActions',
       'matchStart',
       'actorHandoff',
       'aiTurns',

@@ -1,0 +1,40 @@
+{
+  "apiVersion": 21,
+  "outcome": {
+    "response": {
+      "result": {
+        "actions": [
+          {
+            "coordinate": {
+              "col": 0,
+              "row": 0
+            },
+            "type": "unit",
+            "unitId": "unit-0"
+          },
+          {
+            "cityId": "capital",
+            "coordinate": {
+              "col": 0,
+              "row": 1
+            },
+            "type": "cityProduction"
+          },
+          {
+            "type": "research"
+          }
+        ],
+        "canActivate": true,
+        "stamp": {
+          "mapHash": "39e954609abef129f61757b7fc73a25f0c15d8b00d3f23e4d5725a3e1c69e994",
+          "revision": 0,
+          "rulesetHash": "c8bec5b750ded25f60e989dd0e87c6a1a1a7ab87914d574aea830856441ad7ed",
+          "stateDigest": "2e4cb660cd84e243df6fbe5b8bcca4e6355c7a0d64cce6d4d315da28bec7db28"
+        },
+        "type": "pendingTurnActions"
+      },
+      "type": "query"
+    },
+    "status": "success"
+  }
+}

@@ -9,6 +9,8 @@ mod city;
 mod diplomacy;
 mod economy;
 mod event;
+mod pending_turn_actions;
+pub use pending_turn_actions::PendingTurnActionDto;
 mod hex_inspection;
 pub use hex_inspection::{
     HexAssessmentKindDto, HexAssessmentScoreDto, HexAssessmentTagDto, HexImprovementAccessDto,
@@ -219,6 +221,8 @@ pub enum ClientFeatureDto {
     InspectMap,
     /// Actor-filtered hex assessment and improvement context.
     HexInspection,
+    /// Ordered actor-owned manual turn work.
+    PendingTurnActions,
     /// Atomic participant, lifecycle, and fog initialization.
     MatchStart,
     /// Local hot-seat recipient handoff.

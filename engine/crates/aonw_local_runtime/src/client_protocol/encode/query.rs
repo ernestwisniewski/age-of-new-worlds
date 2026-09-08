@@ -25,6 +25,9 @@ use super::research::research_options;
 
 pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
     match value {
+        RuntimeQueryResult::PendingTurnActions { stamp, actions } => {
+            aonw_contract_mapping::encode_pending_turn_actions(*stamp, actions)
+        }
         RuntimeQueryResult::HexInspection { stamp, inspection } => {
             aonw_contract_mapping::encode_hex_inspection(*stamp, inspection)
         }

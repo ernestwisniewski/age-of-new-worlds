@@ -11,6 +11,8 @@ use serde::{Deserialize, Serialize};
     deny_unknown_fields
 )]
 pub enum ClientQueryDto {
+    /// Ordered manual work for the authenticated actor.
+    PendingTurnActions { expected_revision: u64 },
     /// Returns the actor-filtered profile of one map hex.
     HexInspection {
         expected_revision: u64,

@@ -7,6 +7,7 @@ enum AonwClientFeature {
   combat,
   inspectMap,
   hexInspection,
+  pendingTurnActions,
   matchStart,
   actorHandoff,
   aiTurns,

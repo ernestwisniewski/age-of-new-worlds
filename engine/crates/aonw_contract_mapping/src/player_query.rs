@@ -6,6 +6,8 @@ use aonw_projection::SessionStamp;
 mod decode;
 mod encode;
 mod hex_inspection;
+mod pending_turn_actions;
+pub use pending_turn_actions::encode_pending_turn_actions;
 mod research;
 pub use hex_inspection::encode_hex_inspection;
 
@@ -53,6 +55,11 @@ pub fn decode_client_player_query<R>(
     execute: impl for<'query> FnOnce(GameQuery<'query>) -> R,
 ) -> Result<R, PlayerQueryMappingError> {
     match query {
+        ClientQueryDto::PendingTurnActions { expected_revision } => {
+            Ok(execute(GameQuery::PendingTurnActions(
+                aonw_engine::PendingTurnActionsQuery::new(expected_revision),
+            )))
+        }
         ClientQueryDto::HexInspection {
             expected_revision,
             coordinate,

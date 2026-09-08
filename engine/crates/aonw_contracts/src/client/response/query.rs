@@ -119,6 +119,15 @@ pub enum ClientEvidenceDto {
     deny_unknown_fields
 )]
 pub enum ClientQueryResultDto {
+    /// Manual turn work in engine-owned navigation order.
+    PendingTurnActions {
+        /// Identity of the queried state.
+        stamp: ClientSessionStampDto,
+        /// Whether the actor may activate work or the normal turn action.
+        can_activate: bool,
+        /// Ordered focus targets; an empty list does not bypass command validation.
+        actions: Vec<super::PendingTurnActionDto>,
+    },
     /// Actor-filtered profile of one map hex.
     HexInspection {
         /// Identity of the queried state.

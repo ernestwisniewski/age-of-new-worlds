@@ -1,0 +1,10 @@
+{
+  "apiVersion": 21,
+  "request": {
+    "type": "query",
+    "query": {
+      "type": "pendingTurnActions",
+      "expectedRevision": 0
+    }
+  }
+}

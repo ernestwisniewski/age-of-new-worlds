@@ -14,6 +14,8 @@ use crate::{
 /// Read-only game query family.
 #[derive(Clone, Copy, Debug)]
 pub enum GameQuery<'query> {
+    /// Ordered manual work for the authenticated actor.
+    PendingTurnActions(crate::PendingTurnActionsQuery),
     /// Disclosed terrain, resource assessment, and improvement context.
     HexInspection(crate::HexInspectionQuery),
     /// Returns founding legality and engine-owned initial territory choices.
@@ -47,6 +49,8 @@ pub enum GameQuery<'query> {
 /// Typed query result.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum QueryResult {
+    /// Ordered actor-owned targets and lifecycle availability.
+    PendingTurnActions(crate::PendingTurnActions),
     /// Actor-filtered profile of one map hex.
     HexInspection(crate::HexInspection),
     /// Legal initial territory for one founder.
@@ -80,6 +84,8 @@ pub enum QueryResult {
 /// Failure from a canonical read-only query.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CanonicalQueryError {
+    /// Pending turn work failed validation.
+    PendingTurnActions(crate::PendingTurnActionsError),
     /// Hex inspection failed validation or arithmetic.
     HexInspection(crate::HexInspectionError),
     /// City query was rejected by deterministic city rules.
@@ -109,6 +115,7 @@ impl CanonicalQueryError {
     #[must_use]
     pub const fn code(&self) -> &'static str {
         match self {
+            Self::PendingTurnActions(error) => error.code(),
             Self::HexInspection(error) => error.code(),
             Self::Technology(_) => "technology_query_invalid",
             Self::Economy(error) => error.code(),
@@ -127,6 +134,7 @@ impl CanonicalQueryError {
 impl core::fmt::Display for CanonicalQueryError {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
+            Self::PendingTurnActions(source) => source.fmt(formatter),
             Self::HexInspection(source) => source.fmt(formatter),
             Self::Technology(source) => source.fmt(formatter),
             Self::Economy(source) => source.fmt(formatter),
@@ -172,6 +180,11 @@ impl GameEngine {
     ) -> Result<QueryResult, CanonicalQueryError> {
         let context = context.with_world(state);
         match query {
+            GameQuery::PendingTurnActions(query) => {
+                Self::pending_turn_actions(state, context, query)
+                    .map(QueryResult::PendingTurnActions)
+                    .map_err(CanonicalQueryError::PendingTurnActions)
+            }
             GameQuery::HexInspection(query) => {
                 crate::hex_inspection::query::inspect(state, context, query)
                     .map(QueryResult::HexInspection)
