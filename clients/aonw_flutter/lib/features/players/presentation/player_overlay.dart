@@ -17,12 +17,14 @@ final class PlayerOverlay extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     required this.onClose,
+    this.onDiplomacy,
     super.key,
   });
   final PlayerMapView player;
   final String? selectedId;
   final ValueChanged<String>? onSelect;
   final VoidCallback onClose;
+  final ValueChanged<String>? onDiplomacy;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,7 @@ final class PlayerOverlay extends StatelessWidget {
                   player: player,
                   participant: selected,
                   onClose: onClose,
+                  onDiplomacy: onDiplomacy,
                 ),
               ),
             ),
@@ -90,10 +93,12 @@ final class _PlayerDetails extends StatelessWidget {
     required this.player,
     required this.participant,
     required this.onClose,
+    this.onDiplomacy,
   });
   final PlayerMapView player;
   final MatchParticipantView participant;
   final VoidCallback onClose;
+  final ValueChanged<String>? onDiplomacy;
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +156,17 @@ final class _PlayerDetails extends StatelessWidget {
           relation == null
               ? l10n.playerText('noContact')
               : l10n.presentationName(relation.status.name),
+        ),
+      if (onDiplomacy != null &&
+          relation != null &&
+          participant.id != player.actorPlayerId)
+        Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: OutlinedButton(
+            key: const ValueKey('player-open-diplomacy'),
+            onPressed: () => onDiplomacy!(participant.id),
+            child: Text(l10n.diplomacyText('open')),
+          ),
         ),
       const SizedBox(height: 12),
       Text(l10n.turnModeName(player.turnMode.name)),

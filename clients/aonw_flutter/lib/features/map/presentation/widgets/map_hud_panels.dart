@@ -48,6 +48,7 @@ final class MapHudPanels extends StatefulWidget {
 final class _MapHudPanelsState extends State<MapHudPanels> {
   _MapHudPanel? _openPanel;
   String? _selectedPlayerId;
+  String? _diplomacyTargetId;
   var _workerActionsWereOpen = false;
   var _researchWasFocused = false;
 
@@ -160,10 +161,9 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           view: widget.scene.player.diplomacy,
           state: widget.diplomacy,
           open: effectivePanel == _MapHudPanel.diplomacy,
-          onOpenChanged: locked
-              ? null
-              : (open) => _setOpen(_MapHudPanel.diplomacy, open),
+          onOpenChanged: locked ? null : _setGeneralDiplomacy,
           onAction: widget.controller.executeDiplomacyAction,
+          initialTargetPlayerId: _diplomacyTargetId,
         ),
         ObjectiveOverlay(
           objectives: widget.scene.map.objectives,
@@ -183,6 +183,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
                 : null,
             onSelect: locked ? null : _setPlayer,
             onClose: () => _setPlayer(null),
+            onDiplomacy: locked ? null : _openPlayerDiplomacy,
           ),
         _resources(effectivePanel, locked),
       ],
@@ -198,6 +199,16 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     return _researchSelectionRequired || _researchFocused
         ? _MapHudPanel.research
         : _openPanel;
+  }
+
+  void _setGeneralDiplomacy(bool open) {
+    _diplomacyTargetId = null;
+    _setOpen(_MapHudPanel.diplomacy, open);
+  }
+
+  void _openPlayerDiplomacy(String id) {
+    _diplomacyTargetId = id;
+    _setOpen(_MapHudPanel.diplomacy, true);
   }
 
   void _setPlayer(String? id) {

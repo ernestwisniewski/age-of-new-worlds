@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
@@ -21,6 +23,7 @@ final class DiplomacyOverlay extends StatelessWidget {
     required this.open,
     required this.onOpenChanged,
     required this.onAction,
+    this.initialTargetPlayerId,
     super.key,
   });
 
@@ -30,6 +33,7 @@ final class DiplomacyOverlay extends StatelessWidget {
   final bool open;
   final ValueChanged<bool>? onOpenChanged;
   final ValueChanged<DiplomacyActionView> onAction;
+  final String? initialTargetPlayerId;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,15 @@ final class DiplomacyOverlay extends StatelessWidget {
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
+            width: math.max(
+              0,
+              math.min(
+                720,
+                MediaQuery.sizeOf(context).width -
+                    AonwHudSideMenuLayout.panelLeft(context) -
+                    12,
+              ),
+            ),
             child: MapGamepadRegion(
               section: MapHudSection.globalActions,
               priority: MapGamepadPriority.panel,
@@ -52,32 +65,18 @@ final class DiplomacyOverlay extends StatelessWidget {
                   maxWidth: 720,
                   padding: const EdgeInsets.all(AonwSpacing.md),
                   child: SizedBox(
-                    width: 680,
+                    width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                copy.title,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ),
-                            IconButton(
-                              key: const ValueKey('close-diplomacy'),
-                              tooltip: copy.close,
-                              onPressed: () => onOpenChanged?.call(false),
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
+                        _header(context, copy),
                         Expanded(
                           child: DiplomacyPanel(
                             actorPlayerId: actorPlayerId,
                             view: view,
                             state: state,
                             onAction: onAction,
+                            initialTargetPlayerId: initialTargetPlayerId,
                           ),
                         ),
                       ],
@@ -90,6 +89,20 @@ final class DiplomacyOverlay extends StatelessWidget {
       ],
     );
   }
+
+  Widget _header(BuildContext context, DiplomacyCopy copy) => Row(
+    children: [
+      Expanded(
+        child: Text(copy.title, style: Theme.of(context).textTheme.titleLarge),
+      ),
+      IconButton(
+        key: const ValueKey('close-diplomacy'),
+        tooltip: copy.close,
+        onPressed: () => onOpenChanged?.call(false),
+        icon: const Icon(Icons.close),
+      ),
+    ],
+  );
 
   Widget _trigger(BuildContext context, DiplomacyCopy copy) => Positioned(
     top: AonwHudSideMenuLayout.actionTop(context, 2),
@@ -110,6 +123,7 @@ final class DiplomacyPanel extends StatelessWidget {
     required this.view,
     required this.state,
     required this.onAction,
+    this.initialTargetPlayerId,
     super.key,
   });
 
@@ -117,6 +131,7 @@ final class DiplomacyPanel extends StatelessWidget {
   final DiplomacyView view;
   final DiplomacyState state;
   final ValueChanged<DiplomacyActionView> onAction;
+  final String? initialTargetPlayerId;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +148,8 @@ final class DiplomacyPanel extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         _DiplomacyComposer(
+          key: ValueKey(initialTargetPlayerId),
+          initialTargetPlayerId: initialTargetPlayerId,
           relations: view.relations,
           enabled: !state.commandPending,
           onAction: onAction,
@@ -185,11 +202,14 @@ final class _DiplomacyComposer extends StatefulWidget {
     required this.relations,
     required this.enabled,
     required this.onAction,
+    this.initialTargetPlayerId,
+    super.key,
   });
 
   final List<DiplomaticRelationView> relations;
   final bool enabled;
   final ValueChanged<DiplomacyActionView> onAction;
+  final String? initialTargetPlayerId;
 
   @override
   State<_DiplomacyComposer> createState() => _DiplomacyComposerState();
@@ -202,7 +222,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
   var _topic = DiplomaticMessageTopicView.avoidEscalation;
   var _resource = MapResource.iron;
   var _requestedResource = MapResource.marble;
-  String? _target;
+  late String? _target = widget.initialTargetPlayerId;
   var _invalid = false;
 
   @override
@@ -218,8 +238,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
     final targets = widget.relations
         .map((relation) => relation.counterpartPlayerId)
         .toList(growable: false);
-    final target = targets.contains(_target) ? _target : targets.firstOrNull;
-    _target = target;
+    final target = _resolvedTarget;
     return Card.outlined(
       child: Padding(
         padding: const EdgeInsets.all(AonwSpacing.sm),
@@ -230,6 +249,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
             DropdownButtonFormField<String>(
               key: const ValueKey('diplomacy-target'),
               initialValue: target,
+              isExpanded: true,
               decoration: InputDecoration(labelText: copy.target),
               items: [
                 for (final value in targets)
@@ -242,6 +262,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
             DropdownButtonFormField<_ComposerAction>(
               key: const ValueKey('diplomacy-action'),
               initialValue: _action,
+              isExpanded: true,
               decoration: InputDecoration(labelText: copy.action),
               items: [
                 for (final value in _ComposerAction.values)
@@ -282,6 +303,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
       DropdownButtonFormField<DiplomaticMessageTopicView>(
         key: const ValueKey('diplomacy-topic'),
         initialValue: _topic,
+        isExpanded: true,
         decoration: InputDecoration(labelText: copy.topic),
         items: [
           for (final value in DiplomaticMessageTopicView.values)
@@ -337,6 +359,7 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
     ValueChanged<MapResource> update,
   ) => DropdownButtonFormField<MapResource>(
     initialValue: value,
+    isExpanded: true,
     decoration: InputDecoration(labelText: label),
     items: [
       for (final resource in MapResource.values)
@@ -345,8 +368,17 @@ final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
     onChanged: widget.enabled ? (next) => setState(() => update(next!)) : null,
   );
 
+  String? get _resolvedTarget {
+    final targets = widget.relations.map((value) => value.counterpartPlayerId);
+    return _target == null
+        ? targets.firstOrNull
+        : targets.contains(_target)
+        ? _target
+        : null;
+  }
+
   void _submit() {
-    final target = _target;
+    final target = _resolvedTarget;
     final amount = int.tryParse(_amount.text);
     final duration = int.tryParse(_duration.text);
     final action = switch (_action) {
