@@ -28,6 +28,32 @@ void main() {
       expect(moved.zoom, closeTo(initial.zoom * 1.675, 1e-9));
     },
   );
+  testWithGame<AonwFlameGame>(
+    'live zoom sensitivity scales triggers without changing stick speed',
+    AonwFlameGame.new,
+    (game) async {
+      await _prepare(game);
+      game.setCameraSensitivity(2);
+      final initial = game.mapCamera.debugTransform!;
+      game.applyGamepadCameraFrame(
+        const MapGamepadFrame(cameraX: 1, zoom: 1),
+        0.1,
+      );
+      final moved = game.mapCamera.debugTransform!;
+      expect(moved.zoom, closeTo(initial.zoom * 1.135 * 1.135, 1e-9));
+      expect(moved.worldCenter.x, closeTo(initial.worldCenter.x - 52, 1e-9));
+      game.setCameraSensitivity(1);
+      game.applyGamepadCameraFrame(const MapGamepadFrame(zoom: 1), 0.1);
+      expect(
+        game.mapCamera.debugTransform!.zoom,
+        closeTo(moved.zoom * 1.135, 1e-9),
+      );
+      final zoom = game.mapCamera.debugTransform!.zoom;
+      game.setViewportActive(false);
+      game.applyGamepadCameraFrame(const MapGamepadFrame(zoom: 1), 0.1);
+      expect(game.mapCamera.debugTransform!.zoom, zoom);
+    },
+  );
 }
 
 Future<void> _prepare(AonwFlameGame game) async {

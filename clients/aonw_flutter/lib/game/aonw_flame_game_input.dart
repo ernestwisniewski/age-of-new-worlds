@@ -14,7 +14,7 @@ extension AonwFlameGameViewportInput on AonwFlameGame {
           y: -frame.cameraY * AonwFlameGame._gamepadPanSpeed * dt,
         ),
         zoomFocalPoint: focalPoint,
-        zoomFactor: zoomFactor,
+        zoomFactor: inputSurface.scaleZoomFactor(zoomFactor),
         hoverScreenPosition: null,
       ),
     );

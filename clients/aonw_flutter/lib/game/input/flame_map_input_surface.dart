@@ -107,9 +107,20 @@ final class FlameMapInputSurface extends PositionComponent {
 
   void submitZoom({required Vector2 focalPoint, required double factor}) {
     if (!_enabled || !factor.isFinite || factor <= 0) return;
+    final adjusted = scaleZoomFactor(factor);
+    if (adjusted == 1) return;
+    final pending = _pendingZoomFactor * adjusted;
+    if (!pending.isFinite || pending <= 0) return;
     _pendingZoomFocalPoint = focalPoint.clone();
-    _pendingZoomFactor *= factor;
+    _pendingZoomFactor = pending;
     _ensureFrame();
+  }
+
+  /// Scales relative zoom in logarithmic space so reciprocal gestures cancel.
+  double scaleZoomFactor(double factor) {
+    if (!factor.isFinite || factor <= 0) return 1;
+    final adjusted = math.pow(factor, _cameraSensitivity).toDouble();
+    return adjusted.isFinite && adjusted > 0 ? adjusted : 1;
   }
 
   void handlePointerDown(int pointerId, Vector2 position) {
