@@ -5,8 +5,8 @@ import 'package:aonw_flutter/features/map/application/map_coordinator.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../support/map_test_fixture.dart';
 import '../../../support/counting_map_session.dart';
+import '../../../support/map_test_fixture.dart';
 
 void main() {
   test(

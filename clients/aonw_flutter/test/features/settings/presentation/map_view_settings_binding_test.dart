@@ -10,8 +10,8 @@ import 'package:aonw_flutter/features/settings/presentation/client_settings_cont
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../support/map_test_fixture.dart';
 import '../../../support/counting_map_session.dart';
+import '../../../support/map_test_fixture.dart';
 
 void main() {
   testWidgets(
