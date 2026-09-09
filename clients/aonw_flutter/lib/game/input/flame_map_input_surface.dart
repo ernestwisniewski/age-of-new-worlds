@@ -202,7 +202,10 @@ final class FlameMapInputSurface extends PositionComponent {
     final hasPan = _pendingPanX != 0 || _pendingPanY != 0;
     final zoomFocalPoint = _pendingZoomFocalPoint;
     final hasZoom = zoomFocalPoint != null && _pendingZoomFactor != 1;
-    if (hover == null && !hasPan && !hasZoom) return;
+    if (hover == null && !hasPan && !hasZoom) {
+      _clearPending();
+      return;
+    }
     _flushCount += 1;
     _onIntent(
       MapViewportFrameIntent(
