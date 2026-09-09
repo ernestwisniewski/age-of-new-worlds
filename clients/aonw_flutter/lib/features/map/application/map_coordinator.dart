@@ -62,6 +62,7 @@ part 'map_coordinator_view_mode.dart';
 part 'map_coordinator_actions.dart';
 part 'map_coordinator_cancellation.dart';
 part 'map_coordinator_local_save.dart';
+part 'map_coordinator_autosave.dart';
 part 'map_coordinator_local_turns.dart';
 part 'map_coordinator_network.dart';
 part 'map_coordinator_selection.dart';

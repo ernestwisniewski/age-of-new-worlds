@@ -57,7 +57,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
       );
     }
     _localGameEntry = attempt.entry;
-    _localSaveSlot = attempt.slot;
+    _localSaveSlot = attempt.slot?.automatic == true ? null : attempt.slot;
     _localControlPlan = attempt.controlPlan;
     _setState(ready);
     return const LocalResumeResultView.started();
@@ -98,7 +98,11 @@ extension MapCoordinatorLocalSave on MapCoordinator {
     }
     final generation = _loadGeneration;
     _setState(current.withLocalSave(const LocalSaveState.saving()));
-    final result = await _saveWorkflow.save(entry, slot: _localSaveSlot);
+    final result = await _saveWorkflow.save(
+      entry,
+      slot: _localSaveSlot,
+      isCurrent: () => _isCurrent(generation),
+    );
     if (!_isCurrent(generation)) return;
     if (result.saved) {
       _localSaveSlot = result.slot;

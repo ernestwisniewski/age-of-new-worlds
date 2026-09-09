@@ -6,7 +6,11 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../infrastructure/storage/atomic_local_document_store.dart';
 import '../../local_game/application/local_game_catalog.dart';
+import '../../map/read_model/player_map_view.dart';
+import '../application/local_autosave_store.dart';
 import '../application/local_save_store.dart';
+
+part 'atomic_local_autosave_store.dart';
 
 typedef LocalSaveDirectoryProvider = Future<Directory> Function();
 typedef LocalSaveClock = DateTime Function();
@@ -17,7 +21,7 @@ const _slotPrefix = 'save-';
 const _legacyPrefix = 'legacy-';
 const _storedDocumentMaximumBytes = maxLocalSaveDocumentBytes * 2 + 64 * 1024;
 
-final class AtomicLocalSaveStore implements LocalSaveStore {
+final class AtomicLocalSaveStore implements LocalSaveStore, LocalAutosaveStore {
   AtomicLocalSaveStore({
     required LocalSaveDirectoryProvider rootDirectory,
     LocalSaveClock clock = _utcNow,
@@ -121,6 +125,7 @@ final class AtomicLocalSaveStore implements LocalSaveStore {
           id: slot.id,
           scenario: slot.scenario,
           name: slot.name,
+          automatic: slot.automatic,
           savedAt: _clock().toUtc(),
         );
         if (_isLegacy(slot)) {
@@ -131,6 +136,14 @@ final class AtomicLocalSaveStore implements LocalSaveStore {
         await _documents.write(slot.id, _encodeEnvelope(updated, document));
         return updated;
       });
+
+  @override
+  Future<LocalSaveSlotView> writeAutomatic({
+    required LocalGameScenarioView scenario,
+    required bool privateHandoff,
+    required MatchTurnModeView turnMode,
+    required String document,
+  }) => _writeAutomatic(scenario, privateHandoff, turnMode, document);
 
   Future<Directory> _saveDirectory() async {
     final root = await _rootDirectory();
@@ -156,6 +169,7 @@ final class AtomicLocalSaveStore implements LocalSaveStore {
     return LocalSaveSlotView(
       id: inferred.id,
       scenario: inferred.scenario,
+      automatic: inferred.automatic,
       savedAt: stat.modified.toUtc(),
     );
   }
@@ -171,7 +185,9 @@ final class AtomicLocalSaveStore implements LocalSaveStore {
 
   static void _validateSlot(LocalSaveSlotView slot) {
     final inferred = _slotFromDocumentName(slot.id);
-    if (inferred == null || inferred.scenario != slot.scenario) {
+    if (inferred == null ||
+        inferred.scenario != slot.scenario ||
+        inferred.automatic != slot.automatic) {
       throw ArgumentError.value(slot.id, 'slot.id', 'invalid local save slot');
     }
   }
@@ -209,6 +225,7 @@ final class AtomicLocalSaveStore implements LocalSaveStore {
       slot: LocalSaveSlotView(
         id: expected.id,
         scenario: expected.scenario,
+        automatic: expected.automatic,
         name: _normalizedName(decoded['name'] as String?),
         savedAt: savedAt,
       ),
@@ -249,7 +266,7 @@ const _envelopeKeys = {
 };
 
 LocalSaveSlotView? _slotFromDocumentName(String name) {
-  if (!name.startsWith(_slotPrefix)) return null;
+  if (!name.startsWith(_slotPrefix)) return _automaticSlot(name);
   for (final scenario in LocalGameScenarioView.values) {
     final prefix = '$_slotPrefix${scenario.name}-';
     if (!name.startsWith(prefix)) continue;

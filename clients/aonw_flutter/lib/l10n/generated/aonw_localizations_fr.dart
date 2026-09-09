@@ -2717,4 +2717,7 @@ class AonwLocalizationsFr extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automaticSave => 'Sauvegarde automatique';
 }

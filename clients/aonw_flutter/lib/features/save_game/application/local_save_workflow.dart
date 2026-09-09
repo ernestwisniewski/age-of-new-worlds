@@ -3,7 +3,9 @@ import 'dart:convert';
 import '../../local_game/application/local_game_catalog.dart';
 import '../../local_game/application/local_game_session_port.dart';
 import '../../map/read_model/map_scene.dart';
+import '../../map/read_model/player_map_view.dart';
 import 'game_save_session_port.dart';
+import 'local_autosave_store.dart';
 import 'local_save_state.dart';
 import 'local_save_store.dart';
 import 'local_save_summary.dart';
@@ -93,13 +95,42 @@ final class LocalSaveWorkflow {
     return List.unmodifiable(summaries);
   }
 
+  bool get canAutosave => _session != null && _store is LocalAutosaveStore;
+
   Future<LocalSaveWriteResultView> save(
     LocalGameCatalogEntryView entry, {
     required LocalSaveSlotView? slot,
+    bool Function()? isCurrent,
+  }) => _writeDocument(
+    (store, document) => slot == null
+        ? store.create(scenario: entry.id, name: null, document: document)
+        : store.write(slot, document),
+    isCurrent: isCurrent,
+  );
+
+  Future<LocalSaveWriteResultView> saveAutomatic(
+    LocalGameCatalogEntryView entry, {
+    required bool privateHandoff,
+    required MatchTurnModeView turnMode,
+    bool Function()? isCurrent,
+  }) => _writeDocument(
+    (store, document) => (store as LocalAutosaveStore).writeAutomatic(
+      scenario: entry.id,
+      privateHandoff: privateHandoff,
+      turnMode: turnMode,
+      document: document,
+    ),
+    isCurrent: () => canAutosave && (isCurrent?.call() ?? true),
+  );
+
+  Future<LocalSaveWriteResultView> _writeDocument(
+    Future<LocalSaveSlotView> Function(LocalSaveStore store, String document)
+    write, {
+    bool Function()? isCurrent,
   }) async {
     final session = _session;
     final store = _store;
-    if (session == null || store == null) {
+    if (session == null || store == null || !(isCurrent?.call() ?? true)) {
       return const LocalSaveWriteResultView.failed(
         LocalSaveFailureViewCode.unavailable,
       );
@@ -118,14 +149,13 @@ final class LocalSaveWorkflow {
         LocalSaveFailureViewCode.exportFailed,
       );
     }
+    if (!(isCurrent?.call() ?? true)) {
+      return const LocalSaveWriteResultView.failed(
+        LocalSaveFailureViewCode.unavailable,
+      );
+    }
     try {
-      final updated = slot == null
-          ? await store.create(
-              scenario: entry.id,
-              name: null,
-              document: document,
-            )
-          : await store.write(slot, document);
+      final updated = await write(store, document);
       return LocalSaveWriteResultView.saved(updated);
     } on LocalSaveStoreException catch (error, stackTrace) {
       _reportStoreFailure(error, stackTrace);

@@ -2712,4 +2712,7 @@ class AonwLocalizationsNl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get automaticSave => 'Automatisch opgeslagen spel';
 }

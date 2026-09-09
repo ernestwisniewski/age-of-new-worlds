@@ -285,7 +285,7 @@ extension MapCoordinatorActions on MapCoordinator {
       readState: () => _state,
       publish: _setState,
       isDisposed: () => _disposed,
-      onAccepted: _advanceLocalTurns,
+      onAccepted: _completeLocalTurn,
     );
   }
 

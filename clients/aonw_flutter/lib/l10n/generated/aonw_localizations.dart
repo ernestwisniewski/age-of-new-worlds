@@ -2619,6 +2619,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{key, select, gold{Gold} science{Science} stability{Stability} resources{Resources} victory{Victory} turn{Turn} close{Close details} treasury{Treasury} income{Income} cityIncome{City income} projectIncome{Project income} upkeep{Unit upkeep} netPerTurn{Per turn} freeUnits{Free units} paidUnits{Paid units} nextWorker{Next worker upkeep} activeResearch{Active research} overflow{Stored science} sources{Sources} baseOrder{Base order} buildings{Buildings} luxuries{Luxuries} technologies{Technologies} artifacts{Artifacts} wonders{Wonders} cities{Cities} population{Population} cohesion{Cohesion} conqueredCities{Conquered cities} warWeariness{War weariness} hegemony{Hegemony tax} relativeStanding{Relative standing} totalSources{Total sources} totalCosts{Total costs} stockpile{Stockpile} output{Output per turn} empty{No sources} score{Score} conquest{Conquest} domination{Domination} culture{Culture} holdTurns{Hold turns} remainingTurns{Remaining turns} turnLimit{Turn limit} submitted{Submitted} required{Required submissions} content{Content} stable{Stable} strained{Strained} unrest{Unrest} other{Resources}}'**
   String resourceText(String key);
+
+  /// No description provided for @automaticSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Autosave'**
+  String get automaticSave;
 }
 
 class _AonwLocalizationsDelegate

@@ -10,12 +10,14 @@ final class LocalSaveSlotView {
     required this.scenario,
     required this.savedAt,
     this.name,
+    this.automatic = false,
   });
 
   final String id;
   final LocalGameScenarioView scenario;
   final DateTime savedAt;
   final String? name;
+  final bool automatic;
 }
 
 abstract interface class LocalSaveStore {

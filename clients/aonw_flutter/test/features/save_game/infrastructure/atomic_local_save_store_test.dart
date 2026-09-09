@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/save_game/application/local_save_store.dart';
 import 'package:aonw_flutter/features/save_game/infrastructure/atomic_local_save_store.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,6 +29,55 @@ void main() {
   tearDown(() async {
     if (await root.exists()) await root.delete(recursive: true);
   });
+
+  test(
+    'automatic slots are bounded, backed up and separate from manual saves',
+    () async {
+      const scenario = LocalGameScenarioView.starterDuel;
+      final manual = await store.create(
+        scenario: scenario,
+        name: 'Campaign',
+        document: 'manual',
+      );
+      Future<LocalSaveSlotView> auto(
+        String document, {
+        bool hotseat = false,
+        MatchTurnModeView mode = MatchTurnModeView.sequential,
+      }) => store.writeAutomatic(
+        scenario: scenario,
+        privateHandoff: hotseat,
+        turnMode: mode,
+        document: document,
+      );
+      final first = await auto('first');
+      final second = await auto('second');
+      expect(second.id, first.id);
+      expect(await store.read(second, LocalSaveCopyView.backup), 'first');
+      expect(await store.read(second, LocalSaveCopyView.primary), 'second');
+      expect(await store.read(manual, LocalSaveCopyView.primary), 'manual');
+      await auto('simultaneous', mode: MatchTurnModeView.simultaneous);
+      await auto('hotseat', hotseat: true);
+      final slots = await store.list();
+      expect(slots, hasLength(4));
+      expect(slots.where((slot) => slot.automatic), hasLength(3));
+      final reopened = AtomicLocalSaveStore(rootDirectory: () async => root);
+      final restored = (await reopened.list()).singleWhere(
+        (slot) => slot.id == second.id,
+      );
+      expect(restored.automatic, isTrue);
+      expect(
+        await reopened.read(restored, LocalSaveCopyView.primary),
+        'second',
+      );
+      final primary = File.fromUri(root.uri.resolve('saves/${second.id}.json'));
+      await primary.delete();
+      final recovered = (await reopened.list()).singleWhere(
+        (slot) => slot.id == second.id,
+      );
+      expect(recovered.automatic, isTrue);
+      expect(await reopened.read(recovered, LocalSaveCopyView.backup), 'first');
+    },
+  );
 
   test(
     'keeps multiple named slots for one scenario and one backup each',

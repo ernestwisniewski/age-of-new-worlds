@@ -34,7 +34,10 @@ final class _LocalSaveCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              save?.slot.name ?? l10n.localScenarioName(entry.scenario.name),
+              save?.slot.automatic == true
+                  ? l10n.automaticSave
+                  : save?.slot.name ??
+                        l10n.localScenarioName(entry.scenario.name),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: AonwSpacing.xs),
