@@ -168,7 +168,12 @@ final class AonwWorld extends World implements FlameSceneSink {
       snapshot.player.fog,
       actorPlayerId: snapshot.player.actorPlayerId,
     );
-    routeLayer.applyRoute(cache, snapshot.interaction.route, snapshot.player);
+    routeLayer.applyRoute(
+      cache,
+      snapshot.interaction.route,
+      snapshot.player,
+      selectedUnitId: snapshot.interaction.selectedUnitId,
+    );
     threatOverlayLayer.applyThreats(
       cache,
       snapshot.interaction,

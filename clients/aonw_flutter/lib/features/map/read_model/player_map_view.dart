@@ -8,6 +8,7 @@ import 'map_view.dart';
 import 'pending_action_view.dart';
 import 'player_economy_view.dart';
 import 'player_victory_view.dart';
+import 'stored_unit_route_view.dart';
 
 export 'player_economy_view.dart';
 
@@ -202,8 +203,10 @@ final class VisibleUnitView {
     this.hitPoints,
     this.maximumHitPoints,
     List<VisibleArmyTroopView> army = const [],
-    this.queuedTarget,
-    this.merchantRouteDestinationCityId,
+    MapHexCoordinate? queuedTarget,
+    this.queuedRoute,
+    this.merchantRoute,
+    String? merchantRouteDestinationCityId,
     this.workerBuildCharges = 0,
     this.workerJob,
     this.workerAssignment,
@@ -211,7 +214,9 @@ final class VisibleUnitView {
     this.carriedArtifactId,
     this.excavatingArtifactId,
     List<MapHexCoordinate> threatenedHexes = const [],
-  }) : army = List.unmodifiable(army),
+  }) : _queuedTarget = queuedTarget,
+       _merchantRouteDestinationCityId = merchantRouteDestinationCityId,
+       army = List.unmodifiable(army),
        threatenedHexes = List.unmodifiable(threatenedHexes);
 
   final String id;
@@ -224,8 +229,13 @@ final class VisibleUnitView {
   final int? hitPoints;
   final int? maximumHitPoints;
   final List<VisibleArmyTroopView> army;
-  final MapHexCoordinate? queuedTarget;
-  final String? merchantRouteDestinationCityId;
+  final StoredUnitRouteView? queuedRoute;
+  final StoredUnitRouteView? merchantRoute;
+  final MapHexCoordinate? _queuedTarget;
+  final String? _merchantRouteDestinationCityId;
+  MapHexCoordinate? get queuedTarget => queuedRoute?.target ?? _queuedTarget;
+  String? get merchantRouteDestinationCityId =>
+      merchantRoute?.destinationCityId ?? _merchantRouteDestinationCityId;
   final int workerBuildCharges;
   final WorkerJobView? workerJob;
   final MapHexCoordinate? workerAssignment;

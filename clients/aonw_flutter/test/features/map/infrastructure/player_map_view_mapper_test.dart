@@ -13,11 +13,13 @@ import '../../../support/map_test_fixture.dart';
 part 'player_map_view_mapper_fixture.dart';
 part 'player_economy_view_mapper_cases.dart';
 part 'player_victory_view_mapper_cases.dart';
+part 'stored_unit_route_mapper_cases.dart';
 
 void main() {
   const mapper = PlayerMapViewMapper();
   registerPlayerEconomyViewMapperCases(mapper);
   registerPlayerVictoryViewMapperCases(mapper);
+  registerStoredUnitRouteCases(mapper);
 
   test('maps the complete recipient-safe unit snapshot', () {
     final map = testMapScene().map;
@@ -143,12 +145,12 @@ void main() {
               army: [AonwArmyTroop(kind: AonwTroopKind.archer, count: 2)],
               queuedPath: AonwQueuedMovePath(
                 target: AonwCoordinate(col: 1, row: 0),
-                steps: [],
+                steps: _storedRouteSteps,
               ),
               merchantTradeRoute: AonwMerchantTradeRoute(
                 originCityId: 'city-a',
                 destinationCityId: 'city-b',
-                steps: [],
+                steps: _storedRouteSteps,
                 transportNetworkFingerprint: 'road-network',
               ),
               workerJob: null,

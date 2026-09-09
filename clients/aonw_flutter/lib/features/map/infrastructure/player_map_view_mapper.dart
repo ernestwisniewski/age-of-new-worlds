@@ -13,6 +13,7 @@ import 'pending_action_view_mapper.dart';
 import 'player_economy_view_mapper.dart';
 import 'player_victory_view_mapper.dart';
 import 'recipient_projection_validator.dart';
+import 'stored_unit_route_mapper.dart';
 
 final class PlayerMapViewMapper {
   const PlayerMapViewMapper({
@@ -36,7 +37,7 @@ final class PlayerMapViewMapper {
   }) {
     RecipientProjectionValidator(map).validateSnapshot(wire);
     _validateActor(wire.participants, actorPlayerId);
-    final units = _mapUnits(wire.units, map);
+    final units = _mapUnits(wire.units, map, actorPlayerId);
     final cities = [for (final city in wire.cities) _mapCity(city)];
     final artifacts = [
       for (final artifact in wire.artifacts) _mapArtifact(artifact),
@@ -85,11 +86,15 @@ final class PlayerMapViewMapper {
   List<VisibleUnitView> _mapUnits(
     List<AonwPlayerUnitView> source,
     MapView map,
+    String actorPlayerId,
   ) {
     final units = <VisibleUnitView>[];
     String? previousId;
     for (final unit in source) {
       _validateUnit(unit, previousId: previousId, map: map);
+      if (unit.ownerPlayerId != actorPlayerId && unit.ownedDetails != null) {
+        throw const FormatException('Foreign unit contains private orders.');
+      }
       units.add(_mapUnit(unit, map));
       previousId = unit.id;
     }
@@ -136,14 +141,8 @@ final class PlayerMapViewMapper {
               in unit.ownedDetails?.army ?? const <AonwArmyTroop>[])
             VisibleArmyTroopView(kind: troop.kind.name, count: troop.count),
         ],
-        queuedTarget: unit.ownedDetails?.queuedPath == null
-            ? null
-            : (
-                col: unit.ownedDetails!.queuedPath!.target.col,
-                row: unit.ownedDetails!.queuedPath!.target.row,
-              ),
-        merchantRouteDestinationCityId:
-            unit.ownedDetails?.merchantTradeRoute?.destinationCityId,
+        queuedRoute: mapQueuedUnitRoute(unit, map),
+        merchantRoute: mapMerchantUnitRoute(unit, map),
         workerBuildCharges: unit.workerBuildCharges,
         workerJob: _workerMapper.job(unit.workerJob, map),
         workerAssignment: unit.workerAssignment == null

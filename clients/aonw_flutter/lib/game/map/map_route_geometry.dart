@@ -32,6 +32,7 @@ extension _MapRouteGeometry on MapRouteLayerComponent {
           (bounds, segment) => bounds.expandToInclude(segment.stroke.bounds),
         )
         .inflate(64);
+    _motionBounds = _bounds;
     _pathBuildCount++;
     isVisible = true;
   }
@@ -54,6 +55,7 @@ _MapRouteSegment _buildSegment(
     reachable:
         route.steps[index].cumulativeCostUnits <= route.availableMovementUnits,
     followsRoad: followsRoad,
+    traversed: false,
   );
 }
 

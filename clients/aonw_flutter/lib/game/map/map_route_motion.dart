@@ -40,7 +40,7 @@ extension MapRouteMotion on MapRouteLayerComponent {
         _animationsEnabled &&
         !_reducedMotion &&
         _length > 0 &&
-        _bounds.overlaps(_viewport);
+        _motionBounds.overlaps(_viewport);
     if (_active == active) return;
     _active = active;
     onActivityChanged?.call(active);
@@ -78,6 +78,7 @@ extension MapRouteMotion on MapRouteLayerComponent {
     if (_length < 8) return null;
     var distance = (_flowPhase * 0.82) % _length;
     for (final segment in _segments) {
+      if (segment.traversed) continue;
       for (final metric in segment.stroke.metrics) {
         if (distance <= metric.length) {
           return metric.getTangentForOffset(distance);

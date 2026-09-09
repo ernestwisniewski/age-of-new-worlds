@@ -8,6 +8,11 @@ abstract final class _MapRoutePaints {
     ..strokeCap = ui.StrokeCap.round
     ..strokeJoin = ui.StrokeJoin.round
     ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 4.2);
+  static final _traversedLinePaint = ui.Paint()
+    ..color = MapPalette.route.withAlpha(80)
+    ..style = ui.PaintingStyle.stroke
+    ..strokeWidth = 1.6
+    ..strokeCap = ui.StrokeCap.round;
   static final _currentLinePaint = ui.Paint()
     ..color = MapPalette.route
     ..style = ui.PaintingStyle.stroke
@@ -60,12 +65,20 @@ extension _MapRoutePainter on MapRouteLayerComponent {
     for (var index = 0; index < _segments.length; index++) {
       final segment = _segments[index];
       if (!segment.stroke.bounds.inflate(20).overlaps(clip)) continue;
-      final phase = (_flowPhase + (index + 1) * 3.5) % 19;
+      final phase = segment.traversed
+          ? 0.0
+          : (_flowPhase + (index + 1) * 3.5) % 19;
       final dashes = segment.stroke.dashes(phase);
       if (segment.reachable) {
         _paintDashes(canvas, dashes, _MapRoutePaints._currentGlowPaint);
       }
-      _paintDashes(canvas, dashes, _MapRoutePaints._currentLinePaint);
+      _paintDashes(
+        canvas,
+        dashes,
+        segment.traversed
+            ? _MapRoutePaints._traversedLinePaint
+            : _MapRoutePaints._currentLinePaint,
+      );
     }
     for (final boundary in _boundaries) {
       _paintBoundary(canvas, boundary);

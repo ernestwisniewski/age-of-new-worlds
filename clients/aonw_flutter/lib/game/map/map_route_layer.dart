@@ -9,6 +9,7 @@ import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/movement_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import '../../features/map/read_model/stored_unit_route_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
 import 'map_canvas_clip.dart';
 import 'map_interaction_geometry.dart';
@@ -20,11 +21,13 @@ part 'map_route_geometry.dart';
 part 'map_route_motion.dart';
 part 'map_route_painter.dart';
 part 'map_route_stroke.dart';
+part 'map_stored_route.dart';
 
 typedef _MapRouteSegment = ({
   _MapRouteStroke stroke,
   bool reachable,
   bool followsRoad,
+  bool traversed,
 });
 
 final class MapRouteLayerComponent extends Component with HasVisibility {
@@ -33,6 +36,8 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   }
 
   RoutePlanView? _route;
+  StoredUnitRouteView? _storedRoute;
+  (String, MapHexCoordinate)? _storedUnit;
   MapStaticRenderIdentity? _identity;
   String? _actor;
   String? _infrastructureSignature;
@@ -42,6 +47,7 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   ui.Offset? _destination;
   bool _destinationReachable = false;
   ui.Rect _bounds = ui.Rect.zero;
+  ui.Rect _motionBounds = ui.Rect.zero;
   ui.Rect _viewport = ui.Rect.zero;
   VisibleUnitKind? _ghostKind;
   MapUnitSpriteAnimation? _ghost;
@@ -71,6 +77,9 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   @visibleForTesting
   int get debugBoundaryCount => _boundaries.length;
   @visibleForTesting
+  int get debugTraversedSegmentCount =>
+      _segments.where((segment) => segment.traversed).length;
+  @visibleForTesting
   bool debugSegmentFollowsRoad(int index) => _segments[index].followsRoad;
   @visibleForTesting
   ui.Rect debugSegmentBounds(int index) => _segments[index].stroke.bounds;
@@ -97,10 +106,17 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   void applyRoute(
     MapStaticRenderCache cache,
     RoutePlanView? route,
-    PlayerMapView player,
-  ) {
+    PlayerMapView player, {
+    String? selectedUnitId,
+  }) {
+    if (route == null) {
+      _applyStoredRoute(cache, player, selectedUnitId);
+      return;
+    }
+    _storedRoute = null;
+    _storedUnit = null;
     final signature = _roadSignature(player);
-    final kind = route == null || route.steps.length < 2
+    final kind = route.steps.length < 2
         ? null
         : player.units
               .where((unit) => unit.id == route.unitId)
@@ -120,7 +136,7 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
       return;
     }
     _flowPhase = 0;
-    if (route == null || route.steps.length < 2) {
+    if (route.steps.length < 2) {
       _clearGeometry();
       return;
     }
@@ -132,6 +148,8 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
 
   void clearLayer() {
     _route = null;
+    _storedRoute = null;
+    _storedUnit = null;
     _identity = null;
     _actor = null;
     _infrastructureSignature = null;
@@ -145,6 +163,7 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
     _destination = null;
     _destinationReachable = false;
     _bounds = ui.Rect.zero;
+    _motionBounds = ui.Rect.zero;
     _length = 0;
     _flowPhase = 0;
     _setGhostKind(null);
