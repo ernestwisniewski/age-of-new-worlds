@@ -62,7 +62,7 @@ pub(super) fn tags(terrain: T, river: bool, resources: &[R], kind: K, score: Sco
 }
 
 pub(super) fn can_found(terrain: T) -> bool {
-    !matches!(terrain, T::Ocean | T::Lake | T::Mountain | T::River)
+    crate::city::can_found_on_terrain(terrain)
 }
 
 fn city(kind: K) -> bool {

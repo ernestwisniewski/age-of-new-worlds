@@ -8,6 +8,7 @@
 mod application;
 mod artifact;
 mod city;
+mod city_planning;
 mod combat;
 mod context;
 mod diplomacy;
@@ -54,6 +55,7 @@ pub use city::{
     CityFoundingOptionsQuery, CityWorkedHexOptions, CityWorkedHexOptionsQuery, FoundCityCommand,
     SelectCityExpansionHexCommand, ToggleWorkedHexCommand,
 };
+pub use city_planning::{CityPlanning, CityPlanningError, CityPlanningQuery};
 pub use combat::{
     AttackHexCommand, CombatExecution, CombatModifier, CombatModifierKind, CombatOutcome,
     CombatPreview, CombatPreviewQuery, CombatRng, CombatRoll, CombatStatTarget, CombatTarget,

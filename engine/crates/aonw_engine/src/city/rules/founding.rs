@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use aonw_content::{CityBalance, MapDefinition, TerrainType};
+use aonw_content::{CityBalance, MapDefinition};
 use aonw_domain::{City, CityFoundingJob, GameState, HexCoord, TroopKind, Unit, UnitId, UnitKind};
 
 use super::CityRuleError;
@@ -33,10 +33,7 @@ pub(super) fn validate_founder_start<'state>(
         .map()
         .tile_at(center)
         .ok_or(CommandRejectionCode::CitySiteInvalid)?;
-    if matches!(
-        tile.yield_terrain(),
-        TerrainType::Ocean | TerrainType::Lake | TerrainType::Mountain
-    ) {
+    if !crate::city::can_found_on_terrain(tile.yield_terrain()) {
         return Err(CommandRejectionCode::CitySiteInvalid.into());
     }
     if state.cities().iter().any(|city| city.center() == center) {
@@ -178,10 +175,8 @@ pub(crate) fn founding_job_is_valid(
     let Some(tile) = map.tile_at(job.center()) else {
         return false;
     };
-    if matches!(
-        tile.yield_terrain(),
-        TerrainType::Ocean | TerrainType::Lake | TerrainType::Mountain
-    ) || cities.iter().any(|city| city.controls(job.center()))
+    if !crate::city::can_found_on_terrain(tile.yield_terrain())
+        || cities.iter().any(|city| city.controls(job.center()))
         || cities.iter().any(|city| {
             city.center().distance_to(job.center()) < u64::from(balance.minimum_center_distance())
         })
