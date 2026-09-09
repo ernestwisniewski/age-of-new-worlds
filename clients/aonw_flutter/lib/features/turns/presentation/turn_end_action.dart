@@ -5,12 +5,14 @@ enum _EndTurnMode { waiting, ready, action }
 final class _EndTurnAction extends StatefulWidget {
   const _EndTurnAction({
     required this.turn,
+    required this.turnMode,
     required this.action,
     required this.onPressed,
     required this.aiTurn,
   });
 
   final RecipientTurnView turn;
+  final MatchTurnModeView turnMode;
   final TurnActionState action;
   final VoidCallback onPressed;
   final LocalAiTurnState aiTurn;
@@ -70,6 +72,8 @@ final class _EndTurnActionState extends State<_EndTurnAction>
   void _syncPulse() {
     final shouldPulse =
         widget.turn.pendingAction != null &&
+        _mode(widget) != _EndTurnMode.waiting &&
+        !widget.turn.outcome.isTerminal &&
         !(MediaQuery.maybeOf(context)?.disableAnimations ?? false);
     if (shouldPulse && !_pulse.isAnimating) {
       unawaited(_pulse.repeat(reverse: true));
@@ -234,7 +238,11 @@ final class _EndTurnVisual {
       glow: const Color(0xFF555566),
       foreground: const Color(0xFF555566),
       label: action.action.inFlight || action.aiTurn.inFlight
-          ? context.aonwL10n.turnText('actionEnding')
+          ? context.aonwL10n.turnText(
+              action.turnMode == MatchTurnModeView.simultaneous
+                  ? 'actionSubmitting'
+                  : 'actionEnding',
+            )
           : _turnStatus(context.aonwL10n, action.turn),
       tooltip: _turnStatus(context.aonwL10n, action.turn),
       icon: Icons.hourglass_empty,
@@ -244,8 +252,8 @@ final class _EndTurnVisual {
       border: AonwColorTokens.copperDeep,
       glow: AonwColorTokens.copper,
       foreground: AonwColorTokens.background,
-      label: context.aonwL10n.turnText('actionEnd'),
-      tooltip: context.aonwL10n.turnText('actionEnd'),
+      label: _endTurnLabel(context, action),
+      tooltip: _endTurnLabel(context, action),
       icon: Icons.check_circle_outline,
     ),
     _EndTurnMode.action => _EndTurnVisual(
@@ -301,3 +309,10 @@ final class _PulsingBorderPainter extends CustomPainter {
   bool shouldRepaint(covariant _PulsingBorderPainter oldDelegate) =>
       oldDelegate.progress != progress || oldDelegate.color != color;
 }
+
+String _endTurnLabel(BuildContext context, _EndTurnAction action) =>
+    context.aonwL10n.turnText(
+      action.turnMode == MatchTurnModeView.simultaneous
+          ? 'actionSubmit'
+          : 'actionEnd',
+    );

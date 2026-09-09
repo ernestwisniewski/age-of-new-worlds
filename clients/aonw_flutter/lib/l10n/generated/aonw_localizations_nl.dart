@@ -1077,6 +1077,8 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'statusWaiting': 'Wachten',
       'statusPendingAction': 'Actie vereist',
       'actionEnd': 'Beurt beëindigen',
+      'actionSubmit': 'Beurt bevestigen',
+      'actionSubmitting': 'Beurt bevestigen…',
       'actionEnding': 'Beurt wordt beëindigd',
       'outcomeConquest': 'Veroveringsoverwinning',
       'outcomeDomination': 'Dominantieoverwinning',

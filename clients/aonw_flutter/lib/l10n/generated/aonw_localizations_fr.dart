@@ -1079,6 +1079,8 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'statusWaiting': 'En attente',
       'statusPendingAction': 'Action requise',
       'actionEnd': 'Terminer le tour',
+      'actionSubmit': 'Valider le tour',
+      'actionSubmitting': 'Validation du tour',
       'actionEnding': 'Fin du tour en cours',
       'outcomeConquest': 'Victoire par conquête',
       'outcomeDomination': 'Victoire par domination',

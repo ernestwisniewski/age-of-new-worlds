@@ -1087,6 +1087,8 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'statusWaiting': 'Warten',
       'statusPendingAction': 'Aktion erforderlich',
       'actionEnd': 'Runde beenden',
+      'actionSubmit': 'Zug bestätigen',
+      'actionSubmitting': 'Zug wird bestätigt',
       'actionEnding': 'Runde wird beendet',
       'outcomeConquest': 'Eroberungssieg',
       'outcomeDomination': 'Vorherrschaftssieg',

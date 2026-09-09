@@ -91,7 +91,13 @@ void main() {
 
       expect(session.endTurnCalls, 1);
       expect(find.text('Turn updated'), findsWidgets);
-      expect(find.text('TURN 2'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('resource-turn')),
+          matching: find.text('2'),
+        ),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     });
   }

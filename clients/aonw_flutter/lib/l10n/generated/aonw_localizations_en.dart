@@ -1062,6 +1062,8 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'statusWaiting': 'Waiting',
       'statusPendingAction': 'Action required',
       'actionEnd': 'End turn',
+      'actionSubmit': 'Submit turn',
+      'actionSubmitting': 'Submitting turn',
       'actionEnding': 'Ending turn',
       'outcomeConquest': 'Conquest victory',
       'outcomeDomination': 'Domination victory',

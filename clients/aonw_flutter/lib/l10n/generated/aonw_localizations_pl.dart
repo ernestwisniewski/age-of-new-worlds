@@ -1066,6 +1066,8 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'statusWaiting': 'Oczekiwanie',
       'statusPendingAction': 'Wymagana akcja',
       'actionEnd': 'Zakończ turę',
+      'actionSubmit': 'Zatwierdź turę',
+      'actionSubmitting': 'Zatwierdzanie tury',
       'actionEnding': 'Kończenie tury',
       'outcomeConquest': 'Zwycięstwo przez podbój',
       'outcomeDomination': 'Zwycięstwo przez dominację',

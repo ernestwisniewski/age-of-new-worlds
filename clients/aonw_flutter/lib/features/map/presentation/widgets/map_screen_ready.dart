@@ -70,6 +70,7 @@ final class _ReadyMap extends StatelessWidget {
       Positioned.fill(
         child: TurnPresentationOverlays(
           turn: scene.player.turnView,
+          turnMode: scene.player.turnMode,
           action: turnAction,
           presentations: turnPresentations,
           localAiTurn: localAiTurn,

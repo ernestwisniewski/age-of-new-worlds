@@ -1083,6 +1083,8 @@ class AonwLocalizationsEs extends AonwLocalizations {
       'statusWaiting': 'Esperando',
       'statusPendingAction': 'Acción necesaria',
       'actionEnd': 'Terminar turno',
+      'actionSubmit': 'Confirmar turno',
+      'actionSubmitting': 'Confirmando turno',
       'actionEnding': 'Terminando el turno',
       'outcomeConquest': 'Victoria por conquista',
       'outcomeDomination': 'Victoria por dominación',

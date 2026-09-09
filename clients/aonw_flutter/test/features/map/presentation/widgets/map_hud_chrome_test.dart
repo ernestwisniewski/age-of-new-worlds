@@ -78,8 +78,8 @@ void main() {
     expect(find.byKey(const ValueKey('open-objectives')), findsOneWidget);
     expect(find.byKey(const ValueKey('map-selection-panel')), findsOneWidget);
     expect(
-      tester.getSize(find.byKey(const ValueKey('turn-number'))).height,
-      34,
+      tester.getSize(find.byKey(const ValueKey('resource-turn'))).height,
+      44,
     );
     expect(
       tester.getSize(find.byKey(const ValueKey('end-turn'))),
