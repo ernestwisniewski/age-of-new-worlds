@@ -9,17 +9,20 @@ import '../../map/read_model/player_map_view.dart';
 import 'player_status.dart';
 
 part 'player_avatar_badges.dart';
+part 'online_player_tile.dart';
 
 final class PlayerRail extends StatelessWidget {
   const PlayerRail({
     required this.player,
     required this.selectedId,
     required this.onSelect,
+    this.online = false,
     super.key,
   });
   final PlayerMapView player;
   final String? selectedId;
   final ValueChanged<String>? onSelect;
+  final bool online;
 
   @override
   Widget build(BuildContext context) => MapGamepadRegion(
@@ -31,14 +34,29 @@ final class PlayerRail extends StatelessWidget {
           for (final participant in player.participants)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: _Avatar(
-                player: player,
-                participant: participant,
-                selected: selectedId == participant.id,
-                onTap: onSelect == null
-                    ? null
-                    : () => onSelect!(participant.id),
-              ),
+              child: online
+                  ? _OnlinePlayerTile(
+                      player: player,
+                      participant: participant,
+                      selected: selectedId == participant.id,
+                      compact:
+                          playerRailWidth(
+                            MediaQuery.sizeOf(context),
+                            online: true,
+                          ) ==
+                          48,
+                      onTap: onSelect == null
+                          ? null
+                          : () => onSelect!(participant.id),
+                    )
+                  : _Avatar(
+                      player: player,
+                      participant: participant,
+                      selected: selectedId == participant.id,
+                      onTap: onSelect == null
+                          ? null
+                          : () => onSelect!(participant.id),
+                    ),
             ),
         ],
       ),

@@ -18,9 +18,11 @@ final class PlayerOverlay extends StatelessWidget {
     required this.onSelect,
     required this.onClose,
     this.onDiplomacy,
+    this.online = false,
     super.key,
   });
   final PlayerMapView player;
+  final bool online;
   final String? selectedId;
   final ValueChanged<String>? onSelect;
   final VoidCallback onClose;
@@ -28,6 +30,10 @@ final class PlayerOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final railWidth = playerRailWidth(
+      MediaQuery.sizeOf(context),
+      online: online,
+    );
     final selected = player.participants
         .where((p) => p.id == selectedId)
         .firstOrNull;
@@ -42,30 +48,15 @@ final class PlayerOverlay extends StatelessWidget {
               onTap: onClose,
             ),
           ),
-        Positioned(
-          top: MediaQuery.paddingOf(context).top + 70,
-          right: 8,
-          bottom: MediaQuery.paddingOf(context).bottom + 112,
-          child: Align(
-            alignment: Alignment.topRight,
-            child: SizedBox(
-              width: 48,
-              child: PlayerRail(
-                player: player,
-                selectedId: selectedId,
-                onSelect: onSelect,
-              ),
-            ),
-          ),
-        ),
+        _rail(context, railWidth),
         if (selected != null)
           Positioned(
             top: MediaQuery.paddingOf(context).top + 70,
-            right: 64,
+            right: railWidth + 16,
             bottom: MediaQuery.paddingOf(context).bottom + 12,
             width: math.max(
               0,
-              math.min(380, MediaQuery.sizeOf(context).width - 76),
+              math.min(380, MediaQuery.sizeOf(context).width - railWidth - 28),
             ),
             child: Align(
               alignment: Alignment.topRight,
@@ -86,6 +77,24 @@ final class PlayerOverlay extends StatelessWidget {
       ],
     );
   }
+
+  Widget _rail(BuildContext context, double railWidth) => Positioned(
+    top: MediaQuery.paddingOf(context).top + 70,
+    right: 8,
+    bottom: MediaQuery.paddingOf(context).bottom + 112,
+    child: Align(
+      alignment: Alignment.topRight,
+      child: SizedBox(
+        width: railWidth,
+        child: PlayerRail(
+          player: player,
+          online: online,
+          selectedId: selectedId,
+          onSelect: onSelect,
+        ),
+      ),
+    ),
+  );
 }
 
 final class _PlayerDetails extends StatelessWidget {

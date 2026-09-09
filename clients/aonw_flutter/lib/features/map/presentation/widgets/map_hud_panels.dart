@@ -10,6 +10,7 @@ import '../../../research/presentation/research_overlay.dart';
 import '../../../resources/presentation/resource_overlay.dart';
 import '../../../resources/presentation/resource_strip.dart';
 import '../../application/game_session_state.dart';
+import '../../application/network_game_session_port.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/pending_action_view.dart';
 import '../map_presentation_controller.dart';
@@ -177,6 +178,9 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           (kind) => kind.name == effectivePanel?.name,
         ))
           PlayerOverlay(
+            online:
+                widget.controller.networkConnection.phase !=
+                NetworkGameConnectionPhase.inactive,
             player: widget.scene.player,
             selectedId: effectivePanel == _MapHudPanel.players
                 ? _selectedPlayerId
