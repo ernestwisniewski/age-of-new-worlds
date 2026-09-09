@@ -24,6 +24,7 @@ use super::research::research_options;
 
 pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQueryResultDto {
     match value {
+        QueryResult::CityPlanning(planning) => super::encode_city_planning(stamp, planning),
         QueryResult::PendingTurnActions(actions) => {
             super::encode_pending_turn_actions(stamp, actions)
         }

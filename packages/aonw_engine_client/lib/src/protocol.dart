@@ -100,6 +100,12 @@ final class AonwClientRequest {
   factory AonwClientRequest.snapshot() =>
       AonwClientRequest._(const {'type': 'snapshot'});
 
+  factory AonwClientRequest.cityPlanning({required int expectedRevision}) =>
+      AonwClientRequest._({
+        'type': 'query',
+        'query': {'type': 'cityPlanning', 'expectedRevision': expectedRevision},
+      });
+
   factory AonwClientRequest.pendingTurnActions({
     required int expectedRevision,
   }) => AonwClientRequest._({

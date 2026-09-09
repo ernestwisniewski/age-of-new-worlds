@@ -18,6 +18,12 @@ fn strict_server_queries_match_the_local_client_protocol() {
     let fixture = fixture([]);
     let actor = player("player-1");
     let queries = [
+        ClientQueryDto::CityPlanning {
+            expected_revision: 7,
+        },
+        ClientQueryDto::CityPlanning {
+            expected_revision: 6,
+        },
         ClientQueryDto::PendingTurnActions {
             expected_revision: 7,
         },

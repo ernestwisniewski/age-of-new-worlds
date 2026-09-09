@@ -13,6 +13,7 @@ void main() {
       'cities',
       'combat',
       'inspectMap',
+      'cityPlanning',
       'hexInspection',
       'pendingTurnActions',
       'matchStart',

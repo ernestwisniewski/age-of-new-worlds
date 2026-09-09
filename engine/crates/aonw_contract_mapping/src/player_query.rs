@@ -3,6 +3,8 @@ use aonw_domain::{CityId, UnitId};
 use aonw_engine::{GameQuery, QueryResult, ResearchOptionsQuery};
 use aonw_projection::SessionStamp;
 
+mod city_planning;
+pub use city_planning::encode_city_planning;
 mod decode;
 mod encode;
 mod hex_inspection;
@@ -55,6 +57,9 @@ pub fn decode_client_player_query<R>(
     execute: impl for<'query> FnOnce(GameQuery<'query>) -> R,
 ) -> Result<R, PlayerQueryMappingError> {
     match query {
+        ClientQueryDto::CityPlanning { expected_revision } => Ok(execute(GameQuery::CityPlanning(
+            aonw_engine::CityPlanningQuery::new(expected_revision),
+        ))),
         ClientQueryDto::PendingTurnActions { expected_revision } => {
             Ok(execute(GameQuery::PendingTurnActions(
                 aonw_engine::PendingTurnActionsQuery::new(expected_revision),

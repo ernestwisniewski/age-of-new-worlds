@@ -9,6 +9,11 @@ use aonw_domain::HexCoord;
 
 pub(crate) fn query(query: ClientQueryDto) -> Result<RuntimeQuery, ClientDecodeError> {
     match query {
+        ClientQueryDto::CityPlanning { expected_revision } => {
+            Ok(RuntimeQuery::CityPlanning(crate::CityPlanningRequest {
+                expected_revision,
+            }))
+        }
         ClientQueryDto::PendingTurnActions { expected_revision } => {
             Ok(RuntimeQuery::PendingTurnActions(
                 crate::PendingTurnActionsRequest { expected_revision },

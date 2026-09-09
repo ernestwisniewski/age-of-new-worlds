@@ -1,0 +1,58 @@
+{
+  "apiVersion": 24,
+  "outcome": {
+    "response": {
+      "result": {
+        "type": "cityPlanning",
+        "stamp": {
+          "mapHash": "39e954609abef129f61757b7fc73a25f0c15d8b00d3f23e4d5725a3e1c69e994",
+          "revision": 0,
+          "rulesetHash": "c8bec5b750ded25f60e989dd0e87c6a1a1a7ab87914d574aea830856441ad7ed",
+          "stateDigest": "2e4cb660cd84e243df6fbe5b8bcca4e6355c7a0d64cce6d4d315da28bec7db28"
+        },
+        "citySites": [
+          {
+            "col": 3,
+            "row": 0
+          },
+          {
+            "col": 3,
+            "row": 1
+          }
+        ],
+        "growthTiles": [
+          {
+            "col": 0,
+            "row": 0
+          },
+          {
+            "col": 1,
+            "row": 0
+          },
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 0
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 0
+          },
+          {
+            "col": 3,
+            "row": 1
+          }
+        ]
+      },
+      "type": "query"
+    },
+    "status": "success"
+  }
+}

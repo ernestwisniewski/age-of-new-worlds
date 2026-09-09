@@ -11,6 +11,8 @@ use serde::{Deserialize, Serialize};
     deny_unknown_fields
 )]
 pub enum ClientQueryDto {
+    /// Discovered city-site and growth markings.
+    CityPlanning { expected_revision: u64 },
     /// Ordered manual work for the authenticated actor.
     PendingTurnActions { expected_revision: u64 },
     /// Returns the actor-filtered profile of one map hex.

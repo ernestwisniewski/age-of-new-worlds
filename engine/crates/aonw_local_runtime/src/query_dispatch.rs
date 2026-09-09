@@ -7,6 +7,8 @@ use aonw_engine::{
     TerrainMovementQuery, WorkerOptions,
 };
 
+mod city_planning;
+pub use city_planning::CityPlanningRequest;
 mod pending_turn_actions;
 pub use pending_turn_actions::PendingTurnActionsRequest;
 mod hex_inspection;
@@ -107,6 +109,8 @@ pub struct UnitLogisticsOptionsRequest {
 /// Versioned local query family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQuery {
+    /// Discovered city-site and growth markings.
+    CityPlanning(CityPlanningRequest),
     /// Ordered actor-owned manual turn work.
     PendingTurnActions(PendingTurnActionsRequest),
     /// Disclosed profile of one map hex.
@@ -186,6 +190,13 @@ pub struct UnitLogisticsOptionsResult {
 /// Versioned local query response family.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeQueryResult {
+    /// Disclosed planning candidates.
+    CityPlanning {
+        /// Version and authoritative identity metadata.
+        stamp: SessionStamp,
+        /// Engine-owned city-site and growth markings.
+        planning: aonw_engine::CityPlanning,
+    },
     /// Ordered actor-owned manual turn work.
     PendingTurnActions {
         /// Version and authoritative identity metadata.
@@ -277,6 +288,7 @@ pub(crate) fn dispatch_query(
     workspace: &mut MovementSearchWorkspace,
 ) -> Result<RuntimeQueryResult, RuntimeError> {
     match request {
+        RuntimeQuery::CityPlanning(request) => city_planning::dispatch(session, request, workspace),
         RuntimeQuery::PendingTurnActions(request) => {
             pending_turn_actions::dispatch(session, request, workspace)
         }

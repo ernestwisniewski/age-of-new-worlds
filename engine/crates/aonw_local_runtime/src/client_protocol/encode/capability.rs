@@ -6,6 +6,7 @@ pub(crate) fn capabilities() -> ClientResponseBodyDto {
     let capabilities = LocalRuntime::capabilities();
     let mut features = vec![
         ClientFeatureDto::InspectMap,
+        ClientFeatureDto::CityPlanning,
         ClientFeatureDto::HexInspection,
         ClientFeatureDto::PendingTurnActions,
         ClientFeatureDto::MatchStart,

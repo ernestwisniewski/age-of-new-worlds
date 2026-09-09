@@ -38,6 +38,18 @@ replay preserve those commands and their outcomes; the runtime profile is not
 canonical match state. Tests check actual search work, deterministic decisions,
 profile changes between requests, and complete games across save and replay.
 
+## City planning markings
+
+Client API 24 adds the revision-bound `cityPlanning` query to the shared local
+and server protocol. It returns sorted potential city centers and growth tiles
+on discovered terrain. City centers use the same terrain predicate as founding
+and the configured minimum center distance. Territory growth itself permits all
+terrain. Only owned cities and foreign cities whose centers are known affect
+these optional markings; an undiscovered foreign city cannot remove a candidate
+on a neighboring discovered tile. The result does not authorize a command:
+founding and expansion still validate the complete canonical state. Local query
+caching includes the recipient, expected revision, and authoritative identities.
+
 ## Quality gates
 
 Run the focused checks from the repository root:

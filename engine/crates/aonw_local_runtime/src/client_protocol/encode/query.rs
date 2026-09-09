@@ -25,6 +25,9 @@ use super::research::research_options;
 
 pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
     match value {
+        RuntimeQueryResult::CityPlanning { stamp, planning } => {
+            aonw_contract_mapping::encode_city_planning(*stamp, planning)
+        }
         RuntimeQueryResult::PendingTurnActions { stamp, actions } => {
             aonw_contract_mapping::encode_pending_turn_actions(*stamp, actions)
         }

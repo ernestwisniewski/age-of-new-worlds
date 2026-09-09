@@ -3,7 +3,7 @@
   "request": {
     "type": "query",
     "query": {
-      "type": "pendingTurnActions",
+      "type": "cityPlanning",
       "expectedRevision": 0
     }
   }

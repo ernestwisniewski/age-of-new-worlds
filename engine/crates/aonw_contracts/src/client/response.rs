@@ -211,6 +211,8 @@ pub struct ClientParticipantControlDto {
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ClientFeatureDto {
+    /// Discovered city-site and growth markings.
+    CityPlanning,
     /// Artifact excavation, storage, trade, and recipient-safe projection.
     Artifacts,
     /// City founding, worked territory, expansion, and city projections.

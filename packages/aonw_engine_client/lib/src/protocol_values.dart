@@ -6,6 +6,7 @@ enum AonwClientFeature {
   cities,
   combat,
   inspectMap,
+  cityPlanning,
   hexInspection,
   pendingTurnActions,
   matchStart,

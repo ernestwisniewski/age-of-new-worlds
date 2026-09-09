@@ -225,3 +225,42 @@ fn opened() -> LocalRuntime {
 fn player(id: &str) -> PlayerId {
     PlayerId::new(id).expect("player")
 }
+
+#[test]
+fn city_planning_wire_is_read_only_cached_and_bound_to_recipient_and_revision() {
+    let mut runtime = opened();
+    let before = runtime.snapshot().unwrap();
+    let replay = runtime.export_replay_json().unwrap();
+    let first = planning_query(&mut runtime, 0);
+    let fixture = aonw_contracts::client::ClientResponseDto::from_json(include_str!(
+        "../../../fixtures/client_protocol/city_planning_response.json"
+    ))
+    .unwrap();
+    assert_eq!(first, fixture.outcome);
+    assert_eq!(planning_query(&mut runtime, 0), first);
+    assert_eq!(runtime.query_cache_stats().hits, 1);
+    assert_eq!(runtime.query_cache_stats().misses, 1);
+    assert_eq!(runtime.snapshot().unwrap(), before);
+    assert_eq!(runtime.export_replay_json().unwrap(), replay);
+    runtime.handoff_hot_seat_actor(player("player-2")).unwrap();
+    assert_eq!(planning_query(&mut runtime, 0), first);
+    assert_eq!(runtime.query_cache_stats().misses, 2);
+    let ClientOutcomeDto::Failure { error } = planning_query(&mut runtime, 1) else {
+        panic!("a stale planning request must fail")
+    };
+    assert_eq!(error.code, "stale_revision");
+    assert_eq!(runtime.query_cache_stats().misses, 3);
+}
+
+fn planning_query(runtime: &mut LocalRuntime, expected_revision: u64) -> ClientOutcomeDto {
+    ClientProtocol::dispatch(
+        runtime,
+        ClientRequestDto {
+            api_version: CLIENT_API_VERSION,
+            request: ClientRequestBodyDto::Query {
+                query: ClientQueryDto::CityPlanning { expected_revision },
+            },
+        },
+    )
+    .outcome
+}

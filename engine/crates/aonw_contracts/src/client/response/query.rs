@@ -119,6 +119,15 @@ pub enum ClientEvidenceDto {
     deny_unknown_fields
 )]
 pub enum ClientQueryResultDto {
+    /// Discovered city-site and growth markings.
+    CityPlanning {
+        /// Identity of the queried state.
+        stamp: ClientSessionStampDto,
+        /// Potential city centers based on disclosed territory and distance.
+        city_sites: Vec<CoordinateDto>,
+        /// Discovered tiles outside known city territory.
+        growth_tiles: Vec<CoordinateDto>,
+    },
     /// Manual turn work in engine-owned navigation order.
     PendingTurnActions {
         /// Identity of the queried state.
