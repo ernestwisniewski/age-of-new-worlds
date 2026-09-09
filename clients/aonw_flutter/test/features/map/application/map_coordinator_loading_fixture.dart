@@ -14,12 +14,15 @@ final class _CompletingGameSession
         DiplomacySessionPort,
         TurnSessionPort,
         UnitActionSessionPort {
-  final requests = <Completer<MapScene>>[];
+  var _nextRequest = Completer<Completer<MapScene>>();
+
+  Future<Completer<MapScene>> get nextRequest => _nextRequest.future;
 
   @override
   Future<MapScene> load(MapAssetPaths assets) {
     final request = Completer<MapScene>();
-    requests.add(request);
+    _nextRequest.complete(request);
+    _nextRequest = Completer<Completer<MapScene>>();
     return request.future;
   }
 

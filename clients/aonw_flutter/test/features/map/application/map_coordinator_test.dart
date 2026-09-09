@@ -110,11 +110,15 @@ void main() {
     );
     addTearDown(controller.dispose);
 
+    final firstRequest = session.nextRequest;
     final firstLoad = controller.load();
+    final older = await firstRequest;
+    final secondRequest = session.nextRequest;
     final secondLoad = controller.load();
-    session.requests[1].complete(testMapScene(mapId: 'new-map'));
+    final newer = await secondRequest;
+    newer.complete(testMapScene(mapId: 'new-map'));
     await secondLoad;
-    session.requests[0].complete(testMapScene(mapId: 'old-map'));
+    older.complete(testMapScene(mapId: 'old-map'));
     await firstLoad;
 
     final ready = controller.state as GameSessionReady;
