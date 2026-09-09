@@ -11,7 +11,7 @@ import '../../map/presentation/city_planning_presentation.dart';
 import '../../map/presentation/map_audio.dart';
 import '../../map/presentation/map_feedback_labels.dart';
 import '../../map/presentation/map_render_snapshot.dart';
-import '../../resources/presentation/resource_hud.dart';
+import '../../map/presentation/widgets/viewer_hud.dart';
 import '../../settings/presentation/client_settings_scope.dart';
 import '../application/replay_state.dart';
 import '../read_model/replay_frame_view.dart';
@@ -307,7 +307,7 @@ final class _ReplayPlayer extends StatelessWidget {
         child: _ReplayControls(state: state, controller: controller),
       ),
       Positioned.fill(
-        child: ResourceHud(
+        child: ViewerHud(
           player: state.frame.scene.player,
           sessionIdentity: controller,
           blocked: state.isSeeking,

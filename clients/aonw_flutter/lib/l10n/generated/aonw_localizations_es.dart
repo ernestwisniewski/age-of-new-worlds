@@ -2719,4 +2719,20 @@ class AonwLocalizationsEs extends AonwLocalizations {
 
   @override
   String get automaticSave => 'Guardado automático';
+
+  @override
+  String playerText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Jugadores',
+      'active': 'Activo',
+      'finished': 'Turno terminado',
+      'submitted': 'Confirmado',
+      'waiting': 'En espera',
+      'ended': 'Partida terminada',
+      'privateStatus': 'El estado del turno es privado',
+      'noContact': 'Sin contacto diplomático',
+      'other': 'Jugadores',
+    });
+    return '$_temp0';
+  }
 }

@@ -2636,4 +2636,20 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get automaticSave => 'Autosave';
+
+  @override
+  String playerText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Players',
+      'active': 'Active',
+      'finished': 'Turn finished',
+      'submitted': 'Submitted',
+      'waiting': 'Waiting',
+      'ended': 'Match ended',
+      'privateStatus': 'Turn status is private',
+      'noContact': 'No diplomatic contact',
+      'other': 'Players',
+    });
+    return '$_temp0';
+  }
 }

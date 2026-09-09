@@ -513,5 +513,6 @@
       }
     }
   },
-  "automaticSave": "Zapis automatyczny"
+  "automaticSave": "Zapis automatyczny",
+  "playerText": "{key, select, title{Gracze} active{Aktywny} finished{Tura zakończona} submitted{Zatwierdzono} waiting{Oczekiwanie} ended{Mecz zakończony} privateStatus{Status tury jest prywatny} noContact{Brak kontaktu dyplomatycznego} other{Gracze}}"
 }

@@ -1127,5 +1127,6 @@
       }
     }
   },
-  "automaticSave": "Guardado automático"
+  "automaticSave": "Guardado automático",
+  "playerText": "{key, select, title{Jugadores} active{Activo} finished{Turno terminado} submitted{Confirmado} waiting{En espera} ended{Partida terminada} privateStatus{El estado del turno es privado} noContact{Sin contacto diplomático} other{Jugadores}}"
 }

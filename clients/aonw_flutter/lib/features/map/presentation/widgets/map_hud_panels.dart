@@ -4,6 +4,7 @@ import '../../../audio/presentation/game_audio_actions.dart';
 import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
+import '../../../players/presentation/player_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../research/presentation/research_overlay.dart';
 import '../../../resources/presentation/resource_overlay.dart';
@@ -14,6 +15,7 @@ import '../../read_model/pending_action_view.dart';
 import '../map_presentation_controller.dart';
 
 enum _MapHudPanel {
+  players,
   objectives,
   research,
   diplomacy,
@@ -45,6 +47,7 @@ final class MapHudPanels extends StatefulWidget {
 
 final class _MapHudPanelsState extends State<MapHudPanels> {
   _MapHudPanel? _openPanel;
+  String? _selectedPlayerId;
   var _workerActionsWereOpen = false;
   var _researchWasFocused = false;
 
@@ -170,6 +173,17 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
               ? null
               : (open) => _setOpen(_MapHudPanel.objectives, open),
         ),
+        if (!ResourcePopup.values.any(
+          (kind) => kind.name == effectivePanel?.name,
+        ))
+          PlayerOverlay(
+            player: widget.scene.player,
+            selectedId: effectivePanel == _MapHudPanel.players
+                ? _selectedPlayerId
+                : null,
+            onSelect: locked ? null : _setPlayer,
+            onClose: () => _setPlayer(null),
+          ),
         _resources(effectivePanel, locked),
       ],
     );
@@ -177,12 +191,27 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
 
   _MapHudPanel? get _effectivePanel {
     if (_terminal) return null;
+    if (_openPanel == _MapHudPanel.players) return _openPanel;
     if (ResourcePopup.values.any((kind) => kind.name == _openPanel?.name)) {
       return _openPanel;
     }
     return _researchSelectionRequired || _researchFocused
         ? _MapHudPanel.research
         : _openPanel;
+  }
+
+  void _setPlayer(String? id) {
+    if (_panelsLocked) return;
+    final next = _openPanel == _MapHudPanel.players && _selectedPlayerId == id
+        ? null
+        : id;
+    setState(() {
+      _selectedPlayerId = next;
+      _openPanel = next == null ? null : _MapHudPanel.players;
+    });
+    context.playGameSound(
+      next == null ? GameSoundCue.uiPanelClose : GameSoundCue.uiPanelOpen,
+    );
   }
 
   void _setResource(ResourcePopup? value) {

@@ -1127,5 +1127,6 @@
       }
     }
   },
-  "automaticSave": "Automatischer Spielstand"
+  "automaticSave": "Automatischer Spielstand",
+  "playerText": "{key, select, title{Spieler} active{Aktiv} finished{Zug beendet} submitted{Bestätigt} waiting{Warten} ended{Partie beendet} privateStatus{Zugstatus ist privat} noContact{Kein diplomatischer Kontakt} other{Spieler}}"
 }

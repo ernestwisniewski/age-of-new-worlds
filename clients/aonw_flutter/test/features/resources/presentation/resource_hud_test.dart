@@ -1,7 +1,7 @@
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
-import 'package:aonw_flutter/features/resources/presentation/resource_hud.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/viewer_hud.dart';
 import 'package:aonw_flutter/features/resources/presentation/resource_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +17,7 @@ void main() {
     await tester.pumpWidget(
       LocalizedTestApp(
         home: Scaffold(
-          body: ResourceHud(player: testMapScene().player, sessionIdentity: 0),
+          body: ViewerHud(player: testMapScene().player, sessionIdentity: 0),
         ),
       ),
     );
@@ -53,10 +53,7 @@ void main() {
         home: MapGamepadNavigationScope(
           navigation: navigation,
           child: Scaffold(
-            body: ResourceHud(
-              player: testMapScene().player,
-              sessionIdentity: 0,
-            ),
+            body: ViewerHud(player: testMapScene().player, sessionIdentity: 0),
           ),
         ),
       ),
@@ -77,7 +74,7 @@ void main() {
   ) async {
     Widget screen(int identity, bool blocked) => LocalizedTestApp(
       home: Scaffold(
-        body: ResourceHud(
+        body: ViewerHud(
           player: testMapScene().player,
           sessionIdentity: identity,
           blocked: blocked,
@@ -113,7 +110,7 @@ void main() {
               textScaler: TextScaler.linear(1.3),
             ),
             child: Scaffold(
-              body: ResourceHud(
+              body: ViewerHud(
                 player: testMapScene().player,
                 sessionIdentity: 0,
               ),

@@ -1127,5 +1127,6 @@
       }
     }
   },
-  "automaticSave": "Sauvegarde automatique"
+  "automaticSave": "Sauvegarde automatique",
+  "playerText": "{key, select, title{Joueurs} active{Actif} finished{Tour terminé} submitted{Validé} waiting{En attente} ended{Partie terminée} privateStatus{Le statut du tour est privé} noContact{Aucun contact diplomatique} other{Joueurs}}"
 }

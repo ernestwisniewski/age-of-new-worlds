@@ -2715,4 +2715,20 @@ class AonwLocalizationsNl extends AonwLocalizations {
 
   @override
   String get automaticSave => 'Automatisch opgeslagen spel';
+
+  @override
+  String playerText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Spelers',
+      'active': 'Actief',
+      'finished': 'Beurt beëindigd',
+      'submitted': 'Bevestigd',
+      'waiting': 'Wachten',
+      'ended': 'Wedstrijd beëindigd',
+      'privateStatus': 'Beurtstatus is privé',
+      'noContact': 'Geen diplomatiek contact',
+      'other': 'Spelers',
+    });
+    return '$_temp0';
+  }
 }

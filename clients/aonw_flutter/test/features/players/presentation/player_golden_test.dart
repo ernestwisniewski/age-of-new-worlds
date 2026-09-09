@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
-import 'resource_test_fixture.dart';
+import 'player_test_fixture.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ void main() {
     (name: 'tablet', size: const Size(1024, 768), locale: const Locale('de')),
     (name: 'desktop', size: const Size(1440, 900), locale: const Locale('en')),
   ]) {
-    testWidgets('${sample.name} resource strip and detailed income', (
+    testWidgets('${sample.name} player rail and contact details', (
       tester,
     ) async {
       tester.view.physicalSize = sample.size;
@@ -38,25 +38,22 @@ void main() {
           locale: sample.locale,
           theme: AonwTheme.dark,
           home: RepaintBoundary(
-            key: const ValueKey('resource-golden'),
+            key: const ValueKey('player-golden'),
             child: Scaffold(
-              body: ViewerHud(
-                player: resourcePlayerFixture(),
-                sessionIdentity: 0,
-              ),
+              body: ViewerHud(player: playersFixture(), sessionIdentity: 0),
             ),
           ),
         ),
       );
       await tester.pumpAndSettle();
-      final gold = find.byKey(const ValueKey('resource-gold'));
+      final gold = find.byKey(const ValueKey('player-avatar-two'));
       await tester.ensureVisible(gold);
       await tester.tap(gold);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       await expectLater(
-        find.byKey(const ValueKey('resource-golden')),
-        matchesGoldenFile('goldens/resources_${sample.name}.png'),
+        find.byKey(const ValueKey('player-golden')),
+        matchesGoldenFile('goldens/players_${sample.name}.png'),
       );
     });
   }

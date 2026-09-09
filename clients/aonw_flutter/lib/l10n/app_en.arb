@@ -656,5 +656,13 @@
       }
     }
   },
-  "automaticSave": "Autosave"
+  "automaticSave": "Autosave",
+  "playerText": "{key, select, title{Players} active{Active} finished{Turn finished} submitted{Submitted} waiting{Waiting} ended{Match ended} privateStatus{Turn status is private} noContact{No diplomatic contact} other{Players}}",
+  "@playerText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  }
 }

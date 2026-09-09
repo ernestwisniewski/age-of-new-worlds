@@ -2625,6 +2625,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Autosave'**
   String get automaticSave;
+
+  /// No description provided for @playerText.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, title{Players} active{Active} finished{Turn finished} submitted{Submitted} waiting{Waiting} ended{Match ended} privateStatus{Turn status is private} noContact{No diplomatic contact} other{Players}}'**
+  String playerText(String key);
 }
 
 class _AonwLocalizationsDelegate

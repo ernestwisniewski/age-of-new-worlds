@@ -2737,4 +2737,20 @@ class AonwLocalizationsDe extends AonwLocalizations {
 
   @override
   String get automaticSave => 'Automatischer Spielstand';
+
+  @override
+  String playerText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Spieler',
+      'active': 'Aktiv',
+      'finished': 'Zug beendet',
+      'submitted': 'Bestätigt',
+      'waiting': 'Warten',
+      'ended': 'Partie beendet',
+      'privateStatus': 'Zugstatus ist privat',
+      'noContact': 'Kein diplomatischer Kontakt',
+      'other': 'Spieler',
+    });
+    return '$_temp0';
+  }
 }

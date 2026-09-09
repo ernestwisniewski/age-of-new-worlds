@@ -1127,5 +1127,6 @@
       }
     }
   },
-  "automaticSave": "Automatisch opgeslagen spel"
+  "automaticSave": "Automatisch opgeslagen spel",
+  "playerText": "{key, select, title{Spelers} active{Actief} finished{Beurt beëindigd} submitted{Bevestigd} waiting{Wachten} ended{Wedstrijd beëindigd} privateStatus{Beurtstatus is privé} noContact{Geen diplomatiek contact} other{Spelers}}"
 }

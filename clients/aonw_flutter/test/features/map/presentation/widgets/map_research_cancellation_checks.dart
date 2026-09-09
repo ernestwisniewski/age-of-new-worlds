@@ -24,6 +24,23 @@ void researchCancellationTests() {
     expect(h.session.endTurnCalls, 0);
   });
 
+  testWidgets('reading players preserves required research', (tester) async {
+    final h = _Harness(actions: [_research], requiredResearch: true);
+    _currentResearchWork(h);
+    await h.mount(tester, settle: false);
+    final actor = h.ready.recipient.actorPlayerId;
+    await tester.tap(find.byKey(ValueKey('player-avatar-$actor')));
+    await tester.pump();
+    expect(find.byKey(ValueKey('player-details-$actor')), findsOneWidget);
+    expect(h.session.researchCancellationCalls, 0);
+    expect(h.session.researchCommandCalls, 0);
+    await tester.tap(find.byKey(const ValueKey('close-player-details')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-research')), findsOneWidget);
+    expect(h.session.researchCancellationCalls, 0);
+    expect(h.session.endTurnCalls, 0);
+  });
+
   testWidgets(
     'required research closes after acknowledgement without automatic reopening',
     (tester) async {

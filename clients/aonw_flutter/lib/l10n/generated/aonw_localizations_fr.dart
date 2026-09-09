@@ -2720,4 +2720,20 @@ class AonwLocalizationsFr extends AonwLocalizations {
 
   @override
   String get automaticSave => 'Sauvegarde automatique';
+
+  @override
+  String playerText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Joueurs',
+      'active': 'Actif',
+      'finished': 'Tour terminé',
+      'submitted': 'Validé',
+      'waiting': 'En attente',
+      'ended': 'Partie terminée',
+      'privateStatus': 'Le statut du tour est privé',
+      'noContact': 'Aucun contact diplomatique',
+      'other': 'Joueurs',
+    });
+    return '$_temp0';
+  }
 }
