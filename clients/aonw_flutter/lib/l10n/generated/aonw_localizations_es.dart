@@ -2658,4 +2658,62 @@ class AonwLocalizationsEs extends AonwLocalizations {
   @override
   String get mapCityGrowthDescription =>
       'Mostrar casillas exploradas fuera del territorio de ciudades conocidas.';
+
+  @override
+  String resourceText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'gold': 'Oro',
+      'science': 'Ciencia',
+      'stability': 'Estabilidad',
+      'resources': 'Recursos',
+      'victory': 'Victoria',
+      'turn': 'Turno',
+      'close': 'Cerrar detalles',
+      'treasury': 'Tesoro',
+      'income': 'Ingresos',
+      'cityIncome': 'Ingresos de ciudades',
+      'projectIncome': 'Ingresos de proyectos',
+      'upkeep': 'Mantenimiento de unidades',
+      'netPerTurn': 'Por turno',
+      'freeUnits': 'Unidades gratuitas',
+      'paidUnits': 'Unidades de pago',
+      'nextWorker': 'Mantenimiento del próximo trabajador',
+      'activeResearch': 'Investigación activa',
+      'overflow': 'Ciencia acumulada',
+      'sources': 'Fuentes',
+      'baseOrder': 'Orden básico',
+      'buildings': 'Edificios',
+      'luxuries': 'Bienes de lujo',
+      'technologies': 'Tecnologías',
+      'artifacts': 'Artefactos',
+      'wonders': 'Maravillas',
+      'cities': 'Ciudades',
+      'population': 'Población',
+      'cohesion': 'Cohesión',
+      'conqueredCities': 'Ciudades conquistadas',
+      'warWeariness': 'Desgaste de guerra',
+      'hegemony': 'Impuesto de hegemonía',
+      'relativeStanding': 'Posición relativa',
+      'totalSources': 'Fuentes totales',
+      'totalCosts': 'Costes totales',
+      'stockpile': 'Reservas',
+      'output': 'Producción por turno',
+      'empty': 'Sin fuentes',
+      'score': 'Puntuación',
+      'conquest': 'Conquista',
+      'domination': 'Dominación',
+      'culture': 'Cultura',
+      'holdTurns': 'Turnos mantenidos',
+      'remainingTurns': 'Turnos restantes',
+      'turnLimit': 'Límite de turnos',
+      'submitted': 'Confirmados',
+      'required': 'Confirmaciones requeridas',
+      'content': 'Satisfecho',
+      'stable': 'Estable',
+      'strained': 'Tenso',
+      'unrest': 'Disturbios',
+      'other': 'Recursos',
+    });
+    return '$_temp0';
+  }
 }

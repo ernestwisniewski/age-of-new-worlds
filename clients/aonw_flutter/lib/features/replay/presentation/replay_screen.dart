@@ -11,6 +11,7 @@ import '../../map/presentation/city_planning_presentation.dart';
 import '../../map/presentation/map_audio.dart';
 import '../../map/presentation/map_feedback_labels.dart';
 import '../../map/presentation/map_render_snapshot.dart';
+import '../../resources/presentation/resource_hud.dart';
 import '../../settings/presentation/client_settings_scope.dart';
 import '../application/replay_state.dart';
 import '../read_model/replay_frame_view.dart';
@@ -275,7 +276,7 @@ final class _ReplayPlayer extends StatelessWidget {
       ),
       Positioned(
         left: AonwSpacing.md,
-        top: AonwSpacing.md,
+        top: 70,
         child: AonwPanel(
           semanticLabel: context.aonwL10n.replayTitle,
           padding: const EdgeInsets.symmetric(
@@ -304,6 +305,13 @@ final class _ReplayPlayer extends StatelessWidget {
         right: AonwSpacing.md,
         bottom: AonwSpacing.md,
         child: _ReplayControls(state: state, controller: controller),
+      ),
+      Positioned.fill(
+        child: ResourceHud(
+          player: state.frame.scene.player,
+          sessionIdentity: controller,
+          blocked: state.isSeeking,
+        ),
       ),
     ],
   );

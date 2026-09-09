@@ -1,6 +1,29 @@
 part of 'map_automatic_turn_test.dart';
 
 void researchCancellationTests() {
+  testWidgets('reading resources preserves the required research decision', (
+    tester,
+  ) async {
+    final h = _Harness(actions: [_research], requiredResearch: true);
+    _currentResearchWork(h);
+    await h.mount(tester, settle: false);
+    await tester.ensureVisible(find.byKey(const ValueKey('resource-gold')));
+    await tester.tap(find.byKey(const ValueKey('resource-gold')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('resource-details-gold')), findsOneWidget);
+    expect(h.session.researchCancellationCalls, 0);
+    expect(h.session.researchCommandCalls, 0);
+    expect(
+      h.ready.recipient.pendingAction,
+      isA<PendingResearchSelectionView>(),
+    );
+    await tester.tap(find.byKey(const ValueKey('close-resource-details')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('close-research')), findsOneWidget);
+    expect(h.session.researchCancellationCalls, 0);
+    expect(h.session.endTurnCalls, 0);
+  });
+
   testWidgets(
     'required research closes after acknowledgement without automatic reopening',
     (tester) async {

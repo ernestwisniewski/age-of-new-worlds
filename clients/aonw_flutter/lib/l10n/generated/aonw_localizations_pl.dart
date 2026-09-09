@@ -2582,4 +2582,62 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get mapCityGrowthDescription =>
       'Pokazuj odkryte pola poza terytorium znanych miast.';
+
+  @override
+  String resourceText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'gold': 'Złoto',
+      'science': 'Nauka',
+      'stability': 'Stabilność',
+      'resources': 'Zasoby',
+      'victory': 'Zwycięstwo',
+      'turn': 'Tura',
+      'close': 'Zamknij szczegóły',
+      'treasury': 'Skarbiec',
+      'income': 'Przychód',
+      'cityIncome': 'Przychód miast',
+      'projectIncome': 'Przychód projektów',
+      'upkeep': 'Utrzymanie jednostek',
+      'netPerTurn': 'Na turę',
+      'freeUnits': 'Darmowe jednostki',
+      'paidUnits': 'Płatne jednostki',
+      'nextWorker': 'Utrzymanie następnego robotnika',
+      'activeResearch': 'Aktywne badanie',
+      'overflow': 'Zgromadzona nauka',
+      'sources': 'Źródła',
+      'baseOrder': 'Porządek bazowy',
+      'buildings': 'Budynki',
+      'luxuries': 'Dobra luksusowe',
+      'technologies': 'Technologie',
+      'artifacts': 'Artefakty',
+      'wonders': 'Cuda',
+      'cities': 'Miasta',
+      'population': 'Populacja',
+      'cohesion': 'Spójność',
+      'conqueredCities': 'Podbite miasta',
+      'warWeariness': 'Zmęczenie wojną',
+      'hegemony': 'Podatek hegemonii',
+      'relativeStanding': 'Pozycja względna',
+      'totalSources': 'Suma źródeł',
+      'totalCosts': 'Suma kosztów',
+      'stockpile': 'Zapasy',
+      'output': 'Produkcja na turę',
+      'empty': 'Brak źródeł',
+      'score': 'Wynik',
+      'conquest': 'Podbój',
+      'domination': 'Dominacja',
+      'culture': 'Kultura',
+      'holdTurns': 'Tury utrzymania',
+      'remainingTurns': 'Pozostałe tury',
+      'turnLimit': 'Limit tur',
+      'submitted': 'Zatwierdzono',
+      'required': 'Wymagane zatwierdzenia',
+      'content': 'Zadowolenie',
+      'stable': 'Stabilność',
+      'strained': 'Napięcie',
+      'unrest': 'Niepokoje',
+      'other': 'Zasoby',
+    });
+    return '$_temp0';
+  }
 }

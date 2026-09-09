@@ -2659,4 +2659,62 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String get mapCityGrowthDescription =>
       'Afficher les cases explorées en dehors du territoire des villes connues.';
+
+  @override
+  String resourceText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'gold': 'Or',
+      'science': 'Science',
+      'stability': 'Stabilité',
+      'resources': 'Ressources',
+      'victory': 'Victoire',
+      'turn': 'Tour',
+      'close': 'Fermer les détails',
+      'treasury': 'Trésorerie',
+      'income': 'Revenus',
+      'cityIncome': 'Revenus des villes',
+      'projectIncome': 'Revenus des projets',
+      'upkeep': 'Entretien des unités',
+      'netPerTurn': 'Par tour',
+      'freeUnits': 'Unités gratuites',
+      'paidUnits': 'Unités payantes',
+      'nextWorker': 'Entretien du prochain ouvrier',
+      'activeResearch': 'Recherche active',
+      'overflow': 'Science stockée',
+      'sources': 'Sources',
+      'baseOrder': 'Ordre de base',
+      'buildings': 'Bâtiments',
+      'luxuries': 'Produits de luxe',
+      'technologies': 'Technologies',
+      'artifacts': 'Artefacts',
+      'wonders': 'Merveilles',
+      'cities': 'Villes',
+      'population': 'Population',
+      'cohesion': 'Cohésion',
+      'conqueredCities': 'Villes conquises',
+      'warWeariness': 'Lassitude de guerre',
+      'hegemony': 'Taxe hégémonique',
+      'relativeStanding': 'Position relative',
+      'totalSources': 'Total des sources',
+      'totalCosts': 'Total des coûts',
+      'stockpile': 'Réserves',
+      'output': 'Production par tour',
+      'empty': 'Aucune source',
+      'score': 'Score',
+      'conquest': 'Conquête',
+      'domination': 'Domination',
+      'culture': 'Culture',
+      'holdTurns': 'Tours de maintien',
+      'remainingTurns': 'Tours restants',
+      'turnLimit': 'Limite de tours',
+      'submitted': 'Confirmé',
+      'required': 'Confirmations requises',
+      'content': 'Satisfait',
+      'stable': 'Stable',
+      'strained': 'Tendu',
+      'unrest': 'Troubles',
+      'other': 'Ressources',
+    });
+    return '$_temp0';
+  }
 }

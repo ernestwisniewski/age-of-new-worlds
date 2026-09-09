@@ -6,9 +6,18 @@ extension MapGamepadFocusNavigation on MapGamepadNavigation {
       if (node is! FocusScopeNode &&
           node.context != null &&
           node.rect.width > 0 &&
-          node.rect.height > 0)
+          node.rect.height > 0 &&
+          _belongsToRegion(node, entry))
         node,
   ];
+
+  bool _belongsToRegion(FocusNode node, MapGamepadRegionEntry entry) {
+    final scopes = {for (final value in _entries.values) value.scope};
+    for (final ancestor in node.ancestors) {
+      if (scopes.contains(ancestor)) return identical(ancestor, entry.scope);
+    }
+    return false;
+  }
 
   List<FocusNode> _sectionNodes(
     MapHudSection section, {

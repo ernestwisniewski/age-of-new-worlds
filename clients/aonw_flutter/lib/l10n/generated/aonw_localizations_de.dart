@@ -2676,4 +2676,62 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String get mapCityGrowthDescription =>
       'Erkundete Felder außerhalb bekannter Stadtgebiete anzeigen.';
+
+  @override
+  String resourceText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'gold': 'Gold',
+      'science': 'Wissenschaft',
+      'stability': 'Stabilität',
+      'resources': 'Ressourcen',
+      'victory': 'Sieg',
+      'turn': 'Runde',
+      'close': 'Details schließen',
+      'treasury': 'Staatskasse',
+      'income': 'Einkommen',
+      'cityIncome': 'Stadteinkommen',
+      'projectIncome': 'Projekteinkommen',
+      'upkeep': 'Einheitenunterhalt',
+      'netPerTurn': 'Pro Runde',
+      'freeUnits': 'Kostenlose Einheiten',
+      'paidUnits': 'Unterhaltspflichtige Einheiten',
+      'nextWorker': 'Unterhalt des nächsten Arbeiters',
+      'activeResearch': 'Aktive Forschung',
+      'overflow': 'Gespeicherte Wissenschaft',
+      'sources': 'Quellen',
+      'baseOrder': 'Grundordnung',
+      'buildings': 'Gebäude',
+      'luxuries': 'Luxusgüter',
+      'technologies': 'Technologien',
+      'artifacts': 'Artefakte',
+      'wonders': 'Wunder',
+      'cities': 'Städte',
+      'population': 'Bevölkerung',
+      'cohesion': 'Zusammenhalt',
+      'conqueredCities': 'Eroberte Städte',
+      'warWeariness': 'Kriegsmüdigkeit',
+      'hegemony': 'Hegemoniesteuer',
+      'relativeStanding': 'Relative Stellung',
+      'totalSources': 'Quellen gesamt',
+      'totalCosts': 'Kosten gesamt',
+      'stockpile': 'Vorrat',
+      'output': 'Ertrag pro Runde',
+      'empty': 'Keine Quellen',
+      'score': 'Punktzahl',
+      'conquest': 'Eroberung',
+      'domination': 'Vorherrschaft',
+      'culture': 'Kultur',
+      'holdTurns': 'Gehaltene Runden',
+      'remainingTurns': 'Verbleibende Runden',
+      'turnLimit': 'Rundenlimit',
+      'submitted': 'Bestätigt',
+      'required': 'Erforderliche Bestätigungen',
+      'content': 'Zufrieden',
+      'stable': 'Stabil',
+      'strained': 'Angespannt',
+      'unrest': 'Unruhen',
+      'other': 'Ressourcen',
+    });
+    return '$_temp0';
+  }
 }

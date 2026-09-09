@@ -2654,4 +2654,62 @@ class AonwLocalizationsNl extends AonwLocalizations {
   @override
   String get mapCityGrowthDescription =>
       'Toon verkende velden buiten het grondgebied van bekende steden.';
+
+  @override
+  String resourceText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'gold': 'Goud',
+      'science': 'Wetenschap',
+      'stability': 'Stabiliteit',
+      'resources': 'Grondstoffen',
+      'victory': 'Overwinning',
+      'turn': 'Beurt',
+      'close': 'Details sluiten',
+      'treasury': 'Schatkist',
+      'income': 'Inkomsten',
+      'cityIncome': 'Stadsinkomsten',
+      'projectIncome': 'Projectinkomsten',
+      'upkeep': 'Eenheidsonderhoud',
+      'netPerTurn': 'Per beurt',
+      'freeUnits': 'Gratis eenheden',
+      'paidUnits': 'Betaalde eenheden',
+      'nextWorker': 'Onderhoud volgende werker',
+      'activeResearch': 'Actief onderzoek',
+      'overflow': 'Opgeslagen wetenschap',
+      'sources': 'Bronnen',
+      'baseOrder': 'Basisorde',
+      'buildings': 'Gebouwen',
+      'luxuries': 'Luxegoederen',
+      'technologies': 'Technologieën',
+      'artifacts': 'Artefacten',
+      'wonders': 'Wereldwonderen',
+      'cities': 'Steden',
+      'population': 'Bevolking',
+      'cohesion': 'Samenhang',
+      'conqueredCities': 'Veroverde steden',
+      'warWeariness': 'Oorlogsmoeheid',
+      'hegemony': 'Hegemoniebelasting',
+      'relativeStanding': 'Relatieve positie',
+      'totalSources': 'Totaal bronnen',
+      'totalCosts': 'Totale kosten',
+      'stockpile': 'Voorraad',
+      'output': 'Opbrengst per beurt',
+      'empty': 'Geen bronnen',
+      'score': 'Score',
+      'conquest': 'Verovering',
+      'domination': 'Dominantie',
+      'culture': 'Cultuur',
+      'holdTurns': 'Beurten behouden',
+      'remainingTurns': 'Resterende beurten',
+      'turnLimit': 'Beurtlimiet',
+      'submitted': 'Bevestigd',
+      'required': 'Vereiste bevestigingen',
+      'content': 'Tevreden',
+      'stable': 'Stabiel',
+      'strained': 'Gespannen',
+      'unrest': 'Onrust',
+      'other': 'Grondstoffen',
+    });
+    return '$_temp0';
+  }
 }

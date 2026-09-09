@@ -6,12 +6,24 @@ import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../research/presentation/research_overlay.dart';
+import '../../../resources/presentation/resource_overlay.dart';
+import '../../../resources/presentation/resource_strip.dart';
 import '../../application/game_session_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/pending_action_view.dart';
 import '../map_presentation_controller.dart';
 
-enum _MapHudPanel { objectives, research, diplomacy }
+enum _MapHudPanel {
+  objectives,
+  research,
+  diplomacy,
+  gold,
+  science,
+  stability,
+  resources,
+  turn,
+  victory,
+}
 
 final class MapHudPanels extends StatefulWidget {
   const MapHudPanels({
@@ -127,11 +139,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   @override
   Widget build(BuildContext context) {
     final locked = _panelsLocked;
-    final effectivePanel = _researchSelectionRequired || _researchFocused
-        ? _MapHudPanel.research
-        : _terminal
-        ? null
-        : _openPanel;
+    final effectivePanel = _effectivePanel;
     return Stack(
       children: [
         ResearchOverlay(
@@ -162,7 +170,42 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
               ? null
               : (open) => _setOpen(_MapHudPanel.objectives, open),
         ),
+        _resources(effectivePanel, locked),
       ],
+    );
+  }
+
+  _MapHudPanel? get _effectivePanel {
+    if (_terminal) return null;
+    if (ResourcePopup.values.any((kind) => kind.name == _openPanel?.name)) {
+      return _openPanel;
+    }
+    return _researchSelectionRequired || _researchFocused
+        ? _MapHudPanel.research
+        : _openPanel;
+  }
+
+  void _setResource(ResourcePopup? value) {
+    if (_panelsLocked) return;
+    final next = value == null ? null : _MapHudPanel.values.byName(value.name);
+    if (next == _openPanel) return;
+    setState(() => _openPanel = next);
+    context.playGameSound(
+      value == null ? GameSoundCue.uiPanelClose : GameSoundCue.uiPanelOpen,
+    );
+  }
+
+  Widget _resources(_MapHudPanel? effectivePanel, bool locked) {
+    final open = ResourcePopup.values
+        .where((kind) => kind.name == effectivePanel?.name)
+        .firstOrNull;
+    return ResourceOverlay(
+      player: widget.scene.player,
+      open: open,
+      onOpen: locked
+          ? null
+          : (kind) => _setResource(open == kind ? null : kind),
+      onClose: () => _setResource(null),
     );
   }
 
