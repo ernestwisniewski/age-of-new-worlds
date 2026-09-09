@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aonw_flutter/features/audio/presentation/game_audio_host.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/read_model/city_planning_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
@@ -243,7 +244,9 @@ void main() {
   });
 }
 
-final class _ReplaySession implements ReplaySessionPort {
+final class _ReplaySession
+    with FakeCityPlanningSession
+    implements ReplaySessionPort {
   _ReplaySession({
     this.rejectDocument,
     this.observed = false,
@@ -255,6 +258,19 @@ final class _ReplaySession implements ReplaySessionPort {
   final bool audio;
   Completer<void>? seekCompletion;
   int _position = 0;
+  int planningCalls = 0;
+  @override
+  Future<CityPlanningView> cityPlanning({required int expectedRevision}) async {
+    planningCalls++;
+    final player = _frame(_position).scene.player;
+    return CityPlanningView(
+      stamp: player.stamp,
+      actorPlayerId: player.actorPlayerId,
+      citySites: const [(col: 0, row: 0)],
+      growthTiles: const [(col: 0, row: 0)],
+    );
+  }
+
   final positions = <int>[];
   final openedDocuments = <String>[];
 

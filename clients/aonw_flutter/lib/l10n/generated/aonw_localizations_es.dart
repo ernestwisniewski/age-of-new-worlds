@@ -2644,4 +2644,18 @@ class AonwLocalizationsEs extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Se usa al abrir una partida o una repetición.';
+
+  @override
+  String get mapCitySites => 'Lugares para ciudades';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Mostrar posibles lugares para ciudades en terreno explorado.';
+
+  @override
+  String get mapCityGrowth => 'Expansión de ciudades';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Mostrar casillas exploradas fuera del territorio de ciudades conocidas.';
 }

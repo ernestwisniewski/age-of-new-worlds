@@ -9,6 +9,7 @@ import 'package:aonw_flutter/features/diplomacy/read_model/diplomacy_view.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_session_port.dart';
 import 'package:aonw_flutter/features/logistics/application/unit_logistics_session_port.dart';
 import 'package:aonw_flutter/features/logistics/read_model/unit_logistics_view.dart';
+import 'package:aonw_flutter/features/map/application/city_planning_session_port.dart';
 import 'package:aonw_flutter/features/map/application/game_session_capabilities.dart';
 import 'package:aonw_flutter/features/map/application/hex_inspection_session_port.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
@@ -33,12 +34,16 @@ import 'package:aonw_flutter/features/unit_actions/read_model/unit_action_view.d
 import 'package:aonw_flutter/features/workers/application/worker_session_port.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 
+import 'city_planning_test_fixture.dart';
 import 'hex_inspection_test_fixture.dart';
 import 'pending_turn_actions_test_fixture.dart';
 
+export 'city_planning_test_fixture.dart';
 export 'pending_turn_actions_test_fixture.dart';
 
 part 'city_test_fixture.dart';
+part 'map_scene_test_fixture.dart';
+part 'production_overview_game_fixture.dart';
 part 'pending_turn_actions_game_fixture.dart';
 part 'map_research_test_fixture.dart';
 part 'game_session_capabilities_test_fixture.dart';
@@ -51,147 +56,6 @@ typedef ProductionOverviewFixture = ({
   ProductionOptionsView options,
   StrategicResourceProjectionView resources,
 });
-
-MapScene testMapScene({
-  int cols = 3,
-  int rows = 2,
-  String? mapId,
-  String? contentHash,
-  double defaultZoom = 1,
-  List<MapObjectiveView> objectives = const [],
-  List<VisibleUnitView> units = const [],
-  List<CityView> cities = const [],
-  List<WorldArtifactView> artifacts = const [],
-  List<String> diplomaticCounterpartPlayerIds = const [],
-  DiplomacyView? diplomacy,
-  List<FieldImprovementView> fieldImprovements = const [],
-  List<RoadView> roads = const [],
-  CityFoundingDraftView? cityFoundingDraft,
-  GameOutcomeView? outcome,
-  PendingActionView? pendingAction,
-  int actorColorValue = 0xff000000,
-}) {
-  final terrains = MapTerrain.values;
-  final tiles = <MapTileView>[];
-  for (var row = 0; row < rows; row++) {
-    for (var col = 0; col < cols; col++) {
-      final terrain = terrains[(row * cols + col) % terrains.length];
-      tiles.add(
-        MapTileView(
-          coordinate: (col: col, row: row),
-          displayTerrain: terrain,
-          yieldTerrain: terrain,
-          movementTerrains: [terrain],
-          terrainTags: [terrain],
-          resources: const [],
-          height: 0,
-        ),
-      );
-    }
-  }
-  return MapScene(
-    map: MapView(
-      mapId: mapId ?? (cols == 7 && rows == 7 ? 'aonw2_starter' : 'test-map'),
-      contentHash: contentHash ?? 'a' * 64,
-      gridLayout: MapGridLayout.oddQFlatTop,
-      cols: cols,
-      rows: rows,
-      defaultZoom: defaultZoom,
-      tiles: tiles,
-      objectives: objectives,
-    ),
-    reference: MapReferenceBundle(
-      mapId: mapId ?? (cols == 7 && rows == 7 ? 'aonw2_starter' : 'test-map'),
-      mapContentHash: contentHash ?? 'a' * 64,
-      worldWidth: 120 + (cols - 1) * 90,
-      worldHeight: 103.92304845413263 * (rows + (cols > 1 ? 0.5 : 0)),
-      pages: const [],
-    ),
-    player: PlayerMapView.preview(
-      actorPlayerId: 'preview-player',
-      stamp: SessionStampView(
-        revision: 0,
-        stateDigest: 'b' * 64,
-        mapHash: contentHash ?? 'a' * 64,
-        rulesetHash: 'c' * 64,
-      ),
-      turn: 1,
-      pendingAction: pendingAction,
-      outcome: outcome,
-      units: units,
-      diplomacy:
-          diplomacy ??
-          DiplomacyView(
-            relations: [
-              for (final id in diplomaticCounterpartPlayerIds)
-                DiplomaticRelationView(
-                  counterpartPlayerId: id,
-                  status: DiplomaticRelationStatusView.neutral,
-                  relationScore: 0,
-                  statusExpiresOnTurn: null,
-                  lastChangedTurn: null,
-                  lastChangeReason: null,
-                ),
-            ],
-            proposals: const [],
-            messages: const [],
-            resourceTradeAgreements: const [],
-          ),
-      cities: cities,
-      artifacts: artifacts,
-      fieldImprovements: fieldImprovements,
-      roads: roads,
-      cityFoundingDraft: cityFoundingDraft,
-      actorColorValue: actorColorValue,
-    ),
-  );
-}
-
-RoutePlanView testRoutePlanView({
-  String unitId = 'preview-commander',
-  MapHexCoordinate origin = (col: 0, row: 0),
-  MapHexCoordinate target = (col: 1, row: 0),
-}) => RoutePlanView(
-  stamp: testSessionStamp(),
-  unitId: unitId,
-  target: target,
-  destination: target,
-  totalCostUnits: 4,
-  availableMovementUnits: 12,
-  remainingMovementUnits: 8,
-  estimatedTurns: 1,
-  steps: [
-    MovementStepView(
-      coordinate: origin,
-      enterCostUnits: 0,
-      cumulativeCostUnits: 0,
-    ),
-    MovementStepView(
-      coordinate: target,
-      enterCostUnits: 4,
-      cumulativeCostUnits: 4,
-    ),
-  ],
-);
-
-MoveUnitExecutionView testMoveUnitExecutionView({
-  String unitId = 'preview-commander',
-  MapHexCoordinate from = const (col: 0, row: 0),
-  MapHexCoordinate to = const (col: 1, row: 0),
-}) => MoveUnitExecutionView(
-  events: [UnitMovedEventView(unitId: unitId, from: from, to: to)],
-  evidence: UnitMovementEvidenceView(
-    unitId: unitId,
-    from: from,
-    steps: [
-      MovementStepView(
-        coordinate: to,
-        enterCostUnits: 4,
-        cumulativeCostUnits: 4,
-      ),
-    ],
-  ),
-);
 
 final class FakeGameSession
     with
@@ -572,44 +436,10 @@ final class FakeGameSession
   }
 
   @override
-  Future<
-    ({ProductionOptionsView options, StrategicResourceProjectionView resources})
-  >
-  productionOverview({
+  Future<ProductionOverviewFixture> productionOverview({
     required int expectedRevision,
     required String cityId,
-  }) async {
-    productionOverviewCalls += 1;
-    final error = productionFailure;
-    if (error != null) throw error;
-    if (productionOverviewResults.isNotEmpty) {
-      final index = productionOverviewCalls <= productionOverviewResults.length
-          ? productionOverviewCalls - 1
-          : productionOverviewResults.length - 1;
-      return productionOverviewResults[index];
-    }
-    return productionOverviewResult ??
-        (
-          options: ProductionOptionsView(
-            stamp: testSessionStamp(revision: expectedRevision),
-            cityId: cityId,
-            currentTarget: null,
-            investedProduction: 0,
-            productionOverflow: 0,
-            buildings: const [],
-            units: const [],
-            projects: const [],
-            wonders: const [],
-            specializations: const [],
-          ),
-          resources: StrategicResourceProjectionView(
-            stamp: testSessionStamp(revision: expectedRevision),
-            playerId: scene?.player.actorPlayerId ?? 'preview-player',
-            output: const [],
-            sources: const [],
-          ),
-        );
-  }
+  }) async => _productionOverview(expectedRevision, cityId);
 
   @override
   Future<ProductionCommandResultView> executeProductionAction({

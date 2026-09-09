@@ -22,6 +22,7 @@ import '../../turns/application/automatic_turn_policy.dart';
 import '../../turns/read_model/pending_turn_actions_view.dart';
 import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/read_model/worker_view.dart';
+import '../application/city_planning_session_port.dart';
 import '../application/game_session_capabilities.dart';
 import '../application/game_session_state.dart';
 import '../application/map_coordinator.dart';
@@ -74,6 +75,8 @@ final class MapPresentationController extends ChangeNotifier {
     });
   }
 
+  CityPlanningSessionPort get cityPlanningSession =>
+      _coordinator.cityPlanningSession;
   final MapCoordinator _coordinator;
   final NetworkGameSessionPort? _networkGame;
   late final StreamSubscription<GameSessionState> _subscription;

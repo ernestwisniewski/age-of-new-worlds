@@ -643,5 +643,9 @@
   "mapAppearanceSettings": "Map appearance",
   "mapMarkingsSettings": "Map markings",
   "preferredMapViewMode": "Default map view",
-  "preferredMapViewModeDescription": "Used when opening a game or replay."
+  "preferredMapViewModeDescription": "Used when opening a game or replay.",
+  "mapCitySites": "City sites",
+  "mapCitySitesDescription": "Show potential city sites on discovered terrain.",
+  "mapCityGrowth": "City growth",
+  "mapCityGrowthDescription": "Show discovered tiles outside known city territory."
 }

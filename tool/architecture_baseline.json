@@ -99,11 +99,9 @@
       }
     },
     "flutter_client_test": {
-      "files": {
-        "clients/aonw_flutter/test/support/map_test_fixture.dart": 657
-      },
+      "files": {},
       "declarations": {
-        "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 462
+        "clients/aonw_flutter/test/support/map_test_fixture.dart::class:FakeGameSession": 428
       },
       "callableLines": {
         "clients/aonw_flutter/test/architecture/architecture_callable_metrics_test.dart::function:main/closure:test[control-flow_complexity_has_deterministic_golden_values]#1": 131

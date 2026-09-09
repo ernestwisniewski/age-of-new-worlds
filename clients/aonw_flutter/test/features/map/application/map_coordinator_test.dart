@@ -94,6 +94,7 @@ void main() {
     final controller = MapCoordinator(
       capabilities: GameSessionCapabilities(
         map: session,
+        cityPlanning: FakeCityPlanningSession(),
         hexInspection: FakeHexInspectionSession(scene: testMapScene()),
         movement: session,
         combat: session,

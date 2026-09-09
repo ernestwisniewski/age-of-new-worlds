@@ -500,5 +500,9 @@
   "mapAppearanceSettings": "Wygląd mapy",
   "mapMarkingsSettings": "Oznaczenia mapy",
   "preferredMapViewMode": "Domyślny widok mapy",
-  "preferredMapViewModeDescription": "Używany przy otwieraniu gry lub powtórki."
+  "preferredMapViewModeDescription": "Używany przy otwieraniu gry lub powtórki.",
+  "mapCitySites": "Miejsca pod miasta",
+  "mapCitySitesDescription": "Pokazuj potencjalne miejsca pod miasta na odkrytym terenie.",
+  "mapCityGrowth": "Rozwój miast",
+  "mapCityGrowthDescription": "Pokazuj odkryte pola poza terytorium znanych miast."
 }

@@ -1114,5 +1114,9 @@
   "mapAppearanceSettings": "Kaartweergave",
   "mapMarkingsSettings": "Kaartmarkeringen",
   "preferredMapViewMode": "Standaardkaartweergave",
-  "preferredMapViewModeDescription": "Wordt gebruikt bij het openen van een spel of herhaling."
+  "preferredMapViewModeDescription": "Wordt gebruikt bij het openen van een spel of herhaling.",
+  "mapCitySites": "Stadslocaties",
+  "mapCitySitesDescription": "Toon mogelijke stadslocaties op verkend terrein.",
+  "mapCityGrowth": "Stadsuitbreiding",
+  "mapCityGrowthDescription": "Toon verkende velden buiten het grondgebied van bekende steden."
 }

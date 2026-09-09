@@ -10,6 +10,7 @@ import '../../save_game/application/game_save_session_port.dart';
 import '../../turns/application/turn_session_port.dart';
 import '../../unit_actions/application/unit_action_session_port.dart';
 import '../../workers/application/worker_session_port.dart';
+import 'city_planning_session_port.dart';
 import 'hex_inspection_session_port.dart';
 import 'map_session_port.dart';
 import 'movement_session_port.dart';
@@ -20,6 +21,7 @@ final class GameSessionCapabilities {
   const GameSessionCapabilities({
     required this.map,
     required this.hexInspection,
+    required this.cityPlanning,
     required this.movement,
     required this.combat,
     required this.cities,
@@ -37,6 +39,7 @@ final class GameSessionCapabilities {
   });
 
   final MapSessionPort map;
+  final CityPlanningSessionPort cityPlanning;
   final HexInspectionSessionPort hexInspection;
   final MovementSessionPort movement;
   final CombatSessionPort combat;
@@ -59,6 +62,7 @@ extension NetworkGameSessionCapabilities on GameSessionCapabilities {
       GameSessionCapabilities(
         map: map,
         hexInspection: hexInspection,
+        cityPlanning: cityPlanning,
         movement: movement,
         combat: combat,
         cities: cities,

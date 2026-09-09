@@ -39,15 +39,18 @@ import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/application/worker_session_port.dart';
 import '../../workers/infrastructure/engine_worker_gateway.dart';
 import '../../workers/read_model/worker_view.dart';
+import '../application/city_planning_session_port.dart';
 import '../application/game_session_capabilities.dart';
 import '../application/hex_inspection_session_port.dart';
 import '../application/map_session_port.dart';
 import '../application/movement_session_port.dart';
+import '../read_model/city_planning_view.dart';
 import '../read_model/hex_inspection_view.dart';
 import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
 import '../read_model/movement_view.dart';
 import '../read_model/player_map_view.dart';
+import 'engine_city_planning_gateway.dart';
 import 'engine_game_session_context.dart';
 import 'engine_game_session_loader.dart';
 import 'engine_game_session_operations.dart';
@@ -60,15 +63,17 @@ import 'player_map_view_mapper.dart';
 import 'recipient_projection_cache.dart';
 
 part 'engine_game_artifact_session.dart';
+part 'engine_game_city_planning_session.dart';
+part 'engine_game_session_close.dart';
 part 'engine_game_city_session.dart';
 part 'engine_game_hex_inspection_session.dart';
 part 'engine_game_production_session.dart';
+part 'engine_game_remote_session.dart';
 part 'engine_game_replay_session.dart';
 part 'engine_game_save_session.dart';
-part 'engine_game_remote_session.dart';
 part 'engine_game_session_gateway_support.dart';
-part 'engine_game_worker_session.dart';
 part 'engine_game_turn_session.dart';
+part 'engine_game_worker_session.dart';
 
 final class EngineGameSessionGateway
     implements
@@ -122,6 +127,7 @@ final class EngineGameSessionGateway
        ) {
     citySession = _EngineGameCitySession(this);
     hexInspectionSession = _EngineGameHexInspectionSession(this);
+    cityPlanningSession = _EngineGameCityPlanningSession(this);
     workerSession = _EngineGameWorkerSession(this);
     productionSession = _EngineGameProductionSession(this);
     artifactSession = _EngineGameArtifactSession(this);
@@ -146,6 +152,7 @@ final class EngineGameSessionGateway
   final EngineUnitActionGateway _unitActions;
   late final CitySessionPort citySession;
   late final HexInspectionSessionPort hexInspectionSession;
+  late final CityPlanningSessionPort cityPlanningSession;
   late final WorkerSessionPort workerSession;
   late final ProductionSessionPort productionSession;
   late final ArtifactSessionPort artifactSession;
@@ -156,6 +163,7 @@ final class EngineGameSessionGateway
   GameSessionCapabilities get capabilities => GameSessionCapabilities(
     map: this,
     hexInspection: hexInspectionSession,
+    cityPlanning: cityPlanningSession,
     movement: this,
     combat: this,
     cities: citySession,
@@ -402,19 +410,5 @@ final class EngineGameSessionGateway
       _serialize(() => _restoreHuman(_context(), playerId));
 
   @override
-  Future<void> close() async {
-    _loadGeneration += 1;
-    _sessionGeneration += 1;
-    final session = _session;
-    _session = null;
-    _scene = null;
-    _map = null;
-    _player = null;
-    _cache = null;
-    _actorPlayerId = null;
-    _replayEntryCount = null;
-    _replayPosition = null;
-    await _requestTail;
-    if (session != null) await session.close();
-  }
+  Future<void> close() => _closeSession();
 }

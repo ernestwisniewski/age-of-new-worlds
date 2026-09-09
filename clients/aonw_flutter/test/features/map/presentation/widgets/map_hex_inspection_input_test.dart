@@ -87,6 +87,7 @@ final class _Harness {
           reachableResult: testReachableView(),
           routeResult: testRoutePlanView(),
         ),
+        cityPlanning: FakeCityPlanningSession(),
         hexInspection: inspection,
       ),
     );

@@ -29,6 +29,7 @@ import '../../application/hex_inspection_state.dart';
 import '../../application/map_interaction_state.dart';
 import '../../read_model/map_scene.dart';
 import '../../read_model/map_view.dart';
+import '../city_planning_presentation.dart';
 import '../geometry/odd_q_flat_top_geometry.dart';
 import '../input/map_action_palette_intent.dart';
 import '../input/map_gamepad_cursor.dart';
@@ -61,6 +62,8 @@ part 'map_screen_cursor.dart';
 part 'map_screen_keyboard.dart';
 part 'map_screen_ready.dart';
 part 'map_screen_scene.dart';
+part 'map_screen_save.dart';
+part 'map_screen_city_planning.dart';
 
 final class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -87,6 +90,10 @@ final class MapScreen extends StatefulWidget {
 final class _MapScreenState extends State<MapScreen>
     with WidgetsBindingObserver, RouteAware, SingleTickerProviderStateMixin {
   late AonwFlameGame _flameGame;
+  late final _cityPlanning = CityPlanningPresentation(
+    onChanged: (value) => _flameGame.setCityPlanning(value),
+  );
+  bool _planningEnabled = false;
   late FocusNode _flameFocusNode;
   late AppLifecycleState _lifecycleState;
   late Ticker _gamepadTicker;
@@ -199,6 +206,7 @@ final class _MapScreenState extends State<MapScreen>
 
   @override
   void dispose() {
+    _cityPlanning.dispose();
     _automaticDisposed = true;
     _automaticGeneration += 1;
     widget.controller.bindInteractionSounds(null);
@@ -315,6 +323,8 @@ final class _MapScreenState extends State<MapScreen>
     ));
     _flameGame.setMapDisplayOptions(
       MapDisplayOptions(
+        showCitySites: settings.showMapCitySites,
+        showCityGrowth: settings.showMapCityGrowth,
         showGrid: settings.showMapGrid,
         showElevationWalls: settings.showMapElevationWalls,
         showTerrainIcons: settings.showMapTerrainIcons,
@@ -322,6 +332,8 @@ final class _MapScreenState extends State<MapScreen>
         showHeightBadges: settings.showMapHeightBadges,
       ),
     );
+    _planningEnabled = settings.showMapCitySites || settings.showMapCityGrowth;
+    _synchronizeCityPlanning();
     _synchronizeGamepadSettings(settings.gamepad);
     final ready = ClientSettingsScope.isLoadedOf(context);
     final changed = _automaticFlow.configure(settings.automation);
@@ -420,72 +432,4 @@ final class _MapScreenState extends State<MapScreen>
         _openHexSelectionPalette(coordinate, screenPosition);
     }
   }
-}
-
-final class _SaveAction extends StatelessWidget {
-  const _SaveAction({
-    required this.localSave,
-    required this.localAiTurn,
-    required this.localHandoff,
-    required this.onSave,
-  });
-
-  final LocalSaveState localSave;
-  final LocalAiTurnState localAiTurn;
-  final LocalHandoffState localHandoff;
-  final VoidCallback onSave;
-
-  @override
-  Widget build(BuildContext context) {
-    final failure = localSave.failure;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AonwHudIconButton(
-          key: const ValueKey('save-game'),
-          tooltip: localSave.inFlight
-              ? context.aonwL10n.savingGame
-              : context.aonwL10n.saveGame,
-          onPressed:
-              localSave.inFlight ||
-                  localAiTurn.blocksGameplay ||
-                  localHandoff.blocksGameplay
-              ? null
-              : onSave,
-          icon: Icon(
-            localSave.inFlight ? Icons.hourglass_top : Icons.save_outlined,
-          ),
-        ),
-        if (localSave.phase == LocalSavePhase.saved)
-          _SaveMessage(message: context.aonwL10n.gameSaved),
-        if (failure != null)
-          _SaveMessage(
-            message: context.aonwL10n.saveFailure(failure.name),
-            error: true,
-          ),
-      ],
-    );
-  }
-}
-
-final class _SaveMessage extends StatelessWidget {
-  const _SaveMessage({required this.message, this.error = false});
-
-  final String message;
-  final bool error;
-
-  @override
-  Widget build(BuildContext context) => Semantics(
-    liveRegion: true,
-    child: AonwPanel(
-      padding: const EdgeInsets.all(AonwSpacing.xs),
-      child: Text(
-        message,
-        key: const ValueKey('save-status'),
-        style: error
-            ? TextStyle(color: Theme.of(context).colorScheme.error)
-            : null,
-      ),
-    ),
-  );
 }

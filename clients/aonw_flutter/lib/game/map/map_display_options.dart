@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 @immutable
 final class MapDisplayOptions {
   const MapDisplayOptions({
+    this.showCitySites = false,
+    this.showCityGrowth = false,
     this.showGrid = false,
     this.showElevationWalls = false,
     this.showTerrainIcons = false,
@@ -10,6 +12,8 @@ final class MapDisplayOptions {
     this.showHeightBadges = false,
   });
 
+  final bool showCitySites;
+  final bool showCityGrowth;
   final bool showGrid;
   final bool showElevationWalls;
   final bool showTerrainIcons;
@@ -20,6 +24,8 @@ final class MapDisplayOptions {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MapDisplayOptions &&
+          other.showCitySites == showCitySites &&
+          other.showCityGrowth == showCityGrowth &&
           other.showGrid == showGrid &&
           other.showElevationWalls == showElevationWalls &&
           other.showTerrainIcons == showTerrainIcons &&
@@ -28,6 +34,8 @@ final class MapDisplayOptions {
 
   @override
   int get hashCode => Object.hash(
+    showCitySites,
+    showCityGrowth,
     showGrid,
     showElevationWalls,
     showTerrainIcons,

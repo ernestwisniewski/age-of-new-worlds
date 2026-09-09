@@ -48,6 +48,7 @@ final class AonwWorld extends World implements FlameSceneSink {
       cityLayer,
       artifactLayer,
       this.unitLayer,
+      cityPlanningLayer,
       cityFoundingPreviewLayer,
       cityManagementOverlayLayer,
       selectionLayer,
@@ -59,6 +60,10 @@ final class AonwWorld extends World implements FlameSceneSink {
       this.cityProductionLayer,
     ]);
   }
+
+  final cityPlanningLayer = MapCityPlanningLayerComponent();
+  CityPlanningView? _cityPlanning;
+  MapDisplayOptions _displayOptions = const MapDisplayOptions();
 
   final MapTerrainLayerComponent terrainLayer;
   final MapReferenceLayerComponent referenceLayer;
@@ -100,10 +105,30 @@ final class AonwWorld extends World implements FlameSceneSink {
   MapStaticRenderCache? get _staticRenderCacheForGame => _staticCache;
 
   bool applyMapDisplayOptions(MapDisplayOptions options) {
+    _displayOptions = options;
+    final planningChanged = _synchronizePlanning();
     final gridChanged = gridLayer.setGridVisible(options.showGrid);
     final wallsChanged = terrainLayer.setWalls(options.showElevationWalls);
     final detailsChanged = tileDetailsLayer.setOptions(options);
-    return gridChanged || wallsChanged || detailsChanged;
+    return planningChanged || gridChanged || wallsChanged || detailsChanged;
+  }
+
+  bool applyCityPlanning(CityPlanningView? planning) {
+    _cityPlanning = planning;
+    return _synchronizePlanning();
+  }
+
+  bool _synchronizePlanning() {
+    final cache = _staticCache;
+    final scene = _scene;
+    if (cache == null || scene == null) return false;
+    return cityPlanningLayer.applyPlanning(
+      cache,
+      _cityPlanning,
+      scene.player,
+      showCitySites: _displayOptions.showCitySites,
+      showCityGrowth: _displayOptions.showCityGrowth,
+    );
   }
 
   @override
@@ -124,6 +149,7 @@ final class AonwWorld extends World implements FlameSceneSink {
         ? _staticCache!
         : MapStaticRenderCache.build(snapshot.map);
     _staticCache = cache;
+    _synchronizePlanning();
     terrainLayer.applyCache(cache);
     terrainLayer.setViewMode(snapshot.effectiveViewMode);
     referenceLayer.applyReference(
@@ -202,6 +228,8 @@ final class AonwWorld extends World implements FlameSceneSink {
     if (_scene == null) return;
     _scene = null;
     _staticCache = null;
+    _cityPlanning = null;
+    cityPlanningLayer.clearLayer();
     _cursor = null;
     _sceneWriteCount += 1;
     terrainLayer.clearCache();

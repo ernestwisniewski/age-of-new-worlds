@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../local_game/application/local_game_catalog.dart';
+import '../../map/application/city_planning_session_port.dart';
 import '../../map/read_model/map_view_mode.dart';
 import '../application/local_replay_store.dart';
 import '../application/replay_capture.dart';
@@ -33,6 +34,7 @@ final class ReplayPresentationController extends ChangeNotifier
        _store = store,
        _diagnosticReporter = diagnosticReporter;
 
+  CityPlanningSessionPort? get cityPlanningSession => _session;
   final ReplaySessionPort? _session;
   final LocalReplayStore? _store;
   final ReplayDiagnosticReporter _diagnosticReporter;

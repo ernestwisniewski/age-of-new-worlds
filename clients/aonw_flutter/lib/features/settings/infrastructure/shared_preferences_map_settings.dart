@@ -1,5 +1,8 @@
 part of 'shared_preferences_client_settings_store.dart';
 
+const _showMapCitySitesKey = 'aonw.settings.showMapCitySites';
+const _showMapCityGrowthKey = 'aonw.settings.showMapCityGrowth';
+
 const _showMapGridKey = 'aonw.settings.showMapGrid';
 const _showMapElevationWallsKey = 'aonw.settings.showMapElevationWalls';
 const _showMapTerrainIconsKey = 'aonw.settings.showMapTerrainIcons';
@@ -12,6 +15,8 @@ extension _MapSettings on SharedPreferencesClientSettingsStore {
   Future<
     ({
       MapViewMode viewMode,
+      bool citySites,
+      bool cityGrowth,
       bool grid,
       bool walls,
       bool terrain,
@@ -21,6 +26,12 @@ extension _MapSettings on SharedPreferencesClientSettingsStore {
   >
   _loadMap() async => (
     viewMode: await _loadMapViewMode(),
+    citySites:
+        await _preferences.getBool(_showMapCitySitesKey) ??
+        ClientSettings.defaults.showMapCitySites,
+    cityGrowth:
+        await _preferences.getBool(_showMapCityGrowthKey) ??
+        ClientSettings.defaults.showMapCityGrowth,
     grid:
         await _preferences.getBool(_showMapGridKey) ??
         ClientSettings.defaults.showMapGrid,
@@ -47,6 +58,11 @@ extension _MapSettings on SharedPreferencesClientSettingsStore {
   }
 
   Future<void> _saveMap(ClientSettings settings) async {
+    await _preferences.setBool(_showMapCitySitesKey, settings.showMapCitySites);
+    await _preferences.setBool(
+      _showMapCityGrowthKey,
+      settings.showMapCityGrowth,
+    );
     await _preferences.setString(
       _preferredMapViewModeKey,
       settings.preferredMapViewMode.name,

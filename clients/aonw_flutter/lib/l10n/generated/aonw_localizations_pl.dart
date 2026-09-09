@@ -2568,4 +2568,18 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Używany przy otwieraniu gry lub powtórki.';
+
+  @override
+  String get mapCitySites => 'Miejsca pod miasta';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Pokazuj potencjalne miejsca pod miasta na odkrytym terenie.';
+
+  @override
+  String get mapCityGrowth => 'Rozwój miast';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Pokazuj odkryte pola poza terytorium znanych miast.';
 }

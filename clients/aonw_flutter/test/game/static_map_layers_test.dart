@@ -93,7 +93,7 @@ void main() {
       await game.ready();
 
       final layers = game.world.children.toList();
-      expect(layers, hasLength(23));
+      expect(layers, hasLength(24));
       expect(layers[0], same(game.world.terrainLayer));
       expect(layers[1], same(game.world.referenceLayer));
       expect(layers[2], same(game.world.gridLayer));
@@ -108,15 +108,16 @@ void main() {
       expect(layers[11], same(game.world.cityLayer));
       expect(layers[12], same(game.world.artifactLayer));
       expect(layers[13], same(game.world.unitLayer));
-      expect(layers[14], same(game.world.cityFoundingPreviewLayer));
-      expect(layers[15], same(game.world.cityManagementOverlayLayer));
-      expect(layers[16], same(game.world.cloudLayer));
-      expect(layers[17], same(game.world.selectionLayer));
-      expect(layers[18], same(game.world.eventFeedbackLayer));
-      expect(layers[19], same(game.world.effectHost));
-      expect(layers[20], same(game.world.cityProductionLayer));
-      expect(layers[21], same(game.world.actionPaletteLayer));
-      expect(layers[22], same(game.world.hexSelectionPaletteLayer));
+      expect(layers[14], same(game.world.cityPlanningLayer));
+      expect(layers[15], same(game.world.cityFoundingPreviewLayer));
+      expect(layers[16], same(game.world.cityManagementOverlayLayer));
+      expect(layers[17], same(game.world.cloudLayer));
+      expect(layers[18], same(game.world.selectionLayer));
+      expect(layers[19], same(game.world.eventFeedbackLayer));
+      expect(layers[20], same(game.world.effectHost));
+      expect(layers[21], same(game.world.cityProductionLayer));
+      expect(layers[22], same(game.world.actionPaletteLayer));
+      expect(layers[23], same(game.world.hexSelectionPaletteLayer));
       expect(layers.map((component) => component.priority), [
         0,
         10,
@@ -132,6 +133,7 @@ void main() {
         45,
         47,
         50,
+        54,
         55,
         55,
         56,

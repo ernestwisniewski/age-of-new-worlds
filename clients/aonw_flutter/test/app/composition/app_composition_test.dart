@@ -225,6 +225,7 @@ final class _RecordingClientTelemetry implements ClientTelemetry {
 GameSessionCapabilities _capabilities(_LifecycleGameSession session) =>
     GameSessionCapabilities(
       map: session,
+      cityPlanning: FakeCityPlanningSession(),
       hexInspection: FakeHexInspectionSession(scene: testMapScene()),
       movement: session,
       combat: session,

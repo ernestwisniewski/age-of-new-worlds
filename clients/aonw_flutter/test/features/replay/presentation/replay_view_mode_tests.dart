@@ -1,6 +1,61 @@
 part of 'replay_presentation_controller_test.dart';
 
 void replayViewModeTests() {
+  testWidgets('replay markings follow settings and refresh after seeks', (
+    tester,
+  ) async {
+    final session = _ReplaySession();
+    final controller = ReplayPresentationController(
+      session: session,
+      store: _ReplayStore(primary: 'valid'),
+    );
+    final settings = ClientSettingsController.ephemeral();
+    final game = AonwFlameGame();
+    addTearDown(controller.dispose);
+    addTearDown(settings.dispose);
+    await controller.openLatest();
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: ClientSettingsScope(
+          controller: settings,
+          child: ReplayScreen(
+            controller: controller,
+            flameGameFactory: () => game,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(session.planningCalls, 0);
+    final writes = game.world.debugSceneWriteCount;
+    await settings.update(
+      settings.settings.copyWith(
+        mapDisplay: settings.settings.mapDisplay.copyWith(
+          cityPlanning: settings.settings.cityPlanning.copyWith(
+            showSites: true,
+          ),
+          showMapGrid: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(session.planningCalls, 1);
+    expect(game.world.cityPlanningLayer.debugSiteCenters, hasLength(1));
+    expect(game.world.gridLayer.debugGridVisible, isTrue);
+    expect(game.world.debugSceneWriteCount, writes);
+    session.seekCompletion = Completer<void>();
+    controller.seek(1);
+    await tester.pump();
+    expect(game.world.cityPlanningLayer.isVisible, isFalse);
+    session.seekCompletion!.complete();
+    await tester.pumpAndSettle();
+    expect(session.planningCalls, 2);
+    expect(game.world.cityPlanningLayer.isVisible, isTrue);
+    await settings.reset();
+    await tester.pumpAndSettle();
+    expect(game.world.cityPlanningLayer.isVisible, isFalse);
+  });
+
   testWidgets(
     'replay waits for its initial view and retains it while seeking',
     (tester) async {

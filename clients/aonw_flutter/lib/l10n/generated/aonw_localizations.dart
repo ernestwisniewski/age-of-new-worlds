@@ -2589,6 +2589,30 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Used when opening a game or replay.'**
   String get preferredMapViewModeDescription;
+
+  /// No description provided for @mapCitySites.
+  ///
+  /// In en, this message translates to:
+  /// **'City sites'**
+  String get mapCitySites;
+
+  /// No description provided for @mapCitySitesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show potential city sites on discovered terrain.'**
+  String get mapCitySitesDescription;
+
+  /// No description provided for @mapCityGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'City growth'**
+  String get mapCityGrowth;
+
+  /// No description provided for @mapCityGrowthDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show discovered tiles outside known city territory.'**
+  String get mapCityGrowthDescription;
 }
 
 class _AonwLocalizationsDelegate

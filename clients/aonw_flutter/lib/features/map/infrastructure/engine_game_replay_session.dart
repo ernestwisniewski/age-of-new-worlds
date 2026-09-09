@@ -6,6 +6,12 @@ final class _EngineGameReplaySession implements ReplaySessionPort {
   final EngineGameSessionGateway _owner;
 
   @override
+  Future<CityPlanningView> cityPlanning({required int expectedRevision}) =>
+      _owner.cityPlanningSession.cityPlanning(
+        expectedRevision: expectedRevision,
+      );
+
+  @override
   Future<String> exportReplayDocument() => _owner._serialize(() async {
     final context = _owner._context();
     try {

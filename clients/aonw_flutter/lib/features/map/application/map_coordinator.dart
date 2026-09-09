@@ -48,6 +48,7 @@ import '../read_model/map_view_mode.dart';
 import '../read_model/movement_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_map_view.dart';
+import 'city_planning_session_port.dart';
 import 'game_session_capabilities.dart';
 import 'game_session_state.dart';
 import 'hex_inspection_workflow.dart';
@@ -172,6 +173,7 @@ final class MapCoordinator {
   final DiplomacyWorkflow _diplomacy;
   final UnitActionWorkflow _unitActions;
   final TurnWorkflow _turns;
+  CityPlanningSessionPort get cityPlanningSession => _capabilities.cityPlanning;
   final GameSessionCapabilities _capabilities;
   final LocalSaveWorkflow _saveWorkflow;
   final ReplayCapture? _replayCapture;

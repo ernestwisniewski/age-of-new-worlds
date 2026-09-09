@@ -1114,5 +1114,9 @@
   "mapAppearanceSettings": "Kartendarstellung",
   "mapMarkingsSettings": "Kartenmarkierungen",
   "preferredMapViewMode": "Standard-Kartenansicht",
-  "preferredMapViewModeDescription": "Wird beim Öffnen eines Spiels oder einer Wiederholung verwendet."
+  "preferredMapViewModeDescription": "Wird beim Öffnen eines Spiels oder einer Wiederholung verwendet.",
+  "mapCitySites": "Stadtstandorte",
+  "mapCitySitesDescription": "Mögliche Stadtstandorte auf erkundetem Gelände anzeigen.",
+  "mapCityGrowth": "Stadtwachstum",
+  "mapCityGrowthDescription": "Erkundete Felder außerhalb bekannter Stadtgebiete anzeigen."
 }

@@ -420,7 +420,9 @@ final class _SingleSaveStore implements LocalSaveStore {
   }
 }
 
-final class _ReplaySession implements ReplaySessionPort {
+final class _ReplaySession
+    with FakeCityPlanningSession
+    implements ReplaySessionPort {
   _ReplaySession(this.scene);
 
   final MapScene scene;

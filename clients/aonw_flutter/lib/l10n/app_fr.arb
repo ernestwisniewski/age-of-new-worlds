@@ -1114,5 +1114,9 @@
   "mapAppearanceSettings": "Apparence de la carte",
   "mapMarkingsSettings": "Repères de la carte",
   "preferredMapViewMode": "Vue de carte par défaut",
-  "preferredMapViewModeDescription": "Utilisée à l’ouverture d’une partie ou d’un replay."
+  "preferredMapViewModeDescription": "Utilisée à l’ouverture d’une partie ou d’un replay.",
+  "mapCitySites": "Sites de villes",
+  "mapCitySitesDescription": "Afficher les sites de villes potentiels sur le terrain exploré.",
+  "mapCityGrowth": "Expansion des villes",
+  "mapCityGrowthDescription": "Afficher les cases explorées en dehors du territoire des villes connues."
 }

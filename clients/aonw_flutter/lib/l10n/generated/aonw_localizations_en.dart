@@ -2561,4 +2561,18 @@ class AonwLocalizationsEn extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Used when opening a game or replay.';
+
+  @override
+  String get mapCitySites => 'City sites';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Show potential city sites on discovered terrain.';
+
+  @override
+  String get mapCityGrowth => 'City growth';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Show discovered tiles outside known city territory.';
 }

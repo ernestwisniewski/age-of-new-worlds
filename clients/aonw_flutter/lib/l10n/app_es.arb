@@ -1114,5 +1114,9 @@
   "mapAppearanceSettings": "Aspecto del mapa",
   "mapMarkingsSettings": "Marcadores del mapa",
   "preferredMapViewMode": "Vista predeterminada del mapa",
-  "preferredMapViewModeDescription": "Se usa al abrir una partida o una repetición."
+  "preferredMapViewModeDescription": "Se usa al abrir una partida o una repetición.",
+  "mapCitySites": "Lugares para ciudades",
+  "mapCitySitesDescription": "Mostrar posibles lugares para ciudades en terreno explorado.",
+  "mapCityGrowth": "Expansión de ciudades",
+  "mapCityGrowthDescription": "Mostrar casillas exploradas fuera del territorio de ciudades conocidas."
 }

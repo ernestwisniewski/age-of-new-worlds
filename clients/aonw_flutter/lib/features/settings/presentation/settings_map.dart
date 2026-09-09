@@ -21,16 +21,24 @@ final class _MapAppearanceSettings extends StatelessWidget {
           title: l10n.mapGrid,
           description: l10n.mapGridDescription,
           value: settings.showMapGrid,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapGrid: value)),
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(showMapGrid: value),
+            ),
+          ),
         ),
         _MapSetting(
           key: const ValueKey('map-elevation-walls-setting'),
           title: l10n.mapElevationWalls,
           description: l10n.mapElevationWallsDescription,
           value: settings.showMapElevationWalls,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapElevationWalls: value)),
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                showMapElevationWalls: value,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -53,24 +61,65 @@ final class _MapMarkingsSettings extends StatelessWidget {
           title: l10n.mapResourceIcons,
           description: l10n.mapResourceIconsDescription,
           value: settings.showMapResourceIcons,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapResourceIcons: value)),
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                showMapResourceIcons: value,
+              ),
+            ),
+          ),
         ),
         _MapSetting(
           key: const ValueKey('map-height-badges-setting'),
           title: l10n.mapHeightBadges,
           description: l10n.mapHeightBadgesDescription,
           value: settings.showMapHeightBadges,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapHeightBadges: value)),
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                showMapHeightBadges: value,
+              ),
+            ),
+          ),
+        ),
+        _MapSetting(
+          key: const ValueKey('map-city-sites-setting'),
+          title: l10n.mapCitySites,
+          description: l10n.mapCitySitesDescription,
+          value: settings.showMapCitySites,
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                cityPlanning: settings.cityPlanning.copyWith(showSites: value),
+              ),
+            ),
+          ),
+        ),
+        _MapSetting(
+          key: const ValueKey('map-city-growth-setting'),
+          title: l10n.mapCityGrowth,
+          description: l10n.mapCityGrowthDescription,
+          value: settings.showMapCityGrowth,
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                cityPlanning: settings.cityPlanning.copyWith(showGrowth: value),
+              ),
+            ),
+          ),
         ),
         _MapSetting(
           key: const ValueKey('map-terrain-icons-setting'),
           title: l10n.mapTerrainIcons,
           description: l10n.mapTerrainIconsDescription,
           value: settings.showMapTerrainIcons,
-          onChanged: (value) =>
-              onChanged(settings.copyWith(showMapTerrainIcons: value)),
+          onChanged: (value) => onChanged(
+            settings.copyWith(
+              mapDisplay: settings.mapDisplay.copyWith(
+                showMapTerrainIcons: value,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -121,7 +170,13 @@ final class _PreferredMapViewSetting extends StatelessWidget {
             ],
             onChanged: context.withGameSoundValue((mode) {
               if (mode != null) {
-                onChanged(settings.copyWith(preferredMapViewMode: mode));
+                onChanged(
+                  settings.copyWith(
+                    mapDisplay: settings.mapDisplay.copyWith(
+                      preferredMapViewMode: mode,
+                    ),
+                  ),
+                );
               }
             }),
           ),

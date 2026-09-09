@@ -15,6 +15,7 @@ import '../features/map/presentation/input/map_hex_selection_palette_intent.dart
 import '../features/map/presentation/input/map_viewport_intent.dart';
 import '../features/map/presentation/map_hex_selection_palette_view.dart';
 import '../features/map/presentation/map_render_snapshot.dart';
+import '../features/map/read_model/city_planning_view.dart';
 import '../features/map/read_model/map_feedback_view.dart';
 import '../features/map/read_model/map_view.dart';
 import 'input/flame_map_input_surface.dart';
@@ -22,6 +23,7 @@ import 'map/artifact_map_layer.dart';
 import 'map/city_founding_preview_layer.dart';
 import 'map/city_management_overlay_layer.dart';
 import 'map/city_map_layer.dart';
+import 'map/city_planning_layer.dart';
 import 'map/city_territory_layer.dart';
 import 'map/flame_map_camera.dart';
 import 'map/fog_map_layer.dart';
@@ -52,6 +54,7 @@ part 'aonw_flame_game_movement_camera.dart';
 part 'aonw_flame_game_effects.dart';
 part 'aonw_flame_game_input.dart';
 part 'aonw_world.dart';
+part 'aonw_flame_game_display.dart';
 
 base class AonwFlameGame extends FlameGame<AonwWorld>
     implements FlameSceneSink {
@@ -221,12 +224,6 @@ base class AonwFlameGame extends FlameGame<AonwWorld>
   void setCameraSensitivity(double sensitivity) {
     if (_disposed) return;
     inputSurface.setCameraSensitivity(sensitivity);
-  }
-
-  void setMapDisplayOptions(MapDisplayOptions options) {
-    if (!_disposed && world.applyMapDisplayOptions(options)) {
-      _requestInputFrame();
-    }
   }
 
   void setKeyboardPanDirection({required double x, required double y}) {

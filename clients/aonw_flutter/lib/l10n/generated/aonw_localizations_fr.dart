@@ -2645,4 +2645,18 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Utilisée à l’ouverture d’une partie ou d’un replay.';
+
+  @override
+  String get mapCitySites => 'Sites de villes';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Afficher les sites de villes potentiels sur le terrain exploré.';
+
+  @override
+  String get mapCityGrowth => 'Expansion des villes';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Afficher les cases explorées en dehors du territoire des villes connues.';
 }

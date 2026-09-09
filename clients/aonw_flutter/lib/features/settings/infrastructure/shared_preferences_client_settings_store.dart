@@ -76,12 +76,18 @@ final class SharedPreferencesClientSettingsStore
       reducedMotion: reducedMotion ?? ClientSettings.defaults.reducedMotion,
       smoothCameraMovement: camera.smoothCameraMovement,
       highContrast: highContrast ?? ClientSettings.defaults.highContrast,
-      preferredMapViewMode: map.viewMode,
-      showMapGrid: map.grid,
-      showMapElevationWalls: map.walls,
-      showMapTerrainIcons: map.terrain,
-      showMapResourceIcons: map.resources,
-      showMapHeightBadges: map.heights,
+      mapDisplay: ClientMapDisplaySettings(
+        cityPlanning: ClientCityPlanningSettings(
+          showSites: map.citySites,
+          showGrowth: map.cityGrowth,
+        ),
+        preferredMapViewMode: map.viewMode,
+        showMapGrid: map.grid,
+        showMapElevationWalls: map.walls,
+        showMapTerrainIcons: map.terrain,
+        showMapResourceIcons: map.resources,
+        showMapHeightBadges: map.heights,
+      ),
     );
   }
 

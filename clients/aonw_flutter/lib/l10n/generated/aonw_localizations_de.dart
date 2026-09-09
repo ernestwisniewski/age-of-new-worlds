@@ -2662,4 +2662,18 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Wird beim Öffnen eines Spiels oder einer Wiederholung verwendet.';
+
+  @override
+  String get mapCitySites => 'Stadtstandorte';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Mögliche Stadtstandorte auf erkundetem Gelände anzeigen.';
+
+  @override
+  String get mapCityGrowth => 'Stadtwachstum';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Erkundete Felder außerhalb bekannter Stadtgebiete anzeigen.';
 }

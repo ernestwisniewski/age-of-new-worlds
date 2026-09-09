@@ -269,6 +269,7 @@ final class _Harness {
     controller = MapPresentationController(
       capabilities: testGameSessionCapabilities(
         session,
+        cityPlanning: FakeCityPlanningSession(),
         hexInspection: inspection,
       ),
     );

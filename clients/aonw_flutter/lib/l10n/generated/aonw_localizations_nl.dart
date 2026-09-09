@@ -2640,4 +2640,18 @@ class AonwLocalizationsNl extends AonwLocalizations {
   @override
   String get preferredMapViewModeDescription =>
       'Wordt gebruikt bij het openen van een spel of herhaling.';
+
+  @override
+  String get mapCitySites => 'Stadslocaties';
+
+  @override
+  String get mapCitySitesDescription =>
+      'Toon mogelijke stadslocaties op verkend terrein.';
+
+  @override
+  String get mapCityGrowth => 'Stadsuitbreiding';
+
+  @override
+  String get mapCityGrowthDescription =>
+      'Toon verkende velden buiten het grondgebied van bekende steden.';
 }

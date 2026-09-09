@@ -5,6 +5,7 @@ import '../read_model/hex_inspection_view.dart';
 import '../read_model/map_view.dart';
 import 'engine_game_session_context.dart';
 import 'engine_game_session_operations.dart';
+import 'engine_query_identity.dart';
 import 'hex_inspection_view_mapper.dart';
 
 final class EngineHexInspectionGateway {
@@ -28,7 +29,7 @@ final class EngineHexInspectionGateway {
           coordinate: AonwCoordinate(col: coordinate.col, row: coordinate.row),
         ),
       );
-      _ensureRecipient(context, readContext());
+      ensureEngineQueryContext(context, readContext());
       final result = response.require<AonwQueryResponse>().result;
       if (result is! AonwHexInspectionResult) {
         throw const FormatException('Expected hex inspection response.');
@@ -57,33 +58,5 @@ final class EngineHexInspectionGateway {
         diagnosticStackTrace: stackTrace,
       );
     }
-  }
-}
-
-void _ensureRecipient(
-  EngineGameSessionContext before,
-  EngineGameSessionContext after,
-) {
-  final first = before.player.stamp;
-  final last = after.player.stamp;
-  if (!identical(before.session, after.session) ||
-      (
-            before.generation,
-            before.actorPlayerId,
-            before.map.mapId,
-            before.map.contentHash,
-          ) !=
-          (
-            after.generation,
-            after.actorPlayerId,
-            after.map.mapId,
-            after.map.contentHash,
-          ) ||
-      (first.revision, first.stateDigest, first.mapHash, first.rulesetHash) !=
-          (last.revision, last.stateDigest, last.mapHash, last.rulesetHash)) {
-    throw const EngineSessionTransportException(
-      code: 'session_superseded',
-      message: 'The inspected recipient state was replaced.',
-    );
   }
 }

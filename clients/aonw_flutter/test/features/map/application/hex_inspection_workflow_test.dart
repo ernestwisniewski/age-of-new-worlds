@@ -208,6 +208,7 @@ void main() {
       final controller = MapCoordinator(
         capabilities: testGameSessionCapabilities(
           FakeGameSession.success(scene),
+          cityPlanning: FakeCityPlanningSession(),
           hexInspection: inspection,
         ),
       );

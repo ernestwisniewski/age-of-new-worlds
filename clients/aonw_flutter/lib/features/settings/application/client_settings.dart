@@ -3,22 +3,26 @@ import '../../map/read_model/map_view_mode.dart';
 import 'client_ai_settings.dart';
 import 'client_audio_settings.dart';
 import 'client_automation_settings.dart';
+import 'client_city_planning_settings.dart';
 import 'client_gamepad_settings.dart';
 import 'client_language.dart';
+import 'client_map_display_settings.dart';
 import 'client_performance_settings.dart';
 import 'client_text_scale.dart';
 
 export 'client_ai_settings.dart';
 export 'client_audio_settings.dart';
 export 'client_automation_settings.dart';
+export 'client_city_planning_settings.dart';
 export 'client_gamepad_settings.dart';
 export 'client_language.dart';
+export 'client_map_display_settings.dart';
 export 'client_performance_settings.dart';
 export 'client_text_scale.dart';
 
 final class ClientSettings {
   const ClientSettings({
-    this.preferredMapViewMode = MapViewMode.graphic,
+    this.mapDisplay = const ClientMapDisplaySettings(),
     this.language = ClientLanguage.system,
     this.textScale = ClientTextScale.standard,
     this.gamepad = const ClientGamepadSettings(),
@@ -29,11 +33,6 @@ final class ClientSettings {
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
-    required this.showMapGrid,
-    required this.showMapElevationWalls,
-    required this.showMapTerrainIcons,
-    required this.showMapResourceIcons,
-    required this.showMapHeightBadges,
     this.smoothCameraMovement = true,
     this.cinematicCamera = false,
     this.showUnitMovementAnimations = true,
@@ -50,14 +49,12 @@ final class ClientSettings {
     cameraSensitivity: 1,
     reducedMotion: false,
     highContrast: false,
-    showMapGrid: false,
-    showMapElevationWalls: false,
-    showMapTerrainIcons: false,
-    showMapResourceIcons: true,
-    showMapHeightBadges: false,
   );
 
-  final MapViewMode preferredMapViewMode;
+  ClientCityPlanningSettings get cityPlanning => mapDisplay.cityPlanning;
+  bool get showMapCitySites => cityPlanning.showSites;
+  bool get showMapCityGrowth => cityPlanning.showGrowth;
+  MapViewMode get preferredMapViewMode => mapDisplay.preferredMapViewMode;
   final ClientLanguage language;
   final ClientTextScale textScale;
   final ClientGamepadSettings gamepad;
@@ -78,14 +75,16 @@ final class ClientSettings {
   final bool followForeignUnitMovement;
   final bool reducedMotion;
   final bool highContrast;
-  final bool showMapGrid;
-  final bool showMapElevationWalls;
-  final bool showMapTerrainIcons;
-  final bool showMapResourceIcons;
-  final bool showMapHeightBadges;
+  bool get showMapGrid => mapDisplay.showMapGrid;
+  bool get showMapElevationWalls => mapDisplay.showMapElevationWalls;
+  bool get showMapTerrainIcons => mapDisplay.showMapTerrainIcons;
+  bool get showMapResourceIcons => mapDisplay.showMapResourceIcons;
+  bool get showMapHeightBadges => mapDisplay.showMapHeightBadges;
+
+  final ClientMapDisplaySettings mapDisplay;
 
   ClientSettings copyWith({
-    MapViewMode? preferredMapViewMode,
+    ClientMapDisplaySettings? mapDisplay,
     ClientLanguage? language,
     ClientTextScale? textScale,
     ClientGamepadSettings? gamepad,
@@ -106,13 +105,8 @@ final class ClientSettings {
     bool? followForeignUnitMovement,
     bool? reducedMotion,
     bool? highContrast,
-    bool? showMapGrid,
-    bool? showMapElevationWalls,
-    bool? showMapTerrainIcons,
-    bool? showMapResourceIcons,
-    bool? showMapHeightBadges,
   }) => ClientSettings(
-    preferredMapViewMode: preferredMapViewMode ?? this.preferredMapViewMode,
+    mapDisplay: mapDisplay ?? this.mapDisplay,
     language: language ?? this.language,
     textScale: textScale ?? this.textScale,
     gamepad: gamepad ?? this.gamepad,
@@ -137,11 +131,6 @@ final class ClientSettings {
         followForeignUnitMovement ?? this.followForeignUnitMovement,
     reducedMotion: reducedMotion ?? this.reducedMotion,
     highContrast: highContrast ?? this.highContrast,
-    showMapGrid: showMapGrid ?? this.showMapGrid,
-    showMapElevationWalls: showMapElevationWalls ?? this.showMapElevationWalls,
-    showMapTerrainIcons: showMapTerrainIcons ?? this.showMapTerrainIcons,
-    showMapResourceIcons: showMapResourceIcons ?? this.showMapResourceIcons,
-    showMapHeightBadges: showMapHeightBadges ?? this.showMapHeightBadges,
   );
 
   @override
@@ -182,6 +171,8 @@ final class ClientSettings {
       other.followForeignUnitMovement == followForeignUnitMovement;
 
   bool _sameMapDisplay(ClientSettings other) =>
+      other.showMapCitySites == showMapCitySites &&
+      other.showMapCityGrowth == showMapCityGrowth &&
       other.preferredMapViewMode == preferredMapViewMode &&
       other.showMapGrid == showMapGrid &&
       other.showMapElevationWalls == showMapElevationWalls &&
@@ -191,6 +182,8 @@ final class ClientSettings {
 
   @override
   int get hashCode => Object.hashAll([
+    showMapCitySites,
+    showMapCityGrowth,
     preferredMapViewMode,
     language,
     textScale,

@@ -40,7 +40,9 @@ void main() {
       expect(counted.loadCalls, 0);
       second.loaded.complete(
         ClientSettings.defaults.copyWith(
-          preferredMapViewMode: MapViewMode.tile,
+          mapDisplay: ClientSettings.defaults.mapDisplay.copyWith(
+            preferredMapViewMode: MapViewMode.tile,
+          ),
         ),
       );
       await tester.pumpAndSettle();

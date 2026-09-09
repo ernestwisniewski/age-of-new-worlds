@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../game/aonw_flame_game.dart';
+import '../../../game/map/map_display_options.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/application/map_interaction_state.dart';
+import '../../map/presentation/city_planning_presentation.dart';
 import '../../map/presentation/map_audio.dart';
 import '../../map/presentation/map_feedback_labels.dart';
 import '../../map/presentation/map_render_snapshot.dart';
@@ -33,6 +35,10 @@ final class ReplayScreen extends StatefulWidget {
 final class _ReplayScreenState extends State<ReplayScreen>
     with WidgetsBindingObserver, RouteAware {
   late AonwFlameGame _game;
+  late final _cityPlanning = CityPlanningPresentation(
+    onChanged: (value) => _game.setCityPlanning(value),
+  );
+  bool _planningEnabled = false;
   late AppLifecycleState _lifecycleState;
   ReplayFrameView? _lastFrame;
   var _effectEpoch = 0;
@@ -89,6 +95,7 @@ final class _ReplayScreenState extends State<ReplayScreen>
 
   @override
   void dispose() {
+    _cityPlanning.dispose();
     _game.setSoundSink(null);
     WidgetsBinding.instance.removeObserver(this);
     widget.routeObserver?.unsubscribe(this);
@@ -119,6 +126,19 @@ final class _ReplayScreenState extends State<ReplayScreen>
       focusForeign: settings.focusForeignUnitMovement,
       followForeign: settings.followForeignUnitMovement,
     ));
+    _game.setMapDisplayOptions(
+      MapDisplayOptions(
+        showCitySites: settings.showMapCitySites,
+        showCityGrowth: settings.showMapCityGrowth,
+        showGrid: settings.showMapGrid,
+        showElevationWalls: settings.showMapElevationWalls,
+        showTerrainIcons: settings.showMapTerrainIcons,
+        showResourceIcons: settings.showMapResourceIcons,
+        showHeightBadges: settings.showMapHeightBadges,
+      ),
+    );
+    _planningEnabled = settings.showMapCitySites || settings.showMapCityGrowth;
+    _synchronizeCityPlanning();
     return Scaffold(
       body: SafeArea(
         child: ListenableBuilder(
@@ -180,6 +200,19 @@ final class _ReplayScreenState extends State<ReplayScreen>
         _lastFrame = null;
         _game.sceneSink.clearScene();
     }
+    _synchronizeCityPlanning();
+  }
+
+  void _synchronizeCityPlanning() {
+    final state = widget.controller.state;
+    _cityPlanning.synchronize(
+      session: widget.controller.cityPlanningSession,
+      player: state is ReplayReady && !state.isSeeking
+          ? state.frame.scene.player
+          : null,
+      enabled: _planningEnabled,
+      epoch: (widget.controller, _effectEpoch),
+    );
   }
 
   void _synchronizeLifecycle() {
