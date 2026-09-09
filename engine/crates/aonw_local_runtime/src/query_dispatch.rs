@@ -318,37 +318,7 @@ pub(crate) fn dispatch_query(
         RuntimeQuery::CombatPreview(request) => {
             dispatch_combat_preview_query(session, &request, workspace)
         }
-        RuntimeQuery::Reachable(request) => {
-            let result = GameEngine::query_with_workspace(
-                session.state(),
-                session.context(),
-                GameQuery::Reachable(ReachableMovementQuery::new(
-                    request.expected_revision,
-                    &request.unit_id,
-                )),
-                workspace,
-            )
-            .map_err(RuntimeError::Query)?;
-            let QueryResult::Reachable(result) = result else {
-                unreachable!("reachable query returns reachable response")
-            };
-            Ok(RuntimeQueryResult::Reachable(ReachableResult {
-                stamp: session.stamp(),
-                unit_id: result.unit_id().clone(),
-                available_movement: result.available_movement(),
-                can_start_targeting: result.can_start_targeting(),
-                can_retain_targeting: result.can_retain_targeting(),
-                tiles: result
-                    .tiles()
-                    .iter()
-                    .map(|tile| ReachableTileView {
-                        coordinate: tile.coordinate(),
-                        cost: tile.cost(),
-                        exhausts_movement: tile.exhausts_movement(),
-                    })
-                    .collect(),
-            }))
-        }
+        RuntimeQuery::Reachable(request) => dispatch_reachable(session, &request, workspace),
         RuntimeQuery::RoutePlan(request) => {
             let result = GameEngine::query_with_workspace(
                 session.state(),
@@ -481,4 +451,40 @@ fn dispatch_city_expansion_query(
         stamp: session.stamp(),
         options,
     })
+}
+
+fn dispatch_reachable(
+    session: &Session,
+    request: &ReachableRequest,
+    workspace: &mut MovementSearchWorkspace,
+) -> Result<RuntimeQueryResult, RuntimeError> {
+    let result = GameEngine::query_with_workspace(
+        session.state(),
+        session.context(),
+        GameQuery::Reachable(ReachableMovementQuery::new(
+            request.expected_revision,
+            &request.unit_id,
+        )),
+        workspace,
+    )
+    .map_err(RuntimeError::Query)?;
+    let QueryResult::Reachable(result) = result else {
+        unreachable!("reachable query returns reachable response")
+    };
+    Ok(RuntimeQueryResult::Reachable(ReachableResult {
+        stamp: session.stamp(),
+        unit_id: result.unit_id().clone(),
+        available_movement: result.available_movement(),
+        can_start_targeting: result.can_start_targeting(),
+        can_retain_targeting: result.can_retain_targeting(),
+        tiles: result
+            .tiles()
+            .iter()
+            .map(|tile| ReachableTileView {
+                coordinate: tile.coordinate(),
+                cost: tile.cost(),
+                exhausts_movement: tile.exhausts_movement(),
+            })
+            .collect(),
+    }))
 }
