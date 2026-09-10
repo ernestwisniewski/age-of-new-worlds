@@ -15,6 +15,7 @@ final class _ReadyMap extends StatelessWidget {
     required this.controller,
     required this.onInput,
     required this.onTurnShortcut,
+    required this.onNavigateTurn,
     required this.canPanKeyboard,
     required this.onOpenSettings,
     required this.flameGame,
@@ -37,6 +38,7 @@ final class _ReadyMap extends StatelessWidget {
   final MapPresentationController controller;
   final ValueChanged<MapInputCommand> onInput;
   final ValueChanged<MapTurnShortcut> onTurnShortcut;
+  final ValueChanged<int> onNavigateTurn;
   final bool Function() canPanKeyboard;
   final VoidCallback? onOpenSettings;
   final AonwFlameGame flameGame;
@@ -75,6 +77,7 @@ final class _ReadyMap extends StatelessWidget {
           presentations: turnPresentations,
           localAiTurn: localAiTurn,
           onEndTurn: controller.endTurn,
+          onNavigateTurn: onNavigateTurn,
         ),
       ),
       ..._mapActions(context),

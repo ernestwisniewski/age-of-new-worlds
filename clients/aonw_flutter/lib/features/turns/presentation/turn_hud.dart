@@ -16,6 +16,7 @@ import '../read_model/recipient_turn_view.dart';
 import '../read_model/turn_activity_view.dart';
 
 part 'turn_end_action.dart';
+part 'turn_navigation_actions.dart';
 
 final class TurnPresentationOverlays extends StatelessWidget {
   const TurnPresentationOverlays({
@@ -24,6 +25,7 @@ final class TurnPresentationOverlays extends StatelessWidget {
     required this.action,
     required this.presentations,
     required this.onEndTurn,
+    this.onNavigateTurn,
     required this.localAiTurn,
     super.key,
   });
@@ -33,6 +35,7 @@ final class TurnPresentationOverlays extends StatelessWidget {
   final TurnActionState action;
   final TurnPresentationQueue presentations;
   final VoidCallback onEndTurn;
+  final ValueChanged<int>? onNavigateTurn;
   final LocalAiTurnState localAiTurn;
 
   @override
@@ -45,6 +48,7 @@ final class TurnPresentationOverlays extends StatelessWidget {
           action: action,
           localAiTurn: localAiTurn,
           onEndTurn: onEndTurn,
+          onNavigateTurn: onNavigateTurn,
         ),
       ),
       _TurnNotification(activity: presentations.latestActivity),
@@ -58,6 +62,7 @@ final class _TurnCommandDeck extends StatelessWidget {
     required this.turnMode,
     required this.action,
     required this.onEndTurn,
+    this.onNavigateTurn,
     required this.localAiTurn,
   });
 
@@ -65,6 +70,7 @@ final class _TurnCommandDeck extends StatelessWidget {
   final MatchTurnModeView turnMode;
   final TurnActionState action;
   final VoidCallback onEndTurn;
+  final ValueChanged<int>? onNavigateTurn;
   final LocalAiTurnState localAiTurn;
 
   @override
@@ -149,6 +155,16 @@ final class _TurnCommandDeck extends StatelessWidget {
             aiTurn: localAiTurn,
             onPressed: onEndTurn,
           ),
+          if (onNavigateTurn case final navigate?)
+            _TurnNavigationActions(
+              enabled:
+                  !action.inFlight &&
+                  !localAiTurn.blocksGameplay &&
+                  !turn.outcome.isTerminal &&
+                  !turn.ownSubmitted &&
+                  turn.ownState == RecipientTurnStateView.active,
+              onNavigate: navigate,
+            ),
         ],
       ),
     ),

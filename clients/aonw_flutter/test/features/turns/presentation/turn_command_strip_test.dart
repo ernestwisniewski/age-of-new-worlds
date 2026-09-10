@@ -11,6 +11,42 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 void main() {
+  testWidgets('pending navigation fits a narrow screen and stops while busy', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final steps = <int>[];
+    await tester.pumpWidget(
+      _screen(
+        mode: MatchTurnModeView.simultaneous,
+        onEnd: () => fail('Navigation must not end the turn'),
+        onNavigate: steps.add,
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (final key in ['previous-turn-action', 'next-turn-action']) {
+      final button = find.byKey(ValueKey(key));
+      expect(tester.getSize(button), const Size(48, 48));
+      await tester.tap(button);
+    }
+    expect(steps, [-1, 1]);
+    await tester.pumpWidget(
+      _screen(
+        mode: MatchTurnModeView.simultaneous,
+        onEnd: () {},
+        onNavigate: steps.add,
+        inFlight: true,
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (final key in ['previous-turn-action', 'next-turn-action']) {
+      final button = find.byKey(ValueKey(key));
+      expect(tester.widget<IconButton>(button).onPressed, isNull);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   for (final mode in MatchTurnModeView.values) {
     testWidgets(
       'command describes $mode and keeps aggregate progress beside it',
@@ -64,6 +100,7 @@ void main() {
 Widget _screen({
   required MatchTurnModeView mode,
   required VoidCallback onEnd,
+  ValueChanged<int>? onNavigate,
   PendingActionView? pending,
   bool inFlight = false,
   LocalAiTurnState aiTurn = const LocalAiTurnState.idle(),
@@ -88,6 +125,7 @@ Widget _screen({
       action: TurnActionState(inFlight: inFlight),
       presentations: TurnPresentationQueue.start(8),
       onEndTurn: onEnd,
+      onNavigateTurn: onNavigate,
       localAiTurn: aiTurn,
     ),
   ),

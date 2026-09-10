@@ -22,6 +22,70 @@ import '../../../../support/map_test_fixture.dart';
 import '../../../../support/test_map_input_source.dart';
 
 void main() {
+  testWidgets('HUD arrows navigate Rust work while the map lacks focus', (
+    tester,
+  ) async {
+    final h = await _Harness.mount(tester);
+    h.textFocus.requestFocus();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('next-turn-action')));
+    await tester.pumpAndSettle();
+    expect(h.ready.interaction.selectedUnitId, 'preview-commander');
+    expect(h.session.endTurnCalls, 0);
+    await tester.tap(find.byKey(const ValueKey('previous-turn-action')));
+    await tester.pumpAndSettle();
+    expect(h.ready.interaction.researchFocused, isTrue);
+    await tester.tap(find.byKey(const ValueKey('close-research')));
+    await tester.pumpAndSettle();
+    h.session.pendingTurnActionsResult = h.work([]);
+    await tester.tap(find.byKey(const ValueKey('next-turn-action')));
+    await tester.pumpAndSettle();
+    expect(h.session.pendingTurnActionsRevisions, [0, 0, 0]);
+    expect(h.session.endTurnCalls, 0);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('next-turn-action'))),
+      const Size(48, 48),
+    );
+  });
+
+  for (final interruption in ['panel', 'lifecycle']) {
+    testWidgets('HUD navigation discards late work after $interruption', (
+      tester,
+    ) async {
+      final h = await _Harness.mount(tester);
+      final response = Completer<PendingTurnActionsView>();
+      h.session.pendingTurnActionsHandler = (_) => response.future;
+      await tester.tap(find.byKey(const ValueKey('next-turn-action')));
+      await tester.pump();
+      expect(h.session.pendingTurnActionsRevisions, [0]);
+      if (interruption == 'panel') {
+        await tester.tap(find.byKey(const ValueKey('open-objectives')));
+        await tester.pumpAndSettle();
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+        await tester.pumpAndSettle();
+      } else {
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.inactive,
+        );
+        await tester.pump();
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
+      }
+      response.complete(
+        h.work([
+          const PendingUnitTurnActionView(
+            unitId: 'preview-commander',
+            coordinate: (col: 0, row: 0),
+          ),
+        ]),
+      );
+      await tester.pumpAndSettle();
+      expect(h.ready.interaction.selectedUnitId, isNull);
+      expect(h.session.endTurnCalls, 0);
+    });
+  }
+
   testWidgets('Space focuses pending work and ends an empty turn only once', (
     tester,
   ) async {

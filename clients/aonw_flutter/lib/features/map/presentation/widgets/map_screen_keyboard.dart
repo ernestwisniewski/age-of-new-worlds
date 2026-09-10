@@ -26,6 +26,30 @@ extension _MapScreenKeyboard on _MapScreenState {
     );
   }
 
+  void _handleHudTurnNavigation(int step) {
+    final controller = widget.controller;
+    final game = _flameGame;
+    final generation = _automaticGeneration;
+    bool available() =>
+        mounted &&
+        identical(controller, widget.controller) &&
+        identical(game, _flameGame) &&
+        generation == _automaticGeneration &&
+        _routeVisible &&
+        _lifecycleState == AppLifecycleState.resumed &&
+        !_gamepadNavigation.hasOpenPanel &&
+        !controller.networkConnection.blocksGameplay &&
+        !game.hasActiveUnitEffects;
+    if (!available()) return;
+    unawaited(
+      controller.navigateTurnActions(
+        step: step,
+        inputAvailable: available,
+        onFocus: game.mapCamera.centerOnHex,
+      ),
+    );
+  }
+
   bool get _keyboardTurnInputAvailable =>
       _keyboardMapInputAvailable && !_flameGame.hasActiveUnitEffects;
 

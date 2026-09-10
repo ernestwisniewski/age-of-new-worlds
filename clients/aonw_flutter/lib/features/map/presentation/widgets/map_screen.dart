@@ -292,6 +292,7 @@ final class _MapScreenState extends State<MapScreen>
           controller: widget.controller,
           onInput: _handleInput,
           onTurnShortcut: _handleKeyboardTurnShortcut,
+          onNavigateTurn: _handleHudTurnNavigation,
           canPanKeyboard: () => _keyboardMapInputAvailable,
           onOpenSettings: widget.onOpenSettings,
           flameGame: _flameGame,
