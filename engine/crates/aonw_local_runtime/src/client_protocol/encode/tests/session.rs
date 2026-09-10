@@ -103,3 +103,81 @@ fn direct_open_helper_builds_a_strict_session() {
     runtime.open(request).expect("open");
     let _ = super::snapshot(&runtime.snapshot().expect("snapshot"));
 }
+
+#[test]
+fn replay_allows_recipient_queries_but_rejects_mutating_requests() {
+    use crate::ClientProtocol;
+    use aonw_contracts::client::{ClientOutcomeDto, ClientQueryDto, ClientQueryResultDto};
+
+    let map = authored_map();
+    let ruleset = RulesetDefinition::standard().clone();
+    let map_document = MapDocument::try_new(map.clone(), 1.0)
+        .expect("map")
+        .to_versioned_json()
+        .expect("map JSON");
+    let mut runtime = LocalRuntime::default();
+    success(
+        &mut runtime,
+        ClientRequestBodyDto::OpenSession {
+            map_document: map_document.clone(),
+            scenario_document: scenario_json(&map, &ruleset),
+            actor_player_id: "player-1".to_owned(),
+        },
+    );
+    success(
+        &mut runtime,
+        ClientRequestBodyDto::Dispatch {
+            command: ClientCommandDto::FortifyUnit {
+                expected_revision: 0,
+                unit_id: "unit-1".to_owned(),
+            },
+        },
+    );
+    let document = runtime.export_replay_json().expect("archive");
+    success(
+        &mut runtime,
+        ClientRequestBodyDto::OpenReplay {
+            map_document,
+            replay_document: document,
+            recipient_player_id: "player-1".to_owned(),
+        },
+    );
+    for position in [0, 1, 0] {
+        success(&mut runtime, ClientRequestBodyDto::SeekReplay { position });
+        let stamp = *runtime.snapshot().expect("snapshot").stamp();
+        let result = success(
+            &mut runtime,
+            ClientRequestBodyDto::Query {
+                query: ClientQueryDto::CityPlanning {
+                    expected_revision: stamp.revision.get(),
+                },
+            },
+        );
+        let ClientResponseBodyDto::Query {
+            result: ClientQueryResultDto::CityPlanning { stamp: queried, .. },
+        } = result
+        else {
+            panic!("planning query");
+        };
+        assert_eq!(queried.revision, stamp.revision.get());
+        assert_eq!(queried.state_digest, stamp.state_digest.to_string());
+        for request in [
+            ClientRequestBodyDto::ExportSave,
+            ClientRequestBodyDto::HandoffActor {
+                actor_player_id: "player-2".to_owned(),
+            },
+            ClientRequestBodyDto::Dispatch {
+                command: ClientCommandDto::FortifyUnit {
+                    expected_revision: stamp.revision.get(),
+                    unit_id: "unit-1".to_owned(),
+                },
+            },
+        ] {
+            let response = ClientProtocol::dispatch(&mut runtime, super::request(request));
+            assert!(
+                matches!(response.outcome, ClientOutcomeDto::Failure {error} if error.code == "replay_read_only")
+            );
+        }
+        assert_eq!(runtime.snapshot().expect("unchanged").stamp(), &stamp);
+    }
+}

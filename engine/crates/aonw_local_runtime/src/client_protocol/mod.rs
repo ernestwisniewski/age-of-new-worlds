@@ -190,12 +190,13 @@ fn request_state_failure(
             | ClientRequestBodyDto::OpenReplay { .. }
             | ClientRequestBodyDto::SeekReplay { .. }
             | ClientRequestBodyDto::Snapshot
+            | ClientRequestBodyDto::Query { .. }
             | ClientRequestBodyDto::CloseSession
     );
     (runtime.is_replay_playback() && !allowed_during_replay).then(|| {
         failure(
             "replay_read_only",
-            "replay playback accepts only snapshot, seek, open, or close operations",
+            "replay playback accepts only read queries, snapshot, seek, open, or close operations",
         )
     })
 }

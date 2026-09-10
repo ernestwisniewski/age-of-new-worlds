@@ -50,6 +50,16 @@ on a neighboring discovered tile. The result does not authorize a command:
 founding and expansion still validate the complete canonical state. Local query
 caching includes the recipient, expected revision, and authoritative identities.
 
+## Read-only replay queries
+
+The local client boundary permits recipient-safe queries while replay playback
+is open. Queries use the runtime at the selected entry boundary and retain its
+recipient, revision, digest and existing query cache rules. They do not advance
+the archive or mutate canonical state. Gameplay commands, actor handoff, AI
+advancement and save export remain blocked during playback. This allows the
+shared map/HUD to refresh city planning and other read-only details after seeks.
+The Client API version and canonical behavior fingerprint are unchanged.
+
 ## Quality gates
 
 Run the focused checks from the repository root:
