@@ -1,0 +1,98 @@
+{
+  "source": "flame_4x",
+  "revision": "c6473641e57eb4337218234669c361db01c45d6e",
+  "captureDate": "2026-09-12",
+  "scope": "HUD widget fixture without a terrain renderer; English; pixel ratio 1.0",
+  "images": [
+    {
+      "file": "desktop_activityLog.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "bb14d9aa165d8966c379d0a8713c1506e39b1646428989738c84325d5b164a61"
+    },
+    {
+      "file": "desktop_empire.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "578c5a515a2bafe9143e515d61816bf7aabfe24a34459c78c0adba8b8af7b716"
+    },
+    {
+      "file": "desktop_hud.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "a977e819c5e2758b9c5450c662e01be6c763dc00ff8a3281b92a922e88b5b54c"
+    },
+    {
+      "file": "desktop_objectives.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "896a8406ba7100997de8d6c6d157c1546c80b5858d9853c869920d114f448223"
+    },
+    {
+      "file": "desktop_research.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "8f00c4cd3b48420bd68e95026b6ad1cf808c3a431c0c8836227f1167ccf23a32"
+    },
+    {
+      "file": "phone_activityLog.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "a15fa6b4df23c3d460f3987e1c1ffd17debc7fd6ba27b03572632c1c7e43fe78"
+    },
+    {
+      "file": "phone_empire.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "100323fb7ce0a113b64ebc0f461d23a38d5dad713fa754d03eb06aa792bb871a"
+    },
+    {
+      "file": "phone_hud.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "dfb1b844bc3a51eabcc74fef0183009259e4013ed87ba84bbc05a1e8fa0c2c2b"
+    },
+    {
+      "file": "phone_objectives.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "6fa66222e94924951e06eaae9ffb115d32e1896ec46f781f7c4d9c2ef8c82408"
+    },
+    {
+      "file": "phone_research.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "7cdbe1af4511d1f1d09fd0893d86f1260ddb6779210baef464d123e9e2d9caf5"
+    },
+    {
+      "file": "tablet_activityLog.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "807d086eae01d345d5ab58df6bc3dc54913647dc6624728d8d03f12308b855f1"
+    },
+    {
+      "file": "tablet_empire.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "668085aedebdf0d258063d8401f233fdbc89eae06af3cfae120f1a1c5ee29079"
+    },
+    {
+      "file": "tablet_hud.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "6ab08f37030a856f2cf2566fa6253a922e36fafab20bca7aa45cca4fa76496ba"
+    },
+    {
+      "file": "tablet_objectives.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "6039297b439e999ba13dbae021da7d80cfc9e7a6909ac61e4c2b564450f1aac2"
+    },
+    {
+      "file": "tablet_research.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "13f350f0f44622442b51a5d61f02962a4095205f3ccbd78f5ebb19a7a55bdfa6"
+    }
+  ]
+}
