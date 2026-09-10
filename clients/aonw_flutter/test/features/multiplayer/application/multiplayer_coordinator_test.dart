@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:aonw_flutter/features/multiplayer/application/account_profile_port.dart';
+import 'package:aonw_flutter/features/multiplayer/application/match_history_port.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_coordinator.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_session_port.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_state.dart';
@@ -11,9 +12,11 @@ import 'package:flutter_test/flutter_test.dart';
 part 'multiplayer_coordinator_fixture.dart';
 part 'multiplayer_session_fixture.dart';
 part 'account_profile_cases.dart';
+part 'match_history_cases.dart';
 
 void main() {
   accountProfileCases();
+  matchHistoryCases();
   test('restores an authenticated account into its match lobby', () async {
     final session = _Session()..restored = _account;
     final coordinator = _coordinator(session);

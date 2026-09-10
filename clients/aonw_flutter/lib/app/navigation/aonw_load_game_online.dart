@@ -25,21 +25,28 @@ final class AonwLoadGameOnline {
         phase: OnlineSaveIndexPhaseView.signedOut,
         failureCode: failureCode,
       ),
-      MultiplayerLobby(:final matches, :final failureCode) =>
+      MultiplayerLobby(:final account, :final matches, :final failureCode) =>
         OnlineSaveIndexView(
           phase: OnlineSaveIndexPhaseView.ready,
+          userId: account.userId,
           saves: _activeSaves(matches),
           failureCode: failureCode,
         ),
-      MultiplayerWaitingRoom(:final lobby, :final failureCode) =>
+      MultiplayerWaitingRoom(
+        :final account,
+        :final lobby,
+        :final failureCode,
+      ) =>
         OnlineSaveIndexView(
           phase: OnlineSaveIndexPhaseView.ready,
+          userId: account.userId,
           saves: _activeSaves([lobby.match]),
           failureCode: failureCode,
         ),
-      MultiplayerInMatch(:final lobby, :final failureCode) =>
+      MultiplayerInMatch(:final account, :final lobby, :final failureCode) =>
         OnlineSaveIndexView(
           phase: OnlineSaveIndexPhaseView.ready,
+          userId: account.userId,
           saves: _activeSaves([lobby.match]),
           failureCode: failureCode,
         ),

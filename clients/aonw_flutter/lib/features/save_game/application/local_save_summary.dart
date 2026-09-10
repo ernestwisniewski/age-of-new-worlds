@@ -50,10 +50,12 @@ final class OnlineSaveIndexView {
   const OnlineSaveIndexView({
     required this.phase,
     this.saves = const [],
+    this.userId,
     this.failureCode,
   });
 
   final OnlineSaveIndexPhaseView phase;
   final List<OnlineSaveSummaryView> saves;
+  final String? userId;
   final String? failureCode;
 }

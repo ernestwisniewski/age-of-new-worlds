@@ -6,6 +6,7 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as auth;
 
 import '../application/account_profile_port.dart';
+import '../application/match_history_port.dart';
 import '../application/multiplayer_session_port.dart';
 import '../read_model/multiplayer_view.dart';
 import 'auth_token_store.dart';
@@ -16,9 +17,10 @@ import 'serverpod_game_transport.dart';
 part 'serverpod_multiplayer_lifecycle.dart';
 part 'serverpod_account_profile.dart';
 part 'serverpod_account_authentication.dart';
+part 'serverpod_match_history.dart';
 
 final class ServerpodMultiplayerSession
-    implements MultiplayerSessionPort, AccountProfilePort {
+    implements MultiplayerSessionPort, AccountProfilePort, MatchHistoryPort {
   ServerpodMultiplayerSession({
     required ServerConnectionConfig config,
     required AuthTokenStore tokenStore,
@@ -42,6 +44,10 @@ final class ServerpodMultiplayerSession
   String? _userId;
   var _serverVerified = false;
   var _closed = false;
+
+  @override
+  Future<MatchHistoryPageView> readMatchHistory({int? beforeParticipantId}) =>
+      _readMatchHistory(beforeParticipantId);
 
   @override
   Future<AccountProfileView> readProfile() =>

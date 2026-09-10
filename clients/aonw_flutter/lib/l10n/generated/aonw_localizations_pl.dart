@@ -2667,6 +2667,26 @@ class AonwLocalizationsPl extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Zakończone mecze Online',
+      'loading': 'Ładowanie historii meczów',
+      'empty': 'Nie ma jeszcze zakończonych meczów.',
+      'failed': 'Nie udało się wczytać historii. Spróbuj odświeżyć.',
+      'refresh': 'Odśwież',
+      'previous': 'Poprzednia strona',
+      'next': 'Następna strona',
+      'turn': 'Ostatnia tura',
+      'won': 'Wygrana',
+      'lost': 'Przegrana',
+      'resigned': 'Zrezygnowano z meczu',
+      'removed': 'Usunięto Cię z meczu',
+      'other': 'Zakończone mecze Online',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Twój profil',

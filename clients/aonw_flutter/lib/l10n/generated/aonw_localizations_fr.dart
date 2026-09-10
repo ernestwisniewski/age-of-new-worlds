@@ -2744,6 +2744,26 @@ class AonwLocalizationsFr extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Parties en ligne terminées',
+      'loading': 'Chargement de l’historique',
+      'empty': 'Aucune partie terminée pour le moment.',
+      'failed': 'Impossible de charger l’historique. Essayez d’actualiser.',
+      'refresh': 'Actualiser',
+      'previous': 'Page précédente',
+      'next': 'Page suivante',
+      'turn': 'Dernier tour',
+      'won': 'Vous avez gagné',
+      'lost': 'Vous avez perdu',
+      'resigned': 'Vous avez abandonné',
+      'removed': 'Vous avez été retiré de la partie',
+      'other': 'Parties en ligne terminées',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Votre profil',

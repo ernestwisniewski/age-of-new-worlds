@@ -2761,6 +2761,27 @@ class AonwLocalizationsDe extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Abgeschlossene Online-Partien',
+      'loading': 'Spielverlauf wird geladen',
+      'empty': 'Noch keine abgeschlossenen Partien.',
+      'failed':
+          'Der Spielverlauf konnte nicht geladen werden. Bitte aktualisieren.',
+      'refresh': 'Aktualisieren',
+      'previous': 'Vorherige Seite',
+      'next': 'Nächste Seite',
+      'turn': 'Letzte Runde',
+      'won': 'Du hast gewonnen',
+      'lost': 'Du hast verloren',
+      'resigned': 'Du hast aufgegeben',
+      'removed': 'Du wurdest aus der Partie entfernt',
+      'other': 'Abgeschlossene Online-Partien',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Dein Profil',

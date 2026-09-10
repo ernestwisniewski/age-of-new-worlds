@@ -23,3 +23,9 @@ serialization and unchanged rejection of gameplay resync after resignation.
 
 This endpoint supplies history metadata. Recipient-safe online replay requires
 an initial authoritative checkpoint and a separate replay transport.
+
+Load Game loads this history when its section is expanded. The Flutter client
+retains one page, supports backward/forward navigation and refresh, and preserves
+the previous page after a failed request. Each request captures authentication;
+account changes discard outstanding responses and remove the previous account's
+history. The history view does not offer gameplay resume for completed matches.

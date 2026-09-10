@@ -10,7 +10,7 @@ extension _ServerpodAccountProfile on ServerpodMultiplayerSession {
     final client = server.Client(
       _config.host,
       connectionTimeout: _config.requestTimeout,
-    )..authKeyProvider = _ProfileAuthProvider(_authProvider.token!);
+    )..authKeyProvider = _FixedAccountAuthProvider(_authProvider.token!);
     try {
       final name = await request(client);
       _ensureAuthenticated();
@@ -43,8 +43,8 @@ extension _ServerpodAccountProfile on ServerpodMultiplayerSession {
   }
 }
 
-final class _ProfileAuthProvider implements server.ClientAuthKeyProvider {
-  _ProfileAuthProvider(String token)
+final class _FixedAccountAuthProvider implements server.ClientAuthKeyProvider {
+  _FixedAccountAuthProvider(String token)
     : _header = server.wrapAsBearerAuthHeaderValue(token);
   final String _header;
   @override

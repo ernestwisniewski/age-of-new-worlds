@@ -1129,6 +1129,7 @@
   },
   "automaticSave": "Automatischer Spielstand",
   "playerText": "{key, select, title{Spieler} active{Aktiv} finished{Zug beendet} submitted{Bestätigt} waiting{Warten} ended{Partie beendet} privateStatus{Zugstatus ist privat} noContact{Kein diplomatischer Kontakt} other{Spieler}}",
+  "historyText": "{key, select, title{Abgeschlossene Online-Partien} loading{Spielverlauf wird geladen} empty{Noch keine abgeschlossenen Partien.} failed{Der Spielverlauf konnte nicht geladen werden. Bitte aktualisieren.} refresh{Aktualisieren} previous{Vorherige Seite} next{Nächste Seite} turn{Letzte Runde} won{Du hast gewonnen} lost{Du hast verloren} resigned{Du hast aufgegeben} removed{Du wurdest aus der Partie entfernt} other{Abgeschlossene Online-Partien}}",
   "profileText": "{value, select, title{Dein Profil} description{Beim Ändern des Anzeigenamens bleiben dein Konto und deine Mehrspielerpartien erhalten.} save{Namen speichern} saved{Anzeigename gespeichert.} taken{Dieser Anzeigename ist bereits vergeben.} changed{Das Konto hat sich geändert. Lade das Profil erneut.} other{Dein Profil}}",
   "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

@@ -2660,6 +2660,26 @@ class AonwLocalizationsEn extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Completed online matches',
+      'loading': 'Loading match history',
+      'empty': 'No completed matches yet.',
+      'failed': 'Match history could not be loaded. Try refreshing.',
+      'refresh': 'Refresh',
+      'previous': 'Previous page',
+      'next': 'Next page',
+      'turn': 'Final turn',
+      'won': 'You won',
+      'lost': 'You lost',
+      'resigned': 'You resigned',
+      'removed': 'You were removed from the match',
+      'other': 'Completed online matches',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Your profile',

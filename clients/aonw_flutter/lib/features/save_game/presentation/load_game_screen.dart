@@ -8,6 +8,8 @@ import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../audio/presentation/game_audio_actions.dart';
 import '../../local_game/application/local_game_catalog.dart';
+import '../../multiplayer/application/match_history_port.dart';
+import '../../multiplayer/presentation/match_history_section.dart';
 import '../../replay/application/replay_state.dart';
 import '../../replay/presentation/replay_presentation_controller.dart';
 import '../application/local_save_state.dart';
@@ -52,6 +54,7 @@ final class LoadGameScreen extends StatefulWidget {
     this.onlineIndex = _unavailableOnlineIndex,
     this.resumeOnlineGame = _unavailableOnlineResume,
     this.onOpenMultiplayer,
+    this.matchHistory,
     super.key,
   });
 
@@ -69,6 +72,7 @@ final class LoadGameScreen extends StatefulWidget {
   final OnlineSaveIndexReader onlineIndex;
   final OnlineGameResume resumeOnlineGame;
   final VoidCallback? onOpenMultiplayer;
+  final MatchHistoryPort? matchHistory;
 
   @override
   State<LoadGameScreen> createState() => _LoadGameScreenState();
@@ -142,6 +146,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             onImportSave: widget.onImportSave == null ? null : _importSave,
             onExportSave: widget.onExportSave == null ? null : _exportSave,
             onlineIndex: widget.onlineIndex(),
+            matchHistory: widget.matchHistory,
             resumingOnline: _resumingOnline,
             activeOnlineMatchId: _activeOnlineMatchId,
             onlineFailureCode: _onlineFailureCode,

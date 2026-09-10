@@ -2739,6 +2739,27 @@ class AonwLocalizationsNl extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Voltooide onlinewedstrijden',
+      'loading': 'Wedstrijdgeschiedenis laden',
+      'empty': 'Nog geen voltooide wedstrijden.',
+      'failed':
+          'De geschiedenis kon niet worden geladen. Probeer te vernieuwen.',
+      'refresh': 'Vernieuwen',
+      'previous': 'Vorige pagina',
+      'next': 'Volgende pagina',
+      'turn': 'Laatste beurt',
+      'won': 'Je hebt gewonnen',
+      'lost': 'Je hebt verloren',
+      'resigned': 'Je hebt opgegeven',
+      'removed': 'Je bent uit de wedstrijd verwijderd',
+      'other': 'Voltooide onlinewedstrijden',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Je profiel',

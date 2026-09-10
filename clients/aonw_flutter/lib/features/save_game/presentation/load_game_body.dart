@@ -26,6 +26,7 @@ final class _LoadGameBody extends StatelessWidget {
     required this.onlineFailureCode,
     required this.onResumeOnline,
     required this.onOpenMultiplayer,
+    required this.matchHistory,
   });
 
   final _LoadAvailability? availability;
@@ -52,6 +53,7 @@ final class _LoadGameBody extends StatelessWidget {
   final String? onlineFailureCode;
   final Future<void> Function(String matchId) onResumeOnline;
   final VoidCallback? onOpenMultiplayer;
+  final MatchHistoryPort? matchHistory;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -101,6 +103,11 @@ final class _LoadGameBody extends StatelessWidget {
                 transferAction: transferAction,
                 transferResult: transferResult,
               ),
+              if (matchHistory != null && onlineIndex.userId != null)
+                MatchHistorySection(
+                  port: matchHistory!,
+                  userId: onlineIndex.userId!,
+                ),
             ],
           ),
         ),
@@ -111,7 +118,9 @@ final class _LoadGameBody extends StatelessWidget {
   bool get _hasOnlineContent => switch (onlineIndex.phase) {
     OnlineSaveIndexPhaseView.unavailable => false,
     OnlineSaveIndexPhaseView.ready =>
-      onlineIndex.saves.isNotEmpty || onlineIndex.failureCode != null,
+      onlineIndex.saves.isNotEmpty ||
+          onlineIndex.failureCode != null ||
+          matchHistory != null && onlineIndex.userId != null,
     _ => true,
   };
 }

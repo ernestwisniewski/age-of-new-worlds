@@ -1,6 +1,14 @@
 part of 'multiplayer_coordinator_test.dart';
 
-final class _Session implements MultiplayerSessionPort, AccountProfilePort {
+final class _Session
+    implements MultiplayerSessionPort, AccountProfilePort, MatchHistoryPort {
+  Future<MatchHistoryPageView> Function(int?)? historyRequest;
+  @override
+  Future<MatchHistoryPageView> readMatchHistory({
+    int? beforeParticipantId,
+  }) async => historyRequest == null
+      ? MatchHistoryPageView(userId: _account.userId, entries: [])
+      : await historyRequest!(beforeParticipantId);
   Future<AccountProfileView> Function()? profileRequest;
   String profileName = 'Original';
   @override

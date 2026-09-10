@@ -2743,6 +2743,26 @@ class AonwLocalizationsEs extends AonwLocalizations {
   }
 
   @override
+  String historyText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'title': 'Partidas en línea terminadas',
+      'loading': 'Cargando historial de partidas',
+      'empty': 'Todavía no hay partidas terminadas.',
+      'failed': 'No se pudo cargar el historial. Intenta actualizar.',
+      'refresh': 'Actualizar',
+      'previous': 'Página anterior',
+      'next': 'Página siguiente',
+      'turn': 'Último turno',
+      'won': 'Has ganado',
+      'lost': 'Has perdido',
+      'resigned': 'Has abandonado',
+      'removed': 'Se te ha expulsado de la partida',
+      'other': 'Partidas en línea terminadas',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String profileText(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
       'title': 'Tu perfil',

@@ -2632,6 +2632,12 @@ abstract class AonwLocalizations {
   /// **'{key, select, title{Players} active{Active} finished{Turn finished} submitted{Submitted} waiting{Waiting} ended{Match ended} privateStatus{Turn status is private} noContact{No diplomatic contact} other{Players}}'**
   String playerText(String key);
 
+  /// No description provided for @historyText.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, title{Completed online matches} loading{Loading match history} empty{No completed matches yet.} failed{Match history could not be loaded. Try refreshing.} refresh{Refresh} previous{Previous page} next{Next page} turn{Final turn} won{You won} lost{You lost} resigned{You resigned} removed{You were removed from the match} other{Completed online matches}}'**
+  String historyText(String key);
+
   /// No description provided for @profileText.
   ///
   /// In en, this message translates to:

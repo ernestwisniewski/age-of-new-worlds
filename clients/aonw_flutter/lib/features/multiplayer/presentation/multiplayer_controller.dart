@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../application/account_profile_port.dart';
+import '../application/match_history_port.dart';
 import '../application/multiplayer_coordinator.dart';
 import '../application/multiplayer_state.dart';
 import '../read_model/multiplayer_view.dart';
 
 final class MultiplayerController extends ChangeNotifier
-    implements AccountProfilePort {
+    implements AccountProfilePort, MatchHistoryPort {
   MultiplayerController(this._coordinator) {
     _subscription = _coordinator.changes.listen((_) => notifyListeners());
   }
@@ -18,6 +19,10 @@ final class MultiplayerController extends ChangeNotifier
   var _disposed = false;
 
   MultiplayerState get state => _coordinator.state;
+
+  @override
+  Future<MatchHistoryPageView> readMatchHistory({int? beforeParticipantId}) =>
+      _coordinator.readMatchHistory(beforeParticipantId: beforeParticipantId);
 
   @override
   Future<AccountProfileView> readProfile() => _coordinator.readProfile();
