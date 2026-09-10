@@ -60,7 +60,7 @@ Future<bool> _finalizeTimedOutTurnTransaction(
   if (applied.rejection != null) {
     throw StateError('The canonical engine rejected an expired turn scope.');
   }
-  await _persistSystemTurn(session, transaction, context, applied);
+  await _persistSystemTurn(session, transaction, context, applied, command);
   return true;
 }
 
@@ -88,8 +88,17 @@ Future<void> _persistSystemTurn(
   Transaction transaction,
   _CommandContext context,
   _AppliedTurn applied,
+  Map<String, Object?> command,
 ) async {
   await _updateMatch(session, transaction, context.match, applied);
+  await _persistReplayEntry(
+    session,
+    transaction,
+    context.match,
+    applied,
+    actorPlayerId: null,
+    command: command,
+  );
   await _insertEvents(session, transaction, context.match.id!, applied);
   await _persistRecipientSnapshots(
     session,

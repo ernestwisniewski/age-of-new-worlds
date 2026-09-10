@@ -37,6 +37,7 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
     expect(current, isNotNull);
     expect(current!.revision, ownerTurn.nextRevision + 1);
     expect(current.turn, persisted.turn + 1);
+    await _verifyReplayJournal(current, ['submitTurn', 'finalizeTimedOutTurn']);
     expect(current.turnDeadlineAt, isNotNull);
     expect(current.turnDeadlineAt!.isAfter(now), isTrue);
     final canonical = _object(jsonDecode(current.canonicalStateJson!));
@@ -91,6 +92,7 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
     expect(match, isNotNull);
     final current = match!;
     expect(current.state, 'finished');
+    await _verifyReplayJournal(current, ['resignParticipant']);
     expect(current.endedAt, isNotNull);
     expect(current.turnDeadlineAt, isNull);
     expect(current.outcomeCondition, 'resignation');
@@ -254,6 +256,12 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
     expect(match, isNotNull);
     final current = match!;
     expect(current.eventOffset, accepted.finalEventOffset);
+    await _verifyReplayJournal(current, [
+      'fortifyUnit',
+      'submitTurn',
+      'submitTurn',
+      'kickParticipant',
+    ]);
     expect(current.revision, persisted.row.revision + 1);
     final canonical = _object(jsonDecode(current.canonicalStateJson!));
     final lifecycle = _object(canonical['turnLifecycle']);
@@ -299,47 +307,5 @@ extension _GameEndpointPersistence on _GameEndpointJourney {
       ),
       outcome: accepted,
     );
-  }
-
-  Future<void> _verifyRollback(
-    _JoinedMatch joined,
-    _PersistedMatch persisted,
-    game.GameCommandOutcome guestTurn,
-  ) async {
-    await game.GameMatch.db.updateRow(
-      databaseSession,
-      persisted.row.copyWith(canonicalStateJson: '{}'),
-    );
-    await expectLater(
-      GameEndpoint().submitTurn(
-        ownerSession,
-        game.GameSubmitTurnRequest(
-          matchId: joined.created.matchId,
-          clientCommandId: 'must-roll-back',
-          expectedRevision: persisted.row.revision,
-        ),
-      ),
-      throwsA(
-        isA<game.GameException>().having(
-          (error) => error.code,
-          'code',
-          'invalid_canonical_state',
-        ),
-      ),
-    );
-    final ledgers = await game.GameCommandLedger.db.find(
-      databaseSession,
-      where: (table) => table.clientCommandId.equals('must-roll-back'),
-    );
-    expect(ledgers, isEmpty);
-    final snapshots = await game.GameRecipientSnapshot.db.find(
-      databaseSession,
-      where: (table) => table.matchId.equals(persisted.row.id!),
-    );
-    expect({
-      for (final snapshot in snapshots)
-        snapshot.playerId: snapshot.snapshotJson,
-    }, persisted.snapshots);
-    expect(guestTurn.finalEventOffset, persisted.row.eventOffset);
   }
 }

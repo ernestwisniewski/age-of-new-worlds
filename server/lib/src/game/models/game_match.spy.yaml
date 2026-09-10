@@ -8,6 +8,10 @@ fields:
   rulesetHash: String
   mapDocument: String?, scope=serverOnly
   canonicalStateJson: String?, scope=serverOnly
+  initialStateJson: String?, scope=serverOnly
+  initialStateDigest: String?, scope=serverOnly
+  initialRevision: int?, scope=serverOnly
+  replayBehaviorFingerprint: String?, scope=serverOnly
   state: String
   hostPlayerId: String?
   turn: int
@@ -24,6 +28,7 @@ fields:
   commands: List<GameCommandLedger>?, relation(name=game_match_commands), scope=serverOnly
   events: List<GameEvent>?, relation(name=game_match_events), scope=serverOnly
   recipientSnapshots: List<GameRecipientSnapshot>?, relation(name=game_match_recipient_snapshots), scope=serverOnly
+  replayEntries: List<GameReplayEntry>?, relation(name=game_match_replay_entries), scope=serverOnly
 indexes:
   aonw_game_match_public_id_idx:
     fields: publicId

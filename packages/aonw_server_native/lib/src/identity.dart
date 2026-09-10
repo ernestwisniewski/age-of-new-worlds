@@ -4,7 +4,7 @@ import 'dart:ffi' as ffi;
 import 'package:aonw_server_native/aonw_server_native_bindings.dart'
     as bindings;
 
-const aonwServerHostApiVersion = 1;
+const aonwServerHostApiVersion = 2;
 const aonwExpectedServerNativeBuildIdentity = 'aonw_server_native/0.1.0';
 
 enum AonwServerNativeIdentityStatus {

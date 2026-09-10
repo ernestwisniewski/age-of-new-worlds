@@ -207,9 +207,18 @@ Future<GameCommandOutcome> _persistAppliedTurn(
   Transaction transaction,
   _CommandContext context,
   _CommandInput input,
-  _AppliedTurn applied,
-) async {
+  _AppliedTurn applied, {
+  bool system = false,
+}) async {
   await _updateMatch(session, transaction, context.match, applied);
+  await _persistReplayEntry(
+    session,
+    transaction,
+    context.match,
+    applied,
+    actorPlayerId: system ? null : context.participant.playerId,
+    command: input.command,
+  );
   await _insertEvents(session, transaction, context.match.id!, applied);
   await _persistRecipientSnapshots(
     session,

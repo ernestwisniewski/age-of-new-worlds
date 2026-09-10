@@ -325,6 +325,7 @@ pub fn create_server_match_dto(
         .map_err(|error| ServerBoundaryError::MatchStartFailed(error.to_string()))?;
     let projection = project_server_state(world, &state)?;
     Ok(ServerCreatedMatchDto {
+        behavior_fingerprint: aonw_engine::ENGINE_BEHAVIOR_FINGERPRINT.to_owned(),
         state: encode_game_state(&state),
         projection,
     })

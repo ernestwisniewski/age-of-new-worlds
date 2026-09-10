@@ -1,0 +1,16 @@
+class: GameReplayEntry
+serverOnly: true
+table: aonw_game_replay_entry
+fields:
+  match: GameMatch?, relation(name=game_match_replay_entries, onDelete=Cascade)
+  revision: int
+  actorPlayerId: String?
+  commandKind: String
+  commandJson: String
+  stateDigest: String
+  initialEventOffset: int
+  finalEventOffset: int
+indexes:
+  aonw_game_replay_entry_revision_idx:
+    fields: matchId, revision
+    unique: true

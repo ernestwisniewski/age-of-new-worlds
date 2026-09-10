@@ -10,7 +10,7 @@ use crate::client::{
 use crate::{GameStateDto, MatchIdentityDto, ReplaySystemCommandDto};
 
 /// The only stateless server-host protocol version accepted by this build.
-pub const SERVER_HOST_API_VERSION: u16 = 1;
+pub const SERVER_HOST_API_VERSION: u16 = 2;
 /// Maximum accepted native host request, including one canonical state.
 pub const MAX_SERVER_HOST_REQUEST_JSON_BYTES: usize = 32 * 1024 * 1024;
 /// Maximum emitted native host response, including all recipient projections.
@@ -236,6 +236,8 @@ pub struct ServerProjectionResultDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerCreatedMatchDto {
+    /// Durable engine behavior identity for deterministic server replay.
+    pub behavior_fingerprint: String,
     /// Initial canonical state persisted only by the server.
     pub state: GameStateDto,
     /// Initial recipient-safe snapshots persisted per participant.

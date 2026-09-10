@@ -83,6 +83,14 @@ _PreparedCreation _preparedCreation({
     mapDocument: request.mapDocument,
     content: content,
     state: state,
+    initialStateDigest: _identifier(
+      stamp['stateDigest'] as String,
+      'stateDigest',
+    ),
+    replayBehaviorFingerprint: _identifier(
+      created['behaviorFingerprint'] as String,
+      'behaviorFingerprint',
+    ),
     facts: _matchFacts(state),
     revision: _nonNegativeInt(stamp['revision'], r'$.stamp.revision'),
     recipients: recipients,
@@ -132,6 +140,8 @@ final class _PreparedCreation {
     required this.mapDocument,
     required this.content,
     required this.state,
+    required this.initialStateDigest,
+    required this.replayBehaviorFingerprint,
     required this.facts,
     required this.revision,
     required this.recipients,
@@ -144,6 +154,8 @@ final class _PreparedCreation {
   final String mapDocument;
   final PreparedGameContent content;
   final Map<String, Object?> state;
+  final String initialStateDigest;
+  final String replayBehaviorFingerprint;
   final _MatchFacts facts;
   final int revision;
   final Map<String, Map<String, Object?>> recipients;
@@ -156,6 +168,10 @@ final class _PreparedCreation {
     rulesetHash: content.rulesetHash,
     mapDocument: mapDocument,
     canonicalStateJson: jsonEncode(state),
+    initialStateJson: jsonEncode(state),
+    initialStateDigest: initialStateDigest,
+    initialRevision: revision,
+    replayBehaviorFingerprint: replayBehaviorFingerprint,
     state: _matchStateLobby,
     hostPlayerId: creatorPlayerId,
     turn: facts.turn,

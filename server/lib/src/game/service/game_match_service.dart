@@ -12,6 +12,7 @@ part 'game_match_service_history.dart';
 part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
+part 'game_match_service_replay_journal.dart';
 part 'game_match_service_support.dart';
 part 'game_match_service_system.dart';
 part 'game_match_service_timeout.dart';

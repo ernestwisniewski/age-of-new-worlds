@@ -29,8 +29,7 @@ use evidence::{encode_event, encode_evidence};
 use player_decode::decode_command;
 pub(crate) use verification::{verify_entry, verify_replay};
 
-pub(crate) const ENGINE_BEHAVIOR_FINGERPRINT: &str =
-    concat!("aonw-engine/", env!("CARGO_PKG_VERSION"), "/behavior-1");
+pub(crate) use aonw_engine::ENGINE_BEHAVIOR_FINGERPRINT;
 const REPLAY_RECORDER_PAYLOAD_BYTES: usize = MAX_REPLAY_LOG_JSON_BYTES - 4 * 1024 * 1024;
 
 /// Result of deterministic replay verification.

@@ -82,6 +82,7 @@ Future<GameCommandOutcome> _resignTransaction(
     context,
     boundInput,
     applied,
+    system: true,
   );
   if (applied.rejection == null) {
     await GameParticipant.db.updateRow(
@@ -184,6 +185,7 @@ Future<GameCommandOutcome> _kickTransaction(
     context,
     input,
     applied,
+    system: true,
   );
   if (applied.rejection == null) {
     await GameParticipant.db.updateRow(

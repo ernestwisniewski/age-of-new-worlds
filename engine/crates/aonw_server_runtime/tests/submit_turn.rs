@@ -329,6 +329,11 @@ fn rust_constructs_and_projects_multiplayer_matches() {
     let result = create_server_match_dto(&world, request).expect("created match");
 
     assert_eq!(
+        result.behavior_fingerprint,
+        aonw_engine::ENGINE_BEHAVIOR_FINGERPRINT
+    );
+
+    assert_eq!(
         result.state.match_identity.game_mode,
         GameModeDto::Multiplayer
     );

@@ -16,7 +16,8 @@ import '../../game/models/game_participant.dart' as _i2;
 import '../../game/models/game_command_ledger.dart' as _i3;
 import '../../game/models/game_event.dart' as _i4;
 import '../../game/models/game_recipient_snapshot.dart' as _i5;
-import 'package:aonw_server/src/generated/protocol.dart' as _i6;
+import '../../game/models/game_replay_entry.dart' as _i6;
+import 'package:aonw_server/src/generated/protocol.dart' as _i7;
 
 abstract class GameMatch
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -29,6 +30,10 @@ abstract class GameMatch
     required this.rulesetHash,
     this.mapDocument,
     this.canonicalStateJson,
+    this.initialStateJson,
+    this.initialStateDigest,
+    this.initialRevision,
+    this.replayBehaviorFingerprint,
     required this.state,
     this.hostPlayerId,
     required this.turn,
@@ -45,6 +50,7 @@ abstract class GameMatch
     this.commands,
     this.events,
     this.recipientSnapshots,
+    this.replayEntries,
   });
 
   factory GameMatch({
@@ -56,6 +62,10 @@ abstract class GameMatch
     required String rulesetHash,
     String? mapDocument,
     String? canonicalStateJson,
+    String? initialStateJson,
+    String? initialStateDigest,
+    int? initialRevision,
+    String? replayBehaviorFingerprint,
     required String state,
     String? hostPlayerId,
     required int turn,
@@ -72,6 +82,7 @@ abstract class GameMatch
     List<_i3.GameCommandLedger>? commands,
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
+    List<_i6.GameReplayEntry>? replayEntries,
   }) = _GameMatchImpl;
 
   factory GameMatch.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -84,6 +95,11 @@ abstract class GameMatch
       rulesetHash: jsonSerialization['rulesetHash'] as String,
       mapDocument: jsonSerialization['mapDocument'] as String?,
       canonicalStateJson: jsonSerialization['canonicalStateJson'] as String?,
+      initialStateJson: jsonSerialization['initialStateJson'] as String?,
+      initialStateDigest: jsonSerialization['initialStateDigest'] as String?,
+      initialRevision: jsonSerialization['initialRevision'] as int?,
+      replayBehaviorFingerprint:
+          jsonSerialization['replayBehaviorFingerprint'] as String?,
       state: jsonSerialization['state'] as String,
       hostPlayerId: jsonSerialization['hostPlayerId'] as String?,
       turn: jsonSerialization['turn'] as int,
@@ -110,23 +126,28 @@ abstract class GameMatch
       ),
       participants: jsonSerialization['participants'] == null
           ? null
-          : _i6.Protocol().deserialize<List<_i2.GameParticipant>>(
+          : _i7.Protocol().deserialize<List<_i2.GameParticipant>>(
               jsonSerialization['participants'],
             ),
       commands: jsonSerialization['commands'] == null
           ? null
-          : _i6.Protocol().deserialize<List<_i3.GameCommandLedger>>(
+          : _i7.Protocol().deserialize<List<_i3.GameCommandLedger>>(
               jsonSerialization['commands'],
             ),
       events: jsonSerialization['events'] == null
           ? null
-          : _i6.Protocol().deserialize<List<_i4.GameEvent>>(
+          : _i7.Protocol().deserialize<List<_i4.GameEvent>>(
               jsonSerialization['events'],
             ),
       recipientSnapshots: jsonSerialization['recipientSnapshots'] == null
           ? null
-          : _i6.Protocol().deserialize<List<_i5.GameRecipientSnapshot>>(
+          : _i7.Protocol().deserialize<List<_i5.GameRecipientSnapshot>>(
               jsonSerialization['recipientSnapshots'],
+            ),
+      replayEntries: jsonSerialization['replayEntries'] == null
+          ? null
+          : _i7.Protocol().deserialize<List<_i6.GameReplayEntry>>(
+              jsonSerialization['replayEntries'],
             ),
     );
   }
@@ -151,6 +172,14 @@ abstract class GameMatch
   String? mapDocument;
 
   String? canonicalStateJson;
+
+  String? initialStateJson;
+
+  String? initialStateDigest;
+
+  int? initialRevision;
+
+  String? replayBehaviorFingerprint;
 
   String state;
 
@@ -184,6 +213,8 @@ abstract class GameMatch
 
   List<_i5.GameRecipientSnapshot>? recipientSnapshots;
 
+  List<_i6.GameReplayEntry>? replayEntries;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -199,6 +230,10 @@ abstract class GameMatch
     String? rulesetHash,
     String? mapDocument,
     String? canonicalStateJson,
+    String? initialStateJson,
+    String? initialStateDigest,
+    int? initialRevision,
+    String? replayBehaviorFingerprint,
     String? state,
     String? hostPlayerId,
     int? turn,
@@ -215,6 +250,7 @@ abstract class GameMatch
     List<_i3.GameCommandLedger>? commands,
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
+    List<_i6.GameReplayEntry>? replayEntries,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -228,6 +264,11 @@ abstract class GameMatch
       'rulesetHash': rulesetHash,
       if (mapDocument != null) 'mapDocument': mapDocument,
       if (canonicalStateJson != null) 'canonicalStateJson': canonicalStateJson,
+      if (initialStateJson != null) 'initialStateJson': initialStateJson,
+      if (initialStateDigest != null) 'initialStateDigest': initialStateDigest,
+      if (initialRevision != null) 'initialRevision': initialRevision,
+      if (replayBehaviorFingerprint != null)
+        'replayBehaviorFingerprint': replayBehaviorFingerprint,
       'state': state,
       if (hostPlayerId != null) 'hostPlayerId': hostPlayerId,
       'turn': turn,
@@ -250,6 +291,8 @@ abstract class GameMatch
         'recipientSnapshots': recipientSnapshots?.toJson(
           valueToJson: (v) => v.toJson(),
         ),
+      if (replayEntries != null)
+        'replayEntries': replayEntries?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -282,12 +325,14 @@ abstract class GameMatch
     _i3.GameCommandLedgerIncludeList? commands,
     _i4.GameEventIncludeList? events,
     _i5.GameRecipientSnapshotIncludeList? recipientSnapshots,
+    _i6.GameReplayEntryIncludeList? replayEntries,
   }) {
     return GameMatchInclude._(
       participants: participants,
       commands: commands,
       events: events,
       recipientSnapshots: recipientSnapshots,
+      replayEntries: replayEntries,
     );
   }
 
@@ -329,6 +374,10 @@ class _GameMatchImpl extends GameMatch {
     required String rulesetHash,
     String? mapDocument,
     String? canonicalStateJson,
+    String? initialStateJson,
+    String? initialStateDigest,
+    int? initialRevision,
+    String? replayBehaviorFingerprint,
     required String state,
     String? hostPlayerId,
     required int turn,
@@ -345,6 +394,7 @@ class _GameMatchImpl extends GameMatch {
     List<_i3.GameCommandLedger>? commands,
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
+    List<_i6.GameReplayEntry>? replayEntries,
   }) : super._(
          id: id,
          publicId: publicId,
@@ -354,6 +404,10 @@ class _GameMatchImpl extends GameMatch {
          rulesetHash: rulesetHash,
          mapDocument: mapDocument,
          canonicalStateJson: canonicalStateJson,
+         initialStateJson: initialStateJson,
+         initialStateDigest: initialStateDigest,
+         initialRevision: initialRevision,
+         replayBehaviorFingerprint: replayBehaviorFingerprint,
          state: state,
          hostPlayerId: hostPlayerId,
          turn: turn,
@@ -370,6 +424,7 @@ class _GameMatchImpl extends GameMatch {
          commands: commands,
          events: events,
          recipientSnapshots: recipientSnapshots,
+         replayEntries: replayEntries,
        );
 
   /// Returns a shallow copy of this [GameMatch]
@@ -385,6 +440,10 @@ class _GameMatchImpl extends GameMatch {
     String? rulesetHash,
     Object? mapDocument = _Undefined,
     Object? canonicalStateJson = _Undefined,
+    Object? initialStateJson = _Undefined,
+    Object? initialStateDigest = _Undefined,
+    Object? initialRevision = _Undefined,
+    Object? replayBehaviorFingerprint = _Undefined,
     String? state,
     Object? hostPlayerId = _Undefined,
     int? turn,
@@ -401,6 +460,7 @@ class _GameMatchImpl extends GameMatch {
     Object? commands = _Undefined,
     Object? events = _Undefined,
     Object? recipientSnapshots = _Undefined,
+    Object? replayEntries = _Undefined,
   }) {
     return GameMatch(
       id: id is int? ? id : this.id,
@@ -413,6 +473,18 @@ class _GameMatchImpl extends GameMatch {
       canonicalStateJson: canonicalStateJson is String?
           ? canonicalStateJson
           : this.canonicalStateJson,
+      initialStateJson: initialStateJson is String?
+          ? initialStateJson
+          : this.initialStateJson,
+      initialStateDigest: initialStateDigest is String?
+          ? initialStateDigest
+          : this.initialStateDigest,
+      initialRevision: initialRevision is int?
+          ? initialRevision
+          : this.initialRevision,
+      replayBehaviorFingerprint: replayBehaviorFingerprint is String?
+          ? replayBehaviorFingerprint
+          : this.replayBehaviorFingerprint,
       state: state ?? this.state,
       hostPlayerId: hostPlayerId is String? ? hostPlayerId : this.hostPlayerId,
       turn: turn ?? this.turn,
@@ -443,6 +515,9 @@ class _GameMatchImpl extends GameMatch {
       recipientSnapshots: recipientSnapshots is List<_i5.GameRecipientSnapshot>?
           ? recipientSnapshots
           : this.recipientSnapshots?.map((e0) => e0.copyWith()).toList(),
+      replayEntries: replayEntries is List<_i6.GameReplayEntry>?
+          ? replayEntries
+          : this.replayEntries?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -483,6 +558,29 @@ class GameMatchUpdateTable extends _i1.UpdateTable<GameMatchTable> {
   _i1.ColumnValue<String, String> canonicalStateJson(String? value) =>
       _i1.ColumnValue(
         table.canonicalStateJson,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> initialStateJson(String? value) =>
+      _i1.ColumnValue(
+        table.initialStateJson,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> initialStateDigest(String? value) =>
+      _i1.ColumnValue(
+        table.initialStateDigest,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> initialRevision(int? value) => _i1.ColumnValue(
+    table.initialRevision,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> replayBehaviorFingerprint(String? value) =>
+      _i1.ColumnValue(
+        table.replayBehaviorFingerprint,
         value,
       );
 
@@ -586,6 +684,22 @@ class GameMatchTable extends _i1.Table<int?> {
       'canonicalStateJson',
       this,
     );
+    initialStateJson = _i1.ColumnString(
+      'initialStateJson',
+      this,
+    );
+    initialStateDigest = _i1.ColumnString(
+      'initialStateDigest',
+      this,
+    );
+    initialRevision = _i1.ColumnInt(
+      'initialRevision',
+      this,
+    );
+    replayBehaviorFingerprint = _i1.ColumnString(
+      'replayBehaviorFingerprint',
+      this,
+    );
     state = _i1.ColumnString(
       'state',
       this,
@@ -652,6 +766,14 @@ class GameMatchTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString canonicalStateJson;
 
+  late final _i1.ColumnString initialStateJson;
+
+  late final _i1.ColumnString initialStateDigest;
+
+  late final _i1.ColumnInt initialRevision;
+
+  late final _i1.ColumnString replayBehaviorFingerprint;
+
   late final _i1.ColumnString state;
 
   late final _i1.ColumnString hostPlayerId;
@@ -691,6 +813,10 @@ class GameMatchTable extends _i1.Table<int?> {
   _i5.GameRecipientSnapshotTable? ___recipientSnapshots;
 
   _i1.ManyRelation<_i5.GameRecipientSnapshotTable>? _recipientSnapshots;
+
+  _i6.GameReplayEntryTable? ___replayEntries;
+
+  _i1.ManyRelation<_i6.GameReplayEntryTable>? _replayEntries;
 
   _i2.GameParticipantTable get __participants {
     if (___participants != null) return ___participants!;
@@ -742,6 +868,19 @@ class GameMatchTable extends _i1.Table<int?> {
           _i5.GameRecipientSnapshotTable(tableRelation: foreignTableRelation),
     );
     return ___recipientSnapshots!;
+  }
+
+  _i6.GameReplayEntryTable get __replayEntries {
+    if (___replayEntries != null) return ___replayEntries!;
+    ___replayEntries = _i1.createRelationTable(
+      relationFieldName: '__replayEntries',
+      field: GameMatch.t.id,
+      foreignField: _i6.GameReplayEntry.t.matchId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i6.GameReplayEntryTable(tableRelation: foreignTableRelation),
+    );
+    return ___replayEntries!;
   }
 
   _i1.ManyRelation<_i2.GameParticipantTable> get participants {
@@ -820,6 +959,25 @@ class GameMatchTable extends _i1.Table<int?> {
     return _recipientSnapshots!;
   }
 
+  _i1.ManyRelation<_i6.GameReplayEntryTable> get replayEntries {
+    if (_replayEntries != null) return _replayEntries!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'replayEntries',
+      field: GameMatch.t.id,
+      foreignField: _i6.GameReplayEntry.t.matchId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i6.GameReplayEntryTable(tableRelation: foreignTableRelation),
+    );
+    _replayEntries = _i1.ManyRelation<_i6.GameReplayEntryTable>(
+      tableWithRelations: relationTable,
+      table: _i6.GameReplayEntryTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
+    );
+    return _replayEntries!;
+  }
+
   @override
   List<_i1.Column> get columns => [
     id,
@@ -830,6 +988,10 @@ class GameMatchTable extends _i1.Table<int?> {
     rulesetHash,
     mapDocument,
     canonicalStateJson,
+    initialStateJson,
+    initialStateDigest,
+    initialRevision,
+    replayBehaviorFingerprint,
     state,
     hostPlayerId,
     turn,
@@ -858,6 +1020,9 @@ class GameMatchTable extends _i1.Table<int?> {
     if (relationField == 'recipientSnapshots') {
       return __recipientSnapshots;
     }
+    if (relationField == 'replayEntries') {
+      return __replayEntries;
+    }
     return null;
   }
 }
@@ -868,11 +1033,13 @@ class GameMatchInclude extends _i1.IncludeObject {
     _i3.GameCommandLedgerIncludeList? commands,
     _i4.GameEventIncludeList? events,
     _i5.GameRecipientSnapshotIncludeList? recipientSnapshots,
+    _i6.GameReplayEntryIncludeList? replayEntries,
   }) {
     _participants = participants;
     _commands = commands;
     _events = events;
     _recipientSnapshots = recipientSnapshots;
+    _replayEntries = replayEntries;
   }
 
   _i2.GameParticipantIncludeList? _participants;
@@ -883,12 +1050,15 @@ class GameMatchInclude extends _i1.IncludeObject {
 
   _i5.GameRecipientSnapshotIncludeList? _recipientSnapshots;
 
+  _i6.GameReplayEntryIncludeList? _replayEntries;
+
   @override
   Map<String, _i1.Include?> get includes => {
     'participants': _participants,
     'commands': _commands,
     'events': _events,
     'recipientSnapshots': _recipientSnapshots,
+    'replayEntries': _replayEntries,
   };
 
   @override
@@ -1318,6 +1488,31 @@ class GameMatchAttachRepository {
       transaction: transaction,
     );
   }
+
+  /// Creates a relation between this [GameMatch] and the given [GameReplayEntry]s
+  /// by setting each [GameReplayEntry]'s foreign key `matchId` to refer to this [GameMatch].
+  Future<void> replayEntries(
+    _i1.DatabaseSession session,
+    GameMatch gameMatch,
+    List<_i6.GameReplayEntry> gameReplayEntry, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameReplayEntry.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('gameReplayEntry.id');
+    }
+    if (gameMatch.id == null) {
+      throw ArgumentError.notNull('gameMatch.id');
+    }
+
+    var $gameReplayEntry = gameReplayEntry
+        .map((e) => e.copyWith(matchId: gameMatch.id))
+        .toList();
+    await session.db.update<_i6.GameReplayEntry>(
+      $gameReplayEntry,
+      columns: [_i6.GameReplayEntry.t.matchId],
+      transaction: transaction,
+    );
+  }
 }
 
 class GameMatchAttachRowRepository {
@@ -1416,6 +1611,29 @@ class GameMatchAttachRowRepository {
       transaction: transaction,
     );
   }
+
+  /// Creates a relation between this [GameMatch] and the given [GameReplayEntry]
+  /// by setting the [GameReplayEntry]'s foreign key `matchId` to refer to this [GameMatch].
+  Future<void> replayEntries(
+    _i1.DatabaseSession session,
+    GameMatch gameMatch,
+    _i6.GameReplayEntry gameReplayEntry, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameReplayEntry.id == null) {
+      throw ArgumentError.notNull('gameReplayEntry.id');
+    }
+    if (gameMatch.id == null) {
+      throw ArgumentError.notNull('gameMatch.id');
+    }
+
+    var $gameReplayEntry = gameReplayEntry.copyWith(matchId: gameMatch.id);
+    await session.db.updateRow<_i6.GameReplayEntry>(
+      $gameReplayEntry,
+      columns: [_i6.GameReplayEntry.t.matchId],
+      transaction: transaction,
+    );
+  }
 }
 
 class GameMatchDetachRepository {
@@ -1468,6 +1686,30 @@ class GameMatchDetachRepository {
       transaction: transaction,
     );
   }
+
+  /// Detaches the relation between this [GameMatch] and the given [GameReplayEntry]
+  /// by setting the [GameReplayEntry]'s foreign key `matchId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> replayEntries(
+    _i1.DatabaseSession session,
+    List<_i6.GameReplayEntry> gameReplayEntry, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameReplayEntry.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('gameReplayEntry.id');
+    }
+
+    var $gameReplayEntry = gameReplayEntry
+        .map((e) => e.copyWith(matchId: null))
+        .toList();
+    await session.db.update<_i6.GameReplayEntry>(
+      $gameReplayEntry,
+      columns: [_i6.GameReplayEntry.t.matchId],
+      transaction: transaction,
+    );
+  }
 }
 
 class GameMatchDetachRowRepository {
@@ -1513,6 +1755,28 @@ class GameMatchDetachRowRepository {
     await session.db.updateRow<_i5.GameRecipientSnapshot>(
       $gameRecipientSnapshot,
       columns: [_i5.GameRecipientSnapshot.t.matchId],
+      transaction: transaction,
+    );
+  }
+
+  /// Detaches the relation between this [GameMatch] and the given [GameReplayEntry]
+  /// by setting the [GameReplayEntry]'s foreign key `matchId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> replayEntries(
+    _i1.DatabaseSession session,
+    _i6.GameReplayEntry gameReplayEntry, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameReplayEntry.id == null) {
+      throw ArgumentError.notNull('gameReplayEntry.id');
+    }
+
+    var $gameReplayEntry = gameReplayEntry.copyWith(matchId: null);
+    await session.db.updateRow<_i6.GameReplayEntry>(
+      $gameReplayEntry,
+      columns: [_i6.GameReplayEntry.t.matchId],
       transaction: transaction,
     );
   }

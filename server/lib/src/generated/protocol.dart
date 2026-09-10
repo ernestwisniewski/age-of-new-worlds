@@ -44,11 +44,12 @@ import 'game/models/game_player_command_request.dart' as _i28;
 import 'game/models/game_player_query_outcome.dart' as _i29;
 import 'game/models/game_player_query_request.dart' as _i30;
 import 'game/models/game_recipient_snapshot.dart' as _i31;
-import 'game/models/game_resign_match_request.dart' as _i32;
-import 'game/models/game_resync.dart' as _i33;
-import 'game/models/game_submit_turn_request.dart' as _i34;
+import 'game/models/game_replay_entry.dart' as _i32;
+import 'game/models/game_resign_match_request.dart' as _i33;
+import 'game/models/game_resync.dart' as _i34;
+import 'game/models/game_submit_turn_request.dart' as _i35;
 import 'package:aonw_server/src/generated/game/models/game_match_view.dart'
-    as _i35;
+    as _i36;
 export 'auth/models/account.dart';
 export 'auth/models/account_auth_exception.dart';
 export 'auth/models/external_auth_poll_result.dart';
@@ -76,6 +77,7 @@ export 'game/models/game_player_command_request.dart';
 export 'game/models/game_player_query_outcome.dart';
 export 'game/models/game_player_query_request.dart';
 export 'game/models/game_recipient_snapshot.dart';
+export 'game/models/game_replay_entry.dart';
 export 'game/models/game_resign_match_request.dart';
 export 'game/models/game_resync.dart';
 export 'game/models/game_submit_turn_request.dart';
@@ -662,6 +664,30 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String?',
         ),
         _i2.ColumnDefinition(
+          name: 'initialStateJson',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'initialStateDigest',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'initialRevision',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'replayBehaviorFingerprint',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
           name: 'state',
           columnType: _i2.ColumnType.text,
           isNullable: false,
@@ -1048,6 +1074,114 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
+      name: 'aonw_game_replay_entry',
+      dartName: 'GameReplayEntry',
+      schema: 'public',
+      module: 'aonw',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'aonw_game_replay_entry_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'matchId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'revision',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'actorPlayerId',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'commandKind',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'commandJson',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'stateDigest',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'initialEventOffset',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'finalEventOffset',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'aonw_game_replay_entry_fk_0',
+          columns: ['matchId'],
+          referenceTable: 'aonw_game_match',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'aonw_game_replay_entry_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'aonw_game_replay_entry_revision_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'matchId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'revision',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
       name: 'aonw_steam_account',
       dartName: 'SteamAccount',
       schema: 'public',
@@ -1378,14 +1512,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i31.GameRecipientSnapshot) {
       return _i31.GameRecipientSnapshot.fromJson(data) as T;
     }
-    if (t == _i32.GameResignMatchRequest) {
-      return _i32.GameResignMatchRequest.fromJson(data) as T;
+    if (t == _i32.GameReplayEntry) {
+      return _i32.GameReplayEntry.fromJson(data) as T;
     }
-    if (t == _i33.GameResync) {
-      return _i33.GameResync.fromJson(data) as T;
+    if (t == _i33.GameResignMatchRequest) {
+      return _i33.GameResignMatchRequest.fromJson(data) as T;
     }
-    if (t == _i34.GameSubmitTurnRequest) {
-      return _i34.GameSubmitTurnRequest.fromJson(data) as T;
+    if (t == _i34.GameResync) {
+      return _i34.GameResync.fromJson(data) as T;
+    }
+    if (t == _i35.GameSubmitTurnRequest) {
+      return _i35.GameSubmitTurnRequest.fromJson(data) as T;
     }
     if (t == _i1.getType<_i5.AonwAccount?>()) {
       return (data != null ? _i5.AonwAccount.fromJson(data) : null) as T;
@@ -1489,15 +1626,18 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data != null ? _i31.GameRecipientSnapshot.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i32.GameResignMatchRequest?>()) {
-      return (data != null ? _i32.GameResignMatchRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i32.GameReplayEntry?>()) {
+      return (data != null ? _i32.GameReplayEntry.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i33.GameResignMatchRequest?>()) {
+      return (data != null ? _i33.GameResignMatchRequest.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i33.GameResync?>()) {
-      return (data != null ? _i33.GameResync.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i34.GameResync?>()) {
+      return (data != null ? _i34.GameResync.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i34.GameSubmitTurnRequest?>()) {
-      return (data != null ? _i34.GameSubmitTurnRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i35.GameSubmitTurnRequest?>()) {
+      return (data != null ? _i35.GameSubmitTurnRequest.fromJson(data) : null)
           as T;
     }
     if (t == List<String>) {
@@ -1569,15 +1709,29 @@ class Protocol extends _i1.SerializationManagerServer {
               : null)
           as T;
     }
+    if (t == List<_i32.GameReplayEntry>) {
+      return (data as List)
+              .map((e) => deserialize<_i32.GameReplayEntry>(e))
+              .toList()
+          as T;
+    }
+    if (t == _i1.getType<List<_i32.GameReplayEntry>?>()) {
+      return (data != null
+              ? (data as List)
+                    .map((e) => deserialize<_i32.GameReplayEntry>(e))
+                    .toList()
+              : null)
+          as T;
+    }
     if (t == List<_i24.GameMatchHistoryEntry>) {
       return (data as List)
               .map((e) => deserialize<_i24.GameMatchHistoryEntry>(e))
               .toList()
           as T;
     }
-    if (t == List<_i35.GameMatchView>) {
+    if (t == List<_i36.GameMatchView>) {
       return (data as List)
-              .map((e) => deserialize<_i35.GameMatchView>(e))
+              .map((e) => deserialize<_i36.GameMatchView>(e))
               .toList()
           as T;
     }
@@ -1622,9 +1776,10 @@ class Protocol extends _i1.SerializationManagerServer {
       _i29.GamePlayerQueryOutcome => 'GamePlayerQueryOutcome',
       _i30.GamePlayerQueryRequest => 'GamePlayerQueryRequest',
       _i31.GameRecipientSnapshot => 'GameRecipientSnapshot',
-      _i32.GameResignMatchRequest => 'GameResignMatchRequest',
-      _i33.GameResync => 'GameResync',
-      _i34.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
+      _i32.GameReplayEntry => 'GameReplayEntry',
+      _i33.GameResignMatchRequest => 'GameResignMatchRequest',
+      _i34.GameResync => 'GameResync',
+      _i35.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
       _ => null,
     };
   }
@@ -1693,11 +1848,13 @@ class Protocol extends _i1.SerializationManagerServer {
         return 'GamePlayerQueryRequest';
       case _i31.GameRecipientSnapshot():
         return 'GameRecipientSnapshot';
-      case _i32.GameResignMatchRequest():
+      case _i32.GameReplayEntry():
+        return 'GameReplayEntry';
+      case _i33.GameResignMatchRequest():
         return 'GameResignMatchRequest';
-      case _i33.GameResync():
+      case _i34.GameResync():
         return 'GameResync';
-      case _i34.GameSubmitTurnRequest():
+      case _i35.GameSubmitTurnRequest():
         return 'GameSubmitTurnRequest';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -1802,14 +1959,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'GameRecipientSnapshot') {
       return deserialize<_i31.GameRecipientSnapshot>(data['data']);
     }
+    if (dataClassName == 'GameReplayEntry') {
+      return deserialize<_i32.GameReplayEntry>(data['data']);
+    }
     if (dataClassName == 'GameResignMatchRequest') {
-      return deserialize<_i32.GameResignMatchRequest>(data['data']);
+      return deserialize<_i33.GameResignMatchRequest>(data['data']);
     }
     if (dataClassName == 'GameResync') {
-      return deserialize<_i33.GameResync>(data['data']);
+      return deserialize<_i34.GameResync>(data['data']);
     }
     if (dataClassName == 'GameSubmitTurnRequest') {
-      return deserialize<_i34.GameSubmitTurnRequest>(data['data']);
+      return deserialize<_i35.GameSubmitTurnRequest>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -1865,6 +2025,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i27.GameParticipant.t;
       case _i31.GameRecipientSnapshot:
         return _i31.GameRecipientSnapshot.t;
+      case _i32.GameReplayEntry:
+        return _i32.GameReplayEntry.t;
     }
     return null;
   }

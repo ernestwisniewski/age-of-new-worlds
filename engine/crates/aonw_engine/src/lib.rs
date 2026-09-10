@@ -5,6 +5,10 @@
 
 #![forbid(unsafe_code)]
 
+/// Durable behavior identity shared by local archives and server replay.
+pub const ENGINE_BEHAVIOR_FINGERPRINT: &str =
+    concat!("aonw-engine/", env!("CARGO_PKG_VERSION"), "/behavior-1");
+
 mod application;
 mod artifact;
 mod city;
