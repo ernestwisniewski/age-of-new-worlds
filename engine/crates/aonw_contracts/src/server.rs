@@ -9,8 +9,14 @@ use crate::client::{
 };
 use crate::{GameStateDto, MatchIdentityDto, ReplaySystemCommandDto};
 
+mod codec;
+mod replay;
+
+pub use codec::ServerHostCodecError;
+pub use replay::*;
+
 /// The only stateless server-host protocol version accepted by this build.
-pub const SERVER_HOST_API_VERSION: u16 = 2;
+pub const SERVER_HOST_API_VERSION: u16 = 3;
 /// Maximum accepted native host request, including one canonical state.
 pub const MAX_SERVER_HOST_REQUEST_JSON_BYTES: usize = 32 * 1024 * 1024;
 /// Maximum emitted native host response, including all recipient projections.
@@ -182,6 +188,8 @@ pub enum ServerHostErrorCodeDto {
     EngineFailure,
     /// Response serialization exceeded its reviewed bound.
     ResponseTooLarge,
+    /// Persisted replay evidence does not match authoritative execution.
+    ReplayMismatch,
     /// A panic was contained at the native ABI boundary.
     NativePanic,
 }
@@ -318,6 +326,11 @@ pub enum ServerHostResponseBodyDto {
         /// Transactional command result.
         result: Box<ServerCommandResultDto>,
     },
+    /// One bounded replay batch was verified without retaining canonical state.
+    ReplayBatchExecuted {
+        /// Server-only continuation and selected recipient presentation.
+        result: Box<ServerReplayBatchResultDto>,
+    },
     /// One read-only authenticated query completed without retaining state.
     PlayerQueryExecuted {
         /// Recipient-safe result or stable query rejection.
@@ -355,138 +368,6 @@ pub struct ServerHostResponseDto {
     /// Successful result or contained failure.
     pub outcome: ServerHostOutcomeDto,
 }
-
-impl PrepareServerWorldRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl SubmitTurnServerRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl PlayerCommandServerRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl SystemCommandServerRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl PlayerQueryServerRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl ProjectServerStateRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl CreateServerMatchRequestDto {
-    /// Parses one bounded strict request.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error for oversized or structurally invalid JSON.
-    pub fn from_json(input: &str) -> Result<Self, ServerHostCodecError> {
-        parse_bounded(input)
-    }
-}
-
-impl ServerHostResponseDto {
-    /// Serializes one bounded compact response.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error if serialization fails or exceeds the response bound.
-    pub fn to_json(&self) -> Result<String, ServerHostCodecError> {
-        let json = serde_json::to_string(self).map_err(ServerHostCodecError::Json)?;
-        if json.len() > MAX_SERVER_HOST_RESPONSE_JSON_BYTES {
-            return Err(ServerHostCodecError::TooLarge {
-                actual: json.len(),
-                maximum: MAX_SERVER_HOST_RESPONSE_JSON_BYTES,
-            });
-        }
-        Ok(json)
-    }
-}
-
-fn parse_bounded<T: for<'de> Deserialize<'de>>(input: &str) -> Result<T, ServerHostCodecError> {
-    if input.len() > MAX_SERVER_HOST_REQUEST_JSON_BYTES {
-        return Err(ServerHostCodecError::TooLarge {
-            actual: input.len(),
-            maximum: MAX_SERVER_HOST_REQUEST_JSON_BYTES,
-        });
-    }
-    serde_json::from_str(input).map_err(ServerHostCodecError::Json)
-}
-
-/// Strict native host JSON codec failure.
-#[derive(Debug)]
-pub enum ServerHostCodecError {
-    /// Encoded value exceeded its reviewed byte boundary.
-    TooLarge {
-        /// Actual byte count.
-        actual: usize,
-        /// Maximum accepted byte count.
-        maximum: usize,
-    },
-    /// JSON serialization or deserialization failed.
-    Json(serde_json::Error),
-}
-
-impl core::fmt::Display for ServerHostCodecError {
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self {
-            Self::TooLarge { actual, maximum } => {
-                write!(formatter, "payload is {actual} bytes; maximum is {maximum}")
-            }
-            Self::Json(source) => source.fmt(formatter),
-        }
-    }
-}
-
-impl std::error::Error for ServerHostCodecError {}
 
 #[cfg(test)]
 mod tests;

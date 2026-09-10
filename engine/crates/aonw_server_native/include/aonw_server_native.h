@@ -33,6 +33,16 @@ void *aonw_server_native_apply_player_command(
     const uint8_t *request,
     size_t request_len);
 
+void *aonw_server_native_apply_system_command(
+    const void *world,
+    const uint8_t *request,
+    size_t request_len);
+
+void *aonw_server_native_replay_batch(
+    const void *world,
+    const uint8_t *request,
+    size_t request_len);
+
 void *aonw_server_native_query_player(
     const void *world,
     const uint8_t *request,

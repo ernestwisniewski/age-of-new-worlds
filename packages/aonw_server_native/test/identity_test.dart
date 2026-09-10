@@ -82,7 +82,70 @@ void main() {
     expect(command['finalEventOffset'], 1);
     expect(lifecycle['kickedPlayerIds'], ['player-2']);
     expect((command['recipients'] as List<Object?>), hasLength(2));
+    _verifyReplay(host, world, created, state, command, nextState);
   });
+}
+
+void _verifyReplay(
+  AonwServerNativeHost host,
+  AonwPreparedServerWorld world,
+  AonwServerHostResponse created,
+  Map<String, Object?> state,
+  Map<String, Object?> command,
+  Map<String, Object?> nextState,
+) {
+  final initial = _object(created.requireSuccess('matchCreated')['result']);
+  final projection = _object(initial['projection']);
+  final stamp = _object(projection['stamp']);
+  final replayRequest = {
+    'apiVersion': aonwServerHostApiVersion,
+    'mapHash': world.mapHash,
+    'rulesetHash': world.rulesetHash,
+    'behaviorFingerprint': initial['behaviorFingerprint'],
+    'initialState': state,
+    'initialStateDigest': stamp['stateDigest'],
+    'initialEventOffset': 0,
+    'recipientPlayerId': 'player-2',
+    'steps': [
+      {
+        'record': {
+          'kind': 'system',
+          'command': {
+            'type': 'kickParticipant',
+            'expectedRevision': state['revision'],
+            'playerId': 'player-2',
+            'reason': 'timeout',
+            'timeoutStreak': 3,
+          },
+        },
+        'revision': _object(command['stamp'])['revision'],
+        'stateDigest': _object(command['stamp'])['stateDigest'],
+        'initialEventOffset': 0,
+        'finalEventOffset': 1,
+      },
+    ],
+  };
+  final replayed = _object(
+    host
+        .replayBatchJson(world, jsonEncode(replayRequest))
+        .requireSuccess('replayBatchExecuted')['result'],
+  );
+  expect(replayed['state'], nextState);
+  expect(replayed['stamp'], command['stamp']);
+  expect(replayed['recipientPlayerId'], 'player-2');
+  expect(replayed['finalEventOffset'], 1);
+  expect(replayed['command'], isNotNull);
+  replayRequest['behaviorFingerprint'] = 'incompatible';
+  expect(
+    () => host.replayBatchJson(world, jsonEncode(replayRequest)),
+    throwsA(
+      isA<AonwServerNativeException>().having(
+        (error) => error.code,
+        'code',
+        'replay_mismatch',
+      ),
+    ),
+  );
 }
 
 Map<String, Object?> _mapDocument() => {

@@ -25,7 +25,10 @@ use aonw_projection::{ProjectedView, SessionStamp};
 
 mod host;
 mod model;
+mod replay;
 mod system;
+
+pub use replay::replay_server_batch_dto;
 
 pub use host::{
     PlayerCommandRequest, PlayerQueryRequest, apply_player_command, apply_submit_turn,
@@ -68,6 +71,8 @@ pub enum ServerBoundaryError {
     InvalidPlayerCommand(String),
     /// One trusted lifecycle command value was invalid.
     InvalidSystemCommand(String),
+    /// Replay checkpoint or recorded transition does not match execution.
+    ReplayMismatch,
     /// Stateless authoritative execution failed before persistence.
     Host(ServerHostError),
 }
@@ -90,6 +95,7 @@ impl ServerBoundaryError {
             Self::InvalidPlayerCommand(_) | Self::InvalidSystemCommand(_) => {
                 ServerHostErrorCodeDto::InvalidRequest
             }
+            Self::ReplayMismatch => ServerHostErrorCodeDto::ReplayMismatch,
             Self::Host(error) => match error {
                 ServerHostError::EmptyParticipants => ServerHostErrorCodeDto::EmptyParticipants,
                 ServerHostError::UnknownAuthenticatedActor(_) => {
@@ -149,6 +155,7 @@ impl core::fmt::Display for ServerBoundaryError {
             Self::InvalidSystemCommand(message) => {
                 write!(formatter, "invalid system command: {message}")
             }
+            Self::ReplayMismatch => formatter.write_str("replay evidence does not match execution"),
             Self::Host(source) => source.fmt(formatter),
         }
     }

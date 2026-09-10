@@ -7,15 +7,18 @@ use std::panic::{AssertUnwindSafe, catch_unwind};
 use aonw_contracts::server::{
     CreateServerMatchRequestDto, MAX_SERVER_HOST_REQUEST_JSON_BYTES, PlayerCommandServerRequestDto,
     PlayerQueryServerRequestDto, PrepareServerWorldRequestDto, ProjectServerStateRequestDto,
-    SERVER_HOST_API_VERSION, ServerHostCodecError, ServerHostErrorCodeDto, ServerHostErrorDto,
-    ServerHostOutcomeDto, ServerHostResponseBodyDto, ServerHostResponseDto,
-    SubmitTurnServerRequestDto, SystemCommandServerRequestDto,
+    SERVER_HOST_API_VERSION, ServerHostErrorCodeDto, ServerHostResponseBodyDto,
+    ServerHostResponseDto, ServerReplayBatchRequestDto, SubmitTurnServerRequestDto,
+    SystemCommandServerRequestDto,
 };
 use aonw_server_runtime::{
-    PreparedServerWorld, ServerBoundaryError, apply_player_command_dto, apply_submit_turn_dto,
-    apply_system_command_dto, create_server_match_dto, prepare_server_world,
-    project_server_state_dto, query_player_dto,
+    PreparedServerWorld, apply_player_command_dto, apply_submit_turn_dto, apply_system_command_dto,
+    create_server_match_dto, prepare_server_world, project_server_state_dto, query_player_dto,
+    replay_server_batch_dto,
 };
+
+mod response;
+use response::{boundary_error, codec_error, contain, failure, success};
 
 static BUILD_IDENTITY: &[u8] = concat!("aonw_server_native/", env!("CARGO_PKG_VERSION")).as_bytes();
 
@@ -271,6 +274,43 @@ pub unsafe extern "C" fn aonw_server_native_query_player(
     })
 }
 
+/// Verifies a bounded replay batch and projects its selected recipient.
+///
+/// # Safety
+///
+/// `world` must be a live prepared handle for the duration of the call.
+/// `request` follows the same rules as [`aonw_server_native_prepare_world`].
+#[allow(unsafe_code)]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn aonw_server_native_replay_batch(
+    world: *const core::ffi::c_void,
+    request: *const u8,
+    request_len: usize,
+) -> *mut core::ffi::c_void {
+    contain(|| {
+        if world.is_null() {
+            return Err(failure(
+                ServerHostErrorCodeDto::InvalidFfiArgument,
+                "prepared world pointer is null",
+            ));
+        }
+        let input = unsafe { read_request(request, request_len) }?;
+        let request =
+            ServerReplayBatchRequestDto::from_json(input).map_err(|error| codec_error(&error))?;
+        // SAFETY: The caller keeps the immutable world alive for this call.
+        let world = unsafe { &*world.cast::<PreparedServerWorld>() };
+        let result =
+            replay_server_batch_dto(world, request).map_err(|error| boundary_error(&error))?;
+        let response = success(ServerHostResponseBodyDto::ReplayBatchExecuted {
+            result: Box::new(result),
+        })?;
+        Ok(NativeResponse {
+            bytes: response.into_bytes().into_boxed_slice(),
+            world: None,
+        })
+    })
+}
+
 /// Validates and projects one canonical state against a prepared world.
 ///
 /// # Safety
@@ -394,27 +434,6 @@ pub unsafe extern "C" fn aonw_server_native_response_free(response: *mut core::f
     }
 }
 
-fn contain(
-    operation: impl FnOnce() -> Result<NativeResponse, ServerHostResponseDto>,
-) -> *mut core::ffi::c_void {
-    let response = catch_unwind(AssertUnwindSafe(operation));
-    let native = match response {
-        Ok(Ok(response)) => response,
-        Ok(Err(error)) => NativeResponse {
-            bytes: serialize_failure(&error),
-            world: None,
-        },
-        Err(_) => NativeResponse {
-            bytes: serialize_failure(&failure(
-                ServerHostErrorCodeDto::NativePanic,
-                "native server host panicked; nothing may be persisted",
-            )),
-            world: None,
-        },
-    };
-    Box::into_raw(Box::new(native)).cast()
-}
-
 #[allow(unsafe_code)]
 unsafe fn read_request<'a>(
     request: *const u8,
@@ -446,53 +465,6 @@ unsafe fn read_request<'a>(
             "request must be UTF-8",
         )
     })
-}
-
-fn codec_error(error: &ServerHostCodecError) -> ServerHostResponseDto {
-    let code = match error {
-        ServerHostCodecError::TooLarge { .. } => ServerHostErrorCodeDto::PayloadTooLarge,
-        ServerHostCodecError::Json(_) => ServerHostErrorCodeDto::InvalidRequest,
-    };
-    failure(code, error.to_string())
-}
-
-fn boundary_error(error: &ServerBoundaryError) -> ServerHostResponseDto {
-    failure(error.code(), error.to_string())
-}
-
-fn success(body: ServerHostResponseBodyDto) -> Result<String, ServerHostResponseDto> {
-    ServerHostResponseDto {
-        api_version: SERVER_HOST_API_VERSION,
-        outcome: ServerHostOutcomeDto::Success {
-            response: Box::new(body),
-        },
-    }
-    .to_json()
-    .map_err(|error| failure(ServerHostErrorCodeDto::ResponseTooLarge, error.to_string()))
-}
-
-fn failure(code: ServerHostErrorCodeDto, message: impl Into<String>) -> ServerHostResponseDto {
-    ServerHostResponseDto {
-        api_version: SERVER_HOST_API_VERSION,
-        outcome: ServerHostOutcomeDto::Failure {
-            error: ServerHostErrorDto {
-                code,
-                message: message.into(),
-            },
-        },
-    }
-}
-
-fn serialize_failure(response: &ServerHostResponseDto) -> Box<[u8]> {
-    response
-        .to_json()
-        .unwrap_or_else(|_| {
-            format!(
-                r#"{{"apiVersion":{SERVER_HOST_API_VERSION},"outcome":{{"status":"failure","error":{{"code":"response_too_large","message":"native response serialization failed"}}}}}}"#
-            )
-        })
-        .into_bytes()
-        .into_boxed_slice()
 }
 
 #[cfg(test)]

@@ -83,6 +83,23 @@ fn system_command_requires_a_live_prepared_world() {
 
 #[test]
 #[allow(unsafe_code)]
+fn replay_batch_requires_a_live_prepared_world() {
+    // SAFETY: Null is deliberately tested and the request buffer stays alive.
+    let response =
+        unsafe { super::aonw_server_native_replay_batch(core::ptr::null(), b"{}".as_ptr(), 2) };
+    // SAFETY: This test owns the live response until it is freed below.
+    let decoded = unsafe { decode_response(response) };
+    assert!(matches!(
+        decoded.outcome,
+        ServerHostOutcomeDto::Failure { error }
+            if error.code == ServerHostErrorCodeDto::InvalidFfiArgument
+    ));
+    // SAFETY: The test transfers its only live response handle.
+    unsafe { aonw_server_native_response_free(response) };
+}
+
+#[test]
+#[allow(unsafe_code)]
 fn player_query_returns_one_owned_recipient_safe_response() {
     let map = map_document();
     let prepare_request = serde_json::to_vec(&json!({

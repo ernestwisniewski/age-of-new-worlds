@@ -26,7 +26,7 @@ an initial authoritative checkpoint and a separate replay transport.
 
 New matches retain their initial canonical state, its digest and revision, and
 the Rust engine behavior fingerprint in server-only fields. The native host
-protocol is version 2; its match creation response provides the same fingerprint
+protocol is version 3; its match creation response provides the same fingerprint
 used by local Rust saves and replay archives. The fingerprint value is unchanged.
 
 Each accepted command that advances canonical revision adds a server-only
@@ -47,3 +47,19 @@ retains one page, supports backward/forward navigation and refresh, and preserve
 the previous page after a failed request. Each request captures authentication;
 account changes discard outstanding responses and remove the previous account's
 history. The history view does not offer gameplay resume for completed matches.
+
+The host replay operation evaluates at most 256 journal transitions per request.
+It verifies the behavior fingerprint, immutable content, checkpoint digest,
+recipient membership, contiguous revisions, resulting digests, and both event
+offsets. Player and trusted system entries use the same command paths as live
+execution. A rejection, no-op, missing transition or evidence mismatch fails the
+whole batch. A previously verified result can serve as the next checkpoint.
+
+Replay host output contains a canonical continuation for trusted server use and
+one recipient-safe snapshot with the last command's filtered events, evidence and
+patch. It must never be forwarded wholesale to a client. An empty batch returns
+the checkpoint projection with no command. Host API 3 rejects older native
+libraries before the new replay symbol is used; Client API remains 24. The C ABI
+uses the existing bounded buffers, immutable world borrow and owned response
+lifetime, with null-world and Dart artifact round-trip coverage. No new file is
+allowed to contain unsafe code.

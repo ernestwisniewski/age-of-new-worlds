@@ -175,6 +175,26 @@ final class AonwServerNativeHost {
     }
   }
 
+  AonwServerHostResponse replayBatchJson(
+    AonwPreparedServerWorld world,
+    String request,
+  ) {
+    if (world.isClosed) {
+      throw StateError('Prepared server world is closed.');
+    }
+    final native = _invoke(
+      request,
+      (input, length) =>
+          bindings.aonwServerNativeReplayBatch(world._handle, input, length),
+    );
+    try {
+      native.response.requireSuccess('replayBatchExecuted');
+      return native.response;
+    } finally {
+      native.close();
+    }
+  }
+
   AonwServerHostResponse queryPlayerJson(
     AonwPreparedServerWorld world,
     String request,
