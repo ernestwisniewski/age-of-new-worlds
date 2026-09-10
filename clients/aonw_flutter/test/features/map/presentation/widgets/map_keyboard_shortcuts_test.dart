@@ -22,6 +22,23 @@ import '../../../../support/map_test_fixture.dart';
 import '../../../../support/test_map_input_source.dart';
 
 void main() {
+  testWidgets('research close stays clear of the visible player rail', (
+    tester,
+  ) async {
+    await _Harness.mount(tester);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('open-research')));
+    await tester.pumpAndSettle();
+    final close = find.byKey(const ValueKey('close-research'));
+    final avatar = find.byKey(const ValueKey('player-avatar-preview-player'));
+    expect(tester.getRect(close).overlaps(tester.getRect(avatar)), isFalse);
+    await tester.tap(close);
+    await tester.pumpAndSettle();
+    expect(close, findsNothing);
+    expect(avatar, findsOneWidget);
+  });
+
   testWidgets('HUD arrows navigate Rust work while the map lacks focus', (
     tester,
   ) async {

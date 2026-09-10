@@ -5,6 +5,7 @@ import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../diplomacy/presentation/diplomacy_overlay.dart';
 import '../../../objectives/presentation/objective_overlay.dart';
 import '../../../players/presentation/player_overlay.dart';
+import '../../../players/presentation/player_rail.dart';
 import '../../../research/application/research_state.dart';
 import '../../../research/presentation/research_overlay.dart';
 import '../../../resources/presentation/resource_overlay.dart';
@@ -149,6 +150,14 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
       children: [
         ResearchOverlay(
           state: widget.research,
+          trailingReserve:
+              playerRailWidth(
+                MediaQuery.sizeOf(context),
+                online:
+                    widget.controller.networkConnection.phase !=
+                    NetworkGameConnectionPhase.inactive,
+              ) +
+              12,
           selectionRequired: _researchSelectionRequired,
           open: effectivePanel == _MapHudPanel.research,
           onOpenChanged: locked

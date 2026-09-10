@@ -1,3 +1,4 @@
+import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/features/research/application/research_state.dart';
 import 'package:aonw_flutter/features/research/presentation/research_overlay.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
@@ -8,7 +9,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
+part 'research_responsive_cases.dart';
+
 void main() {
+  researchResponsiveCases();
   testWidgets('shows exact research data and selects only available option', (
     tester,
   ) async {

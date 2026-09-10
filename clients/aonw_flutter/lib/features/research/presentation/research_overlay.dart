@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
@@ -10,6 +12,8 @@ import '../application/research_state.dart';
 import '../read_model/research_view.dart';
 import 'research_copy.dart';
 
+part 'research_catalog.dart';
+
 final class ResearchOverlay extends StatelessWidget {
   const ResearchOverlay({
     required this.state,
@@ -18,6 +22,7 @@ final class ResearchOverlay extends StatelessWidget {
     required this.onOpenChanged,
     required this.onSelect,
     required this.onRetry,
+    this.trailingReserve = 0,
     super.key,
   });
 
@@ -27,58 +32,66 @@ final class ResearchOverlay extends StatelessWidget {
   final ValueChanged<bool>? onOpenChanged;
   final ValueChanged<TechnologyIdView> onSelect;
   final VoidCallback onRetry;
+  final double trailingReserve;
 
   @override
-  Widget build(BuildContext context) {
-    final copy = ResearchCopy.of(context);
-    return Stack(
-      children: [
-        _trigger(context, copy, open),
-        if (open)
-          Positioned(
-            top: AonwHudSideMenuLayout.top(context),
-            left: AonwHudSideMenuLayout.panelLeft(context),
-            bottom: AonwSpacing.md,
-            child: MapGamepadRegion(
-              section: MapHudSection.globalActions,
-              priority: MapGamepadPriority.panel,
-              onCancel: onOpenChanged == null
-                  ? null
-                  : () => onOpenChanged?.call(false),
-              child: SafeArea(
-                child: AonwPanel(
-                  semanticLabel: copy.text(ResearchText.title),
-                  liveRegion: selectionRequired,
-                  maxWidth: 680,
-                  padding: const EdgeInsets.all(AonwSpacing.md),
-                  child: SizedBox(
-                    width: 640,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _header(context, copy),
-                        if (selectionRequired)
-                          Text(
-                            copy.text(ResearchText.selectionRequired),
-                            key: const ValueKey('research-selection-required'),
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final copy = ResearchCopy.of(context);
+      return Stack(
+        children: [
+          _trigger(context, copy, open),
+          if (open)
+            Positioned(
+              top: AonwHudSideMenuLayout.top(context),
+              left: _panelMargin(constraints.maxWidth - trailingReserve),
+              right:
+                  _panelMargin(constraints.maxWidth - trailingReserve) +
+                  trailingReserve,
+              bottom: AonwSpacing.md,
+              child: MapGamepadRegion(
+                section: MapHudSection.globalActions,
+                priority: MapGamepadPriority.panel,
+                onCancel: onOpenChanged == null
+                    ? null
+                    : () => onOpenChanged?.call(false),
+                child: SafeArea(
+                  child: AonwPanel(
+                    semanticLabel: copy.text(ResearchText.title),
+                    liveRegion: selectionRequired,
+                    maxWidth: 980,
+                    padding: const EdgeInsets.all(AonwSpacing.md),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _header(context, copy),
+                          if (selectionRequired)
+                            Text(
+                              copy.text(ResearchText.selectionRequired),
+                              key: const ValueKey(
+                                'research-selection-required',
+                              ),
+                            ),
+                          Expanded(
+                            child: ResearchPanel(
+                              state: state,
+                              onSelect: onSelect,
+                              onRetry: onRetry,
+                            ),
                           ),
-                        Expanded(
-                          child: ResearchPanel(
-                            state: state,
-                            onSelect: onSelect,
-                            onRetry: onRetry,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-      ],
-    );
-  }
+        ],
+      );
+    },
+  );
 
   Widget _header(BuildContext context, ResearchCopy copy) => Row(
     children: [
@@ -171,17 +184,10 @@ final class ResearchPanel extends StatelessWidget {
           ),
         const SizedBox(height: AonwSpacing.sm),
         Expanded(
-          child: FocusTraversalGroup(
-            policy: OrderedTraversalPolicy(),
-            child: ListView.builder(
-              key: const ValueKey('research-options'),
-              itemCount: options.options.length,
-              itemBuilder: (context, index) => _TechnologyOptionCard(
-                option: options.options[index],
-                enabled: !state.commandPending,
-                onSelect: onSelect,
-              ),
-            ),
+          child: _ResearchCatalog(
+            options: options.options,
+            enabled: !state.commandPending,
+            onSelect: onSelect,
           ),
         ),
       ],
@@ -281,3 +287,5 @@ final class _TechnologyOptionCard extends StatelessWidget {
     );
   }
 }
+
+double _panelMargin(double width) => math.max(12, (width - 980) / 2);
