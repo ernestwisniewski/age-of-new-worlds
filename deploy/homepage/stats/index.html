@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#090d12">
+    <meta name="theme-color" content="#18242a">
     <meta
       name="description"
       content="Public multiplayer statistics for Age of New Worlds."
@@ -46,15 +46,15 @@
 
       :root {
         color-scheme: dark;
-        --bg: #090d12;
-        --panel: rgba(9, 13, 18, 0.84);
-        --panel-strong: rgba(13, 18, 23, 0.94);
-        --paper: #f1dfaa;
-        --muted: rgba(241, 223, 170, 0.7);
-        --subtle: rgba(241, 223, 170, 0.5);
-        --gold: #d9b85d;
-        --gold-soft: rgba(217, 184, 93, 0.34);
-        --gold-faint: rgba(217, 184, 93, 0.12);
+        --bg: #18242a;
+        --panel: rgba(24, 36, 42, 0.84);
+        --panel-strong: rgba(30, 42, 46, 0.94);
+        --paper: #eedcbd;
+        --muted: rgba(238, 220, 189, 0.7);
+        --subtle: rgba(238, 220, 189, 0.5);
+        --gold: #d7bc8c;
+        --gold-soft: rgba(215, 188, 140, 0.34);
+        --gold-faint: rgba(215, 188, 140, 0.12);
         --green: #78c6a3;
         --blue: #75aee8;
         --red: #d47b72;
@@ -93,7 +93,7 @@
       }
 
       body::before {
-        background: url("/assets/main_menu/background.png") center right / cover no-repeat;
+        background: url("/assets/main_menu/background2.jpg") center right / cover no-repeat;
         inset: -4vh -4vw;
         transform: scale(1.02);
         z-index: -2;
@@ -101,8 +101,8 @@
 
       body::after {
         background:
-          linear-gradient(90deg, rgba(9, 13, 18, 0.86), rgba(9, 13, 18, 0.58) 56%, rgba(9, 13, 18, 0.82)),
-          linear-gradient(0deg, rgba(9, 13, 18, 0.92), rgba(9, 13, 18, 0.34) 58%, rgba(9, 13, 18, 0.78));
+          linear-gradient(90deg, rgba(24, 36, 42, 0.86), rgba(24, 36, 42, 0.58) 56%, rgba(24, 36, 42, 0.82)),
+          linear-gradient(0deg, rgba(24, 36, 42, 0.92), rgba(24, 36, 42, 0.34) 58%, rgba(24, 36, 42, 0.78));
         z-index: -1;
       }
 
@@ -163,7 +163,7 @@
         display: block;
         filter:
           drop-shadow(0 0.7rem 1.2rem rgba(0, 0, 0, 0.52))
-          drop-shadow(0 0 1rem rgba(217, 184, 93, 0.14));
+          drop-shadow(0 0 1rem rgba(215, 188, 140, 0.14));
         height: auto;
         width: 100%;
       }
@@ -179,8 +179,8 @@
       .nav-link,
       .button {
         align-items: center;
-        background: rgba(9, 13, 18, 0.72);
-        border: 1px solid rgba(217, 184, 93, 0.54);
+        background: rgba(24, 36, 42, 0.72);
+        border: 1px solid rgba(215, 188, 140, 0.54);
         border-radius: 0.35rem;
         color: var(--paper);
         cursor: pointer;
@@ -205,8 +205,8 @@
       .nav-link:hover,
       .button:hover:not(:disabled) {
         background: rgba(31, 33, 29, 0.9);
-        border-color: rgba(241, 223, 170, 0.84);
-        box-shadow: 0 0 1rem rgba(217, 184, 93, 0.14);
+        border-color: rgba(238, 220, 189, 0.84);
+        box-shadow: 0 0 1rem rgba(215, 188, 140, 0.14);
         transform: translateY(-1px);
       }
 
@@ -268,7 +268,7 @@
 
       .snapshot-meta {
         align-self: end;
-        background: rgba(9, 13, 18, 0.66);
+        background: rgba(24, 36, 42, 0.66);
         border: 1px solid var(--gold-soft);
         border-radius: 0.4rem;
         box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.28);
@@ -348,7 +348,7 @@
 
       .spinner {
         animation: stats-spin 900ms linear infinite;
-        border: 2px solid rgba(217, 184, 93, 0.24);
+        border: 2px solid rgba(215, 188, 140, 0.24);
         border-radius: 50%;
         border-top-color: var(--gold);
         height: 2.3rem;
@@ -435,7 +435,7 @@
 
       .support-card {
         align-items: center;
-        background: rgba(9, 13, 18, 0.7);
+        background: rgba(24, 36, 42, 0.7);
         display: flex;
         gap: 0.8rem;
         justify-content: space-between;
@@ -568,7 +568,7 @@
       }
 
       details {
-        border-top: 1px solid rgba(217, 184, 93, 0.2);
+        border-top: 1px solid rgba(215, 188, 140, 0.2);
         margin-top: 0.7rem;
         padding-top: 0.75rem;
       }
@@ -599,7 +599,7 @@
 
       th,
       td {
-        border-bottom: 1px solid rgba(217, 184, 93, 0.14);
+        border-bottom: 1px solid rgba(215, 188, 140, 0.14);
         padding: 0.55rem 0.7rem;
         text-align: right;
       }
@@ -1056,11 +1056,11 @@
         const REQUEST_TIMEOUT_MS = 10_000;
         const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
         const SERIES = {
-          started: "#d9b85d",
+          started: "#d7bc8c",
           completed: "#78c6a3",
         };
         const OUTCOME_COLORS = [
-          "#d9b85d",
+          "#d7bc8c",
           "#78c6a3",
           "#75aee8",
           "#dca05f",
@@ -1385,7 +1385,7 @@
                 x2: width - padding.right,
                 y1: y,
                 y2: y,
-                stroke: "rgba(217, 184, 93, 0.16)",
+                stroke: "rgba(215, 188, 140, 0.16)",
                 "stroke-width": 1,
               }),
             );
@@ -1484,7 +1484,7 @@
                 width: 568,
                 height: 17,
                 rx: 8.5,
-                fill: "rgba(217, 184, 93, 0.1)",
+                fill: "rgba(215, 188, 140, 0.1)",
               }),
               createSvgElement("rect", {
                 x: 24,
@@ -1532,7 +1532,7 @@
               cy: centerY,
               r: radius,
               fill: "none",
-              stroke: "rgba(217, 184, 93, 0.12)",
+              stroke: "rgba(215, 188, 140, 0.12)",
               "stroke-width": 32,
             }),
           );

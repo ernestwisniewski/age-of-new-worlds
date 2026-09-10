@@ -4,6 +4,20 @@ Run commands from the repository root. The Makefile is the executable contract
 for local development, verification, and the supported Compose deployments.
 Credentials, signing material, and populated `.env` files do not belong in Git.
 
+## Static homepage and engine website
+
+Run `python3 tool/build_sites.py` to stage `build/homepage` and
+`build/engine-docs`. This regenerates the workspace Rust API documentation with
+the pinned toolchain and includes the shared `assets/main_menu/background2.jpg`
+artwork, fonts, and site icons. API generation does not deploy the game backend.
+
+Upload only these two directories to their corresponding Caddy bind mounts.
+Preserve `homepage/download/`, keep a backup of replaced files, and transfer
+without `--delete` so cached Rustdoc pages retain their older hashed assets.
+No application image rebuild, database migration, or container restart is
+needed. Verify both public sites, their background assets, `/architecture`, and
+the engine `/aonw_engine/` API reference after uploading.
+
 ## Release verification
 
 Install the pinned dependencies and run the complete qualification gate:

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#07151c">
+    <meta name="theme-color" content="#18242a">
     <meta
       name="description"
       content="Age of New Worlds"
@@ -30,12 +30,12 @@
 
       :root {
         color-scheme: dark;
-        --bg: #07151c;
+        --bg: #18242a;
         --font-body: "Aonw Albert Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         --font-display: "Aonw Cinzel", Georgia, "Times New Roman", serif;
-        --gold: #d8b66a;
-        --gold-soft: rgba(216, 182, 106, 0.32);
-        --shade: rgba(7, 21, 28, 0.4);
+        --gold: #d7bc8c;
+        --gold-soft: rgba(215, 188, 140, 0.32);
+        --shade: rgba(24, 36, 42, 0.4);
       }
 
       * {
@@ -71,19 +71,19 @@
 
       body::before {
         animation: map-journey 96s ease-in-out infinite;
-        background: url("/assets/main_menu/background.jpg") center / cover no-repeat;
-        height: 150lvh;
-        left: -25vw;
-        top: -25lvh;
+        background: url("/assets/main_menu/background2.jpg") center / cover no-repeat;
+        height: 112lvh;
+        left: -6vw;
+        top: -6lvh;
         will-change: transform;
-        width: 150vw;
+        width: 112vw;
         z-index: 0;
       }
 
       body::after {
         background:
-          linear-gradient(90deg, rgba(7, 21, 28, 0.72), rgba(7, 21, 28, 0.32) 50%, rgba(6, 18, 25, 0.64)),
-          linear-gradient(0deg, rgba(6, 18, 25, 0.68), rgba(7, 21, 28, 0.18) 42%, rgba(5, 16, 22, 0.58));
+          linear-gradient(90deg, rgba(24, 36, 42, 0.72), rgba(24, 36, 42, 0.32) 50%, rgba(20, 30, 34, 0.64)),
+          linear-gradient(0deg, rgba(20, 30, 34, 0.68), rgba(24, 36, 42, 0.18) 42%, rgba(17, 26, 30, 0.58));
         height: 100lvh;
         left: 0;
         top: 0;
@@ -103,15 +103,15 @@
         }
 
         25% {
-          transform: translate3d(7vw, -6vh, 0) scale(1.07);
+          transform: translate3d(2vw, -2vh, 0) scale(1.07);
         }
 
         50% {
-          transform: translate3d(-8vw, -4vh, 0) scale(1.035);
+          transform: translate3d(-2vw, -1vh, 0) scale(1.035);
         }
 
         75% {
-          transform: translate3d(5.5vw, 7vh, 0) scale(1.075);
+          transform: translate3d(1.5vw, 2vh, 0) scale(1.075);
         }
       }
 
@@ -195,7 +195,7 @@
       }
 
       .homepage-screen + .homepage-screen {
-        border-top: 1px solid rgba(217, 184, 93, 0.14);
+        border-top: 1px solid rgba(215, 188, 140, 0.14);
       }
 
       .screen-inner {
@@ -247,8 +247,8 @@
 
       .screen-copy {
         background:
-          radial-gradient(ellipse at 50% 54%, rgba(7, 21, 28, 0.62), rgba(7, 21, 28, 0.3) 60%, transparent 76%),
-          linear-gradient(90deg, transparent, rgba(241, 223, 170, 0.05) 32%, rgba(217, 184, 93, 0.07) 70%, transparent);
+          radial-gradient(ellipse at 50% 54%, rgba(24, 36, 42, 0.62), rgba(24, 36, 42, 0.3) 60%, transparent 76%),
+          linear-gradient(90deg, transparent, rgba(238, 220, 189, 0.05) 32%, rgba(215, 188, 140, 0.07) 70%, transparent);
         display: grid;
         gap: 0.54rem;
         justify-items: center;
@@ -260,7 +260,7 @@
 
       .screen-copy::before,
       .screen-copy::after {
-        background: linear-gradient(90deg, transparent, rgba(217, 184, 93, 0.38), rgba(241, 223, 170, 0.22), transparent);
+        background: linear-gradient(90deg, transparent, rgba(215, 188, 140, 0.38), rgba(238, 220, 189, 0.22), transparent);
         content: "";
         height: 1px;
         left: 50%;
@@ -279,7 +279,7 @@
       }
 
       .screen-kicker {
-        color: rgba(216, 182, 106, 0.82);
+        color: rgba(215, 188, 140, 0.82);
         font: 700 0.74rem var(--font-body);
         letter-spacing: 0;
         margin: 0;
@@ -290,7 +290,7 @@
       }
 
       .screen-title {
-        color: rgba(245, 235, 207, 0.96);
+        color: rgba(243, 236, 223, 0.96);
         font: 700 clamp(2rem, 4vw, 2.85rem) var(--font-body);
         line-height: 1.12;
         margin: 0;
@@ -299,11 +299,11 @@
         text-shadow:
           0 0.14rem 0.42rem rgba(0, 0, 0, 0.98),
           0 0.62rem 1.4rem rgba(0, 0, 0, 0.8),
-          0 0 1.35rem rgba(217, 184, 93, 0.12);
+          0 0 1.35rem rgba(215, 188, 140, 0.12);
       }
 
       .screen-text {
-        color: rgba(245, 235, 207, 0.78);
+        color: rgba(243, 236, 223, 0.78);
         font: 300 1.04rem var(--font-body);
         line-height: 1.58;
         margin: 0;
@@ -316,7 +316,7 @@
       }
 
       .screen-text a {
-        color: #f0deb0;
+        color: #eedcbd;
         font-weight: 500;
         text-decoration: none;
         text-underline-offset: 0.18em;
@@ -360,10 +360,10 @@
 
       .logo-link::before {
         animation: logo-outline-pulse 6.8s ease-in-out infinite;
-        background: rgba(241, 223, 170, 0.42);
+        background: rgba(238, 220, 189, 0.42);
         filter:
-          drop-shadow(0 0 0.42rem rgba(217, 184, 93, 0.28))
-          drop-shadow(0 0 1.2rem rgba(217, 184, 93, 0.16));
+          drop-shadow(0 0 0.42rem rgba(215, 188, 140, 0.28))
+          drop-shadow(0 0 1.2rem rgba(215, 188, 140, 0.16));
         transform-origin: center;
         z-index: 0;
       }
@@ -371,9 +371,9 @@
       .logo-link::after {
         animation: logo-trace-flow 7.4s ease-in-out infinite;
         background:
-          linear-gradient(100deg, transparent 32%, rgba(241, 223, 170, 0.86) 48%, transparent 64%) -120% 48% / 48% 190% no-repeat,
-          repeating-linear-gradient(110deg, transparent 0 1.14rem, rgba(217, 184, 93, 0.22) 1.18rem 1.24rem, transparent 1.3rem 2.56rem);
-        filter: drop-shadow(0 0 0.8rem rgba(217, 184, 93, 0.2));
+          linear-gradient(100deg, transparent 32%, rgba(238, 220, 189, 0.86) 48%, transparent 64%) -120% 48% / 48% 190% no-repeat,
+          repeating-linear-gradient(110deg, transparent 0 1.14rem, rgba(215, 188, 140, 0.22) 1.18rem 1.24rem, transparent 1.3rem 2.56rem);
+        filter: drop-shadow(0 0 0.8rem rgba(215, 188, 140, 0.2));
         mix-blend-mode: screen;
         z-index: 2;
       }
@@ -392,16 +392,16 @@
         object-fit: contain;
         filter:
           drop-shadow(0 1.25rem 2.5rem rgba(0, 0, 0, 0.6))
-          drop-shadow(0 0 2rem rgba(217, 184, 93, 0.26));
+          drop-shadow(0 0 2rem rgba(215, 188, 140, 0.26));
         position: relative;
         z-index: 1;
       }
 
       .game-summary {
         background:
-          radial-gradient(ellipse at 50% 54%, rgba(7, 21, 28, 0.62), rgba(7, 21, 28, 0.3) 60%, transparent 76%),
-          linear-gradient(90deg, transparent, rgba(241, 223, 170, 0.05) 32%, rgba(217, 184, 93, 0.07) 70%, transparent);
-        color: rgba(245, 235, 207, 0.92);
+          radial-gradient(ellipse at 50% 54%, rgba(24, 36, 42, 0.62), rgba(24, 36, 42, 0.3) 60%, transparent 76%),
+          linear-gradient(90deg, transparent, rgba(238, 220, 189, 0.05) 32%, rgba(215, 188, 140, 0.07) 70%, transparent);
+        color: rgba(243, 236, 223, 0.92);
         font: 300 clamp(1.02rem, 1.45vw, 1.18rem) var(--font-body);
         line-height: 1.64;
         margin: -0.05rem 0 0;
@@ -413,12 +413,12 @@
         text-shadow:
           0 0.11rem 0.34rem rgba(0, 0, 0, 0.98),
           0 0.48rem 1.1rem rgba(0, 0, 0, 0.82),
-          0 0 1.2rem rgba(217, 184, 93, 0.14);
+          0 0 1.2rem rgba(215, 188, 140, 0.14);
       }
 
       .game-summary::before,
       .game-summary::after {
-        background: linear-gradient(90deg, transparent, rgba(217, 184, 93, 0.38), rgba(241, 223, 170, 0.22), transparent);
+        background: linear-gradient(90deg, transparent, rgba(215, 188, 140, 0.38), rgba(238, 220, 189, 0.22), transparent);
         content: "";
         height: 1px;
         left: 50%;
@@ -439,7 +439,7 @@
       .scroll-marker {
         animation: scroll-pulse 2.2s ease-in-out infinite;
         bottom: clamp(1rem, 3svh, 2rem);
-        color: rgba(241, 223, 170, 0.56);
+        color: rgba(238, 220, 189, 0.56);
         display: block;
         height: 2.3rem;
         position: absolute;
@@ -479,8 +479,8 @@
       }
 
       a.scroll-marker:hover {
-        color: rgba(241, 223, 170, 0.9);
-        filter: drop-shadow(0 0 0.7rem rgba(217, 184, 93, 0.28));
+        color: rgba(238, 220, 189, 0.9);
+        filter: drop-shadow(0 0 0.7rem rgba(215, 188, 140, 0.28));
       }
 
       a.scroll-marker:focus-visible {
@@ -553,17 +553,17 @@
         width: auto;
         filter:
           drop-shadow(0 1rem 1.6rem rgba(0, 0, 0, 0.54))
-          drop-shadow(0 0 1.1rem rgba(217, 184, 93, 0.18));
+          drop-shadow(0 0 1.1rem rgba(215, 188, 140, 0.18));
       }
 
       .video-frame {
         aspect-ratio: 16 / 9;
         background: rgba(4, 14, 19, 0.78);
-        border: 1px solid rgba(217, 184, 93, 0.5);
+        border: 1px solid rgba(215, 188, 140, 0.5);
         border-radius: 0.45rem;
         box-shadow:
           0 1.4rem 3rem rgba(0, 0, 0, 0.52),
-          0 0 2rem rgba(217, 184, 93, 0.14);
+          0 0 2rem rgba(215, 188, 140, 0.14);
         height: 100%;
         overflow: hidden;
         position: relative;
@@ -625,12 +625,12 @@
       }
 
       .video-cover::before {
-        background: rgba(7, 21, 28, 0.78);
-        border: 1px solid rgba(241, 223, 170, 0.74);
+        background: rgba(24, 36, 42, 0.78);
+        border: 1px solid rgba(238, 220, 189, 0.74);
         border-radius: 999px;
         box-shadow:
           0 0.8rem 1.4rem rgba(0, 0, 0, 0.44),
-          0 0 1.2rem rgba(217, 184, 93, 0.24);
+          0 0 1.2rem rgba(215, 188, 140, 0.24);
         content: "";
         height: clamp(3.1rem, 7vw, 4.3rem);
         width: clamp(3.1rem, 7vw, 4.3rem);
@@ -638,7 +638,7 @@
 
       .video-cover::after {
         border-bottom: clamp(0.52rem, 1.14vw, 0.74rem) solid transparent;
-        border-left: clamp(0.88rem, 1.92vw, 1.24rem) solid #f1dfaa;
+        border-left: clamp(0.88rem, 1.92vw, 1.24rem) solid #eedcbd;
         border-top: clamp(0.52rem, 1.14vw, 0.74rem) solid transparent;
         content: "";
         margin-left: clamp(0.16rem, 0.35vw, 0.24rem);
@@ -659,8 +659,8 @@
 
       .carousel-dot {
         appearance: none;
-        background: rgba(241, 223, 170, 0.28);
-        border: 1px solid rgba(217, 184, 93, 0.58);
+        background: rgba(238, 220, 189, 0.28);
+        border: 1px solid rgba(215, 188, 140, 0.58);
         border-radius: 999px;
         cursor: pointer;
         height: 0.54rem;
@@ -677,9 +677,9 @@
       }
 
       .carousel-dot[aria-current="true"] {
-        background: #f1dfaa;
-        border-color: #f1dfaa;
-        box-shadow: 0 0 0.72rem rgba(217, 184, 93, 0.46);
+        background: #eedcbd;
+        border-color: #eedcbd;
+        box-shadow: 0 0 0.72rem rgba(215, 188, 140, 0.46);
       }
 
       .carousel-dot:focus-visible {
@@ -841,7 +841,7 @@
       }
 
       .asset-note {
-        color: rgba(241, 223, 170, 0.94);
+        color: rgba(238, 220, 189, 0.94);
         font: 700 0.67rem var(--font-body);
         line-height: 1.45;
         margin: 0;
@@ -910,10 +910,10 @@
       }
 
       .legal-link {
-        color: rgba(241, 223, 170, 0.94);
+        color: rgba(238, 220, 189, 0.94);
         font: 700 0.7rem var(--font-body);
         text-decoration: underline;
-        text-decoration-color: rgba(217, 184, 93, 0.42);
+        text-decoration-color: rgba(215, 188, 140, 0.42);
         text-underline-offset: 0.18rem;
         text-shadow:
           0 0.14rem 0.42rem rgba(0, 0, 0, 0.92),
@@ -926,7 +926,7 @@
       }
 
       .legal-separator {
-        color: rgba(241, 223, 170, 0.76);
+        color: rgba(238, 220, 189, 0.76);
         font: 700 0.7rem var(--font-body);
         text-shadow:
           0 0.14rem 0.42rem rgba(0, 0, 0, 0.92),
@@ -935,9 +935,9 @@
 
       .nav-link {
         align-items: center;
-        border: 1px solid rgba(217, 184, 93, 0.62);
+        border: 1px solid rgba(215, 188, 140, 0.62);
         border-radius: 0.35rem;
-        color: #f0deb0;
+        color: #eedcbd;
         display: inline-flex;
         font: 700 0.86rem var(--font-body);
         gap: 0.48rem;
@@ -947,7 +947,7 @@
         text-decoration: none;
         text-transform: uppercase;
         white-space: nowrap;
-        background: rgba(7, 21, 28, 0.72);
+        background: rgba(24, 36, 42, 0.72);
         box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.32);
         transition:
           background-color 180ms ease,
@@ -959,10 +959,10 @@
 
       a.nav-link:hover {
         background: rgba(16, 36, 42, 0.86);
-        border-color: rgba(241, 223, 170, 0.82);
+        border-color: rgba(238, 220, 189, 0.82);
         box-shadow:
           0 0.95rem 1.9rem rgba(0, 0, 0, 0.36),
-          0 0 1.2rem rgba(217, 184, 93, 0.16);
+          0 0 1.2rem rgba(215, 188, 140, 0.16);
         transform: translateY(-1px);
       }
 
@@ -973,11 +973,11 @@
       }
 
       .secondary-links .nav-link {
-        border-color: rgba(217, 184, 93, 0.46);
+        border-color: rgba(215, 188, 140, 0.46);
         color: #e4d09a;
         font-size: 0.72rem;
         padding: 0.58rem 0.78rem;
-        background: rgba(7, 21, 28, 0.6);
+        background: rgba(24, 36, 42, 0.6);
         box-shadow: 0 0.45rem 1rem rgba(0, 0, 0, 0.24);
         text-transform: none;
       }
