@@ -10,9 +10,11 @@ import '../../map/presentation/input/map_gamepad_navigation.dart';
 import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../application/research_state.dart';
 import '../read_model/research_view.dart';
+import 'research_browser.dart';
 import 'research_copy.dart';
 
 part 'research_catalog.dart';
+part 'technology_option_card.dart';
 
 final class ResearchOverlay extends StatelessWidget {
   const ResearchOverlay({
@@ -183,16 +185,30 @@ final class ResearchPanel extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         const SizedBox(height: AonwSpacing.sm),
-        Expanded(
-          child: _ResearchCatalog(
-            options: options.options,
-            enabled: !state.commandPending,
-            onSelect: onSelect,
-          ),
-        ),
+        Expanded(child: _browser(options)),
       ],
     );
   }
+
+  Widget _browser(ResearchOptionsView options) => ResearchBrowser(
+    key: ValueKey((
+      options.playerId,
+      options.stamp.mapHash,
+      options.stamp.rulesetHash,
+      options.stamp.stateDigest,
+    )),
+    options: options.options,
+    catalog: _ResearchCatalog(
+      options: options.options,
+      enabled: !state.commandPending,
+      onSelect: onSelect,
+    ),
+    details: (option) => _TechnologyOptionCard(
+      option: option,
+      enabled: !state.commandPending,
+      onSelect: onSelect,
+    ),
+  );
 }
 
 final class _ResearchSummary extends StatelessWidget {
@@ -218,72 +234,6 @@ final class _ResearchSummary extends StatelessWidget {
           '${active == null ? copy.text(ResearchText.none) : copy.technology(active)}',
         ),
       ],
-    );
-  }
-}
-
-final class _TechnologyOptionCard extends StatelessWidget {
-  const _TechnologyOptionCard({
-    required this.option,
-    required this.enabled,
-    required this.onSelect,
-  });
-
-  final ResearchOptionView option;
-  final bool enabled;
-  final ValueChanged<TechnologyIdView> onSelect;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = ResearchCopy.of(context);
-    final available =
-        option.availability == TechnologyAvailabilityView.available;
-    String technologies(List<TechnologyIdView> values) => values.isEmpty
-        ? copy.text(ResearchText.none)
-        : values.map(copy.technology).join(', ');
-    final unlocks = option.unlocks.isEmpty
-        ? copy.text(ResearchText.none)
-        : option.unlocks.map(copy.unlock).join(', ');
-    final percent = option.boostDiscountBasisPoints / 100;
-    return Card.outlined(
-      key: ValueKey(('research-option', option.technology.name)),
-      child: Padding(
-        padding: const EdgeInsets.all(AonwSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              copy.technology(option.technology),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(copy.availability(option.availability)),
-            Text(
-              '${copy.text(ResearchText.progress)}: ${option.progress} / '
-              '${option.effectiveCost} · ${copy.text(ResearchText.boost)}: '
-              '${percent.toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2)}%',
-            ),
-            Text(
-              '${copy.text(ResearchText.prerequisites)}: '
-              '${technologies(option.prerequisites)}',
-            ),
-            Text(
-              '${copy.text(ResearchText.blockedBy)}: '
-              '${technologies(option.blockedBy)}',
-            ),
-            Text('${copy.text(ResearchText.unlocks)}: $unlocks'),
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: FilledButton(
-                key: ValueKey(('select-technology', option.technology.name)),
-                onPressed: enabled && available
-                    ? () => onSelect(option.technology)
-                    : null,
-                child: Text(copy.text(ResearchText.choose)),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1686,6 +1686,10 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'blockedBy': 'Geblokkeerd door',
       'unlocks': 'Ontgrendelt',
       'choose': 'Selecteren',
+      'tree': 'Technologieboom',
+      'catalog': 'Onderzoekscatalogus',
+      'backToTree': 'Terug naar de boom',
+      'treeUnavailable': 'Het afhankelijkheidsdiagram is niet beschikbaar.',
       'other': 'Onderzoek',
     });
     return '$_temp0';

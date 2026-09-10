@@ -1643,6 +1643,10 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'blockedBy': 'Blokowane przez',
       'unlocks': 'Odblokowuje',
       'choose': 'Wybierz',
+      'tree': 'Drzewo technologii',
+      'catalog': 'Katalog badań',
+      'backToTree': 'Powrót do drzewa',
+      'treeUnavailable': 'Diagram zależności jest niedostępny.',
       'other': 'Badania',
     });
     return '$_temp0';

@@ -1,6 +1,10 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
+import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
 import 'package:aonw_flutter/features/research/application/research_state.dart';
 import 'package:aonw_flutter/features/research/presentation/research_overlay.dart';
+import 'package:aonw_flutter/features/research/presentation/research_tree_layout.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,9 +14,11 @@ import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 part 'research_responsive_cases.dart';
+part 'research_tree_cases.dart';
 
 void main() {
   researchResponsiveCases();
+  researchTreeCases();
   testWidgets('shows exact research data and selects only available option', (
     tester,
   ) async {
@@ -111,6 +117,7 @@ void main() {
       find.byType(Card).evaluate().length,
       lessThan(TechnologyIdView.values.length),
     );
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pump();

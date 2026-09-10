@@ -168,9 +168,36 @@ void main() {
     );
     expect(harness.session.researchCommandCalls, 0);
     await harness.press(tester, GamepadButton.dpadDown);
+    await harness.press(tester, GamepadButton.dpadDown);
     await harness.press(tester, GamepadButton.a, hold: true);
     expect(harness.session.researchCommandCalls, 1);
     expect(harness.ready.interaction.selected, isNull);
+    expect(harness.session.endTurnCalls, 0);
+    harness.release(GamepadButton.a);
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('gamepad inspects research tree before selecting technology', (
+    tester,
+  ) async {
+    final harness = await _Harness.mount(tester, requiredResearch: true);
+    await harness.press(tester, GamepadButton.dpadDown);
+    await harness.press(tester, GamepadButton.a);
+    expect(
+      find.byKey(const ValueKey('research-tree-horizontal')),
+      findsOneWidget,
+    );
+    await harness.press(tester, GamepadButton.dpadDown);
+    await harness.press(tester, GamepadButton.a);
+    expect(harness.session.researchCommandCalls, 0);
+    expect(
+      find.byKey(const ValueKey(('select-technology', 'agriculture'))),
+      findsOneWidget,
+    );
+    await harness.press(tester, GamepadButton.dpadDown);
+    await harness.press(tester, GamepadButton.a, hold: true);
+    expect(harness.session.researchCommandCalls, 1);
     expect(harness.session.endTurnCalls, 0);
     harness.release(GamepadButton.a);
     await tester.pump();

@@ -1690,6 +1690,10 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'blockedBy': 'Bloquée par',
       'unlocks': 'Débloque',
       'choose': 'Sélectionner',
+      'tree': 'Arbre technologique',
+      'catalog': 'Catalogue de recherche',
+      'backToTree': 'Retour à l’arbre',
+      'treeUnavailable': 'Le diagramme des dépendances est indisponible.',
       'other': 'Recherche',
     });
     return '$_temp0';

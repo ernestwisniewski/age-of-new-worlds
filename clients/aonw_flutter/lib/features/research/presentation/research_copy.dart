@@ -23,6 +23,10 @@ enum ResearchText {
   blockedBy,
   unlocks,
   choose,
+  tree,
+  catalog,
+  backToTree,
+  treeUnavailable,
 }
 
 final class ResearchCopy {

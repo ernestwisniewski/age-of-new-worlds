@@ -1690,6 +1690,10 @@ class AonwLocalizationsEs extends AonwLocalizations {
       'blockedBy': 'Bloqueada por',
       'unlocks': 'Desbloquea',
       'choose': 'Seleccionar',
+      'tree': 'Árbol tecnológico',
+      'catalog': 'Catálogo de investigación',
+      'backToTree': 'Volver al árbol',
+      'treeUnavailable': 'El diagrama de dependencias no está disponible.',
       'other': 'Investigación',
     });
     return '$_temp0';

@@ -1939,7 +1939,7 @@ abstract class AonwLocalizations {
   /// No description provided for @researchText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} other{Research}}'**
+  /// **'{key, select, title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} tree{Technology tree} catalog{Research catalog} backToTree{Back to tree} treeUnavailable{The dependency diagram is unavailable.} other{Research}}'**
   String researchText(String key);
 
   /// No description provided for @researchAvailability.

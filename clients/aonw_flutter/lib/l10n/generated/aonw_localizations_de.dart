@@ -1705,6 +1705,10 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'blockedBy': 'Gesperrt durch',
       'unlocks': 'Schaltet frei',
       'choose': 'Auswählen',
+      'tree': 'Technologiebaum',
+      'catalog': 'Forschungskatalog',
+      'backToTree': 'Zurück zum Baum',
+      'treeUnavailable': 'Das Abhängigkeitsdiagramm ist nicht verfügbar.',
       'other': 'Forschung',
     });
     return '$_temp0';

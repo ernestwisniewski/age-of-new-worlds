@@ -849,7 +849,7 @@
       }
     }
   },
-  "researchText": "{key, select, title{Investigación} open{Abrir investigación} close{Cerrar investigación} loading{Cargando opciones de investigación} retry{Reintentar} selecting{Seleccionando tecnología} selectionRequired{Selecciona una tecnología para continuar} sciencePerTurn{Ciencia por turno} overflow{Ciencia almacenada} active{Tecnología activa} none{Ninguna} cost{Coste} progress{Progreso} boost{Descuento por impulso} prerequisites{Requisitos previos} blockedBy{Bloqueada por} unlocks{Desbloquea} choose{Seleccionar} other{Investigación}}",
+  "researchText": "{key, select, title{Investigación} open{Abrir investigación} close{Cerrar investigación} loading{Cargando opciones de investigación} retry{Reintentar} selecting{Seleccionando tecnología} selectionRequired{Selecciona una tecnología para continuar} sciencePerTurn{Ciencia por turno} overflow{Ciencia almacenada} active{Tecnología activa} none{Ninguna} cost{Coste} progress{Progreso} boost{Descuento por impulso} prerequisites{Requisitos previos} blockedBy{Bloqueada por} unlocks{Desbloquea} choose{Seleccionar} tree{Árbol tecnológico} catalog{Catálogo de investigación} backToTree{Volver al árbol} treeUnavailable{El diagrama de dependencias no está disponible.} other{Investigación}}",
   "@researchText": {
     "placeholders": {
       "key": {

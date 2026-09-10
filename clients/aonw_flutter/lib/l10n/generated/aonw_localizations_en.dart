@@ -1637,6 +1637,10 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'blockedBy': 'Blocked by',
       'unlocks': 'Unlocks',
       'choose': 'Select',
+      'tree': 'Technology tree',
+      'catalog': 'Research catalog',
+      'backToTree': 'Back to tree',
+      'treeUnavailable': 'The dependency diagram is unavailable.',
       'other': 'Research',
     });
     return '$_temp0';
