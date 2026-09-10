@@ -533,6 +533,24 @@ class Endpoints extends _i1.EndpointDispatch {
               ) async =>
                   (endpoints['game'] as _i11.GameEndpoint).listMatches(session),
         ),
+        'matchHistory': _i1.MethodConnector(
+          name: 'matchHistory',
+          params: {
+            'beforeParticipantId': _i1.ParameterDescription(
+              name: 'beforeParticipantId',
+              type: _i1.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).matchHistory(
+                session,
+                beforeParticipantId: params['beforeParticipantId'],
+              ),
+        ),
         'lobby': _i1.MethodConnector(
           name: 'lobby',
           params: {

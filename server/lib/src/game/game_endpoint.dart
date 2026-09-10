@@ -23,6 +23,12 @@ final class GameEndpoint extends Endpoint {
   Future<List<GameMatchView>> listMatches(Session session) =>
       _service.listMatches(session);
 
+  Future<GameMatchHistoryPage> matchHistory(
+    Session session, {
+    int? beforeParticipantId,
+  }) =>
+      _service.matchHistory(session, beforeParticipantId: beforeParticipantId);
+
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _service.lobby(session, matchId);
 

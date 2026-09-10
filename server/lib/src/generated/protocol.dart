@@ -36,17 +36,19 @@ import 'game/models/game_kick_participant_request.dart' as _i20;
 import 'game/models/game_lobby_participant_view.dart' as _i21;
 import 'game/models/game_lobby_view.dart' as _i22;
 import 'game/models/game_match.dart' as _i23;
-import 'game/models/game_match_view.dart' as _i24;
-import 'game/models/game_participant.dart' as _i25;
-import 'game/models/game_player_command_request.dart' as _i26;
-import 'game/models/game_player_query_outcome.dart' as _i27;
-import 'game/models/game_player_query_request.dart' as _i28;
-import 'game/models/game_recipient_snapshot.dart' as _i29;
-import 'game/models/game_resign_match_request.dart' as _i30;
-import 'game/models/game_resync.dart' as _i31;
-import 'game/models/game_submit_turn_request.dart' as _i32;
+import 'game/models/game_match_history_entry.dart' as _i24;
+import 'game/models/game_match_history_page.dart' as _i25;
+import 'game/models/game_match_view.dart' as _i26;
+import 'game/models/game_participant.dart' as _i27;
+import 'game/models/game_player_command_request.dart' as _i28;
+import 'game/models/game_player_query_outcome.dart' as _i29;
+import 'game/models/game_player_query_request.dart' as _i30;
+import 'game/models/game_recipient_snapshot.dart' as _i31;
+import 'game/models/game_resign_match_request.dart' as _i32;
+import 'game/models/game_resync.dart' as _i33;
+import 'game/models/game_submit_turn_request.dart' as _i34;
 import 'package:aonw_server/src/generated/game/models/game_match_view.dart'
-    as _i33;
+    as _i35;
 export 'auth/models/account.dart';
 export 'auth/models/account_auth_exception.dart';
 export 'auth/models/external_auth_poll_result.dart';
@@ -66,6 +68,8 @@ export 'game/models/game_kick_participant_request.dart';
 export 'game/models/game_lobby_participant_view.dart';
 export 'game/models/game_lobby_view.dart';
 export 'game/models/game_match.dart';
+export 'game/models/game_match_history_entry.dart';
+export 'game/models/game_match_history_page.dart';
 export 'game/models/game_match_view.dart';
 export 'game/models/game_participant.dart';
 export 'game/models/game_player_command_request.dart';
@@ -1350,32 +1354,38 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i23.GameMatch) {
       return _i23.GameMatch.fromJson(data) as T;
     }
-    if (t == _i24.GameMatchView) {
-      return _i24.GameMatchView.fromJson(data) as T;
+    if (t == _i24.GameMatchHistoryEntry) {
+      return _i24.GameMatchHistoryEntry.fromJson(data) as T;
     }
-    if (t == _i25.GameParticipant) {
-      return _i25.GameParticipant.fromJson(data) as T;
+    if (t == _i25.GameMatchHistoryPage) {
+      return _i25.GameMatchHistoryPage.fromJson(data) as T;
     }
-    if (t == _i26.GamePlayerCommandRequest) {
-      return _i26.GamePlayerCommandRequest.fromJson(data) as T;
+    if (t == _i26.GameMatchView) {
+      return _i26.GameMatchView.fromJson(data) as T;
     }
-    if (t == _i27.GamePlayerQueryOutcome) {
-      return _i27.GamePlayerQueryOutcome.fromJson(data) as T;
+    if (t == _i27.GameParticipant) {
+      return _i27.GameParticipant.fromJson(data) as T;
     }
-    if (t == _i28.GamePlayerQueryRequest) {
-      return _i28.GamePlayerQueryRequest.fromJson(data) as T;
+    if (t == _i28.GamePlayerCommandRequest) {
+      return _i28.GamePlayerCommandRequest.fromJson(data) as T;
     }
-    if (t == _i29.GameRecipientSnapshot) {
-      return _i29.GameRecipientSnapshot.fromJson(data) as T;
+    if (t == _i29.GamePlayerQueryOutcome) {
+      return _i29.GamePlayerQueryOutcome.fromJson(data) as T;
     }
-    if (t == _i30.GameResignMatchRequest) {
-      return _i30.GameResignMatchRequest.fromJson(data) as T;
+    if (t == _i30.GamePlayerQueryRequest) {
+      return _i30.GamePlayerQueryRequest.fromJson(data) as T;
     }
-    if (t == _i31.GameResync) {
-      return _i31.GameResync.fromJson(data) as T;
+    if (t == _i31.GameRecipientSnapshot) {
+      return _i31.GameRecipientSnapshot.fromJson(data) as T;
     }
-    if (t == _i32.GameSubmitTurnRequest) {
-      return _i32.GameSubmitTurnRequest.fromJson(data) as T;
+    if (t == _i32.GameResignMatchRequest) {
+      return _i32.GameResignMatchRequest.fromJson(data) as T;
+    }
+    if (t == _i33.GameResync) {
+      return _i33.GameResync.fromJson(data) as T;
+    }
+    if (t == _i34.GameSubmitTurnRequest) {
+      return _i34.GameSubmitTurnRequest.fromJson(data) as T;
     }
     if (t == _i1.getType<_i5.AonwAccount?>()) {
       return (data != null ? _i5.AonwAccount.fromJson(data) : null) as T;
@@ -1447,39 +1457,47 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i23.GameMatch?>()) {
       return (data != null ? _i23.GameMatch.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i24.GameMatchView?>()) {
-      return (data != null ? _i24.GameMatchView.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i24.GameMatchHistoryEntry?>()) {
+      return (data != null ? _i24.GameMatchHistoryEntry.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i25.GameParticipant?>()) {
-      return (data != null ? _i25.GameParticipant.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i25.GameMatchHistoryPage?>()) {
+      return (data != null ? _i25.GameMatchHistoryPage.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i26.GamePlayerCommandRequest?>()) {
+    if (t == _i1.getType<_i26.GameMatchView?>()) {
+      return (data != null ? _i26.GameMatchView.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i27.GameParticipant?>()) {
+      return (data != null ? _i27.GameParticipant.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i28.GamePlayerCommandRequest?>()) {
       return (data != null
-              ? _i26.GamePlayerCommandRequest.fromJson(data)
+              ? _i28.GamePlayerCommandRequest.fromJson(data)
               : null)
           as T;
     }
-    if (t == _i1.getType<_i27.GamePlayerQueryOutcome?>()) {
-      return (data != null ? _i27.GamePlayerQueryOutcome.fromJson(data) : null)
+    if (t == _i1.getType<_i29.GamePlayerQueryOutcome?>()) {
+      return (data != null ? _i29.GamePlayerQueryOutcome.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i28.GamePlayerQueryRequest?>()) {
-      return (data != null ? _i28.GamePlayerQueryRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i30.GamePlayerQueryRequest?>()) {
+      return (data != null ? _i30.GamePlayerQueryRequest.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i29.GameRecipientSnapshot?>()) {
-      return (data != null ? _i29.GameRecipientSnapshot.fromJson(data) : null)
+    if (t == _i1.getType<_i31.GameRecipientSnapshot?>()) {
+      return (data != null ? _i31.GameRecipientSnapshot.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i30.GameResignMatchRequest?>()) {
-      return (data != null ? _i30.GameResignMatchRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i32.GameResignMatchRequest?>()) {
+      return (data != null ? _i32.GameResignMatchRequest.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i31.GameResync?>()) {
-      return (data != null ? _i31.GameResync.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.GameResync?>()) {
+      return (data != null ? _i33.GameResync.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.GameSubmitTurnRequest?>()) {
-      return (data != null ? _i32.GameSubmitTurnRequest.fromJson(data) : null)
+    if (t == _i1.getType<_i34.GameSubmitTurnRequest?>()) {
+      return (data != null ? _i34.GameSubmitTurnRequest.fromJson(data) : null)
           as T;
     }
     if (t == List<String>) {
@@ -1497,16 +1515,16 @@ class Protocol extends _i1.SerializationManagerServer {
               .toList()
           as T;
     }
-    if (t == List<_i25.GameParticipant>) {
+    if (t == List<_i27.GameParticipant>) {
       return (data as List)
-              .map((e) => deserialize<_i25.GameParticipant>(e))
+              .map((e) => deserialize<_i27.GameParticipant>(e))
               .toList()
           as T;
     }
-    if (t == _i1.getType<List<_i25.GameParticipant>?>()) {
+    if (t == _i1.getType<List<_i27.GameParticipant>?>()) {
       return (data != null
               ? (data as List)
-                    .map((e) => deserialize<_i25.GameParticipant>(e))
+                    .map((e) => deserialize<_i27.GameParticipant>(e))
                     .toList()
               : null)
           as T;
@@ -1537,23 +1555,29 @@ class Protocol extends _i1.SerializationManagerServer {
               : null)
           as T;
     }
-    if (t == List<_i29.GameRecipientSnapshot>) {
+    if (t == List<_i31.GameRecipientSnapshot>) {
       return (data as List)
-              .map((e) => deserialize<_i29.GameRecipientSnapshot>(e))
+              .map((e) => deserialize<_i31.GameRecipientSnapshot>(e))
               .toList()
           as T;
     }
-    if (t == _i1.getType<List<_i29.GameRecipientSnapshot>?>()) {
+    if (t == _i1.getType<List<_i31.GameRecipientSnapshot>?>()) {
       return (data != null
               ? (data as List)
-                    .map((e) => deserialize<_i29.GameRecipientSnapshot>(e))
+                    .map((e) => deserialize<_i31.GameRecipientSnapshot>(e))
                     .toList()
               : null)
           as T;
     }
-    if (t == List<_i33.GameMatchView>) {
+    if (t == List<_i24.GameMatchHistoryEntry>) {
       return (data as List)
-              .map((e) => deserialize<_i33.GameMatchView>(e))
+              .map((e) => deserialize<_i24.GameMatchHistoryEntry>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i35.GameMatchView>) {
+      return (data as List)
+              .map((e) => deserialize<_i35.GameMatchView>(e))
               .toList()
           as T;
     }
@@ -1590,15 +1614,17 @@ class Protocol extends _i1.SerializationManagerServer {
       _i21.GameLobbyParticipantView => 'GameLobbyParticipantView',
       _i22.GameLobbyView => 'GameLobbyView',
       _i23.GameMatch => 'GameMatch',
-      _i24.GameMatchView => 'GameMatchView',
-      _i25.GameParticipant => 'GameParticipant',
-      _i26.GamePlayerCommandRequest => 'GamePlayerCommandRequest',
-      _i27.GamePlayerQueryOutcome => 'GamePlayerQueryOutcome',
-      _i28.GamePlayerQueryRequest => 'GamePlayerQueryRequest',
-      _i29.GameRecipientSnapshot => 'GameRecipientSnapshot',
-      _i30.GameResignMatchRequest => 'GameResignMatchRequest',
-      _i31.GameResync => 'GameResync',
-      _i32.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
+      _i24.GameMatchHistoryEntry => 'GameMatchHistoryEntry',
+      _i25.GameMatchHistoryPage => 'GameMatchHistoryPage',
+      _i26.GameMatchView => 'GameMatchView',
+      _i27.GameParticipant => 'GameParticipant',
+      _i28.GamePlayerCommandRequest => 'GamePlayerCommandRequest',
+      _i29.GamePlayerQueryOutcome => 'GamePlayerQueryOutcome',
+      _i30.GamePlayerQueryRequest => 'GamePlayerQueryRequest',
+      _i31.GameRecipientSnapshot => 'GameRecipientSnapshot',
+      _i32.GameResignMatchRequest => 'GameResignMatchRequest',
+      _i33.GameResync => 'GameResync',
+      _i34.GameSubmitTurnRequest => 'GameSubmitTurnRequest',
       _ => null,
     };
   }
@@ -1651,23 +1677,27 @@ class Protocol extends _i1.SerializationManagerServer {
         return 'GameLobbyView';
       case _i23.GameMatch():
         return 'GameMatch';
-      case _i24.GameMatchView():
+      case _i24.GameMatchHistoryEntry():
+        return 'GameMatchHistoryEntry';
+      case _i25.GameMatchHistoryPage():
+        return 'GameMatchHistoryPage';
+      case _i26.GameMatchView():
         return 'GameMatchView';
-      case _i25.GameParticipant():
+      case _i27.GameParticipant():
         return 'GameParticipant';
-      case _i26.GamePlayerCommandRequest():
+      case _i28.GamePlayerCommandRequest():
         return 'GamePlayerCommandRequest';
-      case _i27.GamePlayerQueryOutcome():
+      case _i29.GamePlayerQueryOutcome():
         return 'GamePlayerQueryOutcome';
-      case _i28.GamePlayerQueryRequest():
+      case _i30.GamePlayerQueryRequest():
         return 'GamePlayerQueryRequest';
-      case _i29.GameRecipientSnapshot():
+      case _i31.GameRecipientSnapshot():
         return 'GameRecipientSnapshot';
-      case _i30.GameResignMatchRequest():
+      case _i32.GameResignMatchRequest():
         return 'GameResignMatchRequest';
-      case _i31.GameResync():
+      case _i33.GameResync():
         return 'GameResync';
-      case _i32.GameSubmitTurnRequest():
+      case _i34.GameSubmitTurnRequest():
         return 'GameSubmitTurnRequest';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -1748,32 +1778,38 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'GameMatch') {
       return deserialize<_i23.GameMatch>(data['data']);
     }
+    if (dataClassName == 'GameMatchHistoryEntry') {
+      return deserialize<_i24.GameMatchHistoryEntry>(data['data']);
+    }
+    if (dataClassName == 'GameMatchHistoryPage') {
+      return deserialize<_i25.GameMatchHistoryPage>(data['data']);
+    }
     if (dataClassName == 'GameMatchView') {
-      return deserialize<_i24.GameMatchView>(data['data']);
+      return deserialize<_i26.GameMatchView>(data['data']);
     }
     if (dataClassName == 'GameParticipant') {
-      return deserialize<_i25.GameParticipant>(data['data']);
+      return deserialize<_i27.GameParticipant>(data['data']);
     }
     if (dataClassName == 'GamePlayerCommandRequest') {
-      return deserialize<_i26.GamePlayerCommandRequest>(data['data']);
+      return deserialize<_i28.GamePlayerCommandRequest>(data['data']);
     }
     if (dataClassName == 'GamePlayerQueryOutcome') {
-      return deserialize<_i27.GamePlayerQueryOutcome>(data['data']);
+      return deserialize<_i29.GamePlayerQueryOutcome>(data['data']);
     }
     if (dataClassName == 'GamePlayerQueryRequest') {
-      return deserialize<_i28.GamePlayerQueryRequest>(data['data']);
+      return deserialize<_i30.GamePlayerQueryRequest>(data['data']);
     }
     if (dataClassName == 'GameRecipientSnapshot') {
-      return deserialize<_i29.GameRecipientSnapshot>(data['data']);
+      return deserialize<_i31.GameRecipientSnapshot>(data['data']);
     }
     if (dataClassName == 'GameResignMatchRequest') {
-      return deserialize<_i30.GameResignMatchRequest>(data['data']);
+      return deserialize<_i32.GameResignMatchRequest>(data['data']);
     }
     if (dataClassName == 'GameResync') {
-      return deserialize<_i31.GameResync>(data['data']);
+      return deserialize<_i33.GameResync>(data['data']);
     }
     if (dataClassName == 'GameSubmitTurnRequest') {
-      return deserialize<_i32.GameSubmitTurnRequest>(data['data']);
+      return deserialize<_i34.GameSubmitTurnRequest>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -1825,10 +1861,10 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i17.GameEvent.t;
       case _i23.GameMatch:
         return _i23.GameMatch.t;
-      case _i25.GameParticipant:
-        return _i25.GameParticipant.t;
-      case _i29.GameRecipientSnapshot:
-        return _i29.GameRecipientSnapshot.t;
+      case _i27.GameParticipant:
+        return _i27.GameParticipant.t;
+      case _i31.GameRecipientSnapshot:
+        return _i31.GameRecipientSnapshot.t;
     }
     return null;
   }

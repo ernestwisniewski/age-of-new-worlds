@@ -8,6 +8,7 @@ import 'package:serverpod/serverpod.dart';
 
 part 'game_match_service_commands.dart';
 part 'game_match_service_creation.dart';
+part 'game_match_service_history.dart';
 part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
@@ -38,6 +39,11 @@ final class GameMatchService {
 
   Future<List<GameMatchView>> listMatches(Session session) =>
       _listMatches(session);
+
+  Future<GameMatchHistoryPage> matchHistory(
+    Session session, {
+    int? beforeParticipantId,
+  }) => _matchHistory(session, beforeParticipantId);
 
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _lobby(session, matchId);

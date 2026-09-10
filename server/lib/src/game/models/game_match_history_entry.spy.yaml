@@ -1,0 +1,10 @@
+class: GameMatchHistoryEntry
+fields:
+  match: GameMatchView
+  playerId: String
+  turn: int
+  endedAt: DateTime?
+  outcomeCondition: String?
+  winnerPlayerId: String?
+  resignedAt: DateTime?
+  kickedAt: DateTime?

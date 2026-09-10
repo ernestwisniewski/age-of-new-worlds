@@ -1,0 +1,4 @@
+class: GameMatchHistoryPage
+fields:
+  entries: List<GameMatchHistoryEntry>
+  nextBeforeParticipantId: int?

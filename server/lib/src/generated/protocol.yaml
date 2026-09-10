@@ -28,6 +28,7 @@ game:
   - createMatch:
   - joinMatch:
   - listMatches:
+  - matchHistory:
   - lobby:
   - setReady:
   - startMatch:
