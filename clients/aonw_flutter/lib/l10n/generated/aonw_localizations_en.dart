@@ -2693,4 +2693,22 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get researchDiscoveryTitle => 'Research completed';
+
+  @override
+  String get showResearchDiscoveries => 'Show research discoveries';
+
+  @override
+  String get researchDiscoverySuppress => 'Do not show again';
+
+  @override
+  String get researchDiscoveryMinimize => 'Minimize';
+
+  @override
+  String get researchDiscoveryRestore => 'Restore discovery';
+
+  @override
+  String get researchDiscoveryContinue => 'Continue';
 }

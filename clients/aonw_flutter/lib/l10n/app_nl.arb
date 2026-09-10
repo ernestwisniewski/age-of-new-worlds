@@ -1131,5 +1131,11 @@
   "playerText": "{key, select, title{Spelers} active{Actief} finished{Beurt beëindigd} submitted{Bevestigd} waiting{Wachten} ended{Wedstrijd beëindigd} privateStatus{Beurtstatus is privé} noContact{Geen diplomatiek contact} other{Spelers}}",
   "historyText": "{key, select, title{Voltooide onlinewedstrijden} loading{Wedstrijdgeschiedenis laden} empty{Nog geen voltooide wedstrijden.} failed{De geschiedenis kon niet worden geladen. Probeer te vernieuwen.} refresh{Vernieuwen} previous{Vorige pagina} next{Volgende pagina} turn{Laatste beurt} won{Je hebt gewonnen} lost{Je hebt verloren} resigned{Je hebt opgegeven} removed{Je bent uit de wedstrijd verwijderd} other{Voltooide onlinewedstrijden}}",
   "profileText": "{value, select, title{Je profiel} description{Bij het wijzigen van je weergavenaam blijven je account en multiplayerwedstrijden behouden.} save{Naam opslaan} saved{Weergavenaam opgeslagen.} taken{Deze weergavenaam is al in gebruik.} changed{Het account is gewijzigd. Laad het profiel opnieuw.} other{Je profiel}}",
-  "@profileText": {"placeholders": {"value": {"type": "String"}}}
+  "@profileText": {"placeholders": {"value": {"type": "String"}}},
+  "researchDiscoveryTitle": "Onderzoek voltooid",
+  "showResearchDiscoveries": "Technologische ontdekkingen tonen",
+  "researchDiscoverySuppress": "Niet opnieuw tonen",
+  "researchDiscoveryMinimize": "Minimaliseren",
+  "researchDiscoveryRestore": "Ontdekking herstellen",
+  "researchDiscoveryContinue": "Doorgaan"
 }

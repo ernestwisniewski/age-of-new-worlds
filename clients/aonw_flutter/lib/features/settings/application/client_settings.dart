@@ -30,6 +30,7 @@ final class ClientSettings {
     this.ai = const ClientAiSettings(),
     this.automation = const ClientAutomationSettings(),
     this.performance = const ClientPerformanceSettings(),
+    this.showResearchDiscoveries = true,
     required this.cameraSensitivity,
     required this.reducedMotion,
     required this.highContrast,
@@ -62,6 +63,7 @@ final class ClientSettings {
   final ClientAiSettings ai;
   final ClientAutomationSettings automation;
   final ClientPerformanceSettings performance;
+  final bool showResearchDiscoveries;
   final double cameraSensitivity;
   final bool smoothCameraMovement;
   final bool cinematicCamera;
@@ -92,6 +94,7 @@ final class ClientSettings {
     ClientAiSettings? ai,
     ClientAutomationSettings? automation,
     ClientPerformanceSettings? performance,
+    bool? showResearchDiscoveries,
     double? cameraSensitivity,
     bool? smoothCameraMovement,
     bool? cinematicCamera,
@@ -114,6 +117,8 @@ final class ClientSettings {
     ai: ai ?? this.ai,
     automation: automation ?? this.automation,
     performance: performance ?? this.performance,
+    showResearchDiscoveries:
+        showResearchDiscoveries ?? this.showResearchDiscoveries,
     cameraSensitivity: cameraSensitivity ?? this.cameraSensitivity,
     smoothCameraMovement: smoothCameraMovement ?? this.smoothCameraMovement,
     cinematicCamera: cinematicCamera ?? this.cinematicCamera,
@@ -149,7 +154,8 @@ final class ClientSettings {
       other.audio == audio &&
       other.ai == ai &&
       other.automation == automation &&
-      other.performance == performance;
+      other.performance == performance &&
+      other.showResearchDiscoveries == showResearchDiscoveries;
 
   bool _sameAccessibility(ClientSettings other) =>
       other.textScale == textScale &&
@@ -192,6 +198,7 @@ final class ClientSettings {
     ai,
     automation,
     performance,
+    showResearchDiscoveries,
     cameraSensitivity,
     smoothCameraMovement,
     cinematicCamera,

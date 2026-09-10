@@ -1131,5 +1131,11 @@
   "playerText": "{key, select, title{Joueurs} active{Actif} finished{Tour terminé} submitted{Validé} waiting{En attente} ended{Partie terminée} privateStatus{Le statut du tour est privé} noContact{Aucun contact diplomatique} other{Joueurs}}",
   "historyText": "{key, select, title{Parties en ligne terminées} loading{Chargement de l’historique} empty{Aucune partie terminée pour le moment.} failed{Impossible de charger l’historique. Essayez d’actualiser.} refresh{Actualiser} previous{Page précédente} next{Page suivante} turn{Dernier tour} won{Vous avez gagné} lost{Vous avez perdu} resigned{Vous avez abandonné} removed{Vous avez été retiré de la partie} other{Parties en ligne terminées}}",
   "profileText": "{value, select, title{Votre profil} description{Changer de nom conserve votre compte et vos parties multijoueurs.} save{Enregistrer le nom} saved{Nom enregistré.} taken{Ce nom est déjà utilisé.} changed{Le compte a changé. Rechargez le profil.} other{Votre profil}}",
-  "@profileText": {"placeholders": {"value": {"type": "String"}}}
+  "@profileText": {"placeholders": {"value": {"type": "String"}}},
+  "researchDiscoveryTitle": "Recherche terminée",
+  "showResearchDiscoveries": "Afficher les découvertes technologiques",
+  "researchDiscoverySuppress": "Ne plus afficher",
+  "researchDiscoveryMinimize": "Réduire",
+  "researchDiscoveryRestore": "Rétablir la découverte",
+  "researchDiscoveryContinue": "Continuer"
 }

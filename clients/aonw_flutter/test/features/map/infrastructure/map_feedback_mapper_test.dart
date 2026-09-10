@@ -10,11 +10,13 @@ import '../../../support/map_feedback_test_fixture.dart';
 import '../../../support/map_test_fixture.dart';
 
 part 'map_command_animation_mapper_tests.dart';
+part 'research_discovery_mapper_tests.dart';
 part 'map_feedback_mapper_fixture.dart';
 part 'map_feedback_text_mapper_tests.dart';
 part 'map_sound_mapper_tests.dart';
 
 void main() {
+  researchDiscoveryMapperTests();
   textMapperTests();
   animationMapperTests();
   soundMapperTests();

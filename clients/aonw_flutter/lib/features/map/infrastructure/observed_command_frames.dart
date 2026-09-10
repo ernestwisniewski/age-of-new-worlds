@@ -57,6 +57,12 @@ final class ObservedCommandFrames {
         snapshot,
         map: _map,
         actorPlayerId: previous.actorPlayerId,
+        recentDiscoveries: mapResearchDiscoveries(
+          command: command,
+          snapshot: snapshot,
+          previous: previous,
+          map: _map,
+        ),
         recentFeedback: mapCommandFeedback(
           command: command,
           snapshot: snapshot,

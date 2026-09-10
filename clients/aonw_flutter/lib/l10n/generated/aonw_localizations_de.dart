@@ -2795,4 +2795,22 @@ class AonwLocalizationsDe extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get researchDiscoveryTitle => 'Forschung abgeschlossen';
+
+  @override
+  String get showResearchDiscoveries => 'Technologische Entdeckungen anzeigen';
+
+  @override
+  String get researchDiscoverySuppress => 'Nicht mehr anzeigen';
+
+  @override
+  String get researchDiscoveryMinimize => 'Minimieren';
+
+  @override
+  String get researchDiscoveryRestore => 'Entdeckung wieder anzeigen';
+
+  @override
+  String get researchDiscoveryContinue => 'Weiter';
 }

@@ -668,5 +668,11 @@
   "historyText": "{key, select, title{Completed online matches} loading{Loading match history} empty{No completed matches yet.} failed{Match history could not be loaded. Try refreshing.} refresh{Refresh} previous{Previous page} next{Next page} turn{Final turn} won{You won} lost{You lost} resigned{You resigned} removed{You were removed from the match} other{Completed online matches}}",
   "@historyText": {"placeholders": {"key": {"type": "String"}}},
   "profileText": "{value, select, title{Your profile} description{Changing your display name keeps your account and multiplayer matches.} save{Save name} saved{Display name saved.} taken{This display name is already taken.} changed{The account changed. Load the profile again.} other{Your profile}}",
-  "@profileText": {"placeholders": {"value": {"type": "String"}}}
+  "@profileText": {"placeholders": {"value": {"type": "String"}}},
+  "researchDiscoveryTitle": "Research completed",
+  "showResearchDiscoveries": "Show research discoveries",
+  "researchDiscoverySuppress": "Do not show again",
+  "researchDiscoveryMinimize": "Minimize",
+  "researchDiscoveryRestore": "Restore discovery",
+  "researchDiscoveryContinue": "Continue"
 }

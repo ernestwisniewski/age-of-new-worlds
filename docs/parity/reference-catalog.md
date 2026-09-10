@@ -44,7 +44,7 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 | Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | Rust-backed bankruptcy/shortage warnings and compact victory summary |
 | Avatars and Online status | `hud/game_hud_chrome.dart` | Participants, own submission, known diplomacy and aggregate submissions | Final full-map visual comparison |
 | Action deck and selection | `hud/action_deck`, `selection` | Selected visible unit/city, typed action options and Rust pending-turn query | Integrated command/selection deck, expansion and detail behavior |
-| Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive panel, tree and selected details implemented; recommendation ranking/reasons require Rust policy |
+| Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive panel, tree and selected details implemented; recommendation ranking/reasons require Rust policy; completion popup uses own accepted events |
 | City and production | `city` | City inspection, founding/growth/production queries and own city projection | Full panel composition and comparative visual audit |
 | Workers and improvements | `hud/action_deck`, `selection` | Worker options and accepted command feedback | Detail layout and popup/gamepad audit |
 | Diplomacy | `diplomacy` | Known relations, own proposals/messages, typed commands | Full message/trade composition and visual audit |
@@ -65,3 +65,23 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 ## Still required for reference completion
 
 Native desktop/phone/tablet runs; menu, setup and lobby captures; populated city, production, worker, diplomacy, technology tree, battle, log, handoff and terminal states; terrain/fog/camera captures and recordings; complete field-level mappings for all remaining presentation policies. This catalog does not mark M0 or M7 complete.
+
+
+## Research discovery acknowledgement
+
+The client retains at most 64 own completion events independently of map-effect
+anchors. Direct commands and lazily projected AI/replay frames use the same
+mapper; other recipients, rejected commands and repeated revisions add nothing.
+Opening/resync clears this journal. The popup inbox deduplicates event identity,
+clears on recipient/session changes and backward revisions, and acknowledges
+suppressed events without redisplaying them when the preference is enabled.
+
+Gameplay shows a scrollable completion panel, minimize/restore and a persistent
+suppress preference (also available in Settings). Unlock details are shown only
+from the current recipient's matching-stamp Rust research query. Closing the
+popup preserves required research without a cancellation, selection or turn
+command. Input ownership blocks background keyboard/gamepad actions. Six
+languages and 200% landscape text pass; phone/tablet/desktop goldens are reviewed.
+The full client gate passes 1151 tests, followed by one additional HUD regression
+and clean analysis. Reference-specific technology thumbnails/descriptive prose
+and full replay notification composition remain part of the final HUD audit.

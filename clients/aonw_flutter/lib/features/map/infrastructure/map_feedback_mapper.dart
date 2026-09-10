@@ -1,6 +1,8 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../../cities/read_model/city_view.dart';
+import '../../research/read_model/research_discovery_view.dart';
+import '../../research/read_model/research_view.dart';
 import '../read_model/map_feedback_view.dart';
 import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
@@ -9,6 +11,7 @@ import 'map_feedback_positions.dart';
 import 'map_sound_mapper.dart';
 
 part 'map_feedback_text_mapper.dart';
+part 'research_discovery_mapper.dart';
 
 const maximumRecentMapFeedback = 64;
 

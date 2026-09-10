@@ -38,6 +38,8 @@ final class SharedPreferencesClientSettingsStore
   static const _idleAnimationsKey = 'aonw.settings.showUnitIdleAnimations';
   static const _routeAnimationsKey = 'aonw.settings.showRouteAnimations';
 
+  static const _discoveriesKey = 'aonw.settings.showResearchDiscoveries';
+
   final SharedPreferencesAsync _preferences;
 
   @override
@@ -52,6 +54,8 @@ final class SharedPreferencesClientSettingsStore
     final animations = await _loadAnimations();
     return ClientSettings(
       language: await _loadLanguage(),
+      showResearchDiscoveries:
+          await _preferences.getBool(_discoveriesKey) ?? true,
       textScale: await _loadTextScale(),
       gamepad: await _loadGamepad(),
       showUnitMovementAnimations: animations.movement,
@@ -109,6 +113,10 @@ final class SharedPreferencesClientSettingsStore
     await _preferences.setBool(_reducedMotionKey, settings.reducedMotion);
     await _preferences.setBool(_highContrastKey, settings.highContrast);
     await _saveMap(settings);
+    await _preferences.setBool(
+      _discoveriesKey,
+      settings.showResearchDiscoveries,
+    );
   }
 
   Future<ClientLanguage> _loadLanguage() async {

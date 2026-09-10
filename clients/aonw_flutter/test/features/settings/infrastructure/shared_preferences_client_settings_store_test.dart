@@ -5,6 +5,29 @@ import '../../../support/client_preferences_fixture.dart';
 
 void main() {
   test(
+    'research discovery preference survives restart and defaults reset',
+    () async {
+      final preferences = MemoryClientPreferences();
+      final store = SharedPreferencesClientSettingsStore(
+        preferences: preferences,
+      );
+      expect((await store.load()).showResearchDiscoveries, isTrue);
+      final disabled = ClientSettings.defaults.copyWith(
+        showResearchDiscoveries: false,
+      );
+      expect(disabled, isNot(ClientSettings.defaults));
+      await store.save(disabled);
+      expect(
+        (await SharedPreferencesClientSettingsStore(
+          preferences: preferences,
+        ).load()).showResearchDiscoveries,
+        isFalse,
+      );
+      await store.save(ClientSettings.defaults);
+      expect((await store.load()).showResearchDiscoveries, isTrue);
+    },
+  );
+  test(
     'automation options persist independently across restart and reset',
     () async {
       final preferences = MemoryClientPreferences();

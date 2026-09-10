@@ -1,6 +1,7 @@
 import '../../artifacts/read_model/artifact_view.dart';
 import '../../cities/read_model/city_view.dart';
 import '../../diplomacy/read_model/diplomacy_view.dart';
+import '../../research/read_model/research_discovery_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/read_model/worker_view.dart';
 import 'map_feedback_view.dart';
@@ -266,12 +267,14 @@ final class PlayerMapView {
     required this.diplomacy,
     required List<VisibleUnitView> units,
     List<MapFeedbackCueView> recentFeedback = const [],
+    List<ResearchDiscoveryView> recentDiscoveries = const [],
     List<CityView> cities = const [],
     List<WorldArtifactView> artifacts = const [],
     List<FieldImprovementView> fieldImprovements = const [],
     List<RoadView> roads = const [],
     this.cityFoundingDraft,
-  }) : recentFeedback = List.unmodifiable(recentFeedback),
+  }) : recentDiscoveries = List.unmodifiable(recentDiscoveries),
+       recentFeedback = List.unmodifiable(recentFeedback),
        participants = List.unmodifiable(participants),
        units = List.unmodifiable(units),
        cities = List.unmodifiable(cities),
@@ -388,6 +391,7 @@ final class PlayerMapView {
   final DiplomacyView diplomacy;
   final List<VisibleUnitView> units;
   final List<MapFeedbackCueView> recentFeedback;
+  final List<ResearchDiscoveryView> recentDiscoveries;
   final List<CityView> cities;
   final List<WorldArtifactView> artifacts;
   final List<FieldImprovementView> fieldImprovements;

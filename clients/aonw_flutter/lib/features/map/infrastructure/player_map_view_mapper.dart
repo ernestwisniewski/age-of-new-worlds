@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../../artifacts/read_model/artifact_view.dart';
 import '../../cities/read_model/city_view.dart';
 import '../../diplomacy/infrastructure/diplomacy_view_mapper.dart';
+import '../../research/read_model/research_discovery_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 import '../../workers/infrastructure/worker_view_mapper.dart';
 import '../read_model/map_feedback_view.dart';
@@ -34,6 +35,7 @@ final class PlayerMapViewMapper {
     required MapView map,
     required String actorPlayerId,
     List<MapFeedbackCueView> recentFeedback = const [],
+    List<ResearchDiscoveryView> recentDiscoveries = const [],
   }) {
     RecipientProjectionValidator(map).validateSnapshot(wire);
     _validateActor(wire.participants, actorPlayerId);
@@ -58,6 +60,7 @@ final class PlayerMapViewMapper {
       actorPlayerId: actorPlayerId,
       stamp: _mapStamp(wire.stamp),
       recentFeedback: recentFeedback,
+      recentDiscoveries: recentDiscoveries,
       turnMode: MatchTurnModeView.values.byName(wire.turnMode.name),
       participants: _mapParticipants(wire.participants),
       fog: _mapFog(wire.fog),

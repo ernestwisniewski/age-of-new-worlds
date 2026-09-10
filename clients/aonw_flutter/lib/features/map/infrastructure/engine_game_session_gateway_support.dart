@@ -212,6 +212,12 @@ extension _EngineGameSessionGatewaySupport on EngineGameSessionGateway {
         snapshot,
         map: context.map,
         actorPlayerId: context.actorPlayerId,
+        recentDiscoveries: mapResearchDiscoveries(
+          command: command,
+          snapshot: snapshot,
+          previous: context.player,
+          map: context.map,
+        ),
         recentFeedback: mapCommandFeedback(
           command: command,
           snapshot: snapshot,

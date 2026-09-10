@@ -60,6 +60,21 @@ void main() {
     expect(second.current.player.stamp.revision, 1);
     expect(first.current.player.stamp.revision, 2);
     expect(second.current.player.recentFeedback, hasLength(1));
+    expect(second.current.player.recentDiscoveries, hasLength(1));
+    expect(
+      observed.finalPlayer.recentDiscoveries.map((event) => event.identity),
+      [
+        (revision: 1, eventIndex: 1),
+        (revision: 2, eventIndex: 0),
+        (revision: 3, eventIndex: 0),
+      ],
+    );
+    expect(
+      observed.finalPlayer.recentDiscoveries.map(
+        (event) => event.technology.name,
+      ),
+      everyElement('agriculture'),
+    );
     expect(observed.finalPlayer.recentFeedback.map((cue) => cue.identity), [
       (revision: 1, eventIndex: 1),
       (revision: 2, eventIndex: 0),

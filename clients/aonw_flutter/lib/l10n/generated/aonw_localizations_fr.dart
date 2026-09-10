@@ -2777,4 +2777,23 @@ class AonwLocalizationsFr extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get researchDiscoveryTitle => 'Recherche terminée';
+
+  @override
+  String get showResearchDiscoveries =>
+      'Afficher les découvertes technologiques';
+
+  @override
+  String get researchDiscoverySuppress => 'Ne plus afficher';
+
+  @override
+  String get researchDiscoveryMinimize => 'Réduire';
+
+  @override
+  String get researchDiscoveryRestore => 'Rétablir la découverte';
+
+  @override
+  String get researchDiscoveryContinue => 'Continuer';
 }

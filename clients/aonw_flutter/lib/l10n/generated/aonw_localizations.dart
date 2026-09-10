@@ -2643,6 +2643,42 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{value, select, title{Your profile} description{Changing your display name keeps your account and multiplayer matches.} save{Save name} saved{Display name saved.} taken{This display name is already taken.} changed{The account changed. Load the profile again.} other{Your profile}}'**
   String profileText(String value);
+
+  /// No description provided for @researchDiscoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Research completed'**
+  String get researchDiscoveryTitle;
+
+  /// No description provided for @showResearchDiscoveries.
+  ///
+  /// In en, this message translates to:
+  /// **'Show research discoveries'**
+  String get showResearchDiscoveries;
+
+  /// No description provided for @researchDiscoverySuppress.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not show again'**
+  String get researchDiscoverySuppress;
+
+  /// No description provided for @researchDiscoveryMinimize.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimize'**
+  String get researchDiscoveryMinimize;
+
+  /// No description provided for @researchDiscoveryRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore discovery'**
+  String get researchDiscoveryRestore;
+
+  /// No description provided for @researchDiscoveryContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get researchDiscoveryContinue;
 }
 
 class _AonwLocalizationsDelegate

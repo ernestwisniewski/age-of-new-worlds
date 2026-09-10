@@ -7,6 +7,7 @@ import '../../../objectives/presentation/objective_overlay.dart';
 import '../../../players/presentation/player_overlay.dart';
 import '../../../players/presentation/player_rail.dart';
 import '../../../research/application/research_state.dart';
+import '../../../research/presentation/research_discovery_overlay.dart';
 import '../../../research/presentation/research_overlay.dart';
 import '../../../resources/presentation/resource_overlay.dart';
 import '../../../resources/presentation/resource_strip.dart';
@@ -199,9 +200,18 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
             onDiplomacy: locked ? null : _openPlayerDiplomacy,
           ),
         _resources(effectivePanel, locked),
+        _discoveries(),
       ],
     );
   }
+
+  Widget _discoveries() => ResearchDiscoveryOverlay(
+    player: widget.scene.player,
+    session: widget.controller,
+    options: widget.research.options,
+    blocked:
+        _panelsLocked || widget.controller.networkConnection.blocksGameplay,
+  );
 
   _MapHudPanel? get _effectivePanel {
     if (_terminal) return null;

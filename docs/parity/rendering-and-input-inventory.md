@@ -61,7 +61,7 @@ The mounting sources are `widgets/hud/game_hud.dart`,
 | Movement, combat and worker confirmation | `widgets/selection` | Rust preview/options plus local confirmation state |
 | City management, production, building/unit/project/wonder details | `widgets/city` | Typed Rust city and production queries; full composition audit open |
 | Research recommendations, tree, technology details | `widgets/technology` | Responsive catalog/tree/details present; Rust recommendation ranking remains open |
-| Technology discovery, minimize/restore, suppress future popups | `widgets/technology/technology_discovery_popup_*` | Discovery popup remains open; use filtered completion events, not another player's research |
+| Technology discovery, minimize/restore, suppress future popups | `widgets/technology/technology_discovery_popup_*` | Own filtered completion journal and popup implemented; thumbnail/prose comparison remains open |
 | Civilization met, diplomatic messages/events/proposals | `widgets/diplomacy` | Known contacts, own messages/proposals; notification routing and full trade composition open |
 | Objectives and guidance | `widgets/options`, `widgets/hud/overlay` | Objective overlay present; priority guidance requires authoritative policy |
 | Empire overview, readiness, army composition, city comparisons | `widgets/empire` | Own projected entities available; readiness definition and full panel open |
