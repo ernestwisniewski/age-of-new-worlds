@@ -47,6 +47,7 @@ void main() {
         expect(entries.where((entry) => entry.kickedAt != null), isNotEmpty);
         expect(entries.every((entry) => entry.playerId == 'player-1'), isTrue);
         expect(entries.every((entry) => entry.turn == 12), isTrue);
+        expect(entries.every((entry) => !entry.replayAvailable), isTrue);
         final serialized = jsonEncode(first.toJson());
         for (final privateField in [
           'canonicalStateJson',

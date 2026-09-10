@@ -13,6 +13,7 @@ part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
 part 'game_match_service_queries.dart';
 part 'game_match_service_replay_journal.dart';
+part 'game_match_service_replay.dart';
 part 'game_match_service_support.dart';
 part 'game_match_service_system.dart';
 part 'game_match_service_timeout.dart';
@@ -45,6 +46,18 @@ final class GameMatchService {
     Session session, {
     int? beforeParticipantId,
   }) => _matchHistory(session, beforeParticipantId);
+
+  Future<GameReplayFrame> replayFrame(
+    Session session,
+    String matchId,
+    int position,
+  ) => _replayFrame(this, session, matchId, position);
+
+  Future<GamePlayerQueryOutcome> replayQuery(
+    Session session,
+    GamePlayerQueryRequest request,
+    int position,
+  ) => _replayQuery(this, session, request, position);
 
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _lobby(session, matchId);

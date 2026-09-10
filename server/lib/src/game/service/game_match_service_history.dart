@@ -48,5 +48,6 @@ GameMatchHistoryEntry _historyEntry(GameParticipant participant) {
     winnerPlayerId: match.winnerPlayerId,
     resignedAt: participant.resignedAt,
     kickedAt: participant.kickedAt,
+    replayAvailable: _hasReplayCheckpoint(match),
   );
 }

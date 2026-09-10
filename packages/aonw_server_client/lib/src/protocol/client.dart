@@ -35,23 +35,25 @@ import 'package:aonw_server_client/src/protocol/game/models/game_join_match_requ
     as _i12;
 import 'package:aonw_server_client/src/protocol/game/models/game_match_history_page.dart'
     as _i13;
-import 'package:aonw_server_client/src/protocol/game/models/game_lobby_view.dart'
+import 'package:aonw_server_client/src/protocol/game/models/game_replay_frame.dart'
     as _i14;
-import 'package:aonw_server_client/src/protocol/game/models/game_command_outcome.dart'
-    as _i15;
-import 'package:aonw_server_client/src/protocol/game/models/game_submit_turn_request.dart'
-    as _i16;
-import 'package:aonw_server_client/src/protocol/game/models/game_player_command_request.dart'
-    as _i17;
-import 'package:aonw_server_client/src/protocol/game/models/game_kick_participant_request.dart'
-    as _i18;
-import 'package:aonw_server_client/src/protocol/game/models/game_resign_match_request.dart'
-    as _i19;
 import 'package:aonw_server_client/src/protocol/game/models/game_player_query_outcome.dart'
-    as _i20;
+    as _i15;
 import 'package:aonw_server_client/src/protocol/game/models/game_player_query_request.dart'
+    as _i16;
+import 'package:aonw_server_client/src/protocol/game/models/game_lobby_view.dart'
+    as _i17;
+import 'package:aonw_server_client/src/protocol/game/models/game_command_outcome.dart'
+    as _i18;
+import 'package:aonw_server_client/src/protocol/game/models/game_submit_turn_request.dart'
+    as _i19;
+import 'package:aonw_server_client/src/protocol/game/models/game_player_command_request.dart'
+    as _i20;
+import 'package:aonw_server_client/src/protocol/game/models/game_kick_participant_request.dart'
     as _i21;
-import 'protocol.dart' as _i22;
+import 'package:aonw_server_client/src/protocol/game/models/game_resign_match_request.dart'
+    as _i22;
+import 'protocol.dart' as _i23;
 
 /// {@category Endpoint}
 class EndpointAppStatus extends _i1.EndpointRef {
@@ -352,17 +354,41 @@ class EndpointGame extends _i1.EndpointRef {
     {'beforeParticipantId': beforeParticipantId},
   );
 
-  _i2.Future<_i14.GameLobbyView> lobby(String matchId) =>
-      caller.callServerEndpoint<_i14.GameLobbyView>(
+  _i2.Future<_i14.GameReplayFrame> replayFrame(
+    String matchId,
+    int position,
+  ) => caller.callServerEndpoint<_i14.GameReplayFrame>(
+    'game',
+    'replayFrame',
+    {
+      'matchId': matchId,
+      'position': position,
+    },
+  );
+
+  _i2.Future<_i15.GamePlayerQueryOutcome> replayQuery(
+    _i16.GamePlayerQueryRequest request,
+    int position,
+  ) => caller.callServerEndpoint<_i15.GamePlayerQueryOutcome>(
+    'game',
+    'replayQuery',
+    {
+      'request': request,
+      'position': position,
+    },
+  );
+
+  _i2.Future<_i17.GameLobbyView> lobby(String matchId) =>
+      caller.callServerEndpoint<_i17.GameLobbyView>(
         'game',
         'lobby',
         {'matchId': matchId},
       );
 
-  _i2.Future<_i14.GameLobbyView> setReady(
+  _i2.Future<_i17.GameLobbyView> setReady(
     String matchId,
     bool ready,
-  ) => caller.callServerEndpoint<_i14.GameLobbyView>(
+  ) => caller.callServerEndpoint<_i17.GameLobbyView>(
     'game',
     'setReady',
     {
@@ -371,8 +397,8 @@ class EndpointGame extends _i1.EndpointRef {
     },
   );
 
-  _i2.Future<_i14.GameLobbyView> startMatch(String matchId) =>
-      caller.callServerEndpoint<_i14.GameLobbyView>(
+  _i2.Future<_i17.GameLobbyView> startMatch(String matchId) =>
+      caller.callServerEndpoint<_i17.GameLobbyView>(
         'game',
         'startMatch',
         {'matchId': matchId},
@@ -385,41 +411,41 @@ class EndpointGame extends _i1.EndpointRef {
         {'matchId': matchId},
       );
 
-  _i2.Future<_i15.GameCommandOutcome> submitTurn(
-    _i16.GameSubmitTurnRequest request,
-  ) => caller.callServerEndpoint<_i15.GameCommandOutcome>(
+  _i2.Future<_i18.GameCommandOutcome> submitTurn(
+    _i19.GameSubmitTurnRequest request,
+  ) => caller.callServerEndpoint<_i18.GameCommandOutcome>(
     'game',
     'submitTurn',
     {'request': request},
   );
 
-  _i2.Future<_i15.GameCommandOutcome> applyCommand(
-    _i17.GamePlayerCommandRequest request,
-  ) => caller.callServerEndpoint<_i15.GameCommandOutcome>(
+  _i2.Future<_i18.GameCommandOutcome> applyCommand(
+    _i20.GamePlayerCommandRequest request,
+  ) => caller.callServerEndpoint<_i18.GameCommandOutcome>(
     'game',
     'applyCommand',
     {'request': request},
   );
 
-  _i2.Future<_i15.GameCommandOutcome> kickParticipant(
-    _i18.GameKickParticipantRequest request,
-  ) => caller.callServerEndpoint<_i15.GameCommandOutcome>(
+  _i2.Future<_i18.GameCommandOutcome> kickParticipant(
+    _i21.GameKickParticipantRequest request,
+  ) => caller.callServerEndpoint<_i18.GameCommandOutcome>(
     'game',
     'kickParticipant',
     {'request': request},
   );
 
-  _i2.Future<_i15.GameCommandOutcome> resignMatch(
-    _i19.GameResignMatchRequest request,
-  ) => caller.callServerEndpoint<_i15.GameCommandOutcome>(
+  _i2.Future<_i18.GameCommandOutcome> resignMatch(
+    _i22.GameResignMatchRequest request,
+  ) => caller.callServerEndpoint<_i18.GameCommandOutcome>(
     'game',
     'resignMatch',
     {'request': request},
   );
 
-  _i2.Future<_i20.GamePlayerQueryOutcome> query(
-    _i21.GamePlayerQueryRequest request,
-  ) => caller.callServerEndpoint<_i20.GamePlayerQueryOutcome>(
+  _i2.Future<_i15.GamePlayerQueryOutcome> query(
+    _i16.GamePlayerQueryRequest request,
+  ) => caller.callServerEndpoint<_i15.GamePlayerQueryOutcome>(
     'game',
     'query',
     {'request': request},
@@ -464,7 +490,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i22.Protocol(),
+         _i23.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,

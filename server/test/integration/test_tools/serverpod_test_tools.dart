@@ -33,22 +33,24 @@ import 'package:aonw_server/src/generated/game/models/game_join_match_request.da
     as _i12;
 import 'package:aonw_server/src/generated/game/models/game_match_history_page.dart'
     as _i13;
-import 'package:aonw_server/src/generated/game/models/game_lobby_view.dart'
+import 'package:aonw_server/src/generated/game/models/game_replay_frame.dart'
     as _i14;
-import 'package:aonw_server/src/generated/game/models/game_command_outcome.dart'
-    as _i15;
-import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
-    as _i16;
-import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
-    as _i17;
-import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
-    as _i18;
-import 'package:aonw_server/src/generated/game/models/game_resign_match_request.dart'
-    as _i19;
 import 'package:aonw_server/src/generated/game/models/game_player_query_outcome.dart'
-    as _i20;
+    as _i15;
 import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+    as _i16;
+import 'package:aonw_server/src/generated/game/models/game_lobby_view.dart'
+    as _i17;
+import 'package:aonw_server/src/generated/game/models/game_command_outcome.dart'
+    as _i18;
+import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
+    as _i19;
+import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
+    as _i20;
+import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
     as _i21;
+import 'package:aonw_server/src/generated/game/models/game_resign_match_request.dart'
+    as _i22;
 import 'package:aonw_server/src/generated/protocol.dart';
 import 'package:aonw_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -1009,7 +1011,77 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i14.GameLobbyView> lobby(
+  _i3.Future<_i14.GameReplayFrame> replayFrame(
+    _i1.TestSessionBuilder sessionBuilder,
+    String matchId,
+    int position,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'game',
+            method: 'replayFrame',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'game',
+          methodName: 'replayFrame',
+          parameters: _i1.testObjectToJson({
+            'matchId': matchId,
+            'position': position,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _i3.Future<_i14.GameReplayFrame>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i15.GamePlayerQueryOutcome> replayQuery(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i16.GamePlayerQueryRequest request,
+    int position,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'game',
+            method: 'replayQuery',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'game',
+          methodName: 'replayQuery',
+          parameters: _i1.testObjectToJson({
+            'request': request,
+            'position': position,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _i3.Future<_i15.GamePlayerQueryOutcome>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i17.GameLobbyView> lobby(
     _i1.TestSessionBuilder sessionBuilder,
     String matchId,
   ) async {
@@ -1032,7 +1104,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i14.GameLobbyView>);
+                as _i3.Future<_i17.GameLobbyView>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1040,7 +1112,7 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i14.GameLobbyView> setReady(
+  _i3.Future<_i17.GameLobbyView> setReady(
     _i1.TestSessionBuilder sessionBuilder,
     String matchId,
     bool ready,
@@ -1067,7 +1139,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i14.GameLobbyView>);
+                as _i3.Future<_i17.GameLobbyView>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1075,7 +1147,7 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i14.GameLobbyView> startMatch(
+  _i3.Future<_i17.GameLobbyView> startMatch(
     _i1.TestSessionBuilder sessionBuilder,
     String matchId,
   ) async {
@@ -1098,7 +1170,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i14.GameLobbyView>);
+                as _i3.Future<_i17.GameLobbyView>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1137,9 +1209,9 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i15.GameCommandOutcome> submitTurn(
+  _i3.Future<_i18.GameCommandOutcome> submitTurn(
     _i1.TestSessionBuilder sessionBuilder,
-    _i16.GameSubmitTurnRequest request,
+    _i19.GameSubmitTurnRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1160,7 +1232,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i15.GameCommandOutcome>);
+                as _i3.Future<_i18.GameCommandOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1168,9 +1240,9 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i15.GameCommandOutcome> applyCommand(
+  _i3.Future<_i18.GameCommandOutcome> applyCommand(
     _i1.TestSessionBuilder sessionBuilder,
-    _i17.GamePlayerCommandRequest request,
+    _i20.GamePlayerCommandRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1191,7 +1263,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i15.GameCommandOutcome>);
+                as _i3.Future<_i18.GameCommandOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1199,9 +1271,9 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i15.GameCommandOutcome> kickParticipant(
+  _i3.Future<_i18.GameCommandOutcome> kickParticipant(
     _i1.TestSessionBuilder sessionBuilder,
-    _i18.GameKickParticipantRequest request,
+    _i21.GameKickParticipantRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1222,7 +1294,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i15.GameCommandOutcome>);
+                as _i3.Future<_i18.GameCommandOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1230,9 +1302,9 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i15.GameCommandOutcome> resignMatch(
+  _i3.Future<_i18.GameCommandOutcome> resignMatch(
     _i1.TestSessionBuilder sessionBuilder,
-    _i19.GameResignMatchRequest request,
+    _i22.GameResignMatchRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1253,7 +1325,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i15.GameCommandOutcome>);
+                as _i3.Future<_i18.GameCommandOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1261,9 +1333,9 @@ class _GameEndpoint {
     });
   }
 
-  _i3.Future<_i20.GamePlayerQueryOutcome> query(
+  _i3.Future<_i15.GamePlayerQueryOutcome> query(
     _i1.TestSessionBuilder sessionBuilder,
-    _i21.GamePlayerQueryRequest request,
+    _i16.GamePlayerQueryRequest request,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1284,7 +1356,7 @@ class _GameEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i20.GamePlayerQueryOutcome>);
+                as _i3.Future<_i15.GamePlayerQueryOutcome>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

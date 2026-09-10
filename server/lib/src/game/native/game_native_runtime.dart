@@ -6,7 +6,8 @@ import 'package:aonw_server_native/aonw_server_native.dart';
 /// Process-local owner of the verified stateless engine server host.
 ///
 /// Only immutable prepared content is cached. Canonical match state always
-/// crosses the native boundary from the transaction that locked its row.
+/// crosses the native boundary from a locked gameplay transaction or a durable
+/// completed-match replay checkpoint.
 final class GameNativeRuntime {
   GameNativeRuntime({AonwServerNativeHost? host, int worldCapacity = 16})
     : _host = host ?? AonwServerNativeHost(),
@@ -157,6 +158,33 @@ final class GameNativeRuntime {
       );
     }
   }
+
+  /// Evaluates server-only journal data without retaining canonical state.
+  Map<String, Object?> replayBatch({
+    required PreparedGameContent content,
+    required String behaviorFingerprint,
+    required Map<String, Object?> initialState,
+    required String initialStateDigest,
+    required int initialEventOffset,
+    required String recipientPlayerId,
+    required List<Map<String, Object?>> steps,
+  }) => _result(
+    _host.replayBatchJson(
+      content._world,
+      jsonEncode({
+        'apiVersion': aonwServerHostApiVersion,
+        'mapHash': content.mapHash,
+        'rulesetHash': content.rulesetHash,
+        'behaviorFingerprint': behaviorFingerprint,
+        'initialState': initialState,
+        'initialStateDigest': initialStateDigest,
+        'initialEventOffset': initialEventOffset,
+        'recipientPlayerId': recipientPlayerId,
+        'steps': steps,
+      }),
+    ),
+    'replayBatchExecuted',
+  );
 
   Map<String, Object?> queryPlayer({
     required PreparedGameContent content,

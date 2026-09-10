@@ -14,6 +14,7 @@ import 'test_tools/serverpod_test_tools.dart';
 part 'game_endpoint_fixture.dart';
 part 'game_endpoint_persistence.dart';
 part 'game_endpoint_replay_journal.dart';
+part 'game_endpoint_replay.dart';
 
 void main() {
   withServerpod(
@@ -30,6 +31,17 @@ void main() {
       test('finalizes an expired simultaneous turn once', () async {
         addTearDown(shutdownAonwGameNativeHost);
         await _GameEndpointJourney(sessionBuilder).runTimeout();
+      });
+      test(
+        'replays completed matches privately and rejects archive drift',
+        () async {
+          addTearDown(shutdownAonwGameNativeHost);
+          await _GameEndpointJourney(sessionBuilder).verifyReplayRead();
+        },
+      );
+      test('replays journal pages across the native batch boundary', () async {
+        addTearDown(shutdownAonwGameNativeHost);
+        await _GameEndpointJourney(sessionBuilder).verifyReplayPages();
       });
       test('rolls back gameplay when the replay write fails', () async {
         addTearDown(shutdownAonwGameNativeHost);

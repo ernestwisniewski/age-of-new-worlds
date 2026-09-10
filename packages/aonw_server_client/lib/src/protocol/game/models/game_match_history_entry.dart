@@ -25,7 +25,8 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
     this.winnerPlayerId,
     this.resignedAt,
     this.kickedAt,
-  });
+    bool? replayAvailable,
+  }) : replayAvailable = replayAvailable ?? false;
 
   factory GameMatchHistoryEntry({
     required _i2.GameMatchView match,
@@ -36,6 +37,7 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
     String? winnerPlayerId,
     DateTime? resignedAt,
     DateTime? kickedAt,
+    bool? replayAvailable,
   }) = _GameMatchHistoryEntryImpl;
 
   factory GameMatchHistoryEntry.fromJson(
@@ -58,6 +60,11 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
       kickedAt: jsonSerialization['kickedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['kickedAt']),
+      replayAvailable: jsonSerialization['replayAvailable'] == null
+          ? null
+          : _i1.BoolJsonExtension.fromJson(
+              jsonSerialization['replayAvailable'],
+            ),
     );
   }
 
@@ -77,6 +84,8 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
 
   DateTime? kickedAt;
 
+  bool replayAvailable;
+
   /// Returns a shallow copy of this [GameMatchHistoryEntry]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -89,6 +98,7 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
     String? winnerPlayerId,
     DateTime? resignedAt,
     DateTime? kickedAt,
+    bool? replayAvailable,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -102,6 +112,7 @@ abstract class GameMatchHistoryEntry implements _i1.SerializableModel {
       if (winnerPlayerId != null) 'winnerPlayerId': winnerPlayerId,
       if (resignedAt != null) 'resignedAt': resignedAt?.toJson(),
       if (kickedAt != null) 'kickedAt': kickedAt?.toJson(),
+      'replayAvailable': replayAvailable,
     };
   }
 
@@ -123,6 +134,7 @@ class _GameMatchHistoryEntryImpl extends GameMatchHistoryEntry {
     String? winnerPlayerId,
     DateTime? resignedAt,
     DateTime? kickedAt,
+    bool? replayAvailable,
   }) : super._(
          match: match,
          playerId: playerId,
@@ -132,6 +144,7 @@ class _GameMatchHistoryEntryImpl extends GameMatchHistoryEntry {
          winnerPlayerId: winnerPlayerId,
          resignedAt: resignedAt,
          kickedAt: kickedAt,
+         replayAvailable: replayAvailable,
        );
 
   /// Returns a shallow copy of this [GameMatchHistoryEntry]
@@ -147,6 +160,7 @@ class _GameMatchHistoryEntryImpl extends GameMatchHistoryEntry {
     Object? winnerPlayerId = _Undefined,
     Object? resignedAt = _Undefined,
     Object? kickedAt = _Undefined,
+    bool? replayAvailable,
   }) {
     return GameMatchHistoryEntry(
       match: match ?? this.match.copyWith(),
@@ -161,6 +175,7 @@ class _GameMatchHistoryEntryImpl extends GameMatchHistoryEntry {
           : this.winnerPlayerId,
       resignedAt: resignedAt is DateTime? ? resignedAt : this.resignedAt,
       kickedAt: kickedAt is DateTime? ? kickedAt : this.kickedAt,
+      replayAvailable: replayAvailable ?? this.replayAvailable,
     );
   }
 }

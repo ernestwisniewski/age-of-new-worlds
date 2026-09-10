@@ -21,8 +21,8 @@ The integration test seeds 52 completed own matches, 100 active own matches and
 one foreign match. It verifies complete pagination, account isolation, metadata
 serialization and unchanged rejection of gameplay resync after resignation.
 
-This endpoint supplies history metadata. Recipient-safe online replay requires
-an initial authoritative checkpoint and a separate replay transport.
+History includes `replayAvailable` when the completed match retains all required
+checkpoint fields. Older matches without those fields remain visible in history.
 
 New matches retain their initial canonical state, its digest and revision, and
 the Rust engine behavior fingerprint in server-only fields. The native host
@@ -63,3 +63,25 @@ libraries before the new replay symbol is used; Client API remains 24. The C ABI
 uses the existing bounded buffers, immutable world borrow and owned response
 lifetime, with null-world and Dart artifact round-trip coverage. No new file is
 allowed to contain unsafe code.
+
+`game.replayFrame(matchId, position)` and `game.replayQuery(request, position)`
+authorize durable account membership on each read, including resigned and kicked
+participants. Lobby/running matches, missing checkpoints, departed lobby seats,
+and positions outside the journal fail closed. The caller cannot choose another
+recipient. These endpoints do not restore command or gameplay-resync access.
+
+Before returning any position, the reader traverses the complete journal in
+bounded SQL/native batches. It validates the total row count, final revision,
+event offset, persisted recipient digest, and final canonical state against
+Rust. An invalid later command therefore also blocks opening position zero.
+Only the selected frame's snapshot and filtered command enter `frameJson`;
+canonical continuations and other recipients stay server-side. Queries use the
+same verified historical state through the existing Rust query dispatcher.
+
+The reader currently performs full verification on every frame/query request
+and retains no canonical cache. Memory is bounded by checkpoint/selected/current
+states and one journal page; latency grows with archive length. The integration
+suite covers 261 accepted transitions and seeks on both sides of the 256-step
+boundary, private reads for both participants, historical city planning,
+corrupted evidence, unavailable older matches, and account isolation. Client
+playback integration and long-archive performance review remain separate work.

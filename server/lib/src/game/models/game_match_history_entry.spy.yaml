@@ -8,3 +8,4 @@ fields:
   winnerPlayerId: String?
   resignedAt: DateTime?
   kickedAt: DateTime?
+  replayAvailable: bool, default=false

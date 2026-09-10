@@ -29,6 +29,8 @@ game:
   - joinMatch:
   - listMatches:
   - matchHistory:
+  - replayFrame:
+  - replayQuery:
   - lobby:
   - setReady:
   - startMatch:

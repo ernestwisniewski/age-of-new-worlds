@@ -1,0 +1,5 @@
+class: GameReplayFrame
+fields:
+  matchId: String
+  playerId: String
+  frameJson: String

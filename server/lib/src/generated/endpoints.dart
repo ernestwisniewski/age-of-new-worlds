@@ -26,15 +26,15 @@ import 'package:aonw_server/src/generated/game/models/game_create_match_request.
     as _i12;
 import 'package:aonw_server/src/generated/game/models/game_join_match_request.dart'
     as _i13;
-import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
-    as _i14;
-import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
-    as _i15;
-import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
-    as _i16;
-import 'package:aonw_server/src/generated/game/models/game_resign_match_request.dart'
-    as _i17;
 import 'package:aonw_server/src/generated/game/models/game_player_query_request.dart'
+    as _i14;
+import 'package:aonw_server/src/generated/game/models/game_submit_turn_request.dart'
+    as _i15;
+import 'package:aonw_server/src/generated/game/models/game_player_command_request.dart'
+    as _i16;
+import 'package:aonw_server/src/generated/game/models/game_kick_participant_request.dart'
+    as _i17;
+import 'package:aonw_server/src/generated/game/models/game_resign_match_request.dart'
     as _i18;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _i19;
@@ -551,6 +551,54 @@ class Endpoints extends _i1.EndpointDispatch {
                 beforeParticipantId: params['beforeParticipantId'],
               ),
         ),
+        'replayFrame': _i1.MethodConnector(
+          name: 'replayFrame',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'position': _i1.ParameterDescription(
+              name: 'position',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).replayFrame(
+                session,
+                params['matchId'],
+                params['position'],
+              ),
+        ),
+        'replayQuery': _i1.MethodConnector(
+          name: 'replayQuery',
+          params: {
+            'request': _i1.ParameterDescription(
+              name: 'request',
+              type: _i1.getType<_i14.GamePlayerQueryRequest>(),
+              nullable: false,
+            ),
+            'position': _i1.ParameterDescription(
+              name: 'position',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['game'] as _i11.GameEndpoint).replayQuery(
+                session,
+                params['request'],
+                params['position'],
+              ),
+        ),
         'lobby': _i1.MethodConnector(
           name: 'lobby',
           params: {
@@ -634,7 +682,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i14.GameSubmitTurnRequest>(),
+              type: _i1.getType<_i15.GameSubmitTurnRequest>(),
               nullable: false,
             ),
           },
@@ -652,7 +700,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i15.GamePlayerCommandRequest>(),
+              type: _i1.getType<_i16.GamePlayerCommandRequest>(),
               nullable: false,
             ),
           },
@@ -670,7 +718,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i16.GameKickParticipantRequest>(),
+              type: _i1.getType<_i17.GameKickParticipantRequest>(),
               nullable: false,
             ),
           },
@@ -689,7 +737,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i17.GameResignMatchRequest>(),
+              type: _i1.getType<_i18.GameResignMatchRequest>(),
               nullable: false,
             ),
           },
@@ -707,7 +755,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'request': _i1.ParameterDescription(
               name: 'request',
-              type: _i1.getType<_i18.GamePlayerQueryRequest>(),
+              type: _i1.getType<_i14.GamePlayerQueryRequest>(),
               nullable: false,
             ),
           },

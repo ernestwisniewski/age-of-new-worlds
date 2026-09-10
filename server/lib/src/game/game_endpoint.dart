@@ -29,6 +29,18 @@ final class GameEndpoint extends Endpoint {
   }) =>
       _service.matchHistory(session, beforeParticipantId: beforeParticipantId);
 
+  Future<GameReplayFrame> replayFrame(
+    Session session,
+    String matchId,
+    int position,
+  ) => _service.replayFrame(session, matchId, position);
+
+  Future<GamePlayerQueryOutcome> replayQuery(
+    Session session,
+    GamePlayerQueryRequest request,
+    int position,
+  ) => _service.replayQuery(session, request, position);
+
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _service.lobby(session, matchId);
 
