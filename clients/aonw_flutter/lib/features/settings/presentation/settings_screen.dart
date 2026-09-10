@@ -8,8 +8,10 @@ import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../audio/presentation/game_audio_actions.dart';
 import '../../map/read_model/map_view_mode.dart';
+import '../../multiplayer/presentation/multiplayer_controller.dart';
 import '../application/client_settings.dart';
 import '../application/window_settings.dart';
+import 'account_profile_settings.dart';
 import 'client_settings_controller.dart';
 import 'window_settings_controller.dart';
 import 'window_settings_host.dart';
@@ -30,9 +32,16 @@ part 'settings_gamepad_bindings.dart';
 part 'settings_gamepad_labels.dart';
 
 final class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({required this.controller, super.key});
+  const SettingsScreen({
+    required this.controller,
+    this.account,
+    this.onSignIn,
+    super.key,
+  });
 
   final ClientSettingsController controller;
+  final MultiplayerController? account;
+  final VoidCallback? onSignIn;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -43,6 +52,9 @@ final class SettingsScreen extends StatelessWidget {
         listenable: controller,
         builder: (context, child) => _SettingsForm(
           settings: controller.settings,
+          profile: account == null
+              ? null
+              : AccountProfileSettings(account: account!, onSignIn: onSignIn),
           onChanged: (settings) => unawaited(controller.update(settings)),
           onReset: () => _reset(context),
         ),
@@ -61,11 +73,13 @@ final class _SettingsForm extends StatelessWidget {
     required this.settings,
     required this.onChanged,
     required this.onReset,
+    this.profile,
   });
 
   final ClientSettings settings;
   final ValueChanged<ClientSettings> onChanged;
   final VoidCallback onReset;
+  final Widget? profile;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -86,6 +100,10 @@ final class _SettingsForm extends StatelessWidget {
   List<Widget> _sections(BuildContext context) {
     final l10n = context.aonwL10n;
     return [
+      if (profile != null) ...[
+        profile!,
+        const SizedBox(height: AonwSpacing.md),
+      ],
       ..._accessibilitySections(context),
       _SettingsSection(
         title: l10n.mapAppearanceSettings,

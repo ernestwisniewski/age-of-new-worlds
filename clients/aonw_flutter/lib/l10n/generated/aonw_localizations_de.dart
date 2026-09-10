@@ -2755,4 +2755,19 @@ class AonwLocalizationsDe extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String profileText(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'title': 'Dein Profil',
+      'description':
+          'Beim Ändern des Anzeigenamens bleiben dein Konto und deine Mehrspielerpartien erhalten.',
+      'save': 'Namen speichern',
+      'saved': 'Anzeigename gespeichert.',
+      'taken': 'Dieser Anzeigename ist bereits vergeben.',
+      'changed': 'Das Konto hat sich geändert. Lade das Profil erneut.',
+      'other': 'Dein Profil',
+    });
+    return '$_temp0';
+  }
 }

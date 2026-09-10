@@ -2631,6 +2631,12 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{key, select, title{Players} active{Active} finished{Turn finished} submitted{Submitted} waiting{Waiting} ended{Match ended} privateStatus{Turn status is private} noContact{No diplomatic contact} other{Players}}'**
   String playerText(String key);
+
+  /// No description provided for @profileText.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, title{Your profile} description{Changing your display name keeps your account and multiplayer matches.} save{Save name} saved{Display name saved.} taken{This display name is already taken.} changed{The account changed. Load the profile again.} other{Your profile}}'**
+  String profileText(String value);
 }
 
 class _AonwLocalizationsDelegate

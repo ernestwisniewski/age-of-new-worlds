@@ -2737,4 +2737,19 @@ class AonwLocalizationsEs extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String profileText(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'title': 'Tu perfil',
+      'description':
+          'Cambiar el nombre conserva tu cuenta y tus partidas multijugador.',
+      'save': 'Guardar nombre',
+      'saved': 'Nombre guardado.',
+      'taken': 'Este nombre ya está en uso.',
+      'changed': 'La cuenta ha cambiado. Vuelve a cargar el perfil.',
+      'other': 'Tu perfil',
+    });
+    return '$_temp0';
+  }
 }

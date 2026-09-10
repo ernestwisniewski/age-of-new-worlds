@@ -664,5 +664,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "profileText": "{value, select, title{Your profile} description{Changing your display name keeps your account and multiplayer matches.} save{Save name} saved{Display name saved.} taken{This display name is already taken.} changed{The account changed. Load the profile again.} other{Your profile}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

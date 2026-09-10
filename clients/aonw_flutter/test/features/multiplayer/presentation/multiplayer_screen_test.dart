@@ -1,17 +1,24 @@
 import 'dart:ui' as ui;
 
+import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
+import 'package:aonw_flutter/features/multiplayer/application/account_profile_port.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_coordinator.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_session_port.dart';
 import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_controller.dart';
 import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_screen.dart';
 import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
+import 'package:aonw_flutter/features/settings/presentation/account_profile_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
 
+part 'account_profile_widget_cases.dart';
+
 void main() {
+  accountProfileWidgetCases();
   testWidgets('configures a match and exposes an accessible turn action', (
     tester,
   ) async {
@@ -190,7 +197,23 @@ const _resignedProjection = MultiplayerProjectionView(
   winnerPlayerId: 'player-2',
 );
 
-final class _Session implements MultiplayerSessionPort {
+final class _Session implements MultiplayerSessionPort, AccountProfilePort {
+  var profileName = 'Original';
+  Object? profileFailure;
+  var profileReads = 0;
+  @override
+  Future<AccountProfileView> readProfile() async {
+    profileReads++;
+    return AccountProfileView(userId: 'account-1', displayName: profileName);
+  }
+
+  @override
+  Future<AccountProfileView> updateDisplayName(String name) async {
+    if (profileFailure != null) throw profileFailure!;
+    profileName = name.trim();
+    return AccountProfileView(userId: 'account-1', displayName: profileName);
+  }
+
   var _lobby = _matchLobby();
   var kickCount = 0;
   var resignCount = 0;

@@ -1128,5 +1128,7 @@
     }
   },
   "automaticSave": "Guardado automático",
-  "playerText": "{key, select, title{Jugadores} active{Activo} finished{Turno terminado} submitted{Confirmado} waiting{En espera} ended{Partida terminada} privateStatus{El estado del turno es privado} noContact{Sin contacto diplomático} other{Jugadores}}"
+  "playerText": "{key, select, title{Jugadores} active{Activo} finished{Turno terminado} submitted{Confirmado} waiting{En espera} ended{Partida terminada} privateStatus{El estado del turno es privado} noContact{Sin contacto diplomático} other{Jugadores}}",
+  "profileText": "{value, select, title{Tu perfil} description{Cambiar el nombre conserva tu cuenta y tus partidas multijugador.} save{Guardar nombre} saved{Nombre guardado.} taken{Este nombre ya está en uso.} changed{La cuenta ha cambiado. Vuelve a cargar el perfil.} other{Tu perfil}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

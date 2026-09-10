@@ -5,6 +5,7 @@ import 'package:aonw_server_client/aonw_server_client.dart' as server;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as auth;
 
+import '../application/account_profile_port.dart';
 import '../application/multiplayer_session_port.dart';
 import '../read_model/multiplayer_view.dart';
 import 'auth_token_store.dart';
@@ -13,8 +14,11 @@ import 'server_projection_decoder.dart';
 import 'serverpod_game_transport.dart';
 
 part 'serverpod_multiplayer_lifecycle.dart';
+part 'serverpod_account_profile.dart';
+part 'serverpod_account_authentication.dart';
 
-final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
+final class ServerpodMultiplayerSession
+    implements MultiplayerSessionPort, AccountProfilePort {
   ServerpodMultiplayerSession({
     required ServerConnectionConfig config,
     required AuthTokenStore tokenStore,
@@ -38,6 +42,16 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
   String? _userId;
   var _serverVerified = false;
   var _closed = false;
+
+  @override
+  Future<AccountProfileView> readProfile() =>
+      _profileRequest((client) => client.emailIdp.displayName());
+
+  @override
+  Future<AccountProfileView> updateDisplayName(String displayName) =>
+      _profileRequest(
+        (client) => client.emailIdp.updateDisplayName(displayName: displayName),
+      );
 
   @override
   Future<MultiplayerAccountView?> restoreAccount() async {
@@ -321,24 +335,6 @@ final class ServerpodMultiplayerSession implements MultiplayerSessionPort {
     } on Object catch (error, stackTrace) {
       throw _translate(error, stackTrace);
     }
-  }
-
-  MultiplayerAccountView _accountView(auth.AuthSuccess value) {
-    final userId = value.authUserId.toString();
-    if (userId.isEmpty || userId != _userId) {
-      throw const MultiplayerSessionException(
-        code: 'invalid_authentication_response',
-        message: 'The restored account identity is invalid.',
-      );
-    }
-    return MultiplayerAccountView(userId: userId);
-  }
-
-  Future<void> _clearCredentials() async {
-    _authProvider.token = null;
-    _refreshToken = null;
-    _userId = null;
-    await _tokenStore.clear();
   }
 
   void _ensureOpen() {

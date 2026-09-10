@@ -514,5 +514,7 @@
     }
   },
   "automaticSave": "Zapis automatyczny",
-  "playerText": "{key, select, title{Gracze} active{Aktywny} finished{Tura zakończona} submitted{Zatwierdzono} waiting{Oczekiwanie} ended{Mecz zakończony} privateStatus{Status tury jest prywatny} noContact{Brak kontaktu dyplomatycznego} other{Gracze}}"
+  "playerText": "{key, select, title{Gracze} active{Aktywny} finished{Tura zakończona} submitted{Zatwierdzono} waiting{Oczekiwanie} ended{Mecz zakończony} privateStatus{Status tury jest prywatny} noContact{Brak kontaktu dyplomatycznego} other{Gracze}}",
+  "profileText": "{value, select, title{Twój profil} description{Zmiana nazwy zachowuje konto i mecze multiplayer.} save{Zapisz nazwę} saved{Nazwa została zapisana.} taken{Ta nazwa jest już zajęta.} changed{Konto uległo zmianie. Wczytaj profil ponownie.} other{Twój profil}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

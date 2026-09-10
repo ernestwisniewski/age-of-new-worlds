@@ -2733,4 +2733,19 @@ class AonwLocalizationsNl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String profileText(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'title': 'Je profiel',
+      'description':
+          'Bij het wijzigen van je weergavenaam blijven je account en multiplayerwedstrijden behouden.',
+      'save': 'Naam opslaan',
+      'saved': 'Weergavenaam opgeslagen.',
+      'taken': 'Deze weergavenaam is al in gebruik.',
+      'changed': 'Het account is gewijzigd. Laad het profiel opnieuw.',
+      'other': 'Je profiel',
+    });
+    return '$_temp0';
+  }
 }

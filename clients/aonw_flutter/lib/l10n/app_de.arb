@@ -1128,5 +1128,7 @@
     }
   },
   "automaticSave": "Automatischer Spielstand",
-  "playerText": "{key, select, title{Spieler} active{Aktiv} finished{Zug beendet} submitted{Bestätigt} waiting{Warten} ended{Partie beendet} privateStatus{Zugstatus ist privat} noContact{Kein diplomatischer Kontakt} other{Spieler}}"
+  "playerText": "{key, select, title{Spieler} active{Aktiv} finished{Zug beendet} submitted{Bestätigt} waiting{Warten} ended{Partie beendet} privateStatus{Zugstatus ist privat} noContact{Kein diplomatischer Kontakt} other{Spieler}}",
+  "profileText": "{value, select, title{Dein Profil} description{Beim Ändern des Anzeigenamens bleiben dein Konto und deine Mehrspielerpartien erhalten.} save{Namen speichern} saved{Anzeigename gespeichert.} taken{Dieser Anzeigename ist bereits vergeben.} changed{Das Konto hat sich geändert. Lade das Profil erneut.} other{Dein Profil}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

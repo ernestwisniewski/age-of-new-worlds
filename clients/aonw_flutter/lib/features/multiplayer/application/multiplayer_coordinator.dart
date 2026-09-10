@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:math';
 
 import '../read_model/multiplayer_view.dart';
+import 'account_profile_port.dart';
 import 'multiplayer_session_port.dart';
 import 'multiplayer_state.dart';
 
 part 'multiplayer_lobby_lifecycle.dart';
 part 'multiplayer_match_lifecycle.dart';
+part 'multiplayer_account_profile.dart';
 
 typedef MultiplayerDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);

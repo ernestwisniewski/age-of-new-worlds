@@ -2654,4 +2654,19 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String profileText(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'title': 'Your profile',
+      'description':
+          'Changing your display name keeps your account and multiplayer matches.',
+      'save': 'Save name',
+      'saved': 'Display name saved.',
+      'taken': 'This display name is already taken.',
+      'changed': 'The account changed. Load the profile again.',
+      'other': 'Your profile',
+    });
+    return '$_temp0';
+  }
 }

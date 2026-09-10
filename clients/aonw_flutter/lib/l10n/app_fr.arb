@@ -1128,5 +1128,7 @@
     }
   },
   "automaticSave": "Sauvegarde automatique",
-  "playerText": "{key, select, title{Joueurs} active{Actif} finished{Tour terminé} submitted{Validé} waiting{En attente} ended{Partie terminée} privateStatus{Le statut du tour est privé} noContact{Aucun contact diplomatique} other{Joueurs}}"
+  "playerText": "{key, select, title{Joueurs} active{Actif} finished{Tour terminé} submitted{Validé} waiting{En attente} ended{Partie terminée} privateStatus{Le statut du tour est privé} noContact{Aucun contact diplomatique} other{Joueurs}}",
+  "profileText": "{value, select, title{Votre profil} description{Changer de nom conserve votre compte et vos parties multijoueurs.} save{Enregistrer le nom} saved{Nom enregistré.} taken{Ce nom est déjà utilisé.} changed{Le compte a changé. Rechargez le profil.} other{Votre profil}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

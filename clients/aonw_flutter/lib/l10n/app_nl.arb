@@ -1128,5 +1128,7 @@
     }
   },
   "automaticSave": "Automatisch opgeslagen spel",
-  "playerText": "{key, select, title{Spelers} active{Actief} finished{Beurt beëindigd} submitted{Bevestigd} waiting{Wachten} ended{Wedstrijd beëindigd} privateStatus{Beurtstatus is privé} noContact{Geen diplomatiek contact} other{Spelers}}"
+  "playerText": "{key, select, title{Spelers} active{Actief} finished{Beurt beëindigd} submitted{Bevestigd} waiting{Wachten} ended{Wedstrijd beëindigd} privateStatus{Beurtstatus is privé} noContact{Geen diplomatiek contact} other{Spelers}}",
+  "profileText": "{value, select, title{Je profiel} description{Bij het wijzigen van je weergavenaam blijven je account en multiplayerwedstrijden behouden.} save{Naam opslaan} saved{Weergavenaam opgeslagen.} taken{Deze weergavenaam is al in gebruik.} changed{Het account is gewijzigd. Laad het profiel opnieuw.} other{Je profiel}}",
+  "@profileText": {"placeholders": {"value": {"type": "String"}}}
 }

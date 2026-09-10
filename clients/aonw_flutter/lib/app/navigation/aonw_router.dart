@@ -307,8 +307,12 @@ final class AonwRouter {
           routeObserver: routeObserver,
         );
 
-  Widget _settingsScreen(BuildContext context) =>
-      SettingsScreen(controller: settingsController);
+  Widget _settingsScreen(BuildContext context) => SettingsScreen(
+    controller: settingsController,
+    account: multiplayerController,
+    onSignIn: () =>
+        Navigator.of(context).pushNamed(AonwRoute.multiplayer.location),
+  );
 
   bool _serverUpdateRequired() {
     if (multiplayerAccessController?.updateRequired ?? false) return true;
