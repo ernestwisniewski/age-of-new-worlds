@@ -32,6 +32,9 @@ These images render the source project's `PumpGameHudTest`, `FakeHudRepository`,
 | Audio, AI battery saver and performance controls | Retain controls | Three sound channels/volumes, Rust AI effort, FPS and map zoom |
 | Load Game list | Overridden by load specification | Single/Hotseat/Online, resume/replay/export, import; Online history and recipient-safe playback; portable Online export remains open |
 
+The [rendering and input inventory](rendering-and-input-inventory.md) enumerates
+the reference component factory, mounted HUD surfaces and input families.
+
 ## Panel and data inventory
 
 Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the reference and `clients/aonw_flutter/lib/features` for the target. A present data field does not certify visual parity.
