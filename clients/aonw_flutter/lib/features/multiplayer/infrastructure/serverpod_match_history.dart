@@ -71,5 +71,6 @@ MatchHistoryEntryView _decodeHistoryEntry(server.GameMatchHistoryEntry value) {
     winnerPlayerId: value.winnerPlayerId,
     resignedAt: value.resignedAt,
     kickedAt: value.kickedAt,
+    replayAvailable: value.replayAvailable,
   );
 }

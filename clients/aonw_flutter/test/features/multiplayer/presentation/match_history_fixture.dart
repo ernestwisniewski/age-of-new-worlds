@@ -6,6 +6,7 @@ import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.da
 final class HistoryPort implements MatchHistoryPort {
   Object? failure;
   String userId = 'account';
+  bool replayAvailable = false;
   Completer<MatchHistoryPageView>? pending;
   final cursors = <int?>[];
 
@@ -16,13 +17,18 @@ final class HistoryPort implements MatchHistoryPort {
     cursors.add(beforeParticipantId);
     if (failure case final error?) throw error;
     return pending?.future ??
-        historyPage(userId: userId, second: beforeParticipantId != null);
+        historyPage(
+          userId: userId,
+          second: beforeParticipantId != null,
+          replayAvailable: replayAvailable,
+        );
   }
 }
 
 MatchHistoryPageView historyPage({
   String userId = 'account',
   bool second = false,
+  bool replayAvailable = false,
 }) => MatchHistoryPageView(
   userId: userId,
   nextBeforeParticipantId: second ? null : 42,
@@ -42,6 +48,7 @@ MatchHistoryPageView historyPage({
       ),
       playerId: 'player-1',
       turn: 40,
+      replayAvailable: replayAvailable,
       endedAt: DateTime(2026, 9, 12),
       outcomeCondition: 'resignation',
       winnerPlayerId: second ? 'player-1' : 'player-2',

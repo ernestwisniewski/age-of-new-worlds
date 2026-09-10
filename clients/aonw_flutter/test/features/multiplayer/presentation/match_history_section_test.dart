@@ -24,6 +24,52 @@ void main() {
       'MaterialIcons',
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
+  for (final (language, size) in [
+    ('pl', const Size(390, 844)),
+    ('de', const Size(1024, 768)),
+    ('en', const Size(1440, 900)),
+  ]) {
+    testWidgets(
+      '$language online replay action is responsive and respects busy state',
+      (tester) async {
+        await tester.binding.setSurfaceSize(size);
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        final port = HistoryPort()..replayAvailable = true;
+        MatchHistoryEntryView? selected;
+        Future<void> open(MatchHistoryEntryView entry) async {
+          selected = entry;
+        }
+
+        await tester.pumpWidget(
+          _app(port, language: language, size: size, onReplay: open),
+        );
+        await tester.tap(find.byKey(const ValueKey('match-history-section')));
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const ValueKey('history-golden')),
+          matchesGoldenFile('goldens/match_history_replay_$language.png'),
+        );
+        final button = find.byKey(
+          const ValueKey(('history-replay', 'match-first')),
+        );
+        await tester.ensureVisible(button);
+        await tester.tap(button);
+        expect(selected?.match.matchId, 'match-first');
+        await tester.pumpWidget(
+          _app(
+            port,
+            language: language,
+            size: size,
+            onReplay: open,
+            replayBusy: true,
+          ),
+        );
+        await tester.pump();
+        expect(tester.widget<OutlinedButton>(button).onPressed, isNull);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   for (final language in ['en', 'pl', 'de', 'fr', 'es', 'nl']) {
     testWidgets('$language history loads lazily and navigates bounded pages', (
       tester,
@@ -98,6 +144,8 @@ void main() {
 Widget _app(
   HistoryPort port, {
   String userId = 'account',
+  Future<void> Function(MatchHistoryEntryView)? onReplay,
+  bool replayBusy = false,
   String language = 'en',
   Size size = const Size(800, 600),
 }) => LocalizedTestApp(
@@ -115,7 +163,12 @@ Widget _app(
           child: Center(
             child: SizedBox(
               width: 760,
-              child: MatchHistorySection(port: port, userId: userId),
+              child: MatchHistorySection(
+                port: port,
+                userId: userId,
+                onReplay: onReplay,
+                replayBusy: replayBusy,
+              ),
             ),
           ),
         ),

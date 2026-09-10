@@ -55,6 +55,7 @@ final class LoadGameScreen extends StatefulWidget {
     this.resumeOnlineGame = _unavailableOnlineResume,
     this.onOpenMultiplayer,
     this.matchHistory,
+    this.openOnlineReplay,
     super.key,
   });
 
@@ -73,6 +74,8 @@ final class LoadGameScreen extends StatefulWidget {
   final OnlineGameResume resumeOnlineGame;
   final VoidCallback? onOpenMultiplayer;
   final MatchHistoryPort? matchHistory;
+  final Future<ReplayOpenResultView> Function(MatchHistoryEntryView, String)?
+  openOnlineReplay;
 
   @override
   State<LoadGameScreen> createState() => _LoadGameScreenState();
@@ -88,6 +91,7 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
   LocalGameScenarioView? _activeReplayScenario;
   String? _transferSaveId;
   String? _activeOnlineMatchId;
+  String? _activeOnlineReplayId;
   String? _onlineFailureCode;
   LocalResumeFailureViewCode? _resumeFailure;
   ReplayFailureViewCode? _replayFailure;
@@ -147,6 +151,10 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
             onExportSave: widget.onExportSave == null ? null : _exportSave,
             onlineIndex: widget.onlineIndex(),
             matchHistory: widget.matchHistory,
+            onReplayOnline: widget.openOnlineReplay == null
+                ? null
+                : _openHistoryReplay,
+            replayingOnlineMatchId: _activeOnlineReplayId,
             resumingOnline: _resumingOnline,
             activeOnlineMatchId: _activeOnlineMatchId,
             onlineFailureCode: _onlineFailureCode,
@@ -242,6 +250,35 @@ final class _LoadGameScreenState extends State<LoadGameScreen> {
       _replayFailure = result.failure;
       _availability = _readAvailability();
     });
+  }
+
+  Future<void> _openHistoryReplay(MatchHistoryEntryView entry) async {
+    final open = widget.openOnlineReplay;
+    final userId = widget.onlineIndex().userId;
+    if (_busy || _resumingOnline || open == null || userId == null) return;
+    setState(() {
+      _openingReplay = true;
+      _activeOnlineReplayId = entry.match.matchId;
+      _replayFailure = null;
+    });
+    ReplayOpenResultView result;
+    try {
+      result = await open(entry, userId);
+    } on Object {
+      result = const ReplayOpenResultView.failed(
+        ReplayFailureViewCode.incompatible,
+      );
+    }
+    if (!mounted) return;
+    final sameAccount = widget.onlineIndex().userId == userId;
+    setState(() {
+      _openingReplay = false;
+      _activeOnlineReplayId = null;
+      _replayFailure = sameAccount
+          ? result.failure
+          : ReplayFailureViewCode.unavailable;
+    });
+    if (sameAccount && result.started) widget.onReplayOpened();
   }
 
   Future<void> _resumeOnline(String matchId) async {

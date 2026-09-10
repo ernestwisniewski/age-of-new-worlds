@@ -13,6 +13,7 @@ void main() {
     expect(entry.match.phase, MultiplayerMatchPhase.finished);
     expect(entry.playerId, 'player-1');
     expect(entry.turn, 40);
+    expect(entry.replayAvailable, isTrue);
     expect(entry.outcomeCondition, 'resignation');
     expect(entry.winnerPlayerId, 'player-2');
     expect(entry.resignedAt, DateTime.utc(2026, 9, 12));
@@ -59,6 +60,7 @@ server.GameMatchHistoryPage _page() => server.GameMatchHistoryPage(
       ),
       playerId: 'player-1',
       turn: 40,
+      replayAvailable: true,
       endedAt: DateTime.utc(2026, 9, 12),
       outcomeCondition: 'resignation',
       winnerPlayerId: 'player-2',

@@ -10,6 +10,7 @@ final class MatchHistoryEntryView {
     this.winnerPlayerId,
     this.resignedAt,
     this.kickedAt,
+    this.replayAvailable = false,
   });
 
   final MultiplayerMatchView match;
@@ -20,6 +21,7 @@ final class MatchHistoryEntryView {
   final String? winnerPlayerId;
   final DateTime? resignedAt;
   final DateTime? kickedAt;
+  final bool replayAvailable;
 }
 
 final class MatchHistoryPageView {

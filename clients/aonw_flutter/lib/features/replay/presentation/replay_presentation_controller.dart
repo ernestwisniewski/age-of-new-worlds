@@ -4,12 +4,17 @@ import 'package:flutter/foundation.dart';
 
 import '../../local_game/application/local_game_catalog.dart';
 import '../../map/application/city_planning_session_port.dart';
+import '../../map/application/map_session_port.dart';
 import '../../map/read_model/map_view_mode.dart';
+import '../../multiplayer/application/match_history_port.dart';
 import '../application/local_replay_store.dart';
+import '../application/network_replay_session_port.dart';
 import '../application/replay_capture.dart';
 import '../application/replay_session_port.dart';
 import '../application/replay_state.dart';
 import '../read_model/replay_frame_view.dart';
+
+part 'replay_online_opening.dart';
 
 typedef ReplayDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -29,13 +34,17 @@ final class ReplayPresentationController extends ChangeNotifier
   ReplayPresentationController({
     required ReplaySessionPort? session,
     required LocalReplayStore? store,
+    NetworkReplaySessionPort? networkSession,
     ReplayDiagnosticReporter diagnosticReporter = _reportReplayDiagnostic,
   }) : _session = session,
        _store = store,
+       _networkSession = networkSession,
        _diagnosticReporter = diagnosticReporter;
 
   CityPlanningSessionPort? get cityPlanningSession => _session;
   final ReplaySessionPort? _session;
+  final NetworkReplaySessionPort? _networkSession;
+  String? _networkUserId;
   final LocalReplayStore? _store;
   final ReplayDiagnosticReporter _diagnosticReporter;
   ReplayState _state = const ReplayIdle();
@@ -114,6 +123,7 @@ final class ReplayPresentationController extends ChangeNotifier
     Iterable<LocalGameCatalogEntryView> entries,
   ) async {
     pause();
+    _networkUserId = null;
     final generation = ++_generation;
     _waitingForEffects = false;
     _setState(const ReplayLoading());

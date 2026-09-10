@@ -7,7 +7,10 @@ import 'package:aonw_flutter/features/map/read_model/city_planning_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
+import 'package:aonw_flutter/features/multiplayer/application/match_history_port.dart';
+import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
 import 'package:aonw_flutter/features/replay/application/local_replay_store.dart';
+import 'package:aonw_flutter/features/replay/application/network_replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_session_port.dart';
 import 'package:aonw_flutter/features/replay/application/replay_state.dart';
 import 'package:aonw_flutter/features/replay/presentation/replay_presentation_controller.dart';
@@ -26,8 +29,10 @@ import '../../../support/recording_game_audio.dart';
 
 part 'replay_audio_tests.dart';
 part 'replay_view_mode_tests.dart';
+part 'replay_online_tests.dart';
 
 void main() {
+  replayOnlineTests();
   replayAudioTests();
   replayViewModeTests();
   testWidgets(

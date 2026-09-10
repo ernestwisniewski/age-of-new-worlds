@@ -24,6 +24,7 @@ import '../../l10n/aonw_locale_resolution.dart';
 import '../../l10n/l10n.dart';
 import '../platform/app_platform_actions.dart';
 import '../telemetry/client_telemetry.dart';
+import 'aonw_load_game_online.dart';
 import 'aonw_route_observer.dart';
 import 'aonw_router.dart';
 
@@ -79,6 +80,7 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
         WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     widget.telemetry.record(ClientTelemetryEvent.appStarted);
     _installSettingsController();
+    widget.multiplayerController?.addListener(_synchronizeReplayAccount);
     unawaited(widget.multiplayerAccessController?.initialize());
     _synchronizeInputLifecycle();
   }
@@ -95,7 +97,12 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
       _synchronizeClientConfiguration();
     }
     if (oldWidget.multiplayerController != widget.multiplayerController) {
+      oldWidget.multiplayerController?.removeListener(
+        _synchronizeReplayAccount,
+      );
       oldWidget.multiplayerController?.dispose();
+      widget.multiplayerController?.addListener(_synchronizeReplayAccount);
+      _synchronizeReplayAccount();
     }
     if (oldWidget.multiplayerAccessController !=
         widget.multiplayerAccessController) {
@@ -122,10 +129,19 @@ final class _AonwAppState extends State<AonwApp> with WidgetsBindingObserver {
     widget.mapController.dispose();
     widget.replayController?.dispose();
     widget.multiplayerAccessController?.dispose();
+    widget.multiplayerController?.removeListener(_synchronizeReplayAccount);
     widget.multiplayerController?.dispose();
     unawaited(widget.mapInputSource?.close());
     _settingsController.dispose();
     super.dispose();
+  }
+
+  void _synchronizeReplayAccount() {
+    final controller = widget.multiplayerController;
+    final userId = controller == null
+        ? null
+        : AonwLoadGameOnline(controller).index(available: true).userId;
+    widget.replayController?.updateOnlineAccount(userId);
   }
 
   @override

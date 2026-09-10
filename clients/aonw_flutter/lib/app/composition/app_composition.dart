@@ -16,6 +16,7 @@ import '../../features/multiplayer/infrastructure/server_connection_config.dart'
 import '../../features/multiplayer/infrastructure/serverpod_game_session_gateway.dart';
 import '../../features/multiplayer/infrastructure/serverpod_multiplayer_access.dart';
 import '../../features/multiplayer/infrastructure/serverpod_multiplayer_session.dart';
+import '../../features/multiplayer/infrastructure/serverpod_replay_session_gateway.dart';
 import '../../features/multiplayer/presentation/multiplayer_access_controller.dart';
 import '../../features/multiplayer/presentation/multiplayer_controller.dart';
 import '../../features/replay/infrastructure/atomic_local_replay_store.dart';
@@ -82,13 +83,17 @@ final class AppComposition {
   }) {
     final gateway = EngineGameSessionGateway(assets: rootBundle);
     final serverConfig = ServerConnectionConfig.production();
-    final replayController = ReplayPresentationController(
-      session: gateway.replaySession,
-      store: AtomicLocalReplayStore.production(),
-    );
     final multiplayerSession = ServerpodMultiplayerSession(
       config: serverConfig,
       tokenStore: const SecureAuthTokenStore(),
+    );
+    final replayController = ReplayPresentationController(
+      session: gateway.replaySession,
+      networkSession: ServerpodReplaySessionGateway(
+        gameplay: gateway,
+        multiplayer: multiplayerSession,
+      ),
+      store: AtomicLocalReplayStore.production(),
     );
     final multiplayerAccessController = MultiplayerAccessController(
       access: ServerpodMultiplayerAccess(config: serverConfig),

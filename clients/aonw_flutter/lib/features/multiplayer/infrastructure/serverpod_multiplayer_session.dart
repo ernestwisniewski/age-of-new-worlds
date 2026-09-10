@@ -13,11 +13,13 @@ import 'auth_token_store.dart';
 import 'server_connection_config.dart';
 import 'server_projection_decoder.dart';
 import 'serverpod_game_transport.dart';
+import 'serverpod_replay_transport.dart';
 
 part 'serverpod_multiplayer_lifecycle.dart';
 part 'serverpod_account_profile.dart';
 part 'serverpod_account_authentication.dart';
 part 'serverpod_match_history.dart';
+part 'serverpod_replay_session.dart';
 
 final class ServerpodMultiplayerSession
     implements MultiplayerSessionPort, AccountProfilePort, MatchHistoryPort {

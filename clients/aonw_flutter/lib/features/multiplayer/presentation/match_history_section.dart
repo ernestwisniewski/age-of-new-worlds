@@ -14,11 +14,17 @@ final class MatchHistorySection extends StatefulWidget {
   const MatchHistorySection({
     required this.port,
     required this.userId,
+    this.onReplay,
+    this.replayBusy = false,
+    this.replayingMatchId,
     super.key,
   });
 
   final MatchHistoryPort port;
   final String userId;
+  final Future<void> Function(MatchHistoryEntryView)? onReplay;
+  final bool replayBusy;
+  final String? replayingMatchId;
 
   @override
   State<MatchHistorySection> createState() => _MatchHistorySectionState();
@@ -82,6 +88,14 @@ final class _MatchHistorySectionState extends State<MatchHistorySection> {
     });
   }
 
+  Widget _card(MatchHistoryEntryView entry) => _MatchHistoryCard(
+    entry: entry,
+    onReplay: widget.onReplay == null || widget.replayBusy || _controller.busy
+        ? null
+        : () => widget.onReplay!(entry),
+    replaying: widget.replayingMatchId == entry.match.matchId,
+  );
+
   Widget _body(BuildContext context) {
     final copy = context.aonwL10n;
     final entries = _controller.page?.entries;
@@ -97,7 +111,7 @@ final class _MatchHistorySectionState extends State<MatchHistorySection> {
             key: const ValueKey('history-error'),
           ),
         for (final entry in entries ?? const <MatchHistoryEntryView>[])
-          _MatchHistoryCard(entry: entry),
+          _card(entry),
         Wrap(
           spacing: 8,
           children: [

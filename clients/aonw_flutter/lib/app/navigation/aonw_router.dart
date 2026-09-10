@@ -205,6 +205,9 @@ final class AonwRouter {
         : AonwLoadGameOnline(onlineController);
     return LoadGameScreen(
       matchHistory: onlineController,
+      openOnlineReplay: replayController?.canOpenOnlineReplay == true
+          ? replayController!.openOnline
+          : null,
       listLocalSaves: mapController.listLocalSaves,
       resumeLocalGame: mapController.resumeLocalGame,
       onResumed: () =>

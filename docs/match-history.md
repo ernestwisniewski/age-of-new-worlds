@@ -83,5 +83,26 @@ and retains no canonical cache. Memory is bounded by checkpoint/selected/current
 states and one journal page; latency grows with archive length. The integration
 suite covers 261 accepted transitions and seeks on both sides of the 256-step
 boundary, private reads for both participants, historical city planning,
-corrupted evidence, unavailable older matches, and account isolation. Client
-playback integration and long-archive performance review remain separate work.
+corrupted evidence, unavailable older matches, and account isolation. Long-archive
+performance review remains open.
+
+
+Load Game offers replay for available history entries. Opening pins the account,
+match, recipient and content hashes, then initializes the same engine gateway,
+map renderer, queries and playback controller used by local replay. The transport
+accepts only snapshot, seek and historical queries. A single forward step retains
+command feedback; repeated positions and jumps clear it. Snapshot reads reuse
+the validated current frame without another network request.
+
+Account changes clear the replay presentation and invalidate both cached reads
+and in-flight responses. Network authentication is captured per replay transport;
+a later token rotation invalidates that transport. Old callbacks cannot navigate
+the new account into a replay. Failures remain visible through the shared replay
+error state. Online replay does not expose a canonical export.
+
+Coverage includes transport identity/bounds/continuity, historical queries,
+account changes during opening and navigation, shared playback, and a native Rust
+replay round-trip with identical final digest. The native Flutter test uses Rust
+behind a transport fixture; the separate PostgreSQL suite covers the real server
+reader. Three reviewed history goldens cover phone, tablet and desktop. The full
+Flutter gate passes 1140 tests, analysis and existing architecture budgets.

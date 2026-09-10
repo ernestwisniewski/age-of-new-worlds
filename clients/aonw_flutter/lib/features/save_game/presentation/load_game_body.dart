@@ -27,6 +27,8 @@ final class _LoadGameBody extends StatelessWidget {
     required this.onResumeOnline,
     required this.onOpenMultiplayer,
     required this.matchHistory,
+    required this.onReplayOnline,
+    required this.replayingOnlineMatchId,
   });
 
   final _LoadAvailability? availability;
@@ -54,6 +56,8 @@ final class _LoadGameBody extends StatelessWidget {
   final Future<void> Function(String matchId) onResumeOnline;
   final VoidCallback? onOpenMultiplayer;
   final MatchHistoryPort? matchHistory;
+  final Future<void> Function(MatchHistoryEntryView)? onReplayOnline;
+  final String? replayingOnlineMatchId;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -103,17 +107,26 @@ final class _LoadGameBody extends StatelessWidget {
                 transferAction: transferAction,
                 transferResult: transferResult,
               ),
-              if (matchHistory != null && onlineIndex.userId != null)
-                MatchHistorySection(
-                  port: matchHistory!,
-                  userId: onlineIndex.userId!,
-                ),
+              _history(),
             ],
           ),
         ),
       ),
     ],
   );
+
+  Widget _history() {
+    final port = matchHistory;
+    final userId = onlineIndex.userId;
+    if (port == null || userId == null) return const SizedBox.shrink();
+    return MatchHistorySection(
+      port: port,
+      userId: userId,
+      onReplay: onReplayOnline,
+      replayBusy: busy,
+      replayingMatchId: replayingOnlineMatchId,
+    );
+  }
 
   bool get _hasOnlineContent => switch (onlineIndex.phase) {
     OnlineSaveIndexPhaseView.unavailable => false,
