@@ -82,6 +82,6 @@ from the current recipient's matching-stamp Rust research query. Closing the
 popup preserves required research without a cancellation, selection or turn
 command. Input ownership blocks background keyboard/gamepad actions. Six
 languages and 200% landscape text pass; phone/tablet/desktop goldens are reviewed.
-The full client gate passes 1151 tests, followed by one additional HUD regression
-and clean analysis. Reference-specific technology thumbnails/descriptive prose
-and full replay notification composition remain part of the final HUD audit.
+The full client gate passes 1165 tests with clean analysis. All 54 technology
+thumbnails and authored discovery descriptions in six languages are implemented.
+Full replay notification composition remains part of the final HUD audit.
