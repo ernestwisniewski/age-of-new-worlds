@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../aonw_tokens.dart';
 
-const aonwMenuBackgroundAsset = 'assets/main_menu/background.jpg';
+const aonwMenuBackgroundAsset = 'assets/main_menu/background2.jpg';
 const aonwLogoAsset = 'assets/runtime/ui/logo.webp';
 
 final class AonwMenuBackdrop extends StatefulWidget {
