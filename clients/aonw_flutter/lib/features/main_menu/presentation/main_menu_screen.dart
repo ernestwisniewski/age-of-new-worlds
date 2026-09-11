@@ -53,7 +53,7 @@ final class MainMenuScreen extends StatelessWidget {
         children: [
           const _MenuBackgroundOverlay(),
           SafeArea(child: _buildMenuPanel(context, constraints)),
-          if (constraints.maxWidth >= _wideMenuInfoBreakpoint)
+          if (_showWideInfo(context, constraints))
             Positioned(
               right: 18,
               bottom: 18,
@@ -69,9 +69,14 @@ final class MainMenuScreen extends StatelessWidget {
         ],
       );
 
+  bool _showWideInfo(BuildContext context, BoxConstraints constraints) =>
+      constraints.maxWidth >= _wideMenuInfoBreakpoint &&
+      constraints.maxHeight >= 600 &&
+      MediaQuery.textScalerOf(context).scale(1) <= 1.3;
+
   Widget _buildMenuPanel(BuildContext context, BoxConstraints constraints) {
     final compact = constraints.maxWidth < 700;
-    final showBottomLinks = constraints.maxWidth < _wideMenuInfoBreakpoint;
+    final showBottomLinks = !_showWideInfo(context, constraints);
     final panelWidth = compact
         ? constraints.maxWidth
         : constraints.maxWidth.clamp(340.0, 390.0).toDouble();
@@ -82,7 +87,6 @@ final class MainMenuScreen extends StatelessWidget {
         width: panelWidth,
         child: _MenuPanel(
           showBottomLinks: showBottomLinks,
-          showSynopsis: constraints.maxHeight >= 760,
           onOpenSinglePlayer: onOpenSinglePlayer,
           onOpenMultiplayer: onOpenMultiplayer,
           onOpenHotseat: onOpenHotseat,

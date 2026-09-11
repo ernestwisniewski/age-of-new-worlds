@@ -3,7 +3,6 @@ part of 'main_menu_screen.dart';
 final class _MenuPanel extends StatelessWidget {
   const _MenuPanel({
     required this.showBottomLinks,
-    required this.showSynopsis,
     required this.onOpenSinglePlayer,
     required this.onOpenMultiplayer,
     required this.onOpenHotseat,
@@ -17,7 +16,6 @@ final class _MenuPanel extends StatelessWidget {
   });
 
   final bool showBottomLinks;
-  final bool showSynopsis;
   final VoidCallback onOpenSinglePlayer;
   final VoidCallback? onOpenMultiplayer;
   final VoidCallback? onOpenHotseat;
@@ -110,37 +108,43 @@ final class _MenuPanelContent extends StatelessWidget {
   final List<_MenuItem> items;
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final scrollAll =
+          constraints.maxHeight < 740 ||
+          MediaQuery.textScalerOf(context).scale(1) > 1.3;
+      final content = Column(
+        mainAxisSize: scrollAll ? MainAxisSize.min : MainAxisSize.max,
+        children: [
+          const _MenuLogo(),
+          const SizedBox(height: 6),
+          const AonwGoldDivider(width: 146),
+          const SizedBox(height: 10),
+          _MenuSynopsis(serverUpdateRequired: panel.serverUpdateRequired),
+          const SizedBox(height: 12),
+          if (scrollAll)
+            _actions()
+          else
+            Expanded(child: SingleChildScrollView(child: _actions())),
+          if (panel.showBottomLinks) ...[
+            const SizedBox(height: 8),
+            _BottomLinks(
+              onOpenInstructions: panel.onOpenInstructions,
+              onOpenCredits: panel.onOpenCredits,
+              onOpenFeedback: panel.onOpenFeedback,
+            ),
+          ],
+        ],
+      );
+      return scrollAll ? SingleChildScrollView(child: content) : content;
+    },
+  );
+
+  Widget _actions() => Column(
     children: [
-      const _MenuLogo(),
-      const SizedBox(height: 6),
-      const AonwGoldDivider(width: 146),
-      const SizedBox(height: 10),
-      _MenuSynopsis(
-        compact: panel.showBottomLinks,
-        visible: panel.showSynopsis,
-        serverUpdateRequired: panel.serverUpdateRequired,
-      ),
-      const SizedBox(height: 12),
-      Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              for (final item in items) ...[
-                _MenuButton(item: item),
-                const SizedBox(height: 9),
-              ],
-            ],
-          ),
-        ),
-      ),
-      if (panel.showBottomLinks) ...[
-        const SizedBox(height: 8),
-        _BottomLinks(
-          onOpenInstructions: panel.onOpenInstructions,
-          onOpenCredits: panel.onOpenCredits,
-          onOpenFeedback: panel.onOpenFeedback,
-        ),
+      for (final item in items) ...[
+        _MenuButton(item: item),
+        const SizedBox(height: 9),
       ],
     ],
   );

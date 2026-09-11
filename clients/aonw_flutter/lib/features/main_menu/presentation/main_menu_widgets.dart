@@ -48,21 +48,12 @@ final class _MenuLogo extends StatelessWidget {
 }
 
 final class _MenuSynopsis extends StatelessWidget {
-  const _MenuSynopsis({
-    required this.compact,
-    required this.serverUpdateRequired,
-    required this.visible,
-  });
+  const _MenuSynopsis({required this.serverUpdateRequired});
 
-  final bool compact;
   final bool serverUpdateRequired;
-  final bool visible;
 
   @override
   Widget build(BuildContext context) {
-    if (!visible) {
-      return const SizedBox.shrink();
-    }
     final l10n = context.aonwL10n;
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -77,8 +68,6 @@ final class _MenuSynopsis extends StatelessWidget {
           children: [
             Text(
               l10n.mainMenuSynopsisTitle.toUpperCase(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               style: AonwTextStyles.toolbarLabel.copyWith(
                 color: serverUpdateRequired
                     ? AonwColorTokens.brand
@@ -91,8 +80,6 @@ final class _MenuSynopsis extends StatelessWidget {
               serverUpdateRequired
                   ? l10n.serverUpdateSoon
                   : l10n.mainMenuWelcome,
-              maxLines: compact && !serverUpdateRequired ? 2 : 3,
-              overflow: TextOverflow.ellipsis,
               style: AonwTextStyles.bodySmall.copyWith(
                 color: AonwColorTokens.textPrimary,
                 height: 1.32,
@@ -167,7 +154,7 @@ final class _MenuButtonFrame extends StatelessWidget {
     child: AnimatedContainer(
       key: item.key,
       duration: const Duration(milliseconds: 140),
-      height: _buttonHeight(context),
+      constraints: const BoxConstraints(minHeight: 50),
       decoration: _decoration(),
       child: Material(
         type: MaterialType.transparency,
@@ -178,7 +165,7 @@ final class _MenuButtonFrame extends StatelessWidget {
           canRequestFocus: enabled,
           borderRadius: BorderRadius.circular(AonwRadii.panel),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: _MenuButtonContent(
               item: item,
               highlighted: highlighted,
@@ -189,11 +176,6 @@ final class _MenuButtonFrame extends StatelessWidget {
       ),
     ),
   );
-
-  double _buttonHeight(BuildContext context) {
-    final textScale = MediaQuery.textScalerOf(context).scale(1).clamp(1, 1.3);
-    return 50 + ((textScale - 1) * 18);
-  }
 
   BoxDecoration _decoration() => BoxDecoration(
     gradient: LinearGradient(
@@ -293,12 +275,11 @@ final class _MenuButtonLabels extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
         item.label.toUpperCase(),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
         style: AonwTextStyles.menuButton.copyWith(
           color: highlighted
               ? AonwColorTokens.brandLight
@@ -308,8 +289,6 @@ final class _MenuButtonLabels extends StatelessWidget {
       if (item.sublabel case final sublabel?)
         Text(
           sublabel.toUpperCase(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
           style: AonwTextStyles.chipLabel.copyWith(
             color: AonwColorTokens.textTertiary,
             fontSize: 9,
@@ -349,11 +328,33 @@ final class _BottomLinks extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: Row(
-          children: [
-            for (final link in links)
-              Expanded(child: _BottomLinkButton(link: link)),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            var width = constraints.maxWidth / links.length;
+            for (final link in links) {
+              final painter = TextPainter(
+                text: TextSpan(
+                  text: link.label.toUpperCase(),
+                  style: AonwTextStyles.toolbarLabel,
+                ),
+                textDirection: Directionality.of(context),
+                textScaler: MediaQuery.textScalerOf(context),
+                maxLines: 1,
+              )..layout();
+              if (painter.width + 8 > width) width = painter.width + 8;
+              painter.dispose();
+            }
+            return Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                for (final link in links)
+                  SizedBox(
+                    width: width.clamp(0, constraints.maxWidth),
+                    child: _BottomLinkButton(link: link),
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -409,8 +410,7 @@ final class _BottomLinkButton extends StatelessWidget {
         const SizedBox(height: 3),
         Text(
           link.label.toUpperCase(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
           style: AonwTextStyles.toolbarLabel.copyWith(
             color: AonwColorTokens.textTertiary,
           ),

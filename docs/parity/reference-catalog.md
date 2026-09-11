@@ -97,3 +97,26 @@ a deterministic 12×8 tile map and four loaded commander sprites. Reduced motion
 keeps captures deterministic. These are target regression images, not captured
 reference matches or evidence of native archive correctness. All three images
 were inspected; controls remain below the map without covering the shared HUD.
+
+## Main menu comparison
+
+The [menu capture template](../../tool/reference/capture_menu_test.dart.template)
+reproduces the original root menu with mocked local preferences, secure storage
+and package metadata. [Its manifest](reference-menu/manifest.json) records source
+revision, sizes, hashes and limitations. The English reference captures cover
+[phone](reference-menu/phone_menu.png), [tablet](reference-menu/tablet_menu.png)
+and [desktop](reference-menu/desktop_menu.png). The reference phone overlaps two
+footer groups; that defect is not an intended interaction target.
+
+The target retains the source logo, gradients, 390-pixel wide panel, gold borders
+and 50-pixel minimum action height. By explicit user direction, the background
+uses `assets/main_menu/background2.jpg` from this repository, copied byte for byte
+to the Flutter asset bundle. This supersedes the reference bay-and-city background. Six main actions,
+the welcome message and update notice follow the current menu specification.
+At increased text scale, labels wrap, footer links reflow and the complete menu
+scrolls. A short viewport must not hide the update notice. Twelve regression
+cases across six languages first failed and now exercise every action at 200%
+in portrait and landscape. Target images are
+[phone](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_phone.png),
+[tablet](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_tablet.png)
+and [desktop](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_desktop.png).
