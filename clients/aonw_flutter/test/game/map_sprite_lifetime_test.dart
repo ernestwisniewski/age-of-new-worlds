@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_action_palette_view.dart';
@@ -47,6 +49,7 @@ void main() {
     'map layers retain shared atlases until their final presentation ends',
     AonwFlameGame.new,
     (game) async {
+      addTearDown(game.clearScene);
       final snapshot = _snapshot();
       final warmup = SpriteFrames.createScope();
       addTearDown(warmup.dispose);
@@ -61,6 +64,13 @@ void main() {
       await game.ready();
       final world = game.world;
       await world.unitLayer.componentForUnit('worker')!.debugLoadSprite();
+      final recorder = ui.PictureRecorder();
+      final canvas = ui.Canvas(recorder);
+      world.cityLayer.debugComponentForCity('city')!.render(canvas);
+      world.workerInfrastructureLayer
+          .debugImprovementAt((col: 1, row: 1))!
+          .render(canvas);
+      recorder.endRecording().dispose();
       await world.routeLayer.debugLoadGhost();
       await world.tileDetailsLayer.debugPreloadVisibleFrames();
       await Future<void>.delayed(Duration.zero);
@@ -100,6 +110,71 @@ void main() {
       expect(SpriteFrames.debugAtlasBytes, isEmpty);
       await game.ready();
       expect(SpriteFrames.debugAtlasBytes, isEmpty);
+    },
+  );
+
+  testWithGame<AonwFlameGame>(
+    'city and improvement atlases follow the camera without replacing components',
+    AonwFlameGame.new,
+    (game) async {
+      addTearDown(game.clearScene);
+      game.replaceScene(_snapshot());
+      await game.ready();
+      final city = game.world.cityLayer.debugComponentForCity('city')!;
+      final farm = game.world.workerInfrastructureLayer.debugImprovementAt((
+        col: 1,
+        row: 1,
+      ))!;
+      void render(ui.Rect clip) {
+        final recorder = ui.PictureRecorder();
+        final canvas = ui.Canvas(recorder)..clipRect(clip);
+        city.render(canvas);
+        farm.render(canvas);
+        recorder.endRecording().dispose();
+      }
+
+      const away = ui.Rect.fromLTWH(1000, 1000, 200, 200);
+      const nearby = ui.Rect.fromLTWH(-20, -20, 200, 200);
+      render(away);
+      expect(city.debugSpriteVisible, isFalse);
+      expect(farm.debugSpriteVisible, isFalse);
+      expect(city.debugSpriteFrame, isNull);
+      expect(farm.debugSpriteFrame, isNull);
+      final warmup = SpriteFrames.createScope();
+      addTearDown(warmup.dispose);
+      await warmup.preload([
+        MapSpriteCatalog.cityFrame(visualLevel: 0),
+        MapSpriteCatalog.improvementFrame(FieldImprovementKind.farm),
+      ]);
+      final cityPaints = city.debugPaintCount;
+      final farmPaints = farm.debugPaintCount;
+      render(const ui.Rect.fromLTWH(180, 0, 20, 20));
+      await Future<void>.delayed(Duration.zero);
+      expect(city.debugSpriteVisible, isTrue);
+      expect(farm.debugSpriteVisible, isTrue);
+      expect(city.debugPaintCount, cityPaints);
+      expect(farm.debugPaintCount, farmPaints);
+      render(nearby);
+      await Future<void>.delayed(Duration.zero);
+      expect(city.debugSpriteFrame, isNotNull);
+      expect(farm.debugSpriteFrame, isNotNull);
+      final cityFrame = city.debugSpriteFrame;
+      final farmFrame = farm.debugSpriteFrame;
+      render(away);
+      expect(city.debugSpriteFrame, isNull);
+      expect(farm.debugSpriteFrame, isNull);
+      render(nearby);
+      await Future<void>.delayed(Duration.zero);
+      expect(city.debugSpriteFrame, same(cityFrame));
+      expect(farm.debugSpriteFrame, same(farmFrame));
+      expect(game.world.cityLayer.debugComponentForCity('city'), same(city));
+      expect(
+        game.world.workerInfrastructureLayer.debugImprovementAt((
+          col: 1,
+          row: 1,
+        )),
+        same(farm),
+      );
     },
   );
 

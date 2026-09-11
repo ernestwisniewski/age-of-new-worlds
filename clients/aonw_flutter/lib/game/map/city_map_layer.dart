@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -8,12 +7,12 @@ import 'package:flutter/foundation.dart';
 
 import '../../design_system/assets/sprite_frame_id.dart';
 import '../../design_system/assets/sprite_frame_repository.dart';
-import '../../design_system/assets/sprite_frames.dart';
 import '../../features/cities/read_model/city_view.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
+import 'map_sprite_frame_binding.dart';
 import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
 
@@ -133,9 +132,10 @@ final class MapCityComponent extends PositionComponent
 
   CityView _city;
   bool _controlled;
-  final _framesScope = SpriteFrames.createScope();
-  SpriteFrame? _frame;
-  var _loadGeneration = 0;
+  late final _sprite = MapSpriteFrameBinding(
+    id: _frameId,
+    onLoaded: _refreshGameWidget,
+  );
 
   static final _visualBounds = ui.Rect.fromLTWH(
     0,
@@ -152,13 +152,10 @@ final class MapCityComponent extends PositionComponent
   CityView get debugCity => _city;
 
   @visibleForTesting
-  SpriteFrame? get debugSpriteFrame => _frame;
+  SpriteFrame? get debugSpriteFrame => _sprite.frame;
 
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    unawaited(_loadFrame());
-  }
+  @visibleForTesting
+  bool get debugSpriteVisible => _sprite.visible;
 
   void applyCity(
     CityView city, {
@@ -169,16 +166,18 @@ final class MapCityComponent extends PositionComponent
     _city = city;
     _controlled = city.ownerPlayerId == actorPlayerId;
     position.setValues(center.dx, center.dy);
-    if (levelChanged) _reloadFrame();
+    if (levelChanged) _sprite.replaceFrame(_frameId);
   }
 
   @override
   void render(ui.Canvas canvas) {
-    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
+    final clip = mapCanvasClipBounds(canvas);
+    _sprite.setVisible(clip.overlaps(_visualBounds.inflate(128)));
+    if (!clip.overlaps(_visualBounds)) return;
     _paintCount++;
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);
-    final frame = _frame;
+    final frame = _sprite.frame;
     if (frame != null) {
       canvas.drawPath(path, _spriteSurfacePaint);
       MapSpritePainter.paint(canvas, frame, destination: bounds, clip: path);
@@ -189,37 +188,13 @@ final class MapCityComponent extends PositionComponent
     canvas.drawPath(path, _outlinePaint);
   }
 
-  void _reloadFrame() {
-    _frame = null;
-    _loadGeneration += 1;
-    if (isLoaded) unawaited(_loadFrame());
-  }
-
-  Future<void> _loadFrame() async {
-    final generation = ++_loadGeneration;
-    final id = MapSpriteCatalog.cityFrame(visualLevel: _visualLevel(_city));
-    final SpriteFrame frame;
-    try {
-      frame = await _framesScope.load(id);
-    } on Object {
-      return;
-    }
-    if (generation != _loadGeneration || id != _frameId) return;
-    _frame = frame;
-    _refreshGameWidget();
-  }
-
   SpriteFrameId get _frameId =>
       MapSpriteCatalog.cityFrame(visualLevel: _visualLevel(_city));
 
   static int _visualLevel(CityView city) =>
       MapSpriteCatalog.cityVisualLevel(city.ownedDetails?.population ?? 1);
 
-  void disposePresentation() {
-    _loadGeneration++;
-    _frame = null;
-    _framesScope.dispose();
-  }
+  void disposePresentation() => _sprite.dispose();
 
   @override
   void onRemove() {

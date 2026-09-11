@@ -102,11 +102,25 @@ Input mounting sources: `engine/game_renderer_input_handler.dart`,
 modal bindings. Current implementations live in `features/map/presentation/input`,
 `features/map/presentation/widgets/map_screen_*` and shared gamepad focus regions.
 
+## Sprite ownership near the camera
+
+City and field-improvement components request their atlas frame when their local
+visual bounds intersect the camera clip expanded by 128 world pixels. They paint
+only inside the original clip. Leaving the expanded clip releases that component's
+scope; other visible owners retain the shared atlas. Re-entering requests the same
+frame without replacing the map component or rewriting the scene. Pending loads
+cannot publish after leaving the clip, changing frame or disposing the component.
+Unit animation scopes retain their existing ownership policy.
+
+Tests cover cold offscreen components, camera exit/re-entry, shared ownership,
+stale async completion and scene removal. Native frame and memory measurements
+remain separate from these lifetime assertions.
+
 ## Outstanding evidence
 
 The inventory accounts for every visual layer in the reference component factory
 and the mounted HUD surface/input families. It does not claim a field-by-field
-mapping of every panel: recommendation reasons, warnings, readiness, notification
+mapping of every panel: warnings, readiness, notification
 payloads and future-turn route semantics need separate Rust contracts or audits.
 Native captures, populated panels, full-screen comparisons and physical input
 verification remain required by the execution plan.

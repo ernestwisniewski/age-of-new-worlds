@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -7,13 +6,13 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../design_system/assets/sprite_frame_repository.dart';
-import '../../design_system/assets/sprite_frames.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
 import 'map_sprite_catalog.dart';
+import 'map_sprite_frame_binding.dart';
 import 'map_sprite_painter.dart';
 import 'static_map_layers.dart';
 
@@ -337,9 +336,13 @@ final class MapFieldImprovementComponent extends PositionComponent
 
   FieldImprovementView _improvement;
   bool _selected;
-  var _framesScope = SpriteFrames.createScope();
-  SpriteFrame? _frame;
-  var _loadGeneration = 0;
+  late final _sprite = MapSpriteFrameBinding(
+    id: MapSpriteCatalog.improvementFrame(
+      _improvement.improvement,
+      era: _improvement.eraColumn,
+    ),
+    onLoaded: _refreshGameWidget,
+  );
 
   static final _visualBounds = ui.Rect.fromLTWH(
     0,
@@ -356,7 +359,10 @@ final class MapFieldImprovementComponent extends PositionComponent
   FieldImprovementView get debugImprovement => _improvement;
 
   @visibleForTesting
-  SpriteFrame? get debugSpriteFrame => _frame;
+  SpriteFrame? get debugSpriteFrame => _sprite.frame;
+
+  @visibleForTesting
+  bool get debugSpriteVisible => _sprite.visible;
 
   @visibleForTesting
   bool get debugSelected => _selected;
@@ -368,30 +374,34 @@ final class MapFieldImprovementComponent extends PositionComponent
   ui.Color get debugEffectiveRimColor =>
       _selected ? _selectedRimPaint.color : _spriteRimPaint.color;
 
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    unawaited(_loadFrame());
-  }
-
   void applyImprovement(FieldImprovementView value, ui.Offset center) {
     final kindChanged = _improvement.improvement != value.improvement;
     final frameChanged =
         kindChanged || _improvement.eraColumn != value.eraColumn;
     _improvement = value;
     position.setValues(center.dx, center.dy);
-    if (frameChanged) _reloadFrame(releaseAtlas: kindChanged);
+    if (frameChanged) {
+      _sprite.replaceFrame(
+        MapSpriteCatalog.improvementFrame(
+          value.improvement,
+          era: value.eraColumn,
+        ),
+        releaseAtlas: kindChanged,
+      );
+    }
   }
 
   void setSelected(bool value) => _selected = value;
 
   @override
   void render(ui.Canvas canvas) {
-    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
+    final clip = mapCanvasClipBounds(canvas);
+    _sprite.setVisible(clip.overlaps(_visualBounds.inflate(128)));
+    if (!clip.overlaps(_visualBounds)) return;
     _paintCount++;
     final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
     final path = MapSpritePainter.flatTopHexPath(bounds);
-    final frame = _frame;
+    final frame = _sprite.frame;
     canvas.drawPath(path, _spriteSurfacePaint);
     if (frame != null) {
       MapSpritePainter.paint(canvas, frame, destination: bounds, clip: path);
@@ -408,42 +418,7 @@ final class MapFieldImprovementComponent extends PositionComponent
     }
   }
 
-  void _reloadFrame({required bool releaseAtlas}) {
-    _frame = null;
-    _loadGeneration += 1;
-    if (releaseAtlas) {
-      _framesScope.dispose();
-      _framesScope = SpriteFrames.createScope();
-    }
-    if (isLoaded) unawaited(_loadFrame());
-  }
-
-  Future<void> _loadFrame() async {
-    final generation = ++_loadGeneration;
-    final kind = _improvement.improvement;
-    final era = _improvement.eraColumn;
-    final SpriteFrame frame;
-    try {
-      frame = await _framesScope.load(
-        MapSpriteCatalog.improvementFrame(kind, era: era),
-      );
-    } on Object {
-      return;
-    }
-    if (generation != _loadGeneration ||
-        _improvement.improvement != kind ||
-        _improvement.eraColumn != era) {
-      return;
-    }
-    _frame = frame;
-    _refreshGameWidget();
-  }
-
-  void disposePresentation() {
-    _loadGeneration++;
-    _frame = null;
-    _framesScope.dispose();
-  }
+  void disposePresentation() => _sprite.dispose();
 
   @override
   void onRemove() {
