@@ -12,7 +12,7 @@ extension MapCoordinatorCancellation on MapCoordinator {
   }
 
   void _cancelMapInteraction(GameSessionReady current) {
-    if (!_gameplayActive()) return;
+    if (!_inspectionActive()) return;
     if (_cancellationBlocked(current)) return;
     final interaction = current.interaction;
     if (interaction.city?.founderUnitId != null) {

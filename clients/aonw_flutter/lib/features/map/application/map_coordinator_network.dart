@@ -1,25 +1,30 @@
 part of 'map_coordinator.dart';
 
 extension MapCoordinatorNetwork on MapCoordinator {
-  Future<bool> startNetworkMatch(NetworkMatchSetupView setup) => _openSession(
-    () {
-      final networkGame = _capabilities.networkGame;
-      if (networkGame == null) {
-        throw const MapLoadException(
-          code: 'network_game_unavailable',
-          message: 'The network game session is unavailable.',
+  Future<bool> startNetworkMatch(NetworkMatchSetupView setup) => readOnly
+      ? Future.value(false)
+      : _openSession(
+          () {
+            final networkGame = _capabilities.networkGame;
+            if (networkGame == null) {
+              throw const MapLoadException(
+                code: 'network_game_unavailable',
+                message: 'The network game session is unavailable.',
+              );
+            }
+            return networkGame.startNetworkMatch(setup);
+          },
+          localGameEntry: null,
+          controlPlan: null,
         );
-      }
-      return networkGame.startNetworkMatch(setup);
-    },
-    localGameEntry: null,
-    controlPlan: null,
-  );
 
   Future<bool> reconnectNetworkMatch() async {
     final networkGame = _capabilities.networkGame;
     final current = _state;
-    if (_disposed || networkGame == null || current is! GameSessionReady) {
+    if (_disposed ||
+        readOnly ||
+        networkGame == null ||
+        current is! GameSessionReady) {
       return false;
     }
     final generation = ++_loadGeneration;

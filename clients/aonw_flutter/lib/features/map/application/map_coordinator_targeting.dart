@@ -89,7 +89,7 @@ extension MapCoordinatorTargeting on MapCoordinator {
 
   void moveMapCursor(MapHexCoordinate coordinate) {
     final current = _state;
-    if (current is! GameSessionReady || !_gameplayActive()) return;
+    if (current is! GameSessionReady || !_inspectionActive()) return;
     if (!current.scene.map.contains(coordinate)) return;
     hover(coordinate);
     if (current.interaction.moveTargeting || _otherTargetingMode(current)) {

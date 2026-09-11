@@ -33,11 +33,13 @@ final class GameSessionCapabilities {
     required this.diplomacy,
     required this.unitActions,
     required this.turns,
+    this.readOnly = false,
     this.localGame,
     this.networkGame,
     this.save,
   });
 
+  final bool readOnly;
   final MapSessionPort map;
   final CityPlanningSessionPort cityPlanning;
   final HexInspectionSessionPort hexInspection;
@@ -60,6 +62,7 @@ final class GameSessionCapabilities {
 extension NetworkGameSessionCapabilities on GameSessionCapabilities {
   GameSessionCapabilities withNetworkGame(NetworkGameSessionPort value) =>
       GameSessionCapabilities(
+        readOnly: readOnly,
         map: map,
         hexInspection: hexInspection,
         cityPlanning: cityPlanning,
@@ -77,5 +80,27 @@ extension NetworkGameSessionCapabilities on GameSessionCapabilities {
         localGame: localGame,
         networkGame: value,
         save: save,
+      );
+}
+
+/// Marks the coordinator read-only and removes lifecycle and save ports.
+extension ReadOnlyGameSessionCapabilities on GameSessionCapabilities {
+  GameSessionCapabilities forViewer({required MapSessionPort map}) =>
+      GameSessionCapabilities(
+        readOnly: true,
+        map: map,
+        hexInspection: hexInspection,
+        cityPlanning: cityPlanning,
+        movement: movement,
+        combat: combat,
+        cities: cities,
+        logistics: logistics,
+        workers: workers,
+        production: production,
+        artifacts: artifacts,
+        research: research,
+        diplomacy: diplomacy,
+        unitActions: unitActions,
+        turns: turns,
       );
 }

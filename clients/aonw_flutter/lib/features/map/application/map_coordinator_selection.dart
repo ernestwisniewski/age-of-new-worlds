@@ -22,7 +22,7 @@ extension MapCoordinatorSelection on MapCoordinator {
       controlled,
       current.recipient.cityAt(controlled.coordinate),
       generation,
-      startTargeting: startTargeting,
+      startTargeting: startTargeting && !readOnly,
     );
   }
 
@@ -38,7 +38,7 @@ extension MapCoordinatorSelection on MapCoordinator {
   GameSessionReady? _availableSelectionState() {
     final current = _state;
     if (current is! GameSessionReady ||
-        !_gameplayActive() ||
+        !_inspectionActive() ||
         current.research.commandPending ||
         current.diplomacy.commandPending ||
         _interactionBusy(current.interaction)) {
@@ -250,7 +250,7 @@ extension MapCoordinatorSelection on MapCoordinator {
     _publishSelectedUnitReachability(
       ready,
       completion,
-      startTargeting: startTargeting,
+      startTargeting: startTargeting && !readOnly,
     );
 
     if (_currentInteraction(generation) == null) return;

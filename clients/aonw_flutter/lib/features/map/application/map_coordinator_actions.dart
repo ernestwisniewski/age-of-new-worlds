@@ -4,7 +4,7 @@ extension MapCoordinatorActions on MapCoordinator {
   void inspectSelectedCity(String cityId) {
     final current = _state;
     if (current is! GameSessionReady ||
-        current.recipient.turnView.outcome.isTerminal ||
+        !_inspectionActive() ||
         current.localHandoff.blocksGameplay) {
       return;
     }
@@ -49,6 +49,7 @@ extension MapCoordinatorActions on MapCoordinator {
   }
 
   void openCityFounding() {
+    if (!_gameplayActive()) return;
     final state = _state;
     if (state is! GameSessionReady ||
         state.recipient.turnView.outcome.isTerminal ||
@@ -103,6 +104,7 @@ extension MapCoordinatorActions on MapCoordinator {
   }
 
   void selectCityManagementHex(MapHexCoordinate coordinate) {
+    if (!_gameplayActive()) return;
     final state = _state;
     if (state is! GameSessionReady) return;
     final action = _cityManagementAction(state.interaction.city, coordinate);
@@ -242,6 +244,7 @@ extension MapCoordinatorActions on MapCoordinator {
   }
 
   void executeWorkerAction(WorkerActionView action) {
+    if (!_gameplayActive()) return;
     if (_availableSelectionState() == null) return;
     _workers.execute(
       action: action,

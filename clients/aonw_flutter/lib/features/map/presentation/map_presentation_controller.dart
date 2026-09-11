@@ -102,6 +102,8 @@ final class MapPresentationController extends ChangeNotifier {
     if (!_disposed) _coordinator.aiRuntimeProfile = profile;
   }
 
+  bool get readOnly => _coordinator.readOnly;
+
   GameSessionState get state => _coordinator.state;
 
   void bindCommandEffects(Future<void> Function()? wait) {

@@ -139,9 +139,9 @@ final class MapCoordinator {
        ),
        _capabilities = capabilities,
        _saveWorkflow = LocalSaveWorkflow(
-         session: capabilities.save,
-         store: saveStore,
-         transfer: saveTransfer,
+         session: capabilities.readOnly ? null : capabilities.save,
+         store: capabilities.readOnly ? null : saveStore,
+         transfer: capabilities.readOnly ? null : saveTransfer,
          diagnosticReporter: diagnosticReporter ?? _ignoreDiagnostic,
        ),
        _replayCapture = replayCapture,
@@ -190,6 +190,8 @@ final class MapCoordinator {
   var _loadGeneration = 0;
   var _interactionGeneration = 0;
 
+  bool get readOnly => _capabilities.readOnly;
+
   GameSessionState get state => _state;
 
   Stream<GameSessionState> get changes => _changes.stream;
@@ -210,6 +212,7 @@ final class MapCoordinator {
     LocalGameCatalogEntryView entry,
     LocalMatchSetupView setup,
   ) {
+    if (readOnly) return Future.value(false);
     _validateCatalogSetup(entry, setup);
     return _openSession(
       () {
@@ -284,7 +287,7 @@ final class MapCoordinator {
   }
 
   void inspectHex(MapHexCoordinate coordinate) {
-    if (!_gameplayActive()) return;
+    if (!_inspectionActive()) return;
     final generation = _loadGeneration;
     unawaited(
       _hexInspection.inspect(
@@ -339,11 +342,13 @@ final class MapCoordinator {
   bool _isCurrent(int generation) =>
       !_disposed && generation == _loadGeneration;
 
-  bool _gameplayActive() {
+  bool _gameplayActive() => !readOnly && _inspectionActive();
+
+  bool _inspectionActive() {
     final current = _state;
     return current is GameSessionReady &&
         !(_capabilities.networkGame?.connection.blocksGameplay ?? false) &&
-        !current.recipient.turnView.outcome.isTerminal &&
+        (readOnly || !current.recipient.turnView.outcome.isTerminal) &&
         !current.localAiTurn.blocksGameplay &&
         !current.localHandoff.blocksGameplay &&
         !current.localSave.inFlight;

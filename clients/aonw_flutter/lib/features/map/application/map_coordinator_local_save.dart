@@ -23,7 +23,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
   Future<LocalResumeResultView> _resumeLocalGame(
     Future<LocalResumeAttemptView> Function() resume,
   ) async {
-    if (_disposed) {
+    if (_disposed || readOnly) {
       return const LocalResumeResultView.failed(
         LocalResumeFailureViewCode.unavailable,
       );
@@ -85,6 +85,7 @@ extension MapCoordinatorLocalSave on MapCoordinator {
   void saveLocalGame() => unawaited(_saveLocalGame());
 
   Future<void> _saveLocalGame() async {
+    if (readOnly) return;
     final current = _state;
     if (current is! GameSessionReady || _localFlowBusy(current)) return;
     final entry = _localGameEntry;

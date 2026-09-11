@@ -31,6 +31,7 @@ extension MapCoordinatorTurnNavigation on MapCoordinator {
   GameSessionReady? _turnNavigationState() {
     final current = _availableSelectionState();
     if (_disposed ||
+        readOnly ||
         current == null ||
         current.turnAction.inFlight ||
         current.inspection != null ||

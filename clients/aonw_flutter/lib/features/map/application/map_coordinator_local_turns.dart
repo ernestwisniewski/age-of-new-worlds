@@ -210,6 +210,7 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
   }
 
   void confirmLocalHandoff() {
+    if (readOnly) return;
     final current = _state;
     if (current is! GameSessionReady ||
         current.localHandoff.phase != LocalHandoffPhase.awaitingConfirmation) {
@@ -219,6 +220,7 @@ extension MapCoordinatorLocalTurns on MapCoordinator {
   }
 
   void retryLocalHandoff() {
+    if (readOnly) return;
     final current = _state;
     final handoff = current is GameSessionReady ? current.localHandoff : null;
     if (current is! GameSessionReady ||
