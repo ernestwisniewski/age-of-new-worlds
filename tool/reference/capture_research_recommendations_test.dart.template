@@ -1,0 +1,40 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:aonw/game/presentation/widgets/bottom_toolbar/view_models.dart';
+import 'package:aonw_core/game/domain/technology.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  test('captures authored recommendation priority', () {
+    final catalog = TechnologyRulesets.standard.technologies.values.toList();
+    final cases = <Map<String, Object?>>[];
+    for (final science in [0, 1, 3, 12, 100000]) {
+      for (final boost in [false, true]) {
+       for (var offset = 0; offset < catalog.length; offset += 9) {
+        final cards = [for (final definition in catalog.skip(offset).take(9))
+          TechnologyCardViewModel(id: definition.id, state: TechnologyCardState.available,
+            progress: 0, totalCost: definition.baseCost,
+            turnsRemaining: science == 0 ? null : (definition.baseCost / science).ceil(),
+            boostActive: boost && definition.id == TechnologyId.mining,
+            unlocks: definition.unlocks, effects: definition.effects,
+            treeColumn: definition.treePosition.column, treeRow: definition.treePosition.row,
+          )];
+        final view = TechnologyPanelViewModel(sciencePerTurn: science, activeTechnology: null, technologies: cards);
+        cases.add({'science': science, 'boostMining': boost,
+          'candidates': cards.map((card) => card.id.name).toList(),
+          'expected': view.recommendedTechnologies.map((card) => card.id.name).toList()});
+       }
+      }
+    }
+    File('/tmp/aonw-reference-recommendations.json').writeAsStringSync(const JsonEncoder.withIndent('  ').convert({
+      'sourceRevision': 'c6473641e57eb4337218234669c361db01c45d6e',
+      'technologies': [for (final definition in catalog) {
+        'id': definition.id.name, 'cost': definition.baseCost,
+        'unlocks': definition.unlocks.length, 'effects': definition.effects.length,
+        'column': definition.treePosition.column, 'row': definition.treePosition.row,
+      }],
+      'cases': cases,
+    }));
+    expect(cases.length, 60);
+  });
+}

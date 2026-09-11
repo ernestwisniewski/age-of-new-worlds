@@ -56,12 +56,15 @@ pub(crate) fn query_options(
             definition.unlocks().to_vec(),
         ));
     }
+    let recommendations =
+        super::recommendation::recommend(&options, science_yield.total(), context.ruleset());
     Ok(ResearchOptions::new(
         actor.clone(),
         research.active_technology_id(),
         research.science_overflow(),
         science_yield,
         options,
+        recommendations,
     ))
 }
 

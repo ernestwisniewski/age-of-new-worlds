@@ -112,8 +112,8 @@ pub use production::{
 };
 pub use research::{
     CancelResearchSelectionCommand, ResearchError, ResearchOption, ResearchOptions,
-    ResearchOptionsQuery, ScienceYieldBreakdown, ScienceYieldSource, ScienceYieldSourceKind,
-    SelectTechnologyCommand,
+    ResearchOptionsQuery, ResearchRecommendation, ResearchRecommendationReason,
+    ScienceYieldBreakdown, ScienceYieldSource, ScienceYieldSourceKind, SelectTechnologyCommand,
 };
 pub use state_digest::StateDigest;
 pub use technology_unlock::{

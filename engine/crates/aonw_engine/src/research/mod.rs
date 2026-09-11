@@ -1,6 +1,7 @@
 mod commands;
 mod error;
 mod model;
+mod recommendation;
 mod rules;
 mod science;
 mod turn;
@@ -10,6 +11,7 @@ pub use model::{
     CancelResearchSelectionCommand, ResearchOption, ResearchOptions, ResearchOptionsQuery,
     SelectTechnologyCommand,
 };
+pub use recommendation::{ResearchRecommendation, ResearchRecommendationReason};
 pub use science::{ScienceYieldBreakdown, ScienceYieldSource, ScienceYieldSourceKind};
 
 pub(crate) use commands::{

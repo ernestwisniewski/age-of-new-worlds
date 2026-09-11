@@ -2,6 +2,8 @@
 
 #[path = "research/cancellation.rs"]
 mod cancellation;
+#[path = "research/recommendations.rs"]
+mod recommendations;
 
 use std::collections::BTreeMap;
 

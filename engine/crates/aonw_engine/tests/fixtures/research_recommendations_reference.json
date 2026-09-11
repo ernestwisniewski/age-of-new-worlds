@@ -1,0 +1,1639 @@
+{
+  "sourceRevision": "c6473641e57eb4337218234669c361db01c45d6e",
+  "technologies": [
+    {
+      "id": "agriculture",
+      "cost": 6,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 0,
+      "row": 0
+    },
+    {
+      "id": "woodworking",
+      "cost": 6,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 1,
+      "row": 4
+    },
+    {
+      "id": "mining",
+      "cost": 6,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 0,
+      "row": 4
+    },
+    {
+      "id": "animalHusbandry",
+      "cost": 6,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 1,
+      "row": 0
+    },
+    {
+      "id": "hunting",
+      "cost": 7,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 0,
+      "row": 8
+    },
+    {
+      "id": "fishing",
+      "cost": 6,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 1,
+      "row": 9
+    },
+    {
+      "id": "craftsmanship",
+      "cost": 7,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 1,
+      "row": 5
+    },
+    {
+      "id": "trade",
+      "cost": 7,
+      "unlocks": 4,
+      "effects": 0,
+      "column": 1,
+      "row": 1
+    },
+    {
+      "id": "storage",
+      "cost": 11,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 2,
+      "row": 0
+    },
+    {
+      "id": "waterEngineering",
+      "cost": 12,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 2,
+      "row": 1
+    },
+    {
+      "id": "stoneworking",
+      "cost": 13,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 2,
+      "row": 4
+    },
+    {
+      "id": "militaryOrganization",
+      "cost": 13,
+      "unlocks": 4,
+      "effects": 1,
+      "column": 2,
+      "row": 8
+    },
+    {
+      "id": "advancedTrade",
+      "cost": 14,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 2,
+      "row": 2
+    },
+    {
+      "id": "construction",
+      "cost": 13,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 2,
+      "row": 5
+    },
+    {
+      "id": "navigation",
+      "cost": 12,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 2,
+      "row": 9
+    },
+    {
+      "id": "irrigation",
+      "cost": 18,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 3,
+      "row": 0
+    },
+    {
+      "id": "banking",
+      "cost": 19,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 3,
+      "row": 2
+    },
+    {
+      "id": "engineering",
+      "cost": 19,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 3,
+      "row": 5
+    },
+    {
+      "id": "metallurgy",
+      "cost": 20,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 3,
+      "row": 4
+    },
+    {
+      "id": "horsebackRiding",
+      "cost": 18,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 3,
+      "row": 8
+    },
+    {
+      "id": "shipbuilding",
+      "cost": 18,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 3,
+      "row": 10
+    },
+    {
+      "id": "writing",
+      "cost": 8,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 1,
+      "row": 2
+    },
+    {
+      "id": "mathematics",
+      "cost": 15,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 2,
+      "row": 3
+    },
+    {
+      "id": "medicine",
+      "cost": 16,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 2,
+      "row": 6
+    },
+    {
+      "id": "civilService",
+      "cost": 22,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 4,
+      "row": 1
+    },
+    {
+      "id": "siegecraft",
+      "cost": 22,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 4,
+      "row": 10
+    },
+    {
+      "id": "cartography",
+      "cost": 20,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 3,
+      "row": 11
+    },
+    {
+      "id": "guilds",
+      "cost": 21,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 3,
+      "row": 6
+    },
+    {
+      "id": "law",
+      "cost": 22,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 4,
+      "row": 3
+    },
+    {
+      "id": "education",
+      "cost": 24,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 4,
+      "row": 0
+    },
+    {
+      "id": "ironWorking",
+      "cost": 20,
+      "unlocks": 0,
+      "effects": 1,
+      "column": 4,
+      "row": 4
+    },
+    {
+      "id": "coalMining",
+      "cost": 20,
+      "unlocks": 1,
+      "effects": 1,
+      "column": 4,
+      "row": 5
+    },
+    {
+      "id": "machinery",
+      "cost": 23,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 4,
+      "row": 6
+    },
+    {
+      "id": "urbanPlanning",
+      "cost": 28,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 5,
+      "row": 5
+    },
+    {
+      "id": "navalDoctrine",
+      "cost": 28,
+      "unlocks": 5,
+      "effects": 0,
+      "column": 5,
+      "row": 11
+    },
+    {
+      "id": "steel",
+      "cost": 30,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 5,
+      "row": 4
+    },
+    {
+      "id": "bureaucracy",
+      "cost": 30,
+      "unlocks": 4,
+      "effects": 0,
+      "column": 5,
+      "row": 1
+    },
+    {
+      "id": "nationalism",
+      "cost": 32,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 5,
+      "row": 8
+    },
+    {
+      "id": "administration",
+      "cost": 20,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 3,
+      "row": 1
+    },
+    {
+      "id": "logistics",
+      "cost": 19,
+      "unlocks": 0,
+      "effects": 1,
+      "column": 3,
+      "row": 9
+    },
+    {
+      "id": "tactics",
+      "cost": 23,
+      "unlocks": 1,
+      "effects": 1,
+      "column": 4,
+      "row": 9
+    },
+    {
+      "id": "economy",
+      "cost": 26,
+      "unlocks": 0,
+      "effects": 1,
+      "column": 4,
+      "row": 2
+    },
+    {
+      "id": "urbanization",
+      "cost": 30,
+      "unlocks": 0,
+      "effects": 1,
+      "column": 5,
+      "row": 0
+    },
+    {
+      "id": "fortifications",
+      "cost": 26,
+      "unlocks": 1,
+      "effects": 1,
+      "column": 4,
+      "row": 8
+    },
+    {
+      "id": "strategy",
+      "cost": 30,
+      "unlocks": 2,
+      "effects": 2,
+      "column": 5,
+      "row": 9
+    },
+    {
+      "id": "specialization",
+      "cost": 32,
+      "unlocks": 0,
+      "effects": 1,
+      "column": 5,
+      "row": 2
+    },
+    {
+      "id": "scientificMethod",
+      "cost": 34,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 6,
+      "row": 0
+    },
+    {
+      "id": "steamPower",
+      "cost": 34,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 6,
+      "row": 4
+    },
+    {
+      "id": "electricity",
+      "cost": 36,
+      "unlocks": 1,
+      "effects": 0,
+      "column": 7,
+      "row": 1
+    },
+    {
+      "id": "combustion",
+      "cost": 38,
+      "unlocks": 4,
+      "effects": 0,
+      "column": 7,
+      "row": 4
+    },
+    {
+      "id": "flight",
+      "cost": 40,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 8,
+      "row": 2
+    },
+    {
+      "id": "massProduction",
+      "cost": 42,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 8,
+      "row": 5
+    },
+    {
+      "id": "radio",
+      "cost": 40,
+      "unlocks": 2,
+      "effects": 0,
+      "column": 9,
+      "row": 2
+    },
+    {
+      "id": "nuclearPhysics",
+      "cost": 48,
+      "unlocks": 3,
+      "effects": 0,
+      "column": 9,
+      "row": 0
+    }
+  ],
+  "cases": [
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "agriculture",
+        "mining",
+        "hunting"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": false,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "mining",
+        "agriculture",
+        "hunting"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 0,
+      "boostMining": true,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "agriculture",
+        "mining",
+        "hunting"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": false,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "mining",
+        "agriculture",
+        "hunting"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 1,
+      "boostMining": true,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "agriculture",
+        "mining",
+        "hunting"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": false,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "mining",
+        "agriculture",
+        "hunting"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 3,
+      "boostMining": true,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "agriculture",
+        "mining",
+        "hunting"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": false,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "mining",
+        "agriculture",
+        "hunting"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 12,
+      "boostMining": true,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "agriculture",
+        "mining",
+        "hunting"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": false,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "agriculture",
+        "woodworking",
+        "mining",
+        "animalHusbandry",
+        "hunting",
+        "fishing",
+        "craftsmanship",
+        "trade",
+        "storage"
+      ],
+      "expected": [
+        "mining",
+        "agriculture",
+        "hunting"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "waterEngineering",
+        "stoneworking",
+        "militaryOrganization",
+        "advancedTrade",
+        "construction",
+        "navigation",
+        "irrigation",
+        "banking",
+        "engineering"
+      ],
+      "expected": [
+        "stoneworking",
+        "militaryOrganization",
+        "waterEngineering"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "metallurgy",
+        "horsebackRiding",
+        "shipbuilding",
+        "writing",
+        "mathematics",
+        "medicine",
+        "civilService",
+        "siegecraft",
+        "cartography"
+      ],
+      "expected": [
+        "medicine",
+        "horsebackRiding",
+        "writing"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "guilds",
+        "law",
+        "education",
+        "ironWorking",
+        "coalMining",
+        "machinery",
+        "urbanPlanning",
+        "navalDoctrine",
+        "steel"
+      ],
+      "expected": [
+        "navalDoctrine",
+        "education",
+        "coalMining"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "bureaucracy",
+        "nationalism",
+        "administration",
+        "logistics",
+        "tactics",
+        "economy",
+        "urbanization",
+        "fortifications",
+        "strategy"
+      ],
+      "expected": [
+        "strategy",
+        "bureaucracy",
+        "nationalism"
+      ]
+    },
+    {
+      "science": 100000,
+      "boostMining": true,
+      "candidates": [
+        "specialization",
+        "scientificMethod",
+        "steamPower",
+        "electricity",
+        "combustion",
+        "flight",
+        "massProduction",
+        "radio",
+        "nuclearPhysics"
+      ],
+      "expected": [
+        "combustion",
+        "scientificMethod",
+        "flight"
+      ]
+    }
+  ]
+}
