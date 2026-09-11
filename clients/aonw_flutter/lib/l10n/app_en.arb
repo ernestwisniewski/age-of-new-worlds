@@ -453,7 +453,7 @@
   "@artifactExcavationAt": {"placeholders": {"col": {"type": "int"}, "row": {"type": "int"}, "remainingTurns": {"type": "int"}}},
   "artifactFailure": "{code, select, requestFailed{The artifact request could not be completed.} responseIncompatible{The artifact response is incompatible.} sessionUnavailable{The local game session is unavailable.} staleRevision{The game state changed. Review the artifact and try again.} matchFinished{The match has already finished.} unitNotFound{The unit is no longer available.} unitNotControlled{The unit is not controlled by this player.} unitUnavailable{The unit is unavailable.} unitAlreadyCarryingArtifact{The unit already carries an artifact.} artifactNotFound{The artifact is no longer available.} unitNotCarryingArtifact{The unit is not carrying an artifact.} cityNotFound{The city is no longer available.} cityNotControlled{The city is not controlled by this player.} unitNotInCity{The unit is not in that city.} cityArtifactSlotFull{The city artifact slot is full.} artifactTradeActorUnavailable{This player cannot trade artifacts.} artifactTradeTargetInvalid{The target player is invalid.} artifactTradeGoldInvalid{The gold offer is invalid.} artifactTradeBlockedByWar{Artifact trade is blocked by war.} artifactTradeGoldUnavailable{The offered gold is unavailable.} offeredArtifactUnavailable{The offered artifact is unavailable.} targetArtifactSlotUnavailable{The target has no artifact slot.} stateRevisionOverflow{The game state cannot advance further.} other{The artifact request could not be completed.}}",
   "@artifactFailure": {"placeholders": {"code": {"type": "String"}}},
-  "researchText": "{key, select, title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} tree{Technology tree} catalog{Research catalog} backToTree{Back to tree} treeUnavailable{The dependency diagram is unavailable.} other{Research}}",
+  "researchText": "{key, select, recommendations{Recommendations} title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} tree{Technology tree} catalog{Research catalog} backToTree{Back to tree} treeUnavailable{The dependency diagram is unavailable.} other{Research}}",
   "@researchText": {"placeholders": {"key": {"type": "String"}}},
   "researchAvailability": "{value, select, unlocked{Researched} active{Active} available{Available} lockedByPrerequisites{Prerequisites required} lockedByTechnology{Blocked by technology} other{Unavailable}}",
   "@researchAvailability": {"placeholders": {"value": {"type": "String"}}},
@@ -674,5 +674,29 @@
   "researchDiscoverySuppress": "Do not show again",
   "researchDiscoveryMinimize": "Minimize",
   "researchDiscoveryRestore": "Restore discovery",
-  "researchDiscoveryContinue": "Continue"
+  "researchDiscoveryContinue": "Continue",
+  "researchRecommendationRank": "Recommendation {rank}",
+  "researchRecommendationTurns": "Estimated turns: {turns}",
+  "researchRecommendationReason": "{key, select, boost{Research boost} workerYields{Worker yields} unlocks{New unlocks} effects{Technology effects} nearCompletion{Near completion} other{Recommendations}}",
+  "@researchRecommendationRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "@researchRecommendationTurns": {
+    "placeholders": {
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "@researchRecommendationReason": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  }
 }

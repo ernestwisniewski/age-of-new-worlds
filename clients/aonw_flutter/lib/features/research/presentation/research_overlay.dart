@@ -14,6 +14,7 @@ import 'research_browser.dart';
 import 'research_copy.dart';
 
 part 'research_catalog.dart';
+part 'research_recommendations.dart';
 part 'technology_option_card.dart';
 
 final class ResearchOverlay extends StatelessWidget {
@@ -198,6 +199,13 @@ final class ResearchPanel extends StatelessWidget {
       options.stamp.stateDigest,
     )),
     options: options.options,
+    recommendations: options.recommendations.isEmpty
+        ? null
+        : _ResearchRecommendations(
+            options: options,
+            enabled: !state.commandPending,
+            onSelect: onSelect,
+          ),
     catalog: _ResearchCatalog(
       options: options.options,
       enabled: !state.commandPending,

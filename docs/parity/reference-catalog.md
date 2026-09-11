@@ -44,7 +44,7 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 | Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | Rust-backed bankruptcy/shortage warnings and compact victory summary |
 | Avatars and Online status | `hud/game_hud_chrome.dart` | Participants, own submission, known diplomacy and aggregate submissions | Final full-map visual comparison |
 | Action deck and selection | `hud/action_deck`, `selection` | Selected visible unit/city, typed action options and Rust pending-turn query | Integrated command/selection deck, expansion and detail behavior |
-| Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive panel, tree and selected details implemented; recommendation ranking/reasons require Rust policy; completion popup uses own accepted events |
+| Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive catalog, tree/details and recommendations from Rust API 25 implemented; completion popup uses own accepted events; technology illustrations/descriptions remain in the final audit |
 | City and production | `city` | City inspection, founding/growth/production queries and own city projection | Full panel composition and comparative visual audit |
 | Workers and improvements | `hud/action_deck`, `selection` | Worker options and accepted command feedback | Detail layout and popup/gamepad audit |
 | Diplomacy | `diplomacy` | Known relations, own proposals/messages, typed commands | Full message/trade composition and visual audit |

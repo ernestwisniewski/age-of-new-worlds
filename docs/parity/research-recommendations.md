@@ -49,11 +49,18 @@ The separate query test changes another participant's private research and
 verifies the entire own query result is unchanged, as is the queried state.
 
 Client API 25 transports recommendations through one shared local/server encoder.
-The Flutter read model retains the supplied values; recommendation panel composition
-is the next stage. The
+The Flutter read model retains the supplied values. The research panel opens
+with these recommendations when available, preserves their order and nullable
+ETA, and offers the complete catalog and dependency tree. Cards adapt from
+three columns to a scrollable single column as width or text scale requires.
+Navigation sends no command; only the enabled Select button chooses research. The
 canonical state schema and engine behavior fingerprint are unchanged by this
 read-only policy.
 
 Validation: 84 engine unit tests and 10 research integration tests pass, including
 all 60 independent reference cases. Clippy for all engine targets and the Rust
 architecture gate (including negative controls) pass without budget changes.
+
+Presentation validation covers three reviewed phone/tablet/desktop goldens, all
+six languages at 200% text in landscape, required command-pending disablement,
+exact supplied ETA/order, catalog navigation and Escape from the tree.

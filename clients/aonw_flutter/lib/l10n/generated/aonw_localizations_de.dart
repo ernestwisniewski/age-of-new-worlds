@@ -1687,6 +1687,7 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String researchText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
+      'recommendations': 'Empfehlungen',
       'title': 'Forschung',
       'open': 'Forschung öffnen',
       'close': 'Forschung schließen',
@@ -2813,4 +2814,27 @@ class AonwLocalizationsDe extends AonwLocalizations {
 
   @override
   String get researchDiscoveryContinue => 'Weiter';
+
+  @override
+  String researchRecommendationRank(int rank) {
+    return 'Empfehlung $rank';
+  }
+
+  @override
+  String researchRecommendationTurns(int turns) {
+    return 'Geschätzte Runden: $turns';
+  }
+
+  @override
+  String researchRecommendationReason(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'boost': 'Forschungsbonus',
+      'workerYields': 'Arbeitererträge',
+      'unlocks': 'Neue Freischaltungen',
+      'effects': 'Technologieeffekte',
+      'nearCompletion': 'Bald abgeschlossen',
+      'other': 'Empfehlungen',
+    });
+    return '$_temp0';
+  }
 }

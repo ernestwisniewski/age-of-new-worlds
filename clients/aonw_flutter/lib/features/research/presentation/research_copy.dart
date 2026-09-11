@@ -6,6 +6,7 @@ import '../read_model/research_view.dart';
 
 enum ResearchText {
   title,
+  recommendations,
   open,
   close,
   loading,
@@ -38,6 +39,14 @@ final class ResearchCopy {
   final AonwLocalizations _l10n;
 
   String text(ResearchText key) => _l10n.researchText(key.name);
+
+  String recommendationReason(ResearchRecommendationReasonView reason) =>
+      _l10n.researchRecommendationReason(reason.name);
+
+  String recommendationRank(int rank) => _l10n.researchRecommendationRank(rank);
+
+  String recommendationTurns(int turns) =>
+      _l10n.researchRecommendationTurns(turns);
 
   String technology(TechnologyIdView value) => _l10n.technologyName(value.name);
 

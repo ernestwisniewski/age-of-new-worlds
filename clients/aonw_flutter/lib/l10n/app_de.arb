@@ -849,7 +849,7 @@
       }
     }
   },
-  "researchText": "{key, select, title{Forschung} open{Forschung öffnen} close{Forschung schließen} loading{Forschungsoptionen werden geladen} retry{Erneut versuchen} selecting{Technologie wird ausgewählt} selectionRequired{Wähle eine Technologie, um fortzufahren} sciencePerTurn{Wissenschaft pro Runde} overflow{Gespeicherte Wissenschaft} active{Aktive Technologie} none{Keine} cost{Kosten} progress{Fortschritt} boost{Kostenreduktion durch Förderung} prerequisites{Voraussetzungen} blockedBy{Gesperrt durch} unlocks{Schaltet frei} choose{Auswählen} tree{Technologiebaum} catalog{Forschungskatalog} backToTree{Zurück zum Baum} treeUnavailable{Das Abhängigkeitsdiagramm ist nicht verfügbar.} other{Forschung}}",
+  "researchText": "{key, select, recommendations{Empfehlungen} title{Forschung} open{Forschung öffnen} close{Forschung schließen} loading{Forschungsoptionen werden geladen} retry{Erneut versuchen} selecting{Technologie wird ausgewählt} selectionRequired{Wähle eine Technologie, um fortzufahren} sciencePerTurn{Wissenschaft pro Runde} overflow{Gespeicherte Wissenschaft} active{Aktive Technologie} none{Keine} cost{Kosten} progress{Fortschritt} boost{Kostenreduktion durch Förderung} prerequisites{Voraussetzungen} blockedBy{Gesperrt durch} unlocks{Schaltet frei} choose{Auswählen} tree{Technologiebaum} catalog{Forschungskatalog} backToTree{Zurück zum Baum} treeUnavailable{Das Abhängigkeitsdiagramm ist nicht verfügbar.} other{Forschung}}",
   "@researchText": {
     "placeholders": {
       "key": {
@@ -1137,5 +1137,8 @@
   "researchDiscoverySuppress": "Nicht mehr anzeigen",
   "researchDiscoveryMinimize": "Minimieren",
   "researchDiscoveryRestore": "Entdeckung wieder anzeigen",
-  "researchDiscoveryContinue": "Weiter"
+  "researchDiscoveryContinue": "Weiter",
+  "researchRecommendationRank": "Empfehlung {rank}",
+  "researchRecommendationTurns": "Geschätzte Runden: {turns}",
+  "researchRecommendationReason": "{key, select, boost{Forschungsbonus} workerYields{Arbeitererträge} unlocks{Neue Freischaltungen} effects{Technologieeffekte} nearCompletion{Bald abgeschlossen} other{Empfehlungen}}"
 }

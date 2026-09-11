@@ -15,10 +15,12 @@ import '../../../support/map_test_fixture.dart';
 
 part 'research_responsive_cases.dart';
 part 'research_tree_cases.dart';
+part 'research_recommendation_cases.dart';
 
 void main() {
   researchResponsiveCases();
   researchTreeCases();
+  researchRecommendationCases();
   testWidgets('shows exact research data and selects only available option', (
     tester,
   ) async {

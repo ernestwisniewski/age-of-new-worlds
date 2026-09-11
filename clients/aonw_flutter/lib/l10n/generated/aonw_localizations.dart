@@ -1939,7 +1939,7 @@ abstract class AonwLocalizations {
   /// No description provided for @researchText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} tree{Technology tree} catalog{Research catalog} backToTree{Back to tree} treeUnavailable{The dependency diagram is unavailable.} other{Research}}'**
+  /// **'{key, select, recommendations{Recommendations} title{Research} open{Open research} close{Close research} loading{Loading research options} retry{Retry} selecting{Selecting technology} selectionRequired{Select a technology to continue} sciencePerTurn{Science per turn} overflow{Stored science} active{Active technology} none{None} cost{Cost} progress{Progress} boost{Boost discount} prerequisites{Prerequisites} blockedBy{Blocked by} unlocks{Unlocks} choose{Select} tree{Technology tree} catalog{Research catalog} backToTree{Back to tree} treeUnavailable{The dependency diagram is unavailable.} other{Research}}'**
   String researchText(String key);
 
   /// No description provided for @researchAvailability.
@@ -2679,6 +2679,24 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get researchDiscoveryContinue;
+
+  /// No description provided for @researchRecommendationRank.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation {rank}'**
+  String researchRecommendationRank(int rank);
+
+  /// No description provided for @researchRecommendationTurns.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated turns: {turns}'**
+  String researchRecommendationTurns(int turns);
+
+  /// No description provided for @researchRecommendationReason.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, boost{Research boost} workerYields{Worker yields} unlocks{New unlocks} effects{Technology effects} nearCompletion{Near completion} other{Recommendations}}'**
+  String researchRecommendationReason(String key);
 }
 
 class _AonwLocalizationsDelegate

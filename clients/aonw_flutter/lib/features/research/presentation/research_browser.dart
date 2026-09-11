@@ -14,11 +14,13 @@ final class ResearchBrowser extends StatefulWidget {
     required this.options,
     required this.catalog,
     required this.details,
+    this.recommendations,
     super.key,
   });
 
   final List<ResearchOptionView> options;
   final Widget catalog;
+  final Widget? recommendations;
   final Widget Function(ResearchOptionView) details;
 
   @override
@@ -27,6 +29,7 @@ final class ResearchBrowser extends StatefulWidget {
 
 final class _ResearchBrowserState extends State<ResearchBrowser> {
   var _tree = false;
+  var _catalog = false;
   TechnologyIdView? _selected;
 
   void _back() => setState(() {
@@ -48,11 +51,30 @@ final class _ResearchBrowserState extends State<ResearchBrowser> {
       children: [
         Align(
           alignment: AlignmentDirectional.centerEnd,
-          child: TextButton.icon(
-            key: const ValueKey('research-view-mode'),
-            onPressed: _tree ? _back : () => setState(() => _tree = true),
-            icon: Icon(_tree ? Icons.arrow_back : Icons.account_tree_outlined),
-            label: Text(copy.text(_modeLabel(selected))),
+          child: Wrap(
+            alignment: WrapAlignment.end,
+            children: [
+              if (!_tree && widget.recommendations != null)
+                TextButton(
+                  key: const ValueKey("research-recommendations-mode"),
+                  onPressed: () => setState(() => _catalog = !_catalog),
+                  child: Text(
+                    copy.text(
+                      _catalog
+                          ? ResearchText.recommendations
+                          : ResearchText.catalog,
+                    ),
+                  ),
+                ),
+              TextButton.icon(
+                key: const ValueKey('research-view-mode'),
+                onPressed: _tree ? _back : () => setState(() => _tree = true),
+                icon: Icon(
+                  _tree ? Icons.arrow_back : Icons.account_tree_outlined,
+                ),
+                label: Text(copy.text(_modeLabel(selected))),
+              ),
+            ],
           ),
         ),
         Expanded(child: _body(copy, selected)),
@@ -72,11 +94,19 @@ final class _ResearchBrowserState extends State<ResearchBrowser> {
 
   ResearchText _modeLabel(ResearchOptionView? selected) {
     if (selected != null) return ResearchText.backToTree;
-    return _tree ? ResearchText.catalog : ResearchText.tree;
+    return _tree
+        ? (!_catalog && widget.recommendations != null
+              ? ResearchText.recommendations
+              : ResearchText.catalog)
+        : ResearchText.tree;
   }
 
   Widget _body(ResearchCopy copy, ResearchOptionView? selected) {
-    if (!_tree) return widget.catalog;
+    if (!_tree) {
+      return !_catalog
+          ? widget.recommendations ?? widget.catalog
+          : widget.catalog;
+    }
     final tree = ResearchTree(
       options: widget.options,
       fallback: Column(

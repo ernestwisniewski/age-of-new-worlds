@@ -1619,6 +1619,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
   @override
   String researchText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
+      'recommendations': 'Recommendations',
       'title': 'Research',
       'open': 'Open research',
       'close': 'Close research',
@@ -2711,4 +2712,27 @@ class AonwLocalizationsEn extends AonwLocalizations {
 
   @override
   String get researchDiscoveryContinue => 'Continue';
+
+  @override
+  String researchRecommendationRank(int rank) {
+    return 'Recommendation $rank';
+  }
+
+  @override
+  String researchRecommendationTurns(int turns) {
+    return 'Estimated turns: $turns';
+  }
+
+  @override
+  String researchRecommendationReason(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'boost': 'Research boost',
+      'workerYields': 'Worker yields',
+      'unlocks': 'New unlocks',
+      'effects': 'Technology effects',
+      'nearCompletion': 'Near completion',
+      'other': 'Recommendations',
+    });
+    return '$_temp0';
+  }
 }

@@ -849,7 +849,7 @@
       }
     }
   },
-  "researchText": "{key, select, title{Recherche} open{Ouvrir la recherche} close{Fermer la recherche} loading{Chargement des options de recherche} retry{Réessayer} selecting{Sélection de la technologie} selectionRequired{Sélectionnez une technologie pour continuer} sciencePerTurn{Science par tour} overflow{Science accumulée} active{Technologie active} none{Aucune} cost{Coût} progress{Progression} boost{Réduction par accélération} prerequisites{Prérequis} blockedBy{Bloquée par} unlocks{Débloque} choose{Sélectionner} tree{Arbre technologique} catalog{Catalogue de recherche} backToTree{Retour à l’arbre} treeUnavailable{Le diagramme des dépendances est indisponible.} other{Recherche}}",
+  "researchText": "{key, select, recommendations{Recommandations} title{Recherche} open{Ouvrir la recherche} close{Fermer la recherche} loading{Chargement des options de recherche} retry{Réessayer} selecting{Sélection de la technologie} selectionRequired{Sélectionnez une technologie pour continuer} sciencePerTurn{Science par tour} overflow{Science accumulée} active{Technologie active} none{Aucune} cost{Coût} progress{Progression} boost{Réduction par accélération} prerequisites{Prérequis} blockedBy{Bloquée par} unlocks{Débloque} choose{Sélectionner} tree{Arbre technologique} catalog{Catalogue de recherche} backToTree{Retour à l’arbre} treeUnavailable{Le diagramme des dépendances est indisponible.} other{Recherche}}",
   "@researchText": {
     "placeholders": {
       "key": {
@@ -1137,5 +1137,8 @@
   "researchDiscoverySuppress": "Ne plus afficher",
   "researchDiscoveryMinimize": "Réduire",
   "researchDiscoveryRestore": "Rétablir la découverte",
-  "researchDiscoveryContinue": "Continuer"
+  "researchDiscoveryContinue": "Continuer",
+  "researchRecommendationRank": "Recommandation {rank}",
+  "researchRecommendationTurns": "Tours estimés : {turns}",
+  "researchRecommendationReason": "{key, select, boost{Bonus de recherche} workerYields{Rendements des ouvriers} unlocks{Nouveaux déblocages} effects{Effets technologiques} nearCompletion{Presque terminé} other{Recommandations}}"
 }

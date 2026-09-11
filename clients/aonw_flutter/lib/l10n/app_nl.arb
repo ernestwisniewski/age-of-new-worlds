@@ -849,7 +849,7 @@
       }
     }
   },
-  "researchText": "{key, select, title{Onderzoek} open{Onderzoek openen} close{Onderzoek sluiten} loading{Onderzoeksopties worden geladen} retry{Opnieuw proberen} selecting{Technologie wordt geselecteerd} selectionRequired{Selecteer een technologie om door te gaan} sciencePerTurn{Wetenschap per beurt} overflow{Opgeslagen wetenschap} active{Actieve technologie} none{Geen} cost{Kosten} progress{Voortgang} boost{Kostenkorting door impuls} prerequisites{Vereisten} blockedBy{Geblokkeerd door} unlocks{Ontgrendelt} choose{Selecteren} tree{Technologieboom} catalog{Onderzoekscatalogus} backToTree{Terug naar de boom} treeUnavailable{Het afhankelijkheidsdiagram is niet beschikbaar.} other{Onderzoek}}",
+  "researchText": "{key, select, recommendations{Aanbevelingen} title{Onderzoek} open{Onderzoek openen} close{Onderzoek sluiten} loading{Onderzoeksopties worden geladen} retry{Opnieuw proberen} selecting{Technologie wordt geselecteerd} selectionRequired{Selecteer een technologie om door te gaan} sciencePerTurn{Wetenschap per beurt} overflow{Opgeslagen wetenschap} active{Actieve technologie} none{Geen} cost{Kosten} progress{Voortgang} boost{Kostenkorting door impuls} prerequisites{Vereisten} blockedBy{Geblokkeerd door} unlocks{Ontgrendelt} choose{Selecteren} tree{Technologieboom} catalog{Onderzoekscatalogus} backToTree{Terug naar de boom} treeUnavailable{Het afhankelijkheidsdiagram is niet beschikbaar.} other{Onderzoek}}",
   "@researchText": {
     "placeholders": {
       "key": {
@@ -1137,5 +1137,8 @@
   "researchDiscoverySuppress": "Niet opnieuw tonen",
   "researchDiscoveryMinimize": "Minimaliseren",
   "researchDiscoveryRestore": "Ontdekking herstellen",
-  "researchDiscoveryContinue": "Doorgaan"
+  "researchDiscoveryContinue": "Doorgaan",
+  "researchRecommendationRank": "Aanbeveling {rank}",
+  "researchRecommendationTurns": "Geschatte beurten: {turns}",
+  "researchRecommendationReason": "{key, select, boost{Onderzoeksbonus} workerYields{Opbrengsten van arbeiders} unlocks{Nieuwe vrijgaven} effects{Technologie-effecten} nearCompletion{Bijna voltooid} other{Aanbevelingen}}"
 }
