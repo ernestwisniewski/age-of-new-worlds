@@ -57,6 +57,7 @@ final class MapSelectionOverlay extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: _MapSelectionPanel(
+              readOnly: controller.readOnly,
               coordinate: selected,
               interaction: interaction,
               unit: selectedUnitId == null
@@ -100,6 +101,7 @@ final class _MapSelectionPanel extends StatelessWidget {
   const _MapSelectionPanel({
     required this.coordinate,
     required this.interaction,
+    required this.readOnly,
     required this.unit,
     required this.city,
     required this.player,
@@ -123,6 +125,7 @@ final class _MapSelectionPanel extends StatelessWidget {
   });
 
   final MapHexCoordinate coordinate;
+  final bool readOnly;
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
   final CityView? city;
@@ -167,6 +170,7 @@ final class _MapSelectionPanel extends StatelessWidget {
               Text(l10n.hexLabel(coordinate.col, coordinate.row)),
               if (interaction.selectedUnitId case final unitId?)
                 _SelectedUnitControls(
+                  readOnly: readOnly,
                   unitId: unitId,
                   interaction: interaction,
                   unit: unit,
@@ -180,6 +184,7 @@ final class _MapSelectionPanel extends StatelessWidget {
                   onOpenCityFounding: onOpenCityFounding,
                 ),
               _SelectionFeatureControls(
+                readOnly: readOnly,
                 coordinate: coordinate,
                 interaction: interaction,
                 unit: unit,
@@ -207,6 +212,7 @@ final class _SelectedUnitControls extends StatelessWidget {
   const _SelectedUnitControls({
     required this.unitId,
     required this.interaction,
+    required this.readOnly,
     required this.unit,
     required this.onConfirmMove,
     required this.onToggleMoveTargeting,
@@ -219,6 +225,7 @@ final class _SelectedUnitControls extends StatelessWidget {
   });
 
   final String unitId;
+  final bool readOnly;
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
   final VoidCallback onConfirmMove;
@@ -264,12 +271,14 @@ final class _SelectedUnitControls extends StatelessWidget {
           onConfirmMove: onConfirmMove,
         ),
         _SelectedUnitActionDeck(
+          readOnly: readOnly,
           interaction: interaction,
           foundingActive: foundingActive,
           onAction: onUnitAction,
           onLogisticsAction: onUnitLogistics,
         ),
         _SelectedWorkerControls(
+          readOnly: readOnly,
           interaction: interaction,
           unit: unit,
           foundingActive: foundingActive,
@@ -277,7 +286,7 @@ final class _SelectedUnitControls extends StatelessWidget {
           onOpenChanged: onWorkerOpenChanged,
           onPreview: onWorkerPreview,
         ),
-        if (!foundingActive && _canOfferCityFounding(unit))
+        if (!readOnly && !foundingActive && _canOfferCityFounding(unit))
           TextButton.icon(
             key: const ValueKey('open-city-founding'),
             onPressed: onOpenCityFounding,
@@ -292,11 +301,13 @@ final class _SelectedUnitControls extends StatelessWidget {
 final class _SelectedUnitActionDeck extends StatelessWidget {
   const _SelectedUnitActionDeck({
     required this.interaction,
+    required this.readOnly,
     required this.foundingActive,
     required this.onAction,
     required this.onLogisticsAction,
   });
 
+  final bool readOnly;
   final MapInteractionState interaction;
   final bool foundingActive;
   final ValueChanged<UnitActionKindView> onAction;
@@ -310,6 +321,7 @@ final class _SelectedUnitActionDeck extends StatelessWidget {
       state: actionDeck,
       logistics: interaction.unitLogistics,
       enabled:
+          !readOnly &&
           !interaction.movementPending &&
           !(interaction.worker?.commandPending ?? false) &&
           !(interaction.production?.commandPending ?? false) &&
@@ -323,6 +335,7 @@ final class _SelectedUnitActionDeck extends StatelessWidget {
 final class _SelectedWorkerControls extends StatelessWidget {
   const _SelectedWorkerControls({
     required this.interaction,
+    required this.readOnly,
     required this.unit,
     required this.onOpenChanged,
     required this.onPreview,
@@ -330,6 +343,7 @@ final class _SelectedWorkerControls extends StatelessWidget {
     required this.onAction,
   });
 
+  final bool readOnly;
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
   final ValueChanged<bool> onOpenChanged;
@@ -345,6 +359,7 @@ final class _SelectedWorkerControls extends StatelessWidget {
       return const SizedBox.shrink();
     }
     return WorkerPanel(
+      readOnly: readOnly,
       state: worker,
       unit: selectedUnit,
       onOpenChanged: onOpenChanged,

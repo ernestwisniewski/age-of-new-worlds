@@ -17,6 +17,7 @@ extension _MapScreenScene on _MapScreenState {
             reference: scene.reference,
             player: scene.player,
             commandFrame: commandFrame,
+            effectEpoch: _sceneEpoch,
             feedbackLabels: switch (_localizations) {
               final l10n? => buildMapFeedbackLabels(
                 scene.player.recentFeedback,
@@ -24,14 +25,16 @@ extension _MapScreenScene on _MapScreenState {
               ),
               null => const MapFeedbackLabels.empty(),
             },
-            actionPalette: switch (_localizations) {
-              final l10n? => buildMapActionPaletteView(
-                interaction: interaction,
-                player: scene.player,
-                l10n: l10n,
-              ),
-              null => null,
-            },
+            actionPalette: widget.controller.readOnly
+                ? null
+                : switch (_localizations) {
+                    final l10n? => buildMapActionPaletteView(
+                      interaction: interaction,
+                      player: scene.player,
+                      l10n: l10n,
+                    ),
+                    null => null,
+                  },
           ),
         );
       case GameSessionLoading() || GameSessionFailure():

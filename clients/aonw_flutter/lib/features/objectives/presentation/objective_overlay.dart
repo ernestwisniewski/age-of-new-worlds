@@ -15,20 +15,23 @@ final class ObjectiveOverlay extends StatelessWidget {
     required this.outcome,
     required this.open,
     required this.onOpenChanged,
+    this.showOutcome = true,
     super.key,
   });
 
   final List<MapObjectiveView> objectives;
   final GameOutcomeView outcome;
   final bool open;
+  final bool showOutcome;
   final ValueChanged<bool>? onOpenChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
+    final blockingOutcome = showOutcome && outcome.isTerminal;
     return Stack(
       children: [
-        if (!outcome.isTerminal)
+        if (!blockingOutcome)
           Positioned(
             top: AonwHudSideMenuLayout.actionTop(context, 0),
             left: AonwHudSideMenuLayout.left(context),
@@ -42,7 +45,7 @@ final class ObjectiveOverlay extends StatelessWidget {
               icon: const Icon(Icons.flag),
             ),
           ),
-        if (open && !outcome.isTerminal)
+        if (open && !blockingOutcome)
           Positioned(
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
@@ -59,7 +62,7 @@ final class ObjectiveOverlay extends StatelessWidget {
               ),
             ),
           ),
-        if (outcome.isTerminal)
+        if (blockingOutcome)
           Positioned.fill(child: _TerminalOutcome(outcome: outcome)),
       ],
     );

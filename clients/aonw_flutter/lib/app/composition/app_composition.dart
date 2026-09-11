@@ -89,6 +89,7 @@ final class AppComposition {
     );
     final replayController = ReplayPresentationController(
       session: gateway.replaySession,
+      viewerCapabilities: gateway.capabilities,
       networkSession: ServerpodReplaySessionGateway(
         gameplay: gateway,
         multiplayer: multiplayerSession,

@@ -55,6 +55,7 @@ import 'network_game_status_overlay.dart';
 
 part 'map_screen_action_palette.dart';
 part 'map_screen_automation.dart';
+part 'map_screen_binding.dart';
 part 'map_screen_hex_selection_palette.dart';
 part 'map_screen_lifecycle.dart';
 part 'map_screen_gamepad.dart';
@@ -73,6 +74,7 @@ final class MapScreen extends StatefulWidget {
     this.flameGameFactory = AonwFlameGame.new,
     this.routeObserver,
     this.autoLoad = true,
+    this.interactionEnabled = true,
     super.key,
   });
 
@@ -82,6 +84,7 @@ final class MapScreen extends StatefulWidget {
   final AonwFlameGame Function() flameGameFactory;
   final RouteObserver<ModalRoute<void>>? routeObserver;
   final bool autoLoad;
+  final bool interactionEnabled;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -102,6 +105,7 @@ final class _MapScreenState extends State<MapScreen>
   var _routeVisible = true;
   var _gamepadAvailable = true;
   var _flameGeneration = 0;
+  var _sceneEpoch = 0;
   var _gamepadOwnerGeneration = 0;
   var _keyboardInputGeneration = 0;
   StreamSubscription<MapInputCommand>? _inputSubscription;
@@ -169,21 +173,7 @@ final class _MapScreenState extends State<MapScreen>
   @override
   void didUpdateWidget(MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      _automaticOperation = null;
-      _automaticGeneration += 1;
-      _gamepadCursor.reset();
-      _gamepadNavigation.setAvailable(false);
-      oldWidget.controller.bindCommandEffects(null);
-      oldWidget.controller.bindInteractionSounds(null);
-      _flameGame.skipEffects();
-      oldWidget.controller.removeListener(_synchronizeFlameScene);
-      oldWidget.controller.cursor.removeListener(_synchronizeFlameCursor);
-      widget.controller.addListener(_synchronizeFlameScene);
-      widget.controller.bindCommandEffects(_flameGame.waitForCommandEffects);
-      widget.controller.bindInteractionSounds(_playInteractionSound);
-      widget.controller.cursor.addListener(_synchronizeFlameCursor);
-    }
+    _updateInspectionBinding(oldWidget);
     if (oldWidget.inputSource != widget.inputSource) {
       _listenToInput(widget.inputSource);
     }
@@ -251,9 +241,15 @@ final class _MapScreenState extends State<MapScreen>
   @override
   Widget build(BuildContext context) => MapGamepadNavigationScope(
     navigation: _gamepadNavigation,
-    child: ListenableBuilder(
-      listenable: widget.controller,
-      builder: _buildState,
+    child: ExcludeFocus(
+      excluding: !widget.interactionEnabled,
+      child: AbsorbPointer(
+        absorbing: !widget.interactionEnabled,
+        child: ListenableBuilder(
+          listenable: widget.controller,
+          builder: _buildState,
+        ),
+      ),
     ),
   );
 
@@ -290,6 +286,7 @@ final class _MapScreenState extends State<MapScreen>
           localSave: localSave,
           inspection: inspection,
           controller: widget.controller,
+          interactionEnabled: widget.interactionEnabled,
           onInput: _handleInput,
           onTurnShortcut: _handleKeyboardTurnShortcut,
           onNavigateTurn: _handleHudTurnNavigation,
@@ -302,47 +299,6 @@ final class _MapScreenState extends State<MapScreen>
           onRetryFlame: _retryFlame,
         ),
     };
-  }
-
-  void _applyClientSettings(BuildContext context) {
-    final settings = ClientSettingsScope.settingsOf(context);
-    _flameGame.setReducedMotion(
-      settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
-    );
-    _flameGame.setUnitMovementAnimations(settings.showUnitMovementAnimations);
-    _flameGame.setCombatAnimations(settings.showCombatAnimations);
-    _flameGame.setUnitIdleAnimations(settings.showUnitIdleAnimations);
-    _flameGame.setRouteAnimations(settings.showRouteAnimations);
-    _flameGame.setCameraSensitivity(settings.cameraSensitivity);
-    _flameGame.setSmoothCameraMovement(settings.smoothCameraMovement);
-    _flameGame.setCinematicCamera(settings.cinematicCamera);
-    _flameGame.setMovementCameraOptions((
-      focusOwn: settings.focusOwnUnitMovement,
-      followOwn: settings.followOwnUnitMovement,
-      focusForeign: settings.focusForeignUnitMovement,
-      followForeign: settings.followForeignUnitMovement,
-    ));
-    _flameGame.setMapDisplayOptions(
-      MapDisplayOptions(
-        showCitySites: settings.showMapCitySites,
-        showCityGrowth: settings.showMapCityGrowth,
-        showGrid: settings.showMapGrid,
-        showElevationWalls: settings.showMapElevationWalls,
-        showTerrainIcons: settings.showMapTerrainIcons,
-        showResourceIcons: settings.showMapResourceIcons,
-        showHeightBadges: settings.showMapHeightBadges,
-      ),
-    );
-    _planningEnabled = settings.showMapCitySites || settings.showMapCityGrowth;
-    _synchronizeCityPlanning();
-    _synchronizeGamepadSettings(settings.gamepad);
-    final ready = ClientSettingsScope.isLoadedOf(context);
-    final changed = _automaticFlow.configure(settings.automation);
-    if (changed || ready != _automaticSettingsReady) {
-      _automaticSettingsReady = ready;
-      _automaticGeneration += 1;
-      _requestAutomaticTurn();
-    }
   }
 
   void _installFreshFlameGame() {
@@ -420,6 +376,7 @@ final class _MapScreenState extends State<MapScreen>
   }
 
   void _handleHexIntent(MapHexIntent intent) {
+    if (!widget.interactionEnabled) return;
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
     if (widget.controller.networkConnection.blocksGameplay) return;
     final state = widget.controller.state;

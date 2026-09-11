@@ -10,6 +10,40 @@ import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets('viewer can inspect improvement choices but cannot confirm', (
+    tester,
+  ) async {
+    final unit = testVisibleUnit(kind: VisibleUnitKind.worker);
+    var toggles = 0;
+    var commands = 0;
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: Scaffold(
+          body: WorkerPanel(
+            readOnly: true,
+            state: WorkerState(
+              unitId: unit.id,
+              options: _options(unit.id),
+              actionsOpen: true,
+              previewedImprovement: FieldImprovementKind.farm,
+            ),
+            unit: unit,
+            onOpenChanged: (_) => toggles++,
+            onPreview: (_) {},
+            onAction: (_) => commands++,
+          ),
+        ),
+      ),
+    );
+    final confirm = tester.widget<OutlinedButton>(
+      find.byKey(const ValueKey('worker-improvement-confirm')),
+    );
+    expect(confirm.onPressed, isNull);
+    await tester.tap(find.byKey(const ValueKey('worker-actions-toggle')));
+    expect(toggles, 1);
+    expect(commands, 0);
+  });
+
   testWidgets('shows progress semantics and cancels the running construction', (
     tester,
   ) async {

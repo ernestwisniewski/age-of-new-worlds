@@ -50,3 +50,25 @@ The machine-readable contracts live in
 `engine/fixtures/persistence/manifest.json` and `restore-matrix.json`. They
 describe the supported save, replay, restore, and corruption cases directly;
 the runtime does not carry a second implementation inventory.
+
+## Shared replay presentation
+
+Local and online playback mount the production `MapScreen` and `MapHudPanels`
+with read-only session capabilities. Each verified frame gets a fresh inspection
+coordinator; the Flame game, camera and world remain mounted. Resource, research,
+city, unit, worker and diplomacy details use the existing recipient queries.
+Research selection, production, diplomatic actions, turn progression, automation,
+handoff and save commands are unavailable in a viewer.
+
+Starting a seek retires the previous coordinator and its pending queries, closes
+its details and suspends pointer, keyboard and gamepad map input. This also applies
+to a seek to the same entry. The returned frame creates a new inspection scope;
+changing speed or pausing keeps the current scope. Map view changes survive seeks
+and the persisted preference is read when another archive opens. Opening, jumping
+and repeating clear command effects; observed forward steps retain their effect
+history and playback waits for the shared map to present each command.
+
+Playback controls occupy their own area below the map. Widget coverage exercises
+both phone orientations, six languages and 200% text, plus same-entry seeks,
+read-only terminal inspection, route/lifecycle pauses and observed command audio.
+These checks do not replace native archive, privacy or performance gates.

@@ -24,9 +24,11 @@ final class DiplomacyOverlay extends StatelessWidget {
     required this.onOpenChanged,
     required this.onAction,
     this.initialTargetPlayerId,
+    this.readOnly = false,
     super.key,
   });
 
+  final bool readOnly;
   final String actorPlayerId;
   final DiplomacyView view;
   final DiplomacyState state;
@@ -72,6 +74,7 @@ final class DiplomacyOverlay extends StatelessWidget {
                         _header(context, copy),
                         Expanded(
                           child: DiplomacyPanel(
+                            readOnly: readOnly,
                             actorPlayerId: actorPlayerId,
                             view: view,
                             state: state,
@@ -124,9 +127,11 @@ final class DiplomacyPanel extends StatelessWidget {
     required this.state,
     required this.onAction,
     this.initialTargetPlayerId,
+    this.readOnly = false,
     super.key,
   });
 
+  final bool readOnly;
   final String actorPlayerId;
   final DiplomacyView view;
   final DiplomacyState state;
@@ -136,6 +141,7 @@ final class DiplomacyPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final copy = DiplomacyCopy.of(context);
+    final enabled = !readOnly && !state.commandPending;
     return ListView(
       key: const ValueKey('diplomacy-content'),
       children: [
@@ -151,7 +157,7 @@ final class DiplomacyPanel extends StatelessWidget {
           key: ValueKey(initialTargetPlayerId),
           initialTargetPlayerId: initialTargetPlayerId,
           relations: view.relations,
-          enabled: !state.commandPending,
+          enabled: enabled,
           onAction: onAction,
         ),
         _heading(context, copy.relations),
@@ -163,7 +169,7 @@ final class DiplomacyPanel extends StatelessWidget {
           _ProposalCard(
             actorPlayerId: actorPlayerId,
             proposal: proposal,
-            enabled: !state.commandPending,
+            enabled: enabled,
             onAction: onAction,
           ),
         _heading(context, copy.messages),
@@ -171,7 +177,7 @@ final class DiplomacyPanel extends StatelessWidget {
           _MessageCard(
             actorPlayerId: actorPlayerId,
             message: message,
-            enabled: !state.commandPending,
+            enabled: enabled,
             onAction: onAction,
           ),
         _heading(context, copy.agreements),

@@ -8,6 +8,36 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 void main() {
+  testWidgets('viewer can read proposals without sending or accepting', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(900, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final actions = <DiplomacyActionView>[];
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: Scaffold(
+          body: DiplomacyPanel(
+            readOnly: true,
+            actorPlayerId: 'player-1',
+            view: _view(),
+            state: const DiplomacyState(),
+            onAction: actions.add,
+          ),
+        ),
+      ),
+    );
+    final submit = find.byKey(const ValueKey('submit-diplomacy-action'));
+    expect(tester.widget<FilledButton>(submit).onPressed, isNull);
+    final accept = find.byKey(
+      const ValueKey(('accept-proposal', 'proposal-1')),
+    );
+    await tester.scrollUntilVisible(accept, 180);
+    expect(tester.widget<FilledButton>(accept).onPressed, isNull);
+    expect(actions, isEmpty);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'shows only projected private records and dispatches exact actions',
     (tester) async {

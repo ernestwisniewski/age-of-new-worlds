@@ -12,7 +12,7 @@ extension _MapScreenCityPlanning on _MapScreenState {
               !widget.controller.networkConnection.blocksGameplay
           ? state.scene.player
           : null,
-      enabled: _planningEnabled,
+      enabled: _planningEnabled && widget.interactionEnabled,
       epoch: widget.controller,
     );
   }

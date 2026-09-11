@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 
 import '../../local_game/application/local_game_catalog.dart';
 import '../../map/application/city_planning_session_port.dart';
+import '../../map/application/game_session_capabilities.dart';
 import '../../map/application/map_session_port.dart';
+import '../../map/presentation/map_presentation_controller.dart';
 import '../../map/read_model/map_view_mode.dart';
 import '../../multiplayer/application/match_history_port.dart';
 import '../application/local_replay_store.dart';
@@ -15,6 +17,7 @@ import '../application/replay_state.dart';
 import '../read_model/replay_frame_view.dart';
 
 part 'replay_online_opening.dart';
+part 'replay_local_opening.dart';
 
 typedef ReplayDiagnosticReporter =
     void Function(String code, Object error, StackTrace stackTrace);
@@ -35,13 +38,31 @@ final class ReplayPresentationController extends ChangeNotifier
     required ReplaySessionPort? session,
     required LocalReplayStore? store,
     NetworkReplaySessionPort? networkSession,
+    GameSessionCapabilities? viewerCapabilities,
     ReplayDiagnosticReporter diagnosticReporter = _reportReplayDiagnostic,
   }) : _session = session,
        _store = store,
        _networkSession = networkSession,
+       _viewerCapabilities = viewerCapabilities,
        _diagnosticReporter = diagnosticReporter;
 
   CityPlanningSessionPort? get cityPlanningSession => _session;
+  final GameSessionCapabilities? _viewerCapabilities;
+
+  MapPresentationController? createMapViewer(
+    ReplayFrameView frame, {
+    MapViewMode? viewMode,
+  }) {
+    final capabilities = _viewerCapabilities;
+    if (capabilities == null) return null;
+    return MapPresentationController.viewer(
+      capabilities: capabilities,
+      scene: frame.scene,
+      commandFrame: frame.command,
+      viewMode: viewMode ?? this.viewMode,
+    );
+  }
+
   final ReplaySessionPort? _session;
   final NetworkReplaySessionPort? _networkSession;
   String? _networkUserId;
@@ -118,111 +139,6 @@ final class ReplayPresentationController extends ChangeNotifier
 
   Future<ReplayOpenResultView> openLatest() =>
       _openEntries(LocalGameCatalog.entries);
-
-  Future<ReplayOpenResultView> _openEntries(
-    Iterable<LocalGameCatalogEntryView> entries,
-  ) async {
-    pause();
-    _networkUserId = null;
-    final generation = ++_generation;
-    _waitingForEffects = false;
-    _setState(const ReplayLoading());
-    final viewMode = await _initialMapViewMode();
-    if (!_isCurrent(generation)) {
-      return const ReplayOpenResultView.failed(
-        ReplayFailureViewCode.unavailable,
-      );
-    }
-    _viewMode = viewMode;
-    final session = _session;
-    final store = _store;
-    if (session == null || store == null) {
-      return _failOpen(generation, ReplayFailureViewCode.unavailable);
-    }
-    return _openStoredEntries(entries, session, store, generation);
-  }
-
-  Future<ReplayOpenResultView> _openStoredEntries(
-    Iterable<LocalGameCatalogEntryView> entries,
-    ReplaySessionPort session,
-    LocalReplayStore store,
-    int generation,
-  ) async {
-    var readFailed = false;
-    var found = false;
-    for (final entry in entries) {
-      for (final copy in LocalReplayCopyView.values) {
-        final read = await _readReplay(store, entry.id, copy);
-        readFailed = readFailed || read.failed;
-        final document = read.document;
-        if (document == null) continue;
-        found = true;
-        final opened = await _tryOpenReplay(
-          session,
-          entry,
-          document,
-          generation,
-        );
-        if (opened != null) return opened;
-      }
-    }
-    return _failOpen(
-      generation,
-      found
-          ? ReplayFailureViewCode.incompatible
-          : readFailed
-          ? ReplayFailureViewCode.unreadable
-          : ReplayFailureViewCode.missing,
-    );
-  }
-
-  Future<({String? document, bool failed})> _readReplay(
-    LocalReplayStore store,
-    LocalGameScenarioView scenario,
-    LocalReplayCopyView copy,
-  ) async {
-    try {
-      return (document: await store.read(scenario, copy), failed: false);
-    } on LocalReplayStoreException catch (error, stackTrace) {
-      _reportStore(error, stackTrace);
-    } on Object catch (error, stackTrace) {
-      _diagnosticReporter('unexpected_replay_read_failure', error, stackTrace);
-    }
-    return (document: null, failed: true);
-  }
-
-  Future<ReplayOpenResultView?> _tryOpenReplay(
-    ReplaySessionPort session,
-    LocalGameCatalogEntryView entry,
-    String document,
-    int generation,
-  ) async {
-    try {
-      final frame = await session.openReplayDocument(
-        assets: entry.assets,
-        document: document,
-      );
-      if (!_isCurrent(generation)) {
-        return const ReplayOpenResultView.failed(
-          ReplayFailureViewCode.unavailable,
-        );
-      }
-      _setState(
-        ReplayReady(
-          frame: frame,
-          speed: ReplaySpeedView.normal,
-          isPlaying: false,
-          isSeeking: false,
-        ),
-      );
-      return const ReplayOpenResultView.started();
-    } on ReplaySessionException catch (error, stackTrace) {
-      _reportSession(error, stackTrace);
-    } on Object catch (error, stackTrace) {
-      _diagnosticReporter('unexpected_replay_open_failure', error, stackTrace);
-    }
-    return null;
-  }
 
   void play() {
     final ready = _state;

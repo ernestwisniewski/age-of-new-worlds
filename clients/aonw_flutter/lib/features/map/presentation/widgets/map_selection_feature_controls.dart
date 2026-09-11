@@ -4,6 +4,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
   const _SelectionFeatureControls({
     required this.coordinate,
     required this.interaction,
+    required this.readOnly,
     required this.unit,
     required this.city,
     required this.player,
@@ -19,6 +20,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
   });
 
   final MapHexCoordinate coordinate;
+  final bool readOnly;
   final MapInteractionState interaction;
   final VisibleUnitView? unit;
   final CityView? city;
@@ -68,6 +70,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
       onStartManagement: onStartCityManagement,
       onCancelManagement: onCancelCityManagement,
       enabled:
+          !readOnly &&
           !(interaction.production?.commandPending ?? false) &&
           !(interaction.artifact?.commandPending ?? false),
     );
@@ -81,6 +84,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
     return ProductionPanel(
       state: production,
       enabled:
+          !readOnly &&
           !(interaction.city?.commandPending ?? false) &&
           !interaction.movementPending &&
           !(interaction.artifact?.commandPending ?? false),
@@ -100,6 +104,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
       unit: unit,
       city: city,
       enabled:
+          !readOnly &&
           !interaction.movementPending &&
           !(interaction.city?.commandPending ?? false) &&
           !(interaction.production?.commandPending ?? false) &&

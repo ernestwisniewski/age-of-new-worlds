@@ -13,6 +13,7 @@ final class _ReadyMap extends StatelessWidget {
     required this.localHandoff,
     required this.localSave,
     required this.controller,
+    required this.interactionEnabled,
     required this.onInput,
     required this.onTurnShortcut,
     required this.onNavigateTurn,
@@ -36,6 +37,7 @@ final class _ReadyMap extends StatelessWidget {
   final LocalHandoffState localHandoff;
   final LocalSaveState localSave;
   final MapPresentationController controller;
+  final bool interactionEnabled;
   final ValueChanged<MapInputCommand> onInput;
   final ValueChanged<MapTurnShortcut> onTurnShortcut;
   final ValueChanged<int> onNavigateTurn;
@@ -65,29 +67,32 @@ final class _ReadyMap extends StatelessWidget {
       ),
       const Positioned.fill(child: AonwHudMapVignette()),
       const Positioned.fill(child: AonwHudTopFade()),
-      TurnBanner(
-        presentation: turnPresentations.active,
-        onFinished: controller.completeTurnPresentation,
-      ),
-      Positioned.fill(
-        child: TurnPresentationOverlays(
-          turn: scene.player.turnView,
-          turnMode: scene.player.turnMode,
-          action: turnAction,
-          presentations: turnPresentations,
-          localAiTurn: localAiTurn,
-          onEndTurn: controller.endTurn,
-          onNavigateTurn: onNavigateTurn,
+      if (!controller.readOnly)
+        TurnBanner(
+          presentation: turnPresentations.active,
+          onFinished: controller.completeTurnPresentation,
         ),
-      ),
+      if (!controller.readOnly)
+        Positioned.fill(
+          child: TurnPresentationOverlays(
+            turn: scene.player.turnView,
+            turnMode: scene.player.turnMode,
+            action: turnAction,
+            presentations: turnPresentations,
+            localAiTurn: localAiTurn,
+            onEndTurn: controller.endTurn,
+            onNavigateTurn: onNavigateTurn,
+          ),
+        ),
       ..._mapActions(context),
-      MapSelectionOverlay(
-        scene: scene,
-        interaction: interaction,
-        controller: controller,
-      ),
+      if (interactionEnabled)
+        MapSelectionOverlay(
+          scene: scene,
+          interaction: interaction,
+          controller: controller,
+        ),
       ..._featureOverlays(),
-      if (inspection case final value?)
+      if (inspection case final value? when interactionEnabled)
         HexInspectionOverlay(
           state: value,
           scene: scene,
@@ -128,19 +133,20 @@ final class _ReadyMap extends StatelessWidget {
       left: AonwHudSideMenuLayout.left(context),
       child: const AonwHudSideMenuSeparator(),
     ),
-    Positioned(
-      top: AonwHudSideMenuLayout.actionTop(context, 3),
-      left: AonwHudSideMenuLayout.left(context),
-      child: MapGamepadRegion(
-        section: MapHudSection.globalActions,
-        child: _SaveAction(
-          localSave: localSave,
-          localAiTurn: localAiTurn,
-          localHandoff: localHandoff,
-          onSave: controller.saveLocalGame,
+    if (!controller.readOnly)
+      Positioned(
+        top: AonwHudSideMenuLayout.actionTop(context, 3),
+        left: AonwHudSideMenuLayout.left(context),
+        child: MapGamepadRegion(
+          section: MapHudSection.globalActions,
+          child: _SaveAction(
+            localSave: localSave,
+            localAiTurn: localAiTurn,
+            localHandoff: localHandoff,
+            onSave: controller.saveLocalGame,
+          ),
         ),
       ),
-    ),
     Positioned(
       top: AonwHudSideMenuLayout.actionTop(context, 4),
       left: AonwHudSideMenuLayout.left(context),
@@ -162,6 +168,7 @@ final class _ReadyMap extends StatelessWidget {
       child: MapGamepadRegion(
         section: MapHudSection.globalActions,
         child: MapHudPanels(
+          blocked: !interactionEnabled,
           scene: scene,
           research: research,
           diplomacy: diplomacy,

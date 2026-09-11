@@ -42,6 +42,7 @@ import '../../unit_actions/read_model/unit_action_view.dart';
 import '../../workers/application/worker_state.dart';
 import '../../workers/application/worker_workflow.dart';
 import '../../workers/read_model/worker_view.dart';
+import '../read_model/map_command_frame_view.dart';
 import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
@@ -59,6 +60,7 @@ import 'network_game_session_port.dart';
 import 'unit_action_workflow.dart';
 
 part 'map_coordinator_view_mode.dart';
+part 'map_coordinator_viewer.dart';
 part 'map_coordinator_actions.dart';
 part 'map_coordinator_cancellation.dart';
 part 'map_coordinator_local_save.dart';

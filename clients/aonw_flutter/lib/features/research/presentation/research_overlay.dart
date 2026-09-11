@@ -26,9 +26,11 @@ final class ResearchOverlay extends StatelessWidget {
     required this.onSelect,
     required this.onRetry,
     this.trailingReserve = 0,
+    this.readOnly = false,
     super.key,
   });
 
+  final bool readOnly;
   final ResearchState state;
   final bool selectionRequired;
   final bool open;
@@ -79,6 +81,7 @@ final class ResearchOverlay extends StatelessWidget {
                             ),
                           Expanded(
                             child: ResearchPanel(
+                              readOnly: readOnly,
                               state: state,
                               onSelect: onSelect,
                               onRetry: onRetry,
@@ -132,9 +135,11 @@ final class ResearchPanel extends StatelessWidget {
     required this.state,
     required this.onSelect,
     required this.onRetry,
+    this.readOnly = false,
     super.key,
   });
 
+  final bool readOnly;
   final ResearchState state;
   final ValueChanged<TechnologyIdView> onSelect;
   final VoidCallback onRetry;
@@ -203,17 +208,17 @@ final class ResearchPanel extends StatelessWidget {
         ? null
         : _ResearchRecommendations(
             options: options,
-            enabled: !state.commandPending,
+            enabled: !readOnly && !state.commandPending,
             onSelect: onSelect,
           ),
     catalog: _ResearchCatalog(
       options: options.options,
-      enabled: !state.commandPending,
+      enabled: !readOnly && !state.commandPending,
       onSelect: onSelect,
     ),
     details: (option) => _TechnologyOptionCard(
       option: option,
-      enabled: !state.commandPending,
+      enabled: !readOnly && !state.commandPending,
       onSelect: onSelect,
     ),
   );

@@ -35,6 +35,7 @@ extension _MapScreenGamepad on _MapScreenState {
 
   void _synchronizeGamepadTicker() {
     final available =
+        widget.interactionEnabled &&
         _gamepadSettings.enabled &&
         _routeVisible &&
         _lifecycleState == AppLifecycleState.resumed;
@@ -54,7 +55,8 @@ extension _MapScreenGamepad on _MapScreenState {
 
   bool get _acceptsGamepadInput {
     final state = widget.controller.state;
-    return _gamepadSettings.enabled &&
+    return widget.interactionEnabled &&
+        _gamepadSettings.enabled &&
         state is GameSessionReady &&
         !state.localHandoff.blocksGameplay &&
         !widget.controller.networkConnection.blocksGameplay;
@@ -124,6 +126,7 @@ extension _MapScreenTurnInput on _MapScreenState {
   }
 
   bool get _turnInputAvailable =>
+      !widget.controller.readOnly &&
       mounted &&
       _routeVisible &&
       _lifecycleState == AppLifecycleState.resumed &&

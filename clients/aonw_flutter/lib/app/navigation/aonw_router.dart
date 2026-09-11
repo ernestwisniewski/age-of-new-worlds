@@ -306,6 +306,7 @@ final class AonwRouter {
   Widget _replayScreen(BuildContext context) => replayController == null
       ? const _UnavailableReplay()
       : ReplayScreen(
+          inputSource: mapInputSource,
           controller: replayController!,
           flameGameFactory: flameGameFactory,
           routeObserver: routeObserver,

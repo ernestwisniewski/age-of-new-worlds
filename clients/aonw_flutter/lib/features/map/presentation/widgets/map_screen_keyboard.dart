@@ -51,11 +51,14 @@ extension _MapScreenKeyboard on _MapScreenState {
   }
 
   bool get _keyboardTurnInputAvailable =>
-      _keyboardMapInputAvailable && !_flameGame.hasActiveUnitEffects;
+      !widget.controller.readOnly &&
+      _keyboardMapInputAvailable &&
+      !_flameGame.hasActiveUnitEffects;
 
   bool get _keyboardMapInputAvailable {
     final state = widget.controller.state;
-    return _routeVisible &&
+    return widget.interactionEnabled &&
+        _routeVisible &&
         _lifecycleState == AppLifecycleState.resumed &&
         _flameFocusNode.hasFocus &&
         state is GameSessionReady &&

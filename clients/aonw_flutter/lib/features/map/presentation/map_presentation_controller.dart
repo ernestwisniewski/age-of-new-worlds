@@ -28,6 +28,8 @@ import '../application/game_session_state.dart';
 import '../application/map_coordinator.dart';
 import '../application/map_session_port.dart';
 import '../application/network_game_session_port.dart';
+import '../read_model/map_command_frame_view.dart';
+import '../read_model/map_scene.dart';
 import '../read_model/map_view.dart';
 import '../read_model/map_view_mode.dart';
 import '../read_model/pending_action_view.dart';
@@ -51,6 +53,20 @@ final class MapPresentationController extends ChangeNotifier {
            diagnosticReporter: diagnosticReporter,
          ),
          networkGame: capabilities.networkGame,
+       );
+
+  MapPresentationController.viewer({
+    required GameSessionCapabilities capabilities,
+    required MapScene scene,
+    MapCommandFrameView? commandFrame,
+    MapViewMode viewMode = MapViewMode.graphic,
+  }) : this.fromCoordinator(
+         createViewerMapCoordinator(
+           capabilities: capabilities,
+           scene: scene,
+           commandFrame: commandFrame,
+           viewMode: viewMode,
+         ),
        );
 
   MapPresentationController.fromCoordinator(

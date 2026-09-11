@@ -7,6 +7,10 @@ void replayViewModeTests() {
     final session = _ReplaySession();
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: _ReplayStore(primary: 'valid'),
     );
     final settings = ClientSettingsController.ephemeral();
@@ -62,6 +66,10 @@ void replayViewModeTests() {
       final session = _ReplaySession();
       final controller = ReplayPresentationController(
         session: session,
+        viewerCapabilities: testGameSessionCapabilities(
+          FakeGameSession.success(testMapScene()),
+          cityPlanning: session,
+        ),
         store: _ReplayStore(primary: 'valid'),
       );
       addTearDown(controller.dispose);
@@ -98,6 +106,10 @@ void replayViewModeTests() {
     final session = _ReplaySession();
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: _ReplayStore(primary: 'valid'),
     );
     final preference = Completer<MapViewMode>();

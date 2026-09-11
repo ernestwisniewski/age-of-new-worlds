@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:aonw_flutter/features/audio/presentation/game_audio_host.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/map_hud_panels.dart';
+import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
 import 'package:aonw_flutter/features/map/read_model/city_planning_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
@@ -30,9 +32,11 @@ import '../../../support/recording_game_audio.dart';
 part 'replay_audio_tests.dart';
 part 'replay_view_mode_tests.dart';
 part 'replay_online_tests.dart';
+part 'replay_shared_hud_tests.dart';
 
 void main() {
   replayOnlineTests();
+  replaySharedHudTests();
   replayAudioTests();
   replayViewModeTests();
   testWidgets(
@@ -41,6 +45,10 @@ void main() {
       final session = _ReplaySession();
       final controller = ReplayPresentationController(
         session: session,
+        viewerCapabilities: testGameSessionCapabilities(
+          FakeGameSession.success(testMapScene()),
+          cityPlanning: session,
+        ),
         store: _ReplayStore(primary: 'valid'),
       );
       final settings = ClientSettingsController.ephemeral();
@@ -98,6 +106,10 @@ void main() {
       final session = _ReplaySession(observed: true);
       final controller = ReplayPresentationController(
         session: session,
+        viewerCapabilities: testGameSessionCapabilities(
+          FakeGameSession.success(testMapScene()),
+          cityPlanning: session,
+        ),
         store: _ReplayStore(primary: 'valid'),
       );
       addTearDown(controller.dispose);
@@ -130,6 +142,10 @@ void main() {
       ..seekCompletion = Completer<void>();
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: _ReplayStore(primary: 'valid'),
     );
     addTearDown(controller.dispose);
@@ -155,6 +171,10 @@ void main() {
     final session = _ReplaySession(observed: true);
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: _ReplayStore(primary: 'valid'),
     );
     addTearDown(controller.dispose);
@@ -180,6 +200,10 @@ void main() {
     final store = _ReplayStore();
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: store,
       diagnosticReporter: (_, _, _) {},
     );
@@ -213,6 +237,10 @@ void main() {
     final store = _ReplayStore(primary: 'corrupt', backup: 'valid');
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: store,
       diagnosticReporter: (_, _, _) {},
     );
@@ -231,6 +259,10 @@ void main() {
     );
     final controller = ReplayPresentationController(
       session: session,
+      viewerCapabilities: testGameSessionCapabilities(
+        FakeGameSession.success(testMapScene()),
+        cityPlanning: session,
+      ),
       store: store,
       diagnosticReporter: (_, _, _) {},
     );

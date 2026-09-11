@@ -7,6 +7,10 @@ void replayAudioTests() {
       final session = _ReplaySession(observed: true, audio: true);
       final controller = ReplayPresentationController(
         session: session,
+        viewerCapabilities: testGameSessionCapabilities(
+          FakeGameSession.success(testMapScene()),
+          cityPlanning: session,
+        ),
         store: _ReplayStore(primary: 'valid'),
       );
       final settings = ClientSettingsController.ephemeral();

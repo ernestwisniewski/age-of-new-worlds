@@ -2,6 +2,7 @@ part of 'map_screen.dart';
 
 extension _MapScreenCursor on _MapScreenState {
   GameSessionReady? _mapInputReady(MapInputCommand command) {
+    if (!widget.interactionEnabled) return null;
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) {
       return null;
     }

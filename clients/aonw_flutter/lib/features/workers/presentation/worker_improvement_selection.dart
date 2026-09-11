@@ -3,6 +3,7 @@ part of 'worker_panel.dart';
 final class _WorkerImprovementSelection extends StatelessWidget {
   const _WorkerImprovementSelection({
     required this.state,
+    this.readOnly = false,
     required this.options,
     required this.enabled,
     required this.onOpenChanged,
@@ -10,6 +11,7 @@ final class _WorkerImprovementSelection extends StatelessWidget {
     required this.onAction,
   });
 
+  final bool readOnly;
   final WorkerState state;
   final WorkerOptionsView options;
   final bool enabled;
@@ -63,7 +65,7 @@ final class _WorkerImprovementSelection extends StatelessWidget {
     FieldImprovementKind kind,
   ) => OutlinedButton.icon(
     key: const ValueKey('worker-improvement-confirm'),
-    onPressed: enabled
+    onPressed: enabled && !readOnly
         ? () => onAction(
             ConfirmWorkerImprovementActionView(
               unitId: options.unitId,

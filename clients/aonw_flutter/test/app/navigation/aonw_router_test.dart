@@ -289,6 +289,7 @@ void main() {
     final replaySession = _ReplaySession(scene);
     final replayController = ReplayPresentationController(
       session: replaySession,
+      viewerCapabilities: testGameSessionCapabilities(gameplay),
       store: _SingleReplayStore('engine-replay'),
       diagnosticReporter: (_, _, _) {},
     );

@@ -14,6 +14,7 @@ part 'worker_improvement_selection.dart';
 final class WorkerPanel extends StatelessWidget {
   const WorkerPanel({
     required this.state,
+    this.readOnly = false,
     required this.unit,
     required this.onOpenChanged,
     required this.onPreview,
@@ -22,6 +23,7 @@ final class WorkerPanel extends StatelessWidget {
     super.key,
   });
 
+  final bool readOnly;
   final WorkerState state;
   final VisibleUnitView unit;
   final ValueChanged<bool> onOpenChanged;
@@ -59,6 +61,7 @@ final class WorkerPanel extends StatelessWidget {
             )
           else if (state.options case final options?)
             _WorkerActions(
+              readOnly: readOnly,
               options: options,
               unit: unit,
               state: state,
@@ -110,6 +113,7 @@ final class _WorkerActions extends StatelessWidget {
   const _WorkerActions({
     required this.options,
     required this.state,
+    this.readOnly = false,
     required this.unit,
     required this.onOpenChanged,
     required this.onPreview,
@@ -118,12 +122,15 @@ final class _WorkerActions extends StatelessWidget {
   });
 
   final WorkerOptionsView options;
+  final bool readOnly;
   final WorkerState state;
   final VisibleUnitView unit;
   final ValueChanged<bool> onOpenChanged;
   final ValueChanged<FieldImprovementKind> onPreview;
   final bool enabled;
   final ValueChanged<WorkerActionView> onAction;
+
+  bool get _commandsEnabled => enabled && !readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +143,7 @@ final class _WorkerActions extends StatelessWidget {
           order: NumericFocusOrder(order++),
           child: OutlinedButton.icon(
             key: ValueKey(('worker-action', action.runtimeType, label)),
-            onPressed: enabled ? () => onAction(action) : null,
+            onPressed: _commandsEnabled ? () => onAction(action) : null,
             icon: Icon(icon),
             label: Text(label),
           ),
@@ -145,16 +152,7 @@ final class _WorkerActions extends StatelessWidget {
     }
 
     if (unit.workerJob == null && options.improvements.isNotEmpty) {
-      buttons.add(
-        _WorkerImprovementSelection(
-          state: state,
-          options: options,
-          enabled: enabled,
-          onOpenChanged: onOpenChanged,
-          onPreview: onPreview,
-          onAction: onAction,
-        ),
-      );
+      buttons.add(_improvementSelection());
     }
     if (unit.workerJob != null) {
       add(
@@ -202,6 +200,16 @@ final class _WorkerActions extends StatelessWidget {
             children: buttons,
           );
   }
+
+  Widget _improvementSelection() => _WorkerImprovementSelection(
+    readOnly: readOnly,
+    state: state,
+    options: options,
+    enabled: enabled,
+    onOpenChanged: onOpenChanged,
+    onPreview: onPreview,
+    onAction: onAction,
+  );
 }
 
 final class _AutomationEvidence extends StatelessWidget {

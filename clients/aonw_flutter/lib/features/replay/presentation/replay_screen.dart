@@ -1,18 +1,13 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../game/aonw_flame_game.dart';
-import '../../../game/map/map_display_options.dart';
 import '../../../l10n/l10n.dart';
-import '../../map/application/map_interaction_state.dart';
-import '../../map/presentation/city_planning_presentation.dart';
-import '../../map/presentation/map_audio.dart';
-import '../../map/presentation/map_feedback_labels.dart';
-import '../../map/presentation/map_render_snapshot.dart';
-import '../../map/presentation/widgets/viewer_hud.dart';
-import '../../settings/presentation/client_settings_scope.dart';
+import '../../map/application/game_session_state.dart';
+import '../../map/presentation/input/map_input.dart';
+import '../../map/presentation/map_presentation_controller.dart';
+import '../../map/presentation/widgets/map_screen.dart';
 import '../application/replay_state.dart';
 import '../read_model/replay_frame_view.dart';
 import 'replay_presentation_controller.dart';
@@ -22,12 +17,14 @@ final class ReplayScreen extends StatefulWidget {
     required this.controller,
     this.flameGameFactory = AonwFlameGame.new,
     this.routeObserver,
+    this.inputSource,
     super.key,
   });
 
   final ReplayPresentationController controller;
   final AonwFlameGame Function() flameGameFactory;
   final RouteObserver<ModalRoute<void>>? routeObserver;
+  final MapInputSource? inputSource;
 
   @override
   State<ReplayScreen> createState() => _ReplayScreenState();
@@ -36,29 +33,28 @@ final class ReplayScreen extends StatefulWidget {
 final class _ReplayScreenState extends State<ReplayScreen>
     with WidgetsBindingObserver, RouteAware {
   late AonwFlameGame _game;
-  late final _cityPlanning = CityPlanningPresentation(
-    onChanged: (value) => _game.setCityPlanning(value),
-  );
-  bool _planningEnabled = false;
-  late AppLifecycleState _lifecycleState;
+  late AonwFlameGame Function() _provideGame;
+  bool _viewerRetired = false;
+  MapPresentationController? _viewer;
   ReplayFrameView? _lastFrame;
-  var _effectEpoch = 0;
-  AonwLocalizations? _localizations;
   ModalRoute<void>? _subscribedRoute;
-  var _routeVisible = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _lifecycleState =
-        WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
     _game = widget.flameGameFactory();
-    _game.setSoundSink(context.playMapSound);
-    widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
-    widget.controller.addListener(_synchronizeScene);
-    _synchronizeScene();
-    _synchronizeLifecycle();
+    final game = _game;
+    _provideGame = () => game;
+    widget.controller.waitForCommandEffects = _waitForPresentedEffects;
+    widget.controller.addListener(_synchronizeFrame);
+    _synchronizeFrame();
+  }
+
+  Future<void> _waitForPresentedEffects() async {
+    // MapScreen applies the new command when its widget rebuilds this frame.
+    await WidgetsBinding.instance.endOfFrame;
+    if (mounted) await _game.waitForCommandEffects();
   }
 
   @override
@@ -71,155 +67,99 @@ final class _ReplayScreenState extends State<ReplayScreen>
     }
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.waitForCommandEffects = null;
-      _game.skipEffects();
-      oldWidget.controller.removeListener(_synchronizeScene);
-      widget.controller.addListener(_synchronizeScene);
+      oldWidget.controller.removeListener(_synchronizeFrame);
+      _lastFrame = null;
+      widget.controller.addListener(_synchronizeFrame);
     }
     if (oldWidget.flameGameFactory != widget.flameGameFactory) {
-      _game.setSoundSink(null);
       _game.skipEffects();
       _game.setViewportActive(false);
       _game = widget.flameGameFactory();
-      _game.setSoundSink(context.playMapSound);
+      final game = _game;
+      _provideGame = () => game;
     }
-    widget.controller.waitForCommandEffects = _game.waitForCommandEffects;
-    _synchronizeScene();
-    _synchronizeLifecycle();
+    widget.controller.waitForCommandEffects = _waitForPresentedEffects;
+    _synchronizeFrame();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _lifecycleState = state;
     if (state != AppLifecycleState.resumed) widget.controller.pause();
-    _synchronizeLifecycle();
   }
 
   @override
   void dispose() {
-    _cityPlanning.dispose();
-    _game.setSoundSink(null);
     WidgetsBinding.instance.removeObserver(this);
     widget.routeObserver?.unsubscribe(this);
+    widget.controller.removeListener(_synchronizeFrame);
     widget.controller.pause();
     widget.controller.waitForCommandEffects = null;
+    _viewer?.dispose();
     _game.skipEffects();
-    widget.controller.removeListener(_synchronizeScene);
     _game.setViewportActive(false);
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final settings = ClientSettingsScope.settingsOf(context);
-    _game.setReducedMotion(
-      settings.reducedMotion || MediaQuery.disableAnimationsOf(context),
-    );
-    _game.setUnitMovementAnimations(settings.showUnitMovementAnimations);
-    _game.setCombatAnimations(settings.showCombatAnimations);
-    _game.setUnitIdleAnimations(settings.showUnitIdleAnimations);
-    _game.setRouteAnimations(settings.showRouteAnimations);
-    _game.setCameraSensitivity(settings.cameraSensitivity);
-    _game.setSmoothCameraMovement(settings.smoothCameraMovement);
-    _game.setCinematicCamera(settings.cinematicCamera);
-    _game.setMovementCameraOptions((
-      focusOwn: settings.focusOwnUnitMovement,
-      followOwn: settings.followOwnUnitMovement,
-      focusForeign: settings.focusForeignUnitMovement,
-      followForeign: settings.followForeignUnitMovement,
-    ));
-    _game.setMapDisplayOptions(
-      MapDisplayOptions(
-        showCitySites: settings.showMapCitySites,
-        showCityGrowth: settings.showMapCityGrowth,
-        showGrid: settings.showMapGrid,
-        showElevationWalls: settings.showMapElevationWalls,
-        showTerrainIcons: settings.showMapTerrainIcons,
-        showResourceIcons: settings.showMapResourceIcons,
-        showHeightBadges: settings.showMapHeightBadges,
-      ),
-    );
-    _planningEnabled = settings.showMapCitySites || settings.showMapCityGrowth;
-    _synchronizeCityPlanning();
-    return Scaffold(
-      body: SafeArea(
-        child: ListenableBuilder(
-          listenable: widget.controller,
-          builder: (context, _) => switch (widget.controller.state) {
-            ReplayIdle() || ReplayLoading() => const Center(
-              child: CircularProgressIndicator(key: ValueKey('replay-loading')),
-            ),
-            ReplayFailure(:final code) => _ReplayFailure(code: code),
-            ReplayReady() => _ReplayPlayer(
-              state: widget.controller.state as ReplayReady,
-              controller: widget.controller,
-              game: _game,
-            ),
-          },
-        ),
-      ),
+  void _synchronizeFrame() {
+    final state = widget.controller.state;
+    if (state is! ReplayReady) {
+      _lastFrame = null;
+      _viewer?.dispose();
+      _viewer = null;
+      _game.skipEffects();
+      return;
+    }
+    _game.setEffectPlaybackSpeed(state.speed.multiplier);
+    if (state.isSeeking) {
+      // Pending queries belong to the old frame even when seeking to itself.
+      _viewer?.dispose();
+      _viewerRetired = true;
+      _game.skipEffects();
+      return;
+    }
+    if (identical(_lastFrame, state.frame) && !_viewerRetired) return;
+    _lastFrame = state.frame;
+    final previous = _viewer?.state;
+    _viewer?.dispose();
+    _viewerRetired = false;
+    _viewer = widget.controller.createMapViewer(
+      state.frame,
+      viewMode: previous is GameSessionReady
+          ? previous.interaction.viewMode
+          : null,
     );
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: SafeArea(
+      child: ListenableBuilder(
+        listenable: widget.controller,
+        builder: (context, _) => switch (widget.controller.state) {
+          ReplayIdle() || ReplayLoading() => const Center(
+            child: CircularProgressIndicator(key: ValueKey('replay-loading')),
+          ),
+          ReplayFailure(:final code) => _ReplayFailure(code: code),
+          ReplayReady() =>
+            _viewer == null
+                ? const _ReplayFailure(code: ReplayFailureViewCode.unavailable)
+                : _ReplayPlayer(
+                    state: widget.controller.state as ReplayReady,
+                    controller: widget.controller,
+                    viewer: _viewer!,
+                    gameFactory: _provideGame,
+                    routeObserver: widget.routeObserver,
+                    inputSource: widget.inputSource,
+                  ),
+        },
+      ),
+    ),
+  );
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _subscribeToRoute();
-    final localizations = context.aonwL10n;
-    if (identical(_localizations, localizations)) return;
-    _localizations = localizations;
-    _synchronizeScene();
-  }
-
-  void _synchronizeScene() {
-    switch (widget.controller.state) {
-      case ReplayReady(:final frame, :final speed):
-        if (!identical(_lastFrame, frame) && frame.command == null) {
-          _effectEpoch++;
-        }
-        _lastFrame = frame;
-        _game.setEffectPlaybackSpeed(speed.multiplier);
-        _game.sceneSink.replaceScene(
-          MapRenderSnapshot(
-            map: frame.scene.map,
-            interaction: MapInteractionState(
-              viewMode: widget.controller.viewMode,
-            ),
-            reference: frame.scene.reference,
-            player: frame.scene.player,
-            commandFrame: frame.command,
-            effectEpoch: _effectEpoch,
-            feedbackLabels: switch (_localizations) {
-              final l10n? => buildMapFeedbackLabels(
-                frame.scene.player.recentFeedback,
-                l10n,
-              ),
-              null => const MapFeedbackLabels.empty(),
-            },
-          ),
-        );
-      case ReplayIdle() || ReplayLoading() || ReplayFailure():
-        _lastFrame = null;
-        _game.sceneSink.clearScene();
-    }
-    _synchronizeCityPlanning();
-  }
-
-  void _synchronizeCityPlanning() {
-    final state = widget.controller.state;
-    _cityPlanning.synchronize(
-      session: widget.controller.cityPlanningSession,
-      player: state is ReplayReady && !state.isSeeking
-          ? state.frame.scene.player
-          : null,
-      enabled: _planningEnabled,
-      epoch: (widget.controller, _effectEpoch),
-    );
-  }
-
-  void _synchronizeLifecycle() {
-    _game.setViewportActive(
-      _routeVisible && _lifecycleState == AppLifecycleState.resumed,
-    );
   }
 
   void _subscribeToRoute() {
@@ -228,90 +168,58 @@ final class _ReplayScreenState extends State<ReplayScreen>
     widget.routeObserver?.unsubscribe(this);
     _subscribedRoute = route;
     widget.routeObserver?.subscribe(this, route);
-    _setRouteVisible(route.isCurrent);
-  }
-
-  void _setRouteVisible(bool visible) {
-    _routeVisible = visible;
-    _synchronizeLifecycle();
-    if (!visible) widget.controller.pause();
+    if (!route.isCurrent) widget.controller.pause();
   }
 
   @override
-  void didPush() => _setRouteVisible(true);
+  void didPushNext() => widget.controller.pause();
   @override
-  void didPopNext() => _setRouteVisible(true);
-  @override
-  void didPushNext() => _setRouteVisible(false);
-  @override
-  void didPop() => _setRouteVisible(false);
+  void didPop() => widget.controller.pause();
 }
 
 final class _ReplayPlayer extends StatelessWidget {
   const _ReplayPlayer({
     required this.state,
     required this.controller,
-    required this.game,
+    required this.viewer,
+    required this.gameFactory,
+    required this.routeObserver,
+    required this.inputSource,
   });
 
   final ReplayReady state;
   final ReplayPresentationController controller;
-  final AonwFlameGame game;
+  final MapPresentationController viewer;
+  final AonwFlameGame Function() gameFactory;
+  final RouteObserver<ModalRoute<void>>? routeObserver;
+  final MapInputSource? inputSource;
 
   @override
-  Widget build(BuildContext context) => Stack(
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      Positioned.fill(
-        child: Semantics(
-          label: context.aonwL10n.replayMapLabel,
-          child: RepaintBoundary(
-            child: GameWidget<AonwFlameGame>(
+      Expanded(
+        child: LayoutBuilder(
+          builder: (context, constraints) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(size: constraints.biggest),
+            child: Semantics(
               key: const ValueKey('replay-viewport'),
-              game: game,
-              autofocus: false,
-              addRepaintBoundary: false,
+              label: context.aonwL10n.replayMapLabel,
+              child: MapScreen(
+                controller: viewer,
+                autoLoad: false,
+                interactionEnabled: !state.isSeeking,
+                flameGameFactory: gameFactory,
+                routeObserver: routeObserver,
+                inputSource: inputSource,
+              ),
             ),
           ),
         ),
       ),
-      Positioned(
-        left: AonwSpacing.md,
-        top: 70,
-        child: AonwPanel(
-          semanticLabel: context.aonwL10n.replayTitle,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AonwSpacing.sm,
-            vertical: AonwSpacing.xs,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                key: const ValueKey('close-replay'),
-                tooltip: context.aonwL10n.backToMenu,
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              Text(
-                context.aonwL10n.replayTitle,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
-        ),
-      ),
-      Positioned(
-        left: AonwSpacing.md,
-        right: AonwSpacing.md,
-        bottom: AonwSpacing.md,
+      Padding(
+        padding: const EdgeInsets.all(AonwSpacing.sm),
         child: _ReplayControls(state: state, controller: controller),
-      ),
-      Positioned.fill(
-        child: ViewerHud(
-          player: state.frame.scene.player,
-          sessionIdentity: controller,
-          blocked: state.isSeeking,
-        ),
       ),
     ],
   );
@@ -327,55 +235,67 @@ final class _ReplayControls extends StatelessWidget {
   Widget build(BuildContext context) => AonwPanel(
     semanticLabel: context.aonwL10n.replayControls,
     padding: const EdgeInsets.all(AonwSpacing.sm),
-    child: Row(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton.filled(
-          key: ValueKey(state.isPlaying ? 'pause-replay' : 'play-replay'),
-          tooltip: state.isPlaying
-              ? context.aonwL10n.pauseReplay
-              : context.aonwL10n.playReplay,
-          onPressed: state.isSeeking
-              ? null
-              : state.isPlaying
-              ? controller.pause
-              : controller.play,
-          icon: Icon(state.isPlaying ? Icons.pause : Icons.play_arrow),
-        ),
-        Expanded(
-          child: Slider(
-            key: const ValueKey('replay-seek'),
-            value: state.frame.position.toDouble(),
-            min: 0,
-            max: state.frame.entryCount.toDouble().clamp(1, double.infinity),
-            divisions: state.frame.entryCount > 0
-                ? state.frame.entryCount
-                : null,
-            label: context.aonwL10n.replayProgress(
-              state.frame.position,
-              state.frame.entryCount,
-            ),
-            onChanged: state.isSeeking
-                ? null
-                : (value) => controller.seek(value.round()),
-          ),
-        ),
-        Text(
-          context.aonwL10n.replayProgress(
+        _buttons(context),
+        Slider(
+          key: const ValueKey('replay-seek'),
+          value: state.frame.position.toDouble(),
+          min: 0,
+          max: state.frame.entryCount.toDouble().clamp(1, double.infinity),
+          divisions: state.frame.entryCount > 0 ? state.frame.entryCount : null,
+          label: context.aonwL10n.replayProgress(
             state.frame.position,
             state.frame.entryCount,
           ),
-          key: const ValueKey('replay-progress'),
-        ),
-        const SizedBox(width: AonwSpacing.sm),
-        OutlinedButton(
-          key: const ValueKey('replay-speed'),
-          onPressed: state.isSeeking ? null : controller.cycleSpeed,
-          child: Text(
-            context.aonwL10n.replaySpeed(_speedLabel(state.speed.multiplier)),
-          ),
+          onChanged: state.isSeeking
+              ? null
+              : (value) => controller.seek(value.round()),
         ),
       ],
     ),
+  );
+
+  Widget _buttons(BuildContext context) => Wrap(
+    spacing: AonwSpacing.sm,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    alignment: WrapAlignment.center,
+    children: [
+      IconButton(
+        key: const ValueKey('close-replay'),
+        tooltip: context.aonwL10n.backToMenu,
+        onPressed: () => Navigator.of(context).pop(),
+        icon: const Icon(Icons.arrow_back),
+      ),
+      Text(context.aonwL10n.replayTitle),
+      IconButton.filled(
+        key: ValueKey(state.isPlaying ? 'pause-replay' : 'play-replay'),
+        tooltip: state.isPlaying
+            ? context.aonwL10n.pauseReplay
+            : context.aonwL10n.playReplay,
+        onPressed: state.isSeeking
+            ? null
+            : state.isPlaying
+            ? controller.pause
+            : controller.play,
+        icon: Icon(state.isPlaying ? Icons.pause : Icons.play_arrow),
+      ),
+      Text(
+        context.aonwL10n.replayProgress(
+          state.frame.position,
+          state.frame.entryCount,
+        ),
+        key: const ValueKey('replay-progress'),
+      ),
+      OutlinedButton(
+        key: const ValueKey('replay-speed'),
+        onPressed: state.isSeeking ? null : controller.cycleSpeed,
+        child: Text(
+          context.aonwL10n.replaySpeed(_speedLabel(state.speed.multiplier)),
+        ),
+      ),
+    ],
   );
 }
 

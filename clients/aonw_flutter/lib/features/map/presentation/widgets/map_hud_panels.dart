@@ -36,6 +36,7 @@ final class MapHudPanels extends StatefulWidget {
     required this.research,
     required this.diplomacy,
     required this.controller,
+    this.blocked = false,
     super.key,
   });
 
@@ -43,6 +44,7 @@ final class MapHudPanels extends StatefulWidget {
   final ResearchState research;
   final DiplomacyState diplomacy;
   final MapPresentationController controller;
+  final bool blocked;
 
   @override
   State<MapHudPanels> createState() => _MapHudPanelsState();
@@ -81,11 +83,15 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   }
 
   bool get _researchSelectionRequired =>
+      !widget.controller.readOnly &&
       widget.scene.player.pendingAction is PendingResearchSelectionView;
 
-  bool get _panelsLocked => _terminal || widget.research.commandPending;
+  bool get _panelsLocked =>
+      widget.blocked || _terminal || widget.research.commandPending;
 
-  bool get _terminal => widget.scene.player.turnView.outcome.isTerminal;
+  bool get _terminal =>
+      !widget.controller.readOnly &&
+      widget.scene.player.turnView.outcome.isTerminal;
 
   @override
   void didUpdateWidget(covariant MapHudPanels oldWidget) {
@@ -104,7 +110,10 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     if (_completedResearchCancellation(oldWidget, sceneChanged)) {
       context.playGameSound(GameSoundCue.uiPanelClose);
     }
-    if (sceneChanged || selectionBecameRequired || matchBecameTerminal) {
+    if (widget.blocked ||
+        sceneChanged ||
+        selectionBecameRequired ||
+        matchBecameTerminal) {
       _openPanel = null;
     }
   }
@@ -150,6 +159,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     return Stack(
       children: [
         ResearchOverlay(
+          readOnly: widget.controller.readOnly,
           state: widget.research,
           trailingReserve:
               playerRailWidth(
@@ -168,6 +178,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           onRetry: widget.controller.refreshResearch,
         ),
         DiplomacyOverlay(
+          readOnly: widget.controller.readOnly,
           actorPlayerId: widget.scene.player.actorPlayerId,
           view: widget.scene.player.diplomacy,
           state: widget.diplomacy,
@@ -177,6 +188,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           initialTargetPlayerId: _diplomacyTargetId,
         ),
         ObjectiveOverlay(
+          showOutcome: !widget.controller.readOnly,
           objectives: widget.scene.map.objectives,
           outcome: widget.scene.player.turnView.outcome,
           open: effectivePanel == _MapHudPanel.objectives,
@@ -214,7 +226,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   );
 
   _MapHudPanel? get _effectivePanel {
-    if (_terminal) return null;
+    if (widget.blocked || _terminal) return null;
     if (_openPanel == _MapHudPanel.players) return _openPanel;
     if (ResourcePopup.values.any((kind) => kind.name == _openPanel?.name)) {
       return _openPanel;

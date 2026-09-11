@@ -15,7 +15,7 @@ extension _MapScreenAutomation on _MapScreenState {
   }
 
   void _requestAutomaticTurn() {
-    if (_automaticDisposed || !mounted) return;
+    if (_automaticDisposed || !mounted || widget.controller.readOnly) return;
     _automaticDirty = true;
     if (_automaticQueued || _automaticOperation != null) return;
     _automaticQueued = true;
@@ -57,8 +57,12 @@ extension _MapScreenAutomation on _MapScreenState {
     }
   }
 
+  bool get _automaticInteractionAvailable =>
+      !widget.controller.readOnly && widget.interactionEnabled;
+
   bool get _automaticUiAvailable =>
       !_automaticDisposed &&
+      _automaticInteractionAvailable &&
       mounted &&
       _automaticSettingsReady &&
       _automaticFlow.enabled &&
