@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/assets/sprite_frame_id.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
+import '../../../design_system/widgets/aonw_sprite_thumbnail.dart';
 import '../../../l10n/l10n.dart';
 import '../../map/presentation/input/map_gamepad_navigation.dart';
 import '../../map/presentation/widgets/map_gamepad_region.dart';

@@ -40,6 +40,8 @@ final class _DiscoveryPanel extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(playerName),
+            const SizedBox(height: AonwSpacing.md),
+            Text(copy.description(technology)),
             if (option case final details? when details.unlocks.isNotEmpty) ...[
               const SizedBox(height: AonwSpacing.md),
               Text(
@@ -70,10 +72,8 @@ final class _DiscoveryPanel extends StatelessWidget {
     final l10n = context.aonwL10n;
     return Row(
       children: [
-        const Icon(
-          Icons.science_outlined,
-          size: 48,
-          color: AonwColorTokens.brand,
+        AonwSpriteThumbnail(
+          frame: SpriteFrameId('technology.${technology.name}'),
         ),
         const SizedBox(width: AonwSpacing.md),
         Expanded(

@@ -50,6 +50,9 @@ final class ResearchCopy {
 
   String technology(TechnologyIdView value) => _l10n.technologyName(value.name);
 
+  String description(TechnologyIdView value) =>
+      _l10n.technologyDescription(value.name);
+
   String availability(TechnologyAvailabilityView value) =>
       _l10n.researchAvailability(value.name);
 

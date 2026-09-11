@@ -1,4 +1,6 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/design_system/assets/sprite_frame_id.dart';
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
@@ -14,7 +16,13 @@ import 'package:flutter_test/flutter_test.dart';
 import '../discovery_fixture.dart';
 
 void main() {
+  final frames = SpriteFrames.createScope();
+  tearDownAll(frames.dispose);
   setUpAll(() async {
+    await frames.preload([
+      const SpriteFrameId("technology.mining"),
+      const SpriteFrameId("technology.agriculture"),
+    ]);
     await (FontLoader('Cinzel')..addFont(
           rootBundle.load('assets/fonts/Cinzel-VariableFont_wght.ttf'),
         ))
