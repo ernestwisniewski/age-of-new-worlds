@@ -1,14 +1,13 @@
+import 'package:aonw_flutter/features/audio/presentation/game_audio_actions.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/features/players/presentation/player_overlay.dart';
+import 'package:aonw_flutter/features/resources/presentation/resource_overlay.dart';
+import 'package:aonw_flutter/features/resources/presentation/resource_strip.dart';
 import 'package:flutter/material.dart';
 
-import '../../../audio/presentation/game_audio_actions.dart';
-import '../../../players/presentation/player_overlay.dart';
-import '../../../resources/presentation/resource_overlay.dart';
-import '../../../resources/presentation/resource_strip.dart';
-import '../../read_model/player_map_view.dart';
-
-/// Read-only HUD owner for viewers without gameplay panel coordination.
-final class ViewerHud extends StatefulWidget {
-  const ViewerHud({
+/// Isolates resource and player widgets for their focused interaction goldens.
+final class ResourceHudTestHost extends StatefulWidget {
+  const ResourceHudTestHost({
     required this.player,
     required this.sessionIdentity,
     this.blocked = false,
@@ -19,15 +18,15 @@ final class ViewerHud extends StatefulWidget {
   final bool blocked;
 
   @override
-  State<ViewerHud> createState() => _ViewerHudState();
+  State<ResourceHudTestHost> createState() => _ResourceHudTestHostState();
 }
 
-final class _ViewerHudState extends State<ViewerHud> {
+final class _ResourceHudTestHostState extends State<ResourceHudTestHost> {
   ResourcePopup? _open;
   String? _playerId;
 
   @override
-  void didUpdateWidget(ViewerHud oldWidget) {
+  void didUpdateWidget(ResourceHudTestHost oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.blocked ||
         widget.sessionIdentity != oldWidget.sessionIdentity ||

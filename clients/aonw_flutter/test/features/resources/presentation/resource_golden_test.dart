@@ -1,10 +1,10 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
-import 'package:aonw_flutter/features/map/presentation/widgets/viewer_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
+import '../../../support/resource_hud_test_host.dart';
 import 'resource_test_fixture.dart';
 
 void main() {
@@ -40,7 +40,7 @@ void main() {
           home: RepaintBoundary(
             key: const ValueKey('resource-golden'),
             child: Scaffold(
-              body: ViewerHud(
+              body: ResourceHudTestHost(
                 player: resourcePlayerFixture(),
                 sessionIdentity: 0,
               ),

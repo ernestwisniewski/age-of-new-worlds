@@ -1,7 +1,6 @@
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
-import 'package:aonw_flutter/features/map/presentation/widgets/viewer_hud.dart';
 import 'package:aonw_flutter/features/resources/presentation/resource_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
+import '../../../support/resource_hud_test_host.dart';
 
 void main() {
   testWidgets('every resource opens a read-only popup and Escape closes it', (
@@ -17,7 +17,10 @@ void main() {
     await tester.pumpWidget(
       LocalizedTestApp(
         home: Scaffold(
-          body: ViewerHud(player: testMapScene().player, sessionIdentity: 0),
+          body: ResourceHudTestHost(
+            player: testMapScene().player,
+            sessionIdentity: 0,
+          ),
         ),
       ),
     );
@@ -53,7 +56,10 @@ void main() {
         home: MapGamepadNavigationScope(
           navigation: navigation,
           child: Scaffold(
-            body: ViewerHud(player: testMapScene().player, sessionIdentity: 0),
+            body: ResourceHudTestHost(
+              player: testMapScene().player,
+              sessionIdentity: 0,
+            ),
           ),
         ),
       ),
@@ -74,7 +80,7 @@ void main() {
   ) async {
     Widget screen(int identity, bool blocked) => LocalizedTestApp(
       home: Scaffold(
-        body: ViewerHud(
+        body: ResourceHudTestHost(
           player: testMapScene().player,
           sessionIdentity: identity,
           blocked: blocked,
@@ -110,7 +116,7 @@ void main() {
               textScaler: TextScaler.linear(1.3),
             ),
             child: Scaffold(
-              body: ViewerHud(
+              body: ResourceHudTestHost(
                 player: testMapScene().player,
                 sessionIdentity: 0,
               ),

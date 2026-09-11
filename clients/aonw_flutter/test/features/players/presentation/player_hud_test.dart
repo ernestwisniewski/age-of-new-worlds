@@ -1,7 +1,6 @@
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
-import 'package:aonw_flutter/features/map/presentation/widgets/viewer_hud.dart';
 import 'package:aonw_flutter/features/players/presentation/player_status.dart';
 import 'package:aonw_flutter/l10n/generated/aonw_localizations_en.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
+import '../../../support/resource_hud_test_host.dart';
 import 'player_test_fixture.dart';
 
 void main() {
@@ -34,7 +34,10 @@ void main() {
         LocalizedTestApp(
           locale: const Locale('en'),
           home: Scaffold(
-            body: ViewerHud(player: playersFixture(), sessionIdentity: 0),
+            body: ResourceHudTestHost(
+              player: playersFixture(),
+              sessionIdentity: 0,
+            ),
           ),
         ),
       );
@@ -67,7 +70,7 @@ void main() {
   ) async {
     Widget screen(String actor, bool blocked) => LocalizedTestApp(
       home: Scaffold(
-        body: ViewerHud(
+        body: ResourceHudTestHost(
           player: playersFixture(actor: actor),
           sessionIdentity: 0,
           blocked: blocked,
@@ -97,7 +100,10 @@ void main() {
         home: MapGamepadNavigationScope(
           navigation: navigation,
           child: Scaffold(
-            body: ViewerHud(player: playersFixture(), sessionIdentity: 0),
+            body: ResourceHudTestHost(
+              player: playersFixture(),
+              sessionIdentity: 0,
+            ),
           ),
         ),
       ),
@@ -133,7 +139,10 @@ void main() {
               textScaler: TextScaler.linear(1.3),
             ),
             child: Scaffold(
-              body: ViewerHud(player: playersFixture(), sessionIdentity: 0),
+              body: ResourceHudTestHost(
+                player: playersFixture(),
+                sessionIdentity: 0,
+              ),
             ),
           ),
         ),
