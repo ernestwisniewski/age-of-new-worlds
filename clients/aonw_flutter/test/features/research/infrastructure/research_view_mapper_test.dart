@@ -7,6 +7,60 @@ import '../../../support/map_test_fixture.dart';
 
 void main() {
   const mapper = ResearchViewMapper();
+  test(
+    'recommendations retain engine order and reject unavailable choices',
+    () {
+      final scene = testMapScene(cities: [testCityView()]);
+      AonwResearchRecommendation entry(AonwTechnologyId technology) =>
+          AonwResearchRecommendation(
+            technology: technology,
+            score: 100,
+            turnsRemaining: 2,
+            reasons: [
+              AonwResearchRecommendationReason.boost,
+              AonwResearchRecommendationReason.nearCompletion,
+            ],
+          );
+      ResearchOptionsView map(List<AonwResearchRecommendation> entries) =>
+          mapper.options(
+            _projection(recommendations: entries),
+            map: scene.map,
+            player: scene.player,
+            expectedRevision: 0,
+          );
+      final result = map([entry(AonwTechnologyId.agriculture)]);
+      expect(
+        result.recommendations.single.technology,
+        TechnologyIdView.agriculture,
+      );
+      expect(result.recommendations.single.score, 100);
+      expect(result.recommendations.single.turnsRemaining, 2);
+      expect(result.recommendations.single.reasons, [
+        ResearchRecommendationReasonView.boost,
+        ResearchRecommendationReasonView.nearCompletion,
+      ]);
+      expect(() => result.recommendations.clear(), throwsUnsupportedError);
+      expect(
+        () => result.recommendations.single.reasons.clear(),
+        throwsUnsupportedError,
+      );
+      expect(
+        () => map([entry(AonwTechnologyId.mining)]),
+        throwsFormatException,
+      );
+      expect(
+        () => map([
+          entry(AonwTechnologyId.agriculture),
+          entry(AonwTechnologyId.agriculture),
+        ]),
+        throwsFormatException,
+      );
+      expect(
+        () => map(List.filled(4, entry(AonwTechnologyId.agriculture))),
+        throwsFormatException,
+      );
+    },
+  );
 
   test('maps the complete ordered research projection exactly', () {
     final scene = testMapScene(cities: [testCityView()]);
@@ -141,6 +195,7 @@ void main() {
 AonwResearchOptionsResult _projection({
   List<AonwResearchOption>? options,
   AonwScienceYieldBreakdown? scienceYield,
+  List<AonwResearchRecommendation> recommendations = const [],
 }) => AonwResearchOptionsResult(
   stamp: _stamp(),
   playerId: 'preview-player',
@@ -160,6 +215,7 @@ AonwResearchOptionsResult _projection({
         ],
       ),
   options: options ?? _options(),
+  recommendations: recommendations,
 );
 
 List<AonwResearchOption> _options() => [

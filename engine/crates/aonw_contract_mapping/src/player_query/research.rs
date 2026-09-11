@@ -11,7 +11,9 @@ use crate::{
     encode_resource, encode_technology, encode_unit_kind,
 };
 
-pub(super) fn research_options(
+/// Maps the same recipient research result for local and server transports.
+#[must_use]
+pub fn encode_research_options(
     stamp: SessionStamp,
     value: &ResearchOptions,
 ) -> ClientQueryResultDto {
@@ -39,6 +41,7 @@ pub(super) fn research_options(
                 })
                 .collect(),
         },
+        recommendations: encode_recommendations(value),
         options: value
             .options()
             .iter()
@@ -106,5 +109,34 @@ const fn unlock(value: TechnologyUnlock) -> TechnologyUnlockDto {
         TechnologyUnlock::Wonder(wonder) => TechnologyUnlockDto::Wonder {
             wonder_type: encode_city_wonder(wonder.domain()),
         },
+    }
+}
+
+fn encode_recommendations(
+    value: &ResearchOptions,
+) -> Vec<aonw_contracts::client::ResearchRecommendationDto> {
+    value
+        .recommendations()
+        .iter()
+        .map(|entry| aonw_contracts::client::ResearchRecommendationDto {
+            technology_id: encode_technology(entry.technology()),
+            score: entry.score(),
+            turns_remaining: entry.turns_remaining(),
+            reasons: entry.reasons().map(recommendation_reason).collect(),
+        })
+        .collect()
+}
+
+const fn recommendation_reason(
+    value: aonw_engine::ResearchRecommendationReason,
+) -> aonw_contracts::client::ResearchRecommendationReasonDto {
+    use aonw_contracts::client::ResearchRecommendationReasonDto as Wire;
+    use aonw_engine::ResearchRecommendationReason as Core;
+    match value {
+        Core::Boost => Wire::Boost,
+        Core::WorkerYields => Wire::WorkerYields,
+        Core::Unlocks => Wire::Unlocks,
+        Core::Effects => Wire::Effects,
+        Core::NearCompletion => Wire::NearCompletion,
     }
 }

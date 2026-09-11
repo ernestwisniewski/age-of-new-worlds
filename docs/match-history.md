@@ -59,7 +59,7 @@ Replay host output contains a canonical continuation for trusted server use and
 one recipient-safe snapshot with the last command's filtered events, evidence and
 patch. It must never be forwarded wholesale to a client. An empty batch returns
 the checkpoint projection with no command. Host API 3 rejects older native
-libraries before the new replay symbol is used; Client API remains 24. The C ABI
+libraries before the new replay symbol is used; the client protocol is now version 25. The C ABI
 uses the existing bounded buffers, immutable world borrow and owned response
 lifetime, with null-world and Dart artifact round-trip coverage. No new file is
 allowed to contain unsafe code.

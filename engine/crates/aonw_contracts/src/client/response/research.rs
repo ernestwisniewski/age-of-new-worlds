@@ -133,3 +133,30 @@ pub struct ResearchOptionDto {
     /// Capabilities granted on completion.
     pub unlocks: Vec<TechnologyUnlockDto>,
 }
+
+/// Positive contribution to an authoritative research recommendation.
+#[allow(missing_docs)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ResearchRecommendationReasonDto {
+    Boost,
+    WorkerYields,
+    Unlocks,
+    Effects,
+    NearCompletion,
+}
+
+/// One of at most three available research choices, ordered by the engine.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ResearchRecommendationDto {
+    /// Available technology identity.
+    pub technology_id: TechnologyIdDto,
+    /// Deterministic recommendation score.
+    pub score: i64,
+    /// Current-rate estimate, absent without positive science and remaining cost.
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub turns_remaining: Option<i64>,
+    /// Positive contributions in stable presentation order.
+    pub reasons: Vec<ResearchRecommendationReasonDto>,
+}

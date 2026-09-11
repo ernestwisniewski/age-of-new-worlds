@@ -4,6 +4,8 @@ import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../read_model/research_view.dart';
 
+part 'research_recommendation_mapper.dart';
+
 final class ResearchViewMapper {
   const ResearchViewMapper();
 
@@ -56,6 +58,7 @@ final class ResearchViewMapper {
         ],
       ),
       options: options,
+      recommendations: _recommendations(wire),
     );
   }
 

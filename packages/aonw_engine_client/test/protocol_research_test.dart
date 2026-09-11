@@ -82,6 +82,19 @@ void main() {
                   {'cityId': 'c1', 'amount': 5, 'kind': 'cityScience'},
                 ],
               },
+              'recommendations': [
+                {
+                  'technologyId': 'agriculture',
+                  'score': 180,
+                  'turnsRemaining': 2,
+                  'reasons': [
+                    'boost',
+                    'workerYields',
+                    'unlocks',
+                    'nearCompletion',
+                  ],
+                },
+              ],
               'options': [
                 {
                   'technologyId': 'agriculture',
@@ -103,6 +116,13 @@ void main() {
             })
             as AonwResearchOptionsResult;
 
+    expect(
+      result.recommendations.single.technology,
+      AonwTechnologyId.agriculture,
+    );
+    expect(result.recommendations.single.turnsRemaining, 2);
+    expect(result.recommendations.single.reasons, hasLength(4));
+    expect(() => result.recommendations.clear(), throwsUnsupportedError);
     expect(result.playerId, 'p1');
     expect(result.scienceOverflow, 3);
     expect(result.scienceYield.byCityId, {'c1': 5});

@@ -11,7 +11,6 @@ use crate::CommandResult;
 mod capability;
 mod map_view;
 mod query;
-mod research;
 mod simple;
 #[cfg(test)]
 mod tests;

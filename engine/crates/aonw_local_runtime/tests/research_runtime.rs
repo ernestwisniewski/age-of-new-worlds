@@ -54,6 +54,7 @@ fn research_protocol_is_complete_and_replayable() {
                 player_id,
                 active_technology_id,
                 options,
+                recommendations,
                 ..
             },
     } = queried
@@ -62,11 +63,7 @@ fn research_protocol_is_complete_and_replayable() {
     };
     assert_eq!(player_id, "player-1");
     assert_eq!(active_technology_id, None);
-    assert_eq!(options.len(), 54);
-    assert!(options.iter().any(|option| {
-        option.technology_id == TechnologyIdDto::Agriculture
-            && option.availability == TechnologyAvailabilityDto::Available
-    }));
+    assert_research_choices(&options, &recommendations);
 
     let selected = dispatch(
         &mut runtime,
@@ -222,4 +219,22 @@ fn map() -> MapDefinition {
         Vec::new(),
     )
     .expect("map")
+}
+
+fn assert_research_choices(
+    options: &[aonw_contracts::client::ResearchOptionDto],
+    recommendations: &[aonw_contracts::client::ResearchRecommendationDto],
+) {
+    assert_eq!(options.len(), 54);
+    assert_eq!(recommendations.len(), 3);
+    for recommendation in recommendations {
+        assert!(options.iter().any(
+            |option| option.technology_id == recommendation.technology_id
+                && option.availability == TechnologyAvailabilityDto::Available
+        ));
+    }
+    assert!(options.iter().any(|option| {
+        option.technology_id == TechnologyIdDto::Agriculture
+            && option.availability == TechnologyAvailabilityDto::Available
+    }));
 }

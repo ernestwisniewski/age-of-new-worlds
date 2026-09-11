@@ -144,7 +144,9 @@ final class ResearchOptionsView {
     required this.scienceOverflow,
     required this.scienceYield,
     required List<ResearchOptionView> options,
-  }) : options = List.unmodifiable(options);
+    List<ResearchRecommendationView> recommendations = const [],
+  }) : recommendations = List.unmodifiable(recommendations),
+       options = List.unmodifiable(options);
 
   final SessionStampView stamp;
   final String playerId;
@@ -152,6 +154,7 @@ final class ResearchOptionsView {
   final int scienceOverflow;
   final ScienceYieldBreakdownView scienceYield;
   final List<ResearchOptionView> options;
+  final List<ResearchRecommendationView> recommendations;
 }
 
 final class SelectTechnologyActionView {
@@ -165,4 +168,25 @@ enum ResearchRejectionCodeView {
   technologyPlayerNotControlled,
   technologyNotAvailable,
   stateRevisionOverflow,
+}
+
+enum ResearchRecommendationReasonView {
+  boost,
+  workerYields,
+  unlocks,
+  effects,
+  nearCompletion,
+}
+
+final class ResearchRecommendationView {
+  ResearchRecommendationView({
+    required this.technology,
+    required this.score,
+    required this.turnsRemaining,
+    required List<ResearchRecommendationReasonView> reasons,
+  }) : reasons = List.unmodifiable(reasons);
+  final TechnologyIdView technology;
+  final int score;
+  final int? turnsRemaining;
+  final List<ResearchRecommendationReasonView> reasons;
 }

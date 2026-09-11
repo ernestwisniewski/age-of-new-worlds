@@ -158,6 +158,8 @@ pub enum ClientQueryResultDto {
         science_yield: ScienceYieldBreakdownDto,
         /// Complete technology catalog in canonical order.
         options: Vec<ResearchOptionDto>,
+        /// At most three available choices in authoritative priority order.
+        recommendations: Vec<super::ResearchRecommendationDto>,
     },
     /// Legal initial territory choices for one founder.
     CityFoundingOptions {

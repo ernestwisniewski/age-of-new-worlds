@@ -180,7 +180,9 @@ final class AonwResearchOptionsResult extends AonwQueryResult {
     required this.scienceOverflow,
     required this.scienceYield,
     required List<AonwResearchOption> options,
-  }) : options = List.unmodifiable(options);
+    List<AonwResearchRecommendation> recommendations = const [],
+  }) : recommendations = List.unmodifiable(recommendations),
+       options = List.unmodifiable(options);
 
   factory AonwResearchOptionsResult.fromJson(Map<String, Object?> value) {
     requireKeys(value, const {
@@ -191,8 +193,10 @@ final class AonwResearchOptionsResult extends AonwQueryResult {
       'scienceOverflow',
       'scienceYield',
       'options',
+      'recommendations',
     }, 'research options');
     return AonwResearchOptionsResult(
+      recommendations: _researchRecommendations(value['recommendations']),
       stamp: AonwSessionStamp.fromJson(value['stamp']),
       playerId: readString(value['playerId'], 'research player id'),
       activeTechnology: value['activeTechnologyId'] == null
@@ -214,4 +218,5 @@ final class AonwResearchOptionsResult extends AonwQueryResult {
   final int scienceOverflow;
   final AonwScienceYieldBreakdown scienceYield;
   final List<AonwResearchOption> options;
+  final List<AonwResearchRecommendation> recommendations;
 }

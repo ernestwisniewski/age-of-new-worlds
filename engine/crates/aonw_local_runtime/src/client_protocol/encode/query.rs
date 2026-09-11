@@ -21,7 +21,7 @@ use aonw_engine::{
 use crate::{RuntimeQueryResult, SessionStamp};
 
 use super::map_view::coordinate;
-use super::research::research_options;
+use aonw_contract_mapping::encode_research_options;
 
 pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
     match value {
@@ -37,7 +37,7 @@ pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
         RuntimeQueryResult::ResearchOptions {
             stamp: value_stamp,
             options,
-        } => research_options(*value_stamp, options),
+        } => encode_research_options(*value_stamp, options),
         RuntimeQueryResult::CityFoundingOptions {
             stamp: value_stamp,
             options,

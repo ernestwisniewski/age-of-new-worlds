@@ -34,7 +34,8 @@ pub use response::{
     PlayerParticipantViewDto, PlayerResearchViewDto, PlayerResourceTradeAgreementViewDto,
     PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerVictoryViewDto, PlayerViewPatchDto,
     PlayerViewSnapshotDto, ProductionOptionDto, ReachableTileViewDto, ResearchOptionDto,
-    RoadViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
+    ResearchRecommendationDto, ResearchRecommendationReasonDto, RoadViewDto,
+    ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
     StabilityBreakdownDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
     TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto, UnitMovementExecutionDto,
     UnitProductionOptionDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
@@ -43,7 +44,7 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 24;
+pub const CLIENT_API_VERSION: u16 = 25;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

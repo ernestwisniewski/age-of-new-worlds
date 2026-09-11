@@ -4,6 +4,10 @@ The Rust research query ranks only technologies whose current availability is
 `Available`. It returns at most three choices, each with its technology identity,
 score, current-rate turn estimate and ordered positive score contributions.
 It does not select research, change progress, spend science or advance revision.
+The top-three result uses fixed storage and a five-bit reason mask, avoiding
+query-time candidate and reason-list allocations. Positive turn estimates fit
+the bounded unsigned research cost; compact storage also avoids enlarging
+unrelated entries in the runtime query cache.
 
 The presentation policy comes from reference revision
 `c6473641e57eb4337218234669c361db01c45d6e`,
@@ -44,7 +48,9 @@ Rust definitions, current costs/boosts and the recipient's science projection.
 The separate query test changes another participant's private research and
 verifies the entire own query result is unchanged, as is the queried state.
 
-Transport and Flutter recommendation composition are the next stage. The
+Client API 25 transports recommendations through one shared local/server encoder.
+The Flutter read model retains the supplied values; recommendation panel composition
+is the next stage. The
 canonical state schema and engine behavior fingerprint are unchanged by this
 read-only policy.
 

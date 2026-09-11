@@ -20,7 +20,7 @@ use crate::{
     encode_resource, encode_troop, encode_unit_kind, encode_worker_automation_option,
 };
 
-use super::research::research_options;
+use super::research::encode_research_options;
 
 pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQueryResultDto {
     match value {
@@ -29,7 +29,7 @@ pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQu
             super::encode_pending_turn_actions(stamp, actions)
         }
         QueryResult::HexInspection(inspection) => super::encode_hex_inspection(stamp, inspection),
-        QueryResult::ResearchOptions(options) => research_options(stamp, options),
+        QueryResult::ResearchOptions(options) => encode_research_options(stamp, options),
         QueryResult::CityFoundingOptions(options) => city_founding_options(stamp, options),
         QueryResult::CityWorkedHexOptions(options) => city_worked_hex_options(stamp, options),
         QueryResult::CityExpansionOptions(options) => city_expansion_options(stamp, options),

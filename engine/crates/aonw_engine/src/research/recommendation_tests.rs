@@ -24,7 +24,7 @@ fn weights_worker_boost_and_completion_without_mutating_option_order() {
     assert_eq!(result[0].score(), 143); // boost 80 + worker 48 + three-turn bonus 15
     assert_eq!(result[0].turns_remaining(), Some(3));
     assert_eq!(
-        result[0].reasons(),
+        result[0].reasons().collect::<Vec<_>>(),
         &[
             ResearchRecommendationReason::Boost,
             ResearchRecommendationReason::WorkerYields,

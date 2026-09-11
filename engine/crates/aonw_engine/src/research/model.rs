@@ -2,6 +2,7 @@ use aonw_content::TechnologyUnlock;
 use aonw_domain::{PlayerId, TechnologyId};
 
 use super::ResearchRecommendation;
+use super::recommendation::ResearchRecommendations;
 use crate::{ScienceYieldBreakdown, TechnologyAvailability};
 
 /// Revision-bound selection of one active research target.
@@ -153,7 +154,7 @@ pub struct ResearchOptions {
     science_overflow: i64,
     science_yield: ScienceYieldBreakdown,
     options: Box<[ResearchOption]>,
-    recommendations: Box<[ResearchRecommendation]>,
+    recommendations: ResearchRecommendations,
 }
 
 impl ResearchOptions {
@@ -163,7 +164,7 @@ impl ResearchOptions {
         science_overflow: i64,
         science_yield: ScienceYieldBreakdown,
         options: impl Into<Box<[ResearchOption]>>,
-        recommendations: Box<[ResearchRecommendation]>,
+        recommendations: ResearchRecommendations,
     ) -> Self {
         Self {
             player_id,
@@ -202,7 +203,7 @@ impl ResearchOptions {
     }
     /// Returns at most three available technologies in authoritative priority order.
     #[must_use]
-    pub const fn recommendations(&self) -> &[ResearchRecommendation] {
+    pub fn recommendations(&self) -> &[ResearchRecommendation] {
         &self.recommendations
     }
 }

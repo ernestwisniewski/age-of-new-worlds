@@ -50,7 +50,8 @@ pub use query::{
 };
 pub use rejection::ClientCommandRejectionCodeDto;
 pub use research::{
-    PlayerResearchViewDto, ResearchOptionDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
+    PlayerResearchViewDto, ResearchOptionDto, ResearchRecommendationDto,
+    ResearchRecommendationReasonDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
     ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto,
 };
 pub use session::{ClientErrorDto, ClientReplayVerificationDto};

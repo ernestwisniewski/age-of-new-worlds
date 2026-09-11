@@ -18,6 +18,17 @@ void main() {
         expectedRevision: scene.player.stamp.revision,
       );
       expect(options.playerId, scene.player.actorPlayerId);
+      expect(options.recommendations, hasLength(3));
+      for (final recommendation in options.recommendations) {
+        expect(
+          options.options
+              .singleWhere(
+                (option) => option.technology == recommendation.technology,
+              )
+              .availability,
+          TechnologyAvailabilityView.available,
+        );
+      }
       expect(options.options, hasLength(TechnologyIdView.values.length));
       expect(
         options.options.map((option) => option.technology),

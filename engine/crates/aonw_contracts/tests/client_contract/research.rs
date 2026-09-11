@@ -78,6 +78,7 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     kind: ScienceYieldSourceKindDto::CityScience,
                 }],
             },
+            recommendations: Vec::new(),
             options: vec![ResearchOptionDto {
                 technology_id: TechnologyIdDto::Agriculture,
                 availability: TechnologyAvailabilityDto::Available,
@@ -89,5 +90,31 @@ pub(super) fn response() -> ClientResponseBodyDto {
                 unlocks: Vec::new(),
             }],
         },
+    }
+}
+
+#[test]
+fn recommendations_require_explicit_nullable_estimates_and_closed_fields() {
+    use aonw_contracts::client::ResearchRecommendationDto;
+    let source = serde_json::json!({"technologyId": "agriculture", "score": 100,
+        "turnsRemaining": null, "reasons": ["boost", "workerYields"]});
+    let value: ResearchRecommendationDto =
+        serde_json::from_value(source.clone()).expect("recommendation");
+    assert_eq!(serde_json::to_value(value).expect("wire"), source);
+    for field in ["technologyId", "score", "turnsRemaining", "reasons"] {
+        let mut missing = source.clone();
+        missing.as_object_mut().expect("object").remove(field);
+        assert!(
+            serde_json::from_value::<ResearchRecommendationDto>(missing).is_err(),
+            "missing {field}"
+        );
+    }
+    for (field, invalid) in [
+        ("extra", serde_json::json!(true)),
+        ("reasons", serde_json::json!(["future"])),
+    ] {
+        let mut changed = source.clone();
+        changed[field] = invalid;
+        assert!(serde_json::from_value::<ResearchRecommendationDto>(changed).is_err());
     }
 }

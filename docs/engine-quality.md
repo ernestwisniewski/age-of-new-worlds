@@ -38,6 +38,24 @@ replay preserve those commands and their outcomes; the runtime profile is not
 canonical match state. Tests check actual search work, deterministic decisions,
 profile changes between requests, and complete games across save and replay.
 
+## Research recommendations
+
+Client API 25 requires `recommendations` in each research-options result. The
+engine returns at most three available technologies with ordered reasons, score
+and an explicit nullable current-rate turn estimate. Flutter validates their
+identity, availability, bounds and order, and retains the supplied values.
+Local and server transports use one shared encoder. The ranking does not select
+research or alter canonical state, save/replay format or behavior fingerprint.
+
+The engine keeps three ranked entries in fixed storage with a five-bit reason
+mask and a bounded turn estimate. This avoids candidate-list allocations and
+preserves the existing query-cache memory budget. All 210 performance workloads
+remain within unchanged work, allocation and payload ceilings. Only the 22
+client JSON response signatures change with the API 24 → 25 identity field.
+[The policy and independent reference cases](parity/research-recommendations.md)
+document scoring inputs and privacy checks. Older client protocol versions are
+rejected through the existing native/session identity check.
+
 ## City planning markings
 
 Client API 24 adds the revision-bound `cityPlanning` query to the shared local

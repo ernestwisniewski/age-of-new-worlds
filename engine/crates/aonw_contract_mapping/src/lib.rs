@@ -13,7 +13,10 @@ mod map_values;
 mod player_command;
 mod player_query;
 pub use map_values::{encode_map_resource, encode_map_terrain};
-pub use player_query::{encode_city_planning, encode_hex_inspection, encode_pending_turn_actions};
+pub use player_query::{
+    encode_city_planning, encode_hex_inspection, encode_pending_turn_actions,
+    encode_research_options,
+};
 
 pub use client_projection::{
     encode_client_event, encode_client_evidence, encode_client_stamp, encode_combat_preview,
