@@ -5,6 +5,8 @@ import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart'
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'performance_environment.dart';
+
 void recordGameplayPerformance(
   AonwFlameGame game,
   Map<String, dynamic> frameTimes, {
@@ -17,7 +19,7 @@ void recordGameplayPerformance(
     'environment': {
       'operatingSystem': Platform.operatingSystemVersion,
       'dart': Platform.version,
-      'buildMode': 'flutter-test-device-debug',
+      'buildMode': performanceBuildMode,
       'flame': '1.38.0',
     },
     'workload': {
@@ -45,6 +47,7 @@ void recordGameplayPerformance(
     'metrics': {
       'startupMicros': startupMicros,
       'residentMemoryDeltaBytes': rssDelta,
+      'memoryBaseline': 'localized app shell before constructing the scene',
       'idleEffectUpdates':
           game.world.effectHost.debugActiveUpdateCount - idleUpdates,
       'frameTimes': frameTimes,
@@ -64,6 +67,44 @@ void recordGameplayPerformance(
 }
 
 /// Prevents a device run from measuring asset-loading fallbacks as the scene.
+Future<void> waitForPerformanceSprites(
+  AonwFlameGame game,
+  MapRenderSnapshot snapshot,
+) async {
+  final watch = Stopwatch()..start();
+  while (!_spritesReady(game, snapshot)) {
+    if (watch.elapsed > const Duration(seconds: 30)) {
+      throw TestFailure(
+        'Production scene sprites did not load within 30 seconds',
+      );
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 16));
+    await game.ready();
+  }
+}
+
+bool _spritesReady(AonwFlameGame game, MapRenderSnapshot snapshot) =>
+    snapshot.player.units.every(
+      (unit) =>
+          game.world.unitLayer
+              .debugComponentForUnit(unit.id)
+              ?.debugSpriteFrame !=
+          null,
+    ) &&
+    snapshot.player.cities.every((city) {
+      final component = game.world.cityLayer.debugComponentForCity(city.id);
+      return component != null &&
+          (!component.debugSpriteVisible || component.debugSpriteFrame != null);
+    }) &&
+    snapshot.player.fieldImprovements.every((value) {
+      final component = game.world.workerInfrastructureLayer.debugImprovementAt(
+        value.coordinate,
+      );
+      return component != null &&
+          (!component.debugSpriteVisible || component.debugSpriteFrame != null);
+    });
+
+/// Checks decoded frames after the bounded native startup wait.
 void expectPerformanceSpritesReady(
   AonwFlameGame game,
   MapRenderSnapshot snapshot,
@@ -75,12 +116,22 @@ void expectPerformanceSpritesReady(
     );
   }
   for (final city in snapshot.player.cities) {
+    if (!game.world.cityLayer
+        .debugComponentForCity(city.id)!
+        .debugSpriteVisible) {
+      continue;
+    }
     expect(
       game.world.cityLayer.debugComponentForCity(city.id)!.debugSpriteFrame,
       isNotNull,
     );
   }
   for (final improvement in snapshot.player.fieldImprovements) {
+    if (!game.world.workerInfrastructureLayer
+        .debugImprovementAt(improvement.coordinate)!
+        .debugSpriteVisible) {
+      continue;
+    }
     expect(
       game.world.workerInfrastructureLayer
           .debugImprovementAt(improvement.coordinate)!

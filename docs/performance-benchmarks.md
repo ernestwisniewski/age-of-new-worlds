@@ -86,18 +86,17 @@ device, workload, build mode, warm-up, percentiles, and resource budgets. Engine
 runtime latency must not be inferred from a frame golden, and renderer timing
 must not be inferred from a headless Rust benchmark.
 
-All Flame frame windows use engine timestamps after 12 warm-up frames and
-collect 60 consecutive frames. This avoids VM timeline allocation in the RSS
+All Flame frame windows use engine timestamps after 12 warm-up pumps and
+60 measured pumps (at least 60 engine frames; high-refresh devices can emit more). This avoids VM timeline allocation in the RSS
 measurement. The device test verifies loaded sprite frames before sampling.
 
 The Flame device test also saturates the four combat slots with eight damage
-labels and 136 city-hit particles on the 40×30 scene. It measures 60 consecutive
-engine frame timestamps after 12 warm-up frames. Effects run at 0.1 playback
+labels and 136 city-hit particles on the 40×30 scene. It collects engine frame timestamps over 60 measured pumps after 12 warm-up
+pumps. Effects run at 0.1 playback
 speed to keep all slots occupied during live device pumps; the measured window
 asserts the same occupancy at both ends. The combat record uses the same frame
 and 192 MiB total RSS limits as the static scene. It uses synthetic accepted
-combat evidence and excludes fog and HUD; it does not replace the full-scene
-parity gate.
+combat evidence and excludes fog and HUD; the full-scene gate below measures these effects with fog and HUD.
 
 A third window renders three clouds with 33 puffs over the discovered clip.
 Each cloud caches its soft shape in one image; movement only changes position,
@@ -107,3 +106,43 @@ hexes in the cloud clip but excludes fog shading and HUD. Coverage of newly
 visible atlas groups during wider camera travel remains a separate parity QA
 requirement. Both transient workloads verify that Flame stops updating after
 effects are disabled.
+
+## Full map and HUD device gate
+
+```sh
+make flutter-client-full-hud-performance-check
+```
+
+This profile-mode macOS integration test mounts the production `MapScreen`,
+including its HUD, input routing and overlays. The fixed presentation fixture
+contains 40×30 tiles, 120 units, 40 cities, 120 improvements, 120 roads and
+visible/discovered/hidden fog regions. All unit frames and city/improvement frames inside the camera prefetch margin must finish loading
+before sampling. Separate windows cover the complete static map, 72 cursor
+changes and four simultaneous combats with eight damage labels and 136 particles.
+Hover must preserve scene writes, tile cache writes and unit component identity;
+unmount must release every shared atlas.
+
+The [reviewed record](../clients/aonw_flutter/performance/full_hud_baseline.json)
+reports p99 build/raster times of 0.760/3.161 ms for the map, 0.789/3.319 ms for
+hover and 0.746/4.047 ms for combat, with no missed budgets. The scene RSS delta
+was 140,902,400 bytes, within the unchanged 192 MiB limit. The memory baseline
+is a localized app shell before constructing the scene, matching entry from
+the running menu. Idle unit animations are disabled for the idle assertion; the combat
+window explicitly runs its effects.
+
+Profile mode avoids charging JIT compilation to the scene's memory delta.
+Exploratory debug runs crossed the RSS limit, including a cold-shell run at
+215,973,888 bytes and a warmed hover run at 207,552,512 bytes; those are not
+reported as passing profile evidence. Build modes and memory baselines are
+recorded separately from the existing renderer-only debug records.
+
+This is a rendering workload using fixed recipient views, not a replacement
+for native-engine gameplay or multiplayer correctness tests. The release gate
+includes this target. Broader camera travel and all-screen/device visual parity
+remain separate QA work.
+
+The renderer-only profile run after camera-based sprite ownership passed the
+static, idle, worker, combat-animation, route and combat windows. The era
+transition window failed its unchanged raster limit twice (p99 57.888 ms and
+46.745 ms, including one run with the Rust gate paused). This remains an open
+release-gate failure; the passing full-HUD record does not supersede it.

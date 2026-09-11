@@ -36,7 +36,7 @@ COMPOSE_PROFILE = $(COMPOSE) $(COMPOSE_PROFILE_FILES) --profile "$(PROFILE)"
 	flutter-client-dependencies flutter-client-format-check \
 	flutter-client-analyze flutter-client-test flutter-client-map-contract-test \
 	flutter-client-check flutter-client-coverage-report \
-	flutter-client-device-test flutter-client-performance-check \
+	flutter-client-device-test flutter-client-performance-check flutter-client-full-hud-performance-check \
 	flutter-client-run flutter-client-release-build flutter-client-release-check \
 	client-dependency-check client-boundary-test dart-architecture-check \
 	dart-architecture-snapshot architecture-check \
@@ -148,7 +148,10 @@ flutter-client-device-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/turn_automation_native_test.dart
 
 flutter-client-performance-check: flutter-client-dependencies
-	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/flame_gameplay_performance_test.dart
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) drive --profile --no-pub --target integration_test/flame_gameplay_performance_test.dart --driver integration_test/support/performance_driver.dart -d $(FLUTTER_CLIENT_DEVICE)
+
+flutter-client-full-hud-performance-check: flutter-client-dependencies
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) drive --profile --no-pub --target integration_test/full_hud_performance_test.dart --driver integration_test/support/performance_driver.dart -d $(FLUTTER_CLIENT_DEVICE)
 
 flutter-client-run: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) run --no-pub -d $(FLUTTER_CLIENT_DEVICE) --dart-define=AONW_API_BASE_URL=$(LOCAL_API_BASE_URL)
@@ -156,7 +159,7 @@ flutter-client-run: flutter-client-dependencies
 flutter-client-release-build: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) build macos --release --no-pub --dart-define=AONW_API_BASE_URL=$(LOCAL_API_BASE_URL)
 
-flutter-client-release-check: flutter-client-check flutter-client-device-test flutter-client-performance-check flutter-client-release-build
+flutter-client-release-check: flutter-client-check flutter-client-device-test flutter-client-performance-check flutter-client-full-hud-performance-check flutter-client-release-build
 
 rust-format-check:
 	@cd $(RUST_WORKSPACE) && $(CARGO) fmt --all -- --check

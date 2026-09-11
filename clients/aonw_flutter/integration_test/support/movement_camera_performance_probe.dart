@@ -11,6 +11,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'active_frame_timings.dart';
 import 'movement_camera_performance_fixture.dart';
+import 'performance_environment.dart';
 
 Future<void> measureMovementCamera(
   IntegrationTestWidgetsFlutterBinding binding,
@@ -124,7 +125,7 @@ Map<String, Object> _movementCameraRecord(
     'environment': {
       'operatingSystem': Platform.operatingSystemVersion,
       'dart': Platform.version,
-      'buildMode': 'flutter-test-device-debug',
+      'buildMode': performanceBuildMode,
       'flame': '1.38.0',
     },
     'workload': {

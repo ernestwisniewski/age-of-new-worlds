@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'active_frame_timings.dart';
+import 'performance_environment.dart';
 
 Future<void> measureEraTintTransition(
   IntegrationTestWidgetsFlutterBinding binding,
@@ -40,7 +41,7 @@ Future<void> measureEraTintTransition(
     'environment': {
       'operatingSystem': Platform.operatingSystemVersion,
       'dart': Platform.version,
-      'buildMode': 'flutter-test-device-debug',
+      'buildMode': performanceBuildMode,
       'flame': '1.38.0',
     },
     'workload': {
