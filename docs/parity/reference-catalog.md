@@ -85,3 +85,15 @@ languages and 200% landscape text pass; phone/tablet/desktop goldens are reviewe
 The full client gate passes 1165 tests with clean analysis. All 54 technology
 thumbnails and authored discovery descriptions in six languages are implemented.
 Full replay notification composition remains part of the final HUD audit.
+
+## Shared replay screen regression images
+
+The target replay now mounts the same `MapScreen` and HUD as live sessions.
+[Phone](../../clients/aonw_flutter/test/features/replay/presentation/goldens/replay_phone.png),
+[tablet](../../clients/aonw_flutter/test/features/replay/presentation/goldens/replay_tablet.png)
+and [desktop](../../clients/aonw_flutter/test/features/replay/presentation/goldens/replay_desktop.png)
+cover the full playback layout in Polish, German and English with bundled fonts,
+a deterministic 12×8 tile map and four loaded commander sprites. Reduced motion
+keeps captures deterministic. These are target regression images, not captured
+reference matches or evidence of native archive correctness. All three images
+were inspected; controls remain below the map without covering the shared HUD.

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/features/audio/presentation/game_audio_host.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/map/application/map_session_port.dart';
@@ -8,6 +9,7 @@ import 'package:aonw_flutter/features/map/presentation/widgets/map_screen.dart';
 import 'package:aonw_flutter/features/map/read_model/city_planning_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_command_frame_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_feedback_view.dart';
+import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view_mode.dart';
 import 'package:aonw_flutter/features/multiplayer/application/match_history_port.dart';
 import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
@@ -21,7 +23,9 @@ import 'package:aonw_flutter/features/replay/read_model/replay_frame_view.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_controller.dart';
 import 'package:aonw_flutter/features/settings/presentation/client_settings_scope.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
+import 'package:aonw_flutter/game/map/unit_map_layer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
@@ -33,10 +37,12 @@ part 'replay_audio_tests.dart';
 part 'replay_view_mode_tests.dart';
 part 'replay_online_tests.dart';
 part 'replay_shared_hud_tests.dart';
+part 'replay_golden_tests.dart';
 
 void main() {
   replayOnlineTests();
   replaySharedHudTests();
+  replayGoldenTests();
   replayAudioTests();
   replayViewModeTests();
   testWidgets(
@@ -288,11 +294,13 @@ final class _ReplaySession
     this.rejectDocument,
     this.observed = false,
     this.audio = false,
+    this.scene,
   });
 
   final String? rejectDocument;
   final bool observed;
   final bool audio;
+  final MapScene? scene;
   Completer<void>? seekCompletion;
   int _position = 0;
   int planningCalls = 0;
@@ -355,7 +363,7 @@ final class _ReplaySession
               ],
             ).player,
           )
-        : testMapScene();
+        : this.scene ?? testMapScene();
     return ReplayFrameView(
       position: position,
       entryCount: 3,
