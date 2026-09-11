@@ -72,3 +72,10 @@ Playback controls occupy their own area below the map. Widget coverage exercises
 both phone orientations, six languages and 200% text, plus same-entry seeks,
 read-only terminal inspection, route/lifecycle pauses and observed command audio.
 These checks do not replace native archive, privacy or performance gates.
+
+`integration_test/replay_hud_native_test.dart` creates a fog-enabled match and AI
+turn through the native Rust adapter, opens the resulting archive in the shared
+HUD, and queries research at the initial and final positions. It checks the
+recorded final digest, refreshed query stamps, retained Flame world, closed
+previous details and absence of gameplay/save requests. The macOS run passed;
+this case is included in `make flutter-client-device-test`.

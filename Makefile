@@ -146,6 +146,7 @@ flutter-client-device-test: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/game_audio_playback_test.dart
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/window_mode_native_test.dart
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/turn_automation_native_test.dart
+	@cd $(FLUTTER_CLIENT) && $(FLUTTER) test --no-dds --no-pub integration_test/replay_hud_native_test.dart
 
 flutter-client-performance-check: flutter-client-dependencies
 	@cd $(FLUTTER_CLIENT) && $(FLUTTER) drive --profile --no-pub --target integration_test/flame_gameplay_performance_test.dart --driver integration_test/support/performance_driver.dart -d $(FLUTTER_CLIENT_DEVICE)
