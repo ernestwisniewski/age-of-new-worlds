@@ -181,3 +181,10 @@ frames. The unchanged 201,326,592-byte memory limit still fails by 10,829,824 by
 later movement-camera scenarios were not reached. Source pixels and geometry for
 all 100 moved frames pass the independent native-decoder regression. This is a
 measured improvement, not a passing renderer release gate.
+
+Loading native asset buffers and eagerly disposing the image descriptor and codec
+further reduced camera-focus RSS delta to 205,176,832 bytes. Build/raster p99 were
+0.967/12.163 ms with zero missed frames. The memory gate remains open, exceeding
+its unchanged limit by 3,850,240 bytes. Invalid image metadata and an atlas closed
+while its buffer is loading both release the buffer; decoded images remain owned
+by their atlas scopes.

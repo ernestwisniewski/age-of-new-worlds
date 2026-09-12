@@ -2,8 +2,9 @@ import 'dart:ui' as ui;
 
 import 'package:flame/cache.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
-import 'package:flutter/painting.dart' show decodeImageFromList;
 import 'package:flutter/services.dart';
+
+import 'atlas_page_decoder.dart';
 
 /// Owns each atlas generation's pages and deduplicates concurrent loads.
 final class AtlasStore {
@@ -93,11 +94,12 @@ final class _AtlasEntry {
   }
 
   Future<ui.Image> _loadPage(String pagePath) async {
-    final data = await bundle.load(pagePath);
-    _ensureActive();
-    final image = await decodeImageFromList(
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-    );
+    final buffer = await bundle.loadBuffer(pagePath);
+    if (_disposed) {
+      buffer.dispose();
+      _ensureActive();
+    }
+    final image = await decodeAtlasPage(buffer);
     if (_disposed) {
       image.dispose();
       _ensureActive();
