@@ -3,6 +3,7 @@ use aonw_domain::{GameState, HexCoord, MovementStep, MovementUnits, Unit, UnitId
 
 use super::reachable::movement_available_for_query;
 use super::route_search::{find_route, find_route_ignoring_capacity, find_route_to_any};
+use super::route_turns::route_step_turns;
 use super::{MovementSearchMetrics, maximum_movement_units};
 use crate::{CommandRejectionCode, EngineContext};
 
@@ -37,6 +38,7 @@ pub struct TerrainMovementPlan {
     available_movement: MovementUnits,
     remaining_movement: MovementUnits,
     estimated_turns: u32,
+    maximum_movement: MovementUnits,
     furthest_reachable_step_index: usize,
     steps: Box<[MovementStep]>,
     search_metrics: MovementSearchMetrics,
@@ -98,6 +100,14 @@ impl TerrainMovementPlan {
     #[must_use]
     pub const fn steps(&self) -> &[MovementStep] {
         &self.steps
+    }
+
+    /// Returns the calendar turn for every step, including origin turn one.
+    ///
+    /// The current turn is one even when it has no movement remaining. A step
+    /// that exhausts a positive remainder still belongs to that turn.
+    pub fn step_turns(&self) -> impl Iterator<Item = u32> + '_ {
+        route_step_turns(&self.steps, self.available_movement, self.maximum_movement)
     }
 
     /// Returns deterministic search work counters.
@@ -293,7 +303,10 @@ pub(crate) fn plan_route_for_unit(
         unit.kind(),
         unit.carried_artifact_id().is_some(),
     );
-    let estimated_turns = estimate_route_turns(&steps, available_movement, maximum_movement);
+    let estimated_turns = route_step_turns(&steps, available_movement, maximum_movement)
+        .skip(1)
+        .last()
+        .unwrap_or(0);
 
     Ok(TerrainMovementPlan {
         revision,
@@ -306,38 +319,11 @@ pub(crate) fn plan_route_for_unit(
         available_movement,
         remaining_movement,
         estimated_turns,
+        maximum_movement,
         furthest_reachable_step_index,
         steps: steps.into_boxed_slice(),
         search_metrics,
     })
-}
-
-fn estimate_route_turns(
-    steps: &[MovementStep],
-    available_movement: MovementUnits,
-    maximum_movement: MovementUnits,
-) -> u32 {
-    if steps.len() <= 1 {
-        return 0;
-    }
-    let mut turns = 1_u32;
-    let mut remaining = available_movement;
-    for step in steps.iter().skip(1) {
-        let enter_cost = step.enter_cost();
-        if enter_cost <= remaining {
-            remaining = remaining
-                .checked_sub(enter_cost)
-                .unwrap_or(MovementUnits::ZERO);
-        } else if remaining != MovementUnits::ZERO {
-            remaining = MovementUnits::ZERO;
-        } else {
-            turns = turns.saturating_add(1);
-            remaining = maximum_movement
-                .checked_sub(enter_cost)
-                .unwrap_or(MovementUnits::ZERO);
-        }
-    }
-    turns
 }
 
 pub(super) fn validate_revision(

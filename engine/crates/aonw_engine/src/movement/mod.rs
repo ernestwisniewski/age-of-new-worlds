@@ -17,6 +17,7 @@ mod query;
 mod query_tests;
 mod reachable;
 mod route_search;
+mod route_turns;
 mod terrain_profile;
 mod transition;
 #[cfg(test)]
