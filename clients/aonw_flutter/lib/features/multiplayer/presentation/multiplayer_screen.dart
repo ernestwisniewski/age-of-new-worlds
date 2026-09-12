@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_menu_backdrop.dart';
 import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../l10n/l10n.dart';
@@ -43,37 +44,44 @@ final class _MultiplayerScreenState extends State<MultiplayerScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.aonwL10n.multiplayerTitle)),
-    body: SafeArea(
-      child: ListenableBuilder(
-        listenable: widget.controller,
-        builder: (context, child) => switch (widget.controller.state) {
-          MultiplayerStarting() || MultiplayerAuthenticating() => Center(
-            child: AonwProgressIndicator(
-              semanticLabel: context.aonwL10n.loadingMultiplayer,
+    extendBodyBehindAppBar: true,
+    appBar: AppBar(
+      title: Text(context.aonwL10n.multiplayerTitle),
+      backgroundColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+    ),
+    body: AonwMenuBackdrop(
+      child: SafeArea(
+        child: ListenableBuilder(
+          listenable: widget.controller,
+          builder: (context, child) => switch (widget.controller.state) {
+            MultiplayerStarting() || MultiplayerAuthenticating() => Center(
+              child: AonwProgressIndicator(
+                semanticLabel: context.aonwL10n.loadingMultiplayer,
+              ),
             ),
-          ),
-          final MultiplayerSignedOut state => _AuthPanel(
-            controller: widget.controller,
-            failureCode: state.failureCode,
-          ),
-          final MultiplayerLobby state => _LobbyPanel(
-            controller: widget.controller,
-            state: state,
-          ),
-          final MultiplayerWaitingRoom state => _WaitingRoomPanel(
-            controller: widget.controller,
-            state: state,
-          ),
-          final MultiplayerInMatch state => _MatchPanel(
-            controller: widget.controller,
-            state: state,
-            openingGame: _openingGame,
-            onOpenGame: widget.onOpenGame == null
-                ? null
-                : () => _openGame(state.projection),
-          ),
-        },
+            final MultiplayerSignedOut state => _AuthPanel(
+              controller: widget.controller,
+              failureCode: state.failureCode,
+            ),
+            final MultiplayerLobby state => _LobbyPanel(
+              controller: widget.controller,
+              state: state,
+            ),
+            final MultiplayerWaitingRoom state => _WaitingRoomPanel(
+              controller: widget.controller,
+              state: state,
+            ),
+            final MultiplayerInMatch state => _MatchPanel(
+              controller: widget.controller,
+              state: state,
+              openingGame: _openingGame,
+              onOpenGame: widget.onOpenGame == null
+                  ? null
+                  : () => _openGame(state.projection),
+            ),
+          },
+        ),
       ),
     ),
   );

@@ -179,3 +179,19 @@ retained the scroll offset in all cases; each step now starts with its own scrol
 state. Tests reach Continue, Start and Change setup, check untruncated body text,
 and retain existing creation tests. This is widget coverage, not native mobile
 validation or the separate Online setup/lobby audit.
+
+## Online layout regression coverage
+
+The Online screen shares the selected menu backdrop. Its waiting panel respects
+a 680-pixel maximum width; small screens and increased text put readiness below
+the participant details. Navigation and account actions wrap, and setup selectors
+allow their labels to wrap at increased text sizes. Six portrait cases first
+failed in each of setup and waiting-room navigation before these corrections.
+
+Twenty-four cases now cover setup/waiting, six languages and both phone
+orientations at 200%. Waiting tests reach every action and verify the ready
+transition enables Start through the controller. Four inspected target images
+under `test/features/multiplayer/presentation/goldens/waiting_room_*` cover the
+three standard sizes and German phone text at 200%. These regressions do not
+complete reference lobby parity: participant country/connection detail, full
+setup flow comparison and native multiplayer sessions remain to be audited.

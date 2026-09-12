@@ -14,11 +14,13 @@ final class _WaitingRoomPanel extends StatelessWidget {
         padding: const EdgeInsets.all(AonwSpacing.lg),
         shrinkWrap: true,
         children: [
-          AonwPanel(
-            semanticLabel: l10n.multiplayerWaitingRoomTitle,
-            maxWidth: 680,
-            padding: const EdgeInsets.all(AonwSpacing.xl),
-            child: _WaitingRoomContent(controller: controller, state: state),
+          Center(
+            child: AonwPanel(
+              semanticLabel: l10n.multiplayerWaitingRoomTitle,
+              maxWidth: 680,
+              padding: const EdgeInsets.all(AonwSpacing.xl),
+              child: _WaitingRoomContent(controller: controller, state: state),
+            ),
           ),
         ],
       ),
@@ -163,7 +165,10 @@ final class _WaitingRoomNavigation extends StatelessWidget {
   final bool busy;
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) => Wrap(
+    alignment: WrapAlignment.spaceBetween,
+    spacing: AonwSpacing.sm,
+    runSpacing: AonwSpacing.sm,
     children: [
       TextButton.icon(
         key: const ValueKey('multiplayer-refresh-lobby'),
@@ -173,7 +178,6 @@ final class _WaitingRoomNavigation extends StatelessWidget {
         icon: const Icon(Icons.refresh),
         label: Text(context.aonwL10n.refreshMatch),
       ),
-      const Spacer(),
       TextButton(
         key: const ValueKey('multiplayer-close-waiting-room'),
         onPressed: context.withGameSound(
@@ -227,22 +231,57 @@ final class _LobbyParticipantTile extends StatelessWidget {
     final title = participant.isClaimed || !human
         ? participant.name
         : l10n.multiplayerSeatOpen;
-    return ListTile(
-      key: ValueKey(('multiplayer-participant', participant.playerId)),
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(human ? Icons.person_outline : Icons.smart_toy_outlined),
-      title: Text(title),
-      subtitle: Text(
-        [
-          human ? l10n.multiplayerHumanSeat : l10n.multiplayerAiSeat,
-          if (participant.isHost) l10n.multiplayerHost,
-          if (participant.isCurrentUser) l10n.multiplayerCurrentPlayer,
-        ].join(' · '),
-      ),
-      trailing: Chip(
-        avatar: Icon(ready ? Icons.check : Icons.hourglass_empty, size: 18),
-        label: Text(ready ? l10n.multiplayerReady : l10n.multiplayerNotReady),
-      ),
+    final details = Text(
+      [
+        human ? l10n.multiplayerHumanSeat : l10n.multiplayerAiSeat,
+        if (participant.isHost) l10n.multiplayerHost,
+        if (participant.isCurrentUser) l10n.multiplayerCurrentPlayer,
+      ].join(' · '),
+    );
+    final status = Chip(
+      avatar: Icon(ready ? Icons.check : Icons.hourglass_empty, size: 18),
+      label: Text(ready ? l10n.multiplayerReady : l10n.multiplayerNotReady),
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact =
+            constraints.maxWidth < 520 ||
+            MediaQuery.textScalerOf(context).scale(14) > 18;
+        if (!compact) {
+          return ListTile(
+            key: ValueKey(('multiplayer-participant', participant.playerId)),
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              human ? Icons.person_outline : Icons.smart_toy_outlined,
+            ),
+            title: Text(title),
+            subtitle: details,
+            trailing: status,
+          );
+        }
+        return Padding(
+          key: ValueKey(('multiplayer-participant', participant.playerId)),
+          padding: const EdgeInsets.symmetric(vertical: AonwSpacing.sm),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(human ? Icons.person_outline : Icons.smart_toy_outlined),
+              const SizedBox(width: AonwSpacing.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: Theme.of(context).textTheme.bodyLarge),
+                    details,
+                    const SizedBox(height: AonwSpacing.xs),
+                    status,
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

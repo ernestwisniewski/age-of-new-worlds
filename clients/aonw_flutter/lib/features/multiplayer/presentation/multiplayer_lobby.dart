@@ -57,7 +57,10 @@ final class _LobbyAccountPanel extends StatelessWidget {
           const SizedBox(height: AonwSpacing.xs),
           SelectableText(l10n.signedInAccount(state.account.userId)),
           const SizedBox(height: AonwSpacing.md),
-          Row(
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: AonwSpacing.sm,
+            runSpacing: AonwSpacing.sm,
             children: [
               TextButton.icon(
                 onPressed: context.withGameSound(
@@ -66,7 +69,6 @@ final class _LobbyAccountPanel extends StatelessWidget {
                 icon: const Icon(Icons.refresh),
                 label: Text(l10n.refreshMatches),
               ),
-              const Spacer(),
               TextButton(
                 onPressed: context.withGameSound(
                   state.busy ? null : controller.signOut,
@@ -141,6 +143,9 @@ final class _MultiplayerCreateMatchPanelState
     title: l10n.chooseCivilizationTitle,
     icon: Icons.flag_outlined,
     child: DropdownButtonFormField<LocalPlayerCountryView>(
+      isExpanded: true,
+      isDense: false,
+      itemHeight: null,
       key: ValueKey(('multiplayer-country', _country)),
       initialValue: _country,
       decoration: InputDecoration(labelText: l10n.humanCountryLabel),
@@ -165,6 +170,9 @@ final class _MultiplayerCreateMatchPanelState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DropdownButtonFormField<LocalGameCatalogEntryView>(
+          isExpanded: true,
+          isDense: false,
+          itemHeight: null,
           key: ValueKey(('multiplayer-scenario', _scenario.id)),
           initialValue: _scenario,
           decoration: InputDecoration(labelText: l10n.scenarioLabel),
@@ -282,6 +290,9 @@ final class _JoinMatchPanelState extends State<_JoinMatchPanel> {
           ),
           const SizedBox(height: AonwSpacing.sm),
           DropdownButtonFormField<String>(
+            isExpanded: true,
+            isDense: false,
+            itemHeight: null,
             key: ValueKey(('multiplayer-player-id', _playerId)),
             initialValue: _playerId,
             decoration: InputDecoration(labelText: l10n.playerSeatLabel),

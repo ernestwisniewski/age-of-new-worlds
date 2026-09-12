@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/design_system/widgets/aonw_menu_backdrop.dart';
 import 'package:aonw_flutter/features/local_game/application/local_game_catalog.dart';
 import 'package:aonw_flutter/features/multiplayer/application/account_profile_port.dart';
 import 'package:aonw_flutter/features/multiplayer/application/multiplayer_coordinator.dart';
@@ -10,15 +11,21 @@ import 'package:aonw_flutter/features/multiplayer/presentation/multiplayer_scree
 import 'package:aonw_flutter/features/multiplayer/read_model/multiplayer_view.dart';
 import 'package:aonw_flutter/features/settings/presentation/account_profile_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
 
 part 'account_profile_widget_cases.dart';
+part 'lobby_layout_cases.dart';
+part 'lobby_golden_cases.dart';
 
 void main() {
   accountProfileWidgetCases();
+  lobbyLayoutCases();
+  onlineSetupLayoutCases();
+  lobbyGoldenCases();
   testWidgets('configures a match and exposes an accessible turn action', (
     tester,
   ) async {
