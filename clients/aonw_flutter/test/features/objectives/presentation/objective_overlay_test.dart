@@ -1,12 +1,70 @@
+import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/design_system/widgets/aonw_panel.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/objectives/presentation/objective_overlay.dart';
 import 'package:aonw_flutter/features/turns/read_model/recipient_turn_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/localized_test_app.dart';
 
+part 'objective_golden_tests.dart';
+
 void main() {
+  for (final language in ['en', 'pl', 'fr', 'de', 'es', 'nl']) {
+    for (final size in [const Size(390, 640), const Size(844, 390)]) {
+      testWidgets('objectives fit $language $size at 200% text', (
+        tester,
+      ) async {
+        await tester.binding.setSurfaceSize(size);
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        await tester.pumpWidget(
+          _app(
+            MediaQuery(
+              data: MediaQueryData(
+                size: size,
+                textScaler: TextScaler.linear(2),
+              ),
+              child: _ObjectiveHarness(
+                objectives: const [
+                  MapObjectiveView(
+                    id: 'holy-site-1',
+                    type: MapObjectiveType.holySite,
+                    coordinate: (col: 2, row: 3),
+                    requiredHoldTurns: 4,
+                    victoryPoints: 7,
+                    goldPerTurn: 2,
+                  ),
+                ],
+                outcome: _ongoing(),
+              ),
+            ),
+            locale: Locale(language),
+          ),
+        );
+        await tester.tap(find.byKey(const ValueKey('open-objectives')));
+        await tester.pump();
+        final panel = tester.getRect(find.byType(AonwPanel));
+        expect(panel.right, lessThanOrEqualTo(size.width));
+        expect(panel.bottom, lessThanOrEqualTo(size.height));
+        final close = find.byKey(const ValueKey('close-objectives'));
+        expect(close.hitTestable(), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        final card = find.byKey(const ValueKey(('objective', 'holy-site-1')));
+        await tester.scrollUntilVisible(card, 160);
+        await tester.pump();
+        expect(tester.getRect(card).overlaps(panel), isTrue);
+        expect(tester.takeException(), isNull);
+        await tester.scrollUntilVisible(close, -160);
+        await tester.pump();
+        expect(close.hitTestable(), findsOneWidget);
+        await tester.tap(close);
+        await tester.pump();
+        expect(find.byType(AonwPanel), findsNothing);
+      });
+    }
+  }
   testWidgets('shows only authored objective requirements from the map', (
     tester,
   ) async {
@@ -81,6 +139,7 @@ void main() {
     expect(tester.takeException(), isNull);
     semantics.dispose();
   });
+  objectiveGoldenTests();
 }
 
 GameOutcomeView _ongoing() => GameOutcomeView(

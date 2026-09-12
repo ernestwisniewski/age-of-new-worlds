@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
@@ -50,6 +52,16 @@ final class ObjectiveOverlay extends StatelessWidget {
             top: AonwHudSideMenuLayout.top(context),
             left: AonwHudSideMenuLayout.panelLeft(context),
             bottom: AonwSpacing.md,
+            width: math.max(
+              0,
+              math.min(
+                520,
+                MediaQuery.sizeOf(context).width -
+                    MediaQuery.paddingOf(context).right -
+                    AonwHudSideMenuLayout.panelLeft(context) -
+                    AonwSpacing.md,
+              ),
+            ),
             child: MapGamepadRegion(
               section: MapHudSection.globalActions,
               priority: MapGamepadPriority.panel,
@@ -81,41 +93,46 @@ final class _ObjectivePanel extends StatelessWidget {
     return AonwPanel(
       semanticLabel: l10n.objectivesTitle,
       maxWidth: 520,
-      child: SizedBox(
-        width: 480,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      child: CustomScrollView(
+        key: const ValueKey('objective-list'),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
-                    l10n.objectivesTitle,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.objectivesTitle,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton(
+                      key: const ValueKey('close-objectives'),
+                      tooltip: l10n.closeObjectives,
+                      onPressed: onClose,
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  key: const ValueKey('close-objectives'),
-                  tooltip: l10n.closeObjectives,
-                  onPressed: onClose,
-                  icon: const Icon(Icons.close),
-                ),
+                Text(l10n.objectivesAuthoredRules),
+                const SizedBox(height: AonwSpacing.sm),
               ],
             ),
-            Text(l10n.objectivesAuthoredRules),
-            const SizedBox(height: AonwSpacing.sm),
-            Expanded(
-              child: objectives.isEmpty
-                  ? Center(child: Text(l10n.objectivesEmpty))
-                  : ListView.builder(
-                      key: const ValueKey('objective-list'),
-                      itemCount: objectives.length,
-                      itemBuilder: (context, index) =>
-                          _ObjectiveCard(objective: objectives[index]),
-                    ),
+          ),
+          if (objectives.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(child: Text(l10n.objectivesEmpty)),
+            )
+          else
+            SliverList.builder(
+              itemCount: objectives.length,
+              itemBuilder: (context, index) =>
+                  _ObjectiveCard(objective: objectives[index]),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

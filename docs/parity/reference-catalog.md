@@ -120,3 +120,16 @@ in portrait and landscape. Target images are
 [phone](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_phone.png),
 [tablet](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_tablet.png)
 and [desktop](../../clients/aonw_flutter/test/features/main_menu/presentation/goldens/menu_desktop.png).
+
+
+## Objective panel regression coverage
+
+The objective panel constrains its width to the viewport and safe right inset.
+Its title, description and lazy objective list share a scroll view, keeping all
+content reachable on short screens at 200% text. Twelve cases cover six languages
+in both phone orientations; they failed before the layout change. The panel
+bounds and close action are checked explicitly. The three populated target
+images under `test/features/objectives/presentation/goldens` use actual test-view
+sizes of 390×844, 1024×768 and 1440×900, bundled fonts and Polish/German/English.
+They were inspected visually. These are isolated panel regressions; full-map
+comparison and objective progress/guidance remain separate work.
