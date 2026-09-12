@@ -107,7 +107,19 @@ String _partitionId(String atlas, String region) {
       !region.startsWith(city ? 'city.' : 'improvement.')) {
     throw StateError('Unsupported frame: $region');
   }
-  return '${atlas}_${city ? 'level' : 'era'}_$level';
+  if (city) {
+    final profile = region.split('.')[1];
+    if (!const {
+      'growthCivic',
+      'tradeKnowledgeMaritime',
+      'militaryFortified',
+      'industryModern',
+    }.contains(profile)) {
+      throw StateError('Unsupported city profile: $profile');
+    }
+    return 'cities_${profile}_level_$level';
+  }
+  return '${atlas}_era_$level';
 }
 
 Future<void> _copyUnchanged(Directory source, Directory output) async {

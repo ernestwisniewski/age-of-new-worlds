@@ -143,53 +143,197 @@
       "bytes": 311318,
       "sha256": "f5c091f805961bf5d2eed123e77cb090bc71c12fe76c1527c73fc2d20afc8395"
     },
-    "sprites/cities_level_0/cities_level_0.atlas": {
-      "bytes": 379,
-      "sha256": "a520462747238a9764f2821dd4df9c1ae939fb2e3aafdf86d77761fe7684609a"
+    "sprites/cities_growthCivic_level_0/cities_growthCivic_level_0.atlas": {
+      "bytes": 163,
+      "sha256": "835e04ea4db93d18af1f8e47a465ce25c7b868277f3e8032ce4d6da6c88e8653"
     },
-    "sprites/cities_level_0/cities_level_0_0.webp": {
-      "bytes": 912120,
-      "sha256": "c4c031d3cb849b13fbc37f60ff285f7a4216b17750afec3718df15d00d7f5217"
+    "sprites/cities_growthCivic_level_0/cities_growthCivic_level_0_0.webp": {
+      "bytes": 228616,
+      "sha256": "f052a7d75bbdc14b5596adaae88c0b337288fee9b7a5747b6e63afda81f16ffe"
     },
-    "sprites/cities_level_1/cities_level_1.atlas": {
-      "bytes": 379,
-      "sha256": "f8af595362dd91f00789a6632c8fe554990ece6a18f7267ca89497f781205c57"
+    "sprites/cities_growthCivic_level_1/cities_growthCivic_level_1.atlas": {
+      "bytes": 163,
+      "sha256": "01052f3090bbb3257842e72c5acf9395d465f2990c2579645ef6481c59b7c14b"
     },
-    "sprites/cities_level_1/cities_level_1_0.webp": {
-      "bytes": 936254,
-      "sha256": "7a6d03c4672cec8a51bb41171fb76d94d5e8ba9abf3cfd89a176178498518026"
+    "sprites/cities_growthCivic_level_1/cities_growthCivic_level_1_0.webp": {
+      "bytes": 236616,
+      "sha256": "b142e427a927574b932712c1645541c5cbe1113d9310cb8830d4c25219345acf"
     },
-    "sprites/cities_level_2/cities_level_2.atlas": {
-      "bytes": 379,
-      "sha256": "781de9064d916b3e404700ea780dd29c2b650df6f120424c03d009d0d5fdbe58"
+    "sprites/cities_growthCivic_level_2/cities_growthCivic_level_2.atlas": {
+      "bytes": 163,
+      "sha256": "54fae96cf89c33cb9592507d3767e246532f5fdc0030fa31162b7996fecce060"
     },
-    "sprites/cities_level_2/cities_level_2_0.webp": {
-      "bytes": 937632,
-      "sha256": "39ea88b4a2a3c2fe3e56ed50706c3b1056de4e8cae31caa47643769547d956bd"
+    "sprites/cities_growthCivic_level_2/cities_growthCivic_level_2_0.webp": {
+      "bytes": 232608,
+      "sha256": "7cd2c147955e678c908640c42e6be61ecb8d0b8dbea26975aaa1ff9ab7def79f"
     },
-    "sprites/cities_level_3/cities_level_3.atlas": {
-      "bytes": 379,
-      "sha256": "0e2e11c2378c7391d765bea3f6cd04804566ae30bc0563a326e22743f34c7328"
+    "sprites/cities_growthCivic_level_3/cities_growthCivic_level_3.atlas": {
+      "bytes": 163,
+      "sha256": "795380c13e85ebb9f8a503d52e7824611030647ee9cb175f088a2178dfea3a87"
     },
-    "sprites/cities_level_3/cities_level_3_0.webp": {
-      "bytes": 944486,
-      "sha256": "179e058e8f1df59bb96d17a15688adb68cefc2d265aa1831acd0923b222a6bd5"
+    "sprites/cities_growthCivic_level_3/cities_growthCivic_level_3_0.webp": {
+      "bytes": 236350,
+      "sha256": "8b923cdcbbeffac9613054f5e9ceafa1bd38e284de58392acfb12f824be3cf08"
     },
-    "sprites/cities_level_4/cities_level_4.atlas": {
-      "bytes": 379,
-      "sha256": "3682c6fb124764d015be5d9fbb2363db6e95f3c25f38d89c15082063bcf48fa1"
+    "sprites/cities_growthCivic_level_4/cities_growthCivic_level_4.atlas": {
+      "bytes": 163,
+      "sha256": "81f592282e06289b1c5791d34fde6430893daabbc15476c12f683b5957fc1566"
     },
-    "sprites/cities_level_4/cities_level_4_0.webp": {
-      "bytes": 945684,
-      "sha256": "fc753b5ab7013f048ea99a41c76b642b11b5abda16849efbbe20476871209eab"
+    "sprites/cities_growthCivic_level_4/cities_growthCivic_level_4_0.webp": {
+      "bytes": 237790,
+      "sha256": "fed842c6f2ee1a9961264a3f6f59d94718c2be235c73785b26427dba58c7612e"
     },
-    "sprites/cities_level_5/cities_level_5.atlas": {
-      "bytes": 379,
-      "sha256": "a152061474fcac7a42c3dfb06ce5be14b2dd472db7c9bc56171d77e6d7533989"
+    "sprites/cities_growthCivic_level_5/cities_growthCivic_level_5.atlas": {
+      "bytes": 163,
+      "sha256": "81f80c3ff27493a969b309d68f3c3b3d0311c54ffa7c56fe90879399c6a0b3a4"
     },
-    "sprites/cities_level_5/cities_level_5_0.webp": {
-      "bytes": 939332,
-      "sha256": "56016ac0490760b603249c6e9a7f34530bb4bac1f1a0549c8599019de2af6746"
+    "sprites/cities_growthCivic_level_5/cities_growthCivic_level_5_0.webp": {
+      "bytes": 237112,
+      "sha256": "05ddff0cbb0e56b1db31184dedebff53a3ff44e767e37ee405d13512a0ed98da"
+    },
+    "sprites/cities_industryModern_level_0/cities_industryModern_level_0.atlas": {
+      "bytes": 169,
+      "sha256": "ed0fec29e37110b16f61f4da5f85319ad005921de69f2a0fdda88d73290e8ed2"
+    },
+    "sprites/cities_industryModern_level_0/cities_industryModern_level_0_0.webp": {
+      "bytes": 226058,
+      "sha256": "f234530e3118782bc477bfd8a94aa2113cc20a75241828156ffadcf5bf1c8e3b"
+    },
+    "sprites/cities_industryModern_level_1/cities_industryModern_level_1.atlas": {
+      "bytes": 169,
+      "sha256": "7b235efc1cdea8d013d87e60578032490190ba8c845823cac05edf247f1538fc"
+    },
+    "sprites/cities_industryModern_level_1/cities_industryModern_level_1_0.webp": {
+      "bytes": 229834,
+      "sha256": "6c587c3065971e05b5155cffb49b8622bcecc98dc4155eb9b096e86420aafeeb"
+    },
+    "sprites/cities_industryModern_level_2/cities_industryModern_level_2.atlas": {
+      "bytes": 169,
+      "sha256": "c45b7ccb4bf6552d96e7bda3891fd777c623fa57688e21e066c6d199862b18b7"
+    },
+    "sprites/cities_industryModern_level_2/cities_industryModern_level_2_0.webp": {
+      "bytes": 231658,
+      "sha256": "7fa9362e5fff0cf42dfcaaf95b9e0e9607146f90e01beaae5ba27857ff15ad74"
+    },
+    "sprites/cities_industryModern_level_3/cities_industryModern_level_3.atlas": {
+      "bytes": 169,
+      "sha256": "14c9ee4ffbf452725b159a8e0dd652d26e2887d974657eac764b1386532451d6"
+    },
+    "sprites/cities_industryModern_level_3/cities_industryModern_level_3_0.webp": {
+      "bytes": 233992,
+      "sha256": "8762756ce8960d68f44652c022f32d64a98a5df88dd587b198d2893fdab5fa0c"
+    },
+    "sprites/cities_industryModern_level_4/cities_industryModern_level_4.atlas": {
+      "bytes": 169,
+      "sha256": "467f9b8f2cd17672c3458934245be7e4a0a208d1cbe7700f9163a35cbac66c59"
+    },
+    "sprites/cities_industryModern_level_4/cities_industryModern_level_4_0.webp": {
+      "bytes": 231950,
+      "sha256": "7e8627e7ed6bfadd2a63ca83c2866afa4c979b6216db710ef8204cecf77a98f4"
+    },
+    "sprites/cities_industryModern_level_5/cities_industryModern_level_5.atlas": {
+      "bytes": 169,
+      "sha256": "3cccfc318216bf3e98b77e4d7f350ffb6c4131d71e0073b8a17783c76a12fd02"
+    },
+    "sprites/cities_industryModern_level_5/cities_industryModern_level_5_0.webp": {
+      "bytes": 232960,
+      "sha256": "70a2fba6890daeacf84f2eb27f46bae15713a560fb6356d3dfa8331211aab36a"
+    },
+    "sprites/cities_militaryFortified_level_0/cities_militaryFortified_level_0.atlas": {
+      "bytes": 175,
+      "sha256": "4694fa327ec920bc3bbcbb257f58cf9d3aadc1db07cf02fce526e7abb9921564"
+    },
+    "sprites/cities_militaryFortified_level_0/cities_militaryFortified_level_0_0.webp": {
+      "bytes": 224102,
+      "sha256": "286e5769a405ee7efb846c1fb18e0ddda7209b1ac36b02a45cb801c9ac7bd73f"
+    },
+    "sprites/cities_militaryFortified_level_1/cities_militaryFortified_level_1.atlas": {
+      "bytes": 175,
+      "sha256": "010ca90e69653ce3341f560b37582ac6808f2a33073b89a93a1a5ce1e029c094"
+    },
+    "sprites/cities_militaryFortified_level_1/cities_militaryFortified_level_1_0.webp": {
+      "bytes": 230908,
+      "sha256": "16ace296486a24cee0a8b00be02a31889be748def49943d2f0e34b87d3f5b872"
+    },
+    "sprites/cities_militaryFortified_level_2/cities_militaryFortified_level_2.atlas": {
+      "bytes": 175,
+      "sha256": "fdfb6e4fe62daba77b1d878d7d57b865ea5f83bc965dad691385f212ace48cf6"
+    },
+    "sprites/cities_militaryFortified_level_2/cities_militaryFortified_level_2_0.webp": {
+      "bytes": 231554,
+      "sha256": "804f18742ed22be3c69f941c415c662f388431a616dbc551ec6e16144ba7837b"
+    },
+    "sprites/cities_militaryFortified_level_3/cities_militaryFortified_level_3.atlas": {
+      "bytes": 175,
+      "sha256": "e5cc5d79a845e6e47a75ab200c49156f763cf4f0f8fb45bfa1dd7624ec91244c"
+    },
+    "sprites/cities_militaryFortified_level_3/cities_militaryFortified_level_3_0.webp": {
+      "bytes": 232682,
+      "sha256": "09157a3a5ec71f97b1a1fb5ca3e8f133e057e6f247fccc533a612e2f6afdf6d4"
+    },
+    "sprites/cities_militaryFortified_level_4/cities_militaryFortified_level_4.atlas": {
+      "bytes": 175,
+      "sha256": "957af3cbd40386d2b4b7b7305b7e75eaa0854aff77f428770bf16e39828a5f5a"
+    },
+    "sprites/cities_militaryFortified_level_4/cities_militaryFortified_level_4_0.webp": {
+      "bytes": 232706,
+      "sha256": "d12112dd603f18aaeadd28d5206e5820c762f5a39d62236dcd637df0b1edad22"
+    },
+    "sprites/cities_militaryFortified_level_5/cities_militaryFortified_level_5.atlas": {
+      "bytes": 175,
+      "sha256": "f39845302d35a6f4d239c41af92c5a6e515a8380cc2e86aa0fdf5ad1ed8bbaf1"
+    },
+    "sprites/cities_militaryFortified_level_5/cities_militaryFortified_level_5_0.webp": {
+      "bytes": 227602,
+      "sha256": "b596249c4d5eedbda0e33f835a8721f5917607debba0e2357719d41dbff2da4f"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_0/cities_tradeKnowledgeMaritime_level_0.atlas": {
+      "bytes": 185,
+      "sha256": "de0eecc98cc1427c1f5a5209ec41524d1ed28983b6cecb2a437639e6b1b698dd"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_0/cities_tradeKnowledgeMaritime_level_0_0.webp": {
+      "bytes": 231336,
+      "sha256": "675643f8655fd15d740108afb690b3ea144704b35f5627b8274c4abb2c644838"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_1/cities_tradeKnowledgeMaritime_level_1.atlas": {
+      "bytes": 185,
+      "sha256": "589b076472a4bacae38babeb2149a95127a7b242b0d066b1ee6f0ee720227d33"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_1/cities_tradeKnowledgeMaritime_level_1_0.webp": {
+      "bytes": 236442,
+      "sha256": "50f50e1910ae55ca01dba84b8c11b36f4815e587813c20678db0813ac5601335"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_2/cities_tradeKnowledgeMaritime_level_2.atlas": {
+      "bytes": 185,
+      "sha256": "b5c69b2a0f810e2097170632c5376c53ecf925f013b834f7178848dbb24d60e5"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_2/cities_tradeKnowledgeMaritime_level_2_0.webp": {
+      "bytes": 238722,
+      "sha256": "f047d7a52e134b581cd789ab74202891ebb12b83d6d42ffce0b6479a251d8cc6"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_3/cities_tradeKnowledgeMaritime_level_3.atlas": {
+      "bytes": 185,
+      "sha256": "59593bd675c9ed38126c7ef1d35dc4bc3687fc815858df0ffc3ab0dd7ae19a31"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_3/cities_tradeKnowledgeMaritime_level_3_0.webp": {
+      "bytes": 238112,
+      "sha256": "24402ca03675ea76fd2adc1ee89e4dea5b61276c8e4e16e3b6d88ca71cf97c9f"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_4/cities_tradeKnowledgeMaritime_level_4.atlas": {
+      "bytes": 185,
+      "sha256": "010fcf3cbb6588516cd861842224b758e3650f89dbebf402ae20e12c73152a83"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_4/cities_tradeKnowledgeMaritime_level_4_0.webp": {
+      "bytes": 240494,
+      "sha256": "ef8d54e6cf3d10c204dfb6abeddcdb5cf57b73bd354f8a4a4f4d6f8421b1d233"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_5/cities_tradeKnowledgeMaritime_level_5.atlas": {
+      "bytes": 185,
+      "sha256": "54199dbc6a35f91ffaa8d0baa4544afc102a1087976021e01060871da9e5ea45"
+    },
+    "sprites/cities_tradeKnowledgeMaritime_level_5/cities_tradeKnowledgeMaritime_level_5_0.webp": {
+      "bytes": 238218,
+      "sha256": "4cab687902eb7f308c57c6319786b5d48a0cdb6f567866093b12a130c476ca29"
     },
     "sprites/dice/dice.atlas": {
       "bytes": 2118,
@@ -336,8 +480,8 @@
       "sha256": "1379551953712bb511e37bcfdac8b7f7c890f173a7608ebe6dffdc156a2c5eb2"
     },
     "sprites/sprite_manifest.json": {
-      "bytes": 164530,
-      "sha256": "24d5fcd9e2a63b89522304bab7f4db6719dfd0a8b1935a2db3f06c9d2e249042"
+      "bytes": 167674,
+      "sha256": "1186499520a4873e77a15d87808e282a7f994c7d7a0ab0ff8e972c470fcd473e"
     },
     "sprites/technologies/technologies.atlas": {
       "bytes": 4119,

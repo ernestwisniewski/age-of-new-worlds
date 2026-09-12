@@ -5,7 +5,8 @@ import 'package:aonw_flutter/design_system/assets/atlas_store.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _path = 'assets/runtime/sprites/cities_level_0/cities_level_0.atlas';
+const _path =
+    'assets/runtime/sprites/cities_growthCivic_level_0/cities_growthCivic_level_0.atlas';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ void main() {
     expect(bundle.buffers.single.debugDisposed, isTrue);
     final image = atlas.sprites.first.region.page.texture!;
     expect(image.debugDisposed, isFalse);
-    expect(store.decodedBytes(_path), 2674944);
+    expect(store.decodedBytes(_path), 668736);
     store.disposeAtlas(_path);
     expect(image.debugDisposed, isTrue);
   });

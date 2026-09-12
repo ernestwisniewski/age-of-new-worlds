@@ -12,12 +12,30 @@
     "buildings_a": "assets/runtime/sprites/buildings_a/buildings_a.atlas",
     "buildings_b": "assets/runtime/sprites/buildings_b/buildings_b.atlas",
     "buildings_c": "assets/runtime/sprites/buildings_c/buildings_c.atlas",
-    "cities_level_0": "assets/runtime/sprites/cities_level_0/cities_level_0.atlas",
-    "cities_level_1": "assets/runtime/sprites/cities_level_1/cities_level_1.atlas",
-    "cities_level_2": "assets/runtime/sprites/cities_level_2/cities_level_2.atlas",
-    "cities_level_3": "assets/runtime/sprites/cities_level_3/cities_level_3.atlas",
-    "cities_level_4": "assets/runtime/sprites/cities_level_4/cities_level_4.atlas",
-    "cities_level_5": "assets/runtime/sprites/cities_level_5/cities_level_5.atlas",
+    "cities_growthCivic_level_0": "assets/runtime/sprites/cities_growthCivic_level_0/cities_growthCivic_level_0.atlas",
+    "cities_growthCivic_level_1": "assets/runtime/sprites/cities_growthCivic_level_1/cities_growthCivic_level_1.atlas",
+    "cities_growthCivic_level_2": "assets/runtime/sprites/cities_growthCivic_level_2/cities_growthCivic_level_2.atlas",
+    "cities_growthCivic_level_3": "assets/runtime/sprites/cities_growthCivic_level_3/cities_growthCivic_level_3.atlas",
+    "cities_growthCivic_level_4": "assets/runtime/sprites/cities_growthCivic_level_4/cities_growthCivic_level_4.atlas",
+    "cities_growthCivic_level_5": "assets/runtime/sprites/cities_growthCivic_level_5/cities_growthCivic_level_5.atlas",
+    "cities_industryModern_level_0": "assets/runtime/sprites/cities_industryModern_level_0/cities_industryModern_level_0.atlas",
+    "cities_industryModern_level_1": "assets/runtime/sprites/cities_industryModern_level_1/cities_industryModern_level_1.atlas",
+    "cities_industryModern_level_2": "assets/runtime/sprites/cities_industryModern_level_2/cities_industryModern_level_2.atlas",
+    "cities_industryModern_level_3": "assets/runtime/sprites/cities_industryModern_level_3/cities_industryModern_level_3.atlas",
+    "cities_industryModern_level_4": "assets/runtime/sprites/cities_industryModern_level_4/cities_industryModern_level_4.atlas",
+    "cities_industryModern_level_5": "assets/runtime/sprites/cities_industryModern_level_5/cities_industryModern_level_5.atlas",
+    "cities_militaryFortified_level_0": "assets/runtime/sprites/cities_militaryFortified_level_0/cities_militaryFortified_level_0.atlas",
+    "cities_militaryFortified_level_1": "assets/runtime/sprites/cities_militaryFortified_level_1/cities_militaryFortified_level_1.atlas",
+    "cities_militaryFortified_level_2": "assets/runtime/sprites/cities_militaryFortified_level_2/cities_militaryFortified_level_2.atlas",
+    "cities_militaryFortified_level_3": "assets/runtime/sprites/cities_militaryFortified_level_3/cities_militaryFortified_level_3.atlas",
+    "cities_militaryFortified_level_4": "assets/runtime/sprites/cities_militaryFortified_level_4/cities_militaryFortified_level_4.atlas",
+    "cities_militaryFortified_level_5": "assets/runtime/sprites/cities_militaryFortified_level_5/cities_militaryFortified_level_5.atlas",
+    "cities_tradeKnowledgeMaritime_level_0": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_0/cities_tradeKnowledgeMaritime_level_0.atlas",
+    "cities_tradeKnowledgeMaritime_level_1": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_1/cities_tradeKnowledgeMaritime_level_1.atlas",
+    "cities_tradeKnowledgeMaritime_level_2": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_2/cities_tradeKnowledgeMaritime_level_2.atlas",
+    "cities_tradeKnowledgeMaritime_level_3": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_3/cities_tradeKnowledgeMaritime_level_3.atlas",
+    "cities_tradeKnowledgeMaritime_level_4": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_4/cities_tradeKnowledgeMaritime_level_4.atlas",
+    "cities_tradeKnowledgeMaritime_level_5": "assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_5/cities_tradeKnowledgeMaritime_level_5.atlas",
     "dice": "assets/runtime/sprites/dice/dice.atlas",
     "icons_map": "assets/runtime/sprites/icons_map/icons_map.atlas",
     "improvements_1_era_0": "assets/runtime/sprites/improvements_1_era_0/improvements_1_era_0.atlas",
@@ -589,7 +607,7 @@
       ]
     },
     "city.growthCivic.0": {
-      "atlas": "cities_level_0",
+      "atlas": "cities_growthCivic_level_0",
       "region": "city.growthCivic.0",
       "index": -1,
       "grid": [
@@ -598,7 +616,7 @@
       ]
     },
     "city.growthCivic.1": {
-      "atlas": "cities_level_1",
+      "atlas": "cities_growthCivic_level_1",
       "region": "city.growthCivic.1",
       "index": -1,
       "grid": [
@@ -607,7 +625,7 @@
       ]
     },
     "city.growthCivic.2": {
-      "atlas": "cities_level_2",
+      "atlas": "cities_growthCivic_level_2",
       "region": "city.growthCivic.2",
       "index": -1,
       "grid": [
@@ -616,7 +634,7 @@
       ]
     },
     "city.growthCivic.3": {
-      "atlas": "cities_level_3",
+      "atlas": "cities_growthCivic_level_3",
       "region": "city.growthCivic.3",
       "index": -1,
       "grid": [
@@ -625,7 +643,7 @@
       ]
     },
     "city.growthCivic.4": {
-      "atlas": "cities_level_4",
+      "atlas": "cities_growthCivic_level_4",
       "region": "city.growthCivic.4",
       "index": -1,
       "grid": [
@@ -634,7 +652,7 @@
       ]
     },
     "city.growthCivic.5": {
-      "atlas": "cities_level_5",
+      "atlas": "cities_growthCivic_level_5",
       "region": "city.growthCivic.5",
       "index": -1,
       "grid": [
@@ -643,7 +661,7 @@
       ]
     },
     "city.industryModern.0": {
-      "atlas": "cities_level_0",
+      "atlas": "cities_industryModern_level_0",
       "region": "city.industryModern.0",
       "index": -1,
       "grid": [
@@ -652,7 +670,7 @@
       ]
     },
     "city.industryModern.1": {
-      "atlas": "cities_level_1",
+      "atlas": "cities_industryModern_level_1",
       "region": "city.industryModern.1",
       "index": -1,
       "grid": [
@@ -661,7 +679,7 @@
       ]
     },
     "city.industryModern.2": {
-      "atlas": "cities_level_2",
+      "atlas": "cities_industryModern_level_2",
       "region": "city.industryModern.2",
       "index": -1,
       "grid": [
@@ -670,7 +688,7 @@
       ]
     },
     "city.industryModern.3": {
-      "atlas": "cities_level_3",
+      "atlas": "cities_industryModern_level_3",
       "region": "city.industryModern.3",
       "index": -1,
       "grid": [
@@ -679,7 +697,7 @@
       ]
     },
     "city.industryModern.4": {
-      "atlas": "cities_level_4",
+      "atlas": "cities_industryModern_level_4",
       "region": "city.industryModern.4",
       "index": -1,
       "grid": [
@@ -688,7 +706,7 @@
       ]
     },
     "city.industryModern.5": {
-      "atlas": "cities_level_5",
+      "atlas": "cities_industryModern_level_5",
       "region": "city.industryModern.5",
       "index": -1,
       "grid": [
@@ -697,7 +715,7 @@
       ]
     },
     "city.militaryFortified.0": {
-      "atlas": "cities_level_0",
+      "atlas": "cities_militaryFortified_level_0",
       "region": "city.militaryFortified.0",
       "index": -1,
       "grid": [
@@ -706,7 +724,7 @@
       ]
     },
     "city.militaryFortified.1": {
-      "atlas": "cities_level_1",
+      "atlas": "cities_militaryFortified_level_1",
       "region": "city.militaryFortified.1",
       "index": -1,
       "grid": [
@@ -715,7 +733,7 @@
       ]
     },
     "city.militaryFortified.2": {
-      "atlas": "cities_level_2",
+      "atlas": "cities_militaryFortified_level_2",
       "region": "city.militaryFortified.2",
       "index": -1,
       "grid": [
@@ -724,7 +742,7 @@
       ]
     },
     "city.militaryFortified.3": {
-      "atlas": "cities_level_3",
+      "atlas": "cities_militaryFortified_level_3",
       "region": "city.militaryFortified.3",
       "index": -1,
       "grid": [
@@ -733,7 +751,7 @@
       ]
     },
     "city.militaryFortified.4": {
-      "atlas": "cities_level_4",
+      "atlas": "cities_militaryFortified_level_4",
       "region": "city.militaryFortified.4",
       "index": -1,
       "grid": [
@@ -742,7 +760,7 @@
       ]
     },
     "city.militaryFortified.5": {
-      "atlas": "cities_level_5",
+      "atlas": "cities_militaryFortified_level_5",
       "region": "city.militaryFortified.5",
       "index": -1,
       "grid": [
@@ -751,7 +769,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.0": {
-      "atlas": "cities_level_0",
+      "atlas": "cities_tradeKnowledgeMaritime_level_0",
       "region": "city.tradeKnowledgeMaritime.0",
       "index": -1,
       "grid": [
@@ -760,7 +778,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.1": {
-      "atlas": "cities_level_1",
+      "atlas": "cities_tradeKnowledgeMaritime_level_1",
       "region": "city.tradeKnowledgeMaritime.1",
       "index": -1,
       "grid": [
@@ -769,7 +787,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.2": {
-      "atlas": "cities_level_2",
+      "atlas": "cities_tradeKnowledgeMaritime_level_2",
       "region": "city.tradeKnowledgeMaritime.2",
       "index": -1,
       "grid": [
@@ -778,7 +796,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.3": {
-      "atlas": "cities_level_3",
+      "atlas": "cities_tradeKnowledgeMaritime_level_3",
       "region": "city.tradeKnowledgeMaritime.3",
       "index": -1,
       "grid": [
@@ -787,7 +805,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.4": {
-      "atlas": "cities_level_4",
+      "atlas": "cities_tradeKnowledgeMaritime_level_4",
       "region": "city.tradeKnowledgeMaritime.4",
       "index": -1,
       "grid": [
@@ -796,7 +814,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.5": {
-      "atlas": "cities_level_5",
+      "atlas": "cities_tradeKnowledgeMaritime_level_5",
       "region": "city.tradeKnowledgeMaritime.5",
       "index": -1,
       "grid": [

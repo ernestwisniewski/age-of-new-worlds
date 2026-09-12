@@ -58,12 +58,30 @@ flutter:
     - assets/runtime/sprites/buildings_a/
     - assets/runtime/sprites/buildings_b/
     - assets/runtime/sprites/buildings_c/
-    - assets/runtime/sprites/cities_level_0/
-    - assets/runtime/sprites/cities_level_1/
-    - assets/runtime/sprites/cities_level_2/
-    - assets/runtime/sprites/cities_level_3/
-    - assets/runtime/sprites/cities_level_4/
-    - assets/runtime/sprites/cities_level_5/
+    - assets/runtime/sprites/cities_growthCivic_level_0/
+    - assets/runtime/sprites/cities_growthCivic_level_1/
+    - assets/runtime/sprites/cities_growthCivic_level_2/
+    - assets/runtime/sprites/cities_growthCivic_level_3/
+    - assets/runtime/sprites/cities_growthCivic_level_4/
+    - assets/runtime/sprites/cities_growthCivic_level_5/
+    - assets/runtime/sprites/cities_industryModern_level_0/
+    - assets/runtime/sprites/cities_industryModern_level_1/
+    - assets/runtime/sprites/cities_industryModern_level_2/
+    - assets/runtime/sprites/cities_industryModern_level_3/
+    - assets/runtime/sprites/cities_industryModern_level_4/
+    - assets/runtime/sprites/cities_industryModern_level_5/
+    - assets/runtime/sprites/cities_militaryFortified_level_0/
+    - assets/runtime/sprites/cities_militaryFortified_level_1/
+    - assets/runtime/sprites/cities_militaryFortified_level_2/
+    - assets/runtime/sprites/cities_militaryFortified_level_3/
+    - assets/runtime/sprites/cities_militaryFortified_level_4/
+    - assets/runtime/sprites/cities_militaryFortified_level_5/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_0/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_1/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_2/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_3/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_4/
+    - assets/runtime/sprites/cities_tradeKnowledgeMaritime_level_5/
     - assets/runtime/sprites/dice/
     - assets/runtime/sprites/icons_map/
     - assets/runtime/sprites/improvements_1_era_0/

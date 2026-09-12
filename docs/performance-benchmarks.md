@@ -188,3 +188,12 @@ further reduced camera-focus RSS delta to 205,176,832 bytes. Build/raster p99 we
 its unchanged limit by 3,850,240 bytes. Invalid image metadata and an atlas closed
 while its buffer is loading both release the buffer; decoded images remain owned
 by their atlas scopes.
+
+Partitioning city profiles further reduces a visible city's decoded page to
+668,736 bytes. The full MapScreen/HUD profile passes: map p99 build/raster
+0.698/2.816 ms, hover 0.728/2.840 ms, RSS delta 102,514,688 bytes; combat RSS delta
+119,226,368 bytes. The committed full-HUD baseline records this complete run.
+The separate renderer camera-focus attempt still fails memory at 210,698,240
+bytes despite passing frame times (1.170/14.238 ms, zero missed frames). Whole
+process memory did not fall proportionally to atlas bytes, so further allocation
+work and movement-camera evidence remain required.
