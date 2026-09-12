@@ -57,8 +57,8 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 ## Observed layout constraints
 
 - Research recommendations use three columns on a large panel and a scrolling single column on the phone. The panel has a title/science header, mode control and independently scrolling body. The tree view is a separate state, not captured here.
-- Empire uses readiness/composition and city comparisons. The phone reference has a cramped composition column; preserve the information and responsive intent while avoiding the clipping in the fixture.
-- Activity log uses category tabs and a centered empty state. On a phone the diplomacy label wraps; target controls must remain accessible at increased text scale.
+- Empire uses readiness/composition and city comparisons. The phone stacks readiness and composition cards while larger views place them side by side.
+- Activity log uses category tabs and a centered empty state. On a phone the diplomacy label is abbreviated; target controls must remain accessible at increased text scale.
 - Objectives can remain beside the side menu, whereas broad research/empire panels use much more of the viewport. A hard-coded 640-pixel child cannot fit the phone target.
 - Opening a read-only panel must preserve authoritative required actions and recipient privacy. Styling is not permission to copy source Dart decision rules.
 
@@ -105,8 +105,7 @@ reproduces the original root menu with mocked local preferences, secure storage
 and package metadata. [Its manifest](reference-menu/manifest.json) records source
 revision, sizes, hashes and limitations. The English reference captures cover
 [phone](reference-menu/phone_menu.png), [tablet](reference-menu/tablet_menu.png)
-and [desktop](reference-menu/desktop_menu.png). The reference phone overlaps two
-footer groups; that defect is not an intended interaction target.
+and [desktop](reference-menu/desktop_menu.png). The reference phone has one footer below the main actions.
 
 The target retains the source logo, gradients, 390-pixel wide panel, gold borders
 and 50-pixel minimum action height. By explicit user direction, the background
@@ -133,3 +132,16 @@ images under `test/features/objectives/presentation/goldens` use actual test-vie
 sizes of 390×844, 1024×768 and 1440×900, bundled fonts and Polish/German/English.
 They were inspected visually. These are isolated panel regressions; full-map
 comparison and objective progress/guidance remain separate work.
+
+
+## Capture viewport correction
+
+The HUD/menu references and target menu/replay goldens now set both the physical
+test view and render surface to the listed dimensions, with pixel ratio 1.
+Each capture asserts its effective `MediaQuery` size. Surface-only sizing had
+left responsive code observing the default 800×600 view, even when the resulting
+PNG had phone/tablet/desktop dimensions. All 18 reference captures were rerun and
+inspected, and their manifest hashes were refreshed. The earlier apparent
+phone footer overlap and cramped empire columns were artifacts of that harness.
+The six target menu/replay images were regenerated and inspected as well;
+33 target tests passed. These corrections do not claim native device coverage.

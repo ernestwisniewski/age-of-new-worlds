@@ -24,6 +24,10 @@ void main() {
     (name: 'desktop', size: const Size(1440, 900), locale: const Locale('en')),
   ]) {
     testWidgets('complete main menu ${sample.name}', (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = sample.size;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
       await tester.binding.setSurfaceSize(sample.size);
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
@@ -54,6 +58,10 @@ void main() {
       });
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
+      expect(
+        MediaQuery.sizeOf(tester.element(find.byType(MainMenuScreen))),
+        sample.size,
+      );
       await expectLater(
         find.byKey(const ValueKey('menu-golden')),
         matchesGoldenFile('goldens/menu_${sample.name}.png'),

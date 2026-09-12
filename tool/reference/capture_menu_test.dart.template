@@ -34,6 +34,10 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       FlutterSecureStorage.setMockInitialValues({});
       PackageInfo.setMockInitialValues(appName: 'Age of New Worlds', packageName: 'net.aonw', version: '1.1.17', buildNumber: '89', buildSignature: '');
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = sample.size;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
       await tester.binding.setSurfaceSize(sample.size);
       addTearDown(() => tester.binding.setSurfaceSize(null));
       final router = GoRouter(routes: [GoRoute(path: '/', builder: (_, _) => const MainMenuScreen())]);
@@ -53,6 +57,7 @@ void main() {
         await precacheImage(const AssetImage('assets/runtime/ui/logo.webp'), context);
       });
       await tester.pumpAndSettle();
+      expect(MediaQuery.sizeOf(tester.element(find.byType(Scaffold).first)), sample.size);
       final boundary = tester.firstRenderObject<RenderRepaintBoundary>(find.byType(RepaintBoundary));
       await tester.runAsync(() async {
         final image = await boundary.toImage();

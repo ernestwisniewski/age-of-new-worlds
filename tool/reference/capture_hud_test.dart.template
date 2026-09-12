@@ -28,6 +28,10 @@ void main() {
     for (final panel in ['hud', 'objectives', 'research', 'empire', 'activityLog']) {
       testWidgets('${sample.name} $panel reference', (tester) async {
         SharedPreferences.setMockInitialValues({});
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = sample.size;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
         await tester.binding.setSurfaceSize(sample.size);
         addTearDown(() => tester.binding.setSurfaceSize(null));
         final repository = FakeHudRepository(
@@ -48,6 +52,7 @@ void main() {
           await tester.pump();
           await tester.pump(const Duration(milliseconds: 500));
         }
+        expect(MediaQuery.sizeOf(tester.element(find.byType(Scaffold).first)), sample.size);
         final boundary = tester.firstRenderObject<RenderRepaintBoundary>(find.byType(RepaintBoundary));
         await tester.runAsync(() async {
           final image = await boundary.toImage();

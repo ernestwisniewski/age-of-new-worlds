@@ -14,7 +14,7 @@
       "file": "desktop_empire.png",
       "width": 1440,
       "height": 900,
-      "sha256": "578c5a515a2bafe9143e515d61816bf7aabfe24a34459c78c0adba8b8af7b716"
+      "sha256": "968014b020a098c45419e89262c2b4dc199bb4f3951b3f5cff8c2640bc8762c1"
     },
     {
       "file": "desktop_hud.png",
@@ -32,37 +32,37 @@
       "file": "desktop_research.png",
       "width": 1440,
       "height": 900,
-      "sha256": "8f00c4cd3b48420bd68e95026b6ad1cf808c3a431c0c8836227f1167ccf23a32"
+      "sha256": "5551ec50588e1450abe02ba559b5958983a6001bdfd0cd753e1d3a3f028be98c"
     },
     {
       "file": "phone_activityLog.png",
       "width": 390,
       "height": 844,
-      "sha256": "a15fa6b4df23c3d460f3987e1c1ffd17debc7fd6ba27b03572632c1c7e43fe78"
+      "sha256": "563ba6b5014b6c22527e44dec1812ff87374c1084cad4d995e5a2f1c57fa74ed"
     },
     {
       "file": "phone_empire.png",
       "width": 390,
       "height": 844,
-      "sha256": "100323fb7ce0a113b64ebc0f461d23a38d5dad713fa754d03eb06aa792bb871a"
+      "sha256": "2be660fd576eb5acaa41dfa591c316eee4f0356c64eb2ffe6ad65c3cb04452e7"
     },
     {
       "file": "phone_hud.png",
       "width": 390,
       "height": 844,
-      "sha256": "dfb1b844bc3a51eabcc74fef0183009259e4013ed87ba84bbc05a1e8fa0c2c2b"
+      "sha256": "e9dfc06a242db71b58d4944bdf182aeeccaa11d83eebc5d1a3635521c4563894"
     },
     {
       "file": "phone_objectives.png",
       "width": 390,
       "height": 844,
-      "sha256": "6fa66222e94924951e06eaae9ffb115d32e1896ec46f781f7c4d9c2ef8c82408"
+      "sha256": "779d24abc1e74f391effec0e1072e75e8d27c122f12dc6fd3b4736bd0b533175"
     },
     {
       "file": "phone_research.png",
       "width": 390,
       "height": 844,
-      "sha256": "7cdbe1af4511d1f1d09fd0893d86f1260ddb6779210baef464d123e9e2d9caf5"
+      "sha256": "0b210415b859535b786beab142c9b57226649641fd20ea9786314f43b525e1a7"
     },
     {
       "file": "tablet_activityLog.png",
@@ -74,7 +74,7 @@
       "file": "tablet_empire.png",
       "width": 1024,
       "height": 768,
-      "sha256": "668085aedebdf0d258063d8401f233fdbc89eae06af3cfae120f1a1c5ee29079"
+      "sha256": "00ca6a7f43ccef5b4df95befa266688f52ca1eca46286aba4ea6d487468be864"
     },
     {
       "file": "tablet_hud.png",
@@ -92,7 +92,8 @@
       "file": "tablet_research.png",
       "width": 1024,
       "height": 768,
-      "sha256": "13f350f0f44622442b51a5d61f02962a4095205f3ccbd78f5ebb19a7a55bdfa6"
+      "sha256": "f7d8794fb8bfd3387b2d392ad5178ef6ba813701f4c119210027a870cd964fe8"
     }
-  ]
+  ],
+  "viewSizing": "Physical test view and render surface match each listed size at pixel ratio 1; MediaQuery size is asserted."
 }

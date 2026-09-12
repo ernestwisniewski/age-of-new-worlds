@@ -8,7 +8,6 @@
   "pixelRatio": 1,
   "limitations": [
     "Mock preferences, secure storage and package metadata; no live account or native device.",
-    "The phone reference visibly overlaps duplicate footer links; target must retain accessible controls.",
     "Menu entries are superseded by the current menu specification."
   ],
   "images": [
@@ -16,19 +15,20 @@
       "file": "phone_menu.png",
       "width": 390,
       "height": 844,
-      "sha256": "ecb88afdf6349163e4b6af08bc04f66560d28407275d1944f80d839413bda3c5"
+      "sha256": "e96f3e84b42701dfa6220312be7c62edf132d2941b8eaf076e1a093cad59fa64"
     },
     {
       "file": "tablet_menu.png",
       "width": 1024,
       "height": 768,
-      "sha256": "713c8ba6ac9b769ea4f8a859e3665f118044cbf70bc93fbcf97b271924e9d7a6"
+      "sha256": "0333b46dfbf736e83f0d7902b34015f6b13f8751033596260b1b4763bdbc891d"
     },
     {
       "file": "desktop_menu.png",
       "width": 1440,
       "height": 900,
-      "sha256": "f09b7ab17751e7d7b927a3de420ca77fbf3afcaa240183ae96330a4126ee0564"
+      "sha256": "89da29b028116e69eebc7047c821d2bd7fd01be235e46d6c8b2080d39d624a5b"
     }
-  ]
+  ],
+  "viewSizing": "Physical test view and render surface match each listed size at pixel ratio 1; MediaQuery size is asserted."
 }
