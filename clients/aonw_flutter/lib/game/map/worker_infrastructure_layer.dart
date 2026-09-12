@@ -386,7 +386,7 @@ final class MapFieldImprovementComponent extends PositionComponent
           value.improvement,
           era: value.eraColumn,
         ),
-        releaseAtlas: kindChanged,
+        releaseAtlas: true,
       );
     }
   }

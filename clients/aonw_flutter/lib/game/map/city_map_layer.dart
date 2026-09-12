@@ -166,7 +166,7 @@ final class MapCityComponent extends PositionComponent
     _city = city;
     _controlled = city.ownerPlayerId == actorPlayerId;
     position.setValues(center.dx, center.dy);
-    if (levelChanged) _sprite.replaceFrame(_frameId);
+    if (levelChanged) _sprite.replaceFrame(_frameId, releaseAtlas: true);
   }
 
   @override

@@ -58,13 +58,30 @@ flutter:
     - assets/runtime/sprites/buildings_a/
     - assets/runtime/sprites/buildings_b/
     - assets/runtime/sprites/buildings_c/
-    - assets/runtime/sprites/cities/
+    - assets/runtime/sprites/cities_level_0/
+    - assets/runtime/sprites/cities_level_1/
+    - assets/runtime/sprites/cities_level_2/
+    - assets/runtime/sprites/cities_level_3/
+    - assets/runtime/sprites/cities_level_4/
+    - assets/runtime/sprites/cities_level_5/
     - assets/runtime/sprites/dice/
     - assets/runtime/sprites/icons_map/
-    - assets/runtime/sprites/improvements_1/
-    - assets/runtime/sprites/improvements_2/
-    - assets/runtime/sprites/improvements_3/
-    - assets/runtime/sprites/improvements_4/
+    - assets/runtime/sprites/improvements_1_era_0/
+    - assets/runtime/sprites/improvements_1_era_1/
+    - assets/runtime/sprites/improvements_1_era_2/
+    - assets/runtime/sprites/improvements_1_era_3/
+    - assets/runtime/sprites/improvements_2_era_0/
+    - assets/runtime/sprites/improvements_2_era_1/
+    - assets/runtime/sprites/improvements_2_era_2/
+    - assets/runtime/sprites/improvements_2_era_3/
+    - assets/runtime/sprites/improvements_3_era_0/
+    - assets/runtime/sprites/improvements_3_era_1/
+    - assets/runtime/sprites/improvements_3_era_2/
+    - assets/runtime/sprites/improvements_3_era_3/
+    - assets/runtime/sprites/improvements_4_era_0/
+    - assets/runtime/sprites/improvements_4_era_1/
+    - assets/runtime/sprites/improvements_4_era_2/
+    - assets/runtime/sprites/improvements_4_era_3/
     - assets/runtime/sprites/technologies/
     - assets/runtime/sprites/unit_archer/
     - assets/runtime/sprites/unit_catapult/

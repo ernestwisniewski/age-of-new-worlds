@@ -12,13 +12,30 @@
     "buildings_a": "assets/runtime/sprites/buildings_a/buildings_a.atlas",
     "buildings_b": "assets/runtime/sprites/buildings_b/buildings_b.atlas",
     "buildings_c": "assets/runtime/sprites/buildings_c/buildings_c.atlas",
-    "cities": "assets/runtime/sprites/cities/cities.atlas",
+    "cities_level_0": "assets/runtime/sprites/cities_level_0/cities_level_0.atlas",
+    "cities_level_1": "assets/runtime/sprites/cities_level_1/cities_level_1.atlas",
+    "cities_level_2": "assets/runtime/sprites/cities_level_2/cities_level_2.atlas",
+    "cities_level_3": "assets/runtime/sprites/cities_level_3/cities_level_3.atlas",
+    "cities_level_4": "assets/runtime/sprites/cities_level_4/cities_level_4.atlas",
+    "cities_level_5": "assets/runtime/sprites/cities_level_5/cities_level_5.atlas",
     "dice": "assets/runtime/sprites/dice/dice.atlas",
     "icons_map": "assets/runtime/sprites/icons_map/icons_map.atlas",
-    "improvements_1": "assets/runtime/sprites/improvements_1/improvements_1.atlas",
-    "improvements_2": "assets/runtime/sprites/improvements_2/improvements_2.atlas",
-    "improvements_3": "assets/runtime/sprites/improvements_3/improvements_3.atlas",
-    "improvements_4": "assets/runtime/sprites/improvements_4/improvements_4.atlas",
+    "improvements_1_era_0": "assets/runtime/sprites/improvements_1_era_0/improvements_1_era_0.atlas",
+    "improvements_1_era_1": "assets/runtime/sprites/improvements_1_era_1/improvements_1_era_1.atlas",
+    "improvements_1_era_2": "assets/runtime/sprites/improvements_1_era_2/improvements_1_era_2.atlas",
+    "improvements_1_era_3": "assets/runtime/sprites/improvements_1_era_3/improvements_1_era_3.atlas",
+    "improvements_2_era_0": "assets/runtime/sprites/improvements_2_era_0/improvements_2_era_0.atlas",
+    "improvements_2_era_1": "assets/runtime/sprites/improvements_2_era_1/improvements_2_era_1.atlas",
+    "improvements_2_era_2": "assets/runtime/sprites/improvements_2_era_2/improvements_2_era_2.atlas",
+    "improvements_2_era_3": "assets/runtime/sprites/improvements_2_era_3/improvements_2_era_3.atlas",
+    "improvements_3_era_0": "assets/runtime/sprites/improvements_3_era_0/improvements_3_era_0.atlas",
+    "improvements_3_era_1": "assets/runtime/sprites/improvements_3_era_1/improvements_3_era_1.atlas",
+    "improvements_3_era_2": "assets/runtime/sprites/improvements_3_era_2/improvements_3_era_2.atlas",
+    "improvements_3_era_3": "assets/runtime/sprites/improvements_3_era_3/improvements_3_era_3.atlas",
+    "improvements_4_era_0": "assets/runtime/sprites/improvements_4_era_0/improvements_4_era_0.atlas",
+    "improvements_4_era_1": "assets/runtime/sprites/improvements_4_era_1/improvements_4_era_1.atlas",
+    "improvements_4_era_2": "assets/runtime/sprites/improvements_4_era_2/improvements_4_era_2.atlas",
+    "improvements_4_era_3": "assets/runtime/sprites/improvements_4_era_3/improvements_4_era_3.atlas",
     "technologies": "assets/runtime/sprites/technologies/technologies.atlas",
     "unit_archer": "assets/runtime/sprites/unit_archer/unit_archer.atlas",
     "unit_catapult": "assets/runtime/sprites/unit_catapult/unit_catapult.atlas",
@@ -572,7 +589,7 @@
       ]
     },
     "city.growthCivic.0": {
-      "atlas": "cities",
+      "atlas": "cities_level_0",
       "region": "city.growthCivic.0",
       "index": -1,
       "grid": [
@@ -581,7 +598,7 @@
       ]
     },
     "city.growthCivic.1": {
-      "atlas": "cities",
+      "atlas": "cities_level_1",
       "region": "city.growthCivic.1",
       "index": -1,
       "grid": [
@@ -590,7 +607,7 @@
       ]
     },
     "city.growthCivic.2": {
-      "atlas": "cities",
+      "atlas": "cities_level_2",
       "region": "city.growthCivic.2",
       "index": -1,
       "grid": [
@@ -599,7 +616,7 @@
       ]
     },
     "city.growthCivic.3": {
-      "atlas": "cities",
+      "atlas": "cities_level_3",
       "region": "city.growthCivic.3",
       "index": -1,
       "grid": [
@@ -608,7 +625,7 @@
       ]
     },
     "city.growthCivic.4": {
-      "atlas": "cities",
+      "atlas": "cities_level_4",
       "region": "city.growthCivic.4",
       "index": -1,
       "grid": [
@@ -617,7 +634,7 @@
       ]
     },
     "city.growthCivic.5": {
-      "atlas": "cities",
+      "atlas": "cities_level_5",
       "region": "city.growthCivic.5",
       "index": -1,
       "grid": [
@@ -626,7 +643,7 @@
       ]
     },
     "city.industryModern.0": {
-      "atlas": "cities",
+      "atlas": "cities_level_0",
       "region": "city.industryModern.0",
       "index": -1,
       "grid": [
@@ -635,7 +652,7 @@
       ]
     },
     "city.industryModern.1": {
-      "atlas": "cities",
+      "atlas": "cities_level_1",
       "region": "city.industryModern.1",
       "index": -1,
       "grid": [
@@ -644,7 +661,7 @@
       ]
     },
     "city.industryModern.2": {
-      "atlas": "cities",
+      "atlas": "cities_level_2",
       "region": "city.industryModern.2",
       "index": -1,
       "grid": [
@@ -653,7 +670,7 @@
       ]
     },
     "city.industryModern.3": {
-      "atlas": "cities",
+      "atlas": "cities_level_3",
       "region": "city.industryModern.3",
       "index": -1,
       "grid": [
@@ -662,7 +679,7 @@
       ]
     },
     "city.industryModern.4": {
-      "atlas": "cities",
+      "atlas": "cities_level_4",
       "region": "city.industryModern.4",
       "index": -1,
       "grid": [
@@ -671,7 +688,7 @@
       ]
     },
     "city.industryModern.5": {
-      "atlas": "cities",
+      "atlas": "cities_level_5",
       "region": "city.industryModern.5",
       "index": -1,
       "grid": [
@@ -680,7 +697,7 @@
       ]
     },
     "city.militaryFortified.0": {
-      "atlas": "cities",
+      "atlas": "cities_level_0",
       "region": "city.militaryFortified.0",
       "index": -1,
       "grid": [
@@ -689,7 +706,7 @@
       ]
     },
     "city.militaryFortified.1": {
-      "atlas": "cities",
+      "atlas": "cities_level_1",
       "region": "city.militaryFortified.1",
       "index": -1,
       "grid": [
@@ -698,7 +715,7 @@
       ]
     },
     "city.militaryFortified.2": {
-      "atlas": "cities",
+      "atlas": "cities_level_2",
       "region": "city.militaryFortified.2",
       "index": -1,
       "grid": [
@@ -707,7 +724,7 @@
       ]
     },
     "city.militaryFortified.3": {
-      "atlas": "cities",
+      "atlas": "cities_level_3",
       "region": "city.militaryFortified.3",
       "index": -1,
       "grid": [
@@ -716,7 +733,7 @@
       ]
     },
     "city.militaryFortified.4": {
-      "atlas": "cities",
+      "atlas": "cities_level_4",
       "region": "city.militaryFortified.4",
       "index": -1,
       "grid": [
@@ -725,7 +742,7 @@
       ]
     },
     "city.militaryFortified.5": {
-      "atlas": "cities",
+      "atlas": "cities_level_5",
       "region": "city.militaryFortified.5",
       "index": -1,
       "grid": [
@@ -734,7 +751,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.0": {
-      "atlas": "cities",
+      "atlas": "cities_level_0",
       "region": "city.tradeKnowledgeMaritime.0",
       "index": -1,
       "grid": [
@@ -743,7 +760,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.1": {
-      "atlas": "cities",
+      "atlas": "cities_level_1",
       "region": "city.tradeKnowledgeMaritime.1",
       "index": -1,
       "grid": [
@@ -752,7 +769,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.2": {
-      "atlas": "cities",
+      "atlas": "cities_level_2",
       "region": "city.tradeKnowledgeMaritime.2",
       "index": -1,
       "grid": [
@@ -761,7 +778,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.3": {
-      "atlas": "cities",
+      "atlas": "cities_level_3",
       "region": "city.tradeKnowledgeMaritime.3",
       "index": -1,
       "grid": [
@@ -770,7 +787,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.4": {
-      "atlas": "cities",
+      "atlas": "cities_level_4",
       "region": "city.tradeKnowledgeMaritime.4",
       "index": -1,
       "grid": [
@@ -779,7 +796,7 @@
       ]
     },
     "city.tradeKnowledgeMaritime.5": {
-      "atlas": "cities",
+      "atlas": "cities_level_5",
       "region": "city.tradeKnowledgeMaritime.5",
       "index": -1,
       "grid": [
@@ -1112,7 +1129,7 @@
       ]
     },
     "improvement.bauxiteMine.0": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_0",
       "region": "improvement.bauxiteMine.0",
       "index": -1,
       "grid": [
@@ -1121,7 +1138,7 @@
       ]
     },
     "improvement.bauxiteMine.1": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_1",
       "region": "improvement.bauxiteMine.1",
       "index": -1,
       "grid": [
@@ -1130,7 +1147,7 @@
       ]
     },
     "improvement.bauxiteMine.2": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_2",
       "region": "improvement.bauxiteMine.2",
       "index": -1,
       "grid": [
@@ -1139,7 +1156,7 @@
       ]
     },
     "improvement.bauxiteMine.3": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_3",
       "region": "improvement.bauxiteMine.3",
       "index": -1,
       "grid": [
@@ -1148,7 +1165,7 @@
       ]
     },
     "improvement.camp.0": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_0",
       "region": "improvement.camp.0",
       "index": -1,
       "grid": [
@@ -1157,7 +1174,7 @@
       ]
     },
     "improvement.camp.1": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_1",
       "region": "improvement.camp.1",
       "index": -1,
       "grid": [
@@ -1166,7 +1183,7 @@
       ]
     },
     "improvement.camp.2": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_2",
       "region": "improvement.camp.2",
       "index": -1,
       "grid": [
@@ -1175,7 +1192,7 @@
       ]
     },
     "improvement.camp.3": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_3",
       "region": "improvement.camp.3",
       "index": -1,
       "grid": [
@@ -1184,7 +1201,7 @@
       ]
     },
     "improvement.coalShaft.0": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_0",
       "region": "improvement.coalShaft.0",
       "index": -1,
       "grid": [
@@ -1193,7 +1210,7 @@
       ]
     },
     "improvement.coalShaft.1": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_1",
       "region": "improvement.coalShaft.1",
       "index": -1,
       "grid": [
@@ -1202,7 +1219,7 @@
       ]
     },
     "improvement.coalShaft.2": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_2",
       "region": "improvement.coalShaft.2",
       "index": -1,
       "grid": [
@@ -1211,7 +1228,7 @@
       ]
     },
     "improvement.coalShaft.3": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_3",
       "region": "improvement.coalShaft.3",
       "index": -1,
       "grid": [
@@ -1220,7 +1237,7 @@
       ]
     },
     "improvement.farm.0": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_0",
       "region": "improvement.farm.0",
       "index": -1,
       "grid": [
@@ -1229,7 +1246,7 @@
       ]
     },
     "improvement.farm.1": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_1",
       "region": "improvement.farm.1",
       "index": -1,
       "grid": [
@@ -1238,7 +1255,7 @@
       ]
     },
     "improvement.farm.2": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_2",
       "region": "improvement.farm.2",
       "index": -1,
       "grid": [
@@ -1247,7 +1264,7 @@
       ]
     },
     "improvement.farm.3": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_3",
       "region": "improvement.farm.3",
       "index": -1,
       "grid": [
@@ -1256,7 +1273,7 @@
       ]
     },
     "improvement.fishingBoats.0": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_0",
       "region": "improvement.fishingBoats.0",
       "index": -1,
       "grid": [
@@ -1265,7 +1282,7 @@
       ]
     },
     "improvement.fishingBoats.1": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_1",
       "region": "improvement.fishingBoats.1",
       "index": -1,
       "grid": [
@@ -1274,7 +1291,7 @@
       ]
     },
     "improvement.fishingBoats.2": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_2",
       "region": "improvement.fishingBoats.2",
       "index": -1,
       "grid": [
@@ -1283,7 +1300,7 @@
       ]
     },
     "improvement.fishingBoats.3": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_3",
       "region": "improvement.fishingBoats.3",
       "index": -1,
       "grid": [
@@ -1292,7 +1309,7 @@
       ]
     },
     "improvement.horseRanch.0": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_0",
       "region": "improvement.horseRanch.0",
       "index": -1,
       "grid": [
@@ -1301,7 +1318,7 @@
       ]
     },
     "improvement.horseRanch.1": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_1",
       "region": "improvement.horseRanch.1",
       "index": -1,
       "grid": [
@@ -1310,7 +1327,7 @@
       ]
     },
     "improvement.horseRanch.2": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_2",
       "region": "improvement.horseRanch.2",
       "index": -1,
       "grid": [
@@ -1319,7 +1336,7 @@
       ]
     },
     "improvement.horseRanch.3": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_3",
       "region": "improvement.horseRanch.3",
       "index": -1,
       "grid": [
@@ -1328,7 +1345,7 @@
       ]
     },
     "improvement.lumberMill.0": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_0",
       "region": "improvement.lumberMill.0",
       "index": -1,
       "grid": [
@@ -1337,7 +1354,7 @@
       ]
     },
     "improvement.lumberMill.1": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_1",
       "region": "improvement.lumberMill.1",
       "index": -1,
       "grid": [
@@ -1346,7 +1363,7 @@
       ]
     },
     "improvement.lumberMill.2": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_2",
       "region": "improvement.lumberMill.2",
       "index": -1,
       "grid": [
@@ -1355,7 +1372,7 @@
       ]
     },
     "improvement.lumberMill.3": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_3",
       "region": "improvement.lumberMill.3",
       "index": -1,
       "grid": [
@@ -1364,7 +1381,7 @@
       ]
     },
     "improvement.mine.0": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_0",
       "region": "improvement.mine.0",
       "index": -1,
       "grid": [
@@ -1373,7 +1390,7 @@
       ]
     },
     "improvement.mine.1": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_1",
       "region": "improvement.mine.1",
       "index": -1,
       "grid": [
@@ -1382,7 +1399,7 @@
       ]
     },
     "improvement.mine.2": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_2",
       "region": "improvement.mine.2",
       "index": -1,
       "grid": [
@@ -1391,7 +1408,7 @@
       ]
     },
     "improvement.mine.3": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_3",
       "region": "improvement.mine.3",
       "index": -1,
       "grid": [
@@ -1400,7 +1417,7 @@
       ]
     },
     "improvement.oilWell.0": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_0",
       "region": "improvement.oilWell.0",
       "index": -1,
       "grid": [
@@ -1409,7 +1426,7 @@
       ]
     },
     "improvement.oilWell.1": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_1",
       "region": "improvement.oilWell.1",
       "index": -1,
       "grid": [
@@ -1418,7 +1435,7 @@
       ]
     },
     "improvement.oilWell.2": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_2",
       "region": "improvement.oilWell.2",
       "index": -1,
       "grid": [
@@ -1427,7 +1444,7 @@
       ]
     },
     "improvement.oilWell.3": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_3",
       "region": "improvement.oilWell.3",
       "index": -1,
       "grid": [
@@ -1436,7 +1453,7 @@
       ]
     },
     "improvement.orchard.0": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_0",
       "region": "improvement.orchard.0",
       "index": -1,
       "grid": [
@@ -1445,7 +1462,7 @@
       ]
     },
     "improvement.orchard.1": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_1",
       "region": "improvement.orchard.1",
       "index": -1,
       "grid": [
@@ -1454,7 +1471,7 @@
       ]
     },
     "improvement.orchard.2": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_2",
       "region": "improvement.orchard.2",
       "index": -1,
       "grid": [
@@ -1463,7 +1480,7 @@
       ]
     },
     "improvement.orchard.3": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_3",
       "region": "improvement.orchard.3",
       "index": -1,
       "grid": [
@@ -1472,7 +1489,7 @@
       ]
     },
     "improvement.pasture.0": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_0",
       "region": "improvement.pasture.0",
       "index": -1,
       "grid": [
@@ -1481,7 +1498,7 @@
       ]
     },
     "improvement.pasture.1": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_1",
       "region": "improvement.pasture.1",
       "index": -1,
       "grid": [
@@ -1490,7 +1507,7 @@
       ]
     },
     "improvement.pasture.2": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_2",
       "region": "improvement.pasture.2",
       "index": -1,
       "grid": [
@@ -1499,7 +1516,7 @@
       ]
     },
     "improvement.pasture.3": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_3",
       "region": "improvement.pasture.3",
       "index": -1,
       "grid": [
@@ -1508,7 +1525,7 @@
       ]
     },
     "improvement.pearlDivers.0": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_0",
       "region": "improvement.pearlDivers.0",
       "index": -1,
       "grid": [
@@ -1517,7 +1534,7 @@
       ]
     },
     "improvement.pearlDivers.1": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_1",
       "region": "improvement.pearlDivers.1",
       "index": -1,
       "grid": [
@@ -1526,7 +1543,7 @@
       ]
     },
     "improvement.pearlDivers.2": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_2",
       "region": "improvement.pearlDivers.2",
       "index": -1,
       "grid": [
@@ -1535,7 +1552,7 @@
       ]
     },
     "improvement.pearlDivers.3": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_3",
       "region": "improvement.pearlDivers.3",
       "index": -1,
       "grid": [
@@ -1544,7 +1561,7 @@
       ]
     },
     "improvement.plantation.0": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_0",
       "region": "improvement.plantation.0",
       "index": -1,
       "grid": [
@@ -1553,7 +1570,7 @@
       ]
     },
     "improvement.plantation.1": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_1",
       "region": "improvement.plantation.1",
       "index": -1,
       "grid": [
@@ -1562,7 +1579,7 @@
       ]
     },
     "improvement.plantation.2": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_2",
       "region": "improvement.plantation.2",
       "index": -1,
       "grid": [
@@ -1571,7 +1588,7 @@
       ]
     },
     "improvement.plantation.3": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_3",
       "region": "improvement.plantation.3",
       "index": -1,
       "grid": [
@@ -1580,7 +1597,7 @@
       ]
     },
     "improvement.prospectorCamp.0": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_0",
       "region": "improvement.prospectorCamp.0",
       "index": -1,
       "grid": [
@@ -1589,7 +1606,7 @@
       ]
     },
     "improvement.prospectorCamp.1": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_1",
       "region": "improvement.prospectorCamp.1",
       "index": -1,
       "grid": [
@@ -1598,7 +1615,7 @@
       ]
     },
     "improvement.prospectorCamp.2": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_2",
       "region": "improvement.prospectorCamp.2",
       "index": -1,
       "grid": [
@@ -1607,7 +1624,7 @@
       ]
     },
     "improvement.prospectorCamp.3": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_3",
       "region": "improvement.prospectorCamp.3",
       "index": -1,
       "grid": [
@@ -1616,7 +1633,7 @@
       ]
     },
     "improvement.quarry.0": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_0",
       "region": "improvement.quarry.0",
       "index": -1,
       "grid": [
@@ -1625,7 +1642,7 @@
       ]
     },
     "improvement.quarry.1": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_1",
       "region": "improvement.quarry.1",
       "index": -1,
       "grid": [
@@ -1634,7 +1651,7 @@
       ]
     },
     "improvement.quarry.2": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_2",
       "region": "improvement.quarry.2",
       "index": -1,
       "grid": [
@@ -1643,7 +1660,7 @@
       ]
     },
     "improvement.quarry.3": {
-      "atlas": "improvements_2",
+      "atlas": "improvements_2_era_3",
       "region": "improvement.quarry.3",
       "index": -1,
       "grid": [
@@ -1652,7 +1669,7 @@
       ]
     },
     "improvement.riverFarm.0": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_0",
       "region": "improvement.riverFarm.0",
       "index": -1,
       "grid": [
@@ -1661,7 +1678,7 @@
       ]
     },
     "improvement.riverFarm.1": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_1",
       "region": "improvement.riverFarm.1",
       "index": -1,
       "grid": [
@@ -1670,7 +1687,7 @@
       ]
     },
     "improvement.riverFarm.2": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_2",
       "region": "improvement.riverFarm.2",
       "index": -1,
       "grid": [
@@ -1679,7 +1696,7 @@
       ]
     },
     "improvement.riverFarm.3": {
-      "atlas": "improvements_1",
+      "atlas": "improvements_1_era_3",
       "region": "improvement.riverFarm.3",
       "index": -1,
       "grid": [
@@ -1688,7 +1705,7 @@
       ]
     },
     "improvement.tradingPost.0": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_0",
       "region": "improvement.tradingPost.0",
       "index": -1,
       "grid": [
@@ -1697,7 +1714,7 @@
       ]
     },
     "improvement.tradingPost.1": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_1",
       "region": "improvement.tradingPost.1",
       "index": -1,
       "grid": [
@@ -1706,7 +1723,7 @@
       ]
     },
     "improvement.tradingPost.2": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_2",
       "region": "improvement.tradingPost.2",
       "index": -1,
       "grid": [
@@ -1715,7 +1732,7 @@
       ]
     },
     "improvement.tradingPost.3": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_3",
       "region": "improvement.tradingPost.3",
       "index": -1,
       "grid": [
@@ -1724,7 +1741,7 @@
       ]
     },
     "improvement.uraniumMine.0": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_0",
       "region": "improvement.uraniumMine.0",
       "index": -1,
       "grid": [
@@ -1733,7 +1750,7 @@
       ]
     },
     "improvement.uraniumMine.1": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_1",
       "region": "improvement.uraniumMine.1",
       "index": -1,
       "grid": [
@@ -1742,7 +1759,7 @@
       ]
     },
     "improvement.uraniumMine.2": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_2",
       "region": "improvement.uraniumMine.2",
       "index": -1,
       "grid": [
@@ -1751,7 +1768,7 @@
       ]
     },
     "improvement.uraniumMine.3": {
-      "atlas": "improvements_4",
+      "atlas": "improvements_4_era_3",
       "region": "improvement.uraniumMine.3",
       "index": -1,
       "grid": [
@@ -1760,7 +1777,7 @@
       ]
     },
     "improvement.vineyard.0": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_0",
       "region": "improvement.vineyard.0",
       "index": -1,
       "grid": [
@@ -1769,7 +1786,7 @@
       ]
     },
     "improvement.vineyard.1": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_1",
       "region": "improvement.vineyard.1",
       "index": -1,
       "grid": [
@@ -1778,7 +1795,7 @@
       ]
     },
     "improvement.vineyard.2": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_2",
       "region": "improvement.vineyard.2",
       "index": -1,
       "grid": [
@@ -1787,7 +1804,7 @@
       ]
     },
     "improvement.vineyard.3": {
-      "atlas": "improvements_3",
+      "atlas": "improvements_3_era_3",
       "region": "improvement.vineyard.3",
       "index": -1,
       "grid": [

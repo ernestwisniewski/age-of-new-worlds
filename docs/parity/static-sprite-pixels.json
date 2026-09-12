@@ -1,0 +1,910 @@
+{
+  "sourceRevision": "0fff0ce",
+  "sourceManifestSha256": "274d9e19360d9e61a319d3da0c061b99f7127a0b99fdd3b09296c6cf6417746c",
+  "pixels": {
+    "pixelFormat": "premultipliedRgba8888",
+    "padding": 2,
+    "frames": {
+      "city.growthCivic.0": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b2b999bb836a9d24ad848a57799dcb329a5f7036f66bbbed08e40d3f01cec1ac"
+      },
+      "city.growthCivic.1": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "f9e483ff3573725edaa09de8557984b809f41999ee1f07562e8b1318b8aaf198"
+      },
+      "city.growthCivic.2": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "a5e06953a9b2c67c556844373e445f38ea0ef1e88e2b4142e708c337ef654797"
+      },
+      "city.growthCivic.3": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "db8fbb789a415fbfd7317a6355f944ca8a0ca86321e2d973032322d229ced1c2"
+      },
+      "city.growthCivic.4": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "cb7ee48c323268a39a5eb477296bc45d10176f957fb0323b9ae1e6e78b50f53d"
+      },
+      "city.growthCivic.5": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "d5a953eaea233b0819e864e048a6e51e6fe27dfa4c8acffa733ad066d6974804"
+      },
+      "city.industryModern.0": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "a2aeb31db457fa3245480a4313ad43daf7a8f7ca1cbc3e2abc33519e7dda5d45"
+      },
+      "city.industryModern.1": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "4fcc81dd89079b4f08b38a07d93446bf8a77e4dc623eb33683b6a0760b279341"
+      },
+      "city.industryModern.2": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ca9bf9921edf6a4c2c0e79129ede1441a855b757feecba6afbff5488b1a7fb56"
+      },
+      "city.industryModern.3": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "c99262c9eea8c3d399eb20d02187a402360ef3826ccc1399e8a53dbad65960e9"
+      },
+      "city.industryModern.4": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "e0859d153b5a28ae479993d8b7c56e79618201cba122ec1647fe488b2992c161"
+      },
+      "city.industryModern.5": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "3ed8f58241b9a79456e04d6865109e506c7c533a84d40a0ed0a0fd243619b306"
+      },
+      "city.militaryFortified.0": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "c21d3db9762747265d14769093083ea399d43e0183209a647ee5d0c86f3005b6"
+      },
+      "city.militaryFortified.1": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "358d27562c00a0d636f3a0570c9855c8e2f8f8f042b1b636e89c496bfabae55d"
+      },
+      "city.militaryFortified.2": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ed7c975b5ad8f45aacb59f8e74fe8fcb893623ba5dc5072a898933164902e6c3"
+      },
+      "city.militaryFortified.3": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "c3f6ba29464e2501a7e755f1d0028f7e35f5523860654b5848b6826947d2a208"
+      },
+      "city.militaryFortified.4": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "7b123f552f56fec1063a6e290a1c37fa7cf97ec055c699eb00ad1fc9477f4466"
+      },
+      "city.militaryFortified.5": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "950629c1b34c0790a3614c84575405bee1cd2a42992e14af91ba6edab22c8315"
+      },
+      "city.tradeKnowledgeMaritime.0": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "84685b119ee9f0adcf1ea1488c3164d9528b434a9e5e8180f847c4e73c271953"
+      },
+      "city.tradeKnowledgeMaritime.1": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "be99174985fa9712a21c6f0c167610a488ea1a29bf6222a3be251192d6779324"
+      },
+      "city.tradeKnowledgeMaritime.2": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "53f7c414be786e69245c1c0224b1969202289824b9763b6f49dad70253b54b9a"
+      },
+      "city.tradeKnowledgeMaritime.3": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ece0610cfab722d98a94dc165bc312fe24697be4a140c20962def90c09a0f04d"
+      },
+      "city.tradeKnowledgeMaritime.4": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "a4b11527ed046e352ba5067d4d09044287e8e4e9dc2a77d81ff3a927955eca67"
+      },
+      "city.tradeKnowledgeMaritime.5": {
+        "width": 512.0,
+        "height": 320.0,
+        "originalWidth": 512.0,
+        "originalHeight": 320.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "aacc37f345c5f66f9d0e8b6af3e2c64f33ca6bb9153fc5d8f95cb800c3a54efb"
+      },
+      "improvement.bauxiteMine.0": {
+        "width": 271.0,
+        "height": 243.0,
+        "originalWidth": 271.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "43d3592ef0d28fc1d3bab4d9738bd939e326df1018c215829f244b4eb567c156"
+      },
+      "improvement.bauxiteMine.1": {
+        "width": 271.0,
+        "height": 242.0,
+        "originalWidth": 271.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "06c27cb8ac38e229f1d1f774e008e676595205544f30573661bb9a868258a628"
+      },
+      "improvement.bauxiteMine.2": {
+        "width": 271.0,
+        "height": 243.0,
+        "originalWidth": 271.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "208cde0b83861690cb58f506642f282fe7ef79926b8622cf6a92b83ecaa5a85b"
+      },
+      "improvement.bauxiteMine.3": {
+        "width": 271.0,
+        "height": 242.0,
+        "originalWidth": 271.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "6c6a92dc286538843020bd7a179c8d375cf50064b90f6f8db7e64f537f56ba6c"
+      },
+      "improvement.camp.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "e58cf86757c56bf2f81d0ceb4a92c1ffb3ef48de332403ea476f19233a3f477a"
+      },
+      "improvement.camp.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "74f7251c14d48a353f4f6d4d332b3ba6556fb5644b92a92a754364ccda56ee2d"
+      },
+      "improvement.camp.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "bf21b05235fc6819fd57fd09471e1fe6f379f82cd3e4e9c0fb5bf7f40604a066"
+      },
+      "improvement.camp.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "c84b7f8a32752b500a1a231e645f9489b7778514bd71efe6ca809508182efa21"
+      },
+      "improvement.coalShaft.0": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "fca54bc69ff063e900e330d20b9b33b2026b7f4020b5160f20728e91cf0803a2"
+      },
+      "improvement.coalShaft.1": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "910293b6bddd090402fd13c6e780f12a2f1bc9086904635e9ebc5959548c3a58"
+      },
+      "improvement.coalShaft.2": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "7e029953db4b093630fe7a388bf5c186b2348202dd922fa87c4fc41299b2468e"
+      },
+      "improvement.coalShaft.3": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "53e3f599be356528100465c5305bc967b856f484d5e6a67f1f4175f7aa4cb153"
+      },
+      "improvement.farm.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ab99ca26040b5a3753e393638775a6baa8ad65a948a707f84c4e66d01269a6c9"
+      },
+      "improvement.farm.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "dd529daeb32610e1c91f3ae906e588abf1d62c4eb3d9a965b60eb70319e61610"
+      },
+      "improvement.farm.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "8c7599b1e6b37445681b4ee209481e41e8585187423b3466e3663499661fbf9d"
+      },
+      "improvement.farm.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b49b28080d90a9d2fa495dba64129f01996787caee1198d802c75daa881fc9d1"
+      },
+      "improvement.fishingBoats.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "6023e7a687d3c6440e446ad698ae89c42a59b23f95aea7cd380276fb9076f7de"
+      },
+      "improvement.fishingBoats.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "001d1be11bf9dfb1fca29fe6420d4e1ed82ceb9be90bbb0c7b21f45afbe52c07"
+      },
+      "improvement.fishingBoats.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "902293bfcc17231028638675d9955a9661171324838bf4d09f9c15e929df7d1f"
+      },
+      "improvement.fishingBoats.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "4efa5855f062745bad4c12a2c3025bed4346c7a2bbce2b079f00fc07a0b99818"
+      },
+      "improvement.horseRanch.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "aecbf7ce887b5d502b84c8a4df5a04422139e2c4a3e599bf3a948beee1e65346"
+      },
+      "improvement.horseRanch.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "3178bed6eb81e7f329525c67e1aaed47cb2b24203162c47916ce5c94ceb0ae85"
+      },
+      "improvement.horseRanch.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "1967682c6dfebfb1640109e63222d07b95c7bc25a531e95d74c99ac9b7638e41"
+      },
+      "improvement.horseRanch.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "9031578d6d43ebe98e1359cd19cb72f536813e0c32beaa49f8707daa953e78d4"
+      },
+      "improvement.lumberMill.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "cab0d6e3d7cb6635c847f41a9edd8918bb78b033ef977fc51ccdb0b725dba672"
+      },
+      "improvement.lumberMill.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "06414d320b2d5cdb38bb2036c7f21976a7e1b6f1f957d1e4d0e3017d376e94be"
+      },
+      "improvement.lumberMill.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "8d95a247c4e7723e347b331b0545ecac9417262377639fb9aea652f74a1967d0"
+      },
+      "improvement.lumberMill.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "a10d5d2ce77bab28088f5381499598caa6fefc731229b68eec0676bcb1a56533"
+      },
+      "improvement.mine.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "95f436de9661b923d804c70993005cae0ee0a3b92db1ac6ad40b945755a969ed"
+      },
+      "improvement.mine.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "5c1fc3ac15718807378234e7de6e8d7bfd392033ff5919ba9762f5f9fbb200f0"
+      },
+      "improvement.mine.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "52fc0db2603eade4b78134a21eeef76edd68e9d989f8ab5e464783c517b2df73"
+      },
+      "improvement.mine.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "5946be8e58ec4929f207b0f4fbb8ac848ed68a574ec81160590eeb9a4d0268f9"
+      },
+      "improvement.oilWell.0": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "33a4709e67e5dffc5a8781a3b0c43d8478a6ea9d5e6fdee894348e879de55136"
+      },
+      "improvement.oilWell.1": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "45995b8ca03ad994941e13930a73db36103a1f039c06a15873ba1e480398b290"
+      },
+      "improvement.oilWell.2": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "d2a14b3b11cbc66db33357b3f66415cafa44badb659de2174b100570cee1eb8a"
+      },
+      "improvement.oilWell.3": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "0b9bfc671521983453defa9e6f8362c3d08ab263d4b08fe7ef8901ab5d407392"
+      },
+      "improvement.orchard.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "01bb5c72c7bb361964be3aee5b95ad34526143be2c2faeaf49423769eaf7d314"
+      },
+      "improvement.orchard.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "a5320568b5d37208b503e3548039cad9e36214e0232d4c4e5f1028f329801251"
+      },
+      "improvement.orchard.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "3798cbc2e9c5a44a2b80da8268c79bba44db4915be881a493e151f1575671c1c"
+      },
+      "improvement.orchard.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "d2969221a3dfe8972a2b7556e8d75b228527db33e804c8f3b941c8bca97ab9c2"
+      },
+      "improvement.pasture.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "0e457b692a5ca04dae775a5655a2f6e622c27a40f7bae7e39680e17d19096bae"
+      },
+      "improvement.pasture.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "7c4f80fba7ef2c948de0eec5671a670df8a6570e3acdfe790d461c76ca7334a8"
+      },
+      "improvement.pasture.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "074fee34ae04989d6f609f9027ee45ac6a63cabada4d32da7cfb36ccdd082012"
+      },
+      "improvement.pasture.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "1997781d885e38039ddbb30eff84c4aa79b351e445f1560ce5cb3f429a279317"
+      },
+      "improvement.pearlDivers.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "8fbf94a57207baa3b76dec93556a51c0ac046da1ab99a3525948b8405f6882b7"
+      },
+      "improvement.pearlDivers.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "3bae6f335767952e1a426a3520504ab590e9a493e988ffda34a95b5ea42e2381"
+      },
+      "improvement.pearlDivers.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "62622a0b6cdba110a78639826ce97c0cf051c9a842287a5a7f65a5cab975cd86"
+      },
+      "improvement.pearlDivers.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "4005a687b2db692ed7c8d79b4bf44f6553ef8e4c76997091ca9ea5c12e2b9b2e"
+      },
+      "improvement.plantation.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "d634918e1d789f6535fc9b2b706ef38c621a73643bd22d5884273ac4214c7499"
+      },
+      "improvement.plantation.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "2d387fb4c3e402d260aa4ef9ddf5826b575044bc102e5daf16116796a74b4bf7"
+      },
+      "improvement.plantation.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "979ce13fa57b563cb8bce968399569bc3505d87293e7ac4c39289a7d98c88841"
+      },
+      "improvement.plantation.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "3328d8840c4b220d09cb2b6910337e1a39ddc8d123fa22691c3cac454598f0d0"
+      },
+      "improvement.prospectorCamp.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b78caf4543c909319d45f729e74728a2cddae9a7e4f70d13107c2934bba8605b"
+      },
+      "improvement.prospectorCamp.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "7cfafd96d5a687266a30ffe653b107732b91809bf5c6d6be1b177684c32183a6"
+      },
+      "improvement.prospectorCamp.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "996310af4ced2dfa7c4dee549176f903c65571c3fdd9a636e81125d2657f8430"
+      },
+      "improvement.prospectorCamp.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b490ac6251df31710fab014e1b8dc9a7f87b3291fc01185226a76fc09bd08634"
+      },
+      "improvement.quarry.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "99be2572ff4a4c3a54108d4c4d67d3b2516e4e578eed64d65b8548e17280411a"
+      },
+      "improvement.quarry.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "e1c79dd74381ca220b98560662bde4b099fbe351b88ff85fa1d8eb947ae3849e"
+      },
+      "improvement.quarry.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b73006cf761d3e070cac3d7ce1c69ee70a0c46abbbb6ba444e68faa92c384c77"
+      },
+      "improvement.quarry.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "0aabfbf24a163c383da4a5675940ee1d2910df5200b0c5b130a0fccaaf6193e8"
+      },
+      "improvement.riverFarm.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "9964a27748544fcd82afb27ce29dea23005ed05fc9c55ec6d01896a6df04ad93"
+      },
+      "improvement.riverFarm.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "38175f3048aff6b5076e6fc61d5dce83254fb398fb7e9ced02bfd55221d20b01"
+      },
+      "improvement.riverFarm.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "0b12a09e2849a4dbaf73d48bffc98bbfc88c5615efe61358119618cf1aae0c56"
+      },
+      "improvement.riverFarm.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "30496b81ac4e8151a667c529ef22914228684ad74fa0d6c0b99ac3131ce34df9"
+      },
+      "improvement.tradingPost.0": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "18524d108f92a6832ad957b091637723a8125f6342e9b64253f14c1b77c266c2"
+      },
+      "improvement.tradingPost.1": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ed6627ad68af2631b7ef87a0925f62388a99d2b35d38a8c5e20aeb70fff8c394"
+      },
+      "improvement.tradingPost.2": {
+        "width": 295.0,
+        "height": 223.0,
+        "originalWidth": 295.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "9baff6c9e258042874ee683a11ea60dd10f76fa1c8fcf2976bde4ebd1c026ec5"
+      },
+      "improvement.tradingPost.3": {
+        "width": 295.0,
+        "height": 222.0,
+        "originalWidth": 295.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "11dccee92a47675c44483b5b2c20f3ff1d6db42245a8ea4246fe1f63be9f9d41"
+      },
+      "improvement.uraniumMine.0": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "b0fdf0cbb1e787831579000c8269ddbcd9e8eda204f7419c8513b825da6cc8e5"
+      },
+      "improvement.uraniumMine.1": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "729e9e8d239df7745d9d75a9439d9f8f5915917ce85467678bd3ebd6275a9852"
+      },
+      "improvement.uraniumMine.2": {
+        "width": 270.0,
+        "height": 243.0,
+        "originalWidth": 270.0,
+        "originalHeight": 243.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "2b6ba277a7904e295ad09e2f0ea0eecbbc422b40b01ab45ab45126eeadd579bc"
+      },
+      "improvement.uraniumMine.3": {
+        "width": 270.0,
+        "height": 242.0,
+        "originalWidth": 270.0,
+        "originalHeight": 242.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "ce16a4792cf86c9dd3bdbe41fabbccace11d92857bf80a28a095df93162059f2"
+      },
+      "improvement.vineyard.0": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "f87bd4fa14484aea18e5054c65bd8d938111577c454449e5e74010d697ec633d"
+      },
+      "improvement.vineyard.1": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "2a0ea6130ce72e845ac21a6db07ca4bf52a04fcf17d9056f407e218826de0882"
+      },
+      "improvement.vineyard.2": {
+        "width": 294.0,
+        "height": 223.0,
+        "originalWidth": 294.0,
+        "originalHeight": 223.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "747c9725f93dd615229864686ea61f541309c474a94357e0651188ff445829ef"
+      },
+      "improvement.vineyard.3": {
+        "width": 294.0,
+        "height": 222.0,
+        "originalWidth": 294.0,
+        "originalHeight": 222.0,
+        "trimX": 0.0,
+        "trimY": 0.0,
+        "sha256": "5a2c1ac9bd3ab008564270a4ab8db4c0241cd9b7ce398281fe2afea2275ef8ca"
+      }
+    }
+  }
+}

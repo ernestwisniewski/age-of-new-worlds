@@ -143,17 +143,53 @@
       "bytes": 311318,
       "sha256": "f5c091f805961bf5d2eed123e77cb090bc71c12fe76c1527c73fc2d20afc8395"
     },
-    "sprites/cities/cities.atlas": {
-      "bytes": 1961,
-      "sha256": "d6f68697d110f87f5de0cf09ad238ee47cbe23dff17ed15331bed17507af488a"
+    "sprites/cities_level_0/cities_level_0.atlas": {
+      "bytes": 379,
+      "sha256": "a520462747238a9764f2821dd4df9c1ae939fb2e3aafdf86d77761fe7684609a"
     },
-    "sprites/cities/cities_0.webp": {
-      "bytes": 761580,
-      "sha256": "062317ab4ea12f1730cc3c8eda66e566c824b9a9dcfe8f499d3fa6341d335f99"
+    "sprites/cities_level_0/cities_level_0_0.webp": {
+      "bytes": 912120,
+      "sha256": "c4c031d3cb849b13fbc37f60ff285f7a4216b17750afec3718df15d00d7f5217"
     },
-    "sprites/cities/cities_1.webp": {
-      "bytes": 789042,
-      "sha256": "d863780ca4896ae098c9cf393d8d68e4715528414379b4a41229522c5196af74"
+    "sprites/cities_level_1/cities_level_1.atlas": {
+      "bytes": 379,
+      "sha256": "f8af595362dd91f00789a6632c8fe554990ece6a18f7267ca89497f781205c57"
+    },
+    "sprites/cities_level_1/cities_level_1_0.webp": {
+      "bytes": 936254,
+      "sha256": "7a6d03c4672cec8a51bb41171fb76d94d5e8ba9abf3cfd89a176178498518026"
+    },
+    "sprites/cities_level_2/cities_level_2.atlas": {
+      "bytes": 379,
+      "sha256": "781de9064d916b3e404700ea780dd29c2b650df6f120424c03d009d0d5fdbe58"
+    },
+    "sprites/cities_level_2/cities_level_2_0.webp": {
+      "bytes": 937632,
+      "sha256": "39ea88b4a2a3c2fe3e56ed50706c3b1056de4e8cae31caa47643769547d956bd"
+    },
+    "sprites/cities_level_3/cities_level_3.atlas": {
+      "bytes": 379,
+      "sha256": "0e2e11c2378c7391d765bea3f6cd04804566ae30bc0563a326e22743f34c7328"
+    },
+    "sprites/cities_level_3/cities_level_3_0.webp": {
+      "bytes": 944486,
+      "sha256": "179e058e8f1df59bb96d17a15688adb68cefc2d265aa1831acd0923b222a6bd5"
+    },
+    "sprites/cities_level_4/cities_level_4.atlas": {
+      "bytes": 379,
+      "sha256": "3682c6fb124764d015be5d9fbb2363db6e95f3c25f38d89c15082063bcf48fa1"
+    },
+    "sprites/cities_level_4/cities_level_4_0.webp": {
+      "bytes": 945684,
+      "sha256": "fc753b5ab7013f048ea99a41c76b642b11b5abda16849efbbe20476871209eab"
+    },
+    "sprites/cities_level_5/cities_level_5.atlas": {
+      "bytes": 379,
+      "sha256": "a152061474fcac7a42c3dfb06ce5be14b2dd472db7c9bc56171d77e6d7533989"
+    },
+    "sprites/cities_level_5/cities_level_5_0.webp": {
+      "bytes": 939332,
+      "sha256": "56016ac0490760b603249c6e9a7f34530bb4bac1f1a0549c8599019de2af6746"
     },
     "sprites/dice/dice.atlas": {
       "bytes": 2118,
@@ -171,41 +207,137 @@
       "bytes": 445656,
       "sha256": "2341a6e45c86d5264c35e30ed43742569ce62c0eb09eb4ddcb915f314908b6c8"
     },
-    "sprites/improvements_1/improvements_1.atlas": {
-      "bytes": 1535,
-      "sha256": "70f910316e5a9049935c5ae545ccd1769e9f564b2a29ad06c5f49bc1a2040536"
+    "sprites/improvements_1_era_0/improvements_1_era_0.atlas": {
+      "bytes": 446,
+      "sha256": "e0807e93b34873f175af44b416dd021a2e31ebb1403ea93b1d60a32ae2031c0e"
     },
-    "sprites/improvements_1/improvements_1_0.webp": {
-      "bytes": 533810,
-      "sha256": "f9b92fc13033ca333d537747f54126635ccb7e4d12f2fcbb5c5b3e8d81cd9166"
+    "sprites/improvements_1_era_0/improvements_1_era_0_0.webp": {
+      "bytes": 483028,
+      "sha256": "90ab5a8aa0ba6894b7c72e4e73145bc6bead4e74a1585358b608ab3c95d1a464"
     },
-    "sprites/improvements_2/improvements_2.atlas": {
-      "bytes": 1583,
-      "sha256": "d7b87ddaf933702d04cb9affe6847aa46507f5cb9fccf17d0ee9afa5df883243"
+    "sprites/improvements_1_era_1/improvements_1_era_1.atlas": {
+      "bytes": 446,
+      "sha256": "1ee81ac88529db390666f5bf46103b12e56e35d6429d6dc20dabba2ea41efa53"
     },
-    "sprites/improvements_2/improvements_2_0.webp": {
-      "bytes": 546892,
-      "sha256": "6d5730cea292d78530f46e609404bd937342126df6aa5a49bd8d71515fdfe1e5"
+    "sprites/improvements_1_era_1/improvements_1_era_1_0.webp": {
+      "bytes": 478156,
+      "sha256": "f0469fbb76ede174806ef3a73c430b0f3e0a6746444dcf79fa65c9b7eb584de7"
     },
-    "sprites/improvements_3/improvements_3.atlas": {
-      "bytes": 1623,
-      "sha256": "5b199e8c196b0bfd23b593f4b77f48f83b21ab1bd5525b32f26de842d9ef39e3"
+    "sprites/improvements_1_era_2/improvements_1_era_2.atlas": {
+      "bytes": 446,
+      "sha256": "ce25b5bd223f5d22468ccb0893b948aa608469e13439f513c697f56ef942ac3d"
     },
-    "sprites/improvements_3/improvements_3_0.webp": {
-      "bytes": 607252,
-      "sha256": "bfd297dd49ead2296778b3485c2b576ece12b9a42d30c239cb2afbabb1714c4e"
+    "sprites/improvements_1_era_2/improvements_1_era_2_0.webp": {
+      "bytes": 462220,
+      "sha256": "2fd44e4f7b061f7af1707550e0968da3486f6722c54cac8dd100c6fd2287d806"
     },
-    "sprites/improvements_4/improvements_4.atlas": {
-      "bytes": 1293,
-      "sha256": "1c4da0d837cfdbda5649b15da1c04422de139e472d16582419bae686fdae57b5"
+    "sprites/improvements_1_era_3/improvements_1_era_3.atlas": {
+      "bytes": 446,
+      "sha256": "bffdf51f68d4c63af32f7adef02cd25bbc022aff6dfd788f497cf516855cacb1"
     },
-    "sprites/improvements_4/improvements_4_0.webp": {
-      "bytes": 411968,
-      "sha256": "14fcb6dad5bbb3f6a8a6523097b846f1fa0140f467159d5022e21bf1f24b50d3"
+    "sprites/improvements_1_era_3/improvements_1_era_3_0.webp": {
+      "bytes": 447974,
+      "sha256": "680159eeffb6003da258deac05c50fc88bea661110ba08f31ed3a82dab7f86eb"
+    },
+    "sprites/improvements_2_era_0/improvements_2_era_0.atlas": {
+      "bytes": 458,
+      "sha256": "cb29484ee1cf99d7fcd14fb48fba89bdd0dcc921453750c655cd8430d15c6174"
+    },
+    "sprites/improvements_2_era_0/improvements_2_era_0_0.webp": {
+      "bytes": 452962,
+      "sha256": "27eda8bd0d7ebd33acb5e33e454b69bf016bfbfbabd904872e6c51010f0c6ab4"
+    },
+    "sprites/improvements_2_era_1/improvements_2_era_1.atlas": {
+      "bytes": 458,
+      "sha256": "5eefb51d100a37dbd28c24617a156deadb817ac940aadcc25eceb07d72d6b690"
+    },
+    "sprites/improvements_2_era_1/improvements_2_era_1_0.webp": {
+      "bytes": 454258,
+      "sha256": "0179b744cbb8a08789fda13f9fce59a048c67dd159ab0c0e58e1d0e4e2f71a46"
+    },
+    "sprites/improvements_2_era_2/improvements_2_era_2.atlas": {
+      "bytes": 458,
+      "sha256": "64107aacc0c9e69a835003532ccbd55b0afca755cf2cc02afddf8468004abade"
+    },
+    "sprites/improvements_2_era_2/improvements_2_era_2_0.webp": {
+      "bytes": 454748,
+      "sha256": "9f8b2319fa0edda06f5baf89e1f466907fefc0aed292e1ec20e4196e31280975"
+    },
+    "sprites/improvements_2_era_3/improvements_2_era_3.atlas": {
+      "bytes": 458,
+      "sha256": "5793666dabf34afb5de785d96d053ea2f387cbb469b0d17c05bc0b3246f42ef3"
+    },
+    "sprites/improvements_2_era_3/improvements_2_era_3_0.webp": {
+      "bytes": 443570,
+      "sha256": "7acc20ad78b588fef440fcc793b39d09b54904f5f85a2c64ba8985ffb34749ad"
+    },
+    "sprites/improvements_3_era_0/improvements_3_era_0.atlas": {
+      "bytes": 468,
+      "sha256": "260d8b6adca363b30532f8e3e2dec45283c469bc9953b00cdca57513fd64b6e8"
+    },
+    "sprites/improvements_3_era_0/improvements_3_era_0_0.webp": {
+      "bytes": 504702,
+      "sha256": "0937579bd8482302d26123a6026976bef7de8200cd29a41e3b89398fd49eadfc"
+    },
+    "sprites/improvements_3_era_1/improvements_3_era_1.atlas": {
+      "bytes": 468,
+      "sha256": "7a26abd5b86ade96638821591cedc7f96afe2dd787d13b05d49651bd3de7bfb3"
+    },
+    "sprites/improvements_3_era_1/improvements_3_era_1_0.webp": {
+      "bytes": 498904,
+      "sha256": "33a82d26b25b4c2df5897b1aa65d49bfefd0ba619a1a6755b62e0976a29ffbdc"
+    },
+    "sprites/improvements_3_era_2/improvements_3_era_2.atlas": {
+      "bytes": 468,
+      "sha256": "9561b8d24a6edcaf83236d5417760f243a83542a17c1383ccf3e9cc2860bd40f"
+    },
+    "sprites/improvements_3_era_2/improvements_3_era_2_0.webp": {
+      "bytes": 487412,
+      "sha256": "946cff7837c2dadf5dcedb01efde9c77c4ef911842c8a1af634ede3b83eb97c5"
+    },
+    "sprites/improvements_3_era_3/improvements_3_era_3.atlas": {
+      "bytes": 468,
+      "sha256": "656544d8bda9093627cf975946f2eff03678061e9fd0a65266d7944ab552900d"
+    },
+    "sprites/improvements_3_era_3/improvements_3_era_3_0.webp": {
+      "bytes": 459594,
+      "sha256": "960b608ba257da001cb6c74a5e7cb39635b4a0c088511c532c37727fa2ca5f80"
+    },
+    "sprites/improvements_4_era_0/improvements_4_era_0.atlas": {
+      "bytes": 387,
+      "sha256": "9c694104eae597e775ce754026b5b78d7feebc44e029137b6194aadcf0c66a58"
+    },
+    "sprites/improvements_4_era_0/improvements_4_era_0_0.webp": {
+      "bytes": 362322,
+      "sha256": "5d6c181527202be16bc3083a02bcc462a83b1d1a5b00a742f9efa97d4c7ed09c"
+    },
+    "sprites/improvements_4_era_1/improvements_4_era_1.atlas": {
+      "bytes": 387,
+      "sha256": "279a55e59a9c6f159ee2151abb585d0736d59c956c97552b7b239fb5b3c1c228"
+    },
+    "sprites/improvements_4_era_1/improvements_4_era_1_0.webp": {
+      "bytes": 378740,
+      "sha256": "66247d4f89ed3353c98f8e235ed5ad69703996f53065895c91fe1366c817a5f9"
+    },
+    "sprites/improvements_4_era_2/improvements_4_era_2.atlas": {
+      "bytes": 387,
+      "sha256": "b40b5f7084641ec9b55bf279862dc9c065804b414d38a838144979b0dec1d3b3"
+    },
+    "sprites/improvements_4_era_2/improvements_4_era_2_0.webp": {
+      "bytes": 368864,
+      "sha256": "d08e765cc4f7dddfc82fadffa8363eebab80847c51597f918af8b6ddead65a48"
+    },
+    "sprites/improvements_4_era_3/improvements_4_era_3.atlas": {
+      "bytes": 387,
+      "sha256": "54f81334b263b7ea67000fea7cb3a738bf20800495c38e51f2a35418c1a5ad57"
+    },
+    "sprites/improvements_4_era_3/improvements_4_era_3_0.webp": {
+      "bytes": 351068,
+      "sha256": "1379551953712bb511e37bcfdac8b7f7c890f173a7608ebe6dffdc156a2c5eb2"
     },
     "sprites/sprite_manifest.json": {
-      "bytes": 162142,
-      "sha256": "274d9e19360d9e61a319d3da0c061b99f7127a0b99fdd3b09296c6cf6417746c"
+      "bytes": 164530,
+      "sha256": "24d5fcd9e2a63b89522304bab7f4db6719dfd0a8b1935a2db3f06c9d2e249042"
     },
     "sprites/technologies/technologies.atlas": {
       "bytes": 4119,

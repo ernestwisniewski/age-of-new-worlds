@@ -173,3 +173,11 @@ commander atlases total 25,486,848 bytes; four improvement atlases add 26,068,22
 bytes by the end. These are decoded sprite bytes, not total process or GPU
 memory. The ownership regression is fixed, but the release-memory gate remains
 open and later movement-camera scenarios still were not reached.
+
+Lossless static sprite partitioning reduced the camera-focus RSS delta to
+212,156,416 bytes (previously 279,150,592). Live atlas memory fell from 51,555,072
+to 17,267,596 bytes. Camera build/raster p99 were 1.443/14.058 ms, with zero missed
+frames. The unchanged 201,326,592-byte memory limit still fails by 10,829,824 bytes;
+later movement-camera scenarios were not reached. Source pixels and geometry for
+all 100 moved frames pass the independent native-decoder regression. This is a
+measured improvement, not a passing renderer release gate.

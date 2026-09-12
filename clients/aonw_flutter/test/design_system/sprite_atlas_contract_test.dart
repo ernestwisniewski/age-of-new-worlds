@@ -46,7 +46,7 @@ void main() {
     final frames = document['frames'] as Map<String, dynamic>;
 
     expect(document['version'], 1);
-    expect(atlases, hasLength(29));
+    expect(atlases, hasLength(46));
     expect(frames, hasLength(711));
     for (final kind in VisibleUnitKind.values) {
       for (final id in MapSpriteCatalog.idleUnitFrames(kind)) {
