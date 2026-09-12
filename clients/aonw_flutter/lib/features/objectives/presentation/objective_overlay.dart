@@ -9,11 +9,14 @@ import '../../../l10n/l10n.dart';
 import '../../map/presentation/input/map_gamepad_navigation.dart';
 import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../../map/read_model/map_view.dart';
+import '../../map/read_model/player_victory_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 
 final class ObjectiveOverlay extends StatelessWidget {
   const ObjectiveOverlay({
     required this.objectives,
+    required this.progress,
+    required this.playerNames,
     required this.outcome,
     required this.open,
     required this.onOpenChanged,
@@ -22,6 +25,8 @@ final class ObjectiveOverlay extends StatelessWidget {
   });
 
   final List<MapObjectiveView> objectives;
+  final List<MapObjectiveProgressView> progress;
+  final Map<String, String> playerNames;
   final GameOutcomeView outcome;
   final bool open;
   final bool showOutcome;
@@ -69,6 +74,8 @@ final class ObjectiveOverlay extends StatelessWidget {
               child: SafeArea(
                 child: _ObjectivePanel(
                   objectives: objectives,
+                  progress: progress,
+                  playerNames: playerNames,
                   onClose: () => onOpenChanged?.call(false),
                 ),
               ),
@@ -82,9 +89,16 @@ final class ObjectiveOverlay extends StatelessWidget {
 }
 
 final class _ObjectivePanel extends StatelessWidget {
-  const _ObjectivePanel({required this.objectives, required this.onClose});
+  const _ObjectivePanel({
+    required this.objectives,
+    required this.progress,
+    required this.playerNames,
+    required this.onClose,
+  });
 
   final List<MapObjectiveView> objectives;
+  final List<MapObjectiveProgressView> progress;
+  final Map<String, String> playerNames;
   final VoidCallback onClose;
 
   @override
@@ -129,8 +143,13 @@ final class _ObjectivePanel extends StatelessWidget {
           else
             SliverList.builder(
               itemCount: objectives.length,
-              itemBuilder: (context, index) =>
-                  _ObjectiveCard(objective: objectives[index]),
+              itemBuilder: (context, index) => _ObjectiveCard(
+                objective: objectives[index],
+                progress: progress
+                    .where((value) => value.objectiveId == objectives[index].id)
+                    .firstOrNull,
+                playerNames: playerNames,
+              ),
             ),
         ],
       ),
@@ -139,26 +158,52 @@ final class _ObjectivePanel extends StatelessWidget {
 }
 
 final class _ObjectiveCard extends StatelessWidget {
-  const _ObjectiveCard({required this.objective});
+  const _ObjectiveCard({
+    required this.objective,
+    required this.progress,
+    required this.playerNames,
+  });
 
   final MapObjectiveView objective;
+  final MapObjectiveProgressView? progress;
+  final Map<String, String> playerNames;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
+    final controllerName = playerNames[progress?.controllerPlayerId];
     return Card.outlined(
       key: ValueKey(('objective', objective.id)),
       child: ListTile(
         leading: const Icon(Icons.flag_outlined),
         title: Text(l10n.objectiveType(objective.type.name)),
-        subtitle: Text(
-          l10n.objectiveDetails(
-            objective.coordinate.col,
-            objective.coordinate.row,
-            objective.requiredHoldTurns,
-            objective.victoryPoints,
-            objective.goldPerTurn,
-          ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.objectiveDetails(
+                objective.coordinate.col,
+                objective.coordinate.row,
+                objective.requiredHoldTurns,
+                objective.victoryPoints,
+                objective.goldPerTurn,
+              ),
+            ),
+            if (progress case final current?)
+              Padding(
+                padding: const EdgeInsets.only(top: AonwSpacing.xs),
+                child: Text(
+                  controllerName != null
+                      ? l10n.objectiveControlProgress(
+                          controllerName,
+                          current.holdTurns,
+                          objective.requiredHoldTurns,
+                        )
+                      : l10n.objectiveControlUnknown,
+                  key: ValueKey(('objective-progress', objective.id)),
+                ),
+              ),
+          ],
         ),
       ),
     );

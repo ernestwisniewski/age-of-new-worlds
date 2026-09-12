@@ -35,6 +35,17 @@ void objectiveGoldenTests() {
               body: RepaintBoundary(
                 key: const ValueKey('objective-golden'),
                 child: _ObjectiveHarness(
+                  progress: [
+                    for (final kind in MapObjectiveType.values)
+                      MapObjectiveProgressView(
+                        objectiveId: kind.name,
+                        controllerPlayerId: kind.index.isEven
+                            ? 'player-1'
+                            : null,
+                        holdTurns: kind.index.isEven ? 3 : 0,
+                      ),
+                  ],
+                  playerNames: const {'player-1': 'Aleksandra'},
                   objectives: [
                     for (final kind in MapObjectiveType.values)
                       MapObjectiveView(

@@ -131,7 +131,7 @@ bounds and close action are checked explicitly. The three populated target
 images under `test/features/objectives/presentation/goldens` use actual test-view
 sizes of 390×844, 1024×768 and 1440×900, bundled fonts and Polish/German/English.
 They were inspected visually. These are isolated panel regressions; full-map
-comparison and objective progress/guidance remain separate work.
+comparison and priority guidance remain separate work.
 
 
 ## Capture viewport correction
@@ -145,3 +145,21 @@ inspected, and their manifest hashes were refreshed. The earlier apparent
 phone footer overlap and cramped empire columns were artifacts of that harness.
 The six target menu/replay images were regenerated and inspected as well;
 33 target tests passed. These corrections do not claim native device coverage.
+
+
+## Map objective progress
+
+The shared HUD passes `PlayerVictoryView.mapObjectives` and public participant
+names into the objective panel. Authored requirements remain in `MapObjectiveView`;
+live entries are matched by objective ID. The card displays the supplied hold
+count without clamping or predicting it. This applies to local/Online play and
+the shared read-only replay HUD.
+
+Rust's `outcome/victory_progress.rs::map_objective_progress` discloses a controller
+only when it belongs to the recipient or its coordinate is visible. A null
+controller can represent either absent or undisclosed control, so Flutter shows
+no known controller rather than claiming the location is unoccupied. It also
+omits the hold count in that case. Six language tests replace disclosed progress
+with unknown control and then an unrelated objective, verifying that old names
+and counts disappear. The 200% phone tests include populated progress, and the
+three regression images now include both known and unknown control.

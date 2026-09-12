@@ -1337,8 +1337,17 @@ class AonwLocalizationsDe extends AonwLocalizations {
   String get objectivesEmpty => 'Diese Karte hat keine Ziele.';
 
   @override
+  String objectiveControlProgress(String player, int turns, int required) {
+    return 'Kontrolliert von $player\nGehaltene Runden: $turns / $required';
+  }
+
+  @override
+  String get objectiveControlUnknown =>
+      'Keine bekannte kontrollierende Zivilisation';
+
+  @override
   String get objectivesAuthoredRules =>
-      'Festgelegte Kartenanforderungen. Der aktuelle Fortschritt wird von der Spielengine verwaltet.';
+      'Kontrolliere diese Orte für die erforderliche Anzahl an Runden.';
 
   @override
   String objectiveType(String type) {

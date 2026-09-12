@@ -1326,8 +1326,16 @@ class AonwLocalizationsNl extends AonwLocalizations {
   String get objectivesEmpty => 'Deze kaart heeft geen doelen.';
 
   @override
+  String objectiveControlProgress(String player, int turns, int required) {
+    return 'Beheerst door $player\nVoortgang: $turns / $required';
+  }
+
+  @override
+  String get objectiveControlUnknown => 'Geen bekende eigenaar';
+
+  @override
   String get objectivesAuthoredRules =>
-      'Vastgelegde kaartvereisten. De spelengine beheert de huidige voortgang.';
+      'Beheers deze locaties gedurende het vereiste aantal beurten.';
 
   @override
   String objectiveType(String type) {

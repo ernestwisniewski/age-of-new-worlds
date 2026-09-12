@@ -685,7 +685,9 @@
   "openObjectives": "Abrir objetivos",
   "closeObjectives": "Cerrar objetivos",
   "objectivesEmpty": "Este mapa no tiene objetivos.",
-  "objectivesAuthoredRules": "Requisitos establecidos para el mapa. El motor gestiona el progreso actual.",
+  "objectiveControlProgress": "Controlado por {player}\nProgreso de control: {turns} / {required}",
+  "objectiveControlUnknown": "No se conoce quién lo controla",
+  "objectivesAuthoredRules": "Controla estos lugares durante el número de turnos requerido.",
   "objectiveType": "{type, select, ruins{Ruinas} strategicPass{Paso estratégico} holySite{Lugar sagrado} legendaryResource{Recurso legendario} other{Objetivo estratégico}}",
   "@objectiveType": {
     "placeholders": {

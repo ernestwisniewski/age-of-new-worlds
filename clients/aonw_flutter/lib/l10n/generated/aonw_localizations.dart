@@ -1804,10 +1804,22 @@ abstract class AonwLocalizations {
   /// **'This map has no objectives.'**
   String get objectivesEmpty;
 
+  /// No description provided for @objectiveControlProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Controlled by {player}\nHold progress: {turns} / {required}'**
+  String objectiveControlProgress(String player, int turns, int required);
+
+  /// No description provided for @objectiveControlUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'No known controller'**
+  String get objectiveControlUnknown;
+
   /// No description provided for @objectivesAuthoredRules.
   ///
   /// In en, this message translates to:
-  /// **'Authored map requirements. Current progress remains in the engine.'**
+  /// **'Control these locations and hold them for the required number of turns.'**
   String get objectivesAuthoredRules;
 
   /// No description provided for @objectiveType.

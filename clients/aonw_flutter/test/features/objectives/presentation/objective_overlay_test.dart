@@ -1,8 +1,10 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/design_system/widgets/aonw_panel.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/player_victory_view.dart';
 import 'package:aonw_flutter/features/objectives/presentation/objective_overlay.dart';
 import 'package:aonw_flutter/features/turns/read_model/recipient_turn_view.dart';
+import 'package:aonw_flutter/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,8 +12,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../support/localized_test_app.dart';
 
 part 'objective_golden_tests.dart';
+part 'objective_progress_tests.dart';
 
 void main() {
+  objectiveProgressTests();
   for (final language in ['en', 'pl', 'fr', 'de', 'es', 'nl']) {
     for (final size in [const Size(390, 640), const Size(844, 390)]) {
       testWidgets('objectives fit $language $size at 200% text', (
@@ -27,6 +31,14 @@ void main() {
                 textScaler: TextScaler.linear(2),
               ),
               child: _ObjectiveHarness(
+                progress: const [
+                  MapObjectiveProgressView(
+                    objectiveId: 'holy-site-1',
+                    controllerPlayerId: 'player-1',
+                    holdTurns: 3,
+                  ),
+                ],
+                playerNames: const {'player-1': 'Aleksandra'},
                 objectives: const [
                   MapObjectiveView(
                     id: 'holy-site-1',
@@ -155,9 +167,16 @@ Widget _app(Widget child, {Locale locale = const Locale('en')}) =>
     );
 
 final class _ObjectiveHarness extends StatefulWidget {
-  const _ObjectiveHarness({required this.objectives, required this.outcome});
+  const _ObjectiveHarness({
+    required this.objectives,
+    required this.outcome,
+    this.progress = const [],
+    this.playerNames = const {},
+  });
 
   final List<MapObjectiveView> objectives;
+  final List<MapObjectiveProgressView> progress;
+  final Map<String, String> playerNames;
   final GameOutcomeView outcome;
 
   @override
@@ -170,6 +189,8 @@ final class _ObjectiveHarnessState extends State<_ObjectiveHarness> {
   @override
   Widget build(BuildContext context) => ObjectiveOverlay(
     objectives: widget.objectives,
+    progress: widget.progress,
+    playerNames: widget.playerNames,
     outcome: widget.outcome,
     open: _open,
     onOpenChanged: (value) => setState(() => _open = value),

@@ -60,10 +60,10 @@ The mounting sources are `widgets/hud/game_hud.dart`,
 | Selection/action deck, previous/next, End/Submit | `widgets/hud/action_deck`, `widgets/selection` | Existing typed actions and Rust pending queue; integrated deck audit open |
 | Movement, combat and worker confirmation | `widgets/selection` | Rust preview/options plus local confirmation state |
 | City management, production, building/unit/project/wonder details | `widgets/city` | Typed Rust city and production queries; full composition audit open |
-| Research recommendations, tree, technology details | `widgets/technology` | Responsive catalog/tree/details present; Rust recommendation ranking remains open |
-| Technology discovery, minimize/restore, suppress future popups | `widgets/technology/technology_discovery_popup_*` | Own filtered completion journal and popup implemented; thumbnail/prose comparison remains open |
+| Research recommendations, tree, technology details | `widgets/technology` | Responsive catalog/tree/details and Rust API 25 recommendation ranking implemented |
+| Technology discovery, minimize/restore, suppress future popups | `widgets/technology/technology_discovery_popup_*` | Own filtered completion journal, 54 atlas thumbnails and six-language discovery prose implemented; full-screen comparison remains open |
 | Civilization met, diplomatic messages/events/proposals | `widgets/diplomacy` | Known contacts, own messages/proposals; notification routing and full trade composition open |
-| Objectives and guidance | `widgets/options`, `widgets/hud/overlay` | Objective overlay present; priority guidance requires authoritative policy |
+| Objectives and guidance | `widgets/options`, `widgets/hud/overlay` | Authored requirements and recipient-safe live hold/controller data shown; priority guidance requires authoritative policy |
 | Empire overview, readiness, army composition, city comparisons | `widgets/empire` | Own projected entities available; readiness definition and full panel open |
 | Activity log, category tabs, notification focus | `widgets/activity_log`, `widgets/hud/notifications` | Recipient event journal available; full read model/filter/focus UI open |
 | Feedback toast, turn-start banner, mode banner | `widgets/hud/feedback`, `widgets/hud/overlay`, `widgets/hud/mode_banner` | Command/turn presentation exists; reference comparison open |

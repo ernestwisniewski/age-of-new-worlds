@@ -1330,8 +1330,16 @@ class AonwLocalizationsFr extends AonwLocalizations {
   String get objectivesEmpty => 'Cette carte n’a aucun objectif.';
 
   @override
+  String objectiveControlProgress(String player, int turns, int required) {
+    return 'Contrôlé par $player\nMaintien du contrôle : $turns / $required';
+  }
+
+  @override
+  String get objectiveControlUnknown => 'Aucun contrôleur connu';
+
+  @override
   String get objectivesAuthoredRules =>
-      'Conditions définies pour la carte. Le moteur conserve la progression actuelle.';
+      'Contrôlez ces lieux et conservez-les pendant le nombre de tours requis.';
 
   @override
   String objectiveType(String type) {

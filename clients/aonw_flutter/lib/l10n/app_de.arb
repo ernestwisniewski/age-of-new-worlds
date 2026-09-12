@@ -685,7 +685,9 @@
   "openObjectives": "Ziele öffnen",
   "closeObjectives": "Ziele schließen",
   "objectivesEmpty": "Diese Karte hat keine Ziele.",
-  "objectivesAuthoredRules": "Festgelegte Kartenanforderungen. Der aktuelle Fortschritt wird von der Spielengine verwaltet.",
+  "objectiveControlProgress": "Kontrolliert von {player}\nGehaltene Runden: {turns} / {required}",
+  "objectiveControlUnknown": "Keine bekannte kontrollierende Zivilisation",
+  "objectivesAuthoredRules": "Kontrolliere diese Orte für die erforderliche Anzahl an Runden.",
   "objectiveType": "{type, select, ruins{Ruinen} strategicPass{Strategischer Pass} holySite{Heilige Stätte} legendaryResource{Legendäre Ressource} other{Strategisches Ziel}}",
   "@objectiveType": {
     "placeholders": {

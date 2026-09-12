@@ -685,7 +685,9 @@
   "openObjectives": "Doelen openen",
   "closeObjectives": "Doelen sluiten",
   "objectivesEmpty": "Deze kaart heeft geen doelen.",
-  "objectivesAuthoredRules": "Vastgelegde kaartvereisten. De spelengine beheert de huidige voortgang.",
+  "objectiveControlProgress": "Beheerst door {player}\nVoortgang: {turns} / {required}",
+  "objectiveControlUnknown": "Geen bekende eigenaar",
+  "objectivesAuthoredRules": "Beheers deze locaties gedurende het vereiste aantal beurten.",
   "objectiveType": "{type, select, ruins{Ruïnes} strategicPass{Strategische pas} holySite{Heilige plaats} legendaryResource{Legendarische grondstof} other{Strategisch doel}}",
   "@objectiveType": {
     "placeholders": {

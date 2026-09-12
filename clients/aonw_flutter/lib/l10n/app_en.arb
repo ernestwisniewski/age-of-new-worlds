@@ -394,7 +394,10 @@
   "openObjectives": "Open objectives",
   "closeObjectives": "Close objectives",
   "objectivesEmpty": "This map has no objectives.",
-  "objectivesAuthoredRules": "Authored map requirements. Current progress remains in the engine.",
+  "objectiveControlProgress": "Controlled by {player}\nHold progress: {turns} / {required}",
+  "objectiveControlUnknown": "No known controller",
+  "@objectiveControlProgress": {"placeholders": {"player": {"type": "String"}, "turns": {"type": "int"}, "required": {"type": "int"}}},
+  "objectivesAuthoredRules": "Control these locations and hold them for the required number of turns.",
   "objectiveType": "{type, select, ruins{Ruins} strategicPass{Strategic pass} holySite{Holy site} legendaryResource{Legendary resource} other{Strategic objective}}",
   "@objectiveType": {
     "placeholders": {

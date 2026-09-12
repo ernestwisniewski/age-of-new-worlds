@@ -187,15 +187,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           onAction: widget.controller.executeDiplomacyAction,
           initialTargetPlayerId: _diplomacyTargetId,
         ),
-        ObjectiveOverlay(
-          showOutcome: !widget.controller.readOnly,
-          objectives: widget.scene.map.objectives,
-          outcome: widget.scene.player.turnView.outcome,
-          open: effectivePanel == _MapHudPanel.objectives,
-          onOpenChanged: locked
-              ? null
-              : (open) => _setOpen(_MapHudPanel.objectives, open),
-        ),
+        _objectives(effectivePanel, locked),
         if (!ResourcePopup.values.any(
           (kind) => kind.name == effectivePanel?.name,
         ))
@@ -216,6 +208,22 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
       ],
     );
   }
+
+  Widget _objectives(_MapHudPanel? effectivePanel, bool locked) =>
+      ObjectiveOverlay(
+        showOutcome: !widget.controller.readOnly,
+        objectives: widget.scene.map.objectives,
+        progress: widget.scene.player.victory.mapObjectives,
+        playerNames: {
+          for (final player in widget.scene.player.participants)
+            player.id: player.name,
+        },
+        outcome: widget.scene.player.turnView.outcome,
+        open: effectivePanel == _MapHudPanel.objectives,
+        onOpenChanged: locked
+            ? null
+            : (open) => _setOpen(_MapHudPanel.objectives, open),
+      );
 
   Widget _discoveries() => ResearchDiscoveryOverlay(
     player: widget.scene.player,

@@ -685,7 +685,9 @@
   "openObjectives": "Ouvrir les objectifs",
   "closeObjectives": "Fermer les objectifs",
   "objectivesEmpty": "Cette carte n’a aucun objectif.",
-  "objectivesAuthoredRules": "Conditions définies pour la carte. Le moteur conserve la progression actuelle.",
+  "objectiveControlProgress": "Contrôlé par {player}\nMaintien du contrôle : {turns} / {required}",
+  "objectiveControlUnknown": "Aucun contrôleur connu",
+  "objectivesAuthoredRules": "Contrôlez ces lieux et conservez-les pendant le nombre de tours requis.",
   "objectiveType": "{type, select, ruins{Ruines} strategicPass{Passage stratégique} holySite{Lieu saint} legendaryResource{Ressource légendaire} other{Objectif stratégique}}",
   "@objectiveType": {
     "placeholders": {

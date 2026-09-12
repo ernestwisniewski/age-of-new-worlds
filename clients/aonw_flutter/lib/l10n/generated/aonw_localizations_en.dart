@@ -1302,8 +1302,16 @@ class AonwLocalizationsEn extends AonwLocalizations {
   String get objectivesEmpty => 'This map has no objectives.';
 
   @override
+  String objectiveControlProgress(String player, int turns, int required) {
+    return 'Controlled by $player\nHold progress: $turns / $required';
+  }
+
+  @override
+  String get objectiveControlUnknown => 'No known controller';
+
+  @override
   String get objectivesAuthoredRules =>
-      'Authored map requirements. Current progress remains in the engine.';
+      'Control these locations and hold them for the required number of turns.';
 
   @override
   String objectiveType(String type) {
