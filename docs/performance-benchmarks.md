@@ -146,3 +146,20 @@ static, idle, worker, combat-animation, route and combat windows. The era
 transition window failed its unchanged raster limit twice (p99 57.888 ms and
 46.745 ms, including one run with the Rust gate paused). This remains an open
 release-gate failure; the passing full-HUD record does not supersede it.
+
+
+A subsequent complete renderer attempt uses `benchmarkLive` so native frames
+continue when the test window loses focus; it retains engine-timestamp timing
+windows and every existing limit. City-production reporting now reads the actual
+world child count instead of a stale literal. With the owned Rust gate paused,
+static rendering, route, combat, era tint, map events, floating text, production
+and clouds passed. Production p99 build/raster was 0.743/2.990 ms, with zero
+missed frames and a resident-memory delta of 159,416,320 bytes.
+
+Camera focus remains failing: p99 build/raster was 1.098/14.195 ms, but one raster
+frame took 63.531 ms and resident-memory delta reached 264,568,832 bytes, above
+the unchanged 201,326,592-byte ceiling. The test stops at that failure; the later
+movement-camera scenarios were not measured in this attempt. An earlier live
+attempt failed during production, so the latest passing production window does
+not establish that failure's cause. No passing baseline is substituted for these
+incomplete runs, and the full renderer release gate remains open.

@@ -59,7 +59,7 @@ Future<void> measureCityProductionHints(
       'producingOwnedCities': 20,
       'visibleHints': visibleHints,
       'renderedHints': visibleHints,
-      'worldComponents': 23,
+      'worldComponents': game.world.children.length,
       'hintPaints': 1,
       'hintComponents': 0,
       'evidenceScope': 'synthetic recipient-owned city production queues',

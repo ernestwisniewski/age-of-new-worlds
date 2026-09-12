@@ -27,6 +27,7 @@ import 'support/unit_work_presentation_probe.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.benchmarkLive;
 
   testWidgets('keeps the production Flame workload within its budget', (
     tester,
