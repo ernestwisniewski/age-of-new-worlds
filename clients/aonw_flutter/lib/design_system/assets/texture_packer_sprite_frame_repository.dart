@@ -43,7 +43,8 @@ final class TexturePackerSpriteFrameRepository
     _TexturePackerFrameScope scope,
     SpriteFrameId id,
   ) async {
-    final manifest = await _loadManifest();
+    // Claim a warm atlas before another scope can release its last owner.
+    final manifest = _manifest ?? await _loadManifest();
     scope._ensureActive();
     final entry = manifest.frames[id.value];
     if (entry == null) {

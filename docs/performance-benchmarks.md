@@ -163,3 +163,13 @@ movement-camera scenarios were not measured in this attempt. An earlier live
 attempt failed during production, so the latest passing production window does
 not establish that failure's cause. No passing baseline is substituted for these
 incomplete runs, and the full renderer release gate remains open.
+
+
+After preserving warm atlas ownership across an incoming request, another profile
+run reached camera focus with p99 build/raster of 1.248/13.682 ms and zero missed
+frames. Resident-memory delta still failed at 279,150,592 bytes. The camera probe
+now records atlas bytes on both sides of the timing window: the initial city and
+commander atlases total 25,486,848 bytes; four improvement atlases add 26,068,224
+bytes by the end. These are decoded sprite bytes, not total process or GPU
+memory. The ownership regression is fixed, but the release-memory gate remains
+open and later movement-camera scenarios still were not reached.

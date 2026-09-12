@@ -17,6 +17,52 @@ const _manifest = TexturePackerSpriteFrameRepository.manifestPath;
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test(
+    'an incoming request retains a warm atlas during owner handoff',
+    () async {
+      final bundle = ControlledSpriteBundle();
+      final repository = TexturePackerSpriteFrameRepository(
+        store: AtlasStore(bundle: bundle),
+      );
+      addTearDown(repository.dispose);
+      final outgoing = repository.createScope();
+      final frame = await outgoing.load(_worker);
+      final incoming = repository.createScope();
+      final request = incoming.load(_walk);
+      outgoing.dispose();
+      final replacement = await request;
+      expect(replacement.image, same(frame.image));
+      expect(bundle.reads[_page], 1);
+      expect(frame.image.debugDisposed, isFalse);
+      incoming.dispose();
+      expect(frame.image.debugDisposed, isTrue);
+      expect(repository.atlasBytes, isEmpty);
+    },
+  );
+
+  for (final disposeRepository in [false, true]) {
+    test(
+      'a warm request cannot outlive its owner, repository=$disposeRepository',
+      () async {
+        final repository = TexturePackerSpriteFrameRepository();
+        addTearDown(repository.dispose);
+        final outgoing = repository.createScope();
+        final frame = await outgoing.load(_worker);
+        final incoming = repository.createScope();
+        final request = expectLater(incoming.load(_worker), throwsStateError);
+        if (disposeRepository) {
+          repository.dispose();
+        } else {
+          incoming.dispose();
+        }
+        await request;
+        expect(frame.image.debugDisposed, disposeRepository);
+        outgoing.dispose();
+        expect(repository.atlasBytes, isEmpty);
+      },
+    );
+  }
+
   test('scopes share pages until the last user releases the atlas', () async {
     final repository = TexturePackerSpriteFrameRepository();
     addTearDown(repository.dispose);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -26,6 +27,7 @@ Future<void> measureCameraFocus(
   final territorySyncs = territories.debugSyncCount;
   final glowBuilds = territories.debugGlowCache.debugBuildCount;
   final updatesBefore = game.mapCamera.debugTransformUpdateCount;
+  final atlasBytesBefore = SpriteFrames.debugAtlasBytes;
   var focusCount = 0;
   final frameTimes = await measureActiveFrameTimings(
     tester,
@@ -97,6 +99,8 @@ Future<void> measureCameraFocus(
     },
     'metrics': {
       'residentMemoryDeltaBytes': rssDelta,
+      'spriteAtlasBytesBeforeFocus': atlasBytesBefore,
+      'spriteAtlasBytesAfterFocus': SpriteFrames.debugAtlasBytes,
       'newTerritoryGlowImages': newGlowImages,
       'territoryGlowPixelCount': territories.debugGlowCache.debugPixelCount,
       'frameTimes': frameTimes,

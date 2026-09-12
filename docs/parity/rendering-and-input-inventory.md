@@ -124,3 +124,10 @@ mapping of every panel: warnings, readiness, notification
 payloads and future-turn route semantics need separate Rust contracts or audits.
 Native captures, populated panels, full-screen comparisons and physical input
 verification remain required by the execution plan.
+
+
+A frame request with an already loaded manifest claims its atlas before yielding.
+This lets an incoming scope retain the existing image when the outgoing scope
+is released in the same event turn. A regression verifies image identity and one
+page decode; separate cancellation cases reject a result after either its scope
+or repository closes. Last-owner disposal still releases the atlas immediately.

@@ -17,7 +17,9 @@ final class _TexturePackerFrameScope implements SpriteFrameScope {
   @override
   Future<SpriteFrame> load(SpriteFrameId id) async {
     _ensureActive();
-    return _repository._load(this, id);
+    final frame = await _repository._load(this, id);
+    _ensureActive();
+    return frame;
   }
 
   @override
