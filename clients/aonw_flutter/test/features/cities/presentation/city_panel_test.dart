@@ -7,6 +7,43 @@ import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
 
 void main() {
+  testWidgets('disables every founding action when the panel is read only', (
+    tester,
+  ) async {
+    var actions = 0;
+    final options = testCityFoundingOptionsView();
+    await tester.pumpWidget(
+      LocalizedTestApp(
+        home: Scaffold(
+          body: CityPanel(
+            enabled: false,
+            state: CityState(
+              founderUnitId: options.founderUnitId,
+              foundingOptions: options,
+              foundingSelection: const [(col: 1, row: 0)],
+            ),
+            city: null,
+            onToggleFoundingHex: (_) => actions++,
+            onConfirmFounding: () => actions++,
+            onCancelFounding: () => actions++,
+            onStartManagement: (_) => actions++,
+            onCancelManagement: () => actions++,
+          ),
+        ),
+      ),
+    );
+    for (final chip in tester.widgetList<FilterChip>(find.byType(FilterChip))) {
+      expect(chip.onSelected, isNull);
+    }
+    for (final key in ['confirm-city-founding', 'cancel-city-founding']) {
+      final button = find.byKey(ValueKey(key));
+      expect(tester.widget<ButtonStyleButton>(button).onPressed, isNull);
+      await tester.tap(button);
+    }
+    expect(actions, 0);
+    expect(find.text('Initial territory: 1/1'), findsOneWidget);
+  });
+
   testWidgets('shows exact city yield and opens map management mode', (
     tester,
   ) async {

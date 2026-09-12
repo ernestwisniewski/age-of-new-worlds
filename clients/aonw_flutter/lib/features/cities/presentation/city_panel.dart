@@ -58,6 +58,7 @@ final class CityPanel extends StatelessWidget {
                 _FoundingEditor(
                   state: state,
                   options: options,
+                  enabled: enabled && !state.commandPending,
                   onToggle: onToggleFoundingHex,
                   onConfirm: onConfirmFounding,
                   onCancel: onCancelFounding,
@@ -120,6 +121,7 @@ final class _FoundingEditor extends StatelessWidget {
   const _FoundingEditor({
     required this.state,
     required this.options,
+    required this.enabled,
     required this.onToggle,
     required this.onConfirm,
     required this.onCancel,
@@ -127,6 +129,7 @@ final class _FoundingEditor extends StatelessWidget {
 
   final CityState state;
   final CityFoundingOptionsView options;
+  final bool enabled;
   final ValueChanged<MapHexCoordinate> onToggle;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
@@ -154,9 +157,7 @@ final class _FoundingEditor extends StatelessWidget {
               FilterChip(
                 label: Text('${coordinate.col}, ${coordinate.row}'),
                 selected: state.foundingSelection.contains(coordinate),
-                onSelected: state.commandPending
-                    ? null
-                    : (_) => onToggle(coordinate),
+                onSelected: enabled ? (_) => onToggle(coordinate) : null,
               ),
           ],
         ),
@@ -167,7 +168,7 @@ final class _FoundingEditor extends StatelessWidget {
             FilledButton.icon(
               key: const ValueKey('confirm-city-founding'),
               onPressed:
-                  !state.commandPending &&
+                  enabled &&
                       state.foundingSelection.length ==
                           options.requiredControlledHexes
                   ? onConfirm
@@ -177,7 +178,7 @@ final class _FoundingEditor extends StatelessWidget {
             ),
             OutlinedButton.icon(
               key: const ValueKey('cancel-city-founding'),
-              onPressed: state.commandPending ? null : onCancel,
+              onPressed: enabled ? onCancel : null,
               icon: const Icon(Icons.close),
               label: Text(copy.text(CityText.foundingCancel)),
             ),
