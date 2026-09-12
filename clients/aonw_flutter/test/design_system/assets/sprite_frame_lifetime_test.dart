@@ -77,7 +77,10 @@ void main() {
     ]);
     expect(frames[0], same(frames[2]));
     expect(frames[0].image, same(frames[1].image));
-    expect(repository.atlasBytes['unit_worker'], 1536 * 1536 * 4);
+    expect(
+      repository.atlasBytes['unit_worker'],
+      frames[0].image.width * frames[0].image.height * 4,
+    );
     first.dispose();
     first.dispose();
     expect(first.cached(_worker), isNull);

@@ -58,6 +58,13 @@ Future<void> verifyUnitWorkPresentation(
   expect(game.paused, isTrue);
   final rssDelta = ProcessInfo.currentRss - rssBefore;
   final workingAtlases = SpriteFrames.debugAtlasBytes;
+  final workingFrameBytes = {
+    for (final unit in units)
+      'unit_${unit.debugUnit.kind.name}':
+          unit.debugSpriteFrame!.image.width *
+          unit.debugSpriteFrame!.image.height *
+          4,
+  };
   game.replaceScene(source);
   for (final unit in units) {
     await unit.debugLoadSprite();
@@ -67,7 +74,7 @@ Future<void> verifyUnitWorkPresentation(
   for (final kind in frames.keys) {
     final atlasId = 'unit_$kind';
     expect(atlasesBefore, isNot(contains(atlasId)));
-    expect(workingAtlases[atlasId], 1536 * 1536 * 4);
+    expect(workingAtlases[atlasId], workingFrameBytes[atlasId]);
     expect(restoredAtlases, isNot(contains(atlasId)));
     releasedBytes += workingAtlases[atlasId]!;
   }

@@ -23,7 +23,10 @@ final class SpritePartitionRegion {
       'offsets:${offsets.join(',')}\nindex:$index\n';
 }
 
-List<SpritePartitionRegion> readPartitionRegions(File atlas) {
+List<SpritePartitionRegion> readPartitionRegions(
+  File atlas, {
+  bool indexed = false,
+}) {
   final regions = <SpritePartitionRegion>[];
   final pages = atlas.readAsStringSync().trim().split(RegExp(r'\n\s*\n'));
   for (final block in pages) {
@@ -42,32 +45,31 @@ List<SpritePartitionRegion> readPartitionRegions(File atlas) {
     for (var index = 5; index < lines.length; index += 4) {
       final bounds = _integers(lines[index + 1], 'bounds', 4);
       final offsets = _integers(lines[index + 2], 'offsets', 4);
-      _validateRegion(lines[index], lines[index + 3], bounds, size);
+      final frameIndex = _integers(lines[index + 3], 'index', 1).single;
+      if (indexed ? frameIndex < 0 : frameIndex != -1) {
+        throw FormatException('Unsupported frame index: $frameIndex');
+      }
+      _validateRegion(lines[index], bounds, size);
       regions.add(
         SpritePartitionRegion(
           name: lines[index],
           page: '${atlas.parent.path}/$pageName',
           bounds: bounds,
           offsets: offsets,
-          index: -1,
+          index: frameIndex,
         ),
       );
     }
   }
-  if (regions.map((region) => region.name).toSet().length != regions.length) {
+  if (regions.map((region) => (region.name, region.index)).toSet().length !=
+      regions.length) {
     throw FormatException('Duplicate atlas region: ${atlas.path}');
   }
   return regions;
 }
 
-void _validateRegion(
-  String name,
-  String index,
-  List<int> bounds,
-  List<int> size,
-) {
-  if (index != 'index:-1' ||
-      bounds[0] < 2 ||
+void _validateRegion(String name, List<int> bounds, List<int> size) {
+  if (bounds[0] < 2 ||
       bounds[1] < 2 ||
       bounds[2] <= 0 ||
       bounds[3] <= 0 ||

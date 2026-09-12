@@ -197,3 +197,17 @@ The separate renderer camera-focus attempt still fails memory at 210,698,240
 bytes despite passing frame times (1.170/14.238 ms, zero missed frames). Whole
 process memory did not fall proportionally to atlas bytes, so further allocation
 work and movement-camera evidence remain required.
+
+Transparent unit-frame margins are now packed on a 32-pixel mipmap grid. Across
+all 17 unit atlases, decoded storage falls from 160,432,128 to 115,904,512 bytes;
+all 408 reconstructed logical frames match the original native pixel hashes.
+The complete full-HUD run still passes: map p99 build/raster 0.751/3.100 ms, hover
+0.747/3.189 ms, RSS delta 101,269,504 bytes; combat 0.864/4.319 ms and 117,391,360
+bytes. The full-HUD baseline has been refreshed from this successful run.
+
+The renderer-only run passes camera focus at 201,048,064 bytes with p99
+1.193/13.779 ms and zero missed frames. It now reaches movement following, where
+memory fails at 210,173,952 bytes, while p99 0.703/7.808 ms passes. Cinematic
+movement following remains unmeasured in this attempt. Every runtime budget is
+unchanged. The unit-work probe accounts for actual decoded page dimensions rather
+than requiring the previous fixed 1536-by-1536 layout.

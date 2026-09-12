@@ -33,6 +33,23 @@ void main() {
     );
   });
 
+  test('keeps distinct animation indices while rejecting duplicate frames', () {
+    final first = _atlas
+        .replaceAll('city.test.0', 'unit.test.idle')
+        .replaceAll('index:-1', 'index:0');
+    const second = 'unit.test.idle\nbounds:2,2,4,4\noffsets:1,2,6,7\nindex:1\n';
+    atlas.writeAsStringSync('$first$second');
+    expect(readPartitionRegions(atlas, indexed: true).map((r) => r.index), [
+      0,
+      1,
+    ]);
+    atlas.writeAsStringSync('$first${second.replaceAll('index:1', 'index:0')}');
+    expect(
+      () => readPartitionRegions(atlas, indexed: true),
+      throwsFormatException,
+    );
+  });
+
   for (final invalid in {
     'rotation': _atlas.replaceFirst('bounds:', 'rotate:90\nbounds:'),
     'missing extrusion': _atlas.replaceFirst('bounds:2,2', 'bounds:1,2'),
