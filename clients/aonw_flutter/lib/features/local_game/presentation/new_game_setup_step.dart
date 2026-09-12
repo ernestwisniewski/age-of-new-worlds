@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../audio/presentation/game_audio_actions.dart';
 import '../application/local_game_catalog.dart';
@@ -56,11 +57,13 @@ final class NewGameSetupStep extends StatelessWidget {
       key: const ValueKey('new-game-setup'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          launchMode == LocalGameLaunchModeView.hotseat
-              ? l10n.hotseatSetupIntro
-              : l10n.singlePlayerSetupIntro,
-          style: Theme.of(context).textTheme.bodyLarge,
+        AonwPanel(
+          child: Text(
+            launchMode == LocalGameLaunchModeView.hotseat
+                ? l10n.hotseatSetupIntro
+                : l10n.singlePlayerSetupIntro,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
         const SizedBox(height: AonwSpacing.lg),
         _civilizationSection(context, l10n),

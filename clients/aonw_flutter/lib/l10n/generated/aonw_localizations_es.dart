@@ -486,7 +486,7 @@ class AonwLocalizationsEs extends AonwLocalizations {
 
   @override
   String get singlePlayerSetupIntro =>
-      'Elige tu civilización y configura una partida local gestionada por el motor.';
+      'Elige tu civilización y configura tu partida.';
 
   @override
   String get hotseatSetupTitle => 'Jugar en modo Hotseat';

@@ -865,7 +865,7 @@ abstract class AonwLocalizations {
   /// No description provided for @singlePlayerSetupIntro.
   ///
   /// In en, this message translates to:
-  /// **'Choose your civilization and configure an authoritative local match.'**
+  /// **'Choose your civilization and set up your game.'**
   String get singlePlayerSetupIntro;
 
   /// No description provided for @hotseatSetupTitle.

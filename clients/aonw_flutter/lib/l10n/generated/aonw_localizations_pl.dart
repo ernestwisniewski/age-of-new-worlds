@@ -484,8 +484,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get singlePlayerSetupTitle => 'Graj z komputerem';
 
   @override
-  String get singlePlayerSetupIntro =>
-      'Wybierz cywilizację i skonfiguruj autorytatywną rozgrywkę lokalną.';
+  String get singlePlayerSetupIntro => 'Wybierz cywilizację i ustaw rozgrywkę.';
 
   @override
   String get hotseatSetupTitle => 'Graj w trybie hotseat';

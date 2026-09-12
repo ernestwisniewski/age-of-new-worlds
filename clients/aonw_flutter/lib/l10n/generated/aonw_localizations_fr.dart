@@ -488,7 +488,7 @@ class AonwLocalizationsFr extends AonwLocalizations {
 
   @override
   String get singlePlayerSetupIntro =>
-      'Choisissez votre civilisation et configurez une partie locale gérée par le moteur.';
+      'Choisissez votre civilisation et configurez votre partie.';
 
   @override
   String get hotseatSetupTitle => 'Jouer en multijoueur local';

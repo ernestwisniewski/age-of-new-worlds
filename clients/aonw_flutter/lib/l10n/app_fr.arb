@@ -247,7 +247,7 @@
   "finishOnboarding": "Créer une partie",
   "newGameTitle": "Créer une partie locale",
   "singlePlayerSetupTitle": "Jouer contre l’ordinateur",
-  "singlePlayerSetupIntro": "Choisissez votre civilisation et configurez une partie locale gérée par le moteur.",
+  "singlePlayerSetupIntro": "Choisissez votre civilisation et configurez votre partie.",
   "hotseatSetupTitle": "Jouer en multijoueur local",
   "hotseatSetupIntro": "Partagez un même appareil. La vue de chaque joueur humain reste masquée jusqu’à ce que le joueur suivant confirme qu’il a reçu l’appareil.",
   "chooseCivilizationTitle": "Choisir une civilisation",

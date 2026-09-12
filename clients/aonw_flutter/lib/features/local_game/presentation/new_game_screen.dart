@@ -80,6 +80,7 @@ final class _NewGameScreenState extends State<NewGameScreen> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
+              key: ValueKey(_reviewing),
               padding: const EdgeInsets.all(AonwSpacing.lg),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 760),

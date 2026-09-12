@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
 import '../../audio/presentation/game_audio_actions.dart';
 import '../application/local_game_catalog.dart';
@@ -42,9 +43,11 @@ final class NewGameReviewStep extends StatelessWidget {
       key: const ValueKey('new-game-review'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          l10n.gameSummaryIntro,
-          style: Theme.of(context).textTheme.bodyLarge,
+        AonwPanel(
+          child: Text(
+            l10n.gameSummaryIntro,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
         const SizedBox(height: AonwSpacing.lg),
         _summary(l10n),

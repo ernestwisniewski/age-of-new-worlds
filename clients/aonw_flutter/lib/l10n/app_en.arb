@@ -142,7 +142,7 @@
   "finishOnboarding": "Create a game",
   "newGameTitle": "Create local game",
   "singlePlayerSetupTitle": "Play with the computer",
-  "singlePlayerSetupIntro": "Choose your civilization and configure an authoritative local match.",
+  "singlePlayerSetupIntro": "Choose your civilization and set up your game.",
   "hotseatSetupTitle": "Play in hotseat mode",
   "hotseatSetupIntro": "Share one device. Every human view stays hidden until the next player confirms the handoff.",
   "chooseCivilizationTitle": "Choose civilization",

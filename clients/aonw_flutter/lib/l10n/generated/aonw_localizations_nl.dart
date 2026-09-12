@@ -485,8 +485,7 @@ class AonwLocalizationsNl extends AonwLocalizations {
   String get singlePlayerSetupTitle => 'Tegen de computer spelen';
 
   @override
-  String get singlePlayerSetupIntro =>
-      'Kies je beschaving en stel een lokale partij in die door de spelengine wordt beheerd.';
+  String get singlePlayerSetupIntro => 'Kies je beschaving en stel je spel in.';
 
   @override
   String get hotseatSetupTitle => 'In Hotseat-modus spelen';

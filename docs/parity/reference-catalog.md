@@ -163,3 +163,19 @@ omits the hold count in that case. Six language tests replace disclosed progress
 with unknown control and then an unrelated objective, verifying that old names
 and counts disappear. The 200% phone tests include populated progress, and the
 three regression images now include both known and unknown control.
+
+## Local setup and review coverage
+
+Twelve target images in `test/features/local_game/presentation/goldens` cover
+Single and Hotseat setup/review at 390×844 (Polish), 1024×768 (German), and
+1440×900 (English). They use production fonts, the selected menu background,
+and matching physical view and surface dimensions. All twelve were inspected.
+Descriptions sit on the shared dark panel so bright areas of the image do not
+obscure them.
+
+Twenty-four body readability/navigation cases cover six languages, both phone
+orientations and 200% text. Moving from the bottom of setup to review originally
+retained the scroll offset in all cases; each step now starts with its own scroll
+state. Tests reach Continue, Start and Change setup, check untruncated body text,
+and retain existing creation tests. This is widget coverage, not native mobile
+validation or the separate Online setup/lobby audit.

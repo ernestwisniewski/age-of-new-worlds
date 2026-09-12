@@ -247,7 +247,7 @@
   "finishOnboarding": "Crear una partida",
   "newGameTitle": "Crear partida local",
   "singlePlayerSetupTitle": "Jugar contra el ordenador",
-  "singlePlayerSetupIntro": "Elige tu civilización y configura una partida local gestionada por el motor.",
+  "singlePlayerSetupIntro": "Elige tu civilización y configura tu partida.",
   "hotseatSetupTitle": "Jugar en modo Hotseat",
   "hotseatSetupIntro": "Comparte un dispositivo. La vista de cada jugador humano permanece oculta hasta que el siguiente jugador confirma el relevo.",
   "chooseCivilizationTitle": "Elegir civilización",
