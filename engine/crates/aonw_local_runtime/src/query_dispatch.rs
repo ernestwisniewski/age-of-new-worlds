@@ -343,6 +343,7 @@ pub(crate) fn dispatch_query(
                 available_movement: result.available_movement(),
                 remaining_movement: result.remaining_movement(),
                 estimated_turns: result.estimated_turns(),
+                step_turns: result.step_turns().collect(),
                 steps: result
                     .steps()
                     .iter()

@@ -75,6 +75,7 @@ final class MovementViewMapper {
       totalCostUnits: wire.totalCostUnits,
       estimatedTurns: wire.estimatedTurns,
     );
+    _validateStepTurns(wire.stepTurns, steps.length, wire.estimatedTurns);
     return RoutePlanView(
       stamp: _stamp(wire.stamp),
       unitId: wire.unitId,
@@ -84,6 +85,7 @@ final class MovementViewMapper {
       availableMovementUnits: wire.availableMovementUnits,
       remainingMovementUnits: wire.remainingMovementUnits,
       estimatedTurns: wire.estimatedTurns,
+      stepTurns: wire.stepTurns,
       steps: steps,
     );
   }
@@ -142,8 +144,19 @@ final class MovementViewMapper {
         steps.last.coordinate != destination ||
         steps.last.cumulativeCostUnits != totalCostUnits ||
         estimatedTurns <= 0 ||
-        estimatedTurns >= steps.length) {
+        estimatedTurns > steps.length) {
       throw const FormatException('Route result endpoints are inconsistent.');
+    }
+  }
+
+  static void _validateStepTurns(List<int> turns, int count, int estimated) {
+    if (turns.length != count || turns.isEmpty || turns.first != 1 || turns.last != estimated) {
+      throw const FormatException('Route step turns are inconsistent.');
+    }
+    for (var index = 1; index < turns.length; index++) {
+      if (turns[index] < turns[index - 1] || turns[index] > turns[index - 1] + 1) {
+        throw const FormatException('Route step turns must be consecutive.');
+      }
     }
   }
 

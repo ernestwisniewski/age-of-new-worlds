@@ -297,6 +297,7 @@ final class AonwRoutePlanResult extends AonwQueryResult {
     required this.availableMovementUnits,
     required this.remainingMovementUnits,
     required this.estimatedTurns,
+    required this.stepTurns,
     required this.steps,
   });
 
@@ -311,6 +312,7 @@ final class AonwRoutePlanResult extends AonwQueryResult {
       'availableMovementUnits',
       'remainingMovementUnits',
       'estimatedTurns',
+      'stepTurns',
       'steps',
     }, 'route plan result');
     return AonwRoutePlanResult(
@@ -331,6 +333,8 @@ final class AonwRoutePlanResult extends AonwQueryResult {
         value['estimatedTurns'],
         'estimated route turns',
       ),
+      stepTurns: readList(value['stepTurns'], 'route step turns',
+        (item, _) => readUnsigned(item, 'route step turn')),
       steps: readList(
         value['steps'],
         'route steps',
@@ -347,5 +351,6 @@ final class AonwRoutePlanResult extends AonwQueryResult {
   final int availableMovementUnits;
   final int remainingMovementUnits;
   final int estimatedTurns;
+  final List<int> stepTurns;
   final List<AonwMovementStep> steps;
 }

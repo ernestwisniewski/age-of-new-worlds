@@ -60,6 +60,8 @@ pub struct RoutePlanResult {
     pub remaining_movement: MovementUnits,
     /// Calendar turns needed by the complete route.
     pub estimated_turns: u32,
+    /// Calendar turn of each step, including origin turn one.
+    pub step_turns: Box<[u32]>,
     /// Ordered route including the origin.
     pub steps: Box<[MovementStepView]>,
 }

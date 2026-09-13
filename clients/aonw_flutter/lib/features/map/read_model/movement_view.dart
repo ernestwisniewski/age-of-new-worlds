@@ -60,8 +60,10 @@ final class RoutePlanView {
     required this.availableMovementUnits,
     required this.remainingMovementUnits,
     required this.estimatedTurns,
+    required List<int> stepTurns,
     required List<MovementStepView> steps,
-  }) : steps = List.unmodifiable(steps);
+  }) : steps = List.unmodifiable(steps),
+       stepTurns = List.unmodifiable(stepTurns);
 
   final SessionStampView stamp;
   final String unitId;
@@ -71,6 +73,7 @@ final class RoutePlanView {
   final int availableMovementUnits;
   final int remainingMovementUnits;
   final int estimatedTurns;
+  final List<int> stepTurns;
   final List<MovementStepView> steps;
 }
 

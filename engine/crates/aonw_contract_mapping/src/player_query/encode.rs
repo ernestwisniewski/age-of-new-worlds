@@ -67,6 +67,7 @@ pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQu
             available_movement_units: result.available_movement().get(),
             remaining_movement_units: result.remaining_movement().get(),
             estimated_turns: result.estimated_turns(),
+            step_turns: result.step_turns().collect(),
             steps: result
                 .steps()
                 .iter()

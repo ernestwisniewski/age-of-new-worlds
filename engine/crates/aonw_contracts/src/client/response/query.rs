@@ -297,6 +297,8 @@ pub enum ClientQueryResultDto {
         remaining_movement_units: u32,
         /// Calendar turns needed by the complete route.
         estimated_turns: u32,
+        /// Calendar turn of each step; the origin and current turn are one.
+        step_turns: Vec<u32>,
         /// Ordered route including the origin.
         steps: Vec<MovementStepViewDto>,
     },
