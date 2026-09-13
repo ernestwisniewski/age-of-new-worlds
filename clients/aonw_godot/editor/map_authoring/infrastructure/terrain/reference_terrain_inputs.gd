@@ -1,12 +1,12 @@
 @tool
 extends RefCounted
-## Resolve the same source as the map picker. Verify identity before using pixels.
+## Resolve the picker's source and verify its canonical hash through the EDITOR
+## API. Terrain authoring must not depend on the version of the gameplay client.
 
 const Catalog := preload("res://editor/map_authoring/infrastructure/map_asset_catalog.gd")
+const Workbench := preload("res://editor/map_authoring/infrastructure/engine_logical_map_workbench.gd")
 const MapSource := preload("res://game/application/map/map_source.gd")
-const MapReader := preload("res://game/infrastructure/map/json_map_repository.gd")
-const Client := preload("res://game/infrastructure/engine/native_local_session.gd")
-const Documents := preload("res://game/infrastructure/filesystem/text_document_reader.gd")
+const MapIdentity := preload("res://game/application/map/read_model/map_view.gd")
 const Artifacts := preload("res://game/infrastructure/terrain/terrain_compiled_artifact_repository.gd")
 const Atlas := preload("res://game/infrastructure/map/tile_atlas_repository.gd")
 
@@ -24,13 +24,20 @@ func load_inputs(map_id: String, bundle_root: String = "res://assets/maps") -> D
 	var file := FileAccess.open(source.map_path, FileAccess.READ)
 	if file == null:
 		return _failure("Cannot read canonical map: " + source.map_path)
-	var document: Variant = JSON.parse_string(file.get_as_text())
-	if document is not Dictionary:
-		return _failure("Map document is not valid JSON")
-	var map_result := MapReader.new(Client.new(), Documents.new()).load_map(source)
-	if not map_result["ok"]:
-		return map_result
-	var map: AonwMapView = map_result["map"]
+	var text := file.get_as_text()
+	var document: Variant = JSON.parse_string(text)
+	if document is not Dictionary or document.get("mapName") != map_id or document.get("gridLayout") != "oddQFlatTop":
+		return _failure("Map document identity or grid layout is invalid")
+	# Inspect validates the full canonical document in Rust and returns its hash.
+	# Only this verified header is needed by the atlas reader, not a game session.
+	var inspected := Workbench.new().inspect_map_tile(text, Vector2i.ZERO)
+	if not inspected["ok"]:
+		return inspected
+	var header: Dictionary = inspected["snapshot"]
+	var objectives: Array[AonwMapObjectiveView] = []
+	var tiles: Array[AonwMapTileView] = []
+	var identity := MapIdentity.new(StringName(map_id), header["mapContentHash"], &"oddQFlatTop",
+		int(header["cols"]), int(header["rows"]), float(document.get("defaultZoom", 1.0)), objectives, tiles)
 	var directory := "res://.godot/terrain_compiled".path_join(map_id)
 	if not FileAccess.file_exists(directory.path_join("terrain_compile.json")):
 		directory = "res://assets/terrain_compiled".path_join(map_id)
@@ -39,14 +46,14 @@ func load_inputs(map_id: String, bundle_root: String = "res://assets/maps") -> D
 	if not loaded["ok"]:
 		return loaded
 	var artifact: AonwTerrainCompiledArtifact = loaded["artifact"]
-	if artifact.map_content_hash != map.content_hash() or artifact.cols != map.cols() or artifact.rows != map.rows():
+	if artifact.map_content_hash != identity.content_hash() or artifact.cols != identity.cols() or artifact.rows != identity.rows():
 		return _failure("Compiled terrain is stale relative to the selected JSON map. Recompile canonical inputs first.")
 	var texture: Texture2D
 	var warning := ""
 	if FileAccess.file_exists(source.visual_directory.path_join("map_texture_manifest.json")):
-		var atlas := Atlas.new().load_atlas(map, source.visual_directory)
+		var atlas := Atlas.new().load_atlas(identity, source.visual_directory)
 		if not atlas["ok"]:
-			return atlas # Corruption or identity mismatch is never hidden by a fallback.
+			return atlas
 		texture = atlas["reference_texture"]
 	else:
 		warning = "No reference atlas: generating from JSON heights and terrain attributes only."
