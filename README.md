@@ -18,7 +18,7 @@ same Rust rules and recipient projections used by local sessions.
 | Architecture | [Interactive Rust engine map](https://engine.aonw.net/architecture) |
 | Rust engine | [4X engine and API documentation](https://engine.aonw.net/) |
 | Devlog | [ernest.dev](https://ernest.dev) |
-| GitHub | [ernestwisniewski/aonw](https://github.com/ernestwisniewski/aonw) |
+| GitHub | [ernestwisniewski/age-of-new-worlds](https://github.com/ernestwisniewski/age-of-new-worlds) |
 | iOS | [App Store](https://apps.apple.com/pl/app/age-of-new-worlds/id6781790591) |
 | Windows/Linux/macOS | [Steam](https://store.steampowered.com/app/4833240/Age_of_New_Worlds/), [itch.io](https://ernest-dev.itch.io/aonw) |
 | Android | [Google Play](https://play.google.com/store/apps/details?id=aonw.net.game), [itch.io](https://ernest-dev.itch.io/aonw) |

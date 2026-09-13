@@ -26,7 +26,7 @@ edition = "2024"
 rust-version = "1.97"
 authors = ["Age of New Worlds contributors"]
 license = "MIT"
-repository = "https://github.com/ernestwisniewski/aonw"
+repository = "https://github.com/ernestwisniewski/age-of-new-worlds"
 publish = false
 
 [workspace.dependencies]
