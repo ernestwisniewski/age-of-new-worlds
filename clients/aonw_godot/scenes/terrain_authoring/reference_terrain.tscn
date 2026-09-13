@@ -12,11 +12,12 @@ show_grey = true
 resource_local_to_scene = true
 
 [sub_resource type="Environment" id="Environment"]
+resource_local_to_scene = true
 background_mode = 1
 background_color = Color(0.065, 0.085, 0.11, 1)
 ambient_light_source = 3
 ambient_light_color = Color(0.88, 0.92, 1, 1)
-ambient_light_energy = 0.6
+ambient_light_energy = 0.45
 reflected_light_source = 2
 
 [node name="ReferenceTerrain" type="Node3D"]
@@ -40,17 +41,17 @@ free_editor_textures = false
 environment = SubResource("Environment")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-52, -32, 0)
+rotation_degrees = Vector3(-48, -32, 0)
 light_color = Color(1, 0.95, 0.87, 1)
 shadow_enabled = true
 directional_shadow_max_distance = 2200.0
 
 [node name="PreviewCamera" type="Camera3D" parent="."]
 position = Vector3(302.5, 1221.6855, 964.5)
-rotation_degrees = Vector3(-60, 0, 0)
-projection = 1
+rotation_degrees = Vector3(-52, 0, 0)
+projection = 0
+fov = 38.0
 current = true
-size = 620.0
 near = 0.1
 far = 8000.0
 script = ExtResource("2_camera")
