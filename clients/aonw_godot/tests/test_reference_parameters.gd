@@ -2,7 +2,7 @@ extends SceneTree
 ## Schema/UI signal and perspective-camera contracts; no Terrain3D extension needed.
 
 const Parameters := preload("res://editor/map_authoring/application/reference_terrain_parameters.gd")
-const Panel := preload("res://editor/map_authoring/presentation/terrain_parameter_panel.gd")
+const ParameterPanel := preload("res://editor/map_authoring/presentation/terrain_parameter_panel.gd")
 const Camera := preload("res://editor/map_authoring/presentation/reference_preview_camera.gd")
 var _failures := PackedStringArray()
 var _events: Array = []
@@ -16,7 +16,7 @@ func _run() -> void:
 	_check(not Parameters.validate({"seed": 1.25}).is_empty(), "Fractional seeds are rejected")
 	_check(not Parameters.validate({"sun_energy": NAN}).is_empty(), "NaN is rejected")
 	_check(not Parameters.validate({"unknown": 1.0}).is_empty(), "Unknown options are rejected")
-	var panel := Panel.new()
+	var panel := ParameterPanel.new()
 	root.add_child(panel)
 	panel.parameter_changed.connect(func(key: String, value: float) -> void: _events.append([key, value]))
 	panel.show_values(values, true, false)

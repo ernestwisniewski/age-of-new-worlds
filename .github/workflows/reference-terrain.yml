@@ -36,3 +36,44 @@ jobs:
           chmod +x Godot_v4.6-stable_linux.x86_64
       - name: Run raster, parameter, UI signal and camera contracts
         run: python3 clients/aonw_godot/tool/run_reference_contracts.py --godot "$RUNNER_TEMP/Godot_v4.6-stable_linux.x86_64"
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            engine/target
+          key: reference-native-${{ runner.os }}-${{ hashFiles('engine/Cargo.lock', 'engine/rust-toolchain.toml') }}
+      - name: Build pinned native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(awk -F '"' '/^channel = / {print $2}' engine/rust-toolchain.toml)
+          rustup toolchain install "$version" --profile minimal
+          (cd engine && cargo build --locked -p aonw_godot) > reference-native-build.log 2>&1 || { tail -n 150 reference-native-build.log; exit 1; }
+          mkdir -p clients/aonw_godot/native/linux/x86_64/debug
+          cp engine/target/debug/libaonw_godot.so clients/aonw_godot/native/linux/x86_64/debug/
+      - name: Install official Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          release=https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable
+          curl --fail --location --retry 3 "$release/Godot_v4.7.1-stable_linux.x86_64.zip" -o Godot_v4.7.1-stable_linux.x86_64.zip
+          curl --fail --location --retry 3 "$release/SHA512-SUMS.txt" -o SHA512-SUMS.txt
+          sha512sum --ignore-missing --check SHA512-SUMS.txt
+          unzip -q Godot_v4.7.1-stable_linux.x86_64.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+      - name: Import editor and run native controls and all maps
+        run: python3 clients/aonw_godot/tool/run_reference_native_contracts.py --godot "$RUNNER_TEMP/Godot_v4.7.1-stable_linux.x86_64"
+      - name: Retain native diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-native-diagnostics
+          path: reference-native-*.log
+          retention-days: 7

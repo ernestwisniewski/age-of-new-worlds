@@ -4,7 +4,7 @@ extends AonwTerrainAuthoringSceneFactory
 const Template := preload("res://scenes/terrain_authoring/reference_terrain.tscn")
 
 func create_scene(map_id: String, compiled_artifact_directory: String, authoring_root: String) -> PackedScene:
-	var root := Template.instantiate()
+	var root := Template.instantiate() as AonwTerrainAuthoringSurface
 	root.name = map_id
 	root.source_map_id = map_id
 	root.compiled_artifact_directory = compiled_artifact_directory
