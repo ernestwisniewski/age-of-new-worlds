@@ -1,0 +1,38 @@
+name: Reference terrain contracts
+on:
+  push:
+    branches: [feature/maps-terrain]
+    paths:
+      - clients/aonw_godot/**
+      - .github/workflows/reference-terrain.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install syntax parser
+        run: python3 -m pip install gdtoolkit==4.3.4
+      - name: Parse reference GDScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=clients/aonw_godot
+          find "$root/editor/map_authoring" -name '*reference*.gd' -o -name 'terrain_parameter_panel.gd' -o -name 'terrain_landscape_fields.gd' -o -name 'terrain_strategic_preview.gd' | while read -r file; do gdparse "$file" >/dev/null; done
+          gdparse "$root/addons/aonw_map_workbench/plugin.gd" >/dev/null
+      - name: Install official Godot 4.6 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          release=https://github.com/godotengine/godot-builds/releases/download/4.6-stable
+          curl --fail --location --retry 3 "$release/Godot_v4.6-stable_linux.x86_64.zip" -o Godot_v4.6-stable_linux.x86_64.zip
+          curl --fail --location --retry 3 "$release/SHA512-SUMS.txt" -o SHA512-SUMS.txt
+          sha512sum --ignore-missing --check SHA512-SUMS.txt
+          unzip -q Godot_v4.6-stable_linux.x86_64.zip
+          chmod +x Godot_v4.6-stable_linux.x86_64
+      - name: Run raster, parameter, UI signal and camera contracts
+        run: python3 clients/aonw_godot/tool/run_reference_contracts.py --godot "$RUNNER_TEMP/Godot_v4.6-stable_linux.x86_64"

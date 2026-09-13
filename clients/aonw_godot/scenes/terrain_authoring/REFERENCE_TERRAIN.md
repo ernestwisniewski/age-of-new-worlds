@@ -1,138 +1,176 @@
-# Reference-guided terrain authoring
+# Reference terrain workbench
 
-The `feature/maps-terrain` work starts from main at `9b4104112749` and reuses
-Dravonia's raster kernels, preview camera and relief shader. It does not merge
-an old game/client snapshot or replace the existing Terenos/Myranth scenes.
+The AoNW Map dock now opens the reference reconstruction workflow by default.
+It combines canonical JSON heights and terrain tags, verified compiled height
+rasters, and the matching reference atlas. Existing canonical authoring scenes
+and earlier reconstruction drafts are not overwritten.
 
-## Open a map
+## Start in the panel
 
-Open any scene under `res://scenes/terrain_authoring/reference_maps/`:
-`dravonia.tscn`, `myranth.tscn`, `terenos.tscn`, `verdantia.tscn`, or
-`aonw2_starter.tscn`. The shared implementation builds native Terrain3D height
-regions on scene open. F6 runs the same scene with an orbit/pan camera.
+1. Restart the Godot editor after updating the plugin scripts. Enable the existing
+   Terrain3D and AoNW Map Workbench plugins if they are disabled.
+2. Select a map in **AoNW Map**. Selection and **Generate / open landscape** use
+   the same scene factory and source catalog. The Terrain3D tab opens by default.
+3. Adjust the landscape controls and press **Apply / rebuild landscape**.
+   Appearance, reference/grid opacity, lighting and strategic camera controls
+   apply immediately; geometry controls are intentionally staged.
+4. Inspect the live strategic preview in the panel, or run the map scene with F6.
+5. Use **Save terrain + recipe + mask** to save native Terrain3D sculpt data,
+   the recipe, water mask, and applied scene settings.
 
-On macOS, from the repository root:
+The supplied scenes are under `res://scenes/terrain_authoring/reference_maps/`:
+`dravonia`, `myranth`, `terenos`, `verdantia`, and `aonw2_starter`. New maps use
+that same factory rather than copying a Dravonia-specific script. The source
+picker and reconstruction resolve the same canonical document. Cached compiled
+artifacts take precedence over packaged ones only when the cache exists. Stale
+hashes, corrupt atlases and inconsistent dimensions fail explicitly; a different
+map or outdated reference is not silently substituted.
 
-```sh
-/Applications/Godot.app/Contents/MacOS/Godot --editor --path clients/aonw_godot \
-  res://scenes/terrain_authoring/reference_maps/dravonia.tscn
-```
+Missing reference atlases are supported as a clearly reported **semantic-only**
+mode. In that mode JSON water tags, height levels and biome tags drive the
+landscape, with no image-refinement claim. Reference-only controls are disabled.
 
-Use the project's Godot/Terrain3D versions and import the project first, as for
-the original authoring workflow. No Rust gameplay changes are required.
-Fresh `res://.godot/terrain_compiled/<map>/` artifacts take precedence over the
-packaged `res://assets/terrain_compiled/<map>/` data. Invalid/stale identities or
-atlas hashes fail explicitly; another map is never silently substituted.
+## Controls and their effects
 
-The generic `reference_terrain.tscn` accepts any complete map bundle through
-`Source Map Id` and `Map Bundle Root`. Add new bundles without copying generator
-code. Change settings, save the scene, then close/reopen it to build that recipe.
+The versioned `reference_terrain_parameters.gd` schema defines UI ranges, defaults,
+validation, stage, help and presets. There is one original metric-height control
+and twenty additional range controls (the seed uses a numeric box).
 
-## What determines the shape
+| Stage | Parameters | Application |
+| --- | --- | --- |
+| Terrain | JSON level-5 height, mountain relief, rolling hills, reference influence, ridge sharpness, cross-hex continuity, detail strength and wavelength, bank width, relaxation passes, seed | Staged; explicit rebuild |
+| Material/light | Relief lighting, rock slope threshold, sun elevation and heading, direct and ambient intensity | Live, no height rebuild |
+| Camera | Pitch, heading, dolly zoom, field of view | Live perspective preview |
+| Existing overlays | Reference enable/blend, grid enable/opacity, constraint envelopes, city marker and coordinates | Live |
 
-* Compiled metre heights provide the broad elevation envelope. Cross-hex
-  smoothing removes isolated hexagonal plateaus. The canonical map JSON and
-  its min/max images are not edited.
-* Multi-scale image contrast locates reference crests and valleys inside that
-  envelope. It shapes the mountain geometry itself. Continuous ridged noise
-  supplies detail/fallback where the illustration contains little information.
-  Hills and lowlands receive smaller, smoother relief.
-* Blue/cyan image regions connected to semantic water seeds define sub-hex
-  coastlines, lakes and rivers. Snow/forest are not classified by brightness
-  alone. Ambiguous water at source sea level is retained conservatively and
-  counted in the console report. An all-water source stays all water.
-* A distance-to-water field forms banks. Masked samples are exactly **0 metres**
-  after every operation; their minimum and maximum are also zero, so ordinary
-  Terrain3D brush edits cannot raise them. Talus relaxation only moves material
-  between unprotected land samples.
+The height control now sets the **presentation** scale. It does not write a
+canonical terrain profile and then call the old hex-constrained rescale path.
+A high JSON level or mountain tag locates a range; it does not create one cone
+per hex. Smoothed compiled elevation and direct JSON levels jointly form the
+macro envelope. Smoothed mountain/hill masks control local relief. Multiscale
+reference contrast or an explicit ridge guide shapes crests inside that envelope;
+seeded world-space noise supplies secondary detail. Hills and lowlands receive
+smaller relief. Water samples are locked to zero in base/min/max after relaxation.
 
-This is image-guided procedural reconstruction, **not** exact recovery of a
-3D surface from an illustration, semantic image recognition, or a hydraulic
-simulation. Painted lighting, dark rock, non-blue rivers and features thinner
-than the height raster can be ambiguous. Zero-height rivers are deliberately a
-future-water authoring convention; they are not physically graded riverbeds.
-Inspect every map in both reference and clay modes before accepting its look.
-Do not treat passing numerical tests as visual approval.
+Presets: **Reference faithful**, **Strategic natural**, **Rugged**. Presets stage
+geometry without throwing away a sculpt or changing the camera. Discard removes
+pending numeric settings. Applied parameters are stored in the scene; un-applied
+settings are not falsely recorded as the current terrain recipe.
 
-## Precise artistic control
+## Reference, material and camera
 
-The Inspector exposes `Mountain Height Scale`, `Reference Influence`, and a
-seed. For difficult references, assign lossless, atlas-sized grayscale textures
-to `Water Guide` and/or `Ridge Guide`:
+Reference opacity is an opaque blend between the illustration and a procedural
+biome/rock material on the draped geometry. Zero, or disabling the reference,
+reveals the material; it does not hide all ground or leave an alpha-depth sheet.
+The active ShaderMaterial receives the value, rather than only its unused base
+StandardMaterial. Terrain tags provide biome colours and slope provides rock
+coverage. These are authoring materials, not a complete production PBR asset set.
 
-* Water: white = exactly zero; black = land. This **replaces** colour-derived
-  hydrology rather than unioning it with old hex polygons.
-* Ridges: white = crest; black = valley, inside the logical height envelope.
-  Explicit guidance overrides uncertain image contrast. Use `Reference Influence
-  = 1` to follow it fully.
+**Strategic** selects a perspective camera with configurable pitch, FOV, rotation
+and real camera-distance zoom. **Reference top** gives an unlit orthographic
+comparison. The dock preview shares the edited world without replacing Godot's
+editor-navigation camera. In the preview: right drag orbits; middle/Shift-right
+pans; wheel/magnify dollies. In F6, `1` is reference top, `2` strategic, `R` toggles
+reference/material and `G` toggles the grid. The sun and environment are local to
+each map scene, so changing one scene's ambient light does not edit another's.
 
-Guides must have exactly the assembled reference-atlas dimensions. They use the
-same world-to-reference UV mapping as the draped texture, including the padded
-last row; no independent stretching or axis flip is introduced. Leave a guide
-unassigned to use automatic reconstruction. The exported water mask below is
-terrain-raster-sized and is **not** an atlas-sized input guide.
+Use the strategic camera to evaluate silhouette, depth and readability. This is
+not a reproduction of Civilization VI's art, lighting pipeline or assets, nor a
+promise that automatic reconstruction will look photorealistic.
 
-`1` gives an unlit top/reference view; `2` shaded oblique; `R` toggles reference
-and clay; `G` the hex grid; `L` lighting. Right-drag orbits, middle/Shift-right-drag
-pans, and the wheel zooms.
+## Precise guidance
 
-## Save and regenerate safely
+Assign optional lossless grayscale **Water Guide** and **Ridge Guide** textures
+to the root in the Inspector, then Apply in the dock (or its Inspector rebuild
+button). Guides must match the assembled reference-atlas pixel dimensions and
+use the same UV transform. White water is locked to zero; black is land. The
+water guide replaces automatic hydrology. White ridge is a crest, black a valley
+inside the elevation envelope. Reference influence 1 follows explicit ridges.
 
-Use **Save terrain draft and water mask** on the root node. Each recipe lives in:
+The reference is an illustration, not a DEM. Painted shadows, pale snow, brown
+rivers and sub-sample features can be ambiguous. The automatic water detector
+uses chroma and semantic connectivity, not brightness alone, but manual guides
+may still be necessary. Zero-height rivers deliberately follow the requested
+future-water convention, not physically graded riverbeds. No water shader or
+hydraulic-flow simulation is introduced by this branch.
+
+## Session safety and legacy boundaries
+
+A map uses one self-opening reference session. The plugin waits for it before
+synchronizing controls, and later state changes resynchronize the dock without
+emitting slider edits. Controls cannot target a different map than the selected
+one. Canonical and reference sessions never compete to initialize the same data.
+
+A rebuild computes and validates its inputs before replacing native regions.
+The previous draft is saved first. Its `maps_edited` callback is disconnected,
+so its old constraints cannot flatten the next recipe. A failed target open
+attempts to restore the previous saved session. The dock resets **this scene's**
+undo history after a recipe switch: old brush actions must not operate on new
+regions. Other scene histories are not cleared.
+
+Each geometry recipe uses:
 
 ```text
 res://assets/generated_maps/<map>/reference_terrain/<workspace-key>/
 ```
 
-The existing persistence layer saves editable native Terrain3D regions. Alongside
-the draft, `water_mask.png` (white water, black land) and `reference_recipe.json`
-are written for later water authoring. Mask pixel `(x,y)` corresponds to terrain
-local `(x * sampleSpacingMeters, 0, y * sampleSpacingMeters)`.
+Identity includes algorithm/schema/Godot versions, map/profile/source hashes,
+reference and guides, geometry options and output heights. Material and camera
+changes do not create new geometry workspaces. Reopening the same recipe restores
+its native sculpt. Earlier `natural_relief`, `terrain_authoring` and v1 recipe
+folders remain untouched. The `water_mask.png` companion is **terrain-raster**
+sized, not an atlas-sized input guide. Pixel `(x,y)` maps to terrain local
+`(x * sampleSpacingMeters, 0, y * sampleSpacingMeters)`.
 
-The workspace key includes source/profile/map identity, reference pixels,
-guidance, algorithm/Godot version, seed, settings, and the actual output height
-hash. Reopening the same recipe restores its draft instead of accumulating
-noise; changing the recipe uses a new directory. Existing `terrain_authoring`,
-`natural_relief`, and manually authored scene files are not reset or overwritten.
-Do not commit generated region caches unless intentionally publishing art.
+Runtime publish is hidden on reference scenes because they do not yet implement
+the game's canonical publication contract. Canonical logical painting is disabled
+there rather than persisting JSON and failing midway through a reference refresh.
+To change gameplay tiles, use the legacy canonical scene/workbench or source
+content tools, recompile the inputs and update matching atlas identity, then
+rebuild the reference scene. Legacy scenes retain their original editing path.
+Generated decoration placement and production runtime integration are separate
+from this landscape authoring system.
 
-This remains a **presentation authoring** workflow, matching the Dravonia study.
-Runtime publishing and generic canonical refresh/rescale actions are blocked on
-these surfaces so they cannot replace the continuous relief with hex constraints.
-The regular map workbench and its existing scenes keep their original behavior.
-This branch does not add a water shader or change Rust/Flutter gameplay rules.
+## Extending the system
 
-## Validation and optional batch generation
+Keep pixel algorithms in the pure builder/landscape fields, source validation in
+`reference_terrain_inputs`, native lifecycle in `reference_terrain_session`, and
+editor bindings in the dock. To add a parameter, add its schema entry, implement
+its stage's effect, and extend the sensitivity or presentation tests. Increment
+the generator version when geometry semantics change. Do not put gameplay rules
+in the material or dock. Biome material selection, erosion passes and guided
+hydrology can be extended behind these boundaries without adding per-map code.
 
-After importing the project, run from the repository root:
+## Validation
+
+Pure raster, parameter/UI-signal and camera contracts can run in an isolated
+project with the exact dependency scripts and no gameplay native extension:
+
+```sh
+python3 clients/aonw_godot/tool/run_reference_contracts.py \
+  --godot /Applications/Godot.app/Contents/MacOS/Godot
+```
+
+The branch workflow runs those contracts on official Godot 4.6 as an API baseline
+and parses the new GDScript. This is not full native/editor/GPU acceptance for the
+project's configured Godot version. Check the actual Actions result; adding tests
+is not evidence that they have passed.
+
+In the fully imported project, with its matching Engine and Terrain3D libraries:
 
 ```sh
 GODOT=/Applications/Godot.app/Contents/MacOS/Godot
-"$GODOT" --headless --path clients/aonw_godot --script res://tests/test_natural_relief.gd
-"$GODOT" --headless --path clients/aonw_godot --script res://tests/test_reference_terrain.gd
+"$GODOT" --headless --path clients/aonw_godot --script res://tests/test_reference_native_controls.gd
 "$GODOT" --headless --path clients/aonw_godot --script res://tests/test_reference_terrain_maps.gd
 ```
 
-The pure-raster suite checks determinism, source immutability, image/guide
-influence, exact water locks after relaxation, envelopes, map-coordinate
-validation and hydrology. The native smoke test discovers **all** map bundles,
-loads them separately, verifies map identity and samples actual Terrain3D water
-heights. Without flags it does not save drafts. It returns a nonzero exit status
-on a failure, including missing references or compiled artifacts.
+The native control test writes only a unique `user://reference-tests` directory.
+It checks active reference/grid materials, overlays, live appearance, pending
+geometry, session detachment, native water samples and saving. The all-map test
+discovers bundles. Adding `-- --save` to the all-map test explicitly saves default
+recipes; without it, drafts are not saved. Tests of controls and sampled water
+heights are not a substitute for viewing every map at strategic and close zoom.
 
-To generate **and save** the default reconstruction for every map:
-
-```sh
-"$GODOT" --headless --path clients/aonw_godot \
-  --script res://tests/test_reference_terrain_maps.gd -- --save
-```
-
-The batch uses default settings, not per-scene Inspector overrides. Save a
-custom-guided version through its scene. Generation is bounded by the inherited
-4,194,304-sample budget and runs synchronously as an offline authoring operation,
-not in the gameplay frame loop.
-
-Validation status when this change was authored: native Godot/Terrain3D execution
-and visual renders were unavailable in the editing environment. The suites above
-are provided but must be run in the project environment; no visual acceptance or
-successful native test run is implied.
+The implementation environment did not have a local Godot executable or GPU
+rendering. Native full-project tests and visual acceptance must not be inferred
+from the Python runner's syntax check or from the isolated baseline workflow.
