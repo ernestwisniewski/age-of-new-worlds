@@ -41,22 +41,32 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
+        id: cargo-cache
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
             engine/target
-          key: reference-native-${{ runner.os }}-${{ hashFiles('engine/Cargo.lock', 'engine/rust-toolchain.toml') }}
-      - name: Build pinned native engine
+          key: reference-editor-native-${{ runner.os }}-${{ hashFiles('engine/Cargo.lock', 'engine/rust-toolchain.toml') }}
+      - name: Build pinned native engine with editor tools
         shell: bash
         run: |
           set -euo pipefail
           version=$(awk -F '"' '/^channel = / {print $2}' engine/rust-toolchain.toml)
           rustup toolchain install "$version" --profile minimal
-          (cd engine && cargo build --locked -p aonw_godot) > reference-native-build.log 2>&1 || { tail -n 150 reference-native-build.log; exit 1; }
+          (cd engine && cargo build --locked -p aonw_godot --features editor-tools) > reference-native-build.log 2>&1 || { tail -n 150 reference-native-build.log; exit 1; }
           mkdir -p clients/aonw_godot/native/linux/x86_64/debug
           cp engine/target/debug/libaonw_godot.so clients/aonw_godot/native/linux/x86_64/debug/
+      - name: Save compiled dependencies
+        if: steps.cargo-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            engine/target
+          key: ${{ steps.cargo-cache.outputs.cache-primary-key }}
       - name: Install official Godot 4.7.1
         shell: bash
         run: |
