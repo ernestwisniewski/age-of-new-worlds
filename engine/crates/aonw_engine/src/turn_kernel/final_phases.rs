@@ -1,6 +1,6 @@
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    Diplomacy, EconomyState, GameOutcome, GameState, ObjectiveState, PlayerId, Unit,
+    DiplomacyState, EconomyState, GameOutcome, GameState, ObjectiveState, PlayerId, Unit,
 };
 
 use crate::{CanonicalEngineError, DomainEvent, MatchEndedEvent};
@@ -11,7 +11,7 @@ use super::objective_phase::advance_turn_objectives;
 
 pub(super) struct FinalTurnPhases {
     pub(super) economy: EconomyState,
-    pub(super) diplomacy: Diplomacy,
+    pub(super) diplomacy: DiplomacyState,
     pub(super) objectives: ObjectiveState,
     pub(super) outcome: GameOutcome,
     pub(super) diplomacy_events: Vec<DomainEvent>,
@@ -26,7 +26,7 @@ pub(super) fn advance_final_turn_phases(
     map: &MapDefinition,
     ruleset: &RulesetDefinition,
     units: &[Unit],
-    diplomacy: Diplomacy,
+    diplomacy: DiplomacyState,
     scope: &[PlayerId],
     turn: u32,
     weariness_counts: &mut crate::economy::WarWearinessEventCounts,

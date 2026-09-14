@@ -2,8 +2,8 @@ use std::cmp::Ordering;
 use std::collections::BTreeSet;
 
 use aonw_domain::{
-    City, Diplomacy, FogOfWar, GameState, HexCoord, HexTileIndex, MatchIdentity, TransportNetwork,
-    Unit, UnitKind, UnitPosture,
+    City, DiplomacyState, FogOfWarState, GameState, HexCoord, HexTileIndex, MatchIdentity,
+    TransportNetwork, Unit, UnitKind, UnitPosture,
 };
 
 use super::fog::{merge_discovered_contacts, recompute_after_move, visible_from_source};
@@ -74,8 +74,8 @@ pub(super) fn plan_auto_explore_for_world(
     revision: u64,
     units: &[Unit],
     cities: &[City],
-    fog_of_war: &FogOfWar,
-    diplomacy: &Diplomacy,
+    fog_of_war: &FogOfWarState,
+    diplomacy: &DiplomacyState,
     match_identity: &MatchIdentity,
     transport_network: &TransportNetwork,
     context: EngineContext<'_>,
@@ -97,7 +97,7 @@ pub(super) fn plan_auto_explore_for_world(
     let metrics = eventual_costs(units, context.map(), unit, context, workspace);
     let discovered = fog_of_war
         .player(unit.owner_player_id())
-        .map_or(&[][..], aonw_domain::PlayerFog::discovered_hexes);
+        .map_or(&[][..], aonw_domain::PlayerFogState::discovered_hexes);
     let mut best = None;
     for (index, &movement_cost) in workspace.reachable_costs[..context.map().bounds().tile_count()]
         .iter()

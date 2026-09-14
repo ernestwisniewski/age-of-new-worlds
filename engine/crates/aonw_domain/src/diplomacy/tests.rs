@@ -1,5 +1,5 @@
 use super::{
-    Diplomacy, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
+    DiplomacyState, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
     DiplomaticMessageTopic, DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation,
     DiplomaticRelationChangeReason, DiplomaticRelationStatus, DiplomaticScoreChangeReason,
     DiplomaticScoreEntry, PlayerPair, ResourceTradeAgreement, attack_status_severity,
@@ -209,7 +209,7 @@ fn pair_cleanup_removes_only_bilateral_pending_actions_and_trades() {
 
 struct Fixture {
     identity: MatchIdentity,
-    diplomacy: Diplomacy,
+    diplomacy: DiplomacyState,
     attacker: PlayerId,
     defender: PlayerId,
     lower_observer: PlayerId,
@@ -270,7 +270,7 @@ fn fixture() -> Fixture {
     .expect("prior score");
     let bilateral = trade("bilateral-trade", &attacker, &defender);
     let unrelated = trade("unrelated-trade", &lower_observer, &upper_observer);
-    let diplomacy = Diplomacy::try_new(
+    let diplomacy = DiplomacyState::try_new(
         &identity,
         contacts,
         [primary, lower],
@@ -291,7 +291,7 @@ fn fixture() -> Fixture {
 }
 
 fn relation<'a>(
-    diplomacy: &'a Diplomacy,
+    diplomacy: &'a DiplomacyState,
     left: &PlayerId,
     right: &PlayerId,
 ) -> &'a DiplomaticRelation {

@@ -3,7 +3,7 @@ use aonw_ai::{
     StrategicPlanningOutcome,
 };
 use aonw_domain::{
-    Diplomacy, DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation,
+    DiplomacyState, DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation,
     DiplomaticRelationChangeReason, DiplomaticRelationStatus, HexCoord, PlayerPair, UnitKind,
 };
 use aonw_local_runtime::{LocalRuntime, OpenSession};
@@ -27,7 +27,7 @@ fn aggressive_profile_declines_friendship_by_policy() {
     let state = world
         .state([], [])
         .with_diplomacy(
-            Diplomacy::try_new(&world.identity, [contact], [], [proposal], [], [], [])
+            DiplomacyState::try_new(&world.identity, [contact], [], [proposal], [], [], [])
                 .expect("diplomacy"),
         )
         .try_build()
@@ -115,7 +115,7 @@ pub(super) fn tactical_session() -> LocalRuntime {
     let state = world
         .state([actor, opponent], [])
         .with_diplomacy(
-            Diplomacy::try_new(&world.identity, [pair], [relation], [], [], [], [])
+            DiplomacyState::try_new(&world.identity, [pair], [relation], [], [], [], [])
                 .expect("diplomacy"),
         )
         .try_build()

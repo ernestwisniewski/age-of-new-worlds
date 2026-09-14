@@ -8,7 +8,7 @@ use aonw_contracts::{
     PlayerPairDto, ResourceTradeAgreementDto,
 };
 use aonw_domain::{
-    Diplomacy, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
+    DiplomacyState, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
     DiplomaticMessageResponse, DiplomaticMessageTopic, DiplomaticProposal, DiplomaticProposalKind,
     DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
     DiplomaticScoreChangeReason, DiplomaticScoreEntry, MatchIdentity, PlayerId, PlayerPair,
@@ -22,7 +22,7 @@ pub(super) fn decode_diplomacy(
     identity: &MatchIdentity,
     dto: DiplomacyStateDto,
     trades: Vec<ResourceTradeAgreementDto>,
-) -> Result<Diplomacy, GameStateMappingError> {
+) -> Result<DiplomacyState, GameStateMappingError> {
     reject_duplicate_ids(
         &dto.pending_proposals,
         "$.diplomacy.pendingProposals",
@@ -89,7 +89,7 @@ pub(super) fn decode_diplomacy(
             )
         })
         .collect::<Result<Vec<_>, _>>()?;
-    Diplomacy::try_new(
+    DiplomacyState::try_new(
         identity,
         contacts,
         relations,
@@ -103,7 +103,7 @@ pub(super) fn decode_diplomacy(
 
 #[must_use]
 pub(super) fn encode_diplomacy(
-    value: &Diplomacy,
+    value: &DiplomacyState,
 ) -> (DiplomacyStateDto, Vec<ResourceTradeAgreementDto>) {
     let dto = DiplomacyStateDto {
         contacts: value.contacts().iter().map(encode_pair).collect(),

@@ -2,7 +2,9 @@
 use aonw_content::{
     GridLayout, MapDefinition, RulesetDefinition, TerrainProfile, TerrainType, TileDefinition,
 };
-use aonw_domain::{City, FogOfWar, GameState, HexCoord, InteractionState, PlayerFog, UnitKind};
+use aonw_domain::{
+    City, FogOfWarState, GameState, HexCoord, InteractionState, PlayerFogState, UnitKind,
+};
 use aonw_engine::{CityPlanning, CityPlanningError, CityPlanningQuery, EngineContext, GameEngine};
 
 #[path = "city/support.rs"]
@@ -166,9 +168,9 @@ fn fixture(map: &MapDefinition, cities: Vec<City>) -> GameState {
 }
 
 fn with_fog(state: &GameState, known: Vec<HexCoord>) -> GameState {
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(player("player-1"), known, []),
-        PlayerFog::new(player("player-2"), [hex(0, 0)], []),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(player("player-1"), known, []),
+        PlayerFogState::new(player("player-2"), [hex(0, 0)], []),
     ])
     .unwrap();
     GameState::builder(

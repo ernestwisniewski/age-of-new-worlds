@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, CityId, EconomyState, FogOfWar, GameMode, GameState, HexCoord, InfrastructureState,
+    City, CityId, EconomyState, FogOfWarState, GameMode, GameState, HexCoord, InfrastructureState,
     InitialResourceDistribution, InteractionState, KnowledgeState, MatchIdentity, MatchLifecycle,
     MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerTurnState,
     ResearchState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
@@ -128,7 +128,7 @@ pub(super) fn state_with_resource_parts(
     .with_infrastructure(infrastructure)
     .with_economy(economy)
     .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_interaction(interaction)
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()

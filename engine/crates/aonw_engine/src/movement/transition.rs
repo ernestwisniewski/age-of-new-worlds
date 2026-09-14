@@ -237,7 +237,7 @@ pub(crate) fn apply_move_unit(
         .last()
         .ok_or(MoveUnitError::UnitUpdateFailed)?;
     let destination = destination_step.coordinate();
-    let queued_path = if plan.target_reachable_this_turn() {
+    let queued_path = if plan.destination_reachable_this_turn() {
         None
     } else {
         Some(rebase_queued_path(
@@ -314,7 +314,7 @@ pub(crate) fn movement_from_plan(
         .last()
         .ok_or(MoveUnitError::UnitUpdateFailed)?
         .coordinate();
-    let queued_path = if plan.target_reachable_this_turn() || !retain_incomplete_path {
+    let queued_path = if plan.destination_reachable_this_turn() || !retain_incomplete_path {
         None
     } else {
         Some(rebase_queued_path(

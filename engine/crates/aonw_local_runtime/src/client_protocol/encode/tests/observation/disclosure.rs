@@ -7,7 +7,7 @@ use super::{HexCoord, ScriptedDriver, budget, command_result, opened, player, un
 
 #[test]
 fn observation_admits_new_visible_entities_and_keeps_city_memories_private() {
-    use aonw_domain::{City, FogOfWar, GameState, PlayerFog};
+    use aonw_domain::{City, FogOfWarState, GameState, PlayerFogState};
     use aonw_projection::ProjectedView;
     use std::sync::Arc;
 
@@ -26,13 +26,13 @@ fn observation_admits_new_visible_entities_and_keeps_city_memories_private() {
     )
     .with_match_lifecycle(state.match_lifecycle().clone())
     .with_fog_of_war(
-        FogOfWar::try_new([
-            PlayerFog::new(
+        FogOfWarState::try_new([
+            PlayerFogState::new(
                 player("human"),
                 [HexCoord::new(5, 0)],
                 (0..3).map(|col| HexCoord::new(col, 0)),
             ),
-            PlayerFog::new(player("ai"), [], (0..12).map(|col| HexCoord::new(col, 0))),
+            PlayerFogState::new(player("ai"), [], (0..12).map(|col| HexCoord::new(col, 0))),
         ])
         .expect("fog"),
     )

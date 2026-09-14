@@ -2,8 +2,7 @@ use std::collections::BTreeSet;
 
 use aonw_content::MapDefinition;
 use aonw_domain::{
-    City, CityFoundingJob, Diplomacy, FogOfWar, GameState, HexCoord, InteractionState,
-    StateRevision, Unit,
+    City, CityFoundingJob, CityStateUpdate, GameState, HexCoord, StateRevision, Unit,
 };
 
 use super::model::{
@@ -42,16 +41,7 @@ impl From<CommandRejectionCode> for CityRuleError {
 /// Atomic replacement produced by a state-changing city command.
 pub(crate) enum CityMutation {
     Identity,
-    Update(Box<CityUpdate>),
-}
-
-pub(crate) struct CityUpdate {
-    pub(crate) revision: StateRevision,
-    pub(crate) units: Vec<Unit>,
-    pub(crate) cities: Vec<City>,
-    pub(crate) interaction: InteractionState,
-    pub(crate) fog_of_war: FogOfWar,
-    pub(crate) diplomacy: Diplomacy,
+    Update(Box<CityStateUpdate>),
 }
 
 pub(crate) fn apply_found_city(
@@ -86,13 +76,11 @@ pub(crate) fn apply_found_city(
     } else {
         state.interaction().clone()
     };
-    Ok(CityMutation::Update(Box::new(CityUpdate {
+    Ok(CityMutation::Update(Box::new(CityStateUpdate {
         revision,
         units,
         cities: state.cities().to_vec(),
         interaction,
-        fog_of_war: state.fog_of_war().clone(),
-        diplomacy: state.diplomacy().clone(),
     })))
 }
 
@@ -120,7 +108,7 @@ pub(crate) fn apply_toggle_worked_hex(
     let revision = next_revision(state)?;
     let mut cities = state.cities().to_vec();
     replace_city(&mut cities, city.with_worked_hexes(selected));
-    Ok(unchanged_environment_update(state, revision, cities))
+    Ok(city_settings_update(state, revision, cities))
 }
 
 pub(crate) fn apply_select_expansion(
@@ -146,7 +134,7 @@ pub(crate) fn apply_select_expansion(
         &mut cities,
         city.with_preferred_expansion_hex(Some(command.target())),
     );
-    Ok(unchanged_environment_update(state, revision, cities))
+    Ok(city_settings_update(state, revision, cities))
 }
 
 pub(crate) fn query_founding(
@@ -484,17 +472,15 @@ fn replace_city(cities: &mut [City], replacement: City) {
     cities[index] = replacement;
 }
 
-fn unchanged_environment_update(
+fn city_settings_update(
     state: &GameState,
     revision: StateRevision,
     cities: Vec<City>,
 ) -> CityMutation {
-    CityMutation::Update(Box::new(CityUpdate {
+    CityMutation::Update(Box::new(CityStateUpdate {
         revision,
         units: state.units().to_vec(),
         cities,
         interaction: state.interaction().clone(),
-        fog_of_war: state.fog_of_war().clone(),
-        diplomacy: state.diplomacy().clone(),
     }))
 }

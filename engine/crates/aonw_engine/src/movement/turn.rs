@@ -2,7 +2,8 @@ use std::collections::BTreeSet;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    Diplomacy, FogOfWar, GameState, InteractionState, PlayerId, Unit, UnitKind, UnitPosture,
+    DiplomacyState, FogOfWarState, GameState, InteractionState, PlayerId, Unit, UnitKind,
+    UnitPosture,
 };
 
 use super::auto_explore::plan_auto_explore_for_world;
@@ -17,8 +18,8 @@ use crate::{DomainEvent, EngineContext};
 
 pub(crate) struct TurnMovementUpdate {
     pub(crate) units: Vec<Unit>,
-    pub(crate) fog_of_war: FogOfWar,
-    pub(crate) diplomacy: Diplomacy,
+    pub(crate) fog_of_war: FogOfWarState,
+    pub(crate) diplomacy: DiplomacyState,
     pub(crate) interaction: InteractionState,
     pub(crate) events: Vec<DomainEvent>,
     pub(crate) executions: Vec<UnitMovementExecution>,
@@ -29,8 +30,8 @@ pub(crate) struct TurnMovementUpdate {
 
 struct MovementProgress {
     units: Vec<Unit>,
-    fog: FogOfWar,
-    diplomacy: Diplomacy,
+    fog: FogOfWarState,
+    diplomacy: DiplomacyState,
     events: Vec<DomainEvent>,
     executions: Vec<UnitMovementExecution>,
     reset_unit_ids: Vec<aonw_domain::UnitId>,
@@ -424,8 +425,8 @@ fn movement_context<'world>(
     map: &'world MapDefinition,
     ruleset: &'world RulesetDefinition,
     state: &'world GameState,
-    fog: &'world FogOfWar,
-    diplomacy: &'world Diplomacy,
+    fog: &'world FogOfWarState,
+    diplomacy: &'world DiplomacyState,
 ) -> EngineContext<'world> {
     EngineContext::canonical(unit.owner_player_id(), map, ruleset).with_movement_world(
         state.cities(),
@@ -456,8 +457,8 @@ fn record_movement(
 }
 
 fn recompute_scope_fog(
-    fog: &mut FogOfWar,
-    diplomacy: &mut Diplomacy,
+    fog: &mut FogOfWarState,
+    diplomacy: &mut DiplomacyState,
     map: &MapDefinition,
     state: &GameState,
     units: &[Unit],

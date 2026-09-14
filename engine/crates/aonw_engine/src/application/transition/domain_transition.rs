@@ -128,6 +128,10 @@ impl DomainTransition {
     }
 
     /// Returns canonical state identity.
+    ///
+    /// Accepted transitions return their stored digest. Rejected transitions hash
+    /// the full unchanged state on every call; the computed digest is not cached.
+    /// Callers retaining the prior identity can use [`Self::into_parts`] to avoid this work.
     #[must_use]
     pub fn digest(&self) -> StateDigest {
         self.digest

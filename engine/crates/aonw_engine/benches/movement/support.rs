@@ -3,7 +3,7 @@ use std::time::Instant;
 
 use aonw_content::{GridLayout, MapDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    FogOfWar, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFog, PlayerId,
+    FogOfWarState, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFogState, PlayerId,
     StateRevision, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
 };
 use aonw_engine::{MovementSearchMetrics, WorkerAutomationMetrics};
@@ -193,7 +193,8 @@ pub(crate) fn hidden_blocker_state(cols: u16, rows: u16, actor: &PlayerId) -> Ga
             6,
         ),
     ];
-    let fog = FogOfWar::try_new([PlayerFog::new(actor.clone(), [], [])]).expect("benchmark fog");
+    let fog = FogOfWarState::try_new([PlayerFogState::new(actor.clone(), [], [])])
+        .expect("benchmark fog");
     GameState::builder(
         StateRevision::new(1),
         1,

@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, CityConquestAction, CityId, CombatState, Diplomacy, DiplomaticProposalKind,
+    City, CityConquestAction, CityId, CombatState, DiplomacyState, DiplomaticProposalKind,
     DiplomaticRelation, DiplomaticRelationStatus, EconomyState, GameMode, GameState, HexCoord,
     IntendedAttack, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
     PlayerCountry, PlayerId, PlayerKind, PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle,
@@ -298,7 +298,7 @@ fn fixture_with_observer(
         contacts.push(PlayerPair::new(p2.clone(), p3.clone()).expect("victim contact"));
     }
     let diplomacy =
-        Diplomacy::try_new(&identity, contacts, relation, [], [], [], []).expect("diplomacy");
+        DiplomacyState::try_new(&identity, contacts, relation, [], [], [], []).expect("diplomacy");
     let economy = EconomyState::try_new(
         &identity,
         map.bounds(),

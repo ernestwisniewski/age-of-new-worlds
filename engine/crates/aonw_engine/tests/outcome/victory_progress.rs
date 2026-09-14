@@ -1,4 +1,4 @@
-use aonw_domain::{FogOfWar, PlayerFog};
+use aonw_domain::{FogOfWarState, PlayerFogState};
 use aonw_engine::{EngineContext, calculate_victory_progress};
 
 use super::*;
@@ -53,9 +53,9 @@ fn live_victory_progress_is_exact_and_recipient_safe() {
         artifact_types()[0],
         WorldArtifactLocation::Stored(p1_city_id),
     )];
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(p1.clone(), [HexCoord::new(0, 0)], [HexCoord::new(0, 0)]),
-        PlayerFog::new(p2.clone(), [], []),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(p1.clone(), [HexCoord::new(0, 0)], [HexCoord::new(0, 0)]),
+        PlayerFogState::new(p2.clone(), [], []),
     ])
     .expect("fog");
     let state = state_builder(

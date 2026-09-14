@@ -1,6 +1,6 @@
 use aonw_domain::{
-    City, CityProductionTarget, Diplomacy, EconomyAccountChange, EconomyState, FogOfWar, GameState,
-    KnowledgeState, ProductionStateUpdate, Unit,
+    City, CityProductionTarget, DiplomacyState, EconomyAccountChange, EconomyState, FogOfWarState,
+    GameState, KnowledgeState, ProductionStateUpdate, Unit,
 };
 
 use super::ProductionError;
@@ -99,8 +99,8 @@ struct CompletionResolution {
     cities: Vec<City>,
     economy: EconomyState,
     knowledge: KnowledgeState,
-    fog: FogOfWar,
-    diplomacy: Diplomacy,
+    fog: FogOfWarState,
+    diplomacy: DiplomacyState,
     events: Vec<DomainEvent>,
 }
 

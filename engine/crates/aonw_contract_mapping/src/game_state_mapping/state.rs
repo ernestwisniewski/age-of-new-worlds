@@ -3,7 +3,7 @@ use aonw_contracts::{
     UnitOccupancyPolicyDto,
 };
 use aonw_domain::{
-    City, FogOfWar, GameState, GameStateBuildError, HexGridBounds, InfrastructureState,
+    City, FogOfWarState, GameState, GameStateBuildError, HexGridBounds, InfrastructureState,
     MatchIdentity, StateRevision, TransportNetwork, UnitOccupancyPolicy,
 };
 
@@ -67,7 +67,7 @@ pub fn decode_game_state(dto: GameStateDto) -> Result<GameState, GameStateMappin
         .map(|(index, artifact)| decode_artifact(index, artifact))
         .collect::<Result<Vec<_>, _>>()?;
     let interaction = decode_interaction(dto.interaction)?;
-    let fog = FogOfWar::try_new(
+    let fog = FogOfWarState::try_new(
         dto.fog_of_war
             .into_iter()
             .enumerate()

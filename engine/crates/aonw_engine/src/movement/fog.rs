@@ -2,7 +2,9 @@ use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 
 use aonw_content::{MapDefinition, TerrainType};
-use aonw_domain::{City, Diplomacy, FogOfWar, HexCoord, PlayerFog, PlayerId, PlayerPair, Unit};
+use aonw_domain::{
+    City, DiplomacyState, FogOfWarState, HexCoord, PlayerFogState, PlayerId, PlayerPair, Unit,
+};
 
 const UNIT_VISION_RANGE: u32 = 2;
 const CITY_CENTER_VISION_RANGE: u32 = 2;
@@ -18,22 +20,22 @@ pub(crate) fn visible_from_unit(map: &MapDefinition, unit: &Unit) -> Vec<HexCoor
 }
 
 pub(crate) fn recompute_after_move(
-    current: &FogOfWar,
+    current: &FogOfWarState,
     map: &MapDefinition,
     player_id: &PlayerId,
     units: &[&Unit],
     cities: &[City],
-) -> FogOfWar {
+) -> FogOfWarState {
     recompute_for_player(current, map, player_id, units.iter().copied(), cities)
 }
 
 pub(crate) fn recompute_after_unit_move(
-    current: &FogOfWar,
+    current: &FogOfWarState,
     map: &MapDefinition,
     updated_unit: &Unit,
     canonical_units: &[Unit],
     cities: &[City],
-) -> FogOfWar {
+) -> FogOfWarState {
     let player_id = updated_unit.owner_player_id();
     let units = canonical_units
         .iter()
@@ -43,12 +45,12 @@ pub(crate) fn recompute_after_unit_move(
 }
 
 fn recompute_for_player<'unit>(
-    current: &FogOfWar,
+    current: &FogOfWarState,
     map: &MapDefinition,
     player_id: &PlayerId,
     units: impl IntoIterator<Item = &'unit Unit>,
     cities: &[City],
-) -> FogOfWar {
+) -> FogOfWarState {
     if current.players().is_empty() {
         return current.clone();
     }
@@ -80,18 +82,18 @@ fn recompute_for_player<'unit>(
     }
     let player = match current.player(player_id) {
         Some(current_player) => current_player.with_visible_hexes(visible),
-        None => PlayerFog::new(player_id.clone(), [], visible),
+        None => PlayerFogState::new(player_id.clone(), [], visible),
     };
     current.updating_player(player)
 }
 
 pub(crate) fn merge_discovered_contacts_after_unit_move(
-    diplomacy: &Diplomacy,
-    fog: &FogOfWar,
+    diplomacy: &DiplomacyState,
+    fog: &FogOfWarState,
     updated_unit: &Unit,
     canonical_units: &[Unit],
     cities: &[City],
-) -> Diplomacy {
+) -> DiplomacyState {
     // A single move can reveal the world to its owner and can reveal the moved unit
     // to existing observers. Every other visibility relationship is unchanged.
     let actor = updated_unit.owner_player_id();
@@ -139,11 +141,11 @@ pub(crate) fn merge_discovered_contacts_after_unit_move(
 }
 
 pub(crate) fn merge_discovered_contacts(
-    diplomacy: &Diplomacy,
-    fog: &FogOfWar,
+    diplomacy: &DiplomacyState,
+    fog: &FogOfWarState,
     units: &[&Unit],
     cities: &[City],
-) -> Diplomacy {
+) -> DiplomacyState {
     let mut players = fog
         .players()
         .iter()
@@ -294,7 +296,7 @@ impl PartialOrd for SightNode {
 #[cfg(test)]
 mod tests {
     use aonw_content::{GridLayout, MapDefinition, TerrainType, TileDefinition};
-    use aonw_domain::{FogOfWar, HexCoord, PlayerFog, PlayerId};
+    use aonw_domain::{FogOfWarState, HexCoord, PlayerFogState, PlayerId};
 
     use super::visible_from_source;
 
@@ -337,7 +339,7 @@ mod tests {
         )
         .build()
         .expect("unit");
-        let current = FogOfWar::try_new([PlayerFog::new(
+        let current = FogOfWarState::try_new([PlayerFogState::new(
             PlayerId::new("player-2").expect("other player"),
             [],
             [],

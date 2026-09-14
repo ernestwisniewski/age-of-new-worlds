@@ -40,7 +40,7 @@ pub use city::{
 };
 pub use combat::{CityConquestAction, CombatState, CombatStateValidationError, IntendedAttack};
 pub use diplomacy::{
-    Diplomacy, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
+    DiplomacyState, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticMessageCategory,
     DiplomaticMessageResponse, DiplomaticMessageTopic, DiplomaticProposal, DiplomaticProposalKind,
     DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
     DiplomaticScoreChangeReason, DiplomaticScoreEntry, PlayerPair, ResourceTradeAgreement,
@@ -50,9 +50,10 @@ pub use economy::{
     InitialResourceDistribution, InitialResourcePlacement, ResourceType,
     StrategicResourceStockpile,
 };
-pub use fog::{FogOfWar, FogVisibility, PlayerFog};
+pub use fog::{FogOfWarState, FogVisibility, PlayerFogState};
 pub use game_state::{
     GameState, GameStateBuildError, GameStateBuilder, UnitOccupancyPolicy,
+    city_update::{CityFoundingStateUpdate, CityStateUpdate},
     turn_update::{
         ArtifactStateUpdate, CombatBatchStepUpdate, CombatCityStateChange, CombatResolutionBatch,
         CombatStateUpdate, CombatUnitStateChange, DiplomacyStateUpdate, ProductionStateUpdate,

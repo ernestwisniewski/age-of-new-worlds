@@ -14,7 +14,7 @@ pub(super) fn state(
     map: &MapDefinition,
     units: Vec<Unit>,
     cities: Vec<City>,
-    fog: FogOfWar,
+    fog: FogOfWarState,
 ) -> GameState {
     let mut players = units
         .iter()

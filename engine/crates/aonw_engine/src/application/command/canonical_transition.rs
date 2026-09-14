@@ -164,14 +164,7 @@ pub(super) fn apply_city(
     let next = match mutation {
         crate::city::CityMutation::Identity => state,
         crate::city::CityMutation::Update(update) => state
-            .into_after_city(
-                update.revision,
-                update.units,
-                update.cities,
-                update.interaction,
-                update.fog_of_war,
-                update.diplomacy,
-            )
+            .into_after_city(*update)
             .map_err(CanonicalEngineError::State)?,
     };
     Ok(DomainTransition::accepted(

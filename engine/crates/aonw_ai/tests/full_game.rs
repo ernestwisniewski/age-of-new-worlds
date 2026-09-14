@@ -8,11 +8,11 @@ use aonw_ai::{
 };
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, CityId, FogOfWar, GameLengthConfig, GameMode, GameOutcomeCondition, GameState, HexCoord,
-    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
-    PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
-    ResearchState, StateRevision, TechnologyId, TurnLifecycle, Unit, UnitId, UnitKind,
-    VictoryRules, WonderRegistry,
+    City, CityId, FogOfWarState, GameLengthConfig, GameMode, GameOutcomeCondition, GameState,
+    HexCoord, KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits,
+    Participant, PlayerCountry, PlayerFogState, PlayerId, PlayerKind, PlayerResearchState,
+    PlayerTurnState, ResearchState, StateRevision, TechnologyId, TurnLifecycle, Unit, UnitId,
+    UnitKind, VictoryRules, WonderRegistry,
 };
 use aonw_local_runtime::{LocalRuntime, OpenSession, SessionStamp};
 
@@ -205,10 +205,10 @@ fn state(map: &MapDefinition, rules: &RulesetDefinition, players: &[PlayerId; 2]
         .iter()
         .map(TileDefinition::coordinate)
         .collect::<Vec<_>>();
-    let fog = FogOfWar::try_new(
+    let fog = FogOfWarState::try_new(
         players
             .iter()
-            .map(|player| PlayerFog::new(player.clone(), [], visible.iter().copied())),
+            .map(|player| PlayerFogState::new(player.clone(), [], visible.iter().copied())),
     )
     .expect("full AI visibility");
     GameState::builder(

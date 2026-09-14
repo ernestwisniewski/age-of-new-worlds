@@ -1,7 +1,7 @@
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
     City, CityId, CityProductionTarget, CityProjectType, EconomyAccountChange, EconomyState,
-    FogOfWar, GameState, PlayerId, ProductionStateUpdate, Unit,
+    FogOfWarState, GameState, PlayerId, ProductionStateUpdate, Unit,
 };
 use std::collections::BTreeMap;
 
@@ -171,8 +171,8 @@ struct PlayerProductionAdvance {
     units: Vec<Unit>,
     cities: Vec<City>,
     economy: EconomyState,
-    fog: FogOfWar,
-    diplomacy: aonw_domain::Diplomacy,
+    fog: FogOfWarState,
+    diplomacy: aonw_domain::DiplomacyState,
     events: Vec<DomainEvent>,
     research_project_science: Vec<ResearchProjectScience>,
 }

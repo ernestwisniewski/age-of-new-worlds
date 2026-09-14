@@ -10,6 +10,11 @@ checkpoints and exact command context and results. The shared client API version
 remains in place because Flutter, Godot, and native libraries are independently
 built components.
 
+Behavior 2 normalizes unit armies by troop kind before computing canonical state
+digests. Archives carrying the prior behavior fingerprint are rejected at the
+header validation boundary; they are not silently normalized and replayed under
+different digest semantics. The durable JSON schema remains version 2.
+
 ## Native write and restore contract
 
 `PersistenceFileStore` is an I/O boundary in `aonw_local_runtime`; pure domain

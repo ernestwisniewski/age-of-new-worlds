@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use aonw_content::RulesetDefinition;
 use aonw_domain::{
-    City, CityId, Diplomacy, DiplomaticMessage, DiplomaticMessageCategory,
+    City, CityId, DiplomacyState, DiplomaticMessage, DiplomaticMessageCategory,
     DiplomaticMessageResponse, DiplomaticMessageTopic, DiplomaticProposal, DiplomaticProposalKind,
     DiplomaticRelation, DiplomaticRelationStatus, EconomyState, GameMode, GameState,
     InitialResourceDistribution, MatchIdentity, MatchLifecycle, MatchRules, PlayerId, PlayerPair,
@@ -124,8 +124,9 @@ fn expiry_state() -> (GameState, PlayerId, PlayerId) {
         )
         .expect("promise"),
     ];
-    let diplomacy = Diplomacy::try_new(&identity, [pair], [relation], [proposal], messages, [], [])
-        .expect("diplomacy");
+    let diplomacy =
+        DiplomacyState::try_new(&identity, [pair], [relation], [proposal], messages, [], [])
+            .expect("diplomacy");
     let city = City::builder(
         CityId::new("city-1").expect("city id"),
         p1.clone(),
@@ -255,7 +256,7 @@ fn trade_state(
         )
         .expect("requested"),
     ];
-    let diplomacy = Diplomacy::try_new(&identity, [pair], [relation], [], [], [], agreements)
+    let diplomacy = DiplomacyState::try_new(&identity, [pair], [relation], [], [], [], agreements)
         .expect("diplomacy");
     let economy = EconomyState::try_new(
         &identity,

@@ -7,7 +7,7 @@ use super::route_turns::route_step_turns;
 use super::{MovementSearchMetrics, maximum_movement_units};
 use crate::{CommandRejectionCode, EngineContext};
 
-/// Input for deterministic terrain-only movement planning.
+/// Input for deterministic unit-route planning with terrain, occupancy, and visibility rules.
 #[derive(Clone, Copy, Debug)]
 pub struct TerrainMovementQuery<'query> {
     expected_revision: u64,
@@ -57,7 +57,7 @@ impl TerrainMovementPlan {
         &self.unit_id
     }
 
-    /// Returns the requested destination.
+    /// Returns the requested target, which may differ from the route destination.
     #[must_use]
     pub const fn target(&self) -> HexCoord {
         self.target
@@ -122,14 +122,22 @@ impl TerrainMovementPlan {
         &self.steps[..=self.furthest_reachable_step_index]
     }
 
-    /// Returns whether the complete target can be reached this turn.
+    /// Returns whether the final route coordinate can be reached this turn.
+    #[must_use]
+    pub fn destination_reachable_this_turn(&self) -> bool {
+        self.furthest_reachable_step_index + 1 == self.steps.len()
+    }
+
+    /// Returns whether the requested target itself can be reached this turn.
+    ///
+    /// Reaching an approach hex next to an occupied target does not reach the target.
     #[must_use]
     pub fn target_reachable_this_turn(&self) -> bool {
-        self.furthest_reachable_step_index + 1 == self.steps.len()
+        self.destination == self.target && self.destination_reachable_this_turn()
     }
 }
 
-/// Rejection from the terrain-only movement query.
+/// Rejection from the unit-route planning query.
 #[allow(missing_docs)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TerrainMovementQueryError {

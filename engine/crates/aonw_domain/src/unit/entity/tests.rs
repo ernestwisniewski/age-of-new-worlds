@@ -58,6 +58,16 @@ fn unit_rejects_invalid_army_and_job_duration() {
             .build(),
         Err(UnitBuildError::EmptyTroop(TroopKind::Warrior))
     );
+    assert_eq!(
+        builder()
+            .with_army([
+                ArmyTroop::new(TroopKind::Settler, 1),
+                ArmyTroop::new(TroopKind::Warrior, 2),
+                ArmyTroop::new(TroopKind::Settler, 3),
+            ])
+            .build(),
+        Err(UnitBuildError::DuplicateTroop(TroopKind::Settler))
+    );
     let invalid = UnitActivity::new(
         Some(WorkerJob::RoadConstruction {
             target: HexCoord::new(0, 0),

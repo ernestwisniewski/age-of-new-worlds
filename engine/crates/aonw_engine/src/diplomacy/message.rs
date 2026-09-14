@@ -1,5 +1,5 @@
 use aonw_domain::{
-    Diplomacy, DiplomaticMessage, DiplomaticMessageResponse, DiplomaticMessageTopic,
+    DiplomacyState, DiplomaticMessage, DiplomaticMessageResponse, DiplomaticMessageTopic,
     DiplomaticRelationStatus, DiplomaticScoreChangeReason, GameState, PlayerId, PlayerPair,
 };
 
@@ -181,7 +181,7 @@ pub(crate) fn apply_respond_message(
 }
 
 fn message_on_cooldown(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     actor: &PlayerId,
     target: &PlayerId,
     topic: DiplomaticMessageTopic,
@@ -197,7 +197,7 @@ fn message_on_cooldown(
     })
 }
 
-fn has_shared_war_enemy(diplomacy: &Diplomacy, first: &PlayerId, second: &PlayerId) -> bool {
+fn has_shared_war_enemy(diplomacy: &DiplomacyState, first: &PlayerId, second: &PlayerId) -> bool {
     diplomacy.relations().iter().any(|relation| {
         if relation.status() != DiplomaticRelationStatus::War {
             return false;
@@ -259,7 +259,7 @@ const fn topic_name(topic: DiplomaticMessageTopic) -> &'static str {
 #[cfg(test)]
 mod tests {
     use aonw_domain::{
-        Diplomacy, DiplomaticRelation, DiplomaticRelationStatus, GameMode, MatchIdentity,
+        DiplomacyState, DiplomaticRelation, DiplomaticRelationStatus, GameMode, MatchIdentity,
         MatchRules, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerPair,
     };
 
@@ -283,7 +283,7 @@ mod tests {
         let first_second = PlayerPair::new(first.clone(), second.clone()).expect("contact");
         let first_enemy = PlayerPair::new(first.clone(), enemy.clone()).expect("war");
         let second_enemy = PlayerPair::new(second.clone(), enemy.clone()).expect("war");
-        let diplomacy = Diplomacy::try_new(
+        let diplomacy = DiplomacyState::try_new(
             &identity,
             [first_second, first_enemy.clone(), second_enemy.clone()],
             [

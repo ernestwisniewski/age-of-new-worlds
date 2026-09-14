@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    ArtifactId, City, CityId, Diplomacy, DiplomaticRelation, DiplomaticRelationStatus,
+    ArtifactId, City, CityId, DiplomacyState, DiplomaticRelation, DiplomaticRelationStatus,
     EconomyState, GameMode, GameState, HexCoord, InitialResourceDistribution, MatchIdentity,
     MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind,
     PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitActivity, UnitId,
@@ -78,7 +78,7 @@ pub(super) fn state_with_active(
     let diplomacy =
         if war {
             let pair = PlayerPair::new(p1, p2).expect("pair");
-            Diplomacy::try_new(
+            DiplomacyState::try_new(
                 &identity,
                 [pair.clone()],
                 [DiplomaticRelation::try_new(
@@ -97,7 +97,7 @@ pub(super) fn state_with_active(
             )
             .expect("diplomacy")
         } else {
-            Diplomacy::default()
+            DiplomacyState::default()
         };
     GameState::builder(
         StateRevision::new(9),

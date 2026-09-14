@@ -1,12 +1,15 @@
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    City, Diplomacy, FogOfWar, FogVisibility, GameState, HexCoord, MatchIdentity, PlayerId,
-    TransportNetwork, Unit,
+    City, DiplomacyState, FogOfWarState, FogVisibility, GameState, HexCoord, MatchIdentity,
+    PlayerId, TransportNetwork, Unit,
 };
 
 use crate::movement::{
     CompiledMovementMap, MovementAccess, MovementPlanningView, MovementVisibility,
 };
+
+#[cfg(test)]
+mod tests;
 
 /// Immutable content available only to a trusted system-command boundary.
 #[derive(Clone, Copy, Debug)]
@@ -57,8 +60,8 @@ pub struct EngineContext<'context> {
 #[derive(Clone, Copy, Debug)]
 struct MovementWorld<'world> {
     cities: &'world [City],
-    fog_of_war: &'world FogOfWar,
-    diplomacy: &'world Diplomacy,
+    fog_of_war: &'world FogOfWarState,
+    diplomacy: &'world DiplomacyState,
     transport_network: &'world TransportNetwork,
     match_identity: &'world MatchIdentity,
 }
@@ -120,10 +123,11 @@ impl<'context> EngineContext<'context> {
         }
     }
 
-    /// Replaces the standard ruleset with an explicit validated definition.
+    /// Replaces the ruleset and invalidates movement data compiled for the prior ruleset.
     #[must_use]
     pub const fn with_ruleset(mut self, ruleset: &'context RulesetDefinition) -> Self {
         self.ruleset = ruleset;
+        self.compiled_movement_map = None;
         self
     }
 
@@ -205,8 +209,8 @@ impl<'context> EngineContext<'context> {
     pub(crate) const fn with_movement_world<'world>(
         self,
         cities: &'world [City],
-        fog_of_war: &'world FogOfWar,
-        diplomacy: &'world Diplomacy,
+        fog_of_war: &'world FogOfWarState,
+        diplomacy: &'world DiplomacyState,
         transport_network: &'world TransportNetwork,
         match_identity: &'world MatchIdentity,
     ) -> EngineContext<'world>
@@ -452,7 +456,7 @@ impl<'context> EngineContext<'context> {
             .map_or("", |world| world.transport_network.routing_fingerprint())
     }
 
-    fn visibility(self, fog: &FogOfWar, coordinate: HexCoord) -> FogVisibility {
+    fn visibility(self, fog: &FogOfWarState, coordinate: HexCoord) -> FogVisibility {
         self.movement_visibility.map_or_else(
             || fog.visibility(self.actor_player_id, coordinate),
             |visibility| visibility.at(self.map, coordinate),

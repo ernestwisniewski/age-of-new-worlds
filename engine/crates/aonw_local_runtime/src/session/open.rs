@@ -5,7 +5,9 @@ use aonw_domain::{
 };
 use aonw_engine::{CanonicalQueryError, MatchStartError, start_match};
 
-/// Fully validated input used to open one local session.
+/// Input used to open one local session.
+///
+/// Cross-component invariants are validated when the session is opened.
 #[derive(Clone, Debug)]
 pub struct OpenSession {
     pub(super) map: MapDefinition,

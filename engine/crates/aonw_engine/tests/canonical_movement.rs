@@ -2,9 +2,9 @@
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    ArmyTroop, City, CityId, FogOfWar, GameState, HexCoord, MovementUnits, PlayerFog, PlayerId,
-    StateRevision, TransportCondition, TransportNetwork, TransportSegment, TroopKind, Unit, UnitId,
-    UnitKind, UnitOccupancyPolicy,
+    ArmyTroop, City, CityId, FogOfWarState, GameState, HexCoord, MovementUnits, PlayerFogState,
+    PlayerId, StateRevision, TransportCondition, TransportNetwork, TransportSegment, TroopKind,
+    Unit, UnitId, UnitKind, UnitOccupancyPolicy,
 };
 use aonw_engine::{
     CompiledMovementMap, EngineContext, ExecutionEvidence, GameEngine, GameQuery, MoveUnitCommand,
@@ -55,7 +55,7 @@ fn unit(id: &str, owner: &str, position: HexCoord) -> Unit {
 fn world(
     units: Vec<Unit>,
     cities: Vec<City>,
-    fog: FogOfWar,
+    fog: FogOfWarState,
     transport: TransportNetwork,
 ) -> GameState {
     GameState::builder(
@@ -82,7 +82,12 @@ fn canonical_move_preserves_unit_fields_and_updates_fog_and_contact() {
             unit("unit-2", "player-2", HexCoord::new(3, 1)),
         ],
         Vec::new(),
-        FogOfWar::try_new([PlayerFog::new(actor.clone(), [], [HexCoord::new(1, 1)])]).expect("fog"),
+        FogOfWarState::try_new([PlayerFogState::new(
+            actor.clone(),
+            [],
+            [HexCoord::new(1, 1)],
+        )])
+        .expect("fog"),
         TransportNetwork::default(),
     );
     let unit_id = UnitId::new("unit-1").expect("unit id");
@@ -129,7 +134,7 @@ fn canonical_rejection_preserves_revision_and_digest() {
     let state = world(
         vec![unit("unit-1", "player-1", HexCoord::new(1, 1))],
         Vec::new(),
-        FogOfWar::default(),
+        FogOfWarState::default(),
         TransportNetwork::default(),
     );
     let unit_id = UnitId::new("unit-1").expect("unit id");
@@ -150,13 +155,51 @@ fn canonical_rejection_preserves_revision_and_digest() {
 }
 
 #[test]
+fn arriving_at_an_occupied_targets_approach_hex_clears_the_route() {
+    let map = map();
+    let actor = PlayerId::new("player-1").expect("actor");
+    let unit_id = UnitId::new("unit-1").expect("unit id");
+    let target = HexCoord::new(2, 1);
+    let state = world(
+        vec![
+            unit("unit-1", "player-1", HexCoord::new(0, 1)),
+            unit("unit-2", "player-2", target),
+        ],
+        Vec::new(),
+        FogOfWarState::default(),
+        TransportNetwork::default(),
+    );
+    let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
+    let QueryResult::Route(plan) = GameEngine::query(
+        &state,
+        context,
+        GameQuery::PlanRoute(TerrainMovementQuery::new(4, &unit_id, target)),
+    )
+    .expect("route") else {
+        panic!("route result")
+    };
+    assert!(plan.destination_reachable_this_turn());
+    assert!(!plan.target_reachable_this_turn());
+    let result = GameEngine::apply_player_owned(
+        state,
+        context,
+        PlayerCommand::MoveUnit(MoveUnitCommand::new(4, &unit_id, target)),
+    )
+    .expect("move");
+    assert!(result.is_accepted());
+    let moved = result.state().unit(&unit_id).expect("moved unit");
+    assert_eq!(moved.position(), plan.destination());
+    assert!(moved.queued_path().is_none());
+}
+
+#[test]
 fn prepared_apply_matches_raw_apply_and_exposes_owned_parts() {
     let map = map();
     let actor = PlayerId::new("player-1").expect("actor");
     let state = world(
         vec![unit("unit-1", "player-1", HexCoord::new(0, 0))],
         Vec::new(),
-        FogOfWar::default(),
+        FogOfWarState::default(),
         TransportNetwork::default(),
     );
     let unit_id = UnitId::new("unit-1").expect("unit id");
@@ -205,7 +248,7 @@ fn canonical_query_uses_known_operational_roads() {
     let state = world(
         vec![unit("unit-1", "player-1", HexCoord::new(1, 1))],
         Vec::new(),
-        FogOfWar::default(),
+        FogOfWarState::default(),
         roads,
     );
     let unit_id = UnitId::new("unit-1").expect("unit id");
@@ -235,7 +278,12 @@ fn hidden_foreign_city_is_an_accepted_no_op_but_discovered_city_is_rejected() {
     let hidden = world(
         vec![unit("unit-1", "player-1", HexCoord::new(1, 1))],
         vec![city.clone()],
-        FogOfWar::try_new([PlayerFog::new(actor.clone(), [], [HexCoord::new(1, 1)])]).expect("fog"),
+        FogOfWarState::try_new([PlayerFogState::new(
+            actor.clone(),
+            [],
+            [HexCoord::new(1, 1)],
+        )])
+        .expect("fog"),
         TransportNetwork::default(),
     );
     let hidden_result = GameEngine::apply_player_owned(
@@ -258,7 +306,7 @@ fn hidden_foreign_city_is_an_accepted_no_op_but_discovered_city_is_rejected() {
     let discovered = world(
         vec![unit("unit-1", "player-1", HexCoord::new(1, 1))],
         vec![city],
-        FogOfWar::try_new([PlayerFog::new(
+        FogOfWarState::try_new([PlayerFogState::new(
             actor.clone(),
             [HexCoord::new(2, 1)],
             [HexCoord::new(1, 1)],

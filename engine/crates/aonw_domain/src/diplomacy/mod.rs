@@ -50,7 +50,7 @@ impl PlayerPair {
 
 /// Complete canonical diplomacy and resource-trade state.
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct Diplomacy {
+pub struct DiplomacyState {
     contacts: Box<[PlayerPair]>,
     relations: Box<[DiplomaticRelation]>,
     pending_proposals: Box<[DiplomaticProposal]>,
@@ -59,7 +59,7 @@ pub struct Diplomacy {
     resource_trade_agreements: Box<[ResourceTradeAgreement]>,
 }
 
-impl Diplomacy {
+impl DiplomacyState {
     /// Normalizes discovered contacts.
     #[must_use]
     pub fn new(contacts: impl IntoIterator<Item = PlayerPair>) -> Self {

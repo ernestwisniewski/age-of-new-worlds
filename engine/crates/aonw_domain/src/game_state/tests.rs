@@ -1,9 +1,9 @@
 use crate::{
-    ArtifactId, City, CityId, Diplomacy, DiplomacyStateBuildError, EconomyState, FogOfWar,
-    GameMode, GameState, GameStateBuildError, HexCoord, HexGridBounds, InteractionState,
-    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
-    PendingInteraction, PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerPair,
-    ProductionStateUpdate, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
+    ArtifactId, City, CityId, DiplomacyState, DiplomacyStateBuildError, EconomyState,
+    FogOfWarState, GameMode, GameState, GameStateBuildError, HexCoord, HexGridBounds,
+    InteractionState, KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits,
+    Participant, PendingInteraction, PlayerCountry, PlayerFogState, PlayerId, PlayerKind,
+    PlayerPair, ProductionStateUpdate, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
     UnitOccupancyPolicy, WorldArtifact, WorldArtifactLocation, WorldArtifactType,
 };
 
@@ -262,7 +262,7 @@ fn bound_aggregate_rejects_every_direct_player_reference_family() {
         Err(GameStateBuildError::CityPlayerNotFound { player_id, .. }) if player_id == unknown
     ));
 
-    let fog = FogOfWar::try_new([PlayerFog::new(unknown.clone(), [], [])]).expect("fog");
+    let fog = FogOfWarState::try_new([PlayerFogState::new(unknown.clone(), [], [])]).expect("fog");
     assert_eq!(
         empty_bound_builder(bounds, lifecycle.clone())
             .with_fog_of_war(fog)
@@ -288,12 +288,47 @@ fn bound_aggregate_rejects_every_direct_player_reference_family() {
     let pair = PlayerPair::new(known, unknown.clone()).expect("player pair");
     assert_eq!(
         empty_bound_builder(bounds, lifecycle)
-            .with_diplomacy(Diplomacy::new([pair]))
+            .with_diplomacy(DiplomacyState::new([pair]))
             .try_build(),
         Err(GameStateBuildError::InvalidDiplomacy(
             DiplomacyStateBuildError::PlayerNotFound(unknown)
         ))
     );
+}
+
+#[test]
+fn city_updates_reject_invalid_replacements() {
+    use crate::{CityFoundingStateUpdate, CityStateUpdate};
+
+    let state = GameState::try_new(
+        StateRevision::INITIAL,
+        1,
+        HexGridBounds::new(2, 2).expect("bounds"),
+        UnitOccupancyPolicy::Exclusive,
+        [],
+    )
+    .expect("state");
+    let outside = unit("outside", HexCoord::new(2, 0));
+    let command_result = state.clone().into_after_city(CityStateUpdate {
+        revision: StateRevision::new(1),
+        units: vec![outside.clone()],
+        cities: Vec::new(),
+        interaction: InteractionState::default(),
+    });
+    assert!(matches!(
+        command_result,
+        Err(GameStateBuildError::UnitOutOfBounds { .. })
+    ));
+    let founding_result = state.into_after_city_founding(CityFoundingStateUpdate {
+        units: vec![outside],
+        cities: Vec::new(),
+        fog_of_war: FogOfWarState::default(),
+        diplomacy: DiplomacyState::default(),
+    });
+    assert!(matches!(
+        founding_result,
+        Err(GameStateBuildError::UnitOutOfBounds { .. })
+    ));
 }
 
 #[test]
@@ -318,8 +353,8 @@ fn production_update_rebuilds_every_affected_section_atomically() {
             cities: vec![city],
             economy: EconomyState::default(),
             knowledge: KnowledgeState::default(),
-            fog_of_war: FogOfWar::default(),
-            diplomacy: Diplomacy::default(),
+            fog_of_war: FogOfWarState::default(),
+            diplomacy: DiplomacyState::default(),
         })
         .expect("production state");
     assert_eq!(updated.revision(), StateRevision::new(1));

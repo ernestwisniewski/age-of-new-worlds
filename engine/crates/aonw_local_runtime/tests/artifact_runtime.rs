@@ -10,9 +10,9 @@ use aonw_contracts::client::{
 };
 use aonw_contracts::{SaveGameDto, WorldArtifactTypeDto};
 use aonw_domain::{
-    ArtifactId, City, CityId, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity,
-    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId,
-    PlayerKind, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
+    ArtifactId, City, CityId, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity,
+    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFogState,
+    PlayerId, PlayerKind, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
     WorldArtifact, WorldArtifactLocation, WorldArtifactType,
 };
 use aonw_local_runtime::{ClientProtocol, LocalRuntime, OpenSession, PersistenceError};
@@ -369,8 +369,8 @@ fn fixture() -> (MapDefinition, RulesetDefinition, GameState, PlayerId) {
     ])
     .with_artifacts(artifacts)
     .with_fog_of_war(
-        FogOfWar::try_new([
-            PlayerFog::new(
+        FogOfWarState::try_new([
+            PlayerFogState::new(
                 p1.clone(),
                 [],
                 [
@@ -379,7 +379,7 @@ fn fixture() -> (MapDefinition, RulesetDefinition, GameState, PlayerId) {
                     HexCoord::new(3, 0),
                 ],
             ),
-            PlayerFog::new(p2.clone(), [], [HexCoord::new(1, 0), HexCoord::new(2, 0)]),
+            PlayerFogState::new(p2.clone(), [], [HexCoord::new(1, 0), HexCoord::new(2, 0)]),
         ])
         .expect("fog"),
     )

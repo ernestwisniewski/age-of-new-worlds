@@ -1,6 +1,6 @@
 use aonw_content::RulesetDefinition;
 use aonw_domain::{
-    Diplomacy, DiplomaticMessage, DiplomaticMessageTopic, DiplomaticRelation,
+    DiplomacyState, DiplomaticMessage, DiplomaticMessageTopic, DiplomaticRelation,
     DiplomaticRelationChangeReason, DiplomaticRelationStatus, DiplomaticScoreChangeReason,
     GameState, PlayerPair, Unit,
 };
@@ -12,7 +12,7 @@ use crate::{
 };
 
 pub(super) struct TurnDiplomacyPhase {
-    pub(super) diplomacy: Diplomacy,
+    pub(super) diplomacy: DiplomacyState,
     pub(super) events: Vec<DomainEvent>,
 }
 
@@ -20,7 +20,7 @@ pub(super) fn advance_turn_diplomacy(
     state: &GameState,
     ruleset: &RulesetDefinition,
     units: &[Unit],
-    mut diplomacy: Diplomacy,
+    mut diplomacy: DiplomacyState,
     turn: u32,
 ) -> Result<TurnDiplomacyPhase, DiplomacyError> {
     let identity = state.match_lifecycle().identity();

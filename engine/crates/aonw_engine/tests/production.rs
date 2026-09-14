@@ -8,7 +8,7 @@ use aonw_content::{
 };
 use aonw_domain::{
     City, CityBuildingType, CityId, CityProductionQueue, CityProductionTarget, CityProjectType,
-    CitySpecializationType, EconomyState, FogOfWar, GameMode, GameState, HexCoord,
+    CitySpecializationType, EconomyState, FogOfWarState, GameMode, GameState, HexCoord,
     InitialResourceDistribution, KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules,
     MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerResearchState,
     PlayerTurnState, ResearchState, ResourceType, StateRevision, StrategicResourceStockpile,
@@ -409,7 +409,7 @@ fn state_with(
     .with_cities(cities)
     .with_economy(economy)
     .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()
     .expect("state")

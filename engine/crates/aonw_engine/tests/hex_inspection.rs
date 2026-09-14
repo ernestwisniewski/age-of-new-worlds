@@ -4,9 +4,9 @@ use aonw_content::{
     TerrainType, TileDefinition,
 };
 use aonw_domain::{
-    City, FieldImprovement, FieldImprovementKind, FogOfWar, GameState, HexCoord,
+    City, FieldImprovement, FieldImprovementKind, FogOfWarState, GameState, HexCoord,
     InfrastructureState, InitialResourceDistribution, InitialResourcePlacement, InteractionState,
-    KnowledgeState, PlayerFog, PlayerResearchState, ResearchState, ResourceType, TechnologyId,
+    KnowledgeState, PlayerFogState, PlayerResearchState, ResearchState, ResourceType, TechnologyId,
     TransportNetwork, UnitKind, WonderRegistry,
 };
 use aonw_engine::{
@@ -414,9 +414,9 @@ fn fixture(
 
 fn with_fog(state: &GameState, discovered: bool) -> GameState {
     let known = if discovered { vec![TARGET] } else { vec![] };
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(player("player-1"), known, [HexCoord::new(0, 0)]),
-        PlayerFog::new(player("player-2"), [], [HexCoord::new(2, 0)]),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(player("player-1"), known, [HexCoord::new(0, 0)]),
+        PlayerFogState::new(player("player-2"), [], [HexCoord::new(2, 0)]),
     ])
     .expect("fog");
     GameState::builder(

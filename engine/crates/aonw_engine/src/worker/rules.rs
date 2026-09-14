@@ -1,5 +1,5 @@
 use aonw_domain::{
-    City, Diplomacy, FieldImprovementKind, FogOfWar, GameState, InfrastructureState,
+    City, DiplomacyState, FieldImprovementKind, FogOfWarState, GameState, InfrastructureState,
     InteractionState, PendingInteraction, StateRevision, Unit, UnitKind, WorkerJob,
 };
 
@@ -33,8 +33,8 @@ pub(crate) struct WorkerUpdate {
     pub(crate) units: Vec<Unit>,
     pub(crate) infrastructure: InfrastructureState,
     pub(crate) interaction: InteractionState,
-    pub(crate) fog_of_war: FogOfWar,
-    pub(crate) diplomacy: Diplomacy,
+    pub(crate) fog_of_war: FogOfWarState,
+    pub(crate) diplomacy: DiplomacyState,
     pub(crate) events: Box<[crate::DomainEvent]>,
     pub(crate) evidence: Option<crate::ExecutionEvidence>,
 }

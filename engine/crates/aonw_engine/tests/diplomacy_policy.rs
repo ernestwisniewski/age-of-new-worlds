@@ -4,9 +4,9 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 use aonw_domain::{
-    Diplomacy, DiplomaticRelation, DiplomaticRelationStatus, GameMode, GameState, HexGridBounds,
-    MatchIdentity, MatchLifecycle, MatchRules, Participant, PlayerCountry, PlayerId, PlayerKind,
-    PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle, UnitOccupancyPolicy,
+    DiplomacyState, DiplomaticRelation, DiplomaticRelationStatus, GameMode, GameState,
+    HexGridBounds, MatchIdentity, MatchLifecycle, MatchRules, Participant, PlayerCountry, PlayerId,
+    PlayerKind, PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle, UnitOccupancyPolicy,
 };
 use aonw_engine::{DiplomacyDisclosure, DiplomacyPolicyPlayerRole, DiplomacyPolicyQuery};
 use serde::Deserialize;
@@ -187,7 +187,7 @@ fn state(has_contact: bool, configured_status: Option<&str>) -> GameState {
         .expect("relation")
     });
     let diplomacy =
-        Diplomacy::try_new(&identity, contacts, relations, [], [], [], []).expect("diplomacy");
+        DiplomacyState::try_new(&identity, contacts, relations, [], [], [], []).expect("diplomacy");
     GameState::builder(
         StateRevision::new(1),
         1,

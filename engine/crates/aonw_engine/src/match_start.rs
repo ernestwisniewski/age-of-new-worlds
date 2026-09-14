@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use aonw_content::MapDefinition;
 use aonw_domain::{
-    FogOfWar, GameState, GameStateBuildError, MatchIdentity, MatchLifecycle, PlayerFog, PlayerId,
-    PlayerTurnState, TurnLifecycle, TurnLifecycleBuildError, TurnMode,
+    FogOfWarState, GameState, GameStateBuildError, MatchIdentity, MatchLifecycle, PlayerFogState,
+    PlayerId, PlayerTurnState, TurnLifecycle, TurnLifecycleBuildError, TurnMode,
 };
 
 use crate::movement::{merge_discovered_contacts, recompute_after_move};
@@ -85,15 +85,15 @@ pub fn start_match(
     .map_err(MatchStartError::InvalidLifecycle)?;
 
     let mut fog = if fog_enabled {
-        FogOfWar::try_new(
+        FogOfWarState::try_new(
             identity
                 .participants()
                 .iter()
-                .map(|participant| PlayerFog::new(participant.id().clone(), [], [])),
+                .map(|participant| PlayerFogState::new(participant.id().clone(), [], [])),
         )
         .map_err(MatchStartError::InvalidFog)?
     } else {
-        FogOfWar::default()
+        FogOfWarState::default()
     };
     let unit_references = seed.units().iter().collect::<Vec<_>>();
     if fog_enabled {

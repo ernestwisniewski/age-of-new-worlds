@@ -1,5 +1,5 @@
 use aonw_domain::{
-    Diplomacy, DiplomaticRelationStatus, GameState, MatchIdentity, PlayerId, PlayerPair,
+    DiplomacyState, DiplomaticRelationStatus, GameState, MatchIdentity, PlayerId, PlayerPair,
 };
 
 /// Recipient-safe visibility of one bilateral diplomatic relation.
@@ -156,7 +156,7 @@ impl DiplomacyPolicyQuery {
 
     pub(crate) fn between_parts(
         identity: &MatchIdentity,
-        diplomacy: &Diplomacy,
+        diplomacy: &DiplomacyState,
         actor_player_id: &PlayerId,
         counterparty_player_id: &PlayerId,
     ) -> Result<DiplomacyPolicy, DiplomacyPolicyError> {

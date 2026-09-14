@@ -5,9 +5,10 @@ use std::collections::BTreeMap;
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_contracts::{ReplayEvidenceDto, ReplayLogDto, SaveGameDto};
 use aonw_domain::{
-    CityFoundingDraft, FogOfWar, GameMode, GameState, HexCoord, InteractionState, MatchIdentity,
-    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId,
-    PlayerKind, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
+    CityFoundingDraft, FogOfWarState, GameMode, GameState, HexCoord, InteractionState,
+    MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
+    PlayerFogState, PlayerId, PlayerKind, PlayerTurnState, StateRevision, TurnLifecycle, Unit,
+    UnitId, UnitKind,
 };
 use aonw_engine::{DomainEvent, ExecutionEvidence, TurnProcessor};
 use aonw_local_runtime::{
@@ -193,9 +194,9 @@ fn fixture() -> (
     )
     .build()
     .expect("observer");
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(p1.clone(), [], [center]),
-        PlayerFog::new(p2.clone(), [], [HexCoord::new(7, 5)]),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(p1.clone(), [], [center]),
+        PlayerFogState::new(p2.clone(), [], [HexCoord::new(7, 5)]),
     ])
     .expect("fog");
     let interaction = InteractionState::new(

@@ -4,10 +4,11 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    ArmyTroop, City, CityId, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity,
+    ArmyTroop, City, CityId, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity,
     MatchLifecycle, MatchRules, MerchantTradeRoute, MovementStep, MovementUnits, Participant,
-    PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerTurnState, QueuedMovePath, StateRevision,
-    TroopKind, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy, UnitPosture,
+    PlayerCountry, PlayerFogState, PlayerId, PlayerKind, PlayerTurnState, QueuedMovePath,
+    StateRevision, TroopKind, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
+    UnitPosture,
 };
 use aonw_engine::{
     AssignMerchantTradeRouteCommand, AutoExploreUnitCommand, CommandRejectionCode,
@@ -46,7 +47,7 @@ fn auto_explore_without_fog_is_deterministic_and_bounded() {
             HexCoord::new(3, 2),
         )],
         Vec::new(),
-        FogOfWar::default(),
+        FogOfWarState::default(),
     );
     let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
     let query = || {
@@ -109,7 +110,7 @@ fn merchant_routes_are_engine_planned_and_allow_owned_city_stacking() {
             ),
         ],
         vec![origin, destination],
-        FogOfWar::default(),
+        FogOfWarState::default(),
     );
     let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
     let assigned = GameEngine::apply_player_owned(
@@ -177,7 +178,7 @@ fn merchant_rejection_precedence_is_revision_then_control_then_kind() {
             HexCoord::new(0, 0),
         )],
         vec![city("actor-city", &actor, HexCoord::new(2, 1))],
-        FogOfWar::default(),
+        FogOfWarState::default(),
     );
     let apply = |revision| {
         GameEngine::apply_player_owned(
@@ -226,7 +227,7 @@ fn detachment_preserves_army_count_and_chooses_next_free_identity() {
     ])
     .build()
     .expect("army");
-    let fog = FogOfWar::try_new([PlayerFog::new(
+    let fog = FogOfWarState::try_new([PlayerFogState::new(
         actor.clone(),
         [HexCoord::new(1, 0), HexCoord::new(2, 1)],
         [HexCoord::new(1, 1)],
@@ -282,7 +283,7 @@ fn merchant_options_and_rejections_cover_the_ruleset() {
             ),
         ],
         vec![origin.clone(), destination.clone(), foreign_city.clone()],
-        FogOfWar::default(),
+        FogOfWarState::default(),
     );
     let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
     let QueryResult::UnitLogisticsOptions(options) = GameEngine::query(
@@ -354,8 +355,12 @@ fn automation_and_detachment_fail_closed_on_invalid_state() {
     let explored = (0..3)
         .flat_map(|row| (0..3).map(move |col| HexCoord::new(col, row)))
         .collect::<Vec<_>>();
-    let fog = FogOfWar::try_new([PlayerFog::new(actor.clone(), explored.clone(), explored)])
-        .expect("fog");
+    let fog = FogOfWarState::try_new([PlayerFogState::new(
+        actor.clone(),
+        explored.clone(),
+        explored,
+    )])
+    .expect("fog");
     let army = Unit::builder(
         army_id.clone(),
         actor.clone(),
@@ -457,7 +462,7 @@ fn turn_processors_advance_queued_trade_and_auto_units_together() {
     .expect("merchant");
     let scout =
         unit("scout-1", &actor, UnitKind::Scout, HexCoord::new(3, 2)).after_auto_explore_started();
-    let fog = FogOfWar::try_new([PlayerFog::new(
+    let fog = FogOfWarState::try_new([PlayerFogState::new(
         actor.clone(),
         [],
         [warrior.position(), merchant.position(), scout.position()],

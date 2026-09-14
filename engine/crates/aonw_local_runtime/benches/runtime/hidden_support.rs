@@ -2,9 +2,9 @@ use std::collections::BTreeMap;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    FogOfWar, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules,
-    Participant, PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerTurnState, StateRevision,
-    TurnLifecycle, Unit, UnitId, UnitKind,
+    FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules,
+    Participant, PlayerCountry, PlayerFogState, PlayerId, PlayerKind, PlayerTurnState,
+    StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
 };
 use aonw_local_runtime::OpenSession;
 
@@ -25,9 +25,9 @@ pub(super) fn open(map: MapDefinition, ruleset: RulesetDefinition, actor: Player
         .build()
         .expect("unit")
     };
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(actor.clone(), [], []),
-        PlayerFog::new(opponent.clone(), [], []),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(actor.clone(), [], []),
+        PlayerFogState::new(opponent.clone(), [], []),
     ])
     .expect("fog");
     let state = GameState::builder(

@@ -2,9 +2,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use aonw_content::{ContentHash, MapDefinition};
 use aonw_domain::{
-    Diplomacy, EconomyState, FogOfWar, GameOutcome, GameState, InteractionState, MatchLifecycle,
-    ObjectiveState, PendingInteraction, PlayerId, PlayerTurnState, TurnLifecycle, UnitPosture,
-    UtcTimestamp,
+    DiplomacyState, EconomyState, FogOfWarState, GameOutcome, GameState, InteractionState,
+    MatchLifecycle, ObjectiveState, PendingInteraction, PlayerId, PlayerTurnState, TurnLifecycle,
+    UnitPosture, UtcTimestamp,
 };
 
 use crate::{
@@ -358,8 +358,8 @@ pub(super) fn apply_update<const PROCESSORS: usize>(
     turn: Option<u32>,
     units: Vec<aonw_domain::Unit>,
     economy: Option<EconomyState>,
-    fog_of_war: Option<FogOfWar>,
-    diplomacy: Option<Diplomacy>,
+    fog_of_war: Option<FogOfWarState>,
+    diplomacy: Option<DiplomacyState>,
     objectives: Option<ObjectiveState>,
     outcome: Option<GameOutcome>,
     interaction: InteractionStateUpdate,

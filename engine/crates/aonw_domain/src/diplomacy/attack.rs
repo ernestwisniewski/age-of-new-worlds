@@ -1,11 +1,11 @@
 use crate::{MatchIdentity, PlayerId};
 
 use super::{
-    Diplomacy, DiplomacyStateBuildError, DiplomaticRelation, DiplomaticRelationChangeReason,
+    DiplomacyState, DiplomacyStateBuildError, DiplomaticRelation, DiplomaticRelationChangeReason,
     DiplomaticRelationStatus, DiplomaticScoreChangeReason, DiplomaticScoreEntry, PlayerPair,
 };
 
-impl Diplomacy {
+impl DiplomacyState {
     /// Applies the canonical diplomatic consequences of a unit attack.
     ///
     /// # Errors

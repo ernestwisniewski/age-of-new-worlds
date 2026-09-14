@@ -1,7 +1,8 @@
 use std::collections::BTreeSet;
 
 use aonw_domain::{
-    Diplomacy, DiplomaticRelationStatus, GameState, PlayerId, ResourceTradeAgreement, ResourceType,
+    DiplomacyState, DiplomaticRelationStatus, GameState, PlayerId, ResourceTradeAgreement,
+    ResourceType,
 };
 
 use super::{
@@ -237,7 +238,7 @@ fn agreement_tokens_available(agreements: &[ResourceTradeAgreement], tokens: &[&
 }
 
 fn generated_trade_id(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     importer: &PlayerId,
     exporter: &PlayerId,
     resource: ResourceType,
@@ -261,7 +262,7 @@ fn generated_trade_id(
 }
 
 fn generated_exchange_id(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     actor: &PlayerId,
     target: &PlayerId,
     offered: ResourceType,

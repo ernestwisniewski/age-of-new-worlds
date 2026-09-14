@@ -194,7 +194,7 @@ pub(crate) fn visible_units(
 mod tests {
     use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
     use aonw_domain::{
-        FogOfWar, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFog, PlayerId,
+        FogOfWarState, GameState, HexCoord, HexGridBounds, MovementUnits, PlayerFogState, PlayerId,
         StateRevision, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
     };
 
@@ -231,8 +231,9 @@ mod tests {
         let discovered = HexCoord::new(3, 1);
         let owned_hidden = HexCoord::new(4, 1);
         let foreign_hidden = HexCoord::new(5, 1);
-        let fog = FogOfWar::try_new([PlayerFog::new(actor.clone(), [discovered], [visible])])
-            .expect("fog");
+        let fog =
+            FogOfWarState::try_new([PlayerFogState::new(actor.clone(), [discovered], [visible])])
+                .expect("fog");
         let state = GameState::builder(
             StateRevision::INITIAL,
             0,

@@ -1,7 +1,7 @@
 use crate::{
-    ArtifactId, City, CityId, CombatState, Diplomacy, EconomyState, FogOfWar, GameOutcome,
-    InfrastructureState, InteractionState, KnowledgeState, MatchLifecycle, ObjectiveState,
-    StateRevision, Unit, UnitId, WorldArtifact,
+    ArtifactId, City, CityId, CombatState, DiplomacyState, EconomyState, FogOfWarState,
+    GameOutcome, InfrastructureState, InteractionState, KnowledgeState, MatchLifecycle,
+    ObjectiveState, StateRevision, Unit, UnitId, WorldArtifact,
 };
 
 use super::{
@@ -36,9 +36,9 @@ pub struct CombatStateUpdate {
     /// Pending intended attacks after the transition.
     pub combat: CombatState,
     /// Recipient visibility recomputed after the transition.
-    pub fog_of_war: FogOfWar,
+    pub fog_of_war: FogOfWarState,
     /// Diplomacy after attack consequences and discovered contacts.
-    pub diplomacy: Diplomacy,
+    pub diplomacy: DiplomacyState,
 }
 
 /// One unit replacement or removal inside a bounded combat-resolution batch.
@@ -69,7 +69,7 @@ pub struct CombatBatchStepUpdate {
     /// Artifact replacements for items dropped by a defeated carrier or city.
     pub artifact_changes: Vec<WorldArtifact>,
     /// Diplomacy after attack consequences; contact discovery is finalized once per batch.
-    pub diplomacy: Diplomacy,
+    pub diplomacy: DiplomacyState,
 }
 
 /// Aggregate-owned scope that postpones full validation until all intended attacks resolve.
@@ -117,8 +117,8 @@ impl CombatResolutionBatch {
     #[must_use]
     pub fn after_visibility_refresh(
         mut self,
-        fog_of_war: Option<FogOfWar>,
-        diplomacy: Diplomacy,
+        fog_of_war: Option<FogOfWarState>,
+        diplomacy: DiplomacyState,
     ) -> Self {
         if let Some(fog_of_war) = fog_of_war {
             self.state.fog_of_war = fog_of_war;
@@ -133,8 +133,8 @@ impl CombatResolutionBatch {
     /// Returns an error when the final aggregate violates any invariant.
     pub fn finish(
         self,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
     ) -> Result<GameState, GameStateBuildError> {
         let mut builder = self.state.into_builder();
         builder.combat = CombatState::default();
@@ -214,9 +214,9 @@ pub struct ProductionStateUpdate {
     /// Research and globally unique wonder ownership after completions.
     pub knowledge: KnowledgeState,
     /// Recipient visibility recomputed after spawned units.
-    pub fog_of_war: FogOfWar,
+    pub fog_of_war: FogOfWarState,
     /// Diplomacy after contacts discovered by spawned units.
-    pub diplomacy: Diplomacy,
+    pub diplomacy: DiplomacyState,
 }
 
 /// Complete replacement produced by one authoritative research command.
@@ -240,7 +240,7 @@ pub struct DiplomacyStateUpdate {
     /// Pending combat after an accepted peace proposal.
     pub combat: CombatState,
     /// Canonical relations, proposals, messages, scores, and trades.
-    pub diplomacy: Diplomacy,
+    pub diplomacy: DiplomacyState,
 }
 
 /// Complete atomic replacement produced by the authoritative turn kernel.
@@ -257,9 +257,9 @@ pub struct TurnKernelStateUpdate {
     /// Economy after atomic resource-agreement settlement.
     pub economy: EconomyState,
     /// Recipient visibility recomputed after movement.
-    pub fog_of_war: FogOfWar,
+    pub fog_of_war: FogOfWarState,
     /// Diplomacy after contact, expiry, promise, and agreement progression.
-    pub diplomacy: Diplomacy,
+    pub diplomacy: DiplomacyState,
     /// Victory and authored map-objective progress after the turn.
     pub objectives: ObjectiveState,
     /// Authoritative result after outcome resolution.
@@ -288,30 +288,6 @@ impl GameState {
         builder.units = update.units;
         builder.artifacts = update.artifacts;
         builder.economy = update.economy;
-        builder.try_build()
-    }
-
-    /// Consumes the aggregate and applies one complete city command update.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error when any replacement collection violates aggregate invariants.
-    pub fn into_after_city(
-        self,
-        revision: StateRevision,
-        units: Vec<Unit>,
-        cities: Vec<City>,
-        interaction: InteractionState,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
-    ) -> Result<Self, GameStateBuildError> {
-        let mut builder = self.into_builder();
-        builder.revision = revision;
-        builder.units = units;
-        builder.cities = cities;
-        builder.interaction = interaction;
-        builder.fog_of_war = fog_of_war;
-        builder.diplomacy = diplomacy;
         builder.try_build()
     }
 
@@ -394,8 +370,8 @@ impl GameState {
         self,
         revision: StateRevision,
         units: Vec<Unit>,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
         interaction: InteractionState,
     ) -> Result<Self, GameStateBuildError> {
         let mut builder = self.into_builder();
@@ -418,8 +394,8 @@ impl GameState {
         units: Vec<Unit>,
         infrastructure: InfrastructureState,
         interaction: InteractionState,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
     ) -> Result<Self, GameStateBuildError> {
         let mut builder = self.into_builder();
         builder.revision = revision;

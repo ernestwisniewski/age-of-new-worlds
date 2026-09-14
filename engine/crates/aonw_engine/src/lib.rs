@@ -6,8 +6,10 @@
 #![forbid(unsafe_code)]
 
 /// Durable behavior identity shared by local archives and server replay.
+///
+/// Behavior 2 canonicalizes commander armies by troop kind before state hashing.
 pub const ENGINE_BEHAVIOR_FINGERPRINT: &str =
-    concat!("aonw-engine/", env!("CARGO_PKG_VERSION"), "/behavior-1");
+    concat!("aonw-engine/", env!("CARGO_PKG_VERSION"), "/behavior-2");
 
 mod application;
 mod artifact;

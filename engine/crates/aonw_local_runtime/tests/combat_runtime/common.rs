@@ -6,7 +6,7 @@ use aonw_contracts::client::{
     CLIENT_API_VERSION, ClientCommandDto, ClientQueryDto, ClientRequestBodyDto, ClientRequestDto,
 };
 use aonw_domain::{
-    City, CityId, Diplomacy, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity,
+    City, CityId, DiplomacyState, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity,
     MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind,
     PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
 };
@@ -128,7 +128,7 @@ pub(super) fn fixture() -> (MapDefinition, RulesetDefinition, GameState, PlayerI
             ),
         ],
     )
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()
     .expect("state");
@@ -152,7 +152,7 @@ pub(super) fn city_fixture() -> (MapDefinition, RulesetDefinition, GameState, Pl
     )
     .expect("identity");
     let lifecycle = lifecycle(&identity, [&actor, &defender, &observer]);
-    let diplomacy = Diplomacy::try_new(
+    let diplomacy = DiplomacyState::try_new(
         &identity,
         [
             PlayerPair::new(actor.clone(), defender.clone()).expect("pair"),

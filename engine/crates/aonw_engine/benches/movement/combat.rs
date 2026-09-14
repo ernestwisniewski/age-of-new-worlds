@@ -3,7 +3,7 @@ use std::hint::black_box;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    CityConquestAction, CombatState, FogOfWar, GameMode, GameState, HexCoord, IntendedAttack,
+    CityConquestAction, CombatState, FogOfWarState, GameMode, GameState, HexCoord, IntendedAttack,
     MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId,
     PlayerKind, PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
     UnitOccupancyPolicy,
@@ -196,7 +196,7 @@ fn combat_state(cols: u16, rows: u16, unit_count: usize) -> (GameState, PlayerId
         UnitOccupancyPolicy::Exclusive,
         units,
     )
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_combat(CombatState::try_new(intents).expect("combat intents"))
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()

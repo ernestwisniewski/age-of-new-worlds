@@ -6,14 +6,14 @@ use aonw_ai::{PlannedCommandFamily, StrategicPlanner, StrategicPlanningOutcome};
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
     ArtifactId, City, CityBuildingType, CityId, CityProductionQueue, CityProductionTarget,
-    Diplomacy, DiplomaticMessage, DiplomaticMessageCategory, DiplomaticMessageTopic,
-    DiplomaticProposal, DiplomaticProposalKind, FieldImprovementKind, FogOfWar, GameLengthConfig,
-    GameMode, GameOutcome, GameOutcomeCondition, GameState, HexCoord, InteractionState,
-    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
-    PendingInteraction, PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerPair,
-    PlayerResearchState, PlayerTurnState, ResearchState, StateRevision, StrategicResourceStockpile,
-    TechnologyId, TurnLifecycle, Unit, UnitId, UnitKind, VictoryRules, WonderRegistry,
-    WorldArtifact, WorldArtifactLocation, WorldArtifactType,
+    DiplomacyState, DiplomaticMessage, DiplomaticMessageCategory, DiplomaticMessageTopic,
+    DiplomaticProposal, DiplomaticProposalKind, FieldImprovementKind, FogOfWarState,
+    GameLengthConfig, GameMode, GameOutcome, GameOutcomeCondition, GameState, HexCoord,
+    InteractionState, KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits,
+    Participant, PendingInteraction, PlayerCountry, PlayerFogState, PlayerId, PlayerKind,
+    PlayerPair, PlayerResearchState, PlayerTurnState, ResearchState, StateRevision,
+    StrategicResourceStockpile, TechnologyId, TurnLifecycle, Unit, UnitId, UnitKind, VictoryRules,
+    WonderRegistry, WorldArtifact, WorldArtifactLocation, WorldArtifactType,
 };
 use aonw_local_runtime::{LocalRuntime, OpenSession};
 
@@ -40,7 +40,7 @@ fn policy_accepts_an_incoming_diplomatic_proposal_first() {
     )
     .expect("proposal");
     let contact = PlayerPair::new(world.actor.clone(), world.foreign.clone()).expect("contact");
-    let diplomacy = Diplomacy::try_new(&world.identity, [contact], [], [proposal], [], [], [])
+    let diplomacy = DiplomacyState::try_new(&world.identity, [contact], [], [proposal], [], [], [])
         .expect("diplomacy");
     let state = world
         .state([], [])
@@ -70,7 +70,7 @@ fn policy_answers_an_unresolved_diplomatic_message() {
     )
     .expect("message");
     let contact = PlayerPair::new(world.actor.clone(), world.foreign.clone()).expect("contact");
-    let diplomacy = Diplomacy::try_new(&world.identity, [contact], [], [], [message], [], [])
+    let diplomacy = DiplomacyState::try_new(&world.identity, [contact], [], [], [message], [], [])
         .expect("diplomacy");
     let state = world
         .state([], [])
@@ -299,10 +299,10 @@ fn actor_fog(
     world: &World,
     discovered: impl IntoIterator<Item = HexCoord>,
     visible: impl IntoIterator<Item = HexCoord>,
-) -> FogOfWar {
-    FogOfWar::try_new([
-        PlayerFog::new(world.actor.clone(), discovered, visible),
-        PlayerFog::new(world.foreign.clone(), [], []),
+) -> FogOfWarState {
+    FogOfWarState::try_new([
+        PlayerFogState::new(world.actor.clone(), discovered, visible),
+        PlayerFogState::new(world.foreign.clone(), [], []),
     ])
     .expect("fog")
 }

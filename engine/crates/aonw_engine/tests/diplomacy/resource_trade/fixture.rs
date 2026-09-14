@@ -5,10 +5,10 @@ use aonw_content::{
     TileDefinition,
 };
 use aonw_domain::{
-    City, CityId, Diplomacy, DiplomaticRelation, DiplomaticRelationStatus, EconomyState, GameMode,
-    GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules, Participant, PlayerCountry,
-    PlayerId, PlayerKind, PlayerPair, PlayerTurnState, ResourceTradeAgreement, ResourceType,
-    StateRevision, TurnLifecycle, UnitOccupancyPolicy,
+    City, CityId, DiplomacyState, DiplomaticRelation, DiplomaticRelationStatus, EconomyState,
+    GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules, Participant,
+    PlayerCountry, PlayerId, PlayerKind, PlayerPair, PlayerTurnState, ResourceTradeAgreement,
+    ResourceType, StateRevision, TurnLifecycle, UnitOccupancyPolicy,
 };
 use aonw_engine::{
     CommandRejectionCode, EngineContext, GameEngine, OpenResourceExchangeCommand,
@@ -55,7 +55,7 @@ pub(super) fn fixture(
     let relation = status.map(|status| {
         DiplomaticRelation::try_new(pair.clone(), status, 0, None, Some(2), None).expect("relation")
     });
-    let diplomacy = Diplomacy::try_new(
+    let diplomacy = DiplomacyState::try_new(
         &identity,
         contact.then_some(pair),
         relation,

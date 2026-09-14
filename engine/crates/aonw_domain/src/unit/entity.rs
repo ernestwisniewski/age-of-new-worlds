@@ -404,24 +404,23 @@ impl UnitBuilder {
     /// # Errors
     ///
     /// Returns [`UnitBuildError`] when an entity invariant is violated.
-    pub fn build(self) -> Result<Unit, UnitBuildError> {
+    pub fn build(mut self) -> Result<Unit, UnitBuildError> {
         if self.name.trim().is_empty() {
             return Err(UnitBuildError::EmptyName);
         }
         if self.name.len() > MAX_UNIT_NAME_BYTES {
             return Err(UnitBuildError::NameTooLong);
         }
-        let mut kinds = self
-            .army
-            .iter()
-            .map(|troop| troop.kind())
-            .collect::<Vec<_>>();
         if let Some(troop) = self.army.iter().find(|troop| troop.count() == 0) {
             return Err(UnitBuildError::EmptyTroop(troop.kind()));
         }
-        kinds.sort_unstable();
-        if let Some(pair) = kinds.windows(2).find(|pair| pair[0] == pair[1]) {
-            return Err(UnitBuildError::DuplicateTroop(pair[0]));
+        self.army.sort_unstable_by_key(|troop| troop.kind());
+        if let Some(pair) = self
+            .army
+            .windows(2)
+            .find(|pair| pair[0].kind() == pair[1].kind())
+        {
+            return Err(UnitBuildError::DuplicateTroop(pair[0].kind()));
         }
         validate_activity(&self.activity)?;
         if self.hit_points == Some(0) {

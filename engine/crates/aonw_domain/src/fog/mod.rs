@@ -11,13 +11,13 @@ pub enum FogVisibility {
 
 /// Immutable fog state of one player.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct PlayerFog {
+pub struct PlayerFogState {
     player_id: PlayerId,
     discovered_hexes: Box<[HexCoord]>,
     visible_hexes: Box<[HexCoord]>,
 }
 
-impl PlayerFog {
+impl PlayerFogState {
     /// Constructs normalized fog. Visible coordinates are always discovered.
     #[must_use]
     pub fn new(
@@ -82,17 +82,17 @@ impl PlayerFog {
 
 /// Canonical fog state sorted by player identifier.
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct FogOfWar {
-    players: Box<[PlayerFog]>,
+pub struct FogOfWarState {
+    players: Box<[PlayerFogState]>,
 }
 
-impl FogOfWar {
+impl FogOfWarState {
     /// Normalizes player entries and rejects duplicate identifiers.
     ///
     /// # Errors
     ///
     /// Returns the duplicated player identifier.
-    pub fn try_new(players: impl IntoIterator<Item = PlayerFog>) -> Result<Self, PlayerId> {
+    pub fn try_new(players: impl IntoIterator<Item = PlayerFogState>) -> Result<Self, PlayerId> {
         let mut players = players.into_iter().collect::<Vec<_>>();
         players.sort_unstable_by(|left, right| left.player_id().cmp(right.player_id()));
         if let Some(pair) = players
@@ -114,7 +114,7 @@ impl FogOfWar {
 
     /// Returns one player's fog state.
     #[must_use]
-    pub fn player(&self, player_id: &PlayerId) -> Option<&PlayerFog> {
+    pub fn player(&self, player_id: &PlayerId) -> Option<&PlayerFogState> {
         self.players
             .binary_search_by(|fog| fog.player_id().cmp(player_id))
             .ok()
@@ -123,7 +123,7 @@ impl FogOfWar {
 
     /// Returns all player fog entries in identifier order.
     #[must_use]
-    pub const fn players(&self) -> &[PlayerFog] {
+    pub const fn players(&self) -> &[PlayerFogState] {
         &self.players
     }
 
@@ -136,7 +136,7 @@ impl FogOfWar {
 
     /// Replaces or inserts one player's fog while preserving sorted storage.
     #[must_use]
-    pub fn updating_player(&self, player: PlayerFog) -> Self {
+    pub fn updating_player(&self, player: PlayerFogState) -> Self {
         let mut players = self.players.to_vec();
         match players.binary_search_by(|fog| fog.player_id().cmp(player.player_id())) {
             Ok(index) => players[index] = player,

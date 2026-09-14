@@ -1,7 +1,7 @@
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
     CityConquestAction, CombatBatchStepUpdate, CombatCityStateChange, CombatUnitStateChange,
-    GameState, HexCoord, Unit, UnitKind, WorldArtifactLocation,
+    DiplomacyState, FogOfWarState, GameState, HexCoord, Unit, UnitKind, WorldArtifactLocation,
 };
 
 use crate::{
@@ -502,14 +502,7 @@ fn update_visibility_and_diplomacy(
     prepared: &PreparedCombat,
     units: &[Unit],
     cities: &[aonw_domain::City],
-) -> Result<
-    (
-        aonw_domain::FogOfWar,
-        aonw_domain::Diplomacy,
-        Vec<DomainEvent>,
-    ),
-    CombatApplyError,
-> {
+) -> Result<(FogOfWarState, DiplomacyState, Vec<DomainEvent>), CombatApplyError> {
     let (attacked_diplomacy, score_events) = update_diplomacy(state, prepared)?;
     let (fog, diplomacy) =
         recompute_visibility(state, context.map(), units, cities, &attacked_diplomacy);
@@ -519,7 +512,7 @@ fn update_visibility_and_diplomacy(
 fn update_diplomacy(
     state: &GameState,
     prepared: &PreparedCombat,
-) -> Result<(aonw_domain::Diplomacy, Vec<DomainEvent>), CombatApplyError> {
+) -> Result<(DiplomacyState, Vec<DomainEvent>), CombatApplyError> {
     let attacker = &state.units()[prepared.attacker_index];
     let attacked_diplomacy = match prepared.target {
         PreparedTarget::Unit(_) => state.diplomacy().after_unit_attack(
@@ -566,8 +559,8 @@ fn recompute_visibility(
     map: &MapDefinition,
     units: &[Unit],
     cities: &[aonw_domain::City],
-    diplomacy: &aonw_domain::Diplomacy,
-) -> (aonw_domain::FogOfWar, aonw_domain::Diplomacy) {
+    diplomacy: &DiplomacyState,
+) -> (FogOfWarState, DiplomacyState) {
     let players = state
         .match_lifecycle()
         .identity()
@@ -582,9 +575,9 @@ fn recompute_visibility_for_players<'player>(
     map: &MapDefinition,
     units: &[Unit],
     cities: &[aonw_domain::City],
-    diplomacy: &aonw_domain::Diplomacy,
+    diplomacy: &DiplomacyState,
     players: impl IntoIterator<Item = &'player aonw_domain::PlayerId>,
-) -> (aonw_domain::FogOfWar, aonw_domain::Diplomacy) {
+) -> (FogOfWarState, DiplomacyState) {
     let refs = units.iter().collect::<Vec<_>>();
     let mut fog = state.fog_of_war().clone();
     for player in players {
@@ -598,7 +591,7 @@ pub(super) fn refresh_batch_visibility(
     state: &GameState,
     map: &MapDefinition,
     players: &[aonw_domain::PlayerId],
-) -> (Option<aonw_domain::FogOfWar>, aonw_domain::Diplomacy) {
+) -> (Option<FogOfWarState>, DiplomacyState) {
     if players.is_empty() {
         let refs = state.units().iter().collect::<Vec<_>>();
         let diplomacy =

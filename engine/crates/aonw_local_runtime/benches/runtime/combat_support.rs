@@ -3,9 +3,9 @@ use std::collections::BTreeMap;
 use aonw_contracts::client::{ClientCommandDto, ClientQueryDto, ClientRequestBodyDto};
 use aonw_contracts::{CityConquestActionDto, CoordinateDto};
 use aonw_domain::{
-    CityConquestAction, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle,
-    MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerTurnState,
-    StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
+    CityConquestAction, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity,
+    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind,
+    PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
 };
 use aonw_local_runtime::{
     AttackHexRequest, CombatPreviewRequest, LocalRuntime, OpenSession, RuntimeQuery,
@@ -155,7 +155,7 @@ fn opened_combat_runtime(unit_count: usize) -> (LocalRuntime, UnitId) {
         occupancy_policy,
         units,
     )
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()
     .expect("combat state");

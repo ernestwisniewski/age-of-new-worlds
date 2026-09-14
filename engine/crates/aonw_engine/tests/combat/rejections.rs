@@ -26,8 +26,8 @@ fn rejection_precedence_is_stable_and_hides_unknown_targets() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(
@@ -75,8 +75,8 @@ fn rejection_precedence_is_stable_and_hides_unknown_targets() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(&exhausted, &actor, 11, &attacker_id, HexCoord::new(9, 9)),
@@ -97,8 +97,8 @@ fn attack_capability_and_visibility_precede_target_identity() {
             None,
         )],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(&worker, &actor, 11, &attacker_id, HexCoord::new(9, 9)),
@@ -119,7 +119,7 @@ fn attack_capability_and_visibility_precede_target_identity() {
         )],
         Vec::new(),
         actor_fog(&actor, [HexCoord::new(0, 0)], [HexCoord::new(0, 0)]),
-        Diplomacy::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(&hidden, &actor, 11, &attacker_id, HexCoord::new(1, 0)),
@@ -159,8 +159,8 @@ fn friendly_targets_are_rejected_before_range() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(
@@ -182,8 +182,8 @@ fn friendly_targets_are_rejected_before_range() {
             None,
         )],
         vec![city("friendly-city", &actor, HexCoord::new(1, 0), None)],
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(
@@ -214,7 +214,7 @@ fn treaty_is_rejected_before_range() {
     )
     .expect("relation");
     let diplomacy =
-        Diplomacy::try_new(&identity, [pair], [relation], [], [], [], []).expect("diplomacy");
+        DiplomacyState::try_new(&identity, [pair], [relation], [], [], [], []).expect("diplomacy");
     let protected = state_with_identity(
         identity,
         vec![
@@ -234,7 +234,7 @@ fn treaty_is_rejected_before_range() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
+        FogOfWarState::default(),
         diplomacy,
         CombatState::default(),
     );
@@ -261,8 +261,8 @@ fn treaty_is_rejected_before_range() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     assert_eq!(
         rejection(&distant, &actor, 11, &attacker_id, HexCoord::new(3, 2)),
@@ -302,8 +302,8 @@ fn worker_to_warrior(state: &GameState, actor: &PlayerId) -> GameState {
             None,
         )],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
         CombatState::default(),
     )
 }

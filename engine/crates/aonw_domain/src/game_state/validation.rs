@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    City, CityFoundingDraft, Diplomacy, FogOfWar, HexGridBounds, InfrastructureState,
+    City, CityFoundingDraft, DiplomacyState, FogOfWarState, HexGridBounds, InfrastructureState,
     InteractionState, MatchIdentity, PendingInteraction, Unit, UnitPosture, WonderRegistry,
     WonderType, WorldArtifact, WorldArtifactLocation,
 };
@@ -38,8 +38,8 @@ pub(super) fn validate_player_references(
     units: &[Unit],
     cities: &[City],
     interaction: &InteractionState,
-    fog_of_war: &FogOfWar,
-    diplomacy: &Diplomacy,
+    fog_of_war: &FogOfWarState,
+    diplomacy: &DiplomacyState,
 ) -> Result<(), GameStateBuildError> {
     // Scenario content is assembled before a runtime binds its match identity.
     // Once any participants are bound, every aggregate reference is strict.
@@ -412,7 +412,7 @@ pub(super) fn validate_environment(
     bounds: HexGridBounds,
     identity: &MatchIdentity,
     cities: &[City],
-    fog_of_war: &FogOfWar,
+    fog_of_war: &FogOfWarState,
     infrastructure: &InfrastructureState,
 ) -> Result<(), GameStateBuildError> {
     for player_fog in fog_of_war.players() {

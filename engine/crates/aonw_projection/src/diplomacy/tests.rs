@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use aonw_domain::{
-    Diplomacy, DiplomaticMessage, DiplomaticMessageCategory, DiplomaticMessageTopic,
+    DiplomacyState, DiplomaticMessage, DiplomaticMessageCategory, DiplomaticMessageTopic,
     DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation, DiplomaticRelationStatus,
     GameMode, GameState, HexGridBounds, MatchIdentity, MatchLifecycle, MatchRules, Participant,
     PlayerCountry, PlayerId, PlayerKind, PlayerPair, PlayerTurnState, ResourceTradeAgreement,
@@ -85,7 +85,7 @@ fn fixture() -> Fixture {
     let pair12 = PlayerPair::new(p1.clone(), p2.clone()).expect("pair");
     let pair13 = PlayerPair::new(p1.clone(), p3.clone()).expect("pair");
     let pair23 = PlayerPair::new(p2.clone(), p3.clone()).expect("pair");
-    let diplomacy = Diplomacy::try_new(
+    let diplomacy = DiplomacyState::try_new(
         &identity,
         [pair12.clone(), pair13, pair23.clone()],
         [

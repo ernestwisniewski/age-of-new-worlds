@@ -11,6 +11,8 @@ use aonw_engine::{
     QueryResult, SelectCityExpansionHexCommand, ToggleWorkedHexCommand, YieldValue,
 };
 
+#[path = "city/environment.rs"]
+mod environment;
 #[path = "city/manifest.rs"]
 mod manifest;
 #[path = "city/support.rs"]

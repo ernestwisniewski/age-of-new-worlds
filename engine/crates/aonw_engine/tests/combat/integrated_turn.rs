@@ -1,8 +1,8 @@
 //! Integrated simultaneous-turn fixture spanning supported processors.
 
 use aonw_domain::{
-    CityFoundingJob, CombatState, Diplomacy, FogOfWar, HexCoord, MovementStep, MovementUnits,
-    PlayerId, QueuedMovePath, Unit, UnitKind, WorkerJob,
+    CityFoundingJob, CombatState, DiplomacyState, FogOfWarState, HexCoord, MovementStep,
+    MovementUnits, PlayerId, QueuedMovePath, Unit, UnitKind, WorkerJob,
 };
 
 use super::{identity, state_with_identity, unit, unit_id};
@@ -54,8 +54,8 @@ pub(super) fn state(
             mover(third),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
         intended,
     )
 }

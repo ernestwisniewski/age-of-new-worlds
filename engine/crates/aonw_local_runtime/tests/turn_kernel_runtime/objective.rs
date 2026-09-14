@@ -10,9 +10,9 @@ use aonw_contracts::client::{
 };
 use aonw_contracts::{ReplayEventDto, ReplayLogDto};
 use aonw_domain::{
-    City, CityId, EconomyState, FogOfWar, GameMode, GameState, HexCoord,
+    City, CityId, EconomyState, FogOfWarState, GameMode, GameState, HexCoord,
     InitialResourceDistribution, MapObjectiveHoldState, MatchIdentity, MatchLifecycle, MatchRules,
-    ObjectiveState, PlayerFog, PlayerId, PlayerTurnState, StateRevision, TurnLifecycle,
+    ObjectiveState, PlayerFogState, PlayerId, PlayerTurnState, StateRevision, TurnLifecycle,
 };
 use aonw_local_runtime::{ClientProtocol, LocalRuntime, OpenSession};
 
@@ -211,9 +211,9 @@ fn fixture(
     .with_economy(economy)
     .with_objectives(objectives)
     .with_fog_of_war(
-        FogOfWar::try_new([
-            PlayerFog::new(p1.clone(), [], [HexCoord::new(4, 0)]),
-            PlayerFog::new(p2.clone(), [], [HexCoord::new(0, 0)]),
+        FogOfWarState::try_new([
+            PlayerFogState::new(p1.clone(), [], [HexCoord::new(4, 0)]),
+            PlayerFogState::new(p2.clone(), [], [HexCoord::new(0, 0)]),
         ])
         .expect("fog"),
     )

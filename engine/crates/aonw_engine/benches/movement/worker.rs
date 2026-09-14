@@ -3,10 +3,11 @@ use std::hint::black_box;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    City, CityId, FogOfWar, GameMode, GameState, HexCoord, KnowledgeState, MatchIdentity,
-    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId,
-    PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState, StateRevision, TechnologyId,
-    TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy, WonderRegistry, WorkerJob,
+    City, CityId, FogOfWarState, GameMode, GameState, HexCoord, KnowledgeState, MatchIdentity,
+    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFogState,
+    PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState, StateRevision,
+    TechnologyId, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy, WonderRegistry,
+    WorkerJob,
 };
 use aonw_engine::{
     AutomateWorkerCommand, EngineContext, GameEngine, GameQuery, PlayerCommand, QueryResult,
@@ -239,7 +240,8 @@ fn worker_state(map: &MapDefinition, actor: &PlayerId, units: Vec<Unit>, city: C
         .tiles()
         .iter()
         .map(aonw_content::TileDefinition::coordinate);
-    let fog = FogOfWar::try_new([PlayerFog::new(actor.clone(), [], visible)]).expect("fog");
+    let fog =
+        FogOfWarState::try_new([PlayerFogState::new(actor.clone(), [], visible)]).expect("fog");
     GameState::builder(
         StateRevision::new(9),
         4,

@@ -9,9 +9,9 @@ use aonw_ai::{
 };
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, CityId, FogOfWar, GameLengthConfig, GameMode, GameState, HexCoord, KnowledgeState,
+    City, CityId, FogOfWarState, GameLengthConfig, GameMode, GameState, HexCoord, KnowledgeState,
     MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
-    PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState,
+    PlayerFogState, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState,
     StateRevision, TechnologyId, TurnLifecycle, Unit, UnitId, UnitKind, VictoryRules,
     WonderRegistry,
 };
@@ -213,9 +213,9 @@ fn fixture() -> (MapDefinition, RulesetDefinition, GameState, PlayerId) {
     let visible = (0..4)
         .flat_map(|row| (0..6).map(move |col| HexCoord::new(col, row)))
         .collect::<Vec<_>>();
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(actor.clone(), [], visible),
-        PlayerFog::new(foreign.clone(), [], [HexCoord::new(5, 3)]),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(actor.clone(), [], visible),
+        PlayerFogState::new(foreign.clone(), [], [HexCoord::new(5, 3)]),
     ])
     .expect("fog");
     let state = GameState::builder(

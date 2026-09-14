@@ -1,5 +1,5 @@
 use aonw_domain::{
-    Diplomacy, DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
+    DiplomacyState, DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
     DiplomaticScoreChangeReason, EconomyAccountChange, GameState, PlayerId, PlayerPair,
 };
 
@@ -204,7 +204,7 @@ pub(crate) fn apply_send_gold_gift(
 }
 
 fn known_observers(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     aggressor: &PlayerId,
     victim: &PlayerId,
 ) -> Vec<PlayerId> {
@@ -229,7 +229,7 @@ fn known_observers(
 }
 
 fn gift_on_cooldown(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     actor: &PlayerId,
     target: &PlayerId,
     turn: u32,

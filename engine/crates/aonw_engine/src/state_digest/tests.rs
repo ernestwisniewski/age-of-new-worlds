@@ -55,6 +55,54 @@ fn digest_is_independent_of_entity_input_order() {
 }
 
 #[test]
+fn army_permutations_have_one_canonical_representation_and_digest() {
+    use aonw_domain::{ArmyTroop, TroopKind};
+
+    let troops = [
+        ArmyTroop::new(TroopKind::Warrior, 2),
+        ArmyTroop::new(TroopKind::Archer, 3),
+        ArmyTroop::new(TroopKind::Settler, 1),
+    ];
+    let mut expected = None;
+    for indices in [
+        [0, 1, 2],
+        [0, 2, 1],
+        [1, 0, 2],
+        [1, 2, 0],
+        [2, 0, 1],
+        [2, 1, 0],
+    ] {
+        let commander = Unit::builder(
+            UnitId::new("commander").expect("id"),
+            PlayerId::new("player").expect("player"),
+            UnitKind::Commander,
+            "Commander",
+            HexCoord::new(0, 0),
+            MovementUnits::new(10),
+        )
+        .with_army(indices.map(|index| troops[index]))
+        .build()
+        .expect("commander");
+        assert_eq!(commander.army(), &troops);
+        let state = GameState::try_new(
+            StateRevision::INITIAL,
+            1,
+            HexGridBounds::new(1, 1).expect("bounds"),
+            UnitOccupancyPolicy::Exclusive,
+            [commander],
+        )
+        .expect("state");
+        let digest = digest_state(&state);
+        if let Some((expected_state, expected_digest)) = &expected {
+            assert_eq!(&state, expected_state);
+            assert_eq!(&digest, expected_digest);
+        } else {
+            expected = Some((state, digest));
+        }
+    }
+}
+
+#[test]
 fn digest_includes_reversible_skip_balance() {
     let bounds = HexGridBounds::new(3, 3).expect("bounds");
     let base = unit("unit", HexCoord::new(1, 1));

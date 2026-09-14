@@ -15,10 +15,10 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, CityConquestAction, CityId, CombatState, Diplomacy, DiplomaticRelationStatus, FogOfWar,
-    GameMode, GameState, HexCoord, IntendedAttack, MatchIdentity, MatchLifecycle, MatchRules,
-    MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerPair, PlayerTurnState,
-    StateRevision, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
+    City, CityConquestAction, CityId, CombatState, DiplomacyState, DiplomaticRelationStatus,
+    FogOfWarState, GameMode, GameState, HexCoord, IntendedAttack, MatchIdentity, MatchLifecycle,
+    MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerPair,
+    PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
 };
 use aonw_engine::{
     AttackHexCommand, CombatPreviewQuery, CombatTarget, CommandRejectionCode, DomainEvent,
@@ -52,8 +52,8 @@ fn preview_and_attack_share_the_exact_combat_input() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
 
@@ -141,7 +141,7 @@ fn hidden_target_rejection_does_not_disclose_target_or_mutate_state() {
         ],
         Vec::new(),
         actor_fog(&actor, [HexCoord::new(0, 0)], [HexCoord::new(0, 0)]),
-        Diplomacy::default(),
+        DiplomacyState::default(),
     );
     let original_digest = GameEngine::state_digest(&state);
     let context = EngineContext::canonical(&actor, &map, RulesetDefinition::standard());
@@ -185,7 +185,7 @@ fn city_capture_and_destroy_are_explicit_and_city_attack_penalizes_observers() {
     let attacker_id = unit_id("tank");
     let city_id = city_id("city");
     let identity = identity();
-    let diplomacy = Diplomacy::try_new(
+    let diplomacy = DiplomacyState::try_new(
         &identity,
         [
             PlayerPair::new(actor.clone(), defender_owner.clone()).expect("pair"),
@@ -209,7 +209,7 @@ fn city_capture_and_destroy_are_explicit_and_city_attack_penalizes_observers() {
             None,
         )],
         vec![city("city", &defender_owner, HexCoord::new(1, 0), Some(1))],
-        FogOfWar::default(),
+        FogOfWarState::default(),
         diplomacy,
         CombatState::default(),
     );
@@ -348,7 +348,12 @@ fn simultaneous_turn_resolves_intended_attacks_through_the_same_combat_evidence(
     assert_eq!(evidence.combat_executions()[0].rolls[0].value, 0);
 }
 
-fn state(units: Vec<Unit>, cities: Vec<City>, fog: FogOfWar, diplomacy: Diplomacy) -> GameState {
+fn state(
+    units: Vec<Unit>,
+    cities: Vec<City>,
+    fog: FogOfWarState,
+    diplomacy: DiplomacyState,
+) -> GameState {
     state_with_identity(
         identity(),
         units,
@@ -363,8 +368,8 @@ fn state_with_identity(
     identity: MatchIdentity,
     units: Vec<Unit>,
     cities: Vec<City>,
-    fog: FogOfWar,
-    diplomacy: Diplomacy,
+    fog: FogOfWarState,
+    diplomacy: DiplomacyState,
     combat: CombatState,
 ) -> GameState {
     let players = identity

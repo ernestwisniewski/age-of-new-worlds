@@ -5,9 +5,10 @@ use std::collections::BTreeMap;
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_contracts::SaveGameDto;
 use aonw_domain::{
-    ArmyTroop, City, CityId, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity,
-    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId,
-    PlayerKind, PlayerTurnState, StateRevision, TroopKind, TurnLifecycle, Unit, UnitId, UnitKind,
+    ArmyTroop, City, CityId, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity,
+    MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFogState,
+    PlayerId, PlayerKind, PlayerTurnState, StateRevision, TroopKind, TurnLifecycle, Unit, UnitId,
+    UnitKind,
 };
 use aonw_local_runtime::{
     DetachTroopRequest, LocalRuntime, MerchantCityRequest, OpenSession, TurnCommandRequest,
@@ -141,8 +142,8 @@ fn fixture() -> (
     .build()
     .expect("army");
     let foreign = unit("foreign-1", &p2, UnitKind::Warrior, HexCoord::new(5, 2));
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(
             p1.clone(),
             [],
             [
@@ -151,7 +152,7 @@ fn fixture() -> (
                 HexCoord::new(2, 2),
             ],
         ),
-        PlayerFog::new(p2.clone(), [], [HexCoord::new(5, 2)]),
+        PlayerFogState::new(p2.clone(), [], [HexCoord::new(5, 2)]),
     ])
     .expect("fog");
     let state = GameState::builder(

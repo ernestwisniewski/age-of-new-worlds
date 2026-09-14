@@ -6,9 +6,9 @@ use aonw_contracts::{
     TurnModeDto,
 };
 use aonw_domain::{
-    EconomyState, FogOfWar, GameMode, GameState, HexCoord, InitialResourceDistribution,
+    EconomyState, FogOfWarState, GameMode, GameState, HexCoord, InitialResourceDistribution,
     KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
-    PlayerCountry, PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
+    PlayerCountry, PlayerFogState, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
     ResearchState, ResourceType, StateRevision, StrategicResourceStockpile, TechnologyId,
     TurnLifecycle, Unit, UnitId, UnitKind, WonderRegistry,
 };
@@ -116,9 +116,9 @@ pub(super) fn fixture(submitted: impl IntoIterator<Item = PlayerId>) -> Fixture 
     .expect("economy");
     let units = [unit("unit-1", &p1, 0), unit("unit-2", &p2, 1)];
     let research = fixture_research(&p1, &p2);
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(p1, [], [HexCoord::new(0, 0)]),
-        PlayerFog::new(p2, [], [HexCoord::new(1, 0)]),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(p1, [], [HexCoord::new(0, 0)]),
+        PlayerFogState::new(p2, [], [HexCoord::new(1, 0)]),
     ])
     .expect("fog");
     let state = GameState::builder(

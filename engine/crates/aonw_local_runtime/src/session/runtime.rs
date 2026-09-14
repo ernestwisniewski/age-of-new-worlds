@@ -37,6 +37,8 @@ pub use ai_turn::{
 pub use replay::ReplayFrame;
 
 /// Mutable owner of at most one local game session.
+///
+/// `Ok` command results may be domain rejections; check [`CommandResult::is_accepted`].
 #[derive(Clone, Debug, Default)]
 pub struct LocalRuntime {
     session: Option<Session>,
@@ -100,8 +102,7 @@ impl LocalRuntime {
     ///
     /// # Errors
     ///
-    /// Returns an internal transition or session error. Domain rejections are
-    /// successful typed results with a rejection code.
+    /// Returns a session or internal error; see [`Self`] for command acceptance semantics.
     pub fn production(
         &mut self,
         command: &ProductionCommandRequest,
@@ -330,8 +331,7 @@ impl LocalRuntime {
     ///
     /// # Errors
     ///
-    /// Returns an internal transition or session error. Domain rejections are
-    /// successful typed results with a rejection code.
+    /// Returns a session or internal error; see [`Self`] for command acceptance semantics.
     pub fn dispatch(&mut self, command: &MoveUnitRequest) -> Result<CommandResult, RuntimeError> {
         let result = {
             let session = self.session_mut()?;

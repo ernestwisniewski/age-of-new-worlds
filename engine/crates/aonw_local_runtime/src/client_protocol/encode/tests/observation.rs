@@ -13,10 +13,10 @@ use crate::{
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_contracts::client::ClientEventDto;
 use aonw_domain::{
-    AiDifficulty, AiPersona, AiPlayer, AiStrategyId, FogOfWar, GameMode, GameState, HexCoord,
+    AiDifficulty, AiPersona, AiPlayer, AiStrategyId, FogOfWarState, GameMode, GameState, HexCoord,
     MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
-    PlayerFog, PlayerId, PlayerKind, PlayerTurnState, StateRevision, TechnologyId, TurnLifecycle,
-    Unit, UnitId, UnitKind,
+    PlayerFogState, PlayerId, PlayerKind, PlayerTurnState, StateRevision, TechnologyId,
+    TurnLifecycle, Unit, UnitId, UnitKind,
 };
 
 use super::super::command_result;
@@ -324,13 +324,13 @@ fn opened_with_visibility(visible: &[i32]) -> (MapDefinition, RulesetDefinition,
         None,
     )
     .expect("turn");
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(
             human.clone(),
             [],
             visible.iter().map(|&col| HexCoord::new(col, 0)),
         ),
-        PlayerFog::new(ai.clone(), [], (0..12).map(|col| HexCoord::new(col, 0))),
+        PlayerFogState::new(ai.clone(), [], (0..12).map(|col| HexCoord::new(col, 0))),
     ])
     .expect("fog");
     let state = GameState::builder(

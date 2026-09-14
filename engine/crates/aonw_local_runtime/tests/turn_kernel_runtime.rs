@@ -9,7 +9,7 @@ use aonw_contracts::client::{
 };
 use aonw_contracts::{ReplayLogDto, ReplayRecordDto};
 use aonw_domain::{
-    Diplomacy, DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation,
+    DiplomacyState, DiplomaticProposal, DiplomaticProposalKind, DiplomaticRelation,
     DiplomaticRelationStatus, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle,
     MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerPair,
     PlayerTurnState, StateRevision, TurnLifecycle, Unit, UnitId, UnitKind,
@@ -285,10 +285,10 @@ fn fixture_with(
             0,
         )
         .expect("proposal");
-        Diplomacy::try_new(&identity, [pair], [relation], [proposal], [], [], [])
+        DiplomacyState::try_new(&identity, [pair], [relation], [proposal], [], [], [])
             .expect("diplomacy")
     } else {
-        Diplomacy::default()
+        DiplomacyState::default()
     };
     let units = [unit("unit-1", &p1, 0), unit("unit-2", &p2, 1)];
     let state = GameState::builder(

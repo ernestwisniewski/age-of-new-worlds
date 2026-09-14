@@ -1,15 +1,12 @@
 use aonw_content::{MapDefinition, RulesetDefinition};
-use aonw_domain::{City, CityId, Diplomacy, FogOfWar, GameState, PlayerCountry, PlayerId, Unit};
+use aonw_domain::{City, CityFoundingStateUpdate, CityId, GameState, PlayerCountry, PlayerId};
 
 use super::rules::founding_job_is_valid;
 use crate::movement::{merge_discovered_contacts, recompute_after_move};
 use crate::{CityFoundedEvent, DomainEvent};
 
 pub(crate) struct CityFoundingTurnUpdate {
-    pub(crate) units: Vec<Unit>,
-    pub(crate) cities: Vec<City>,
-    pub(crate) fog_of_war: FogOfWar,
-    pub(crate) diplomacy: Diplomacy,
+    pub(crate) state: CityFoundingStateUpdate,
     pub(crate) events: Vec<DomainEvent>,
     pub(crate) founded_city_ids: Vec<CityId>,
 }
@@ -114,10 +111,12 @@ pub(crate) fn advance_city_founding(
     }
     let diplomacy = merge_discovered_contacts(state.diplomacy(), &fog_of_war, &unit_refs, &cities);
     Ok(Some(CityFoundingTurnUpdate {
-        units,
-        cities,
-        fog_of_war,
-        diplomacy,
+        state: CityFoundingStateUpdate {
+            units,
+            cities,
+            fog_of_war,
+            diplomacy,
+        },
         events,
         founded_city_ids,
     }))

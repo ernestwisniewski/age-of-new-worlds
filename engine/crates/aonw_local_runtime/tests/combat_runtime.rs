@@ -5,8 +5,8 @@ use std::collections::BTreeMap;
 use aonw_content::RulesetDefinition;
 use aonw_contracts::{CityConquestActionDto, ReplayEvidenceDto, ReplayLogDto};
 use aonw_domain::{
-    CityConquestAction, CombatState, FogOfWar, GameMode, GameState, HexCoord, IntendedAttack,
-    MatchIdentity, MatchLifecycle, MatchRules, PlayerFog, PlayerTurnState, StateRevision,
+    CityConquestAction, CombatState, FogOfWarState, GameMode, GameState, HexCoord, IntendedAttack,
+    MatchIdentity, MatchLifecycle, MatchRules, PlayerFogState, PlayerTurnState, StateRevision,
     TurnLifecycle, UnitKind,
 };
 use aonw_engine::ExecutionEvidence;
@@ -144,10 +144,10 @@ fn client_turn_result_redacts_hidden_combat_but_replay_keeps_canonical_evidence(
     )
     .expect("lifecycle");
     let observer_position = HexCoord::new(7, 1);
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(observer.clone(), [observer_position], [observer_position]),
-        PlayerFog::new(attacker_owner.clone(), [], []),
-        PlayerFog::new(defender_owner.clone(), [], []),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(observer.clone(), [observer_position], [observer_position]),
+        PlayerFogState::new(attacker_owner.clone(), [], []),
+        PlayerFogState::new(defender_owner.clone(), [], []),
     ])
     .expect("fog");
     let combat = CombatState::try_new([IntendedAttack::new(

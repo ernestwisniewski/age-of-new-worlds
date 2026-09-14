@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use aonw_content::{MapDefinition, RulesetDefinition, StabilityValues};
 use aonw_domain::{
-    CityId, Diplomacy, DiplomaticRelationStatus, EconomyState, GameState, PlayerId, UnitId,
+    CityId, DiplomacyState, DiplomaticRelationStatus, EconomyState, GameState, PlayerId, UnitId,
 };
 
 use crate::{CombatTarget, DomainEvent, StabilityBandChangedEvent};
@@ -103,7 +103,7 @@ pub(crate) fn advance_turn_stability(
     map: &MapDefinition,
     ruleset: &RulesetDefinition,
     economy: &EconomyState,
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     scope: &[PlayerId],
     turn: u32,
     counts: &WarWearinessEventCounts,
@@ -196,7 +196,7 @@ pub(crate) fn current_stability_breakdown(
 
 fn advance_war_weariness(
     economy: &EconomyState,
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     scope: &[PlayerId],
     turn: u32,
     counts: &WarWearinessEventCounts,

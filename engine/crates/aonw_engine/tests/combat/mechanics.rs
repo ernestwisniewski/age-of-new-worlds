@@ -26,8 +26,8 @@ fn surviving_units_gain_separate_typed_experience_events() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     let map = map();
     let transition = GameEngine::apply_player_owned(
@@ -93,8 +93,8 @@ fn retreat_consumes_defender_movement_without_a_retaliation_roll() {
             ),
         ],
         Vec::new(),
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     let map = map();
     let transition = GameEngine::apply_player_owned(
@@ -215,8 +215,8 @@ fn surviving_city_keeps_ownership_and_records_remaining_health() {
             None,
         )],
         vec![city("city", &defender, HexCoord::new(1, 0), None)],
-        FogOfWar::default(),
-        Diplomacy::default(),
+        FogOfWarState::default(),
+        DiplomacyState::default(),
     );
     let map = map();
     let transition = GameEngine::apply_player_owned(

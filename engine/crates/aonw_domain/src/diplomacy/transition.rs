@@ -1,11 +1,11 @@
 use crate::MatchIdentity;
 
 use super::{
-    Diplomacy, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticProposal, DiplomaticRelation,
-    DiplomaticScoreEntry, PlayerPair, ResourceTradeAgreement,
+    DiplomacyState, DiplomacyStateBuildError, DiplomaticMessage, DiplomaticProposal,
+    DiplomaticRelation, DiplomaticScoreEntry, PlayerPair, ResourceTradeAgreement,
 };
 
-impl Diplomacy {
+impl DiplomacyState {
     /// Adds one proposal and revalidates the complete diplomacy aggregate.
     ///
     /// # Errors

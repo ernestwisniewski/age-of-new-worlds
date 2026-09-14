@@ -9,7 +9,7 @@ use aonw_contracts::client::{
     ClientResponseBodyDto, ClientResponseDto,
 };
 use aonw_domain::{
-    City, CityId, Diplomacy, DiplomaticMessage, DiplomaticProposal, EconomyState, GameMode,
+    City, CityId, DiplomacyState, DiplomaticMessage, DiplomaticProposal, EconomyState, GameMode,
     GameState, HexCoord, MatchIdentity, MatchLifecycle, MatchRules, Participant, PlayerCountry,
     PlayerId, PlayerKind, PlayerPair, PlayerTurnState, StateRevision, TurnLifecycle,
 };
@@ -96,8 +96,8 @@ fn state_with_records(
     let identity = identity(&p1, &p2);
     let lifecycle = lifecycle(&identity, &p1, &p2);
     let pair = PlayerPair::new(p1.clone(), p2.clone()).expect("pair");
-    let diplomacy =
-        Diplomacy::try_new(&identity, [pair], [], proposal, message, [], []).expect("diplomacy");
+    let diplomacy = DiplomacyState::try_new(&identity, [pair], [], proposal, message, [], [])
+        .expect("diplomacy");
     let economy = economy(&identity, map.bounds(), &p1, &p2);
     GameState::builder(
         StateRevision::new(11),
@@ -120,7 +120,8 @@ pub(super) fn resource_trade_state() -> GameState {
     let identity = identity(&p1, &p2);
     let lifecycle = lifecycle(&identity, &p1, &p2);
     let pair = PlayerPair::new(p1.clone(), p2.clone()).expect("pair");
-    let diplomacy = Diplomacy::try_new(&identity, [pair], [], [], [], [], []).expect("diplomacy");
+    let diplomacy =
+        DiplomacyState::try_new(&identity, [pair], [], [], [], [], []).expect("diplomacy");
     let economy = economy(&identity, map.bounds(), &p1, &p2);
     let actor_city = City::builder(
         CityId::new("city-1").expect("city"),

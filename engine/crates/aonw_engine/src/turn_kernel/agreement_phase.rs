@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use aonw_content::RulesetDefinition;
 use aonw_domain::{
-    Diplomacy, DiplomaticRelationStatus, EconomyAccountChange, EconomyState, GameState, PlayerId,
-    PlayerPair, ResourceTradeAgreement, ResourceType,
+    DiplomacyState, DiplomaticRelationStatus, EconomyAccountChange, EconomyState, GameState,
+    PlayerId, PlayerPair, ResourceTradeAgreement, ResourceType,
 };
 
 use crate::DiplomacyError;
@@ -12,9 +12,9 @@ use crate::diplomacy::support::effective_relation;
 pub(super) fn settle_resource_trades(
     state: &GameState,
     ruleset: &RulesetDefinition,
-    diplomacy: Diplomacy,
+    diplomacy: DiplomacyState,
     scope: &[PlayerId],
-) -> Result<(EconomyState, Diplomacy), DiplomacyError> {
+) -> Result<(EconomyState, DiplomacyState), DiplomacyError> {
     if scope.is_empty() || diplomacy.resource_trade_agreements().is_empty() {
         return Ok((state.economy().clone(), diplomacy));
     }
@@ -79,7 +79,7 @@ fn has_gold_for_every_leg(
         .all(|(player, amount)| economy.player_gold().get(&player).copied().unwrap_or(0) >= amount))
 }
 
-fn routes_allow_every_leg(diplomacy: &Diplomacy, group: &[ResourceTradeAgreement]) -> bool {
+fn routes_allow_every_leg(diplomacy: &DiplomacyState, group: &[ResourceTradeAgreement]) -> bool {
     group.iter().all(|agreement| {
         PlayerPair::new(
             agreement.exporter_player_id().clone(),
@@ -124,7 +124,7 @@ fn has_stock_for_every_leg(
 fn transfer_group(
     state: &GameState,
     ruleset: &RulesetDefinition,
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     economy: &EconomyState,
     group: &[ResourceTradeAgreement],
 ) -> Result<EconomyState, DiplomacyError> {

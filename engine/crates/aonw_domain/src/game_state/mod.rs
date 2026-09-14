@@ -1,3 +1,4 @@
+pub(crate) mod city_update;
 mod error;
 pub(crate) mod turn_update;
 mod validation;
@@ -5,10 +6,10 @@ mod validation;
 pub use error::GameStateBuildError;
 
 use crate::{
-    ArtifactId, City, CityId, CombatState, Diplomacy, EconomyState, FieldImprovement, FogOfWar,
-    GameOutcome, HexCoord, HexGridBounds, InfrastructureState, InteractionState, KnowledgeState,
-    MatchLifecycle, ObjectiveState, PlayerId, ResearchState, StateRevision, TransportNetwork, Unit,
-    UnitId, WonderRegistry, WorldArtifact,
+    ArtifactId, City, CityId, CombatState, DiplomacyState, EconomyState, FieldImprovement,
+    FogOfWarState, GameOutcome, HexCoord, HexGridBounds, InfrastructureState, InteractionState,
+    KnowledgeState, MatchLifecycle, ObjectiveState, PlayerId, ResearchState, StateRevision,
+    TransportNetwork, Unit, UnitId, WonderRegistry, WorldArtifact,
 };
 use validation::{
     city_territory_indices, unit_position_indices, validate_artifact_ids, validate_artifacts,
@@ -53,8 +54,8 @@ pub struct GameState {
     city_territory_indices: Box<[(HexCoord, usize)]>,
     artifacts: Box<[WorldArtifact]>,
     interaction: InteractionState,
-    fog_of_war: FogOfWar,
-    diplomacy: Diplomacy,
+    fog_of_war: FogOfWarState,
+    diplomacy: DiplomacyState,
     infrastructure: InfrastructureState,
 }
 
@@ -76,8 +77,8 @@ pub struct GameStateBuilder {
     cities: Vec<City>,
     artifacts: Vec<WorldArtifact>,
     interaction: InteractionState,
-    fog_of_war: FogOfWar,
-    diplomacy: Diplomacy,
+    fog_of_war: FogOfWarState,
+    diplomacy: DiplomacyState,
     infrastructure: InfrastructureState,
 }
 
@@ -104,8 +105,8 @@ impl GameStateBuilder {
             cities: Vec::new(),
             artifacts: Vec::new(),
             interaction: InteractionState::default(),
-            fog_of_war: FogOfWar::default(),
-            diplomacy: Diplomacy::default(),
+            fog_of_war: FogOfWarState::default(),
+            diplomacy: DiplomacyState::default(),
             infrastructure: InfrastructureState::default(),
         }
     }
@@ -165,13 +166,13 @@ impl GameStateBuilder {
     }
 
     /// Replaces the default fog state.
-    pub fn with_fog_of_war(mut self, value: FogOfWar) -> Self {
+    pub fn with_fog_of_war(mut self, value: FogOfWarState) -> Self {
         self.fog_of_war = value;
         self
     }
 
     /// Replaces the default diplomacy state.
-    pub fn with_diplomacy(mut self, value: Diplomacy) -> Self {
+    pub fn with_diplomacy(mut self, value: DiplomacyState) -> Self {
         self.diplomacy = value;
         self
     }
@@ -301,7 +302,7 @@ impl GameState {
         GameStateBuilder::new(revision, turn, bounds, occupancy_policy, units)
     }
 
-    /// Validates map bounds, unique identifiers and one-unit occupancy.
+    /// Validates map bounds, unique identifiers, and occupancy under the selected policy.
     ///
     /// # Errors
     ///
@@ -325,8 +326,8 @@ impl GameState {
     pub fn into_started_match(
         self,
         match_lifecycle: MatchLifecycle,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
     ) -> Result<Self, GameStateBuildError> {
         self.into_builder()
             .with_match_lifecycle(match_lifecycle)
@@ -417,12 +418,12 @@ impl GameState {
     }
     /// Returns canonical fog state.
     #[must_use]
-    pub const fn fog_of_war(&self) -> &FogOfWar {
+    pub const fn fog_of_war(&self) -> &FogOfWarState {
         &self.fog_of_war
     }
     /// Returns canonical diplomacy state.
     #[must_use]
-    pub const fn diplomacy(&self) -> &Diplomacy {
+    pub const fn diplomacy(&self) -> &DiplomacyState {
         &self.diplomacy
     }
     /// Returns canonical transport infrastructure.
@@ -525,8 +526,8 @@ impl GameState {
         &self,
         revision: StateRevision,
         unit: Unit,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
     ) -> Result<Self, GameStateBuildError> {
         self.clone()
             .into_after_movement(revision, unit, fog_of_war, diplomacy)
@@ -541,8 +542,8 @@ impl GameState {
         self,
         revision: StateRevision,
         unit: Unit,
-        fog_of_war: FogOfWar,
-        diplomacy: Diplomacy,
+        fog_of_war: FogOfWarState,
+        diplomacy: DiplomacyState,
     ) -> Result<Self, GameStateBuildError> {
         let index = self
             .units

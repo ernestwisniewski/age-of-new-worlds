@@ -1,7 +1,7 @@
 use aonw_domain::{
-    CombatState, Diplomacy, DiplomacyStateUpdate, DiplomaticRelation, DiplomaticRelationStatus,
-    DiplomaticScoreChangeReason, DiplomaticScoreEntry, EconomyState, GameState, MatchIdentity,
-    PlayerId, PlayerPair,
+    CombatState, DiplomacyState, DiplomacyStateUpdate, DiplomaticRelation,
+    DiplomaticRelationStatus, DiplomaticScoreChangeReason, DiplomaticScoreEntry, EconomyState,
+    GameState, MatchIdentity, PlayerId, PlayerPair,
 };
 
 use super::{DiplomacyError, DiplomacyMutation};
@@ -9,14 +9,14 @@ use crate::{CommandRejectionCode, DomainEvent, EngineContext};
 
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn adjust_score(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     identity: &MatchIdentity,
     pair: &PlayerPair,
     turn: u32,
     delta: i64,
     reason: DiplomaticScoreChangeReason,
     source_id: Option<&str>,
-) -> Result<(Diplomacy, DiplomaticScoreEntry), DiplomacyError> {
+) -> Result<(DiplomacyState, DiplomaticScoreEntry), DiplomacyError> {
     let (status, current) = effective_relation(diplomacy, pair);
     let current_relation = diplomacy.relation_between(pair.first(), pair.second());
     let score_after = current.saturating_add(delta).clamp(-100, 100);
@@ -42,7 +42,7 @@ pub(crate) fn adjust_score(
 }
 
 pub(crate) fn effective_relation(
-    diplomacy: &Diplomacy,
+    diplomacy: &DiplomacyState,
     pair: &PlayerPair,
 ) -> (DiplomaticRelationStatus, i64) {
     diplomacy
@@ -54,7 +54,7 @@ pub(crate) fn effective_relation(
 
 pub(super) fn mutation(
     state: &GameState,
-    diplomacy: Diplomacy,
+    diplomacy: DiplomacyState,
     economy: EconomyState,
     combat: CombatState,
     events: impl IntoIterator<Item = DomainEvent>,

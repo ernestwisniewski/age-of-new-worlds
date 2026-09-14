@@ -2,11 +2,11 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    City, FogOfWar, GameMode, GameState, InfrastructureState, InteractionState, KnowledgeState,
-    MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant, PlayerCountry,
-    PlayerFog, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState, ResearchState,
-    StateRevision, TechnologyId, TransportNetwork, TurnLifecycle, Unit, UnitId, UnitKind,
-    UnitOccupancyPolicy, WonderRegistry,
+    City, FogOfWarState, GameMode, GameState, InfrastructureState, InteractionState,
+    KnowledgeState, MatchIdentity, MatchLifecycle, MatchRules, MovementUnits, Participant,
+    PlayerCountry, PlayerFogState, PlayerId, PlayerKind, PlayerResearchState, PlayerTurnState,
+    ResearchState, StateRevision, TechnologyId, TransportNetwork, TurnLifecycle, Unit, UnitId,
+    UnitKind, UnitOccupancyPolicy, WonderRegistry,
 };
 
 pub(super) fn map(width: u16, height: u16) -> MapDefinition {
@@ -83,11 +83,11 @@ pub(super) fn state(
     }))
     .expect("research state");
     let visible = coordinates(map.bounds().cols(), map.bounds().rows()).collect::<Vec<_>>();
-    let fog = FogOfWar::try_new(
+    let fog = FogOfWarState::try_new(
         players
             .iter()
             .cloned()
-            .map(|player| PlayerFog::new(player, [], visible.iter().copied())),
+            .map(|player| PlayerFogState::new(player, [], visible.iter().copied())),
     )
     .expect("fog");
     GameState::builder(

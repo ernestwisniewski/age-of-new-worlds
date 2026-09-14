@@ -384,6 +384,8 @@ fn occupied_target_uses_deterministic_approach_policy() {
 
     assert_eq!(plan.target(), HexCoord::new(2, 1));
     assert_eq!(plan.destination(), HexCoord::new(1, 0));
+    assert!(plan.destination_reachable_this_turn());
+    assert!(!plan.target_reachable_this_turn());
 }
 
 #[test]

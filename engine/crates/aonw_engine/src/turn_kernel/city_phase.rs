@@ -3,6 +3,9 @@ use aonw_domain::{CityId, GameState, PlayerId};
 
 use crate::{CanonicalEngineError, DomainEvent};
 
+#[cfg(test)]
+mod tests;
+
 pub(super) struct CityPhase {
     pub(super) state: GameState,
     pub(super) events: Vec<DomainEvent>,
@@ -25,17 +28,12 @@ pub(super) fn advance_city_phase(
         });
     };
     let crate::city::CityFoundingTurnUpdate {
-        units,
-        cities,
-        fog_of_war,
-        diplomacy,
+        state: update,
         events,
         founded_city_ids,
     } = update;
-    let revision = state.revision();
-    let interaction = state.interaction().clone();
     let state = state
-        .into_after_city(revision, units, cities, interaction, fog_of_war, diplomacy)
+        .into_after_city_founding(update)
         .map_err(CanonicalEngineError::State)?;
     Ok(CityPhase {
         state,

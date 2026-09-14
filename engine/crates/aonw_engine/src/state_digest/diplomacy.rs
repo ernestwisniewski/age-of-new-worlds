@@ -1,12 +1,12 @@
 use aonw_domain::{
-    Diplomacy, DiplomaticMessageCategory, DiplomaticMessageResponse, DiplomaticMessageTopic,
+    DiplomacyState, DiplomaticMessageCategory, DiplomaticMessageResponse, DiplomaticMessageTopic,
     DiplomaticProposalKind, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
     DiplomaticScoreChangeReason,
 };
 
 use super::{economy::resource_tag, writer::DigestWriter};
 
-pub(super) fn hash_diplomacy(writer: &mut DigestWriter, state: &Diplomacy) {
+pub(super) fn hash_diplomacy(writer: &mut DigestWriter, state: &DiplomacyState) {
     writer.usize(state.contacts().len());
     for pair in state.contacts() {
         hash_pair(writer, pair);

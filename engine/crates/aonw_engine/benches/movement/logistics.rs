@@ -3,7 +3,7 @@ use std::hint::black_box;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    City, CityId, FogOfWar, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle,
+    City, CityId, FogOfWarState, GameMode, GameState, HexCoord, MatchIdentity, MatchLifecycle,
     MatchRules, MovementUnits, Participant, PlayerCountry, PlayerId, PlayerKind, PlayerTurnState,
     StateRevision, TurnLifecycle, Unit, UnitId, UnitKind, UnitOccupancyPolicy,
 };
@@ -217,7 +217,7 @@ fn state(cols: u16, rows: u16, actor: &PlayerId, units: Vec<Unit>, cities: Vec<C
         units,
     )
     .with_cities(cities)
-    .with_fog_of_war(FogOfWar::default())
+    .with_fog_of_war(FogOfWarState::default())
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()
     .expect("state")

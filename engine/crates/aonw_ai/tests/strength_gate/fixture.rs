@@ -2,9 +2,9 @@ use std::collections::BTreeMap;
 
 use aonw_content::{GridLayout, MapDefinition, RulesetDefinition, TerrainType, TileDefinition};
 use aonw_domain::{
-    Diplomacy, DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
-    FogOfWar, GameMode, GameState, HexCoord, KnowledgeState, MatchIdentity, MatchLifecycle,
-    MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFog, PlayerId, PlayerKind,
+    DiplomacyState, DiplomaticRelation, DiplomaticRelationChangeReason, DiplomaticRelationStatus,
+    FogOfWarState, GameMode, GameState, HexCoord, KnowledgeState, MatchIdentity, MatchLifecycle,
+    MatchRules, MovementUnits, Participant, PlayerCountry, PlayerFogState, PlayerId, PlayerKind,
     PlayerPair, PlayerResearchState, PlayerTurnState, ResearchState, StateRevision, TechnologyId,
     TurnLifecycle, Unit, UnitId, UnitKind, WonderRegistry,
 };
@@ -47,7 +47,7 @@ pub(super) fn opened(case: &StrengthCase) -> LocalRuntime {
         Some(DiplomaticRelationChangeReason::DeclarationOfWar),
     )
     .expect("war relation");
-    let diplomacy = Diplomacy::try_new(&identity, [pair], [relation], [], [], [], [])
+    let diplomacy = DiplomacyState::try_new(&identity, [pair], [relation], [], [], [], [])
         .expect("strength diplomacy");
     let research = ResearchState::try_new([
         (
@@ -67,9 +67,9 @@ pub(super) fn opened(case: &StrengthCase) -> LocalRuntime {
         .iter()
         .map(TileDefinition::coordinate)
         .collect::<Vec<_>>();
-    let fog = FogOfWar::try_new([
-        PlayerFog::new(actor.clone(), [], visible.iter().copied()),
-        PlayerFog::new(opponent.clone(), [], visible.iter().copied()),
+    let fog = FogOfWarState::try_new([
+        PlayerFogState::new(actor.clone(), [], visible.iter().copied()),
+        PlayerFogState::new(opponent.clone(), [], visible.iter().copied()),
     ])
     .expect("strength visibility");
     let state = GameState::builder(

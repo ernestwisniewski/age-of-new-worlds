@@ -1,5 +1,6 @@
 use aonw_domain::{
-    CityId, Diplomacy, FogOfWar, HexCoord, InteractionState, StateRevision, TroopKind, Unit, UnitId,
+    CityId, DiplomacyState, FogOfWarState, HexCoord, InteractionState, StateRevision, TroopKind,
+    Unit, UnitId,
 };
 
 use super::MovementSearchMetrics;
@@ -304,8 +305,8 @@ impl std::error::Error for MovementLogisticsError {}
 pub(crate) struct MovementLogisticsUpdate {
     pub(crate) revision: StateRevision,
     pub(crate) units: Vec<Unit>,
-    pub(crate) fog_of_war: FogOfWar,
-    pub(crate) diplomacy: Diplomacy,
+    pub(crate) fog_of_war: FogOfWarState,
+    pub(crate) diplomacy: DiplomacyState,
     pub(crate) interaction: InteractionState,
     pub(crate) events: Box<[DomainEvent]>,
     pub(crate) evidence: LogisticsExecution,

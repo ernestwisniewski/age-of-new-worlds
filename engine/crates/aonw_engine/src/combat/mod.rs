@@ -15,7 +15,7 @@ pub use threat::unit_threatened_hexes;
 
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
-    CombatBatchStepUpdate, CombatState, Diplomacy, DiplomacyStateBuildError, FogOfWar,
+    CombatBatchStepUpdate, CombatState, DiplomacyState, DiplomacyStateBuildError, FogOfWarState,
     FogVisibility, GameState, HexCoord, MovementUnits, PlayerId, StateRevision, Unit,
     WorldArtifact,
 };
@@ -33,8 +33,8 @@ pub(crate) struct CombatUpdate {
     pub cities: Vec<aonw_domain::City>,
     pub artifacts: Vec<WorldArtifact>,
     pub combat: CombatState,
-    pub fog_of_war: FogOfWar,
-    pub diplomacy: Diplomacy,
+    pub fog_of_war: FogOfWarState,
+    pub diplomacy: DiplomacyState,
     pub events: Box<[DomainEvent]>,
     pub evidence: CombatExecution,
 }

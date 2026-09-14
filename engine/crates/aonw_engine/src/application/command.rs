@@ -119,10 +119,10 @@ pub enum PlayerCommand<'command> {
 impl GameEngine {
     /// Applies a command while reusing owned canonical-state storage.
     ///
-    /// # Errors
+    /// `Ok` includes rejections with unchanged state; check [`DomainTransition::is_accepted`].
     ///
-    /// Returns an error only when canonical state or an engine-produced update
-    /// violates internal invariants.
+    /// # Errors
+    /// Returns an error when canonical state or an engine-produced update violates invariants.
     #[allow(clippy::too_many_lines)]
     pub fn apply_player_owned(
         state: GameState,

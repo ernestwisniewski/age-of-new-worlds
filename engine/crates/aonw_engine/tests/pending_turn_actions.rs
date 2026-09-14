@@ -1,9 +1,9 @@
 //! Manual turn-work ordering and recipient disclosure from the reference turn reducer.
 use aonw_content::RulesetDefinition;
 use aonw_domain::{
-    City, CityProductionQueue, CityProductionTarget, FogOfWar, GameState, HexCoord,
-    InteractionState, KnowledgeState, MovementStep, MovementUnits, PlayerFog, PlayerResearchState,
-    QueuedMovePath, ResearchState, UnitKind, WonderRegistry,
+    City, CityProductionQueue, CityProductionTarget, FogOfWarState, GameState, HexCoord,
+    InteractionState, KnowledgeState, MovementStep, MovementUnits, PlayerFogState,
+    PlayerResearchState, QueuedMovePath, ResearchState, UnitKind, WonderRegistry,
 };
 use aonw_engine::{
     EngineContext, GameEngine, PendingTurnAction, PendingTurnActions, PendingTurnActionsError,
@@ -74,13 +74,13 @@ fn hidden_foreign_units_cannot_reorder_manual_work() {
     );
     let hidden = rebuild(
         &world,
-        FogOfWar::try_new([
-            PlayerFog::new(
+        FogOfWarState::try_new([
+            PlayerFogState::new(
                 actor.clone(),
                 [],
                 [HexCoord::new(0, 0), HexCoord::new(12, 0)],
             ),
-            PlayerFog::new(player("player-2"), [], []),
+            PlayerFogState::new(player("player-2"), [], []),
         ])
         .expect("fog"),
         ResearchState::default(),
@@ -91,9 +91,9 @@ fn hidden_foreign_units_cannot_reorder_manual_work() {
     );
     let visible = rebuild(
         &world,
-        FogOfWar::try_new([
-            PlayerFog::new(actor, [], [HexCoord::new(13, 0)]),
-            PlayerFog::new(player("player-2"), [], []),
+        FogOfWarState::try_new([
+            PlayerFogState::new(actor, [], [HexCoord::new(13, 0)]),
+            PlayerFogState::new(player("player-2"), [], []),
         ])
         .expect("fog"),
         ResearchState::default(),
@@ -193,7 +193,7 @@ fn research_is_absent_when_active_or_no_technology_remains_available() {
     ] {
         let changed = rebuild(
             &world,
-            FogOfWar::default(),
+            FogOfWarState::default(),
             ResearchState::try_new([(actor.clone(), research)]).expect("research"),
         );
         let result = inspect(&changed, &map);
@@ -320,7 +320,7 @@ fn city(id: &str, owner: &str, position: HexCoord, busy: bool) -> City {
         .build()
         .expect("city")
 }
-fn rebuild(world: &GameState, fog: FogOfWar, research: ResearchState) -> GameState {
+fn rebuild(world: &GameState, fog: FogOfWarState, research: ResearchState) -> GameState {
     builder(world)
         .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
         .with_fog_of_war(fog)
