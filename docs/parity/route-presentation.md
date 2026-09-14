@@ -42,3 +42,11 @@ changes 22 client JSON response signatures; all non-JSON signatures, sample
 floors and allocation, byte, payload and work ceilings remain unchanged. The
 native route probe exercises 39 segments and 38 turn boundaries while checking
 cached geometry, six walking frames and a stopped animation after disable.
+
+The September 19 macOS profile capture is recorded in
+`clients/aonw_flutter/performance/flame_route_baseline.json`: build/raster p99
+0.927/3.438 ms, no missed frame budgets, RSS growth 138,084,352 bytes, no geometry
+rebuilds and no updates after disabling animation. These pass the existing
+16.667 ms and 192 MiB limits. The subsequent city-production scenario failed
+its frame-time limit (build/raster p99 62.769/101.014 ms); this capture establishes
+route performance only, not a pass for the entire native performance suite.
