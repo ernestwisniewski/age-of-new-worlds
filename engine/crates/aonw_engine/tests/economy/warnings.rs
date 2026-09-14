@@ -36,9 +36,10 @@ fn stockpile_warnings_use_only_the_recipients_unlocked_production() {
         strategic_resource_shortages(&state, EngineContext::canonical(&first, &map, rules)).count(),
         0
     );
+    // Combustion unlocks extraction, while the Oil-consuming tank requires MassProduction.
     assert_eq!(
         strategic_resource_shortages(&state, EngineContext::canonical(&second, &map, rules))
             .collect::<Vec<_>>(),
-        [ResourceType::Oil, ResourceType::Aluminium]
+        [ResourceType::Aluminium]
     );
 }
