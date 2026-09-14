@@ -47,8 +47,8 @@ edges, excluding city–city edges, pillaged roads and hidden foreign nodes.
 Air and naval units never acquire road styling. The client validates sorted,
 unique, in-range indices and copies them without inferring movement rules.
 
-The engine performance review covers all 210 existing workloads. Client API 26
-changes 22 client JSON response signatures; all non-JSON signatures, sample
+The engine performance review covers all 210 existing workloads. Client API 27
+changes only the same 22 client JSON response signatures; all non-JSON signatures, sample
 floors and allocation, byte, payload and work ceilings remain unchanged. The
 native route probe exercises 39 segments and 38 turn boundaries while checking
 cached geometry, six walking frames and a stopped animation after disable.
