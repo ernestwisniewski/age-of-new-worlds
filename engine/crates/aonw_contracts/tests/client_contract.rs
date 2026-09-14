@@ -9,7 +9,7 @@ use aonw_contracts::client::{
     ClientRequestDto, ClientResponseBodyDto, ClientResponseDto, FieldImprovementViewDto,
     MovementSearchMetricsDto, MovementStepViewDto, PendingActionViewDto, PlayerDiplomacyViewDto,
     PlayerFogViewDto, PlayerParticipantViewDto, PlayerTurnLifecycleViewDto, PlayerViewPatchDto,
-    PlayerViewSnapshotDto, ReachableTileViewDto,
+    PlayerViewSnapshotDto,
 };
 use aonw_contracts::{
     FieldImprovementKindDto, GameOutcomeConditionDto, GameOutcomeDto, PlayerCountryDto,
@@ -22,6 +22,8 @@ mod artifact_contract;
 mod diplomacy_contract;
 #[path = "client_contract/economy.rs"]
 mod economy_contract;
+#[path = "client_contract/movement.rs"]
+mod movement_contract;
 #[path = "client_contract/objective.rs"]
 mod objective_contract;
 #[path = "client_contract/observation.rs"]
@@ -354,6 +356,7 @@ fn logistics_requests() -> [ClientRequestBodyDto; 4] {
 fn every_response_variant_round_trips() {
     let responses = core_response_variants()
         .into_iter()
+        .chain(movement_contract::responses())
         .chain(economy_contract::responses())
         .chain([research_contract::response()])
         .chain(remaining_response_variants());
@@ -389,7 +392,6 @@ fn every_response_variant_round_trips() {
 }
 
 fn core_response_variants() -> Vec<ClientResponseBodyDto> {
-    let query_stamp = stamp();
     vec![
         ClientResponseBodyDto::Capabilities {
             features: vec![ClientFeatureDto::Snapshot, ClientFeatureDto::MoveUnit],
@@ -398,38 +400,6 @@ fn core_response_variants() -> Vec<ClientResponseBodyDto> {
         ClientResponseBodyDto::SessionClosed,
         ClientResponseBodyDto::Snapshot {
             snapshot: player_snapshot(),
-        },
-        ClientResponseBodyDto::Query {
-            result: ClientQueryResultDto::Reachable {
-                stamp: query_stamp.clone(),
-                unit_id: "unit-1".to_owned(),
-                available_movement_units: 8,
-                can_start_targeting: true,
-                can_retain_targeting: true,
-                tiles: vec![ReachableTileViewDto {
-                    coordinate: coordinate(4, 4),
-                    cost_units: 2,
-                    exhausts_movement: false,
-                }],
-            },
-        },
-        ClientResponseBodyDto::Query {
-            result: ClientQueryResultDto::RoutePlan {
-                stamp: query_stamp,
-                unit_id: "unit-1".to_owned(),
-                target: coordinate(4, 4),
-                destination: coordinate(4, 4),
-                total_cost_units: 2,
-                available_movement_units: 8,
-                remaining_movement_units: 6,
-                estimated_turns: 1,
-                step_turns: vec![1],
-                steps: vec![MovementStepViewDto {
-                    coordinate: coordinate(4, 4),
-                    enter_cost_units: 2,
-                    cumulative_cost_units: 2,
-                }],
-            },
         },
     ]
 }
