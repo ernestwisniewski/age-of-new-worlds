@@ -96,7 +96,7 @@ pub use movement::{
     MovementVisibility, ReachableMovement, ReachableMovementQuery, ReachableMovementTile,
     TerrainMovementPlan, TerrainMovementQuery, TerrainMovementQueryError, UnitLogisticsOptions,
     UnitLogisticsOptionsQuery, UnitMovedEvent, UnitMovementExecution, maximum_movement_units,
-    stored_route_step_turns, terrain_entry_cost,
+    route_road_step_indices, stored_route_step_turns, terrain_entry_cost,
 };
 pub use outcome::{
     CulturalVictoryProgress, DominationVictoryProgress, MapObjectiveProgress,

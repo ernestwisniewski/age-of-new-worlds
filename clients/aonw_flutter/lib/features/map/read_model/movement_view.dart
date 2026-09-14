@@ -62,8 +62,10 @@ final class RoutePlanView {
     required this.estimatedTurns,
     required List<int> stepTurns,
     required List<MovementStepView> steps,
+    required Iterable<int> roadStepIndices,
   }) : steps = List.unmodifiable(steps),
-       stepTurns = List.unmodifiable(stepTurns);
+       stepTurns = List.unmodifiable(stepTurns),
+       roadStepIndices = Set.unmodifiable(roadStepIndices);
 
   final SessionStampView stamp;
   final String unitId;
@@ -74,6 +76,7 @@ final class RoutePlanView {
   final int remainingMovementUnits;
   final int estimatedTurns;
   final List<int> stepTurns;
+  final Set<int> roadStepIndices;
   final List<MovementStepView> steps;
 }
 

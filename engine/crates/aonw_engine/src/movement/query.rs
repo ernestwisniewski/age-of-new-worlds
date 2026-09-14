@@ -39,6 +39,7 @@ pub struct TerrainMovementPlan {
     remaining_movement: MovementUnits,
     estimated_turns: u32,
     maximum_movement: MovementUnits,
+    uses_roads: bool,
     furthest_reachable_step_index: usize,
     steps: Box<[MovementStep]>,
     search_metrics: MovementSearchMetrics,
@@ -108,6 +109,23 @@ impl TerrainMovementPlan {
     /// that exhausts a positive remainder still belongs to that turn.
     pub fn step_turns(&self) -> impl Iterator<Item = u32> + '_ {
         route_step_turns(&self.steps, self.available_movement, self.maximum_movement)
+    }
+
+    /// Returns destination indices charged the canonical land-road entry cost.
+    /// Terrain entry costs are at least one full point; only operational road
+    /// edges use half a point, as established by the shared movement cost rule.
+    pub fn road_step_indices(&self) -> impl Iterator<Item = u32> + '_ {
+        self.steps
+            .iter()
+            .enumerate()
+            .skip(1)
+            .filter_map(|(index, step)| {
+                if self.uses_roads && step.enter_cost() == MovementUnits::new(1) {
+                    u32::try_from(index).ok()
+                } else {
+                    None
+                }
+            })
     }
 
     /// Returns deterministic search work counters.
@@ -328,6 +346,7 @@ pub(crate) fn plan_route_for_unit(
         remaining_movement,
         estimated_turns,
         maximum_movement,
+        uses_roads: super::route_roads::unit_uses_roads(context.ruleset(), unit),
         furthest_reachable_step_index,
         steps: steps.into_boxed_slice(),
         search_metrics,

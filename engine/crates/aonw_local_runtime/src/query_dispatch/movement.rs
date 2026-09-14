@@ -62,6 +62,8 @@ pub struct RoutePlanResult {
     pub estimated_turns: u32,
     /// Calendar turn of each step, including origin turn one.
     pub step_turns: Box<[u32]>,
+    /// Destination-step indices of recipient-known operational road edges.
+    pub road_step_indices: Box<[u32]>,
     /// Ordered route including the origin.
     pub steps: Box<[MovementStepView]>,
 }

@@ -100,6 +100,7 @@ RoutePlanView testRoutePlanView({
   MapHexCoordinate origin = (col: 0, row: 0),
   MapHexCoordinate target = (col: 1, row: 0),
 }) => RoutePlanView(
+  roadStepIndices: const [],
   stamp: testSessionStamp(),
   unitId: unitId,
   target: target,

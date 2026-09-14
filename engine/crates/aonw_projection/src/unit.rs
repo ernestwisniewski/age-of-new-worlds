@@ -1,3 +1,8 @@
+mod route;
+#[cfg(test)]
+mod route_tests;
+pub use route::OwnedRouteView;
+
 use aonw_content::MapDefinition;
 use aonw_domain::{
     ArmyTroop, ArtifactId, FogVisibility, GameState, HexCoord, MerchantTradeRoute, PlayerId,
@@ -8,8 +13,8 @@ use aonw_domain::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OwnedUnitDetailsView {
     army: Box<[ArmyTroop]>,
-    queued_path: Option<QueuedMovePath>,
-    merchant_trade_route: Option<MerchantTradeRoute>,
+    queued_path: Option<Box<OwnedRouteView<QueuedMovePath>>>,
+    merchant_trade_route: Option<Box<OwnedRouteView<MerchantTradeRoute>>>,
     activity: UnitActivity,
     worker_build_charges: u32,
     experience_points: u32,
@@ -23,13 +28,13 @@ impl OwnedUnitDetailsView {
     }
     /// Returns the persisted manual route.
     #[must_use]
-    pub const fn queued_path(&self) -> Option<&QueuedMovePath> {
-        self.queued_path.as_ref()
+    pub fn queued_path(&self) -> Option<&OwnedRouteView<QueuedMovePath>> {
+        self.queued_path.as_deref()
     }
     /// Returns the persisted merchant route.
     #[must_use]
-    pub const fn merchant_trade_route(&self) -> Option<&MerchantTradeRoute> {
-        self.merchant_trade_route.as_ref()
+    pub fn merchant_trade_route(&self) -> Option<&OwnedRouteView<MerchantTradeRoute>> {
+        self.merchant_trade_route.as_deref()
     }
     /// Returns all mutually exclusive and independent activity slots.
     #[must_use]
@@ -91,8 +96,12 @@ impl PlayerUnitView {
             threatened_hexes: Box::default(),
             owned_details: disclose_worker.then(|| OwnedUnitDetailsView {
                 army: unit.army().to_vec().into_boxed_slice(),
-                queued_path: unit.queued_path().cloned(),
-                merchant_trade_route: unit.merchant_trade_route().cloned(),
+                queued_path: unit.queued_path().and_then(|route| {
+                    OwnedRouteView::new(state, ruleset, unit, route.clone(), route.steps())
+                }),
+                merchant_trade_route: unit.merchant_trade_route().and_then(|route| {
+                    OwnedRouteView::new(state, ruleset, unit, route.clone(), route.steps())
+                }),
                 activity: unit.activity().clone(),
                 worker_build_charges: unit.worker_build_charges(),
                 experience_points: unit.experience_points(),

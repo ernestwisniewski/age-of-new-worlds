@@ -32,6 +32,7 @@ pub(super) fn responses() -> Vec<ClientResponseBodyDto> {
                 remaining_movement_units: 6,
                 estimated_turns: 1,
                 step_turns: vec![1],
+                road_step_indices: vec![],
                 steps: vec![MovementStepViewDto {
                     coordinate: coordinate(4, 4),
                     enter_cost_units: 2,

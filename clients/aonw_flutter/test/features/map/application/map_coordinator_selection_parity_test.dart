@@ -91,6 +91,7 @@ void main() {
 }
 
 RoutePlanView _multiTurnRoute() => RoutePlanView(
+  roadStepIndices: const [],
   stamp: testSessionStamp(),
   unitId: 'preview-commander',
   target: const (col: 3, row: 0),

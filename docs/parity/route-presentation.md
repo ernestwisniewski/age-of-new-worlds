@@ -8,7 +8,7 @@ remainder starts another turn with the unit's engine-defined maximum movement.
 The total estimate and per-step iterator share one implementation; it does not
 allocate an additional step collection or modify the canonical saved path.
 
-Client API 26 requires `stepTurns` in each route-plan response. The local
+Client API 27 requires `stepTurns` and `roadStepIndices` in each route-plan response. The local
 runtime and server query encoder transport the engine iterator unchanged.
 Flutter validates one turn per coordinate, origin turn one, consecutive
 nondecreasing turns and agreement with the total estimate. It retains an
@@ -33,9 +33,19 @@ longer contains the unit returns no timing. This calculation allocates no new
 step collection and changes neither the persisted route nor canonical state.
 It describes stored costs; it does not predict future replanning.
 
-The stored-route timing still needs owner-only projection, transport and renderer
-integration. All routes also need movement-domain road classification. This
-document does not mark route parity complete.
+Stored queue and merchant itineraries now carry this metadata in owner-only
+projection DTOs, separately from persistence DTOs. A route missing the unit's
+current position is omitted. Native save/resume tests verify stable metadata;
+projection tests verify that visible foreign units disclose no private orders.
+The renderer dims the traversed prefix and draws all remaining turn boundaries.
+Both timing and road metadata participate in cache identity.
+
+Rust classifies road destination indices for land units only. Fresh plans expose
+the operational road cost selected by the movement engine. Stored itineraries
+use the current recipient-known network: operational road–road and road–city
+edges, excluding city–city edges, pillaged roads and hidden foreign nodes.
+Air and naval units never acquire road styling. The client validates sorted,
+unique, in-range indices and copies them without inferring movement rules.
 
 The engine performance review covers all 210 existing workloads. Client API 26
 changes 22 client JSON response signatures; all non-JSON signatures, sample

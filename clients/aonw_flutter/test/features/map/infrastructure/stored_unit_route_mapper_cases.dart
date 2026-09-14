@@ -36,6 +36,36 @@ void registerStoredUnitRouteCases(PlayerMapViewMapper mapper) {
     expect(() => read(details, owner: 'player-2'), throwsFormatException);
   });
 
+  test('rejects inconsistent stored turns and road indices', () {
+    for (final turns in [
+      [1],
+      [0, 1],
+      [1, 0],
+      [1, 3],
+    ]) {
+      expect(
+        () => read(_routeDetails(_storedRouteSteps, turns: turns)),
+        throwsFormatException,
+      );
+    }
+    for (final roads in [
+      [0],
+      [2],
+      [1, 1],
+    ]) {
+      expect(
+        () => read(_routeDetails(_storedRouteSteps, roads: roads)),
+        throwsFormatException,
+      );
+    }
+    final route = read(
+      _routeDetails(_storedRouteSteps, roads: [1]),
+    ).units.single.queuedRoute!;
+    expect(route.roadStepIndices, {1});
+    expect(route.stepTurns, [1, 1]);
+    expect(() => route.stepTurns.clear(), throwsUnsupportedError);
+  });
+
   test(
     'rejects missing, displaced, out-of-map and inconsistent route steps',
     () {
@@ -77,10 +107,17 @@ void registerStoredUnitRouteCases(PlayerMapViewMapper mapper) {
 
 AonwOwnedUnitDetails _routeDetails(
   List<AonwPersistedMovementStep> steps, {
+  List<int> turns = const [1, 1],
+  List<int> roads = const [],
   AonwCoordinate target = const AonwCoordinate(col: 1, row: 0),
 }) => AonwOwnedUnitDetails(
   army: const [],
-  queuedPath: AonwQueuedMovePath(target: target, steps: steps),
+  queuedPath: AonwQueuedMovePath(
+    stepTurns: turns,
+    roadStepIndices: roads,
+    target: target,
+    steps: steps,
+  ),
   merchantTradeRoute: null,
   workerJob: null,
   cityFoundingJob: null,

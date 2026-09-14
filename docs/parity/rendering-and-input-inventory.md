@@ -17,9 +17,9 @@ share a target host rather than requiring separate components.
 | --- | --- | --- |
 | Base hex map, reference image, grid | `static_map_layers.dart`, `map_tile_details_layer.dart` | Immutable authored map, viewport and display preferences |
 | UnitMarkerLayer | `unit_map_layer.dart` | Visible unit projection; own details only for recipient |
-| UnitMovePreviewLayer | `map_route_layer.dart` | Rust preview turn boundaries and owned stored routes; stored-route timing awaits projection and transport |
+| UnitMovePreviewLayer | `map_route_layer.dart` | Rust turn boundaries for previews and owner-only stored routes; traversed merchant prefix dimmed |
 | FieldImprovementMarkerLayer | `worker_infrastructure_layer.dart` | Visible improvement type, state and work progress |
-| TransportNetworkLayer | `worker_infrastructure_layer.dart` | Visible road/city nodes; movement-domain segment classification remains open |
+| TransportNetworkLayer | `worker_infrastructure_layer.dart` | Visible road/city nodes; Rust classifies route road edges by movement domain |
 | ArtifactMarkerLayer | `artifact_map_layer.dart` | Visible artifact projection |
 | MapObjectiveMarkerLayer | `objective_map_layer.dart` | Authored objective location and projected progress |
 | CityMarkerLayer | `city_map_layer.dart` | Visible city identity, ownership, population and presentation status |

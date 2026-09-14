@@ -241,7 +241,12 @@ final class AonwPersistedMovementStep {
 }
 
 final class AonwQueuedMovePath {
-  const AonwQueuedMovePath({required this.target, required this.steps});
+  const AonwQueuedMovePath({
+    required this.target,
+    required this.steps,
+    required this.stepTurns,
+    required this.roadStepIndices,
+  });
 
   factory AonwQueuedMovePath.fromJson(Object? source) {
     final value = readObject(source, 'queued movement path');
@@ -249,11 +254,23 @@ final class AonwQueuedMovePath {
       'targetCol',
       'targetRow',
       'steps',
+      'stepTurns',
+      'roadStepIndices',
     }, 'queued movement path');
     return AonwQueuedMovePath(
       target: AonwCoordinate(
         col: readInt(value['targetCol'], 'queued target column'),
         row: readInt(value['targetRow'], 'queued target row'),
+      ),
+      stepTurns: readList(
+        value['stepTurns'],
+        'route step turns',
+        (item, _) => readUnsigned(item, 'route step turn'),
+      ),
+      roadStepIndices: readList(
+        value['roadStepIndices'],
+        'road step indices',
+        (item, _) => readUnsigned(item, 'road step index'),
       ),
       steps: readList(
         value['steps'],
@@ -265,6 +282,8 @@ final class AonwQueuedMovePath {
 
   final AonwCoordinate target;
   final List<AonwPersistedMovementStep> steps;
+  final List<int> stepTurns;
+  final List<int> roadStepIndices;
 }
 
 final class AonwMerchantTradeRoute {
@@ -273,6 +292,8 @@ final class AonwMerchantTradeRoute {
     required this.destinationCityId,
     required this.steps,
     required this.transportNetworkFingerprint,
+    required this.stepTurns,
+    required this.roadStepIndices,
   });
 
   factory AonwMerchantTradeRoute.fromJson(Object? source) {
@@ -282,12 +303,24 @@ final class AonwMerchantTradeRoute {
       'destinationCityId',
       'steps',
       'transportNetworkFingerprint',
+      'stepTurns',
+      'roadStepIndices',
     }, 'merchant trade route');
     return AonwMerchantTradeRoute(
       originCityId: readString(value['originCityId'], 'route origin city'),
       destinationCityId: readString(
         value['destinationCityId'],
         'route destination city',
+      ),
+      stepTurns: readList(
+        value['stepTurns'],
+        'route step turns',
+        (item, _) => readUnsigned(item, 'route step turn'),
+      ),
+      roadStepIndices: readList(
+        value['roadStepIndices'],
+        'road step indices',
+        (item, _) => readUnsigned(item, 'road step index'),
       ),
       steps: readList(
         value['steps'],
@@ -304,6 +337,8 @@ final class AonwMerchantTradeRoute {
   final String originCityId;
   final String destinationCityId;
   final List<AonwPersistedMovementStep> steps;
+  final List<int> stepTurns;
+  final List<int> roadStepIndices;
   final String transportNetworkFingerprint;
 }
 

@@ -43,7 +43,7 @@ pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
 pub use participant::PlayerParticipantView;
 pub use research::{PlayerResearchView, PlayerScienceYieldSourceView};
 pub(crate) use unit::visible_units;
-pub use unit::{OwnedUnitDetailsView, PlayerUnitView};
+pub use unit::{OwnedRouteView, OwnedUnitDetailsView, PlayerUnitView};
 pub use victory::{
     PlayerCulturalVictoryProgressView, PlayerDominationVictoryProgressView,
     PlayerMapObjectiveProgressView, PlayerVictoryView,

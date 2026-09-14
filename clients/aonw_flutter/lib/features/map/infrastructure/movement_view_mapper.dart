@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../read_model/map_view.dart';
 import '../read_model/movement_view.dart';
 import '../read_model/player_map_view.dart';
+import 'route_metadata_validation.dart';
 
 final class MovementViewMapper {
   const MovementViewMapper();
@@ -76,6 +77,7 @@ final class MovementViewMapper {
       estimatedTurns: wire.estimatedTurns,
     );
     _validateStepTurns(wire.stepTurns, steps.length, wire.estimatedTurns);
+    validateRouteRoadIndices(wire.roadStepIndices, steps.length);
     return RoutePlanView(
       stamp: _stamp(wire.stamp),
       unitId: wire.unitId,
@@ -86,6 +88,7 @@ final class MovementViewMapper {
       remainingMovementUnits: wire.remainingMovementUnits,
       estimatedTurns: wire.estimatedTurns,
       stepTurns: wire.stepTurns,
+      roadStepIndices: wire.roadStepIndices,
       steps: steps,
     );
   }

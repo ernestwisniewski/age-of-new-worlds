@@ -352,6 +352,7 @@ void main() {
           'remainingMovementUnits': 0,
           'estimatedTurns': 1,
           'stepTurns': [1],
+          'roadStepIndices': <int>[],
           'steps': [
             {
               'coordinate': {'col': 3, 'row': 2},

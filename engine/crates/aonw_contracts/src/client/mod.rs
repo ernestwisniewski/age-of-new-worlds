@@ -26,15 +26,15 @@ pub use response::{
     DominationVictoryProgressDto, EconomyForecastDto, FieldImprovementViewDto, GoldIncomeSourceDto,
     HexAssessmentKindDto, HexAssessmentScoreDto, HexAssessmentTagDto, HexImprovementAccessDto,
     HexImprovementOptionDto, HexInspectionDto, HexRecommendationDto, MapObjectiveProgressDto,
-    MerchantDestinationOptionDto, MovementSearchMetricsDto, MovementStepViewDto,
-    OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto, PendingTurnActionDto,
-    PlayerArtifactLocationViewDto, PlayerArtifactViewDto, PlayerCityViewDto,
+    MerchantDestinationOptionDto, MerchantRouteViewDto, MovementSearchMetricsDto,
+    MovementStepViewDto, OwnedCityDetailsViewDto, OwnedUnitDetailsViewDto, PendingActionViewDto,
+    PendingTurnActionDto, PlayerArtifactLocationViewDto, PlayerArtifactViewDto, PlayerCityViewDto,
     PlayerDiplomacyViewDto, PlayerDiplomaticMessageViewDto, PlayerDiplomaticProposalViewDto,
     PlayerDiplomaticRelationViewDto, PlayerEconomyViewDto, PlayerFogViewDto,
     PlayerParticipantViewDto, PlayerResearchViewDto, PlayerResourceTradeAgreementViewDto,
     PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerVictoryViewDto, PlayerViewPatchDto,
-    PlayerViewSnapshotDto, ProductionOptionDto, ReachableTileViewDto, ResearchOptionDto,
-    ResearchRecommendationDto, ResearchRecommendationReasonDto, RoadViewDto,
+    PlayerViewSnapshotDto, ProductionOptionDto, QueuedRouteViewDto, ReachableTileViewDto,
+    ResearchOptionDto, ResearchRecommendationDto, ResearchRecommendationReasonDto, RoadViewDto,
     ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
     StabilityBreakdownDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
     TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto, UnitMovementExecutionDto,
@@ -44,7 +44,7 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 26;
+pub const CLIENT_API_VERSION: u16 = 27;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

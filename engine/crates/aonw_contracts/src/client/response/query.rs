@@ -299,6 +299,8 @@ pub enum ClientQueryResultDto {
         estimated_turns: u32,
         /// Calendar turn of each step; the origin and current turn are one.
         step_turns: Vec<u32>,
+        /// Destination-step indices of recipient-known operational road edges.
+        road_step_indices: Vec<u32>,
         /// Ordered route including the origin.
         steps: Vec<MovementStepViewDto>,
     },

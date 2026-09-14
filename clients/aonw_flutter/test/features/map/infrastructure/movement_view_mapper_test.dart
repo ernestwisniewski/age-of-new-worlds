@@ -63,6 +63,7 @@ void main() {
     );
     final route = mapper.routePlan(
       AonwRoutePlanResult(
+        roadStepIndices: const [],
         stamp: _stamp(),
         unitId: unit.id,
         target: const AonwCoordinate(col: 1, row: 0),
@@ -121,6 +122,7 @@ void main() {
     expect(
       () => mapper.routePlan(
         AonwRoutePlanResult(
+          roadStepIndices: const [],
           stamp: _stamp(),
           unitId: unit.id,
           target: const AonwCoordinate(col: 1, row: 0),

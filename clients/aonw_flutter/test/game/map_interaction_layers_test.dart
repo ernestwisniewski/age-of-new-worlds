@@ -101,6 +101,7 @@ void main() {
         ],
       );
       final route = RoutePlanView(
+        roadStepIndices: const [1],
         stamp: testSessionStamp(),
         unitId: 'preview-commander',
         target: const (col: 3, row: 0),

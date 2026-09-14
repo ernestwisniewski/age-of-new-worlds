@@ -18,73 +18,7 @@ use aonw_server_runtime::{PreparedServerWorld, query_player_dto};
 #[test]
 fn local_and_server_keep_exhausting_steps_in_the_same_calendar_turn() {
     for available in [0, 3, 4] {
-        let map = map();
-        let ruleset = RulesetDefinition::standard().clone();
-        let actor = PlayerId::new("player-1").unwrap();
-        let unit = Unit::builder(
-            UnitId::new("unit-1").unwrap(),
-            actor.clone(),
-            UnitKind::FieldCannon,
-            "Field cannon",
-            HexCoord::new(0, 0),
-            MovementUnits::new(available),
-        )
-        .build()
-        .unwrap();
-        let state = GameState::builder(
-            StateRevision::new(7),
-            1,
-            map.bounds(),
-            ruleset.occupancy_policy(),
-            [unit],
-        )
-        .with_match_lifecycle(support::fixture([]).state.match_lifecycle().clone())
-        .try_build()
-        .unwrap();
-        let canonical = encode_game_state(&state);
-        let world = PreparedServerWorld::try_new(map.clone(), ruleset.clone()).unwrap();
-        let query = ClientQueryDto::RoutePlan {
-            expected_revision: 7,
-            unit_id: "unit-1".into(),
-            target: CoordinateDto { col: 5, row: 0 },
-        };
-        let mut runtime = LocalRuntime::default();
-        runtime
-            .open(OpenSession::from_state(map, ruleset, state, actor))
-            .unwrap();
-        let local = ClientProtocol::dispatch(
-            &mut runtime,
-            ClientRequestDto {
-                api_version: CLIENT_API_VERSION,
-                request: ClientRequestBodyDto::Query {
-                    query: query.clone(),
-                },
-            },
-        );
-        let ClientOutcomeDto::Success { response } = local.outcome else {
-            panic!("local query")
-        };
-        let ClientResponseBodyDto::Query { result } = *response else {
-            panic!("route result")
-        };
-        let server = query_player_dto(
-            world.clone(),
-            PlayerQueryServerRequestDto {
-                api_version: SERVER_HOST_API_VERSION,
-                authenticated_actor_player_id: "player-1".into(),
-                query,
-                map_hash: world.map_hash().to_string(),
-                ruleset_hash: world.ruleset_hash().to_string(),
-                state: canonical,
-            },
-        )
-        .unwrap();
-        assert_eq!(
-            server,
-            ServerPlayerQueryOutcomeDto::Success {
-                result: Box::new(result.clone())
-            }
-        );
+        let result = query(available, UnitKind::FieldCannon, false);
         let ClientQueryResultDto::RoutePlan {
             step_turns,
             estimated_turns,
@@ -101,6 +35,108 @@ fn local_and_server_keep_exhausting_steps_in_the_same_calendar_turn() {
         assert_eq!(step_turns, expected, "available {available}");
         assert_eq!(Some(&estimated_turns), step_turns.last());
     }
+}
+
+#[test]
+fn local_and_server_classify_only_land_road_edges() {
+    for kind in [UnitKind::FieldCannon, UnitKind::ReconPlane] {
+        let ClientQueryResultDto::RoutePlan {
+            road_step_indices, ..
+        } = query(3, kind, true)
+        else {
+            panic!("route")
+        };
+        assert_eq!(
+            road_step_indices,
+            if kind == UnitKind::FieldCannon {
+                vec![1, 2, 3, 4, 5]
+            } else {
+                vec![]
+            }
+        );
+    }
+}
+
+fn query(available: u32, kind: UnitKind, roads: bool) -> ClientQueryResultDto {
+    let map = map();
+    let ruleset = RulesetDefinition::standard().clone();
+    let actor = PlayerId::new("player-1").unwrap();
+    let unit = Unit::builder(
+        UnitId::new("unit-1").unwrap(),
+        actor.clone(),
+        kind,
+        "Field cannon",
+        HexCoord::new(0, 0),
+        MovementUnits::new(available),
+    )
+    .build()
+    .unwrap();
+    let state = GameState::builder(
+        StateRevision::new(7),
+        1,
+        map.bounds(),
+        ruleset.occupancy_policy(),
+        [unit],
+    )
+    .with_match_lifecycle(support::fixture([]).state.match_lifecycle().clone())
+    .with_transport_network(
+        aonw_domain::TransportNetwork::try_new((0..6).filter(|_| roads).map(|col| {
+            aonw_domain::TransportSegment::road(
+                HexCoord::new(col, 0),
+                aonw_domain::TransportCondition::Operational,
+                actor.clone(),
+                None,
+            )
+        }))
+        .unwrap(),
+    )
+    .try_build()
+    .unwrap();
+    let canonical = encode_game_state(&state);
+    let world = PreparedServerWorld::try_new(map.clone(), ruleset.clone()).unwrap();
+    let query = ClientQueryDto::RoutePlan {
+        expected_revision: 7,
+        unit_id: "unit-1".into(),
+        target: CoordinateDto { col: 5, row: 0 },
+    };
+    let mut runtime = LocalRuntime::default();
+    runtime
+        .open(OpenSession::from_state(map, ruleset, state, actor))
+        .unwrap();
+    let local = ClientProtocol::dispatch(
+        &mut runtime,
+        ClientRequestDto {
+            api_version: CLIENT_API_VERSION,
+            request: ClientRequestBodyDto::Query {
+                query: query.clone(),
+            },
+        },
+    );
+    let ClientOutcomeDto::Success { response } = local.outcome else {
+        panic!("local query")
+    };
+    let ClientResponseBodyDto::Query { result } = *response else {
+        panic!("route result")
+    };
+    let server = query_player_dto(
+        world.clone(),
+        PlayerQueryServerRequestDto {
+            api_version: SERVER_HOST_API_VERSION,
+            authenticated_actor_player_id: "player-1".into(),
+            query,
+            map_hash: world.map_hash().to_string(),
+            ruleset_hash: world.ruleset_hash().to_string(),
+            state: canonical,
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        server,
+        ServerPlayerQueryOutcomeDto::Success {
+            result: Box::new(result.clone())
+        }
+    );
+    result
 }
 
 fn map() -> MapDefinition {

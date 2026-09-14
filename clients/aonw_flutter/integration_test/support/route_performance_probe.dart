@@ -120,6 +120,7 @@ MapRenderSnapshot _routeSnapshot(MapRenderSnapshot source) => MapRenderSnapshot(
   interaction: MapInteractionState(
     viewMode: source.interaction.viewMode,
     route: RoutePlanView(
+      roadStepIndices: const [],
       stamp: source.player.stamp,
       unitId: source.player.units.first.id,
       target: (col: 39, row: 0),

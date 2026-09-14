@@ -25,7 +25,9 @@ void main() {
       await layer.debugLoadGhost();
     });
     expect(layer.debugSegmentCount, 7);
-    expect(layer.debugBoundaryCount, 0);
+    expect(layer.debugBoundaryCount, 3);
+    expect(layer.debugCurrentTurnSegmentCount, 0);
+    expect(layer.debugFutureTurnSegmentCount, 7);
     expect(layer.debugTraversedSegmentCount, 0);
     final builds = layer.debugPathBuildCount;
     layer.applyRoute(
@@ -58,6 +60,48 @@ void main() {
       selectedUnitId: 'preview-commander',
     );
     expect(layer.isVisible, isFalse);
+  });
+
+  testWidgets('refreshes stored timing and roads without changed coordinates', (
+    tester,
+  ) async {
+    final scene = storedRouteScene();
+    final cache = MapStaticRenderCache.build(scene.map);
+    final layer = MapRouteLayerComponent();
+    addTearDown(layer.clearLayer);
+    await tester.runAsync(() async {
+      layer.applyRoute(
+        cache,
+        null,
+        scene.player,
+        selectedUnitId: 'preview-commander',
+      );
+      await layer.debugLoadGhost();
+    });
+    final initial = layer.debugPathBuildCount;
+    final changed = storedRouteScene(
+      turns: [1, 1, 2, 2, 3, 3, 4, 4],
+      roads: [1],
+    );
+    layer.applyRoute(
+      cache,
+      null,
+      changed.player,
+      selectedUnitId: 'preview-commander',
+    );
+    expect(layer.debugPathBuildCount, initial + 1);
+    expect(layer.debugCurrentTurnSegmentCount, 1);
+    expect(layer.debugFutureTurnSegmentCount, 6);
+    expect(layer.debugBoundaryCount, 3);
+    expect(layer.debugSegmentFollowsRoad(0), isTrue);
+    expect(layer.debugSegmentFollowsRoad(1), isFalse);
+    layer.applyRoute(
+      cache,
+      null,
+      storedRouteScene(turns: [1, 1, 2, 2, 3, 3, 4, 4], roads: [1]).player,
+      selectedUnitId: 'preview-commander',
+    );
+    expect(layer.debugPathBuildCount, initial + 1);
   });
 
   testWidgets('merchant animation follows only its remaining visible route', (

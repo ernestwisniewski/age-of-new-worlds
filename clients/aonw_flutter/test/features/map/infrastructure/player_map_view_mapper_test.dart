@@ -144,10 +144,14 @@ void main() {
             ownedDetails: const AonwOwnedUnitDetails(
               army: [AonwArmyTroop(kind: AonwTroopKind.archer, count: 2)],
               queuedPath: AonwQueuedMovePath(
+                stepTurns: [1, 1],
+                roadStepIndices: [],
                 target: AonwCoordinate(col: 1, row: 0),
                 steps: _storedRouteSteps,
               ),
               merchantTradeRoute: AonwMerchantTradeRoute(
+                stepTurns: [1, 1],
+                roadStepIndices: [],
                 originCityId: 'city-a',
                 destinationCityId: 'city-b',
                 steps: _storedRouteSteps,

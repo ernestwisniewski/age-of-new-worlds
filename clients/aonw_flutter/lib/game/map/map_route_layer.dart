@@ -10,7 +10,6 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/movement_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
 import '../../features/map/read_model/stored_unit_route_view.dart';
-import '../../features/workers/read_model/worker_view.dart';
 import 'map_canvas_clip.dart';
 import 'map_interaction_geometry.dart';
 import 'map_sprite_catalog.dart';
@@ -40,7 +39,6 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   (String, MapHexCoordinate)? _storedUnit;
   MapStaticRenderIdentity? _identity;
   String? _actor;
-  String? _infrastructureSignature;
   List<_MapRouteSegment> _segments = const [];
   List<ui.Offset> _boundaries = const [];
   _MapRouteStroke? _target;
@@ -72,8 +70,9 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
   int get debugCurrentTurnSegmentCount =>
       _segments.where((segment) => segment.reachable).length;
   @visibleForTesting
-  int get debugFutureTurnSegmentCount =>
-      _segments.where((segment) => !segment.reachable).length;
+  int get debugFutureTurnSegmentCount => _segments
+      .where((segment) => !segment.reachable && !segment.traversed)
+      .length;
   @visibleForTesting
   int get debugBoundaryCount => _boundaries.length;
   @visibleForTesting
@@ -115,7 +114,6 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
     }
     _storedRoute = null;
     _storedUnit = null;
-    final signature = _roadSignature(player);
     final kind = route.steps.length < 2
         ? null
         : player.units
@@ -125,12 +123,10 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
     final sameGeometry =
         _identity == cache.identity &&
         _actor == player.actorPlayerId &&
-        _infrastructureSignature == signature &&
         _sameRoute(_route, route);
     _route = route;
     _identity = cache.identity;
     _actor = player.actorPlayerId;
-    _infrastructureSignature = signature;
     if (sameGeometry) {
       _setGhostKind(kind);
       return;
@@ -140,7 +136,7 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
       _clearGeometry();
       return;
     }
-    _buildGeometry(cache, route, player);
+    _buildGeometry(cache, route);
     _setGhostKind(kind);
     _resetGhost();
     _refreshActivity();
@@ -152,7 +148,6 @@ final class MapRouteLayerComponent extends Component with HasVisibility {
     _storedUnit = null;
     _identity = null;
     _actor = null;
-    _infrastructureSignature = null;
     _clearGeometry();
   }
 

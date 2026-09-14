@@ -1,19 +1,14 @@
 part of 'map_route_layer.dart';
 
 extension _MapRouteGeometry on MapRouteLayerComponent {
-  void _buildGeometry(
-    MapStaticRenderCache cache,
-    RoutePlanView route,
-    PlayerMapView player,
-  ) {
+  void _buildGeometry(MapStaticRenderCache cache, RoutePlanView route) {
     final points = [
       for (final step in route.steps)
         mapProjectedTopFaceCenter(cache, step.coordinate),
     ];
-    final roads = _roadNodes(cache, player);
     _segments = List.unmodifiable([
       for (var index = 1; index < points.length; index++)
-        _buildSegment(points, route, roads, index),
+        _buildSegment(points, route, index),
     ]);
     _boundaries = List.unmodifiable(_routeBoundaries(points, route.stepTurns));
     _target = _MapRouteStroke(
@@ -41,12 +36,9 @@ extension _MapRouteGeometry on MapRouteLayerComponent {
 _MapRouteSegment _buildSegment(
   List<ui.Offset> points,
   RoutePlanView route,
-  Set<MapHexCoordinate> roads,
   int index,
 ) {
-  final followsRoad =
-      roads.contains(route.steps[index - 1].coordinate) &&
-      roads.contains(route.steps[index].coordinate);
+  final followsRoad = route.roadStepIndices.contains(index);
   return (
     stroke: _MapRouteStroke(
       _routeSegmentPath(points, index, followsRoad: followsRoad),
@@ -64,9 +56,14 @@ bool _sameRoute(RoutePlanView? previous, RoutePlanView? next) {
   if (previous.unitId != next.unitId ||
       previous.destination != next.destination ||
       previous.availableMovementUnits != next.availableMovementUnits ||
-      previous.steps.length != next.steps.length) {
+      !setEquals(previous.roadStepIndices, next.roadStepIndices)) {
     return false;
   }
+  return _sameRouteSteps(previous, next);
+}
+
+bool _sameRouteSteps(RoutePlanView previous, RoutePlanView next) {
+  if (previous.steps.length != next.steps.length) return false;
   for (var index = 0; index < previous.steps.length; index++) {
     final before = previous.steps[index];
     final after = next.steps[index];
@@ -126,46 +123,11 @@ double _routePointNoise(ui.Offset point, int index) {
   return (value & 0x7fffffff) / 0x7fffffff;
 }
 
-List<ui.Offset> _routeBoundaries(List<ui.Offset> points, List<int> turns) => [
-  for (var index = 1; index < points.length - 1; index++)
+List<ui.Offset> _routeBoundaries(
+  List<ui.Offset> points,
+  List<int> turns, {
+  int originIndex = 0,
+}) => [
+  for (var index = originIndex + 1; index < points.length - 1; index++)
     if (turns[index] != turns[index + 1]) points[index],
 ];
-
-Set<MapHexCoordinate> _roadNodes(
-  MapStaticRenderCache cache,
-  PlayerMapView player,
-) {
-  final roads = {
-    for (final road in player.roads)
-      if (road.condition == TransportConditionView.operational) road.coordinate,
-  };
-  final nodes = <MapHexCoordinate>{...roads};
-  for (final city in player.cities) {
-    if (cache.geometry.neighbors(city.center).any(roads.contains)) {
-      nodes.add(city.center);
-    }
-  }
-  return nodes;
-}
-
-String _roadSignature(PlayerMapView player) {
-  final buffer = StringBuffer();
-  for (final road in player.roads) {
-    buffer
-      ..write(road.coordinate.col)
-      ..write(',')
-      ..write(road.coordinate.row)
-      ..write(':')
-      ..write(road.condition.name)
-      ..write(';');
-  }
-  buffer.write('|');
-  for (final city in player.cities) {
-    buffer
-      ..write(city.center.col)
-      ..write(',')
-      ..write(city.center.row)
-      ..write(';');
-  }
-  return buffer.toString();
-}

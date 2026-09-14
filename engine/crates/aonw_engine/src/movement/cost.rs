@@ -76,9 +76,10 @@ fn movement_cost_for_base_edge(
     }
     let from_road = access.has_known_operational_road(from_index);
     let to_road = access.has_known_operational_road(to_index);
-    if (from_road || access.has_known_city_center(from_index)) && to_road
-        || (from_road && access.has_known_city_center(to_index))
-    {
+    if super::route_roads::road_edge(
+        super::route_roads::road_node(from_road, access.has_known_city_center(from_index)),
+        super::route_roads::road_node(to_road, access.has_known_city_center(to_index)),
+    ) {
         MovementCost::Passable(MovementUnits::new(1))
     } else {
         base

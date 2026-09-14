@@ -1,10 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::WorkerJobViewDto;
-use crate::{
-    ArmyTroopDto, CoordinateDto, MerchantTradeRouteDto, QueuedMovePathDto, UnitKindDto,
-    UnitPostureDto,
-};
+use crate::{ArmyTroopDto, CoordinateDto, MovementStepDto, UnitKindDto, UnitPostureDto};
 
 /// Recipient-safe unit read model.
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
@@ -43,9 +40,9 @@ pub struct OwnedUnitDetailsViewDto {
     /// Army composition in canonical troop order.
     pub army: Vec<ArmyTroopDto>,
     /// Persisted manual route, when one is queued.
-    pub queued_path: Option<QueuedMovePathDto>,
+    pub queued_path: Option<QueuedRouteViewDto>,
     /// Persisted merchant route, when assigned.
-    pub merchant_trade_route: Option<MerchantTradeRouteDto>,
+    pub merchant_trade_route: Option<MerchantRouteViewDto>,
     /// Current worker construction.
     pub worker_job: Option<WorkerJobViewDto>,
     /// Current city-founding work.
@@ -72,4 +69,38 @@ pub struct CityFoundingJobViewDto {
     pub remaining_turns: u32,
     /// Original activity duration.
     pub total_turns: u32,
+}
+
+/// A recipient-owned queued path with current authoritative presentation.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct QueuedRouteViewDto {
+    /// Target column.
+    pub target_col: i32,
+    /// Target row.
+    pub target_row: i32,
+    /// Unchanged persisted movement steps.
+    pub steps: Vec<MovementStepDto>,
+    /// Calendar turns, with zero for the traversed prefix.
+    pub step_turns: Vec<u32>,
+    /// Destination-step indices of recipient-known operational road edges.
+    pub road_step_indices: Vec<u32>,
+}
+
+/// A recipient-owned merchant itinerary with current authoritative presentation.
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct MerchantRouteViewDto {
+    /// Origin city identity.
+    pub origin_city_id: String,
+    /// Destination city identity.
+    pub destination_city_id: String,
+    /// Unchanged persisted movement steps.
+    pub steps: Vec<MovementStepDto>,
+    /// Persisted transport identity, which may precede a future replan.
+    pub transport_network_fingerprint: String,
+    /// Calendar turns, with zero for the traversed prefix.
+    pub step_turns: Vec<u32>,
+    /// Destination-step indices of recipient-known operational road edges.
+    pub road_step_indices: Vec<u32>,
 }

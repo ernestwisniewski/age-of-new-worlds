@@ -2,8 +2,10 @@ mod artifact;
 mod diplomacy;
 mod evidence;
 mod presentation;
+mod route;
 mod snapshot;
 mod worker;
+use route::{merchant_route, queued_route};
 
 use aonw_contracts::client::{
     CityFoundingDraftViewDto, CityFoundingJobViewDto, FieldImprovementViewDto,
@@ -19,8 +21,7 @@ use aonw_projection::{
 
 use crate::{
     encode_city_building, encode_city_production_queue, encode_city_specialization,
-    encode_city_wonder, encode_improvement, encode_merchant_trade_route, encode_queued_path,
-    encode_troop, encode_unit_kind, encode_unit_posture,
+    encode_city_wonder, encode_improvement, encode_troop, encode_unit_kind, encode_unit_posture,
 };
 
 pub use evidence::{
@@ -123,10 +124,8 @@ fn unit(value: &PlayerUnitView) -> PlayerUnitViewDto {
                         count: troop.count(),
                     })
                     .collect(),
-                queued_path: details.queued_path().map(encode_queued_path),
-                merchant_trade_route: details
-                    .merchant_trade_route()
-                    .map(encode_merchant_trade_route),
+                queued_path: details.queued_path().map(queued_route),
+                merchant_trade_route: details.merchant_trade_route().map(merchant_route),
                 worker_job: activity.worker_job().map(worker_job),
                 city_founding_job: activity
                     .city_founding_job()

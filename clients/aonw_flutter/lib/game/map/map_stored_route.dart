@@ -24,7 +24,6 @@ extension _MapStoredRoute on MapRouteLayerComponent {
     _storedUnit = (currentUnit.id, currentUnit.coordinate);
     _identity = cache.identity;
     _actor = player.actorPlayerId;
-    _infrastructureSignature = null;
     if (!same) {
       _flowPhase = 0;
       _buildStoredGeometry(cache, stored, currentUnit.coordinate);
@@ -50,17 +49,23 @@ extension _MapStoredRoute on MapRouteLayerComponent {
       for (var index = 1; index < points.length; index++)
         (
           stroke: _MapRouteStroke(
-            _routeSegmentPath(points, index, followsRoad: false),
+            _routeSegmentPath(
+              points,
+              index,
+              followsRoad: route.roadStepIndices.contains(index),
+            ),
             seed: index,
           ),
-          reachable: false,
-          followsRoad: false,
+          reachable: index > current && route.stepTurns[index] == 1,
+          followsRoad: route.roadStepIndices.contains(index),
           traversed: index <= current,
         ),
     ]);
-    _boundaries = const [];
+    _boundaries = List.unmodifiable(
+      _routeBoundaries(points, route.stepTurns, originIndex: current),
+    );
     _destination = points.last;
-    _destinationReachable = false;
+    _destinationReachable = _segments.last.reachable;
     _target = _MapRouteStroke(
       mapProjectedTopFacePath(cache, route.target, scale: 0.86),
       seed: points.length,
@@ -109,11 +114,13 @@ bool _sameStoredRoute(StoredUnitRouteView? before, StoredUnitRouteView after) {
   if (before == null ||
       before.kind != after.kind ||
       before.target != after.target ||
-      before.steps.length != after.steps.length) {
+      before.steps.length != after.steps.length ||
+      !setEquals(before.roadStepIndices, after.roadStepIndices)) {
     return false;
   }
   for (var index = 0; index < before.steps.length; index++) {
-    if (before.steps[index].coordinate != after.steps[index].coordinate) {
+    if (before.steps[index].coordinate != after.steps[index].coordinate ||
+        before.stepTurns[index] != after.stepTurns[index]) {
       return false;
     }
   }

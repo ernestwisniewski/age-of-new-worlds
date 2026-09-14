@@ -3,6 +3,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../read_model/map_view.dart';
 import '../read_model/movement_view.dart';
 import '../read_model/stored_unit_route_view.dart';
+import 'route_metadata_validation.dart';
 
 StoredUnitRouteView? mapQueuedUnitRoute(AonwPlayerUnitView unit, MapView map) {
   final route = unit.ownedDetails?.queuedPath;
@@ -13,10 +14,18 @@ StoredUnitRouteView? mapQueuedUnitRoute(AonwPlayerUnitView unit, MapView map) {
       steps.last.coordinate != target) {
     throw const FormatException('Queued route endpoints are inconsistent.');
   }
+  validateStoredRouteTurns(
+    route.stepTurns,
+    steps.length,
+    steps.indexWhere((step) => step.coordinate == _position(unit)),
+  );
+  validateRouteRoadIndices(route.roadStepIndices, steps.length);
   return StoredUnitRouteView(
     kind: StoredUnitRouteKind.queued,
     target: target,
     steps: steps,
+    stepTurns: route.stepTurns,
+    roadStepIndices: route.roadStepIndices,
   );
 }
 
@@ -33,10 +42,18 @@ StoredUnitRouteView? mapMerchantUnitRoute(
       !steps.any((step) => step.coordinate == _position(unit))) {
     throw const FormatException('Merchant route identity is inconsistent.');
   }
+  validateStoredRouteTurns(
+    route.stepTurns,
+    steps.length,
+    steps.indexWhere((step) => step.coordinate == _position(unit)),
+  );
+  validateRouteRoadIndices(route.roadStepIndices, steps.length);
   return StoredUnitRouteView(
     kind: StoredUnitRouteKind.merchant,
     target: steps.last.coordinate,
     steps: steps,
+    stepTurns: route.stepTurns,
+    roadStepIndices: route.roadStepIndices,
     originCityId: route.originCityId,
     destinationCityId: route.destinationCityId,
   );

@@ -19,6 +19,26 @@ void main() {
     expect(() => route.stepTurns.clear(), throwsUnsupportedError);
   });
 
+  test('copies authoritative road indices and rejects invalid ordering', () {
+    final roads = <int>[1, 3, 5];
+    final mapped = _map([1, 1, 2, 2, 3, 3], roads: roads);
+    roads.clear();
+    expect(mapped.roadStepIndices, {1, 3, 5});
+    expect(() => mapped.roadStepIndices.clear(), throwsUnsupportedError);
+    for (final invalid in [
+      [0],
+      [-1],
+      [6],
+      [2, 1],
+      [1, 1],
+    ]) {
+      expect(
+        () => _map([1, 1, 2, 2, 3, 3], roads: invalid),
+        throwsFormatException,
+      );
+    }
+  });
+
   test('accepts a spent current turn and an origin-only approach', () {
     expect(_map([1, 2, 3, 3, 4, 4], available: 0).stepTurns, [
       1,
@@ -54,6 +74,7 @@ void main() {
 RoutePlanView _map(
   List<int> turns, {
   int available = 3,
+  List<int> roads = const [],
   int? estimated,
   bool originOnly = false,
 }) {
@@ -68,6 +89,7 @@ RoutePlanView _map(
       ((value['outcome'] as Map)['response'] as Map)['result']
           as Map<String, Object?>;
   result['stepTurns'] = turns;
+  result['roadStepIndices'] = roads;
   result['availableMovementUnits'] = available;
   result['estimatedTurns'] = estimated ?? (turns.isEmpty ? 1 : turns.last);
   if (originOnly) {

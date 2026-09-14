@@ -39,6 +39,8 @@ void main() {
       final current = moved.player!.units.single;
       final queued = current.queuedRoute!;
       expect(queued.steps.length, greaterThan(1));
+      expect(queued.stepTurns, route.stepTurns);
+      expect(queued.roadStepIndices, route.roadStepIndices);
       expect(queued.steps.first.coordinate, current.coordinate);
       expect(queued.steps.last.coordinate, route.target);
       final save = await gateway.saveSession.exportSaveDocument();
@@ -49,6 +51,8 @@ void main() {
         document: save,
       );
       final restoredRoute = restored.player.units.single.queuedRoute!;
+      expect(restoredRoute.stepTurns, queued.stepTurns);
+      expect(restoredRoute.roadStepIndices, queued.roadStepIndices);
       expect(
         restoredRoute.steps.map(
           (s) => (s.coordinate, s.enterCostUnits, s.cumulativeCostUnits),

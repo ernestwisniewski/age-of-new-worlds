@@ -9,6 +9,8 @@ MapScene storedRouteScene({
   bool merchant = false,
   int current = 0,
   String owner = 'preview-player',
+  List<int>? turns,
+  List<int> roads = const [],
 }) {
   final steps = [
     for (var index = 0; index < 8; index++)
@@ -22,6 +24,18 @@ MapScene storedRouteScene({
     kind: merchant ? StoredUnitRouteKind.merchant : StoredUnitRouteKind.queued,
     target: steps.last.coordinate,
     steps: steps,
+    stepTurns:
+        turns ??
+        [
+          for (var index = 0; index < steps.length; index++)
+            if (index < current)
+              0
+            else if (index == current)
+              1
+            else
+              2 + (index - current - 1) ~/ 2,
+        ],
+    roadStepIndices: roads,
     originCityId: merchant ? 'origin' : null,
     destinationCityId: merchant ? 'destination' : null,
   );

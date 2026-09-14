@@ -55,7 +55,10 @@ pub use research::{
     ScienceYieldSourceKindDto, TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto,
 };
 pub use session::{ClientErrorDto, ClientReplayVerificationDto};
-pub use unit::{CityFoundingJobViewDto, OwnedUnitDetailsViewDto, PlayerUnitViewDto};
+pub use unit::{
+    CityFoundingJobViewDto, MerchantRouteViewDto, OwnedUnitDetailsViewDto, PlayerUnitViewDto,
+    QueuedRouteViewDto,
+};
 pub use victory::{
     CulturalVictoryProgressDto, DominationVictoryProgressDto, MapObjectiveProgressDto,
     PlayerVictoryViewDto,

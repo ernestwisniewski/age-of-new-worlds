@@ -88,6 +88,7 @@ Future<MapRouteLayerComponent> _mount(
 }
 
 RoutePlanView _plan(List<int> turns, {int available = 3}) => RoutePlanView(
+  roadStepIndices: const [],
   stamp: testSessionStamp(),
   unitId: 'preview-commander',
   target: (col: 5, row: 0),

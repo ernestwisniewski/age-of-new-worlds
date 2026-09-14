@@ -344,6 +344,7 @@ pub(crate) fn dispatch_query(
                 remaining_movement: result.remaining_movement(),
                 estimated_turns: result.estimated_turns(),
                 step_turns: result.step_turns().collect(),
+                road_step_indices: result.road_step_indices().collect(),
                 steps: result
                     .steps()
                     .iter()

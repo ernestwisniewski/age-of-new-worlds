@@ -34,28 +34,34 @@ MapRenderSnapshot routeAnimationSnapshot({
     reference: scene.reference,
     player: scene.player,
     interaction: MapInteractionState(
-      route: showRoute ? routeAnimationPlan(points) : null,
+      route: showRoute ? routeAnimationPlan(points, roads: roads) : null,
     ),
   );
 }
 
-RoutePlanView routeAnimationPlan(List<MapHexCoordinate> points) =>
-    RoutePlanView(
-      stamp: testSessionStamp(),
-      unitId: 'preview-commander',
-      target: points.last,
-      destination: points.last,
-      totalCostUnits: 16,
-      availableMovementUnits: 8,
-      remainingMovementUnits: 0,
-      estimatedTurns: 2,
-      stepTurns: [1, for (var index = 1; index < points.length; index++) index],
-      steps: [
-        for (var index = 0; index < points.length; index++)
-          MovementStepView(
-            coordinate: points[index],
-            enterCostUnits: index == 0 ? 0 : 8,
-            cumulativeCostUnits: index * 8,
-          ),
-      ],
-    );
+RoutePlanView routeAnimationPlan(
+  List<MapHexCoordinate> points, {
+  bool roads = true,
+}) => RoutePlanView(
+  roadStepIndices: [
+    if (roads)
+      for (var index = 1; index < points.length; index++) index,
+  ],
+  stamp: testSessionStamp(),
+  unitId: 'preview-commander',
+  target: points.last,
+  destination: points.last,
+  totalCostUnits: 16,
+  availableMovementUnits: 8,
+  remainingMovementUnits: 0,
+  estimatedTurns: 2,
+  stepTurns: [1, for (var index = 1; index < points.length; index++) index],
+  steps: [
+    for (var index = 0; index < points.length; index++)
+      MovementStepView(
+        coordinate: points[index],
+        enterCostUnits: index == 0 ? 0 : 8,
+        cumulativeCostUnits: index * 8,
+      ),
+  ],
+);
