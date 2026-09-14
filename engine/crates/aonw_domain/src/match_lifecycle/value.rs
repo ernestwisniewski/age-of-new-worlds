@@ -75,6 +75,27 @@ impl RuleNumber {
         let right = self.magnitude.multiplied_by(whole);
         left.compare_positive(&right) != Ordering::Less
     }
+
+    /// Compares a percentage of this threshold against an integer part/whole
+    /// ratio. For example, 90 tests whether control reaches 90% of the target.
+    /// Both the configured decimal and the comparison remain exact.
+    #[must_use]
+    pub fn percent_requirement_fraction_met(
+        &self,
+        part: u32,
+        whole: u32,
+        threshold_percent: u8,
+    ) -> bool {
+        if whole == 0 || self.magnitude.negative || self.magnitude.is_zero() {
+            return false;
+        }
+        let left = DecimalMagnitude::from_u64(u64::from(part) * 10_000);
+        let right = self
+            .magnitude
+            .multiplied_by(whole)
+            .multiplied_by(u32::from(threshold_percent));
+        left.compare_positive(&right) != Ordering::Less
+    }
 }
 
 /// Typed recursive value used by the open-ended match balance object.
@@ -276,5 +297,18 @@ mod tests {
         );
         assert_eq!(RuleNumber::new("01"), Err(RuleNumberError));
         assert_eq!(RuleNumber::new("NaN"), Err(RuleNumberError));
+    }
+
+    #[test]
+    fn fractional_percentage_thresholds_preserve_decimal_boundaries() {
+        let sixty = RuleNumber::new("60").unwrap();
+        assert!(sixty.percent_requirement_fraction_met(54, 100, 90));
+        assert!(!sixty.percent_requirement_fraction_met(53, 100, 90));
+        assert!(sixty.percent_requirement_fraction_met(57, 100, 95));
+        assert!(!sixty.percent_requirement_fraction_met(56, 100, 95));
+        assert!(!sixty.percent_requirement_fraction_met(0, 0, 90));
+        let precise = RuleNumber::new("60.00000000000000000001").unwrap();
+        assert!(!precise.percent_requirement_fraction_met(54, 100, 90));
+        assert!(sixty.percent_requirement_fraction_met(u32::MAX, u32::MAX, 100));
     }
 }

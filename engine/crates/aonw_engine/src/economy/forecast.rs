@@ -340,6 +340,12 @@ pub struct EconomyForecast {
 }
 
 impl EconomyForecast {
+    /// Returns the resource-strip warning derived from this authoritative forecast.
+    #[must_use]
+    pub fn treasury_warning(&self) -> super::TreasuryWarning {
+        super::TreasuryWarning::from_forecast(self.treasury, self.net_per_turn)
+    }
+
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn new(
         player_id: PlayerId,

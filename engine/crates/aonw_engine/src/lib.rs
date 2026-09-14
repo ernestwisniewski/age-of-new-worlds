@@ -81,7 +81,8 @@ pub use economy::{
     CityGoldIncomeSource, CityYieldBreakdown, CityYieldContribution, CityYieldContributionKind,
     CityYieldQuery, EconomyForecast, EconomyForecastQuery, EconomyQueryError, StabilityBreakdown,
     StrategicResourceProjection, StrategicResourceProjectionQuery, StrategicResourceSource,
-    UnitUpkeepBreakdown, UnitUpkeepSource, WealthProjectGoldIncomeSource, YieldValue,
+    TreasuryWarning, UnitUpkeepBreakdown, UnitUpkeepSource, WealthProjectGoldIncomeSource,
+    YieldValue, strategic_resource_shortages,
 };
 pub use hex_inspection::{
     HexAssessmentKind, HexAssessmentScore, HexAssessmentTag, HexImprovementAccess,
@@ -100,8 +101,8 @@ pub use movement::{
 };
 pub use outcome::{
     CulturalVictoryProgress, DominationVictoryProgress, MapObjectiveProgress,
-    OutcomeResolutionError, VictoryProgress, calculate_empire_scores, calculate_victory_progress,
-    resolve_game_outcome,
+    OutcomeResolutionError, VictoryProgress, VictoryStatus, VictoryStatusKind,
+    calculate_empire_scores, calculate_victory_progress, resolve_game_outcome,
 };
 pub use pending_turn_actions::{
     PendingTurnAction, PendingTurnActions, PendingTurnActionsError, PendingTurnActionsQuery,

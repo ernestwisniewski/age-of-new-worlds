@@ -1,3 +1,6 @@
+mod status;
+pub use status::{VictoryStatus, VictoryStatusKind};
+
 use std::collections::{BTreeMap, BTreeSet};
 
 use aonw_domain::{

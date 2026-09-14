@@ -4,6 +4,8 @@
 mod manifest;
 #[path = "economy/stability.rs"]
 mod stability;
+#[path = "economy/warnings.rs"]
+mod warnings;
 
 use std::collections::BTreeMap;
 

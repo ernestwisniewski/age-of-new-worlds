@@ -1,8 +1,13 @@
 mod forecast;
 mod forecast_rules;
 mod model;
+mod shortage;
+pub use shortage::strategic_resource_shortages;
 pub(crate) mod rules;
 mod turn;
+mod warning;
+
+pub use warning::TreasuryWarning;
 
 pub use forecast::{
     CityGoldIncomeSource, EconomyForecast, EconomyForecastQuery, StabilityBreakdown,
