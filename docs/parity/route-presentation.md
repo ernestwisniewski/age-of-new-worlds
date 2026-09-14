@@ -36,3 +36,9 @@ It describes stored costs; it does not predict future replanning.
 The stored-route timing still needs owner-only projection, transport and renderer
 integration. All routes also need movement-domain road classification. This
 document does not mark route parity complete.
+
+The engine performance review covers all 210 existing workloads. Client API 26
+changes 22 client JSON response signatures; all non-JSON signatures, sample
+floors and allocation, byte, payload and work ceilings remain unchanged. The
+native route probe exercises 39 segments and 38 turn boundaries while checking
+cached geometry, six walking frames and a stopped animation after disable.

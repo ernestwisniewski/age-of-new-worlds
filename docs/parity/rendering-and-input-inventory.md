@@ -17,7 +17,7 @@ share a target host rather than requiring separate components.
 | --- | --- | --- |
 | Base hex map, reference image, grid | `static_map_layers.dart`, `map_tile_details_layer.dart` | Immutable authored map, viewport and display preferences |
 | UnitMarkerLayer | `unit_map_layer.dart` | Visible unit projection; own details only for recipient |
-| UnitMovePreviewLayer | `map_route_layer.dart` | Rust movement preview and owned stored routes; future-turn boundaries remain open |
+| UnitMovePreviewLayer | `map_route_layer.dart` | Rust preview turn boundaries and owned stored routes; stored-route timing awaits projection and transport |
 | FieldImprovementMarkerLayer | `worker_infrastructure_layer.dart` | Visible improvement type, state and work progress |
 | TransportNetworkLayer | `worker_infrastructure_layer.dart` | Visible road/city nodes; movement-domain segment classification remains open |
 | ArtifactMarkerLayer | `artifact_map_layer.dart` | Visible artifact projection |

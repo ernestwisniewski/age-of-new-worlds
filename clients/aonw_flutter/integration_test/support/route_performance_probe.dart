@@ -31,6 +31,7 @@ Future<void> measurePlannedRoute(
   final updates = route.debugActiveUpdateCount;
   final frames = <String>{};
   expect(route.debugSegmentCount, 39);
+  expect(route.debugBoundaryCount, 38);
   expect(game.paused, isFalse);
   final frameTimes = await measureActiveFrameTimings(
     tester,
@@ -72,6 +73,7 @@ Future<void> measurePlannedRoute(
       'improvements': 120,
       'roads': 120,
       'routeSegments': 39,
+      'turnBoundaries': route.debugBoundaryCount,
       'observedWalkFrames': frames.length,
       'flowUnitsPerSecond': 24,
       'ghostSpeedFactor': 0.82,
