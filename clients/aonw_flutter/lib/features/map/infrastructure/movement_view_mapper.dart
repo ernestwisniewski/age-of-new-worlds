@@ -150,11 +150,15 @@ final class MovementViewMapper {
   }
 
   static void _validateStepTurns(List<int> turns, int count, int estimated) {
-    if (turns.length != count || turns.isEmpty || turns.first != 1 || turns.last != estimated) {
+    if (turns.length != count ||
+        turns.isEmpty ||
+        turns.first != 1 ||
+        turns.last != estimated) {
       throw const FormatException('Route step turns are inconsistent.');
     }
     for (var index = 1; index < turns.length; index++) {
-      if (turns[index] < turns[index - 1] || turns[index] > turns[index - 1] + 1) {
+      if (turns[index] < turns[index - 1] ||
+          turns[index] > turns[index - 1] + 1) {
         throw const FormatException('Route step turns must be consecutive.');
       }
     }

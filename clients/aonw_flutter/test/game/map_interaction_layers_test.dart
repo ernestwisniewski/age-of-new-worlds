@@ -109,6 +109,7 @@ void main() {
         availableMovementUnits: 8,
         remainingMovementUnits: 0,
         estimatedTurns: 2,
+        stepTurns: const [1, 1, 1, 2],
         steps: const [
           MovementStepView(
             coordinate: (col: 0, row: 0),
@@ -145,8 +146,8 @@ void main() {
       await game.ready();
 
       expect(game.world.routeLayer.debugSegmentCount, 3);
-      expect(game.world.routeLayer.debugCurrentTurnSegmentCount, 1);
-      expect(game.world.routeLayer.debugFutureTurnSegmentCount, 2);
+      expect(game.world.routeLayer.debugCurrentTurnSegmentCount, 2);
+      expect(game.world.routeLayer.debugFutureTurnSegmentCount, 1);
       expect(game.world.routeLayer.debugBoundaryCount, 1);
       expect(game.world.routeLayer.debugSegmentFollowsRoad(0), isTrue);
       expect(game.world.routeLayer.debugSegmentFollowsRoad(1), isFalse);

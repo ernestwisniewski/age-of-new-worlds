@@ -1,0 +1,89 @@
+{
+  "apiVersion": 26,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "routePlan",
+        "stamp": {
+          "revision": 7,
+          "stateDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mapHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "rulesetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "unitId": "unit-1",
+        "target": {
+          "col": 5,
+          "row": 0
+        },
+        "destination": {
+          "col": 5,
+          "row": 0
+        },
+        "totalCostUnits": 14,
+        "availableMovementUnits": 3,
+        "remainingMovementUnits": 0,
+        "estimatedTurns": 3,
+        "stepTurns": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "steps": [
+          {
+            "coordinate": {
+              "col": 0,
+              "row": 0
+            },
+            "enterCostUnits": 0,
+            "cumulativeCostUnits": 0
+          },
+          {
+            "coordinate": {
+              "col": 1,
+              "row": 0
+            },
+            "enterCostUnits": 4,
+            "cumulativeCostUnits": 4
+          },
+          {
+            "coordinate": {
+              "col": 2,
+              "row": 0
+            },
+            "enterCostUnits": 2,
+            "cumulativeCostUnits": 6
+          },
+          {
+            "coordinate": {
+              "col": 3,
+              "row": 0
+            },
+            "enterCostUnits": 4,
+            "cumulativeCostUnits": 10
+          },
+          {
+            "coordinate": {
+              "col": 4,
+              "row": 0
+            },
+            "enterCostUnits": 2,
+            "cumulativeCostUnits": 12
+          },
+          {
+            "coordinate": {
+              "col": 5,
+              "row": 0
+            },
+            "enterCostUnits": 2,
+            "cumulativeCostUnits": 14
+          }
+        ]
+      }
+    }
+  }
+}

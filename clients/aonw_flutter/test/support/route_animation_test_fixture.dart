@@ -49,6 +49,7 @@ RoutePlanView routeAnimationPlan(List<MapHexCoordinate> points) =>
       availableMovementUnits: 8,
       remainingMovementUnits: 0,
       estimatedTurns: 2,
+      stepTurns: [1, for (var index = 1; index < points.length; index++) index],
       steps: [
         for (var index = 0; index < points.length; index++)
           MovementStepView(

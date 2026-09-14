@@ -126,6 +126,7 @@ MapRenderSnapshot _routeSnapshot(MapRenderSnapshot source) => MapRenderSnapshot(
       availableMovementUnits: 12,
       remainingMovementUnits: 0,
       estimatedTurns: 39,
+      stepTurns: [1, for (var col = 1; col < 40; col++) col],
       steps: [
         for (var col = 0; col < 40; col++)
           MovementStepView(

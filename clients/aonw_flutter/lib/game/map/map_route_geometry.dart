@@ -15,7 +15,7 @@ extension _MapRouteGeometry on MapRouteLayerComponent {
       for (var index = 1; index < points.length; index++)
         _buildSegment(points, route, roads, index),
     ]);
-    _boundaries = List.unmodifiable(_routeBoundaries(points, _segments));
+    _boundaries = List.unmodifiable(_routeBoundaries(points, route.stepTurns));
     _target = _MapRouteStroke(
       mapProjectedTopFacePath(cache, route.destination, scale: 0.86),
       seed: points.length,
@@ -52,8 +52,7 @@ _MapRouteSegment _buildSegment(
       _routeSegmentPath(points, index, followsRoad: followsRoad),
       seed: index,
     ),
-    reachable:
-        route.steps[index].cumulativeCostUnits <= route.availableMovementUnits,
+    reachable: route.stepTurns[index] == 1,
     followsRoad: followsRoad,
     traversed: false,
   );
@@ -72,7 +71,8 @@ bool _sameRoute(RoutePlanView? previous, RoutePlanView? next) {
     final before = previous.steps[index];
     final after = next.steps[index];
     if (before.coordinate != after.coordinate ||
-        before.cumulativeCostUnits != after.cumulativeCostUnits) {
+        before.cumulativeCostUnits != after.cumulativeCostUnits ||
+        previous.stepTurns[index] != next.stepTurns[index]) {
       return false;
     }
   }
@@ -126,13 +126,9 @@ double _routePointNoise(ui.Offset point, int index) {
   return (value & 0x7fffffff) / 0x7fffffff;
 }
 
-List<ui.Offset> _routeBoundaries(
-  List<ui.Offset> points,
-  List<_MapRouteSegment> segments,
-) => [
-  for (var index = 0; index < segments.length - 1; index += 1)
-    if (segments[index].reachable != segments[index + 1].reachable)
-      points[index + 1],
+List<ui.Offset> _routeBoundaries(List<ui.Offset> points, List<int> turns) => [
+  for (var index = 1; index < points.length - 1; index++)
+    if (turns[index] != turns[index + 1]) points[index],
 ];
 
 Set<MapHexCoordinate> _roadNodes(

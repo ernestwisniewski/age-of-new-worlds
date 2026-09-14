@@ -333,8 +333,11 @@ final class AonwRoutePlanResult extends AonwQueryResult {
         value['estimatedTurns'],
         'estimated route turns',
       ),
-      stepTurns: readList(value['stepTurns'], 'route step turns',
-        (item, _) => readUnsigned(item, 'route step turn')),
+      stepTurns: readList(
+        value['stepTurns'],
+        'route step turns',
+        (item, _) => readUnsigned(item, 'route step turn'),
+      ),
       steps: readList(
         value['steps'],
         'route steps',

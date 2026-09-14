@@ -44,7 +44,7 @@ pub use response::{
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 25;
+pub const CLIENT_API_VERSION: u16 = 26;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

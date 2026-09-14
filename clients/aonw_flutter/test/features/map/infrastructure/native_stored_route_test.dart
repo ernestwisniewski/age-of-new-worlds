@@ -26,6 +26,10 @@ void main() {
         target: (col: 5, row: 4),
       );
       expect(route.estimatedTurns, greaterThan(1));
+      expect(route.stepTurns, hasLength(route.steps.length));
+      expect(route.stepTurns.first, 1);
+      expect(route.stepTurns[1], 2);
+      expect(route.stepTurns.last, route.estimatedTurns);
       final moved = await gateway.moveUnit(
         expectedRevision: 1,
         unitId: unit.id,

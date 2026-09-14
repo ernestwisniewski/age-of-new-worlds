@@ -108,6 +108,7 @@ RoutePlanView testRoutePlanView({
   availableMovementUnits: 12,
   remainingMovementUnits: 8,
   estimatedTurns: 1,
+  stepTurns: const [1, 1],
   steps: [
     MovementStepView(
       coordinate: origin,

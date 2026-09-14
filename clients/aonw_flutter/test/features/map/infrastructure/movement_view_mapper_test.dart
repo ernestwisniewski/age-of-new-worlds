@@ -71,6 +71,7 @@ void main() {
         availableMovementUnits: 12,
         remainingMovementUnits: 8,
         estimatedTurns: 1,
+        stepTurns: const [1, 1],
         steps: const [
           AonwMovementStep(
             coordinate: AonwCoordinate(col: 0, row: 0),
@@ -128,6 +129,7 @@ void main() {
           availableMovementUnits: 12,
           remainingMovementUnits: 8,
           estimatedTurns: 1,
+          stepTurns: const [1, 1],
           steps: const [
             AonwMovementStep(
               coordinate: AonwCoordinate(col: 1, row: 0),

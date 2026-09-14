@@ -351,6 +351,7 @@ void main() {
           'availableMovementUnits': 4,
           'remainingMovementUnits': 0,
           'estimatedTurns': 1,
+          'stepTurns': [1],
           'steps': [
             {
               'coordinate': {'col': 3, 'row': 2},

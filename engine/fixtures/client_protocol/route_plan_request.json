@@ -1,0 +1,15 @@
+{
+  "apiVersion": 26,
+  "request": {
+    "type": "query",
+    "query": {
+      "type": "routePlan",
+      "expectedRevision": 7,
+      "unitId": "unit-1",
+      "target": {
+        "col": 5,
+        "row": 0
+      }
+    }
+  }
+}
