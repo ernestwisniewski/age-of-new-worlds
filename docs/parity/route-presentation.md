@@ -24,6 +24,15 @@ paths and animation phase. Boundary markers remain visible with motion disabled.
 The route-timing golden and a regression that failed before this change cover
 these rules.
 
-Stored and merchant paths still need recipient-safe timing, and all routes
-need movement-domain road classification. This document does not mark route
-parity complete.
+`stored_route_step_turns` supplies the engine foundation for stored queue and
+merchant itineraries. Already traversed steps are zero, the unit's current
+position is turn one, and the remaining itinerary uses the same iterator as a
+fresh query. It skips the entry cost of the current position and uses the unit's
+movement allowance, including the carried-artifact limit. An itinerary that no
+longer contains the unit returns no timing. This calculation allocates no new
+step collection and changes neither the persisted route nor canonical state.
+It describes stored costs; it does not predict future replanning.
+
+The stored-route timing still needs owner-only projection, transport and renderer
+integration. All routes also need movement-domain road classification. This
+document does not mark route parity complete.

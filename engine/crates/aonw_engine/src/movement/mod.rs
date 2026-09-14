@@ -18,6 +18,7 @@ mod query_tests;
 mod reachable;
 mod route_search;
 mod route_turns;
+mod stored_route_turns;
 mod terrain_profile;
 mod transition;
 #[cfg(test)]
@@ -39,6 +40,7 @@ pub(crate) use occupancy::MovementOccupancy;
 pub(crate) use planning_view::MovementPlanningView;
 pub use query::{TerrainMovementPlan, TerrainMovementQuery, TerrainMovementQueryError};
 pub use reachable::{ReachableMovement, ReachableMovementQuery, ReachableMovementTile};
+pub use stored_route_turns::stored_route_step_turns;
 pub use transition::{MoveUnitCommand, MoveUnitError, UnitMovedEvent, UnitMovementExecution};
 pub use visibility::MovementVisibility;
 pub use workspace::MovementSearchWorkspace;
