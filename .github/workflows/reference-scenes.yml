@@ -1,0 +1,74 @@
+name: Reference rendered maps
+on:
+  push:
+    branches: [feature/maps-terrain]
+    paths: [clients/aonw_godot/**, .github/workflows/reference-scenes.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rendered-maps:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            engine/target
+          key: reference-editor-native-${{ runner.os }}-${{ hashFiles('engine/Cargo.lock', 'engine/rust-toolchain.toml') }}
+      - name: Build native editor boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(awk -F '"' '/^channel = / {print $2}' engine/rust-toolchain.toml)
+          rustup toolchain install "$version" --profile minimal
+          (cd engine && cargo build --locked -p aonw_godot --features editor-tools) > reference-scene-build.log 2>&1 || { tail -n 100 reference-scene-build.log; exit 1; }
+          mkdir -p clients/aonw_godot/native/linux/x86_64/debug
+          cp engine/target/debug/libaonw_godot.so clients/aonw_godot/native/linux/x86_64/debug/
+      - name: Install Godot, software renderer and visual assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          release=https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable
+          cd "$RUNNER_TEMP"
+          curl --fail --location --retry 3 "$release/Godot_v4.7.1-stable_linux.x86_64.zip" -o Godot_v4.7.1-stable_linux.x86_64.zip
+          curl --fail --location --retry 3 "$release/SHA512-SUMS.txt" -o SHA512-SUMS.txt
+          sha512sum --ignore-missing --check SHA512-SUMS.txt
+          unzip -q Godot_v4.7.1-stable_linux.x86_64.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          cd "$GITHUB_WORKSPACE"
+          python3 clients/aonw_godot/tool/install_reference_assets.py
+      - name: Retain reproducible preview workspace
+        shell: bash
+        run: |
+          tar --exclude='./.godot' --exclude='./assets/generated_maps' --exclude='./scenes/terrain_authoring/terenos.tscn' -czf reference-preview-workspace.tar.gz -C clients/aonw_godot .
+          cp "$RUNNER_TEMP/Godot_v4.7.1-stable_linux.x86_64.zip" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reference-preview-workspace
+          path: |
+            reference-preview-workspace.tar.gz
+            Godot_v4.7.1-stable_linux.x86_64.zip
+          retention-days: 1
+      - name: Import and render actual maps
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot="$RUNNER_TEMP/Godot_v4.7.1-stable_linux.x86_64"
+          "$godot" --headless --audio-driver Dummy --editor --path clients/aonw_godot --import > reference-scene-import.log 2>&1
+          xvfb-run -a "$godot" --audio-driver Dummy --rendering-method gl_compatibility --rendering-driver opengl3 --path clients/aonw_godot --script res://tool/capture_reference_maps.gd > reference-scene-render.log 2>&1
+          cat reference-scene-render.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Compile Error|ERROR:' reference-scene-*.log; then exit 1; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reference-rendered-maps
+          path: |
+            clients/aonw_godot/reference-captures/*.png
+            reference-scene-*.log
+          retention-days: 7
