@@ -1,133 +1,120 @@
 # Reference landscape and Play preview
 
 The `feature/maps-terrain` authoring workflow reconstructs terrain from canonical
-JSON elevations/tags and the registered reference atlas, then presents real PBR
-surface scans, Tree3D meshes and a separate water surface. No gameplay JSON,
-manual objects, movement rules or existing canonical scenes are rewritten.
+JSON elevations/tags and the registered reference atlas, then presents PBR scans,
+Tree3D meshes and a separate water surface. It does not rewrite gameplay JSON,
+manual objects, movement rules or existing canonical scenes.
 
 ## Open and run
 
-Close Godot and install the visual dependencies once from the repository root:
+Close Godot and install visual dependencies once from the repository root:
 
 ```sh
 python3 clients/aonw_godot/tool/install_reference_assets.py
 ```
 
-Restart Godot. Open a map in **AoNW Terrain3D**, apply any pending geometry edits,
-then click **Play** in the dock or the normal **Play/F5** button. The editor saves
-the current terrain draft and scene before launching; pending geometry blocks
-Play with an explicit Apply/Discard message rather than rendering stale input.
-The selected map/scene is remembered locally in `.godot/aonw_landscape_preview.cfg`.
+Restart Godot. Select a map in **AoNW Terrain3D**, apply pending geometry edits,
+then click **Play** in the dock or the normal **Play/F5** button. The editor
+checkpoints the native draft and saves the scene before launching. Pending
+geometry blocks Play with an Apply/Discard message instead of silently rendering
+stale input. Selection is local to `.godot/aonw_landscape_preview.cfg`.
 
-F5 opens `landscape_play.tscn`: a rendered landscape with map selection, loading
-status and Landscape / Reference / Compare / Grid controls. With no remembered
-selection it opens Dravonia. F6 can still run any of the inherited scenes in
-`reference_maps/` directly. The older gameplay prototype remains available at
-`res://scenes/map_preview.tscn`; the F5 change is for this terrain-authoring branch.
+F5 opens `landscape_play.tscn`, with map selection, loading/error status and
+Landscape / Reference / Compare / Grid buttons. The default map is Dravonia.
+F6 still runs inherited `reference_maps/` scenes directly. The older gameplay
+prototype remains at `res://scenes/map_preview.tscn`; the changed F5 entry point
+belongs to this terrain-authoring branch.
 
-Right drag orbits, middle/Shift-right drag pans, and the wheel/pinch zooms.
-`1` shows the top-down reference, `2` the lit perspective landscape, `R` compares,
-and `G` toggles hexes. The camera fits the actual map corners and viewport aspect
-ratio instead of leaving the map far away inside a large empty native region.
+Right drag orbits, middle/Shift-right drag pans, and wheel/pinch zooms. `1` shows
+the top-down reference, `2` the lit perspective landscape, `R` compares and `G`
+toggles hexes. Camera framing uses map corners and viewport aspect ratio.
 
-## Colour and ground materials
+## Ground and geometry
 
 Six scanned PBR layers cover grass, forest floor, sand, snow, rock and wet soil.
-A smooth, metric-scale semantic prior is refined with registered reference
-colour, brightness and local contrast. Low-frequency reference colour/value is
-combined with mean-normalized scan detail; it is not the original image pasted
-over 3D. The mean correction accounts for Compatibility's sRGB shading versus
-Forward+'s linear space. Normal and roughness maps remain real material inputs.
-Triplanar projection prevents stretched cliff textures. At most two dominant
-layers are sampled per fragment. Blue water pixels do not tint cliffs cyan.
+Smooth semantic weights are refined by registered reference colour, brightness
+and contrast. Low-frequency reference colour/value is combined with normalized
+scan detail, rather than pasting the original image over 3D. Mean correction
+accounts for Compatibility's sRGB shading versus Forward+'s linear space.
+Normal/roughness maps and triplanar projection retain physical material detail;
+only two dominant layers are sampled per fragment. Water pixels do not tint
+adjacent cliffs cyan.
 
-The material surface follows the native edited heights. Native Terrain3D still
-owns data, editing constraints, collision and CPU picking, but its coincident
-grey draw surface is hidden when the PBR surface is ready. This avoids depth
-fighting and exposes no unused square regions. Smooth mesh normals are rebuilt
-also on the native brush fast path, providing consistent lighting and shadows.
-Black/transparent parts of the atlas boundary are clipped consistently in the
-land, water and vegetation layers.
+Native Terrain3D owns heights, editing constraints, collision and CPU picking.
+Its coincident grey draw surface is hidden when the PBR surface is ready, avoiding
+z-fighting and unused square regions. The visible mesh follows native edits;
+height-field normals are rebuilt on full refresh and the brush fast path for
+consistent lighting and shadows. Atlas padding is clipped across all layers.
 
-## Mountains, valleys and banks
+The v3 reconstruction uses neutral bright rock evidence and local contrast to
+refine crests inside JSON mountain ranges. Explicit ridge guides take precedence;
+noise is secondary. Lowland elevation and mountain relief have independent
+controls. Bank width and a bounded shore grade form valleys/beaches instead of
+vertical walls beside every water sample. Conservative supersampling within
+water-tagged tiles retains thin rivers. Ocean-connected blue snow/mountain
+shadows remain land unless a water tag or explicit guide overrides protection.
 
-The v3 reconstruction retains JSON location/elevation constraints but refines
-crests using neutral bright rock evidence and local reference contrast. Explicit
-ridge guides remain authoritative. Small-scale noise is secondary, not the
-source of arbitrary mountains on plains. Lowland elevation and mountain relief
-have independent controls. A bounded shore grade and adjustable bank width
-produce river valleys and beaches rather than vertical walls beside every wet
-sample. Narrow water features are conservatively supersampled within semantic
-water tiles. Ocean-connected blue shadows on snow/mountain tiles remain land
-unless an explicit water tag or water guide overrides that protection.
-
-Geometry algorithm version `aonw-reference-terrain/3` creates separate draft
-workspaces, preserving earlier sculpted v2 terrain. Appearance-only edits do not
-alter the geometry recipe or trigger a height rebuild.
+`aonw-reference-terrain/3` uses separate draft workspaces, preserving v2 sculpts.
+Appearance-only edits do not alter the geometry recipe or rebuild heights.
 
 ## Vegetation
 
-JSON forest neighbourhoods support a continuous canopy-evidence mask. Dark green
-textured areas support woodland; bright clearings thin it. Vegetation is not
-clipped into one patch per hex and green fields alone are not treated as forest.
+Forest neighbourhoods support a continuous canopy-evidence mask. Dark green
+textured areas support woodland; bright clearings thin it. Forest boundaries are
+not clipped into one patch per hex, and green fields alone do not imply forest.
 An optional atlas-sized `forest_guide` (white woodland, black clearing) overrides
-ambiguous image inference. Assign it in the Inspector and rebuild; invalid guide
-dimensions are rejected before replacing the active terrain draft.
+ambiguous inference. Assign it in the Inspector and rebuild. Invalid dimensions
+are rejected before replacing the active terrain draft.
 
-Tree3D creates six shared prototypes, with broadleaf, upland and tropical forms,
-textured foliage and bark normals. Alpha hashing preserves small, distant
-canopies instead of cutting them away at a fixed alpha threshold. Their trunks
-have generated LODs; foliage cards retain their coverage instead of being
-destructively simplified. Meshes are shared through spatially chunked
-MultiMeshes. Placement, scale, rotation
-and modest reference-derived tint are reproducible. Density, spacing, height,
-maximum slope, canopy threshold, reference influence, conifer share and draw
-distance are adjustable. Defaults use smaller, more numerous trees than the
-previous landscape preview. These are visual profiles, not a species classifier.
+Tree3D creates six shared broadleaf/upland/tropical prototypes with textured
+foliage and bark normals. A conservative alpha-cutout threshold retains small
+mipmapped needle clusters and uses the same path in both renderers, instead of
+renderer-dependent alpha hashing. Trunks have generated mesh LODs; foliage cards
+are not destructively decimated. Spatially chunked MultiMeshes share the meshes.
+Placement, scale, rotation and modest reference-derived tint are reproducible.
+Density, spacing, height, slope limit, canopy threshold, reference influence,
+conifer share and draw distance are adjustable. These are visual profiles, not a
+botanical classifier. Defaults use smaller, more numerous trees than before.
 
-Trees avoid water footprints and unsuitable tagged terrain, but snow can support
-woodland when the reference and semantic context support it. Roots and slope
-eligibility are re-evaluated against edited native heights after brush edits.
-Generated forests have no scene owner and never replace `ManualWorld`. Dynamic
-gameplay roads/cities and untagged manually placed objects are not exclusion
-masks. Placement is bounded to 120,000 candidates and 20,000 trees; this is not a
-frame-rate guarantee for every device or slider combination.
+Trees avoid water footprints and unsuitable tagged terrain. Snow can support
+woodland when reference/context evidence agrees. Roots and slope eligibility
+are re-evaluated against edited native heights after brush edits. Generated nodes
+have no scene owner and never replace `ManualWorld`. Dynamic gameplay roads,
+cities and untagged manual objects are not exclusion masks. Placement is capped
+at 120,000 candidates and 20,000 trees, not a device-independent frame-rate promise.
 
 ## Water
 
-Water is a separate clipped mesh, not blue ground paint. Its exact footprint
-uses the same reconstructed water mask as the terrain and forest exclusions.
-Metric distance to land controls shallow/deep colour, shoreline treatment and
-wave-normal attenuation. Reference colours refine the blue/turquoise palette.
-Depth, shore transition, ripples and reference-colour influence have controls.
-The ground shader lowers the rendered bed beneath the surface without changing
-the native gameplay/authoring water-height contract.
+Water is a separate clipped mesh using the same reconstructed footprint as the
+terrain and forest exclusions. Metric shore distance controls shallow/deep
+colour, shoreline treatment and ripple attenuation. Reference colours refine
+the blue/turquoise palette. Depth, shore transition, ripple strength and colour
+influence are adjustable. Rendered bed displacement never alters native heights.
 
-The current canonical maps have zero-height water; their preview surface is
-0.09 m above that datum. This is opaque shallow/deep scattering with animated
-normals, not hydraulic flow, volumetric refraction, flood simulation or inferred
-high-altitude lake levels. These would need explicit per-water-body elevation
-and flow inputs. A reference comparison hides water and trees so the original
-image is not doubled by generated canopies or a second water layer.
+Current maps use a zero-height water datum, with the preview surface 0.09 m above
+it. This is opaque shallow/deep scattering with animated normals, not hydraulic
+flow, volumetric refraction, flooding or inferred high-altitude lake levels.
+Those require explicit water-body elevation/flow inputs. Full reference view
+hides water and trees to avoid doubling the painted image with generated objects.
 
 ## Dependencies and scope
 
-The installer downloads pinned Tree3D v1.1.0 addon/demo archives and six 1k Poly
-Haven PBR scans. It verifies integrity, records provenance, and refuses to
-overwrite unmanaged/modified assets. Nothing downloads on opening Godot.
-Textures are loaded through Godot's imported resource system. Missing visual
-assets leave an explicit warning, not an apparently successful empty forest.
+The installer verifies pinned Tree3D v1.1.0 archives and six 1k Poly Haven PBR
+sets, records provenance, and refuses to overwrite unmanaged/modified assets.
+Nothing downloads when Godot opens. Textures use imported resources; missing
+assets produce warnings instead of pretending an empty forest is complete.
 
 This remains an **authoring and rendered-preview pipeline**, not Terrain3D
-control-map paint or a newly published gameplay terrain format. It does not
-claim pixel-perfect semantic reconstruction from a single painted image.
-Use forest/ridge/water guides for ambiguous features and review multiple zooms.
+control-map paint or a newly published gameplay terrain format. A painted atlas
+does not establish exact geometry/species. Use forest/ridge/water guides for
+ambiguous areas and inspect multiple zooms rather than assuming pixel-perfect
+reconstruction or photorealism.
 
-Tree3D is MIT: https://github.com/JekSun97/gdTree3D/releases/tag/v1.1.0 . Its notice
-is retained in `addons/Tree3D/LICENSE.md`. Poly Haven scans are CC0:
-https://polyhaven.com/license . Scan IDs are `leafy_grass`, `forest_ground_04`,
-`coast_sand_05`, `snow_02`, `rock_boulder_cracked`, `brown_mud_03`. Preserve the
-installer's `assets.lock.json` for repeatable release asset installation.
+Tree3D is MIT: https://github.com/JekSun97/gdTree3D/releases/tag/v1.1.0 ; its notice
+is retained at `addons/Tree3D/LICENSE.md`. Poly Haven scans are CC0:
+https://polyhaven.com/license . IDs: `leafy_grass`, `forest_ground_04`,
+`coast_sand_05`, `snow_02`, `rock_boulder_cracked`, `brown_mud_03`.
+Preserve the installer's `assets.lock.json` for repeatable release installation.
 
 ## Validation
 
@@ -138,10 +125,12 @@ python3 clients/aonw_godot/tool/run_reference_contracts.py --godot /path/to/godo
 /path/to/godot --audio-driver Dummy --path clients/aonw_godot --script res://tool/capture_reference_maps.gd
 ```
 
-On display-less Linux use `xvfb-run -a` for renderer checks. Pure contracts cover
-water continuity, geometry parameter sensitivity, normalized biome weights,
-canopy evidence, reproducibility and appearance/geometry isolation. The F5 test
-uses the actual launcher, native terrain, comparison visibility and brush
-re-seating. Full-map captures save perspective landscape, top-down landscape,
-reference, canopy and water-mask images under `reference-captures/`. These are
-inspection artifacts, not numerical proof of photorealism or a GPU benchmark.
+Use `xvfb-run -a` for render checks on display-less Linux. Pure contracts cover
+water continuity, geometry sensitivity, biome weights, canopy evidence,
+reproducibility and appearance/geometry isolation. The Play integration test
+uses the real entry scene, native terrain, comparison visibility, brush updates
+and invalid-guide protection. Full-map captures save perspective/top-down
+landscapes, references, canopy masks and water masks to `reference-captures/`.
+CI renders all four maps in Compatibility and Dravonia in Forward+, retaining
+images/logs. These are visual inspection artifacts, not a photorealism or GPU
+performance benchmark.

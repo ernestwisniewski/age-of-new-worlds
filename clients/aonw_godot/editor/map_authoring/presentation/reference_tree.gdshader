@@ -18,8 +18,10 @@ void fragment() {
 	ROUGHNESS = foliage ? 0.9 : 0.95;
 	SPECULAR = 0.2;
 	ALPHA = foliage ? tex.a : 1.0;
-	// Coverage-preserving hashed alpha avoids disappearing crowns in small mip levels.
-	ALPHA_HASH_SCALE = 1.0;
+	// Thin needles average with transparent texels in distant mip levels.
+	// A conservative cutout retains crowns without renderer-dependent hash noise
+	// or fragment derivatives in the high-overdraw foliage and shadow passes.
+	ALPHA_SCISSOR_THRESHOLD = foliage ? 0.1 : 0.0;
 	if (foliage) {
 		BACKLIGHT = ALBEDO * 0.25;
 	} else {
