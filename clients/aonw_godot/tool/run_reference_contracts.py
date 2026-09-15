@@ -74,7 +74,8 @@ def run(godot: str, project: Path, visual_assets: bool = False) -> None:
             if result.returncode != 0 or any(marker in output for marker in ("SCRIPT ERROR", "Parse Error", "Compile Error", "ERROR:")):
                 raise RuntimeError(f"Godot contract command failed: {' '.join(command)}")
         if visual_assets:
-            shutil.copyfile(root / "reference-landscape-smoke.png", Path.cwd() / "reference-landscape-smoke.png")
+            for image in root.glob("reference-*.png"):
+                shutil.copyfile(image, Path.cwd() / image.name)
         print(f"Passed {len(tests)} Godot contract suites using {len(selected)} source scripts.")
 
 

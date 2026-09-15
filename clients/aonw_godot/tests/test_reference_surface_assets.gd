@@ -53,10 +53,19 @@ func _run() -> void:
 	sun.rotation_degrees = Vector3(-55, -25, 0)
 	sun.shadow_enabled = true
 	root.add_child(sun)
+	var environment := WorldEnvironment.new()
+	environment.environment = Environment.new()
+	environment.environment.background_mode = Environment.BG_COLOR
+	environment.environment.background_color = Color(0.065, 0.085, 0.11)
+	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.environment.ambient_light_color = Color(0.88, 0.92, 1.0)
+	environment.environment.ambient_light_energy = 0.45
+	root.add_child(environment)
 	var camera := Camera3D.new()
 	root.add_child(camera)
-	camera.position = Vector3(48.0, 36.0, 58.0)
-	camera.look_at(Vector3(20.0, 3.0, 20.0))
+	camera.position = Vector3(40.0, 27.0, 47.0)
+	camera.look_at(Vector3(18.0, 4.0, 19.0))
+	camera.fov = 38.0
 	camera.current = true
 	for frame in 12:
 		await process_frame
@@ -64,5 +73,10 @@ func _run() -> void:
 	var image := root.get_texture().get_image()
 	assert(image != null and not image.is_empty())
 	assert(image.save_png("res://reference-landscape-smoke.png") == OK)
+	for index in 3:
+		var source := Image.load_from_file("res://assets/reference_materials/trees/Branches%d.png" % (index + 1))
+		assert(source != null)
+		source.resize(384, 384)
+		assert(source.save_png("res://reference-foliage-%d.png" % index) == OK)
 	print("PASS native Tree3D prototypes, chunked forest, scanned PBR arrays and renderer smoke")
 	quit(0)

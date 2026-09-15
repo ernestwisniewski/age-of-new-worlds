@@ -37,18 +37,18 @@ static func _generate(species: int, variant: int, textures: Dictionary) -> Dicti
 	if tree == null:
 		return {"ok": false, "message": "Tree3D native class could not be instantiated"}
 	# Counts are recursive branch levels, NOT the number of visible branches.
-	var profile := {"trunk_branches_count": 4, "trunk_segments": 6,
+	var profile := {"trunk_branches_count": 5, "trunk_segments": 6,
 		"trunk_height": 5, "trunk_length": 2.4, "trunk_branch_length": 2.1,
 		"trunk_branch_length_falloff": 0.83, "trunk_max_radius": 0.17,
-		"trunk_radius_falloff_rate": 0.68, "twig_scale": 0.7,
+		"trunk_radius_falloff_rate": 0.68, "twig_scale": 1.6,
 		"trunk_climb_rate": 0.45, "trunk_kink": 0.1, "collision_enabled": false}
 	if species == 1:
 		profile.merge({"trunk_height": 8, "trunk_length": 3.2, "trunk_branch_length": 1.4,
 			"trunk_branch_length_falloff": 0.74, "trunk_climb_rate": 0.65,
-			"trunk_drop_amount": -0.14, "twig_scale": 0.65}, true)
+			"trunk_drop_amount": -0.14, "twig_scale": 1.35}, true)
 	elif species == 2:
 		profile.merge({"trunk_length": 3.0, "trunk_branch_length": 2.7,
-			"trunk_branch_length_falloff": 0.88, "twig_scale": 0.95}, true)
+			"trunk_branch_length_falloff": 0.88, "twig_scale": 1.9}, true)
 	for key in profile:
 		tree.set(key, profile[key])
 	tree.set("seed", 4181 + species * 1301 + variant * 379)

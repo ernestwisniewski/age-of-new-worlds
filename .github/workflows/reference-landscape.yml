@@ -46,7 +46,7 @@ jobs:
         with:
           name: reference-landscape-smoke
           path: |
-            reference-landscape-smoke.png
+            reference-*.png
             reference-landscape-*.log
             clients/aonw_godot/assets/reference_materials/assets.lock.json
           retention-days: 7
