@@ -403,6 +403,8 @@ MultiplayerMatchLobbyView _routerLobby({
   ),
   participants: [
     MultiplayerLobbyParticipantView(
+      country: 'poland',
+      colorValue: 0xff8b2424,
       playerId: 'player-1',
       name: 'Player one',
       kind: 'human',
@@ -412,6 +414,8 @@ MultiplayerMatchLobbyView _routerLobby({
       isCurrentUser: true,
     ),
     const MultiplayerLobbyParticipantView(
+      country: 'germany',
+      colorValue: 0xff24608b,
       playerId: 'player-2',
       name: 'Computer',
       kind: 'ai',

@@ -3,6 +3,8 @@ fields:
   playerId: String
   name: String
   kind: String
+  country: String
+  colorValue: int
   isHost: bool
   isClaimed: bool
   isReady: bool

@@ -80,6 +80,13 @@ void main() {
     expect(documents.lastSetup?.mapId, 'dravonia');
     expect(documents.lastSetup?.creatorCountry, 'poland');
     expect(documents.lastSetup?.fogEnabled, isFalse);
+    expect(find.textContaining('Poland · Human'), findsOneWidget);
+    expect(find.textContaining('Germany · Human'), findsOneWidget);
+    final avatars = tester.widgetList<CircleAvatar>(find.byType(CircleAvatar));
+    expect(
+      avatars.map((avatar) => avatar.backgroundColor),
+      containsAll([const Color(0xff8b2424), const Color(0xff24608b)]),
+    );
 
     expect(
       find.byKey(const ValueKey('multiplayer-start-match')),
@@ -364,6 +371,8 @@ MultiplayerMatchLobbyView _matchLobby({
   ),
   participants: [
     MultiplayerLobbyParticipantView(
+      country: 'poland',
+      colorValue: 0xff8b2424,
       playerId: 'player-1',
       name: 'Player one',
       kind: 'human',
@@ -373,6 +382,8 @@ MultiplayerMatchLobbyView _matchLobby({
       isCurrentUser: true,
     ),
     MultiplayerLobbyParticipantView(
+      country: 'germany',
+      colorValue: 0xff24608b,
       playerId: 'player-2',
       name: 'Player two',
       kind: 'human',

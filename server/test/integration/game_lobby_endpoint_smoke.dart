@@ -80,6 +80,14 @@ void main() {
           expect(guestLeft.hostPlayerId, 'player-1');
           expect(await endpoint.listMatches(guest), isEmpty);
           final ownerLobby = await endpoint.lobby(owner, created.matchId);
+          expect(ownerLobby.participants.map((entry) => entry.country), [
+            'poland',
+            'germany',
+          ]);
+          expect(ownerLobby.participants.map((entry) => entry.colorValue), [
+            0xff0000ff,
+            0x00ff00ff,
+          ]);
           expect(
             ownerLobby.participants
                 .singleWhere((value) => value.playerId == 'player-2')

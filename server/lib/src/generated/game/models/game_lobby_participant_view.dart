@@ -19,6 +19,8 @@ abstract class GameLobbyParticipantView
     required this.playerId,
     required this.name,
     required this.kind,
+    required this.country,
+    required this.colorValue,
     required this.isHost,
     required this.isClaimed,
     required this.isReady,
@@ -29,6 +31,8 @@ abstract class GameLobbyParticipantView
     required String playerId,
     required String name,
     required String kind,
+    required String country,
+    required int colorValue,
     required bool isHost,
     required bool isClaimed,
     required bool isReady,
@@ -42,6 +46,8 @@ abstract class GameLobbyParticipantView
       playerId: jsonSerialization['playerId'] as String,
       name: jsonSerialization['name'] as String,
       kind: jsonSerialization['kind'] as String,
+      country: jsonSerialization['country'] as String,
+      colorValue: jsonSerialization['colorValue'] as int,
       isHost: _i1.BoolJsonExtension.fromJson(jsonSerialization['isHost']),
       isClaimed: _i1.BoolJsonExtension.fromJson(jsonSerialization['isClaimed']),
       isReady: _i1.BoolJsonExtension.fromJson(jsonSerialization['isReady']),
@@ -56,6 +62,10 @@ abstract class GameLobbyParticipantView
   String name;
 
   String kind;
+
+  String country;
+
+  int colorValue;
 
   bool isHost;
 
@@ -72,6 +82,8 @@ abstract class GameLobbyParticipantView
     String? playerId,
     String? name,
     String? kind,
+    String? country,
+    int? colorValue,
     bool? isHost,
     bool? isClaimed,
     bool? isReady,
@@ -84,6 +96,8 @@ abstract class GameLobbyParticipantView
       'playerId': playerId,
       'name': name,
       'kind': kind,
+      'country': country,
+      'colorValue': colorValue,
       'isHost': isHost,
       'isClaimed': isClaimed,
       'isReady': isReady,
@@ -98,6 +112,8 @@ abstract class GameLobbyParticipantView
       'playerId': playerId,
       'name': name,
       'kind': kind,
+      'country': country,
+      'colorValue': colorValue,
       'isHost': isHost,
       'isClaimed': isClaimed,
       'isReady': isReady,
@@ -116,6 +132,8 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
     required String playerId,
     required String name,
     required String kind,
+    required String country,
+    required int colorValue,
     required bool isHost,
     required bool isClaimed,
     required bool isReady,
@@ -124,6 +142,8 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
          playerId: playerId,
          name: name,
          kind: kind,
+         country: country,
+         colorValue: colorValue,
          isHost: isHost,
          isClaimed: isClaimed,
          isReady: isReady,
@@ -138,6 +158,8 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
     String? playerId,
     String? name,
     String? kind,
+    String? country,
+    int? colorValue,
     bool? isHost,
     bool? isClaimed,
     bool? isReady,
@@ -147,6 +169,8 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
       playerId: playerId ?? this.playerId,
       name: name ?? this.name,
       kind: kind ?? this.kind,
+      country: country ?? this.country,
+      colorValue: colorValue ?? this.colorValue,
       isHost: isHost ?? this.isHost,
       isClaimed: isClaimed ?? this.isClaimed,
       isReady: isReady ?? this.isReady,

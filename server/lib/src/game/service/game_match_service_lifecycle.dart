@@ -221,6 +221,11 @@ GameLobbyView _lobbyView(
         playerId: playerId,
         name: _string(participant['name'], r'$.participant.name'),
         kind: kind,
+        country: _string(participant['country'], r'$.participant.country'),
+        colorValue: _nonNegativeInt(
+          participant['colorValue'],
+          r'$.participant.colorValue',
+        ),
         isHost: playerId == hostPlayerId,
         isClaimed: claim != null,
         isReady: ready,

@@ -249,12 +249,7 @@ MultiplayerLobbyParticipantView _decodeLobbyParticipant(
   server.GameLobbyParticipantView value,
   Set<String> seen,
 ) {
-  if (value.playerId.isEmpty || value.name.isEmpty) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-  if (value.kind != 'human' && value.kind != 'ai') {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
+  _validateLobbyParticipantIdentity(value);
   if (!seen.add(value.playerId) ||
       (value.isCurrentUser && !value.isClaimed) ||
       (value.kind == 'ai' && !value.isReady)) {
@@ -264,11 +259,31 @@ MultiplayerLobbyParticipantView _decodeLobbyParticipant(
     playerId: value.playerId,
     name: value.name,
     kind: value.kind,
+    country: value.country,
+    colorValue: value.colorValue,
     isHost: value.isHost,
     isClaimed: value.isClaimed,
     isReady: value.isReady,
     isCurrentUser: value.isCurrentUser,
   );
+}
+
+void _validateLobbyParticipantIdentity(server.GameLobbyParticipantView value) {
+  if (value.playerId.isEmpty || value.name.isEmpty) {
+    throw const FormatException('The server returned an invalid lobby.');
+  }
+  if (!AonwPlayerCountry.values.any(
+        (country) => country.name == value.country,
+      ) ||
+      value.colorValue < 0 ||
+      value.colorValue > 0xffffffff) {
+    throw const FormatException(
+      'The server returned an invalid lobby identity.',
+    );
+  }
+  if (value.kind != 'human' && value.kind != 'ai') {
+    throw const FormatException('The server returned an invalid lobby.');
+  }
 }
 
 void _validateLobbyRoster(

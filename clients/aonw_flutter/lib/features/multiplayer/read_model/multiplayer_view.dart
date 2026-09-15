@@ -39,6 +39,8 @@ final class MultiplayerLobbyParticipantView {
     required this.playerId,
     required this.name,
     required this.kind,
+    required this.country,
+    required this.colorValue,
     required this.isHost,
     required this.isClaimed,
     required this.isReady,
@@ -48,6 +50,8 @@ final class MultiplayerLobbyParticipantView {
   final String playerId;
   final String name;
   final String kind;
+  final String country;
+  final int colorValue;
   final bool isHost;
   final bool isClaimed;
   final bool isReady;

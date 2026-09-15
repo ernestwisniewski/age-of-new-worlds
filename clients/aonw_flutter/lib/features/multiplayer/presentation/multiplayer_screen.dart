@@ -14,6 +14,7 @@ import '../read_model/multiplayer_view.dart';
 import 'multiplayer_controller.dart';
 
 part 'multiplayer_lobby.dart';
+part 'multiplayer_lobby_participant.dart';
 part 'multiplayer_match_actions.dart';
 part 'multiplayer_waiting_room.dart';
 
