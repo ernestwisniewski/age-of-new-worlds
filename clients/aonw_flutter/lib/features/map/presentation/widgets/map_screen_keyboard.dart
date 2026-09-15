@@ -62,7 +62,7 @@ extension _MapScreenKeyboard on _MapScreenState {
         _lifecycleState == AppLifecycleState.resumed &&
         _flameFocusNode.hasFocus &&
         state is GameSessionReady &&
-        !state.localHandoff.blocksGameplay &&
+        !_sessionOverlayBlocksInput &&
         !widget.controller.networkConnection.blocksGameplay &&
         !_gamepadNavigation.capturesInput &&
         !_gamepadNavigation.hasOpenPanel;

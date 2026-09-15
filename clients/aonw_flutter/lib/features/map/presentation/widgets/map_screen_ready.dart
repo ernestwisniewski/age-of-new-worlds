@@ -19,6 +19,7 @@ final class _ReadyMap extends StatelessWidget {
     required this.onNavigateTurn,
     required this.canPanKeyboard,
     required this.onOpenSettings,
+    required this.onReturnToMenu,
     required this.flameGame,
     required this.flameGeneration,
     required this.flameFocusNode,
@@ -43,21 +44,27 @@ final class _ReadyMap extends StatelessWidget {
   final ValueChanged<int> onNavigateTurn;
   final bool Function() canPanKeyboard;
   final VoidCallback? onOpenSettings;
+  final VoidCallback? onReturnToMenu;
   final AonwFlameGame flameGame;
   final int flameGeneration;
   final FocusNode flameFocusNode;
   final MapGamepadNavigation gamepadNavigation;
   final VoidCallback onRetryFlame;
 
+  bool get _terminal =>
+      !controller.readOnly && scene.player.turnView.outcome.isTerminal;
+
+  bool get _blocksGameplay => localHandoff.blocksGameplay || _terminal;
+
   @override
   Widget build(BuildContext context) => Stack(
     children: [
       ExcludeFocus(
-        excluding: localHandoff.blocksGameplay,
+        excluding: _blocksGameplay,
         child: ExcludeSemantics(
-          excluding: localHandoff.blocksGameplay,
+          excluding: _blocksGameplay,
           child: TooltipVisibility(
-            visible: !localHandoff.blocksGameplay,
+            visible: !_blocksGameplay,
             child: _gameplay(context),
           ),
         ),
@@ -74,6 +81,19 @@ final class _ReadyMap extends StatelessWidget {
           onRetry: controller.retryLocalHandoff,
         ),
       ),
+      if (_terminal)
+        Positioned.fill(
+          child: MatchOutcomeOverlay(
+            outcome: scene.player.turnView.outcome,
+            actorPlayerId: scene.player.actorPlayerId,
+            playerNames: {
+              for (final player in scene.player.participants)
+                player.id: player.name,
+            },
+            progress: scene.player.victory,
+            onReturnToMenu: onReturnToMenu,
+          ),
+        ),
       Positioned.fill(
         child: MapGamepadFocusRing(navigation: gamepadNavigation),
       ),

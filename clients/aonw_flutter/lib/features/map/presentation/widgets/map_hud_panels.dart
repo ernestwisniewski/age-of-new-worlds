@@ -211,7 +211,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
 
   Widget _objectives(_MapHudPanel? effectivePanel, bool locked) =>
       ObjectiveOverlay(
-        showOutcome: !widget.controller.readOnly,
+        showOutcome: false,
         objectives: widget.scene.map.objectives,
         progress: widget.scene.player.victory.mapObjectives,
         playerNames: {

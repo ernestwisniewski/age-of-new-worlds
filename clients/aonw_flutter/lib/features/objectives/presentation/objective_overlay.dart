@@ -12,6 +12,8 @@ import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_victory_view.dart';
 import '../../turns/read_model/recipient_turn_view.dart';
 
+import 'match_outcome_overlay.dart';
+
 final class ObjectiveOverlay extends StatelessWidget {
   const ObjectiveOverlay({
     required this.objectives,
@@ -82,7 +84,12 @@ final class ObjectiveOverlay extends StatelessWidget {
             ),
           ),
         if (blockingOutcome)
-          Positioned.fill(child: _TerminalOutcome(outcome: outcome)),
+          Positioned.fill(
+            child: MatchOutcomeOverlay(
+              outcome: outcome,
+              playerNames: playerNames,
+            ),
+          ),
       ],
     );
   }
@@ -209,83 +216,3 @@ final class _ObjectiveCard extends StatelessWidget {
     );
   }
 }
-
-final class _TerminalOutcome extends StatelessWidget {
-  const _TerminalOutcome({required this.outcome});
-
-  final GameOutcomeView outcome;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.aonwL10n;
-    final scores = outcome.scoreByPlayerId.entries.toList()
-      ..sort((left, right) => left.key.compareTo(right.key));
-    return Stack(
-      key: const ValueKey('terminal-outcome'),
-      children: [
-        const ModalBarrier(dismissible: false, color: Color(0xB3000000)),
-        Center(
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AonwSpacing.lg),
-              child: AonwPanel(
-                semanticLabel: l10n.matchFinishedTitle,
-                liveRegion: true,
-                maxWidth: 560,
-                padding: const EdgeInsets.all(AonwSpacing.xl),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Icon(
-                      outcome.winnerPlayerId == null
-                          ? Icons.balance
-                          : Icons.emoji_events,
-                      size: 48,
-                    ),
-                    const SizedBox(height: AonwSpacing.sm),
-                    Text(
-                      l10n.matchFinishedTitle,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    Text(
-                      l10n.turnText(
-                        'outcome${_titleCase(outcome.condition.name)}',
-                      ),
-                      key: const ValueKey('outcome-condition'),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: AonwSpacing.md),
-                    Text(
-                      outcome.winnerPlayerId == null
-                          ? l10n.outcomeNoWinner
-                          : l10n.outcomeWinner(outcome.winnerPlayerId!),
-                      key: const ValueKey('outcome-winner'),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (scores.isNotEmpty) ...[
-                      const SizedBox(height: AonwSpacing.lg),
-                      Text(
-                        l10n.outcomeFinalScore,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      for (final score in scores)
-                        Text(
-                          l10n.outcomeScoreLine(score.key, score.value),
-                          key: ValueKey(('outcome-score', score.key)),
-                        ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-String _titleCase(String value) =>
-    '${value.substring(0, 1).toUpperCase()}${value.substring(1)}';

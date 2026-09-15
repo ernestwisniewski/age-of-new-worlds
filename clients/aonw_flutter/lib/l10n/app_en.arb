@@ -712,5 +712,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "outcomePresentationText": "{key, select, victory{Victory} defeat{Defeat} draw{Draw} complete{Match finished} control{Map control} threshold{Required control} other{Match finished}}",
+  "@outcomePresentationText": {"placeholders": {"key": {"type": "String"}}}
 }

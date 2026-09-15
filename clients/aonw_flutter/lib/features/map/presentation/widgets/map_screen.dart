@@ -14,6 +14,7 @@ import '../../../diplomacy/application/diplomacy_state.dart';
 import '../../../local_game/application/local_ai_turn_state.dart';
 import '../../../local_game/application/local_handoff_state.dart';
 import '../../../local_game/presentation/local_handoff_overlay.dart';
+import '../../../objectives/presentation/match_outcome_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../save_game/application/local_save_state.dart';
 import '../../../settings/application/client_gamepad_settings.dart';
@@ -71,6 +72,7 @@ final class MapScreen extends StatefulWidget {
     required this.controller,
     this.inputSource,
     this.onOpenSettings,
+    this.onReturnToMenu,
     this.flameGameFactory = AonwFlameGame.new,
     this.routeObserver,
     this.autoLoad = true,
@@ -81,6 +83,7 @@ final class MapScreen extends StatefulWidget {
   final MapPresentationController controller;
   final MapInputSource? inputSource;
   final VoidCallback? onOpenSettings;
+  final VoidCallback? onReturnToMenu;
   final AonwFlameGame Function() flameGameFactory;
   final RouteObserver<ModalRoute<void>>? routeObserver;
   final bool autoLoad;
@@ -292,6 +295,7 @@ final class _MapScreenState extends State<MapScreen>
           onNavigateTurn: _handleHudTurnNavigation,
           canPanKeyboard: () => _keyboardMapInputAvailable,
           onOpenSettings: widget.onOpenSettings,
+          onReturnToMenu: widget.onReturnToMenu,
           flameGame: _flameGame,
           flameGeneration: _flameGeneration,
           flameFocusNode: _flameFocusNode,
@@ -379,8 +383,7 @@ final class _MapScreenState extends State<MapScreen>
     if (!widget.interactionEnabled) return;
     if (!_routeVisible || _lifecycleState != AppLifecycleState.resumed) return;
     if (widget.controller.networkConnection.blocksGameplay) return;
-    final state = widget.controller.state;
-    if (state is GameSessionReady && state.localHandoff.blocksGameplay) return;
+    if (_sessionOverlayBlocksInput) return;
     switch (intent) {
       case MapHexHoverIntent(:final coordinate):
         widget.controller.hover(coordinate);

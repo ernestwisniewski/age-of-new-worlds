@@ -2950,4 +2950,18 @@ class AonwLocalizationsNl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String outcomePresentationText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'victory': 'Overwinning',
+      'defeat': 'Nederlaag',
+      'draw': 'Gelijkspel',
+      'complete': 'Partij afgelopen',
+      'control': 'Kaartcontrole',
+      'threshold': 'Vereiste controle',
+      'other': 'Partij afgelopen',
+    });
+    return '$_temp0';
+  }
 }

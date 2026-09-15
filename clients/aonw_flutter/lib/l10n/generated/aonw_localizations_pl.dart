@@ -2874,4 +2874,18 @@ class AonwLocalizationsPl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String outcomePresentationText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'victory': 'Zwycięstwo',
+      'defeat': 'Porażka',
+      'draw': 'Remis',
+      'complete': 'Rozgrywka zakończona',
+      'control': 'Kontrola mapy',
+      'threshold': 'Wymagana kontrola',
+      'other': 'Rozgrywka zakończona',
+    });
+    return '$_temp0';
+  }
 }

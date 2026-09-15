@@ -299,6 +299,9 @@ final class AonwRouter {
         autoLoad: autoLoadMap,
         onOpenSettings: () =>
             Navigator.of(context).pushNamed(AonwRoute.settings.location),
+        onReturnToMenu: () => Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(AonwRoute.menu.location, (route) => false),
       ),
     ),
   );

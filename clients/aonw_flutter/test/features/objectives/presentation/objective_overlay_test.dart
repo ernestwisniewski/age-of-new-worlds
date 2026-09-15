@@ -145,8 +145,10 @@ void main() {
     expect(find.bySemanticsLabel('Rozgrywka zakończona'), findsOneWidget);
     expect(find.text('Zwycięstwo punktowe'), findsOneWidget);
     expect(find.text('Zwycięzca: player-2'), findsOneWidget);
-    expect(find.text('player-1: 9'), findsOneWidget);
-    expect(find.text('player-2: 13'), findsOneWidget);
+    expect(find.text('player-1'), findsOneWidget);
+    expect(find.text('player-2'), findsOneWidget);
+    expect(find.text('9'), findsOneWidget);
+    expect(find.text('13'), findsOneWidget);
     expect(find.byKey(const ValueKey('open-objectives')), findsNothing);
     expect(tester.takeException(), isNull);
     semantics.dispose();

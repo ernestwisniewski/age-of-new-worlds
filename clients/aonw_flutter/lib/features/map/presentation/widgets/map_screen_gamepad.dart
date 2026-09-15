@@ -68,7 +68,7 @@ extension _MapScreenGamepad on _MapScreenState {
         ? 0.0
         : (elapsed - previous).inMicroseconds / Duration.microsecondsPerSecond;
     final frame = _gamepadFrames.advance(input: _gamepadInput, dt: dt);
-    if (_routeHandoffFrame(frame)) {
+    if (_routeBlockingFrame(frame)) {
       _synchronizeGamepadTicker();
       return;
     }
@@ -84,11 +84,16 @@ extension _MapScreenGamepad on _MapScreenState {
     _synchronizeGamepadTicker();
   }
 
-  bool _routeHandoffFrame(MapGamepadFrame frame) {
+  bool get _sessionOverlayBlocksInput {
     final state = widget.controller.state;
-    if (state is! GameSessionReady || !state.localHandoff.blocksGameplay) {
-      return false;
-    }
+    return state is GameSessionReady &&
+        (state.localHandoff.blocksGameplay ||
+            (!widget.controller.readOnly &&
+                state.recipient.turnView.outcome.isTerminal));
+  }
+
+  bool _routeBlockingFrame(MapGamepadFrame frame) {
+    if (!_sessionOverlayBlocksInput) return false;
     if (_acceptsGamepadInput && _gamepadNavigation.hasModal) {
       _gamepadNavigation.handleFrame(frame);
     }
@@ -145,6 +150,7 @@ extension _MapScreenTurnInput on _MapScreenState {
       _routeVisible &&
       _lifecycleState == AppLifecycleState.resumed &&
       _acceptsGamepadInput &&
+      !_sessionOverlayBlocksInput &&
       !_gamepadNavigation.capturesInput &&
       !_flameGame.hasActiveUnitEffects;
 
