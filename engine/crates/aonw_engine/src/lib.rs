@@ -80,9 +80,11 @@ pub use diplomacy_policy::{
 pub use economy::{
     CityGoldIncomeSource, CityYieldBreakdown, CityYieldContribution, CityYieldContributionKind,
     CityYieldQuery, EconomyForecast, EconomyForecastQuery, EconomyQueryError, StabilityBreakdown,
-    StrategicResourceProjection, StrategicResourceProjectionQuery, StrategicResourceSource,
-    TreasuryWarning, UnitUpkeepBreakdown, UnitUpkeepSource, WealthProjectGoldIncomeSource,
-    YieldValue, strategic_resource_shortages,
+    StrategicResourceAllocation, StrategicResourceBalance, StrategicResourceDeposit,
+    StrategicResourceInventory, StrategicResourceProjection, StrategicResourceProjectionQuery,
+    StrategicResourceSource, TreasuryWarning, UnitUpkeepBreakdown, UnitUpkeepSource,
+    WealthProjectGoldIncomeSource, YieldValue, strategic_resource_inventory,
+    strategic_resource_shortages,
 };
 pub use hex_inspection::{
     HexAssessmentKind, HexAssessmentScore, HexAssessmentTag, HexImprovementAccess,

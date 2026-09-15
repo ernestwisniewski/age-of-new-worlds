@@ -1,6 +1,13 @@
 mod forecast;
 mod forecast_rules;
+mod inventory;
+mod inventory_model;
 mod model;
+pub use inventory::strategic_resource_inventory;
+pub use inventory_model::{
+    StrategicResourceAllocation, StrategicResourceBalance, StrategicResourceDeposit,
+    StrategicResourceInventory,
+};
 mod shortage;
 pub use shortage::strategic_resource_shortages;
 pub(crate) mod rules;

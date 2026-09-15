@@ -1,5 +1,7 @@
 //! Economy account and city-yield acceptance tests.
 
+#[path = "economy/inventory.rs"]
+mod inventory;
 #[path = "economy/manifest.rs"]
 mod manifest;
 #[path = "economy/stability.rs"]
