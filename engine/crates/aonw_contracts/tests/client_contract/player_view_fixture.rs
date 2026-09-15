@@ -45,6 +45,7 @@ pub(super) fn unit() -> PlayerUnitViewDto {
 
 pub(super) fn economy() -> PlayerEconomyViewDto {
     PlayerEconomyViewDto {
+        strategic_resource_shortages: vec![],
         gold: 125,
         war_weariness: 3,
         stability_net: -2,
@@ -64,6 +65,7 @@ pub(super) fn economy() -> PlayerEconomyViewDto {
             amount_per_turn: 1,
         }],
         forecast: EconomyForecastDto {
+            treasury_warning: aonw_contracts::client::TreasuryWarningDto::None,
             treasury: 125,
             city_income: 7,
             project_income: 2,
@@ -133,6 +135,11 @@ pub(super) fn research() -> PlayerResearchViewDto {
 
 pub(super) fn victory() -> PlayerVictoryViewDto {
     PlayerVictoryViewDto {
+        status: aonw_contracts::client::VictoryStatusDto {
+            kind: aonw_contracts::client::VictoryStatusKindDto::Culture,
+            critical: false,
+            leader_player_id: Some("player-1".into()),
+        },
         conquest_enabled: true,
         domination_enabled: true,
         domination_required_control_percent: 60.into(),

@@ -4,6 +4,11 @@ import '../read_model/player_victory_view.dart';
 
 PlayerVictoryView mapPlayerVictoryView(AonwPlayerVictoryView value) =>
     PlayerVictoryView(
+      status: VictoryStatusView(
+        kind: VictoryStatusKindView.values.byName(value.status.kind.name),
+        critical: value.status.critical,
+        leaderPlayerId: value.status.leaderPlayerId,
+      ),
       conquestEnabled: value.conquestEnabled,
       dominationEnabled: value.dominationEnabled,
       dominationRequiredControlPercent: value.dominationRequiredControlPercent,

@@ -37,14 +37,15 @@ pub use response::{
     ResearchOptionDto, ResearchRecommendationDto, ResearchRecommendationReasonDto, RoadViewDto,
     ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
     StabilityBreakdownDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
-    TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto, UnitMovementExecutionDto,
-    UnitProductionOptionDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
-    WorkerAutomationActionDto, WorkerAutomationMetricsDto, WorkerAutomationOptionDto,
-    WorkerImprovementOptionDto, WorkerJobCompletionDto, WorkerJobViewDto, YieldValueDto,
+    TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto, TreasuryWarningDto,
+    UnitMovementExecutionDto, UnitProductionOptionDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto,
+    VictoryStatusDto, VictoryStatusKindDto, WorkerAutomationActionDto, WorkerAutomationMetricsDto,
+    WorkerAutomationOptionDto, WorkerImprovementOptionDto, WorkerJobCompletionDto,
+    WorkerJobViewDto, YieldValueDto,
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 27;
+pub const CLIENT_API_VERSION: u16 = 28;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;

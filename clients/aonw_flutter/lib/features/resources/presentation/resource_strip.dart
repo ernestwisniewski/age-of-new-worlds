@@ -7,6 +7,7 @@ import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../../map/read_model/player_map_view.dart';
 import 'resource_pill.dart';
 import 'resource_popup.dart';
+import 'victory_status_copy.dart';
 
 export 'resource_popup.dart';
 
@@ -36,7 +37,8 @@ final class ResourceStrip extends StatelessWidget {
               child: ResourcePill(
                 key: ValueKey('resource-${kind.name}'),
                 label: context.aonwL10n.resourceText(kind.name),
-                value: _value(kind),
+                value: _value(kind, context.aonwL10n),
+                warning: _warning(kind, context.aonwL10n),
                 delta: kind == ResourcePopup.gold
                     ? signedResourceAmount(player.economy.forecast.netPerTurn)
                     : null,
@@ -51,7 +53,7 @@ final class ResourceStrip extends StatelessWidget {
     ),
   );
 
-  String _value(ResourcePopup kind) => switch (kind) {
+  String _value(ResourcePopup kind, AonwLocalizations l10n) => switch (kind) {
     ResourcePopup.gold => '${player.economy.gold}',
     ResourcePopup.science => signedResourceAmount(
       player.research.sciencePerTurn,
@@ -62,20 +64,54 @@ final class ResourceStrip extends StatelessWidget {
     ResourcePopup.resources =>
       '${player.economy.strategicResourceStockpile.where((value) => value.amount > 0).length}/${player.economy.strategicResourceStockpile.length}',
     ResourcePopup.turn => '${player.turnView.number}',
-    ResourcePopup.victory =>
-      '${player.victory.scoreByPlayerId[player.actorPlayerId] ?? 0}',
+    ResourcePopup.victory => victoryStatusLabel(
+      player.victory.status,
+      player.victory,
+      l10n,
+      compact: true,
+    ),
   };
 
-  Color _color(ResourcePopup kind) => switch (kind) {
-    ResourcePopup.science => AonwColorTokens.scienceAccent,
-    ResourcePopup.resources => AonwColorTokens.resourcesAccent,
-    ResourcePopup.stability => switch (player.economy.forecast.stability.band) {
-      PlayerStabilityBandView.content => AonwColorTokens.success,
-      PlayerStabilityBandView.stable => AonwColorTokens.brandLight,
-      PlayerStabilityBandView.strained => AonwColorTokens.warning,
-      PlayerStabilityBandView.unrest => AonwColorTokens.danger,
-    },
-    _ => AonwColorTokens.brandLight,
+  String? _warning(
+    ResourcePopup kind,
+    AonwLocalizations l10n,
+  ) => switch (kind) {
+    ResourcePopup.gold
+        when player.economy.forecast.treasuryWarning !=
+            TreasuryWarningView.none =>
+      l10n.resourceText(player.economy.forecast.treasuryWarning.name),
+    ResourcePopup.resources
+        when player.economy.strategicResourceShortages.isNotEmpty =>
+      '${l10n.resourceText('shortage')}: ${player.economy.strategicResourceShortages.map((resource) => l10n.presentationName(resource.name)).join(', ')}',
+    ResourcePopup.victory when player.victory.status.critical =>
+      l10n.resourceText('victoryCritical'),
+    _ => null,
+  };
+
+  bool _hasWarning(ResourcePopup kind) => switch (kind) {
+    ResourcePopup.gold =>
+      player.economy.forecast.treasuryWarning != TreasuryWarningView.none,
+    ResourcePopup.resources =>
+      player.economy.strategicResourceShortages.isNotEmpty,
+    ResourcePopup.victory => player.victory.status.critical,
+    _ => false,
+  };
+
+  Color _color(ResourcePopup kind) {
+    if (_hasWarning(kind)) return AonwColorTokens.danger;
+    return switch (kind) {
+      ResourcePopup.science => AonwColorTokens.scienceAccent,
+      ResourcePopup.resources => AonwColorTokens.resourcesAccent,
+      ResourcePopup.stability => _stabilityColor(),
+      _ => AonwColorTokens.brandLight,
+    };
+  }
+
+  Color _stabilityColor() => switch (player.economy.forecast.stability.band) {
+    PlayerStabilityBandView.content => AonwColorTokens.success,
+    PlayerStabilityBandView.stable => AonwColorTokens.brandLight,
+    PlayerStabilityBandView.strained => AonwColorTokens.warning,
+    PlayerStabilityBandView.unrest => AonwColorTokens.danger,
   };
 }
 

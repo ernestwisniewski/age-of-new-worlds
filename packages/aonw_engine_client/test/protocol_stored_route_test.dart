@@ -5,13 +5,21 @@ void main() {
   for (final merchant in [false, true]) {
     test('decodes immutable private route metadata (merchant: $merchant)', () {
       final value = _route(merchant);
-      final dynamic route = merchant
-          ? AonwMerchantTradeRoute.fromJson(value)
-          : AonwQueuedMovePath.fromJson(value);
-      expect(route.stepTurns, [1, 2]);
-      expect(route.roadStepIndices, [1]);
-      expect(() => route.stepTurns.clear(), throwsUnsupportedError);
-      expect(() => route.roadStepIndices.clear(), throwsUnsupportedError);
+      final (turns, roads) = switch (_decode(value, merchant)) {
+        AonwMerchantTradeRoute(:final stepTurns, :final roadStepIndices) => (
+          stepTurns,
+          roadStepIndices,
+        ),
+        AonwQueuedMovePath(:final stepTurns, :final roadStepIndices) => (
+          stepTurns,
+          roadStepIndices,
+        ),
+        _ => throw StateError('Unexpected route type'),
+      };
+      expect(turns, [1, 2]);
+      expect(roads, [1]);
+      expect(() => turns.clear(), throwsUnsupportedError);
+      expect(() => roads.clear(), throwsUnsupportedError);
       for (final key in ['stepTurns', 'roadStepIndices']) {
         final missing = {...value}..remove(key);
         expect(() => _decode(missing, merchant), throwsFormatException);

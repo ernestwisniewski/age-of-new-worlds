@@ -34,7 +34,7 @@ void main() {
     expect(() => _decode(missing), throwsFormatException);
     for (final invalid in [
       null,
-      {},
+      <String, Object?>{},
       [null],
       ['1'],
       [-1],

@@ -71,9 +71,11 @@ AonwPlayerViewSnapshot _snapshot(
 );
 
 AonwPlayerVictoryView _victory({
+  AonwVictoryStatus status = AonwVictoryStatus.empty,
   Map<String, int> scoreByPlayerId = const {'player-1': 37, 'player-2': 21},
   List<AonwMapObjectiveProgress> mapObjectives = const [],
 }) => AonwPlayerVictoryView(
+  status: status,
   conquestEnabled: true,
   dominationEnabled: true,
   dominationRequiredControlPercent: 60,
@@ -179,12 +181,14 @@ AonwPlayerDiplomacyView _diplomacy([List<String> counterpartIds = const []]) =>
     );
 
 AonwPlayerEconomyView _economy({
+  List<AonwResourceType> shortages = const [],
   int gold = 10,
   int warWeariness = 0,
   int stabilityNet = 0,
   bool withOutput = false,
   AonwEconomyForecast? forecast,
 }) => AonwPlayerEconomyView(
+  strategicResourceShortages: shortages,
   gold: gold,
   warWeariness: warWeariness,
   stabilityNet: stabilityNet,
@@ -224,6 +228,7 @@ AonwEconomyForecast _forecast({
   List<AonwGoldIncomeSource> citySources = const [],
   List<AonwGoldIncomeSource> projectSources = const [],
 }) => AonwEconomyForecast(
+  treasuryWarning: AonwTreasuryWarning.none,
   treasury: treasury,
   cityIncome: cityIncome,
   projectIncome: projectIncome,

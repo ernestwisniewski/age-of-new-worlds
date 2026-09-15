@@ -13,18 +13,34 @@ void main() {
       final l10n = await AonwLocalizations.delegate.load(const Locale('en'));
       final player = resourcePlayerFixture();
       final gold = resourceDetails(player, ResourcePopup.gold, l10n);
-      expect(gold, contains((label: 'Treasury', value: '123')));
-      expect(gold, contains((label: 'Income', value: '999')));
-      expect(gold, contains((label: 'Unit upkeep', value: '-32')));
-      expect(gold, contains((label: 'Per turn', value: '-77')));
+      expect(gold, contains((warning: false, label: 'Treasury', value: '123')));
+      expect(gold, contains((warning: false, label: 'Income', value: '999')));
+      expect(
+        gold,
+        contains((warning: false, label: 'Unit upkeep', value: '-32')),
+      );
+      expect(gold, contains((warning: false, label: 'Per turn', value: '-77')));
       final science = resourceDetails(player, ResourcePopup.science, l10n);
-      expect(science, contains((label: 'Science', value: '+11')));
-      expect(science, contains((label: 'Stored science', value: '19')));
       expect(
         science,
-        contains((label: 'Active research', value: 'Agriculture')),
+        contains((warning: false, label: 'Science', value: '+11')),
       );
-      expect(science, contains((label: 'Progress', value: '7 / 31')));
+      expect(
+        science,
+        contains((warning: false, label: 'Stored science', value: '19')),
+      );
+      expect(
+        science,
+        contains((
+          warning: false,
+          label: 'Active research',
+          value: 'Agriculture',
+        )),
+      );
+      expect(
+        science,
+        contains((warning: false, label: 'Progress', value: '7 / 31')),
+      );
     },
   );
 

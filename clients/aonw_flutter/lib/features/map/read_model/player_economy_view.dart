@@ -1,5 +1,8 @@
+import 'hud_status_view.dart';
 import 'map_view.dart';
 import 'pending_action_view.dart';
+
+export 'hud_status_view.dart';
 
 final class PlayerStrategicResourceAmountView {
   const PlayerStrategicResourceAmountView({
@@ -132,6 +135,7 @@ final class PlayerStabilityBreakdownView {
 final class PlayerEconomyForecastView {
   PlayerEconomyForecastView({
     required this.treasury,
+    required this.treasuryWarning,
     required this.cityIncome,
     required this.projectIncome,
     required this.grossIncome,
@@ -145,6 +149,7 @@ final class PlayerEconomyForecastView {
 
   factory PlayerEconomyForecastView.empty() => PlayerEconomyForecastView(
     treasury: 0,
+    treasuryWarning: TreasuryWarningView.none,
     cityIncome: 0,
     projectIncome: 0,
     grossIncome: 0,
@@ -181,6 +186,7 @@ final class PlayerEconomyForecastView {
   );
 
   final int treasury;
+  final TreasuryWarningView treasuryWarning;
   final int cityIncome;
   final int projectIncome;
   final int grossIncome;
@@ -194,13 +200,17 @@ final class PlayerEconomyForecastView {
 final class PlayerEconomyView {
   PlayerEconomyView({
     required this.gold,
+    required List<MapResource> strategicResourceShortages,
     required this.warWeariness,
     required this.stabilityNet,
     required List<PlayerStrategicResourceAmountView> strategicResourceStockpile,
     required List<PlayerStrategicResourceAmountView> strategicResourceOutput,
     required List<PlayerStrategicResourceSourceView> strategicResourceSources,
     required this.forecast,
-  }) : strategicResourceStockpile = List.unmodifiable(
+  }) : strategicResourceShortages = List.unmodifiable(
+         strategicResourceShortages,
+       ),
+       strategicResourceStockpile = List.unmodifiable(
          strategicResourceStockpile,
        ),
        strategicResourceOutput = List.unmodifiable(strategicResourceOutput),
@@ -208,6 +218,7 @@ final class PlayerEconomyView {
 
   factory PlayerEconomyView.empty() => PlayerEconomyView(
     gold: 0,
+    strategicResourceShortages: const [],
     warWeariness: 0,
     stabilityNet: 0,
     strategicResourceStockpile: const [],
@@ -217,6 +228,7 @@ final class PlayerEconomyView {
   );
 
   final int gold;
+  final List<MapResource> strategicResourceShortages;
   final int warWeariness;
   final int stabilityNet;
   final List<PlayerStrategicResourceAmountView> strategicResourceStockpile;

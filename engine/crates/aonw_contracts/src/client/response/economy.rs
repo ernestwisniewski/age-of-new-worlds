@@ -119,6 +119,7 @@ pub struct StabilityBreakdownDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EconomyForecastDto {
+    pub treasury_warning: super::TreasuryWarningDto,
     pub treasury: i64,
     pub city_income: i64,
     pub project_income: i64,
@@ -135,6 +136,7 @@ pub struct EconomyForecastDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PlayerEconomyViewDto {
+    pub strategic_resource_shortages: Vec<ResourceTypeDto>,
     pub gold: i64,
     pub war_weariness: i64,
     pub stability_net: i64,

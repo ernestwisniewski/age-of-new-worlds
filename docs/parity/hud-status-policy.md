@@ -35,3 +35,20 @@ Reference sources are `top_resource_strip.dart`,
 `hud_strategic_resource_summary.dart`, `unit_strategic_resource_availability.dart`,
 `hud_victory_status_summary.dart`, `hud_victory_status_cultural.dart` and
 `domination_progress.dart` at the revision pinned in `reference-catalog.md`.
+
+
+Client API 28 requires `economy.forecast.treasuryWarning`, the ordered
+`economy.strategicResourceShortages` list, and `victory.status` with a typed kind,
+critical flag and explicit nullable leader. Snapshots and replacement patches
+share the same encoder. Canonical state, save and replay formats do not change.
+Dart rejects missing or unknown values, invalid shortage kinds/order, leaders
+outside the roster and cultural summaries naming a different recipient. The UI
+copies this metadata into immutable read models; it does not recalculate warning
+thresholds or victory priority.
+
+The resource strip and details expose warnings through icons, text, tooltips and
+semantics in all six languages. Popup warnings use the full available width.
+Golden coverage includes the three size classes; widget checks cover portrait and
+landscape phones at 200% text and verify no scheduled frames after settling.
+The full strategic-resource inventory and detailed victory guidance remain
+separate parity work beyond this compact status contract.

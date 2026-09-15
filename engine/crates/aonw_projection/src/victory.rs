@@ -86,6 +86,9 @@ impl PlayerMapObjectiveProgressView {
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PlayerVictoryView {
+    status_kind: aonw_engine::VictoryStatusKind,
+    status_critical: bool,
+    status_leader_index: Option<usize>,
     conquest_enabled: bool,
     domination_enabled: bool,
     domination_required_control_percent: Box<str>,
@@ -105,6 +108,9 @@ pub struct PlayerVictoryView {
 impl Default for PlayerVictoryView {
     fn default() -> Self {
         Self {
+            status_kind: aonw_engine::VictoryStatusKind::None,
+            status_critical: false,
+            status_leader_index: None,
             conquest_enabled: false,
             domination_enabled: false,
             domination_required_control_percent: "60".into(),
@@ -124,6 +130,23 @@ impl Default for PlayerVictoryView {
 }
 
 impl PlayerVictoryView {
+    /// Returns the condition emphasized by the authoritative HUD policy.
+    #[must_use]
+    pub const fn status_kind(&self) -> aonw_engine::VictoryStatusKind {
+        self.status_kind
+    }
+    /// Returns whether the emphasized condition needs a warning.
+    #[must_use]
+    pub const fn status_critical(&self) -> bool {
+        self.status_critical
+    }
+    /// Returns the disclosed leader without a second owned copy of its ID.
+    #[must_use]
+    pub fn status_leader_player_id(&self) -> Option<&PlayerId> {
+        self.status_leader_index
+            .and_then(|index| self.score_by_player_id.keys().nth(index))
+    }
+
     pub(crate) fn try_for_recipient(
         state: &GameState,
         actor: &PlayerId,
@@ -133,7 +156,16 @@ impl PlayerVictoryView {
         let progress =
             calculate_victory_progress(state, EngineContext::canonical(actor, map, ruleset))
                 .map_err(CanonicalQueryError::Outcome)?;
+        let status = progress.status(actor);
         Ok(Self {
+            status_kind: status.kind(),
+            status_critical: status.critical(),
+            status_leader_index: status.leader_player_id().and_then(|leader| {
+                progress
+                    .score_by_player_id()
+                    .keys()
+                    .position(|player| player == leader)
+            }),
             conquest_enabled: progress.conquest_enabled(),
             domination_enabled: progress.domination_enabled(),
             domination_required_control_percent: progress

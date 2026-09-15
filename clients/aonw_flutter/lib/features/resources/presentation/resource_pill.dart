@@ -13,12 +13,14 @@ final class ResourcePill extends StatelessWidget {
     required this.active,
     required this.onPressed,
     this.delta,
+    this.warning,
     super.key,
   });
 
   final String label;
   final String value;
   final String? delta;
+  final String? warning;
   final ResourcePopup icon;
   final Color color;
   final bool active;
@@ -28,7 +30,9 @@ final class ResourcePill extends StatelessWidget {
   Widget build(BuildContext context) {
     final foreground = active ? AonwColorTokens.background : color;
     final compact = MediaQuery.sizeOf(context).width < 520;
-    final description = '$label: $value${delta == null ? '' : ' ($delta)'}';
+    final description =
+        '$label: $value${delta == null ? '' : ' ($delta)'}'
+        '${warning == null ? '' : '\n$warning'}';
     return Semantics(
       button: true,
       selected: active,
@@ -72,6 +76,10 @@ final class ResourcePill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (warning != null) ...[
+            Icon(Icons.warning_amber_rounded, size: 16, color: foreground),
+            const SizedBox(width: 4),
+          ],
           ResourceIcon(kind: icon, size: compact ? 12 : 16, color: foreground),
           const SizedBox(width: 5),
           Text(

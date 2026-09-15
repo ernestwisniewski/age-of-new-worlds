@@ -13,6 +13,7 @@ import '../read_model/player_map_view.dart';
 import 'pending_action_view_mapper.dart';
 import 'player_economy_view_mapper.dart';
 import 'player_victory_view_mapper.dart';
+import 'recipient_hud_status_validator.dart';
 import 'recipient_projection_validator.dart';
 import 'stored_unit_route_mapper.dart';
 
@@ -39,6 +40,7 @@ final class PlayerMapViewMapper {
   }) {
     RecipientProjectionValidator(map).validateSnapshot(wire);
     _validateActor(wire.participants, actorPlayerId);
+    validateVictoryStatusRecipient(wire.victory.status, actorPlayerId);
     final units = _mapUnits(wire.units, map, actorPlayerId);
     final cities = [for (final city in wire.cities) _mapCity(city)];
     final artifacts = [

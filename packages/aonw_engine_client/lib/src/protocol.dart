@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:aonw_engine_client/src/api.dart';
 import 'package:aonw_engine_client/src/native_identity.dart';
 import 'package:aonw_engine_client/src/protocol_ai.dart';
@@ -18,10 +17,12 @@ export 'protocol_artifact.dart';
 export 'protocol_city_view.dart';
 export 'protocol_coordinate.dart';
 export 'protocol_diplomacy.dart';
+export 'protocol_economy_forecast.dart';
 export 'protocol_event.dart';
 export 'protocol_evidence.dart';
 export 'protocol_execution.dart';
 export 'protocol_hex_values.dart';
+export 'protocol_hud_status.dart';
 export 'protocol_map.dart';
 export 'protocol_match.dart';
 export 'protocol_outcome.dart';

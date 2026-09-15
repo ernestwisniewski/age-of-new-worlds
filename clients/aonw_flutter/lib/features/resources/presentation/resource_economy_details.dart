@@ -7,18 +7,26 @@ List<ResourceDetail> _goldDetails(
   final forecast = player.economy.forecast;
   final upkeep = forecast.upkeep;
   return [
+    if (forecast.treasuryWarning != TreasuryWarningView.none)
+      _detail(
+        l10n,
+        'warning',
+        l10n.resourceText(forecast.treasuryWarning.name),
+      ),
     _detail(l10n, 'treasury', forecast.treasury),
     _detail(l10n, 'income', forecast.grossIncome),
     _detail(l10n, 'cityIncome', forecast.cityIncome),
     for (final source in forecast.citySources)
       (
         label: _cityName(player, source.cityId, l10n),
+        warning: false,
         value: signedResourceAmount(source.amount),
       ),
     _detail(l10n, 'projectIncome', forecast.projectIncome),
     for (final source in forecast.projectSources)
       (
         label: _cityName(player, source.cityId, l10n),
+        warning: false,
         value: signedResourceAmount(source.amount),
       ),
     _detail(l10n, 'upkeep', signedResourceAmount(-upkeep.total)),
@@ -26,6 +34,7 @@ List<ResourceDetail> _goldDetails(
       (
         label:
             '${l10n.presentationName(source.kind.name)} ×${source.paidUnitCount}',
+        warning: false,
         value: signedResourceAmount(-source.amount),
       ),
     _detail(l10n, 'freeUnits', upkeep.freeUnitCount),
@@ -69,22 +78,27 @@ List<ResourceDetail> _strategicDetails(
   PlayerMapView player,
   AonwLocalizations l10n,
 ) => [
+  for (final resource in player.economy.strategicResourceShortages)
+    _detail(l10n, 'shortage', l10n.presentationName(resource.name)),
   for (final stock in player.economy.strategicResourceStockpile)
     (
       label:
           '${l10n.presentationName(stock.resource.name)} · ${l10n.resourceText('stockpile')}',
+      warning: false,
       value: '${stock.amount}',
     ),
   for (final output in player.economy.strategicResourceOutput)
     (
       label:
           '${l10n.presentationName(output.resource.name)} · ${l10n.resourceText('output')}',
+      warning: false,
       value: signedResourceAmount(output.amount),
     ),
   for (final source in player.economy.strategicResourceSources)
     (
       label:
           '${_cityName(player, source.cityId, l10n)} · ${l10n.presentationName(source.improvement.name)} · ${l10n.presentationName(source.resource.name)}',
+      warning: false,
       value: signedResourceAmount(source.amountPerTurn),
     ),
 ];

@@ -1,11 +1,12 @@
 import '../../../l10n/l10n.dart';
 import '../../map/read_model/player_map_view.dart';
 import 'resource_strip.dart';
+import 'victory_status_copy.dart';
 
 part 'resource_economy_details.dart';
 part 'resource_progress_details.dart';
 
-typedef ResourceDetail = ({String label, String value});
+typedef ResourceDetail = ({String label, String value, bool warning});
 
 List<ResourceDetail> resourceDetails(
   PlayerMapView player,
@@ -21,7 +22,7 @@ List<ResourceDetail> resourceDetails(
 };
 
 ResourceDetail _detail(AonwLocalizations l10n, String key, Object value) =>
-    (label: l10n.resourceText(key), value: '$value');
+    (label: l10n.resourceText(key), value: '$value', warning: key == 'warning');
 
 String _cityName(PlayerMapView player, String id, AonwLocalizations l10n) =>
     player.cities.where((city) => city.id == id).firstOrNull?.name ??

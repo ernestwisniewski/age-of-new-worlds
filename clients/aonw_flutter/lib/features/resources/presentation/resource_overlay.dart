@@ -38,6 +38,7 @@ final class ResourceOverlay extends StatelessWidget {
           ),
         ),
       Positioned(
+        key: const ValueKey('resource-strip-position'),
         top: MediaQuery.paddingOf(context).top + 6,
         left: 8,
         right: 8,
@@ -130,17 +131,42 @@ final class _ResourcePanel extends StatelessWidget {
 
   Widget _detailRow(ResourceDetail detail) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
+    child: detail.warning
+        ? _warning(detail)
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: Text(detail.label)),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  detail.value,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontFeatures: AonwTypography.tabularFigures,
+                  ),
+                ),
+              ),
+            ],
+          ),
+  );
+
+  Widget _warning(ResourceDetail detail) => Semantics(
+    container: true,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(flex: 3, child: Text(detail.label)),
-        const SizedBox(width: 12),
+        const Icon(
+          Icons.warning_amber_rounded,
+          size: 20,
+          color: AonwColorTokens.warning,
+        ),
+        const SizedBox(width: 8),
         Expanded(
-          flex: 2,
           child: Text(
-            detail.value,
-            textAlign: TextAlign.end,
-            style: const TextStyle(fontFeatures: AonwTypography.tabularFigures),
+            '${detail.label}: ${detail.value}',
+            style: const TextStyle(color: AonwColorTokens.warning),
           ),
         ),
       ],

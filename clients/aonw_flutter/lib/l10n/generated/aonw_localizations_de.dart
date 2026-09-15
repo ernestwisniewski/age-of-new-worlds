@@ -2694,6 +2694,11 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'Erkundete Felder außerhalb bekannter Stadtgebiete anzeigen.';
 
   @override
+  String resourceTurnsCompact(int turns) {
+    return '${turns}Z';
+  }
+
+  @override
   String resourceText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
       'gold': 'Gold',
@@ -2746,6 +2751,16 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'stable': 'Stabil',
       'strained': 'Angespannt',
       'unrest': 'Unruhen',
+      'warning': 'Warnung',
+      'negativeBalance': 'Die Staatskasse ist im Minus.',
+      'deficitWithinThreeTurns':
+          'Bei den aktuellen Einnahmen wird die Staatskasse innerhalb von drei Runden negativ.',
+      'shortage': 'Nicht genug Ressourcen für freigeschaltete Einheiten',
+      'victoryCritical': 'Eine Siegbedingung nähert sich der Erfüllung.',
+      'leader': 'Führender',
+      'noVictory': 'Keine Siegbedingung',
+      'goalCompact': 'Ziel',
+      'scoreCapCompact': 'LIMIT',
       'other': 'Ressourcen',
     });
     return '$_temp0';

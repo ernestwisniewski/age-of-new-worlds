@@ -255,10 +255,12 @@ Map<String, Object?> _economy() => {
   'gold': 100,
   'warWeariness': 0,
   'stabilityNet': 0,
+  'strategicResourceShortages': <Object?>[],
   'strategicResourceStockpile': <Object?>[],
   'strategicResourceOutput': <Object?>[],
   'strategicResourceSources': <Object?>[],
   'forecast': {
+    'treasuryWarning': 'none',
     'treasury': 100,
     'cityIncome': 0,
     'projectIncome': 0,
@@ -297,6 +299,11 @@ Map<String, Object?> _economy() => {
 };
 
 Map<String, Object?> _victory() => {
+  'status': {
+    'kind': 'domination',
+    'critical': false,
+    'leaderPlayerId': 'player-1',
+  },
   'conquestEnabled': true,
   'dominationEnabled': true,
   'dominationRequiredControlPercent': 60,

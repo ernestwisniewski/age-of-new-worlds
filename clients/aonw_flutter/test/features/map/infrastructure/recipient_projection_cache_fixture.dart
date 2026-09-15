@@ -114,6 +114,7 @@ AonwPlayerResearchView _research({int progress = 4}) => AonwPlayerResearchView(
 
 AonwPlayerVictoryView _victory({required int turn, required int score}) =>
     AonwPlayerVictoryView(
+      status: AonwVictoryStatus.empty,
       conquestEnabled: true,
       dominationEnabled: true,
       dominationRequiredControlPercent: 60,

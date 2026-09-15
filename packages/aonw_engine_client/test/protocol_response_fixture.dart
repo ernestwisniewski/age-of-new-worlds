@@ -8,6 +8,7 @@ const _stamp = {
 };
 
 const _victory = {
+  'status': {'kind': 'conquest', 'critical': false, 'leaderPlayerId': null},
   'conquestEnabled': true,
   'dominationEnabled': true,
   'dominationRequiredControlPercent': 60,
@@ -58,6 +59,7 @@ const _snapshot = {
     'gold': 73,
     'warWeariness': 5,
     'stabilityNet': -4,
+    'strategicResourceShortages': <Object?>[],
     'strategicResourceStockpile': [
       {'resource': 'oil', 'amount': 2},
     ],
@@ -74,6 +76,7 @@ const _snapshot = {
       },
     ],
     'forecast': {
+      'treasuryWarning': 'none',
       'treasury': 73,
       'cityIncome': 7,
       'projectIncome': 2,

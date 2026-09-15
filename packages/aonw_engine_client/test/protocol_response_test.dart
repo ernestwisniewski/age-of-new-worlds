@@ -270,6 +270,7 @@ void main() {
         'economy': {
           ..._snapshot['economy']! as Map<String, Object?>,
           'forecast': {
+            'treasuryWarning': 'none',
             ...(_snapshot['economy']! as Map<String, Object?>)['forecast']!
                 as Map<String, Object?>,
             'clientCalculatedNet': 5,

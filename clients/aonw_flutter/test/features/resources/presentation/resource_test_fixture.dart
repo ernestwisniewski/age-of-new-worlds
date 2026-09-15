@@ -1,8 +1,14 @@
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/player_victory_view.dart';
 
 import '../../../support/map_test_fixture.dart';
 
-PlayerMapView resourcePlayerFixture() {
+PlayerMapView resourcePlayerFixture({
+  TreasuryWarningView warning = TreasuryWarningView.none,
+  List<MapResource> shortages = const [],
+  PlayerVictoryView? victory,
+}) {
   final source = testMapScene().player;
   return PlayerMapView(
     actorPlayerId: source.actorPlayerId,
@@ -12,10 +18,11 @@ PlayerMapView resourcePlayerFixture() {
     fog: source.fog,
     turnView: source.turnView,
     diplomacy: source.diplomacy,
-    victory: source.victory,
+    victory: victory ?? source.victory,
     units: source.units,
     cities: source.cities,
     economy: PlayerEconomyView(
+      strategicResourceShortages: shortages,
       gold: 123,
       warWeariness: 0,
       stabilityNet: 0,
@@ -23,6 +30,7 @@ PlayerMapView resourcePlayerFixture() {
       strategicResourceOutput: const [],
       strategicResourceSources: const [],
       forecast: PlayerEconomyForecastView(
+        treasuryWarning: warning,
         treasury: 123,
         cityIncome: 3,
         projectIncome: 4,
@@ -63,3 +71,32 @@ PlayerMapView resourcePlayerFixture() {
     ),
   );
 }
+
+PlayerVictoryView resourceVictoryFixture(VictoryStatusView status) =>
+    PlayerVictoryView(
+      status: status,
+      conquestEnabled: true,
+      dominationEnabled: true,
+      dominationRequiredControlPercent: 60,
+      dominationRequiredHoldTurns: 5,
+      culturalEnabled: true,
+      culturalRequiredArtifacts: 6,
+      culturalRequiredHoldTurns: 5,
+      scoreFallbackEnabled: true,
+      turnLimit: 20,
+      remainingTurns: 3,
+      scoreByPlayerId: const {'player-1': 40},
+      domination: const [
+        DominationVictoryProgressView(
+          playerId: 'player-1',
+          controlledPassableHexes: 54,
+          totalPassableHexes: 100,
+          holdTurns: 0,
+        ),
+      ],
+      ownCultural: const CulturalVictoryProgressView(
+        uniqueStoredArtifacts: 2,
+        holdTurns: 0,
+      ),
+      mapObjectives: const [],
+    );

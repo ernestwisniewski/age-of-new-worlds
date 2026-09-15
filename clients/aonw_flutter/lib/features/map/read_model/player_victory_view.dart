@@ -1,3 +1,6 @@
+import 'hud_status_view.dart';
+export 'hud_status_view.dart';
+
 final class DominationVictoryProgressView {
   const DominationVictoryProgressView({
     required this.playerId,
@@ -36,6 +39,7 @@ final class MapObjectiveProgressView {
 
 final class PlayerVictoryView {
   PlayerVictoryView({
+    required this.status,
     required this.conquestEnabled,
     required this.dominationEnabled,
     required this.dominationRequiredControlPercent,
@@ -55,6 +59,7 @@ final class PlayerVictoryView {
        mapObjectives = List.unmodifiable(mapObjectives);
 
   factory PlayerVictoryView.empty() => PlayerVictoryView(
+    status: VictoryStatusView.empty,
     conquestEnabled: false,
     dominationEnabled: false,
     dominationRequiredControlPercent: 60,
@@ -74,6 +79,7 @@ final class PlayerVictoryView {
     mapObjectives: const [],
   );
 
+  final VictoryStatusView status;
   final bool conquestEnabled;
   final bool dominationEnabled;
   final double dominationRequiredControlPercent;

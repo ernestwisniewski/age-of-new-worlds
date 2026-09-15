@@ -1,3 +1,4 @@
+import 'package:aonw_engine_client/src/protocol_hud_status.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 
 final class AonwDominationVictoryProgress {
@@ -92,6 +93,7 @@ final class AonwMapObjectiveProgress {
 
 final class AonwPlayerVictoryView {
   const AonwPlayerVictoryView({
+    required this.status,
     required this.conquestEnabled,
     required this.dominationEnabled,
     required this.dominationRequiredControlPercent,
@@ -109,6 +111,7 @@ final class AonwPlayerVictoryView {
   });
 
   factory AonwPlayerVictoryView.empty() => const AonwPlayerVictoryView(
+    status: AonwVictoryStatus.empty,
     conquestEnabled: false,
     dominationEnabled: false,
     dominationRequiredControlPercent: 60,
@@ -131,6 +134,7 @@ final class AonwPlayerVictoryView {
   factory AonwPlayerVictoryView.fromJson(Object? source) =>
       _playerVictoryView(source);
 
+  final AonwVictoryStatus status;
   final bool conquestEnabled;
   final bool dominationEnabled;
   final double dominationRequiredControlPercent;
@@ -153,6 +157,7 @@ AonwPlayerVictoryView _playerVictoryView(Object? source) {
   final rules = _victoryRules(value);
   final progress = _victoryProgress(value);
   return AonwPlayerVictoryView(
+    status: AonwVictoryStatus.fromJson(value['status']),
     conquestEnabled: rules.conquest,
     dominationEnabled: rules.domination,
     dominationRequiredControlPercent: rules.dominationPercent,
@@ -240,6 +245,7 @@ typedef _VictoryProgress = ({
 });
 
 const _playerVictoryKeys = {
+  'status',
   'conquestEnabled',
   'dominationEnabled',
   'dominationRequiredControlPercent',

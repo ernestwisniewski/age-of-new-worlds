@@ -192,6 +192,7 @@ pub struct PlayerStabilityBreakdownView {
 #[allow(missing_docs)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PlayerEconomyForecastView {
+    pub treasury_warning: aonw_engine::TreasuryWarning,
     pub treasury: i64,
     pub city_income: i64,
     pub project_income: i64,
@@ -212,6 +213,7 @@ impl PlayerEconomyForecastView {
         let upkeep = value.upkeep();
         let stability = value.stability();
         Self {
+            treasury_warning: value.treasury_warning(),
             treasury: value.treasury(),
             city_income: value.city_income(),
             project_income: value.project_income(),
@@ -268,6 +270,7 @@ impl PlayerEconomyForecastView {
     #[cfg(test)]
     fn empty() -> Self {
         Self {
+            treasury_warning: aonw_engine::TreasuryWarning::None,
             treasury: 0,
             city_income: 0,
             project_income: 0,
@@ -312,6 +315,7 @@ pub struct PlayerEconomyView {
     gold: i64,
     war_weariness: i64,
     stability_net: i64,
+    strategic_resource_shortages: Box<[ResourceType]>,
     strategic_resource_stockpile: Box<[PlayerStrategicResourceAmountView]>,
     strategic_resource_output: Box<[PlayerStrategicResourceAmountView]>,
     strategic_resource_sources: Box<[PlayerStrategicResourceSourceView]>,
@@ -319,6 +323,12 @@ pub struct PlayerEconomyView {
 }
 
 impl PlayerEconomyView {
+    /// Returns stockpiled resource kinds missing for recipient-unlocked units.
+    #[must_use]
+    pub const fn strategic_resource_shortages(&self) -> &[ResourceType] {
+        &self.strategic_resource_shortages
+    }
+
     pub(crate) fn try_for_recipient(
         state: &GameState,
         actor: &PlayerId,
@@ -385,6 +395,8 @@ impl PlayerEconomyView {
                 .get(actor)
                 .copied()
                 .unwrap_or(0),
+            strategic_resource_shortages: aonw_engine::strategic_resource_shortages(state, context)
+                .collect(),
             strategic_resource_stockpile,
             strategic_resource_output,
             strategic_resource_sources,
@@ -398,6 +410,7 @@ impl PlayerEconomyView {
             gold: 0,
             war_weariness: 0,
             stability_net: 0,
+            strategic_resource_shortages: Box::new([]),
             strategic_resource_stockpile: Box::new([]),
             strategic_resource_output: Box::new([]),
             strategic_resource_sources: Box::new([]),

@@ -23,6 +23,7 @@ void registerPlayerEconomyViewMapperCases(PlayerMapViewMapper mapper) {
 
   test('maps authoritative gold, upkeep and stability forecast evidence', () {
     final forecast = AonwEconomyForecast(
+      treasuryWarning: AonwTreasuryWarning.deficitWithinThreeTurns,
       treasury: 10,
       cityIncome: 7,
       projectIncome: 2,
@@ -74,6 +75,10 @@ void registerPlayerEconomyViewMapperCases(PlayerMapViewMapper mapper) {
       actorPlayerId: 'player-1',
     );
 
+    expect(
+      player.economy.forecast.treasuryWarning,
+      TreasuryWarningView.deficitWithinThreeTurns,
+    );
     expect(player.economy.forecast.cityIncome, 7);
     expect(player.economy.forecast.projectIncome, 2);
     expect(player.economy.forecast.netPerTurn, 8);

@@ -1,4 +1,6 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
+import 'package:aonw_flutter/features/map/read_model/player_victory_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,7 +43,17 @@ void main() {
             key: const ValueKey('resource-golden'),
             child: Scaffold(
               body: ResourceHudTestHost(
-                player: resourcePlayerFixture(),
+                player: resourcePlayerFixture(
+                  warning: TreasuryWarningView.deficitWithinThreeTurns,
+                  shortages: const [MapResource.oil],
+                  victory: resourceVictoryFixture(
+                    const VictoryStatusView(
+                      kind: VictoryStatusKindView.score,
+                      critical: true,
+                      leaderPlayerId: 'player-1',
+                    ),
+                  ),
+                ),
                 sessionIdentity: 0,
               ),
             ),

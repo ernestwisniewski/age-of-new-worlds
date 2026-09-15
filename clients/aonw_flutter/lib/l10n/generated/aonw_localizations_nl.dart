@@ -2670,6 +2670,11 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'Toon verkende velden buiten het grondgebied van bekende steden.';
 
   @override
+  String resourceTurnsCompact(int turns) {
+    return '${turns}T';
+  }
+
+  @override
   String resourceText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
       'gold': 'Goud',
@@ -2722,6 +2727,16 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'stable': 'Stabiel',
       'strained': 'Gespannen',
       'unrest': 'Onrust',
+      'warning': 'Waarschuwing',
+      'negativeBalance': 'De schatkist is negatief.',
+      'deficitWithinThreeTurns':
+          'Met het huidige inkomen wordt de schatkist binnen drie beurten negatief.',
+      'shortage': 'Onvoldoende grondstoffen voor vrijgespeelde eenheden',
+      'victoryCritical': 'Een overwinningsvoorwaarde nadert.',
+      'leader': 'Leider',
+      'noVictory': 'Geen overwinningsvoorwaarde',
+      'goalCompact': 'Doel',
+      'scoreCapCompact': 'LIMIET',
       'other': 'Grondstoffen',
     });
     return '$_temp0';

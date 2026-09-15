@@ -2592,6 +2592,11 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'Show discovered tiles outside known city territory.';
 
   @override
+  String resourceTurnsCompact(int turns) {
+    return '${turns}T';
+  }
+
+  @override
   String resourceText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
       'gold': 'Gold',
@@ -2644,6 +2649,16 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'stable': 'Stable',
       'strained': 'Strained',
       'unrest': 'Unrest',
+      'warning': 'Warning',
+      'negativeBalance': 'The treasury is negative.',
+      'deficitWithinThreeTurns':
+          'At the current income, the treasury will be negative within three turns.',
+      'shortage': 'Insufficient resources for unlocked units',
+      'victoryCritical': 'A victory condition is approaching.',
+      'leader': 'Leader',
+      'noVictory': 'No victory condition',
+      'goalCompact': 'Goal',
+      'scoreCapCompact': 'CAP',
       'other': 'Resources',
     });
     return '$_temp0';

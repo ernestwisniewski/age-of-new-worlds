@@ -43,6 +43,8 @@ pub struct MapObjectiveProgressDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PlayerVictoryViewDto {
+    /// Authoritative compact HUD condition and warning.
+    pub status: super::VictoryStatusDto,
     /// Whether conquest victory is enabled.
     pub conquest_enabled: bool,
     /// Whether domination victory is enabled.

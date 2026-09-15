@@ -1,6 +1,7 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../read_model/map_view.dart';
+import 'recipient_hud_status_validator.dart';
 
 final class RecipientEconomyValidator {
   const RecipientEconomyValidator(this.map);
@@ -14,6 +15,7 @@ final class RecipientEconomyValidator {
     if (economy.gold < 0 || economy.warWeariness < 0) {
       throw const FormatException('Recipient economy account is negative.');
     }
+    validateStrategicShortages(economy.strategicResourceShortages);
     _validateAmounts(
       economy.strategicResourceStockpile,
       'strategic resource stockpile',

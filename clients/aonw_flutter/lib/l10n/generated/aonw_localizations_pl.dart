@@ -2598,6 +2598,11 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'Pokazuj odkryte pola poza terytorium znanych miast.';
 
   @override
+  String resourceTurnsCompact(int turns) {
+    return '${turns}T';
+  }
+
+  @override
   String resourceText(String key) {
     String _temp0 = intl.Intl.selectLogic(key, {
       'gold': 'Złoto',
@@ -2650,6 +2655,16 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'stable': 'Stabilność',
       'strained': 'Napięcie',
       'unrest': 'Niepokoje',
+      'warning': 'Ostrzeżenie',
+      'negativeBalance': 'Skarbiec ma ujemne saldo.',
+      'deficitWithinThreeTurns':
+          'Przy obecnym dochodzie skarbiec będzie miał ujemne saldo w ciągu trzech tur.',
+      'shortage': 'Brakuje zasobów dla odblokowanych jednostek',
+      'victoryCritical': 'Zbliża się rozstrzygnięcie warunku zwycięstwa.',
+      'leader': 'Lider',
+      'noVictory': 'Brak warunku zwycięstwa',
+      'goalCompact': 'Cel',
+      'scoreCapCompact': 'LIMIT',
       'other': 'Zasoby',
     });
     return '$_temp0';

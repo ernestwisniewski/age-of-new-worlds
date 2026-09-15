@@ -55,7 +55,7 @@ The mounting sources are `widgets/hud/game_hud.dart`,
 
 | Surface or family | Reference subtree | Target status / source of truth |
 | --- | --- | --- |
-| Gold, science, stability, strategic resources, turn, victory details | `widgets/resources` | Shared resource strip/popovers; projected economy/research/victory; warning policy remains open |
+| Gold, science, stability, strategic resources, turn, victory details | `widgets/resources` | Shared resource strip/popovers; projected economy/research/victory and API 28 warning/priority metadata; full resource inventory remains open |
 | Avatar details and Online status rail | `widgets/multiplayer` | Shared recipient-safe participants/known relations; own submission and aggregate total |
 | Selection/action deck, previous/next, End/Submit | `widgets/hud/action_deck`, `widgets/selection` | Existing typed actions and Rust pending queue; integrated deck audit open |
 | Movement, combat and worker confirmation | `widgets/selection` | Rust preview/options plus local confirmation state |
@@ -120,8 +120,9 @@ remain separate from these lifetime assertions.
 
 The inventory accounts for every visual layer in the reference component factory
 and the mounted HUD surface/input families. It does not claim a field-by-field
-mapping of every panel: warnings, readiness, notification
-payloads and future-turn route semantics need separate Rust contracts or audits.
+mapping of every panel: resource inventory, readiness and notification
+payloads still need separate Rust contracts or audits. Route timing/roads and
+compact HUD warnings now have explicit recipient-safe contracts.
 Native captures, populated panels, full-screen comparisons and physical input
 verification remain required by the execution plan.
 

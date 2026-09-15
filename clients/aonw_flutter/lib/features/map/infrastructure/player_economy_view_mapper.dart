@@ -7,6 +7,10 @@ import '../read_model/player_economy_view.dart';
 PlayerEconomyView mapPlayerEconomyView(AonwPlayerEconomyView economy) =>
     PlayerEconomyView(
       gold: economy.gold,
+      strategicResourceShortages: [
+        for (final resource in economy.strategicResourceShortages)
+          MapResource.values.byName(resource.name),
+      ],
       warWeariness: economy.warWeariness,
       stabilityNet: economy.stabilityNet,
       strategicResourceStockpile: [
@@ -45,6 +49,9 @@ PlayerEconomyForecastView _mapForecast(
   AonwEconomyForecast forecast,
 ) => PlayerEconomyForecastView(
   treasury: forecast.treasury,
+  treasuryWarning: TreasuryWarningView.values.byName(
+    forecast.treasuryWarning.name,
+  ),
   cityIncome: forecast.cityIncome,
   projectIncome: forecast.projectIncome,
   grossIncome: forecast.grossIncome,

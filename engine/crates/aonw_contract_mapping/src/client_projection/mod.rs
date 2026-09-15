@@ -1,6 +1,7 @@
 mod artifact;
 mod diplomacy;
 mod evidence;
+mod hud_status;
 mod presentation;
 mod route;
 mod snapshot;

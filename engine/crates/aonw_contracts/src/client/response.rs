@@ -8,6 +8,8 @@ mod artifact;
 mod city;
 mod diplomacy;
 mod economy;
+mod hud_status;
+pub use hud_status::{TreasuryWarningDto, VictoryStatusDto, VictoryStatusKindDto};
 mod event;
 mod pending_turn_actions;
 pub use pending_turn_actions::PendingTurnActionDto;

@@ -1,6 +1,7 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../read_model/map_view.dart';
+import 'recipient_hud_status_validator.dart';
 
 final class RecipientVictoryValidator {
   const RecipientVictoryValidator(this.map);
@@ -12,6 +13,7 @@ final class RecipientVictoryValidator {
     required int turn,
     required Set<String> participantIds,
   }) {
+    validateVictoryStatus(victory, participantIds);
     _validateRules(victory, turn);
     _validateScores(victory.scoreByPlayerId, participantIds);
     _validateDomination(victory.domination, participantIds);

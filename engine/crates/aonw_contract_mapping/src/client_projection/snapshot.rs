@@ -57,6 +57,7 @@ pub fn encode_player_view_snapshot(value: &PlayerViewSnapshot) -> PlayerViewSnap
 
 pub(super) fn victory(value: &aonw_projection::PlayerVictoryView) -> PlayerVictoryViewDto {
     PlayerVictoryViewDto {
+        status: super::hud_status::victory_status(value),
         conquest_enabled: value.conquest_enabled(),
         domination_enabled: value.domination_enabled(),
         domination_required_control_percent: value
@@ -154,6 +155,12 @@ const fn science_source_kind(
 
 pub(super) fn economy(value: &aonw_projection::PlayerEconomyView) -> PlayerEconomyViewDto {
     PlayerEconomyViewDto {
+        strategic_resource_shortages: value
+            .strategic_resource_shortages()
+            .iter()
+            .copied()
+            .map(crate::encode_resource)
+            .collect(),
         gold: value.gold(),
         war_weariness: value.war_weariness(),
         stability_net: value.stability_net(),
@@ -190,6 +197,7 @@ fn economy_forecast(value: &aonw_projection::PlayerEconomyForecastView) -> Econo
         amount: source.amount(),
     };
     EconomyForecastDto {
+        treasury_warning: super::hud_status::treasury_warning(value.treasury_warning),
         treasury: value.treasury,
         city_income: value.city_income,
         project_income: value.project_income,

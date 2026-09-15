@@ -1,6 +1,48 @@
 part of 'player_map_view_mapper_test.dart';
 
 void registerPlayerVictoryViewMapperCases(PlayerMapViewMapper mapper) {
+  test('maps immutable HUD metadata and rejects a foreign cultural leader', () {
+    const status = AonwVictoryStatus(
+      kind: AonwVictoryStatusKind.culture,
+      critical: true,
+      leaderPlayerId: 'player-1',
+    );
+    final player = mapper.fromWire(
+      _snapshot(
+        const [],
+        victory: _victory(status: status),
+        economy: _economy(shortages: [AonwResourceType.aluminium]),
+      ),
+      map: testMapScene().map,
+      actorPlayerId: 'player-1',
+    );
+    expect(player.victory.status.kind, VictoryStatusKindView.culture);
+    expect(player.victory.status.critical, isTrue);
+    expect(player.victory.status.leaderPlayerId, 'player-1');
+    expect(player.economy.strategicResourceShortages, [MapResource.aluminium]);
+    expect(
+      () => player.economy.strategicResourceShortages.clear(),
+      throwsUnsupportedError,
+    );
+    expect(
+      () => mapper.fromWire(
+        _snapshot(
+          const [],
+          victory: _victory(
+            status: const AonwVictoryStatus(
+              kind: AonwVictoryStatusKind.culture,
+              critical: true,
+              leaderPlayerId: 'player-2',
+            ),
+          ),
+        ),
+        map: testMapScene().map,
+        actorPlayerId: 'player-1',
+      ),
+      throwsFormatException,
+    );
+  });
+
   test(
     'maps engine-owned victory rules, live score, and recipient progress',
     () {
