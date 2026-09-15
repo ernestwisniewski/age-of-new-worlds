@@ -58,7 +58,6 @@ extension _MapScreenGamepad on _MapScreenState {
     return widget.interactionEnabled &&
         _gamepadSettings.enabled &&
         state is GameSessionReady &&
-        !state.localHandoff.blocksGameplay &&
         !widget.controller.networkConnection.blocksGameplay;
   }
 
@@ -69,6 +68,10 @@ extension _MapScreenGamepad on _MapScreenState {
         ? 0.0
         : (elapsed - previous).inMicroseconds / Duration.microsecondsPerSecond;
     final frame = _gamepadFrames.advance(input: _gamepadInput, dt: dt);
+    if (_routeHandoffFrame(frame)) {
+      _synchronizeGamepadTicker();
+      return;
+    }
     if (!frame.isIdle &&
         _acceptsGamepadInput &&
         !_gamepadNavigation.handleFrame(frame)) {
@@ -79,6 +82,17 @@ extension _MapScreenGamepad on _MapScreenState {
       _applyMapFrame(frame, dt);
     }
     _synchronizeGamepadTicker();
+  }
+
+  bool _routeHandoffFrame(MapGamepadFrame frame) {
+    final state = widget.controller.state;
+    if (state is! GameSessionReady || !state.localHandoff.blocksGameplay) {
+      return false;
+    }
+    if (_acceptsGamepadInput && _gamepadNavigation.hasModal) {
+      _gamepadNavigation.handleFrame(frame);
+    }
+    return true;
   }
 
   void _applyMapFrame(MapGamepadFrame frame, double dt) {

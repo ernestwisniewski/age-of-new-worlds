@@ -9,7 +9,12 @@ extension _MapScreenCursor on _MapScreenState {
     final state = widget.controller.state;
     if (state is! GameSessionReady) return null;
     if (widget.controller.networkConnection.blocksGameplay) return null;
-    if (state.localHandoff.blocksGameplay) return null;
+    if (state.localHandoff.blocksGameplay) {
+      if (_gamepadNavigation.hasModal) {
+        _gamepadNavigation.handleCommand(command);
+      }
+      return null;
+    }
     if (_gamepadNavigation.handleCommand(command)) return null;
     return state;
   }

@@ -52,6 +52,37 @@ final class _ReadyMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
     children: [
+      ExcludeFocus(
+        excluding: localHandoff.blocksGameplay,
+        child: ExcludeSemantics(
+          excluding: localHandoff.blocksGameplay,
+          child: TooltipVisibility(
+            visible: !localHandoff.blocksGameplay,
+            child: _gameplay(context),
+          ),
+        ),
+      ),
+      Positioned.fill(
+        child: LocalHandoffOverlay(
+          state: localHandoff,
+          playerColorValue: scene.player.participants
+              .where((player) => player.id == localHandoff.playerId)
+              .firstOrNull
+              ?.colorValue,
+          turnNumber: scene.player.turn,
+          onConfirm: controller.confirmLocalHandoff,
+          onRetry: controller.retryLocalHandoff,
+        ),
+      ),
+      Positioned.fill(
+        child: MapGamepadFocusRing(navigation: gamepadNavigation),
+      ),
+    ],
+  );
+
+  Widget _gameplay(BuildContext context) => Stack(
+    fit: StackFit.expand,
+    children: [
       Positioned.fill(
         child: FlameMapViewport(
           scene: scene,
@@ -103,9 +134,6 @@ final class _ReadyMap extends StatelessWidget {
       NetworkGameStatusOverlay(
         connection: controller.networkConnection,
         onReconnect: controller.reconnectNetworkMatch,
-      ),
-      Positioned.fill(
-        child: MapGamepadFocusRing(navigation: gamepadNavigation),
       ),
     ],
   );
@@ -174,13 +202,6 @@ final class _ReadyMap extends StatelessWidget {
           diplomacy: diplomacy,
           controller: controller,
         ),
-      ),
-    ),
-    Positioned.fill(
-      child: LocalHandoffOverlay(
-        state: localHandoff,
-        onConfirm: controller.confirmLocalHandoff,
-        onRetry: controller.retryLocalHandoff,
       ),
     ),
   ];

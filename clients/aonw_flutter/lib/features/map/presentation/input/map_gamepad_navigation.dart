@@ -16,7 +16,7 @@ enum MapHudSection {
   selectionActions,
 }
 
-enum MapGamepadPriority { hud, panel, popup }
+enum MapGamepadPriority { hud, panel, popup, modal }
 
 final class MapGamepadRegionEntry {
   const MapGamepadRegionEntry({
@@ -63,6 +63,8 @@ final class MapGamepadNavigation extends ChangeNotifier {
   bool get capturesInput => _capture != null || _active;
 
   bool get hasOpenPanel => _topPanel != null;
+
+  bool get hasModal => _topPanel?.value.priority == MapGamepadPriority.modal;
 
   bool handlePanelKeyboardCommand(MapInputCommand command) {
     final panel = _topPanel;

@@ -1,38 +1,72 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
-import '../../../design_system/widgets/aonw_panel.dart';
 import '../../../l10n/l10n.dart';
+import '../../map/presentation/input/map_gamepad_navigation.dart';
+import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../application/local_handoff_state.dart';
+
+part 'local_handoff_identity.dart';
 
 final class LocalHandoffOverlay extends StatelessWidget {
   const LocalHandoffOverlay({
     required this.state,
     required this.onConfirm,
     required this.onRetry,
+    this.playerColorValue,
+    this.turnNumber,
     super.key,
   });
 
   final LocalHandoffState state;
   final VoidCallback onConfirm;
   final VoidCallback onRetry;
+  final int? playerColorValue;
+  final int? turnNumber;
 
   @override
   Widget build(BuildContext context) {
     if (!state.blocksGameplay) return const SizedBox.shrink();
-    return Stack(
-      key: const ValueKey('local-handoff-overlay'),
-      children: [
-        const ModalBarrier(
-          dismissible: false,
-          color: AonwColorTokens.background,
-        ),
-        _LocalHandoffPanel(
-          state: state,
-          onConfirm: onConfirm,
-          onRetry: onRetry,
-        ),
-      ],
+    return BlockSemantics(
+      child: Stack(
+        key: const ValueKey('local-handoff-overlay'),
+        children: [
+          const ModalBarrier(
+            dismissible: false,
+            color: AonwColorTokens.background,
+          ),
+          MapGamepadRegion(
+            section: MapHudSection.globalActions,
+            priority: MapGamepadPriority.modal,
+            scrollBeforeFocus: true,
+            child: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  padding: const EdgeInsets.all(AonwSpacing.lg),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: (constraints.maxHeight - 2 * AonwSpacing.lg)
+                          .clamp(0, double.infinity),
+                    ),
+                    child: Center(
+                      child: SizedBox(
+                        width: 520,
+                        child: _LocalHandoffPanel(
+                          state: state,
+                          playerColorValue: playerColorValue,
+                          turnNumber: turnNumber,
+                          onConfirm: onConfirm,
+                          onRetry: onRetry,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -42,47 +76,51 @@ final class _LocalHandoffPanel extends StatelessWidget {
     required this.state,
     required this.onConfirm,
     required this.onRetry,
+    required this.playerColorValue,
+    required this.turnNumber,
   });
 
   final LocalHandoffState state;
   final VoidCallback onConfirm;
   final VoidCallback onRetry;
+  final int? playerColorValue;
+  final int? turnNumber;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
     final playerName = state.playerName!;
     final failed = state.phase == LocalHandoffPhase.failed;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AonwSpacing.lg),
-        child: AonwPanel(
-          semanticLabel: l10n.hotseatHandoffTitle,
-          liveRegion: true,
-          maxWidth: 520,
-          padding: const EdgeInsets.all(AonwSpacing.xl),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.visibility_off_outlined, size: 48),
-              const SizedBox(height: AonwSpacing.lg),
-              Text(
-                l10n.hotseatHandoffTitle,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AonwSpacing.md),
-              Text(
-                failed
-                    ? l10n.hotseatHandoffFailure
-                    : l10n.hotseatHandoffBody(playerName),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AonwSpacing.xl),
-              _action(l10n, playerName, failed),
-            ],
+    return Semantics(
+      container: true,
+      liveRegion: true,
+      label: l10n.hotseatHandoffTitle,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _LocalHandoffIdentity(
+            playerName: playerName,
+            colorValue: playerColorValue,
+            turnNumber: state.phase == LocalHandoffPhase.awaitingConfirmation
+                ? turnNumber
+                : null,
           ),
-        ),
+          const SizedBox(height: AonwSpacing.xl),
+          Text(
+            l10n.hotseatHandoffTitle,
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AonwSpacing.md),
+          Text(
+            failed
+                ? l10n.hotseatHandoffFailure
+                : l10n.hotseatHandoffBody(playerName),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AonwSpacing.xl),
+          _action(l10n, playerName, failed),
+        ],
       ),
     );
   }
@@ -91,6 +129,8 @@ final class _LocalHandoffPanel extends StatelessWidget {
     final switching = state.phase == LocalHandoffPhase.switching;
     return FilledButton.icon(
       key: ValueKey(failed ? 'retry-local-handoff' : 'confirm-local-handoff'),
+      autofocus: true,
+      style: FilledButton.styleFrom(minimumSize: const Size(200, 48)),
       onPressed: switching
           ? null
           : failed
@@ -108,6 +148,7 @@ final class _LocalHandoffPanel extends StatelessWidget {
             : failed
             ? l10n.retry
             : l10n.hotseatContinueAs(playerName),
+        textAlign: TextAlign.center,
       ),
     );
   }
