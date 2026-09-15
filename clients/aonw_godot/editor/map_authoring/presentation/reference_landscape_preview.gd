@@ -29,13 +29,20 @@ func rebuild_reference() -> Dictionary:
 	var inputs := Inputs.new().load_inputs(source_map_id, map_bundle_root)
 	if not inputs["ok"]:
 		return _report_failure(str(inputs["message"]))
+	var reference_image: Image = inputs["image"]
+	if reference_image == null:
+		return _report_failure("The reference atlas has no image data")
+	if reference_image.is_compressed():
+		reference_image = reference_image.duplicate()
+		if reference_image.decompress() != OK:
+			return _report_failure("Cannot decode the reference atlas")
 	var guide: Image
 	if forest_guide != null:
 		guide = forest_guide.get_image()
 		if guide == null or (guide.is_compressed() and guide.decompress() != OK):
 			return _report_failure("Cannot decode the forest guide")
 	var plan := SurfacePlan.new()
-	var configured := plan.configure(artifact(), inputs["image"], inputs["document"],
+	var configured := plan.configure(artifact(), reference_image, inputs["document"],
 		reconstruction["water_mask"], inputs["has_reference"], guide)
 	if not configured["ok"]:
 		return _report_failure(str(configured["message"]))

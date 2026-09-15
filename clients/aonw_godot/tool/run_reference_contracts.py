@@ -52,12 +52,23 @@ def run(godot: str, project: Path, visual_assets: bool = False) -> None:
             for folder in ("addons/Tree3D", "assets/reference_materials"):
                 shutil.copytree(project / folder, root / folder, ignore=shutil.ignore_patterns("*.import", ".godot"))
         (root / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Reference contracts"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
-        base = [godot] + ([] if visual_assets else ["--headless"]) + ["--path", str(root)]
-        commands = [base + ["--editor", "--import"]]
-        commands += [base + ["--script", "res://" + test] for test in tests]
-        for command in commands:
-            result = subprocess.run(command, capture_output=True, text=True, timeout=300)
+        base = [godot, "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility",
+                "--rendering-driver", "opengl3", "--path", str(root)]
+        # Import and logic suites need no display or audio device. Only the asset
+        # smoke test needs a real renderer, supplied by Xvfb/Mesa in CI.
+        commands = [base + ["--headless", "--editor", "--import"]]
+        commands += [base + ([] if test.endswith("_assets.gd") else ["--headless"])
+                     + ["--script", "res://" + test] for test in tests]
+        for index, command in enumerate(commands):
+            try:
+                result = subprocess.run(command, capture_output=True, text=True, timeout=300)
+            except subprocess.TimeoutExpired as error:
+                output = (error.stdout or b"") + (error.stderr or b"")
+                Path(f"reference-landscape-{index}.log").write_bytes(output)
+                print(output.decode(errors="replace"), flush=True)
+                raise
             output = result.stdout + result.stderr
+            Path(f"reference-landscape-{index}.log").write_text(output)
             print(output, flush=True)
             # Godot can exit zero after parser/shader failures. That is not a pass.
             if result.returncode != 0 or any(marker in output for marker in ("SCRIPT ERROR", "Parse Error", "Compile Error", "ERROR:")):
