@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Run real Godot raster/UI/camera contracts without importing gameplay extensions.
+"""Run reference contracts in an isolated Godot project.
 
-Uses a temporary project with the exact transitive GDScript dependency closure.
-This is NOT a substitute for test_reference_native_controls.gd or editor testing.
+--visual-assets adds real Tree3D/PBR rendering; run that mode under Xvfb on CI.
+This does not replace the full editor/native terrain tests or map art review.
 """
 from __future__ import annotations
 import argparse
@@ -17,10 +17,11 @@ TESTS = (
     "tests/test_reference_terrain.gd",
     "tests/test_reference_parameters.gd",
     "tests/test_reference_parameter_effects.gd",
+    "tests/test_reference_surface.gd",
 )
 
 
-def run(godot: str, project: Path) -> None:
+def run(godot: str, project: Path, visual_assets: bool = False) -> None:
     classes: dict[str, Path] = {}
     for path in project.rglob("*.gd"):
         if "addons" in path.parts or ".godot" in path.parts:
@@ -28,7 +29,8 @@ def run(godot: str, project: Path) -> None:
         match = re.search(r"^class_name\s+(\w+)", path.read_text(), re.MULTILINE)
         if match:
             classes[match[1]] = path
-    pending = [project / test for test in TESTS]
+    tests = TESTS + (("tests/test_reference_surface_assets.gd",) if visual_assets else ())
+    pending = [project / test for test in tests]
     selected: set[Path] = set()
     while pending:
         path = pending.pop()
@@ -38,7 +40,7 @@ def run(godot: str, project: Path) -> None:
             raise FileNotFoundError(f"Missing contract dependency: {path}")
         selected.add(path)
         text = path.read_text()
-        pending += [project / ref for ref in re.findall(r'res://([^"\s]+\.gd)', text)]
+        pending += [project / ref for ref in re.findall(r'res://([^"\s]+\.(?:gdshader|gd))', text)]
         pending += [classes[name] for name in set(re.findall(r"\bAonw\w+", text)) if name in classes]
     with tempfile.TemporaryDirectory(prefix="aonw-reference-contracts-") as directory:
         root = Path(directory)
@@ -46,22 +48,29 @@ def run(godot: str, project: Path) -> None:
             target = root / path.relative_to(project)
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, target)
+        if visual_assets:
+            for folder in ("addons/Tree3D", "assets/reference_materials"):
+                shutil.copytree(project / folder, root / folder, ignore=shutil.ignore_patterns("*.import", ".godot"))
         (root / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Reference contracts"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
-        commands = [[godot, "--headless", "--editor", "--path", str(root), "--import"]]
-        commands += [[godot, "--headless", "--path", str(root), "--script", "res://" + test] for test in TESTS]
+        base = [godot] + ([] if visual_assets else ["--headless"]) + ["--path", str(root)]
+        commands = [base + ["--editor", "--import"]]
+        commands += [base + ["--script", "res://" + test] for test in tests]
         for command in commands:
-            result = subprocess.run(command, capture_output=True, text=True, timeout=180)
+            result = subprocess.run(command, capture_output=True, text=True, timeout=300)
             output = result.stdout + result.stderr
             print(output, flush=True)
-            # Godot can exit 0 after a script fails to parse. Do not report that as PASS.
+            # Godot can exit zero after parser/shader failures. That is not a pass.
             if result.returncode != 0 or any(marker in output for marker in ("SCRIPT ERROR", "Parse Error", "Compile Error", "ERROR:")):
                 raise RuntimeError(f"Godot contract command failed: {' '.join(command)}")
-        print(f"Passed {len(TESTS)} Godot contract suites using {len(selected)} source scripts.")
+        if visual_assets:
+            shutil.copyfile(root / "reference-landscape-smoke.png", Path.cwd() / "reference-landscape-smoke.png")
+        print(f"Passed {len(tests)} Godot contract suites using {len(selected)} source scripts.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--godot", required=True)
     parser.add_argument("--project", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--visual-assets", action="store_true")
     args = parser.parse_args()
-    run(args.godot, args.project.resolve())
+    run(args.godot, args.project.resolve(), args.visual_assets)

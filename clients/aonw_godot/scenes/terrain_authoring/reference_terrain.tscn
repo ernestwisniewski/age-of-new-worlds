@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3]
 
-[ext_resource type="Script" path="res://editor/map_authoring/presentation/map_reference_preview.gd" id="1_preview"]
+[ext_resource type="Script" path="res://editor/map_authoring/presentation/reference_landscape_preview.gd" id="1_preview"]
 [ext_resource type="Script" path="res://editor/map_authoring/presentation/reference_preview_camera.gd" id="2_camera"]
 
 [sub_resource type="Terrain3DMaterial" id="TerrainMaterial"]
@@ -23,7 +23,9 @@ reflected_light_source = 2
 [node name="ReferenceTerrain" type="Node3D"]
 script = ExtResource("1_preview")
 source_map_id = "dravonia"
+reference_visible = false
 reference_opacity = 1.0
+relief_lighting = 1.0
 grid_visible = false
 city_marker_visible = false
 terrain_material = SubResource("TerrainMaterial")
@@ -61,10 +63,10 @@ script = ExtResource("2_camera")
 [node name="Help" type="Label" parent="PreviewHUD"]
 offset_left = 18.0
 offset_top = 14.0
-offset_right = 700.0
-offset_bottom = 100.0
+offset_right = 1000.0
+offset_bottom = 140.0
 mouse_filter = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-text = "Loading reference terrain..."
+text = "Loading reference landscape..."

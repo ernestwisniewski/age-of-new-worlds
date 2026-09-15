@@ -1,0 +1,51 @@
+name: Reference landscape assets
+on:
+  push:
+    branches: [feature/maps-terrain]
+    paths:
+      - clients/aonw_godot/**
+      - .github/workflows/reference-landscape.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  landscape:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check installer contracts and GDScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s clients/aonw_godot/tool -p test_install_reference_assets.py -v
+          python3 -m pip install gdtoolkit==4.3.4
+          find clients/aonw_godot/editor/map_authoring -name '*reference*.gd' -print0 | xargs -0 -n 1 gdparse >/dev/null
+      - name: Install pinned Godot and headless display
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+          cd "$RUNNER_TEMP"
+          release=https://github.com/godotengine/godot-builds/releases/download/4.6-stable
+          curl --fail --location --retry 3 "$release/Godot_v4.6-stable_linux.x86_64.zip" -o Godot_v4.6-stable_linux.x86_64.zip
+          curl --fail --location --retry 3 "$release/SHA512-SUMS.txt" -o SHA512-SUMS.txt
+          sha512sum --ignore-missing --check SHA512-SUMS.txt
+          unzip -q Godot_v4.6-stable_linux.x86_64.zip
+          chmod +x Godot_v4.6-stable_linux.x86_64
+      - name: Install Tree3D and PBR scans
+        run: python3 clients/aonw_godot/tool/install_reference_assets.py
+      - name: Native prototypes and material rendering contracts
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a python3 clients/aonw_godot/tool/run_reference_contracts.py --godot "$RUNNER_TEMP/Godot_v4.6-stable_linux.x86_64" --visual-assets
+      - name: Retain render and asset provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-landscape-smoke
+          path: |
+            reference-landscape-smoke.png
+            clients/aonw_godot/assets/reference_materials/assets.lock.json
+          retention-days: 7
