@@ -3,6 +3,7 @@ extends RefCounted
 ## Tree3D generates six shared prototypes, never one native generator per instance.
 ## The native addon owns INTERNAL children; get_children(true) is intentional.
 
+const Images := preload("res://editor/map_authoring/presentation/reference_image_loader.gd")
 const ROOT := "res://assets/reference_materials/trees/"
 # Branches3 is an entire bare-tree stamp, not foliage. Do not repeat it on
 # tropical branch cards; broad/tropical forms share the actual leaf texture.
@@ -18,9 +19,9 @@ static func load_library() -> Dictionary:
 	var textures := {}
 	for file in ["bark.jpg", "bark_normal.png", "Branches1.png", "Branches2.png"]:
 		var path: String = ROOT + file
-		if not FileAccess.file_exists(path):
+		if not ResourceLoader.exists(path):
 			return {"ok": false, "message": "Missing Tree3D texture: " + file + ". Run install_reference_assets.py."}
-		var image := Image.load_from_file(path)
+		var image := Images.read(path)
 		if image == null or image.is_empty():
 			return {"ok": false, "message": "Cannot decode Tree3D texture: " + file}
 		image.generate_mipmaps()
@@ -76,9 +77,20 @@ static func _generate(species: int, variant: int, textures: Dictionary) -> Dicti
 		var box: AABB = instance.transform * instance.mesh.get_aabb()
 		bounds = box if first else bounds.merge(box)
 		first = false
-		parts.append({"mesh": instance.mesh, "transform": instance.transform,
+		# Decimating alpha cards as opaque triangles destroys distant canopy coverage.
+		var active := instance.get_active_material(0)
+		var foliage: bool = active is ShaderMaterial and active.get_shader_parameter("foliage") == true
+		var display_mesh: Mesh = instance.mesh if foliage else _with_lods(instance.mesh)
+		parts.append({"mesh": display_mesh, "transform": instance.transform,
 			"material": instance.get_active_material(0)})
 	tree.free()
 	if parts.size() != 2 or bounds.size.y <= 0.01:
 		return {"ok": false, "message": "Tree3D did not generate a trunk and textured canopy"}
 	return {"ok": true, "parts": parts, "height": bounds.size.y, "base_y": bounds.position.y}
+
+static func _with_lods(mesh: Mesh) -> ArrayMesh:
+	var importer := ImporterMesh.new()
+	for surface in mesh.get_surface_count():
+		importer.add_surface(Mesh.PRIMITIVE_TRIANGLES, mesh.surface_get_arrays(surface), [], {}, mesh.surface_get_material(surface))
+	importer.generate_lods(60.0, 25.0, [])
+	return importer.get_mesh()

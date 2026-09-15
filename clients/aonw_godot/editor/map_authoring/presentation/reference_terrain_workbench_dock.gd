@@ -25,7 +25,7 @@ func _build_interface() -> void:
 	content.add_child(preview_label)
 	content.add_child(_strategic_preview)
 	var actions := HBoxContainer.new()
-	for definition in [["Strategic", "show_oblique_view"], ["Reference top", "show_top_view"]]:
+	for definition in [["Strategic", "show_oblique_view"], ["Reference", "show_top_view"], ["Play", "play_rendered_map"]]:
 		var button := Button.new()
 		button.text = definition[0]
 		button.pressed.connect(_view_requested.bind(definition[1]))
@@ -109,6 +109,8 @@ func _sync_reference_controls() -> void:
 		_city_row.editable = ready
 		_logical_map_panel.set_editable(false)
 		_logical_map_panel.tooltip_text = "Edit canonical JSON in the legacy workbench, recompile inputs, then rebuild this landscape."
+		if surface.get("landscape_status") != null and not str(surface.get("landscape_status")).is_empty():
+			_status.text = str(surface.get("landscape_status"))
 		if not str(surface.get("preview_error")).is_empty():
 			_status.text = "Error: " + str(surface.get("preview_error"))
 
@@ -216,5 +218,8 @@ func _set_busy(value: bool) -> void:
 func _view_requested(method: String) -> void:
 	var surface := _current_surface()
 	if _is_reference(surface):
+		if method == "play_rendered_map":
+			EditorInterface.play_main_scene()
+			return
 		surface.call(method)
 		EditorInterface.mark_scene_as_unsaved()

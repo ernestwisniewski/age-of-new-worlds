@@ -41,11 +41,27 @@ func _update_transform() -> void:
 	fov = _fov
 	var pitch := PI * 0.5 if _top_down else _elevation
 	var direction := Vector3(sin(_yaw) * cos(pitch), sin(pitch), cos(_yaw) * cos(pitch))
-	# A bounding sphere remains framed at every heading and in narrow dock previews.
+	# Fit the projected box, not a sphere around the map diagonal. A sphere wasted
+	# most of a widescreen viewport and made a complete landscape look miniature.
 	var radius := Vector3(_extent.x, _maximum_height, _extent.y).length() * 0.5
-	_distance = maxf(10.0, radius / sin(deg_to_rad(_fov) * 0.5) * 1.12 / _zoom)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var aspect := maxf(0.2, viewport_size.x / maxf(1.0, viewport_size.y))
+	var right := Vector3(cos(_yaw), 0.0, -sin(_yaw))
+	var screen_up := direction.cross(right).normalized()
+	var tangent := tan(deg_to_rad(_fov) * 0.5)
+	var fit := 10.0
+	var ortho_span := 1.0
+	for x in [0.0, _extent.x]:
+		for y in [0.0, _maximum_height]:
+			for z in [0.0, _extent.y]:
+				var relative := Vector3(x, y, z) - _target
+				var horizontal := absf(relative.dot(right)) / aspect
+				var vertical := absf(relative.dot(screen_up))
+				fit = maxf(fit, relative.dot(direction) + maxf(horizontal, vertical) / tangent)
+				ortho_span = maxf(ortho_span, 2.0 * maxf(horizontal, vertical))
+	_distance = fit * 1.08 / _zoom
 	projection = Camera3D.PROJECTION_ORTHOGONAL if _top_down else Camera3D.PROJECTION_PERSPECTIVE
-	size = maxf(_extent.x, _extent.y) * 1.12 / _zoom
+	size = ortho_span * 1.08 / _zoom
 	far = maxf(8000.0, _distance + radius * 4.0)
 	position = _target + direction * _distance
 	var up := Vector3.FORWARD if _top_down else Vector3.UP

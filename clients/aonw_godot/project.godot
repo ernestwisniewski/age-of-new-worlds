@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Age of New Worlds 2"
-run/main_scene="res://scenes/map_preview.tscn"
+run/main_scene="res://scenes/terrain_authoring/landscape_play.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 

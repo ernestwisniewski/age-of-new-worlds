@@ -4,7 +4,7 @@ extends "res://editor/map_authoring/infrastructure/terrain/natural_relief_builde
 
 const Landscape := preload("res://editor/map_authoring/infrastructure/terrain/terrain_landscape_fields.gd")
 const Parameters := preload("res://editor/map_authoring/application/reference_terrain_parameters.gd")
-const REFERENCE_VERSION := "aonw-reference-terrain/2"
+const REFERENCE_VERSION := "aonw-reference-terrain/3"
 
 func build_reference(
 	source: AonwTerrainCompiledArtifact, reference: Image, document: Dictionary,
@@ -51,6 +51,7 @@ func build_reference(
 	var macro := _smooth(elevation, width, height, radius, 3)
 	var mountains := _smooth(guides["mountains"], width, height, radius, 2)
 	var hills := _smooth(guides["hills"], width, height, radius, 2)
+	var rock_signal := _smooth(guides["rock_evidence"], width, height, 1, 1)
 	var luma: PackedFloat32Array = guides["luminance"]
 	var fine := _smooth(luma, width, height, maxi(1, roundi(radius * 0.12)), 2)
 	var medium := _smooth(luma, width, height, maxi(2, roundi(radius * 0.5)), 2)
@@ -74,7 +75,7 @@ func build_reference(
 			if water[index] != 0:
 				continue
 			var highland := smoothstep(maximum * 0.22, maximum * 0.65, macro[index])
-			var mountain := highland * lerpf(0.2, 1.0, mountains[index])
+			var mountain := highland * maxf(0.06 * highland, smoothstep(0.02, 0.8, mountains[index]))
 			var hill := maxf(hills[index], smoothstep(maximum * 0.06, maximum * 0.28, macro[index]) * (1.0 - mountain) * 0.25)
 			var world_x := x * spacing + source.world_min_meters.x
 			var world_z := y * spacing + source.world_min_meters.y
@@ -83,19 +84,23 @@ func build_reference(
 			var contrast := fine[index] - medium[index]
 			var broad := medium[index] - coarse[index]
 			var confidence := clampf(absf(contrast) * 18.0 + absf(broad) * 10.0, 0.0, 1.0)
-			var crest := clampf(0.5 + contrast * 5.0 + broad * 2.5, 0.0, 1.0)
+			var crest := clampf(0.45 + contrast * 5.0 + broad * 2.5, 0.0, 1.0)
+			crest = lerpf(crest, clampf(0.08 + rock_signal[index] * 1.4 + contrast * 1.5, 0.0, 1.0), float(p["reference_peak_strength"]))
 			if not has_reference:
 				confidence = 0.0
 			if guides["explicit_ridges"]:
+				mountain = maxf(mountain, highland)
 				crest = explicit_ridges[index]
 				confidence = 1.0
 			crest = lerpf(fallback, crest, confidence * float(p["reference_strength"]))
 			var alpine := macro[index] * float(p["mountain_scale"]) * (0.52 + 1.05 * pow(crest, float(p["ridge_sharpness"])))
-			var lowland := macro[index] + rolling.get_noise_2d(world_x, world_z) * maximum * 0.15 * hill * float(p["hill_scale"])
+			var lowland := macro[index] * float(p["lowland_scale"]) + rolling.get_noise_2d(world_x, world_z) * maximum * 0.15 * hill * float(p["hill_scale"])
 			var sculpted := lerpf(lowland, alpine, mountain)
 			sculpted += noise * maximum * float(p["detail_strength"]) * lerpf(0.15, 1.0, maxf(mountain, hill))
 			dry[index] = smoothstep(0.0, shore_width, distance[index] * spacing)
 			heights[index] = maxf(0.02, sculpted) * dry[index]
+			# Bounded shore grade makes river banks/beaches, not vertical blue walls.
+			heights[index] = minf(heights[index], distance[index] * spacing * lerpf(0.35, 1.6, mountain))
 	for _pass in int(p["erosion_passes"]):
 		heights = _relax_talus(heights, dry, width, height, spacing * 1.3)
 	var minimum := PackedFloat32Array()

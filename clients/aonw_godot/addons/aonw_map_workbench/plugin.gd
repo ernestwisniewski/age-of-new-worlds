@@ -52,3 +52,35 @@ func _compose_scene(scene_root: Node) -> void:
 			push_warning("AoNW Terrain Workbench: %s" % result[warning_key])
 	# Only sync after the self-opening reference surface has an actual session.
 	_dock.sync_from_edited_scene()
+	_remember_preview(scene_root)
+
+func _remember_preview(scene: Node) -> void:
+	if scene == null or not scene.has_method("rebuild_reference"):
+		return
+	var configuration := ConfigFile.new()
+	configuration.set_value("preview", "map_id", scene.get("source_map_id"))
+	configuration.set_value("preview", "scene_path", scene.scene_file_path)
+	var error := configuration.save("res://.godot/aonw_landscape_preview.cfg")
+	if error != OK:
+		push_warning("Cannot remember the preview map: " + error_string(error))
+
+func _build() -> bool:
+	var scene := EditorInterface.get_edited_scene_root()
+	if scene == null or not scene.has_method("rebuild_reference"):
+		return true
+	if bool(scene.get("_opening")) or not bool(scene.get("preview_ready")):
+		push_error("Wait for the landscape to finish generating before Play.")
+		return false
+	if scene.call("has_pending_geometry"):
+		push_error("Apply or discard pending terrain changes before Play; the preview uses the applied recipe.")
+		return false
+	var saved: Dictionary = scene.call("save_draft")
+	if not saved["ok"]:
+		push_error("Cannot checkpoint the terrain for Play: " + str(saved["message"]))
+		return false
+	# Persist appearance/guide/camera resources as well as the native draft.
+	if not scene.scene_file_path.is_empty() and EditorInterface.save_scene() != OK:
+		push_error("Save the authoring scene before Play.")
+		return false
+	_remember_preview(scene)
+	return true

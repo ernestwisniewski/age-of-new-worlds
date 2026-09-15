@@ -49,8 +49,8 @@ func _run() -> void:
 		push_error(str(baseline["message"]))
 		quit(1)
 		return
-	var variants := {"level_height": 120.0, "mountain_scale": 2.5, "hill_scale": 1.5,
-		"reference_strength": 0.0, "ridge_sharpness": 2.8, "smoothing": 1.2,
+	var variants := {"level_height": 120.0, "mountain_scale": 2.5, "lowland_scale": 0.9, "hill_scale": 1.5,
+		"reference_strength": 0.0, "reference_peak_strength": 0.0, "ridge_sharpness": 2.8, "smoothing": 1.2,
 		"detail_strength": 0.09, "detail_scale": 1.5, "bank_width": 0.9,
 		"erosion_passes": 0.0, "seed": 9901.0}
 	_check(variants.size() == Parameters.geometry(parameters).size(), "All geometry parameters have sensitivity tests")

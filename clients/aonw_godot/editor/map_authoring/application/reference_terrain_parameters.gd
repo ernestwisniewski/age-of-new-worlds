@@ -8,26 +8,35 @@ const VERSION := 2
 const FIELDS := [
 	["level_height", "Height of JSON level 5 (m)", 0.5, 1000.0, 0.5, 18.5, "terrain", "Metric elevation envelope; never writes the gameplay JSON."],
 	["mountain_scale", "Mountain relief", 0.5, 3.0, 0.05, 1.65, "terrain", "Amplitude inside mountain ranges located by heights and terrain tags."],
+	["lowland_scale", "Lowland elevation", 0.15, 1.2, 0.05, 0.4, "terrain", "Keeps plains and river valleys below mountain ranges while respecting JSON elevations."],
 	["hill_scale", "Rolling hills", 0.0, 2.0, 0.05, 0.65, "terrain", "Broad relief on hills; does not add random mountains on plains."],
 	["reference_strength", "Reference ridge influence", 0.0, 1.0, 0.05, 0.9, "terrain", "Follow image features or an explicit ridge guide, rather than noise."],
+	["reference_peak_strength", "Reference rocky crests", 0.0, 1.0, 0.05, 0.85, "terrain", "Locate crests from bright low-chroma rock inside JSON mountain ranges, not dark forest shadows."],
 	["ridge_sharpness", "Ridge sharpness", 0.6, 3.0, 0.05, 1.65, "terrain", "Sharper crests and narrower summits, without hexagonal plateaus."],
 	["smoothing", "Range continuity (hex radii)", 0.2, 1.5, 0.05, 0.65, "terrain", "Cross-hex smoothing of elevation and biome masks."],
 	["detail_strength", "Small-scale roughness", 0.0, 0.12, 0.005, 0.018, "terrain", "Small land-only surface detail, relative to the metric envelope."],
 	["detail_scale", "Detail wavelength (hex radii)", 0.2, 2.0, 0.05, 0.9, "terrain", "World-space noise wavelength; independent of raster resolution."],
-	["bank_width", "Bank width (hex radii)", 0.05, 1.0, 0.05, 0.35, "terrain", "Smooth transition into the zero-height water footprint."],
+	["bank_width", "Bank width (hex radii)", 0.05, 1.0, 0.05, 0.8, "terrain", "Smooth transition into the zero-height water footprint."],
 	["erosion_passes", "Talus relaxation passes", 0.0, 8.0, 1.0, 3.0, "terrain", "Conservative land-only slope relaxation, not a hydraulic simulation."],
 	["seed", "Detail seed", 0.0, 2147483647.0, 1.0, 73129.0, "terrain", "Changes secondary detail, not semantic water or reference placement."],
 	["relief_lighting", "Relief lighting", 0.0, 1.0, 0.01, 0.85, "appearance", "Unlit reference at zero; fully lit terrain at one."],
 	["rock_slope", "Rock slope threshold", 0.1, 0.95, 0.01, 0.55, "appearance", "Procedural rock on steep slopes in reference-free material mode."],
 	["ground_scale", "Ground texture repeat (m)", 0.5, 32.0, 0.5, 4.0, "appearance", "World-space PBR texture scale; triplanar projection prevents cliff stretching."],
 	["ground_normal_strength", "Ground normal detail", 0.0, 1.5, 0.05, 0.7, "appearance", "Strength of the scanned surface normals; does not modify terrain geometry."],
-	["ground_reference_tint", "Reference ground palette", 0.0, 0.5, 0.01, 0.12, "appearance", "Broad reference hue only, not painted tree shadows or lighting."],
+	["ground_reference_tint", "Reference ground colour", 0.0, 1.0, 0.01, 0.78, "appearance", "Match the low-frequency reference colour and brightness while retaining scanned PBR detail."],
+	["surface_reference_strength", "Reference biome boundaries", 0.0, 1.0, 0.05, 0.85, "appearance", "Refine smoothly blended JSON biomes using the reference palette and canopy evidence."],
 	["tree_density", "Forest coverage", 0.0, 1.0, 0.05, 0.8, "appearance", "Thins deterministic candidates within forest regions. Zero disables generated trees."],
-	["tree_spacing", "Tree spacing (m)", 2.0, 40.0, 0.5, 7.0, "appearance", "World-space jittered distribution, not a fixed count per hex. Work is capped."],
-	["tree_height", "Tree height (m)", 1.0, 35.0, 0.5, 9.0, "appearance", "Target height before variation; roots follow the edited Terrain3D surface."],
+	["tree_spacing", "Tree spacing (m)", 1.0, 40.0, 0.25, 2.75, "appearance", "World-space jittered distribution, not a fixed count per hex. Work is capped."],
+	["tree_height", "Tree height (m)", 1.0, 35.0, 0.25, 5.0, "appearance", "Target height before variation; roots follow the edited Terrain3D surface."],
 	["tree_max_slope", "Maximum tree slope (degrees)", 5.0, 60.0, 1.0, 38.0, "appearance", "Measured on the current terrain; trees are excluded from steeper cliffs."],
 	["tree_reference_strength", "Reference forest influence", 0.0, 1.0, 0.05, 0.85, "appearance", "Refines JSON forests using the reference image. An optional forest guide resolves ambiguity."],
+	["tree_canopy_threshold", "Forest darkness threshold", 0.1, 0.6, 0.01, 0.3, "appearance", "Higher values admit brighter canopy; inspect the exported canopy mask for ambiguous regions."],
+	["tree_conifer_share", "Temperate conifer share", 0.0, 1.0, 0.05, 0.75, "appearance", "Mixture of narrow and broad Tree3D forms; explicit jungle and taiga tags take precedence."],
 	["tree_draw_distance", "Forest draw distance (m)", 100.0, 8000.0, 50.0, 3000.0, "appearance", "Chunk visibility distance. Shared Tree3D prototypes avoid per-tree native generation."],
+	["water_depth", "Maximum visual water depth (m)", 0.5, 30.0, 0.5, 8.0, "appearance", "Carves the rendered bed below the zero-height water contract. Narrow rivers stay shallow."],
+	["water_shore_width", "Shallow-water colour reach (m)", 1.0, 30.0, 0.5, 10.0, "appearance", "Metric shallow/deep scattering transition measured from the reconstructed shoreline."],
+	["water_waves", "Water ripple strength", 0.0, 1.0, 0.05, 0.35, "appearance", "Animated normal ripples taper at shorelines; no displaced waves breaking narrow rivers."],
+	["water_reference_colour", "Reference water colour", 0.0, 1.0, 0.05, 0.7, "appearance", "Retain the reference's blue/turquoise water palette without baking its foam into geometry."],
 	["sun_elevation", "Sun elevation (degrees)", 10.0, 85.0, 1.0, 48.0, "appearance", "Live light angle; has no effect on the heightmap."],
 	["sun_heading", "Sun heading (degrees)", 0.0, 360.0, 1.0, 328.0, "appearance", "Live direction of terrain shadows."],
 	["sun_energy", "Sun intensity", 0.1, 2.0, 0.05, 1.0, "appearance", "Direct illumination of the reconstruction."],
@@ -85,9 +94,9 @@ static func preset(name: String, current: Dictionary) -> Dictionary:
 	var values := {}
 	match name:
 		"Reference faithful":
-			values = {"reference_strength": 1.0, "mountain_scale": 1.25, "hill_scale": 0.45, "detail_strength": 0.01, "erosion_passes": 2.0}
+			values = {"reference_strength": 1.0, "mountain_scale": 1.25, "hill_scale": 0.45, "detail_strength": 0.01, "erosion_passes": 2.0, "reference_peak_strength": 1.0, "surface_reference_strength": 1.0, "ground_reference_tint": 0.9, "tree_reference_strength": 1.0}
 		"Strategic natural":
-			values = {"reference_strength": 0.9, "mountain_scale": 1.65, "hill_scale": 0.65, "detail_strength": 0.018, "erosion_passes": 3.0}
+			values = {"reference_strength": 0.9, "mountain_scale": 1.65, "hill_scale": 0.65, "detail_strength": 0.018, "erosion_passes": 3.0, "reference_peak_strength": 0.85, "surface_reference_strength": 0.85, "ground_reference_tint": 0.78}
 		"Rugged":
 			values = {"reference_strength": 0.85, "mountain_scale": 2.1, "hill_scale": 1.0, "detail_strength": 0.035, "erosion_passes": 2.0}
 	for key in values:

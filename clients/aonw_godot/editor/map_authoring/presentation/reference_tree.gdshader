@@ -18,7 +18,8 @@ void fragment() {
 	ROUGHNESS = foliage ? 0.9 : 0.95;
 	SPECULAR = 0.2;
 	ALPHA = foliage ? tex.a : 1.0;
-	ALPHA_SCISSOR_THRESHOLD = 0.45;
+	// Coverage-preserving hashed alpha avoids disappearing crowns in small mip levels.
+	ALPHA_HASH_SCALE = 1.0;
 	if (foliage) {
 		BACKLIGHT = ALBEDO * 0.25;
 	} else {

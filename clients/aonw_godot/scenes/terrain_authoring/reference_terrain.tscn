@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://editor/map_authoring/presentation/reference_landscape_preview.gd" id="1_preview"]
 [ext_resource type="Script" path="res://editor/map_authoring/presentation/reference_preview_camera.gd" id="2_camera"]
@@ -11,6 +11,14 @@ show_grey = true
 [sub_resource type="Terrain3DAssets" id="TerrainAssets"]
 resource_local_to_scene = true
 
+[sub_resource type="ProceduralSkyMaterial" id="ReflectionSkyMaterial"]
+sky_top_color = Color(0.23, 0.4, 0.62, 1)
+sky_horizon_color = Color(0.65, 0.74, 0.82, 1)
+ground_horizon_color = Color(0.65, 0.74, 0.82, 1)
+
+[sub_resource type="Sky" id="ReflectionSky"]
+sky_material = SubResource("ReflectionSkyMaterial")
+
 [sub_resource type="Environment" id="Environment"]
 resource_local_to_scene = true
 background_mode = 1
@@ -18,7 +26,8 @@ background_color = Color(0.065, 0.085, 0.11, 1)
 ambient_light_source = 3
 ambient_light_color = Color(0.88, 0.92, 1, 1)
 ambient_light_energy = 0.45
-reflected_light_source = 2
+reflected_light_source = 1
+sky = SubResource("ReflectionSky")
 
 [node name="ReferenceTerrain" type="Node3D"]
 script = ExtResource("1_preview")

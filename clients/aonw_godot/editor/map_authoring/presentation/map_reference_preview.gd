@@ -36,6 +36,7 @@ var _opening := false
 var _has_reference := false
 var _source_maximum := 18.5
 var _opened_map_id := ""
+var _reference_inputs: Dictionary = {}
 
 func _ready() -> void:
 	super._ready()
@@ -121,6 +122,9 @@ func rebuild_reference() -> Dictionary:
 	var inputs := Inputs.new().load_inputs(source_map_id, map_bundle_root)
 	if not inputs["ok"]:
 		return _report_failure(str(inputs["message"]))
+	var presentation_error := _validate_presentation_inputs(inputs)
+	if not presentation_error.is_empty():
+		return _report_failure(presentation_error)
 	var source: AonwTerrainCompiledArtifact = inputs["artifact"]
 	_source_maximum = source.max_terrain_height_meters
 	var options := parameter_values()
@@ -176,6 +180,7 @@ func rebuild_reference() -> Dictionary:
 	authoring_root = next_root
 	compiled_artifact_directory = source.directory
 	reconstruction = next
+	_reference_inputs = inputs
 	terrain_parameters = options
 	_pending_parameters.clear()
 	_has_reference = inputs["has_reference"]
@@ -386,3 +391,6 @@ func set_city_marker_visible(value: bool) -> void:
 func set_city_marker_coordinate(value: Vector2i) -> void:
 	super.set_city_marker_coordinate(value)
 	preview_state_changed.emit()
+
+func _validate_presentation_inputs(_inputs: Dictionary) -> String:
+	return ""

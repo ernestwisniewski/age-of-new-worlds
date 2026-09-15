@@ -25,7 +25,11 @@ func _run() -> void:
 		preview.get_node("PreviewHUD").hide()
 		preview.show_oblique_view()
 		await create_timer(0.5).timeout
-		for _frame in 8:
+		if not preview.landscape_ready or preview.get("_water_surface") == null:
+			push_error("Landscape assets did not become ready for " + id + ": " + preview.landscape_status)
+			quit(1)
+			return
+		for _frame in 1:
 			await process_frame
 			await RenderingServer.frame_post_draw
 		var image := root.get_texture().get_image()
@@ -33,11 +37,21 @@ func _run() -> void:
 			quit(1)
 			return
 		preview.show_top_view()
-		for _frame in 3:
+		for _frame in 1:
 			await process_frame
 			await RenderingServer.frame_post_draw
 		image = root.get_texture().get_image()
 		image.save_png(output.path_join(id + "-reference.png"))
+		preview.set_reference_visible(false)
+		preview.set_parameter_change({"key": "relief_lighting", "value": 1.0})
+		for _frame in 1:
+			await process_frame
+			await RenderingServer.frame_post_draw
+		image = root.get_texture().get_image()
+		image.save_png(output.path_join(id + "-landscape-top.png"))
+		var masks: Dictionary = preview.get("_masks")
+		masks["canopy"].save_png(output.path_join(id + "-canopy.png"))
+		preview.reconstruction["water_mask"].save_png(output.path_join(id + "-water.png"))
 		print("RENDERED ", id, " trees=", preview.tree_count)
 		root.remove_child(preview)
 		preview.free()

@@ -23,7 +23,7 @@ func sample_landscape(
 				return {"ok": false, "message": "Terrain tags must be strings"}
 		tiles[Vector2i(int(tile["col"]), int(tile["row"]))] = tile
 	var fields := {}
-	for key in ["levels", "mountains", "hills", "red", "green", "blue"]:
+	for key in ["levels", "mountains", "hills", "red", "green", "blue", "rock_evidence"]:
 		var values := PackedFloat32Array()
 		values.resize(original.size())
 		fields[key] = values
@@ -33,6 +33,9 @@ func sample_landscape(
 	var red: PackedFloat32Array = fields["red"]
 	var green: PackedFloat32Array = fields["green"]
 	var blue: PackedFloat32Array = fields["blue"]
+	var rock_evidence: PackedFloat32Array = fields["rock_evidence"]
+	var bounds := Geometry.new(source.cols, source.rows, source.hex_radius_meters).bounds()
+	var reference_size := reference.get_size() - Vector2i.ONE
 	var water: PackedByteArray = result["water"]
 	var geometry := Geometry.new(source.cols, source.rows, source.hex_radius_meters)
 	var space := Space.new(source)
@@ -46,6 +49,9 @@ func sample_landscape(
 			levels[index] = float(tile.get("height", 0.0)) / 5.0
 			mountains[index] = 1.0 if _any_tag(tags, ["mountain", "mountains"]) else 0.0
 			hills[index] = 1.0 if _any_tag(tags, ["hill", "hills"]) else 0.0
+			var uv := space.terrain_local_to_reference_uv(space.raster_pixel_to_terrain_local(Vector2i(x, y)), bounds)
+			var sampled := reference.get_pixel(roundi(uv.x * reference_size.x), roundi(uv.y * reference_size.y))
+			rock_evidence[index] = smoothstep(0.35, 0.8, sampled.v) * (1.0 - smoothstep(0.15, 0.55, sampled.s))
 			var color := _biome_color(tags)
 			red[index] = color.r
 			green[index] = color.g
@@ -53,7 +59,7 @@ func sample_landscape(
 			if not has_reference and not overrides.has("water"):
 				water[index] = int(tile.is_empty() or _any_tag(tags, WATER_TAGS))
 	result.merge({"levels": levels, "mountains": mountains, "hills": hills,
-		"red": red, "green": green, "blue": blue}, true)
+		"red": red, "green": green, "blue": blue, "rock_evidence": rock_evidence}, true)
 	result["water"] = water
 	result["bank_distance"] = distance_to_water(water, source.width, source.height)
 	return result

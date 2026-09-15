@@ -1,121 +1,147 @@
-# Reference landscape: PBR ground and Tree3D forests
+# Reference landscape and Play preview
 
-This extends the existing reference-terrain authoring workflow, not the gameplay
-terrain contract. All five scenes in `reference_maps/` inherit the upgraded
-`reference_terrain.tscn`; maps created by the workbench use the same template.
-Existing canonical/manual scenes and map JSON files are not rewritten.
+The `feature/maps-terrain` authoring workflow reconstructs terrain from canonical
+JSON elevations/tags and the registered reference atlas, then presents real PBR
+surface scans, Tree3D meshes and a separate water surface. No gameplay JSON,
+manual objects, movement rules or existing canonical scenes are rewritten.
 
-## Install once
+## Open and run
 
-Close Godot, then run from the repository root:
+Close Godot and install the visual dependencies once from the repository root:
 
 ```sh
 python3 clients/aonw_godot/tool/install_reference_assets.py
 ```
 
-Restart Godot so that its native-extension scan loads Tree3D. Open a map through
-the AoNW Terrain3D panel, or open
-`res://scenes/terrain_authoring/reference_maps/dravonia.tscn` (also Myranth,
-Terenos, Verdantia and the starter map). New scenes default to landscape view.
-`1` shows the reference; `2` shows the lit landscape; `R` compares; `G` toggles
-hexes. In the editor, the existing reference checkbox/opacity controls work too.
-A full-opacity reference hides the generated trees to avoid double canopies.
+Restart Godot. Open a map in **AoNW Terrain3D**, apply any pending geometry edits,
+then click **Play** in the dock or the normal **Play/F5** button. The editor saves
+the current terrain draft and scene before launching; pending geometry blocks
+Play with an explicit Apply/Discard message rather than rendering stale input.
+The selected map/scene is remembered locally in `.godot/aonw_landscape_preview.cfg`.
 
-The repository intentionally does not duplicate native binaries and scan images.
-A clean checkout needs the install command before the textured forest is ready.
-Missing dependencies produce explicit scene warnings and keep the old semantic
-preview available. Nothing downloads when merely opening the editor.
-The installer refuses to overwrite unmanaged or modified files. Back up local
-asset edits before removing a managed installation and reinstalling it.
+F5 opens `landscape_play.tscn`: a rendered landscape with map selection, loading
+status and Landscape / Reference / Compare / Grid controls. With no remembered
+selection it opens Dravonia. F6 can still run any of the inherited scenes in
+`reference_maps/` directly. The older gameplay prototype remains available at
+`res://scenes/map_preview.tscn`; the F5 change is for this terrain-authoring branch.
 
-## Ground
+Right drag orbits, middle/Shift-right drag pans, and the wheel/pinch zooms.
+`1` shows the top-down reference, `2` the lit perspective landscape, `R` compares,
+and `G` toggles hexes. The camera fits the actual map corners and viewport aspect
+ratio instead of leaving the map far away inside a large empty native region.
 
-Six scanned surface layers map JSON tags to grass, forest floor, sand, snow,
-rock and wet mud. Biome-weight masks are smoothed across hex boundaries; cliffs
-expose rock according to the current surface normal. The opaque draped surface
-uses the existing native-height overlay mesh, **not** Terrain3D control-map paint.
-It remains aligned when Terrain3D is sculpted. Reconstructed water retains a
-separate blue, low-roughness wave-normal surface rather than receiving mud
-textures across the ocean. This is an authoring presentation
-layer, not a claim that reference drafts can now be published as runtime terrain.
+## Colour and ground materials
 
-World-space triplanar sampling avoids stretched cliff textures. Diffuse,
-OpenGL normal and roughness maps are used, with mipmaps and a shared pair of
-texture arrays. Only the two strongest surface layers are sampled per fragment.
-A low-frequency reference tint retains the map's broad palette without baking
-painted tree silhouettes or lighting into the new ground.
+Six scanned PBR layers cover grass, forest floor, sand, snow, rock and wet soil.
+A smooth, metric-scale semantic prior is refined with registered reference
+colour, brightness and local contrast. Low-frequency reference colour/value is
+combined with mean-normalized scan detail; it is not the original image pasted
+over 3D. The mean correction accounts for Compatibility's sRGB shading versus
+Forward+'s linear space. Normal and roughness maps remain real material inputs.
+Triplanar projection prevents stretched cliff textures. At most two dominant
+layers are sampled per fragment. Blue water pixels do not tint cliffs cyan.
 
-## Forests
+The material surface follows the native edited heights. Native Terrain3D still
+owns data, editing constraints, collision and CPU picking, but its coincident
+grey draw surface is hidden when the PBR surface is ready. This avoids depth
+fighting and exposes no unused square regions. Smooth mesh normals are rebuilt
+also on the native brush fast path, providing consistent lighting and shadows.
+Black/transparent parts of the atlas boundary are clipped consistently in the
+land, water and vegetation layers.
 
-Tree3D v1.1.0 generates six shared prototypes: two variations each of broadleaf,
-narrow/upland and broad tropical forms. These are artistic profiles, not a
-botanical species classifier. Native Tree3D internal mesh children are extracted
-once; the forest uses chunked MultiMesh instances, textured alpha-cutout foliage,
-bark normals, gentle canopy wind, real shadows, rotation/scale/color variation
-and configurable draw distance. There is no independent native generator or
-collision body for each tree. This implementation does not add mesh LODs.
+## Mountains, valleys and banks
 
-JSON forest tags constrain placement; reference chroma/brightness refines density
-within those areas. Bright clearings become thinner. Water comes from the
-existing reconstructed water mask rather than a second inconsistent detector.
-Root and surrounding footprint samples reject water. Slopes are measured from
-the **edited native height field**, so rebuilding after a brush edit re-seats the
-roots and rejects steep terrain. Explicit desert/snow/road/city tags exclude trees.
-Dynamic gameplay roads/cities and untagged manual objects are not exclusion masks.
+The v3 reconstruction retains JSON location/elevation constraints but refines
+crests using neutral bright rock evidence and local reference contrast. Explicit
+ridge guides remain authoritative. Small-scale noise is secondary, not the
+source of arbitrary mountains on plains. Lowland elevation and mountain relief
+have independent controls. A bounded shore grade and adjustable bank width
+produce river valleys and beaches rather than vertical walls beside every wet
+sample. Narrow water features are conservatively supersampled within semantic
+water tiles. Ocean-connected blue shadows on snow/mountain tiles remain land
+unless an explicit water tag or water guide overrides that protection.
 
-This is a conservative color heuristic, not semantic image segmentation. To
-match an ambiguous painted forest exactly, assign `forest_guide` in the scene
-Inspector: a grayscale image matching the reference atlas, white for woodland,
-black for clearing. The guide overrides density inference, but not exclusions.
-Use Rebuild pending terrain to apply a changed guide. Green plains are not
-silently treated as forest merely because their pixels are green.
+Geometry algorithm version `aonw-reference-terrain/3` creates separate draft
+workspaces, preserving earlier sculpted v2 terrain. Appearance-only edits do not
+alter the geometry recipe or trigger a height rebuild.
 
-## Controls and persistence
+## Vegetation
 
-The appearance section of the existing parameter panel includes ground repeat
-scale, normal strength, reference palette, tree density, spacing, height,
-maximum slope, reference influence and draw distance. Forest updates are
-coalesced after slider/brush events. Camera and lighting changes do not change
-forest placement. Pending geometry/seed edits do not leak into the applied
-forest. Candidate generation is bounded to 120,000 grid cells and 20,000 trees;
-large-map budget reduction is distributed across the map, not truncated by row.
+JSON forest neighbourhoods support a continuous canopy-evidence mask. Dark green
+textured areas support woodland; bright clearings thin it. Vegetation is not
+clipped into one patch per hex and green fields alone are not treated as forest.
+An optional atlas-sized `forest_guide` (white woodland, black clearing) overrides
+ambiguous image inference. Assign it in the Inspector and rebuild; invalid guide
+dimensions are rejected before replacing the active terrain draft.
 
-Generated forest nodes have no scene owner. They are reconstructed, not packed
-into `.tscn`; `ManualWorld` and native terrain revisions are untouched. Appearance
-controls are stored with the existing scene parameters and do not change the
-terrain geometry recipe. The optional guide remains a scene texture resource.
-Older standalone copies using `map_reference_preview.gd` are not silently
-migrated: use an inherited `reference_maps` scene or deliberately replace the
-root script with `reference_landscape_preview.gd` after backing up the scene.
+Tree3D creates six shared prototypes, with broadleaf, upland and tropical forms,
+textured foliage and bark normals. Alpha hashing preserves small, distant
+canopies instead of cutting them away at a fixed alpha threshold. Their trunks
+have generated LODs; foliage cards retain their coverage instead of being
+destructively simplified. Meshes are shared through spatially chunked
+MultiMeshes. Placement, scale, rotation
+and modest reference-derived tint are reproducible. Density, spacing, height,
+maximum slope, canopy threshold, reference influence, conifer share and draw
+distance are adjustable. Defaults use smaller, more numerous trees than the
+previous landscape preview. These are visual profiles, not a species classifier.
 
-## Sources and reproducibility
+Trees avoid water footprints and unsuitable tagged terrain, but snow can support
+woodland when the reference and semantic context support it. Roots and slope
+eligibility are re-evaluated against edited native heights after brush edits.
+Generated forests have no scene owner and never replace `ManualWorld`. Dynamic
+gameplay roads/cities and untagged manually placed objects are not exclusion
+masks. Placement is bounded to 120,000 candidates and 20,000 trees; this is not a
+frame-rate guarantee for every device or slider combination.
 
-- Tree3D: https://github.com/JekSun97/gdTree3D/releases/tag/v1.1.0 . Both addon and
-  demo archives are pinned by SHA-256 in the installer. The upstream MIT notice
-  is retained under `addons/Tree3D/LICENSE.md`; demo bark/branch textures are
-  installed with their package provenance.
-- Poly Haven CC0 scans: `leafy_grass`, `forest_ground_04`, `coast_sand_05`,
-  `snow_02`, `rock_boulder_cracked`, `brown_mud_03`.
-  https://polyhaven.com/license and https://api.polyhaven.com/files/{asset_id} .
-  First installation verifies published MD5 and size; `assets.lock.json` then
-  records SHA-256, source URL and asset ID. Preserve/share that generated lock
-  for a release build; it is not an immutable repository-wide pin on first use.
+## Water
+
+Water is a separate clipped mesh, not blue ground paint. Its exact footprint
+uses the same reconstructed water mask as the terrain and forest exclusions.
+Metric distance to land controls shallow/deep colour, shoreline treatment and
+wave-normal attenuation. Reference colours refine the blue/turquoise palette.
+Depth, shore transition, ripples and reference-colour influence have controls.
+The ground shader lowers the rendered bed beneath the surface without changing
+the native gameplay/authoring water-height contract.
+
+The current canonical maps have zero-height water; their preview surface is
+0.09 m above that datum. This is opaque shallow/deep scattering with animated
+normals, not hydraulic flow, volumetric refraction, flood simulation or inferred
+high-altitude lake levels. These would need explicit per-water-body elevation
+and flow inputs. A reference comparison hides water and trees so the original
+image is not doubled by generated canopies or a second water layer.
+
+## Dependencies and scope
+
+The installer downloads pinned Tree3D v1.1.0 addon/demo archives and six 1k Poly
+Haven PBR scans. It verifies integrity, records provenance, and refuses to
+overwrite unmanaged/modified assets. Nothing downloads on opening Godot.
+Textures are loaded through Godot's imported resource system. Missing visual
+assets leave an explicit warning, not an apparently successful empty forest.
+
+This remains an **authoring and rendered-preview pipeline**, not Terrain3D
+control-map paint or a newly published gameplay terrain format. It does not
+claim pixel-perfect semantic reconstruction from a single painted image.
+Use forest/ridge/water guides for ambiguous features and review multiple zooms.
+
+Tree3D is MIT: https://github.com/JekSun97/gdTree3D/releases/tag/v1.1.0 . Its notice
+is retained in `addons/Tree3D/LICENSE.md`. Poly Haven scans are CC0:
+https://polyhaven.com/license . Scan IDs are `leafy_grass`, `forest_ground_04`,
+`coast_sand_05`, `snow_02`, `rock_boulder_cracked`, `brown_mud_03`. Preserve the
+installer's `assets.lock.json` for repeatable release asset installation.
 
 ## Validation
 
 ```sh
-python3 -m unittest discover -s clients/aonw_godot/tool -p test_install_reference_assets.py -v
 python3 clients/aonw_godot/tool/run_reference_contracts.py --godot /path/to/godot
-# Requires installed assets and a real display (or xvfb-run -a on Linux):
 python3 clients/aonw_godot/tool/run_reference_contracts.py --godot /path/to/godot --visual-assets
+/path/to/godot --headless --audio-driver Dummy --path clients/aonw_godot --script res://tests/test_landscape_play.gd
+/path/to/godot --audio-driver Dummy --path clients/aonw_godot --script res://tool/capture_reference_maps.gd
 ```
 
-Pure contracts cover normalized biome masks, deterministic candidates, water
-exclusion, map identity, slope sampling, disabled forests and appearance/geometry
-isolation. The additional asset suite exercises real Tree3D meshes, materials,
-MultiMeshes, PBR arrays and a small rendered smoke scene. The
-`Reference landscape assets` workflow retains that render and the asset lock.
-It is **not** a visual acceptance test of all authored maps or a frame-time
-benchmark. Review Dravonia, Myranth, Terenos and Verdantia at strategic and close
-zoom before declaring the artwork final; pay particular attention to canopy
-shape, scale, coastlines, steep slopes and clearings.
+On display-less Linux use `xvfb-run -a` for renderer checks. Pure contracts cover
+water continuity, geometry parameter sensitivity, normalized biome weights,
+canopy evidence, reproducibility and appearance/geometry isolation. The F5 test
+uses the actual launcher, native terrain, comparison visibility and brush
+re-seating. Full-map captures save perspective landscape, top-down landscape,
+reference, canopy and water-mask images under `reference-captures/`. These are
+inspection artifacts, not numerical proof of photorealism or a GPU benchmark.

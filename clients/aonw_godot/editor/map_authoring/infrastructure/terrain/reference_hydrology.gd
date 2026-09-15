@@ -31,11 +31,15 @@ func sample(
 	var bounds := geometry.bounds()
 	var tile_water := PackedByteArray()
 	tile_water.resize(source.cols * source.rows)
+	var protected_land := PackedByteArray()
+	protected_land.resize(tile_water.size())
 	for tile in document["tiles"]:
 		var index := int(tile["row"]) * source.cols + int(tile["col"])
 		for tag in tile["terrainTags"]:
 			if tag in WATER_TAGS:
 				tile_water[index] = 1
+			if tag in ["snow", "ice", "glacier", "mountain", "mountains"]:
+				protected_land[index] = 1
 	var sea_only := tile_water.count(1) == tile_water.size()
 	for value in original:
 		if value > 0.05:
@@ -54,6 +58,7 @@ func sample(
 	var tail := 0
 	var ambiguous_samples := 0
 	var reference_size := reference.get_size() - Vector2i.ONE
+	var footprint := Vector2(reference_size) * source.sample_spacing_meters / bounds.size
 	for y in height:
 		for x in width:
 			var index := y * width + x
@@ -76,13 +81,20 @@ func sample(
 				continue
 			var coordinate := geometry.tile_at_point(logical)
 			var wet_tile := false
+			var protected_tile := false
 			if geometry.contains(coordinate):
-				wet_tile = tile_water[coordinate.y * source.cols + coordinate.x] != 0
+				var tile_index := coordinate.y * source.cols + coordinate.x
+				wet_tile = tile_water[tile_index] != 0
+				protected_tile = protected_land[tile_index] != 0 and not wet_tile
 			var blue := is_water_color(color)
+			if not blue and wet_tile:
+				blue = _subpixel_water(reference, pixel, footprint)
 			var uncertain_water := (
 				wet_tile and original[index] <= 0.05 and not _clear_land(color)
 			)
-			candidates[index] = int(blue or uncertain_water or outside)
+			# Connected blue snow shadows are still land, even when they touch the ocean.
+			# Explicit water/river tags or a guide can intentionally cross snowy terrain.
+			candidates[index] = int(outside or (not protected_tile and (blue or uncertain_water)))
 			if uncertain_water and not blue and not outside:
 				ambiguous_samples += 1
 			if outside or (candidates[index] != 0 and (wet_tile or original[index] <= 0.05)):
@@ -184,3 +196,14 @@ func _coordinate(value: Variant, limit: int) -> bool:
 		(value is int or value is float) and is_finite(float(value))
 		and float(value) == floorf(float(value)) and value >= 0 and value < limit
 	)
+
+func _subpixel_water(image: Image, pixel: Vector2i, footprint: Vector2) -> bool:
+	# Preserve a thin reference river falling between raster centres, but only
+	# inside a semantic water seed. This cannot invent lakes in blue mountain shadows.
+	var evidence := 0
+	for offset in [Vector2(-0.35, 0.0), Vector2(0.35, 0.0), Vector2(0.0, -0.35), Vector2(0.0, 0.35)]:
+		var point := pixel + Vector2i((offset * footprint).round())
+		point = point.clamp(Vector2i.ZERO, image.get_size() - Vector2i.ONE)
+		if is_water_color(image.get_pixelv(point)):
+			evidence += 1
+	return evidence >= 2

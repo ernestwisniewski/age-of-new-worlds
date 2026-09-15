@@ -6,6 +6,10 @@ uniform sampler2DArray ground_ar : source_color, filter_linear_mipmap_anisotropi
 uniform sampler2DArray ground_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D ground_weights : filter_linear, repeat_disable;
 uniform sampler2D detail_weights : filter_linear, repeat_disable;
+uniform sampler2D coverage : filter_linear, repeat_disable;
+uniform sampler2D shore_distance : filter_linear, repeat_disable;
+uniform vec4 layer_means[6];
+uniform float water_depth = 8.0;
 uniform sampler2D water_mask : filter_linear, repeat_disable;
 uniform sampler2D reference_texture : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
 uniform sampler2D reference_macro : source_color, filter_linear, repeat_disable;
@@ -20,10 +24,17 @@ uniform float relief_lighting = 1.0;
 uniform float rock_slope = 0.55;
 varying vec3 local_position;
 varying vec3 world_position;
+varying vec3 surface_normal;
 
 void vertex() {
 	local_position = VERTEX;
+	vec2 raster_uv = VERTEX.xz / max(raster_extent, vec2(0.001));
+	float wet = texture(water_mask, raster_uv).r;
+	float bank = texture(shore_distance, raster_uv).r;
+	float reference_mix = reference_visible && has_reference ? reference_opacity : 0.0;
+	VERTEX.y -= smoothstep(0.45, 0.95, wet) * min(water_depth, max(0.0, bank - 0.5) * 0.65 + 0.15) * (1.0 - reference_mix);
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	surface_normal = MODEL_NORMAL_MATRIX * NORMAL;
 }
 
 // Metric triplanar projection avoids stretched cliff textures and hex-shaped UV seams.
@@ -48,8 +59,12 @@ void sample_layer(int layer, vec3 p, vec3 n, out vec4 ar, out vec3 normal_delta)
 
 void fragment() {
 	vec2 terrain_uv = local_position.xz / max(raster_extent, vec2(0.001));
-	vec3 n = normalize(cross(dFdx(world_position), dFdy(world_position)));
-	if (n.y < 0.0) { n = -n; }
+	if (texture(coverage, terrain_uv).r < 0.5) { discard; }
+	vec3 n = normalize(surface_normal);
+	if (length(surface_normal) < 0.5) {
+		n = normalize(cross(dFdx(world_position), dFdy(world_position)));
+		if (n.y < 0.0) { n = -n; }
+	}
 	vec4 g = texture(ground_weights, terrain_uv);
 	vec2 d = texture(detail_weights, terrain_uv).rg;
 	float rock = smoothstep(rock_slope, min(0.999, rock_slope + 0.18), 1.0 - abs(n.y));
@@ -76,22 +91,24 @@ void fragment() {
 	sample_layer(second, world_position / ground_scale, n, ar2, nd2);
 	vec4 ar = mix(ar1, ar2, blend);
 	vec3 detail_normal = normalize(n + mix(nd1, nd2, blend) * ground_normal_strength);
-	vec3 macro = texture(reference_macro, UV).rgb;
-	// Keep the broad reference palette without re-baking tree silhouettes/shadows.
-	float luma = max(dot(macro, vec3(0.2126, 0.7152, 0.0722)), 0.04);
-	vec3 tint = clamp(macro / luma, vec3(0.65), vec3(1.4));
-	vec3 ground = ar.rgb * mix(vec3(1.0), tint, has_reference ? ground_reference_tint : 0.0);
-	float water = smoothstep(0.45, 0.55, texture(water_mask, terrain_uv).r);
-	vec3 water_color = mix(vec3(0.025, 0.13, 0.19), vec3(0.06, 0.24, 0.27), 0.5 + 0.5 * sin(world_position.x * 0.014 + world_position.z * 0.011));
-	vec3 wave_normal = normalize(n + vec3(sin(world_position.z * 0.8 + TIME * 0.7) * 0.055, 0.0, cos(world_position.x * 0.55 + TIME * 0.5) * 0.035));
-	ground = mix(ground, water_color, water);
-	detail_normal = normalize(mix(detail_normal, wave_normal, water));
+	vec3 macro = texture(reference_macro, terrain_uv).rgb;
+	vec3 mean_color = mix(layer_means[first].rgb, layer_means[second].rgb, blend);
+	// Compatibility shades in sRGB; Forward+ shades in linear space.
+	if (OUTPUT_IS_SRGB) {
+		mean_color = mix(12.92 * mean_color, 1.055 * pow(max(mean_color, vec3(0.0)), vec3(1.0 / 2.4)) - 0.055, step(vec3(0.0031308), mean_color));
+	}
+	vec3 surface_detail = clamp(ar.rgb / max(mean_color, vec3(0.01)), vec3(0.65), vec3(1.4));
+	// Match low-frequency colour/value, retaining genuine scan detail and PBR normals.
+	vec3 target = clamp(macro, vec3(0.018), vec3(0.88)) * surface_detail;
+	// Blue water must not colour the neighbouring rock face cyan.
+	float water_chroma = smoothstep(0.02, 0.10, macro.b - macro.r);
+	vec3 ground = mix(ar.rgb, target, has_reference ? ground_reference_tint * (1.0 - water_chroma) : 0.0);
 	vec4 reference = texture(reference_texture, UV);
 	float reference_blend = reference_visible && has_reference ? reference_opacity * reference.a : 0.0;
 	vec3 albedo = mix(ground, reference.rgb, reference_blend);
 	NORMAL = normalize((VIEW_MATRIX * vec4(normalize(mix(detail_normal, n, reference_blend)), 0.0)).xyz);
 	ALBEDO = albedo * relief_lighting;
 	EMISSION = albedo * (1.0 - relief_lighting);
-	ROUGHNESS = mix(mix(clamp(ar.a, 0.35, 1.0), 0.22, water), 1.0, reference_blend);
-	SPECULAR = mix(0.25, 0.55, water * (1.0 - reference_blend));
+	ROUGHNESS = mix(clamp(ar.a, 0.35, 1.0), 1.0, reference_blend);
+	SPECULAR = 0.25;
 }
