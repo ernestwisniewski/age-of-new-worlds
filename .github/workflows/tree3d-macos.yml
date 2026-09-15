@@ -1,0 +1,52 @@
+name: Tree3D macOS loading
+on:
+  push:
+    branches: [feature/maps-terrain]
+    paths:
+      - clients/aonw_godot/tool/install_reference_assets.py
+      - clients/aonw_godot/tool/test_install_reference_assets.py
+      - clients/aonw_godot/tool/run_tree3d_contracts.py
+      - clients/aonw_godot/tests/test_tree3d_extension.gd
+      - clients/aonw_godot/tests/fixtures/tree3d/**
+      - .github/workflows/tree3d-macos.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tree3d-macos-arm64:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native Apple Silicon runner and installer contracts
+        run: |
+          test "$(uname -m)" = arm64
+          python3 -m unittest discover -s clients/aonw_godot/tool -p test_install_reference_assets.py -v
+      - name: Install and verify Tree3D without unrelated ground scans
+        run: |
+          python3 clients/aonw_godot/tool/install_reference_assets.py --trees-only
+          python3 clients/aonw_godot/tool/install_reference_assets.py --trees-only
+          lipo -archs clients/aonw_godot/addons/Tree3D/libTree3D.macos.template_debug.universal
+          lipo -archs clients/aonw_godot/addons/Tree3D/libTree3D.macos.template_release.universal
+      - name: Install checksum-verified Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          release=https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable
+          curl --fail --location --retry 3 "$release/Godot_v4.7.1-stable_macos.universal.zip" -o Godot_v4.7.1-stable_macos.universal.zip
+          curl --fail --location --retry 3 "$release/SHA512-SUMS.txt" -o SHA512-SUMS.txt
+          grep 'Godot_v4.7.1-stable_macos.universal.zip$' SHA512-SUMS.txt | shasum -a 512 --check
+          ditto -x -k Godot_v4.7.1-stable_macos.universal.zip "$RUNNER_TEMP/tree3d-godot"
+      - name: Parse the real descriptor and load native Tree3D on ARM64
+        run: |
+          python3 clients/aonw_godot/tool/run_tree3d_contracts.py \
+            --godot "$RUNNER_TEMP/tree3d-godot/Godot.app/Contents/MacOS/Godot" \
+            --expect-feature macos --expect-feature arm64
+      - name: Retain native diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tree3d-macos-contracts
+          path: tree3d-contract-*.log
+          retention-days: 7

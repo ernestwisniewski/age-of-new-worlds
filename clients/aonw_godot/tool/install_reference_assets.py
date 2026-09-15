@@ -4,7 +4,8 @@
 Close Godot before running. No third-party Python packages are required.
 Tree3D release archives are pinned by SHA-256. Poly Haven's first resolution uses
 its published MD5; assets.lock.json records the URL and SHA-256 for later installs.
-No downloads are performed by the Godot editor scripts.
+No downloads are performed by the Godot editor scripts. Existing managed Tree3D
+installs are repaired in place; --trees-only skips unrelated ground scans.
 """
 from __future__ import annotations
 
@@ -27,6 +28,11 @@ ARCHIVES = {
     "addon": ("Tree3D-addon-godot4.5.zip", "fb12f381ec19d1e9eb6339f8df85da474e9255ba0f86e5251df5d4599cc1b42d"),
     "demo": ("Tree3D-demo-project-godot4.5.zip", "85b6fdca3df7bc82e837097d80f08c4bfe5d4fdb1906a761637039f62b2c709e"),
 }
+TREE_DESCRIPTOR = "addons/Tree3D/Tree3D.gdextension"
+# Exact upstream/fixed bytes for recovery after a descriptor write but before
+# its manifest write. Never accept arbitrary local edits as an automatic repair.
+UPSTREAM_DESCRIPTOR_SHA256 = "7a5b9daa5900af0cb9cc06156c033ec514262bf1279c9f33cb5193b2b341e2f0"
+FIXED_DESCRIPTOR_SHA256 = "e3d4e2aadf3b84adc397d6da6c7f0a0679fb801407df8bb24d61ec34cb9951bc"
 SCANS = {"grass": "leafy_grass", "forest": "forest_ground_04", "sand": "coast_sand_05",
          "snow": "snow_02", "rock": "rock_boulder_cracked", "mud": "brown_mud_03"}
 CHANNELS = {"diffuse": "Diffuse", "normal": "nor_gl", "roughness": "Rough"}
@@ -86,17 +92,70 @@ def archive_files(payload: bytes) -> dict[str, bytes]:
     return result
 
 
+def normalize_tree3d_descriptor(payload: bytes) -> bytes:
+    """Godot ConfigFile comments start with ';', NOT GDScript's '#'.
+
+    In the pinned upstream file, a '#' comment becomes part of the following
+    macos.debug key, so the editor cannot find a library even though the
+    universal Mach-O binary contains both arm64 and x86_64. Preserve CRLF and
+    quoted '#' characters; change only whole-line comments in this descriptor.
+    """
+    return re.sub(rb"(?m)^([ \t]*)#", rb"\1;", payload)
+
+
+def atomic_write(path: Path, payload: bytes) -> None:
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as file:
+            temporary = Path(file.name)
+            file.write(payload)
+        temporary.replace(path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def repair_managed_trees(project: Path, stamp: Path) -> None:
+    record = json.loads(stamp.read_text())
+    files = record.get("files", {})
+    if record.get("version") != VERSION or not isinstance(files, dict) or TREE_DESCRIPTOR not in files:
+        raise ValueError("Invalid or unsupported managed Tree3D manifest")
+    descriptor = b""
+    descriptor_digest = ""
+    # Verify the whole installation BEFORE making any changes. In particular,
+    # do not overwrite modified binaries, textures or custom library mappings.
+    for name, digest in files.items():
+        relative = PurePosixPath(name)
+        if (relative.is_absolute() or ".." in relative.parts or "\\" in name or ":" in name
+                or not name.startswith(("addons/Tree3D/", "assets/reference_materials/trees/"))):
+            raise ValueError("Unsafe managed Tree3D path")
+        path = project / name
+        if not path.resolve().is_relative_to(project.resolve()) or not path.is_file():
+            raise ValueError(f"Missing or unsafe managed Tree3D file: {name}")
+        payload = path.read_bytes()
+        actual = hashlib.sha256(payload).hexdigest()
+        recovered = (name == TREE_DESCRIPTOR and digest == UPSTREAM_DESCRIPTOR_SHA256
+                     and actual == FIXED_DESCRIPTOR_SHA256)
+        if actual != digest and not recovered:
+            raise ValueError(f"Managed Tree3D file was modified: {name}; preserve your edits before reinstalling")
+        if name == TREE_DESCRIPTOR:
+            descriptor = payload
+            descriptor_digest = actual
+    fixed = normalize_tree3d_descriptor(descriptor)
+    fixed_digest = hashlib.sha256(fixed).hexdigest()
+    if descriptor_digest != fixed_digest:
+        atomic_write(project / TREE_DESCRIPTOR, fixed)
+    if files[TREE_DESCRIPTOR] != fixed_digest:
+        files[TREE_DESCRIPTOR] = fixed_digest
+        atomic_write(stamp, (json.dumps(record, indent=2) + "\n").encode())
+
+
 def install_trees(project: Path, fetch=download) -> None:
     target = project / "addons/Tree3D"
     stamp = target / ".aonw-install.json"
     if stamp.exists():
-        record = json.loads(stamp.read_text())
-        if record.get("version") == VERSION and all(
-            (project / name).is_file() and hashlib.sha256((project / name).read_bytes()).hexdigest() == digest
-            for name, digest in record.get("files", {}).items()
-        ) and record.get("files"):
-            return
-        raise ValueError("Installed Tree3D files differ from the managed manifest; preserve your edits before reinstalling")
+        repair_managed_trees(project, stamp)
+        return
     if target.exists() and any(p.name not in {".gitignore", "README.md", "LICENSE.md"} for p in target.iterdir()):
         raise ValueError("Refusing to overwrite an unmanaged Tree3D installation")
     installed: dict[str, bytes] = {}
@@ -120,6 +179,9 @@ def install_trees(project: Path, fetch=download) -> None:
             licenses = [(name, data) for name, data in files.items() if PurePosixPath(name).name.lower() in {"license.md", "license.txt", "license"}]
             for index, (name, data) in enumerate(licenses):
                 installed[f"assets/reference_materials/trees/UPSTREAM-LICENSE-{index}.txt"] = data
+    if TREE_DESCRIPTOR not in installed:
+        raise ValueError("Tree3D addon archive contains no root extension descriptor")
+    installed[TREE_DESCRIPTOR] = normalize_tree3d_descriptor(installed[TREE_DESCRIPTOR])
     for name, payload in installed.items():
         destination = project / name
         if destination.exists() and destination.read_bytes() != payload:
@@ -178,12 +240,16 @@ def install_scans(project: Path, fetch=download) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--trees-only", action="store_true", help="Install/repair Tree3D without downloading ground scans")
     parser.add_argument("--project", type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args()
     project = args.project.resolve()
     if not (project / "project.godot").is_file():
         parser.error("--project must point to clients/aonw_godot")
     install_trees(project)
+    if args.trees_only:
+        print("Tree3D v1.1.0 installed/verified with a valid macOS descriptor. Restart Godot.")
+        return
     install_scans(project)
     print("Installed Tree3D v1.1.0 and six 1k PBR surface sets. Restart Godot before opening a reference map.")
 
