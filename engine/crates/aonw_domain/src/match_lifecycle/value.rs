@@ -1,5 +1,7 @@
 use std::{cmp::Ordering, collections::BTreeMap};
 
+mod ratio;
+
 const MAX_RULE_NUMBER_BYTES: usize = 128;
 
 /// Exact finite JSON number used by immutable rule configuration.
@@ -68,12 +70,7 @@ impl RuleNumber {
     /// ratio without converting either side to floating point.
     #[must_use]
     pub fn percent_requirement_met(&self, part: u32, whole: u32) -> bool {
-        if whole == 0 || self.magnitude.negative || self.magnitude.is_zero() {
-            return false;
-        }
-        let left = DecimalMagnitude::from_u64(u64::from(part) * 100);
-        let right = self.magnitude.multiplied_by(whole);
-        left.compare_positive(&right) != Ordering::Less
+        self.percent_requirement_fraction_met(part, whole, 100)
     }
 
     /// Compares a percentage of this threshold against an integer part/whole
@@ -89,12 +86,11 @@ impl RuleNumber {
         if whole == 0 || self.magnitude.negative || self.magnitude.is_zero() {
             return false;
         }
-        let left = DecimalMagnitude::from_u64(u64::from(part) * 10_000);
-        let right = self
-            .magnitude
-            .multiplied_by(whole)
-            .multiplied_by(u32::from(threshold_percent));
-        left.compare_positive(&right) != Ordering::Less
+        ratio::integer_reaches_scaled_decimal(
+            u64::from(part) * 10_000,
+            &self.magnitude,
+            u64::from(whole) * u64::from(threshold_percent),
+        )
     }
 }
 
@@ -226,6 +222,7 @@ impl DecimalMagnitude {
         self.digits.as_ref() == [0]
     }
 
+    #[cfg(test)]
     fn multiplied_by(&self, factor: u32) -> Self {
         if factor == 0 || self.is_zero() {
             return Self::from_u64(0);
