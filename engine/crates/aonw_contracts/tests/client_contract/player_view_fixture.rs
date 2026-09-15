@@ -1,5 +1,8 @@
 use std::collections::BTreeMap;
 
+#[path = "resource_inventory_fixture.rs"]
+mod resource_inventory_fixture;
+
 use aonw_contracts::client::{
     ClientSessionStampDto, CulturalVictoryProgressDto, DominationVictoryProgressDto,
     EconomyForecastDto, GoldIncomeSourceDto, MapObjectiveProgressDto, PlayerEconomyViewDto,
@@ -45,6 +48,7 @@ pub(super) fn unit() -> PlayerUnitViewDto {
 
 pub(super) fn economy() -> PlayerEconomyViewDto {
     PlayerEconomyViewDto {
+        strategic_resource_inventory: Box::new(resource_inventory_fixture::inventory()),
         strategic_resource_shortages: vec![],
         gold: 125,
         war_weariness: 3,

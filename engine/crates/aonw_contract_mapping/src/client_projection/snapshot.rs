@@ -155,6 +155,9 @@ const fn science_source_kind(
 
 pub(super) fn economy(value: &aonw_projection::PlayerEconomyView) -> PlayerEconomyViewDto {
     PlayerEconomyViewDto {
+        strategic_resource_inventory: Box::new(super::resource_inventory::inventory(
+            value.strategic_resource_inventory(),
+        )),
         strategic_resource_shortages: value
             .strategic_resource_shortages()
             .iter()

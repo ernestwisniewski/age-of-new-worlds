@@ -29,6 +29,7 @@ void main() {
     );
     final diplomacy = _diplomacy();
     final economy = AonwPlayerEconomyView(
+      strategicResourceInventory: AonwStrategicResourceInventory.empty(),
       strategicResourceShortages: const [],
       gold: 25,
       warWeariness: 2,
@@ -89,6 +90,8 @@ void main() {
             toRevision: 0,
             turn: 1,
             economy: AonwPlayerEconomyView(
+              strategicResourceInventory:
+                  AonwStrategicResourceInventory.empty(),
               strategicResourceShortages: const [],
               gold: 1,
               warWeariness: 0,

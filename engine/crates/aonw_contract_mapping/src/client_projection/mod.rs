@@ -3,6 +3,7 @@ mod diplomacy;
 mod evidence;
 mod hud_status;
 mod presentation;
+mod resource_inventory;
 mod route;
 mod snapshot;
 mod worker;

@@ -3,9 +3,13 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../read_model/map_view.dart';
 import '../read_model/pending_action_view.dart';
 import '../read_model/player_economy_view.dart';
+import 'resource_inventory_mapper.dart';
 
 PlayerEconomyView mapPlayerEconomyView(AonwPlayerEconomyView economy) =>
     PlayerEconomyView(
+      strategicResourceInventory: mapResourceInventory(
+        economy.strategicResourceInventory,
+      ),
       gold: economy.gold,
       strategicResourceShortages: [
         for (final resource in economy.strategicResourceShortages)

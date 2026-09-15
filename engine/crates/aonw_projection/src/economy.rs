@@ -1,10 +1,11 @@
+use crate::PlayerStrategicResourceInventoryView;
 use aonw_content::{MapDefinition, RulesetDefinition};
 use aonw_domain::{
     CityId, FieldImprovementKind, GameState, HexCoord, PlayerId, ResourceType, UnitKind,
 };
 use aonw_engine::{
     CanonicalQueryError, EconomyForecastQuery, EngineContext, GameEngine, GameQuery, QueryResult,
-    StabilityBand, StrategicResourceProjectionQuery,
+    StabilityBand,
 };
 
 /// One positive strategic-resource amount in canonical resource order.
@@ -312,6 +313,7 @@ impl PlayerEconomyForecastView {
 /// Complete recipient-owned economy state required by the map HUD.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PlayerEconomyView {
+    strategic_resource_inventory: Box<PlayerStrategicResourceInventoryView>,
     gold: i64,
     war_weariness: i64,
     stability_net: i64,
@@ -323,6 +325,11 @@ pub struct PlayerEconomyView {
 }
 
 impl PlayerEconomyView {
+    /// Returns the complete authoritative recipient inventory.
+    #[must_use]
+    pub const fn strategic_resource_inventory(&self) -> &PlayerStrategicResourceInventoryView {
+        &self.strategic_resource_inventory
+    }
     /// Returns stockpiled resource kinds missing for recipient-unlocked units.
     #[must_use]
     pub const fn strategic_resource_shortages(&self) -> &[ResourceType] {
@@ -341,16 +348,9 @@ impl PlayerEconomyView {
         ruleset: &RulesetDefinition,
     ) -> Result<Self, CanonicalQueryError> {
         let context = EngineContext::canonical(actor, map, ruleset);
-        let result = GameEngine::query(
-            state,
-            context,
-            GameQuery::StrategicResourceProjection(StrategicResourceProjectionQuery::new(
-                state.revision().get(),
-            )),
-        )?;
-        let QueryResult::StrategicResourceProjection(projection) = result else {
-            unreachable!("strategic resource query returned another result kind");
-        };
+        let inventory = aonw_engine::strategic_resource_inventory(state, context)
+            .map_err(CanonicalQueryError::Economy)?;
+        let projection = &inventory.production;
         let result = GameEngine::query(
             state,
             context,
@@ -389,6 +389,7 @@ impl PlayerEconomyView {
             .collect::<Vec<_>>()
             .into_boxed_slice();
         Ok(Self {
+            strategic_resource_inventory: Box::new(inventory.into()),
             gold: economy.player_gold().get(actor).copied().unwrap_or(0),
             war_weariness: economy
                 .player_war_weariness()
@@ -417,6 +418,7 @@ impl PlayerEconomyView {
     #[cfg(test)]
     pub(crate) fn empty() -> Self {
         Self {
+            strategic_resource_inventory: Box::new(PlayerStrategicResourceInventoryView::empty()),
             gold: 0,
             war_weariness: 0,
             stability_net: 0,

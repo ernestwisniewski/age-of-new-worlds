@@ -24,6 +24,11 @@ mod production;
 mod query;
 mod rejection;
 mod research;
+mod resource_inventory;
+pub use resource_inventory::{
+    StrategicResourceAllocationDto, StrategicResourceBalanceDto, StrategicResourceDepositDto,
+    StrategicResourceInventoryDto,
+};
 mod session;
 mod unit;
 mod victory;

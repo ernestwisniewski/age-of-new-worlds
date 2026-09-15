@@ -55,7 +55,7 @@ The mounting sources are `widgets/hud/game_hud.dart`,
 
 | Surface or family | Reference subtree | Target status / source of truth |
 | --- | --- | --- |
-| Gold, science, stability, strategic resources, turn, victory details | `widgets/resources` | Shared resource strip/popovers; projected economy/research/victory and API 28 warning/priority metadata; full resource inventory remains open |
+| Gold, science, stability, strategic resources, turn, victory details | `widgets/resources` | Shared strip/popovers; API 28 warnings/priority and API 29 authoritative inventory; full inventory panel remains open |
 | Avatar details and Online status rail | `widgets/multiplayer` | Shared recipient-safe participants/known relations; own submission and aggregate total |
 | Selection/action deck, previous/next, End/Submit | `widgets/hud/action_deck`, `widgets/selection` | Existing typed actions and Rust pending queue; integrated deck audit open |
 | Movement, combat and worker confirmation | `widgets/selection` | Rust preview/options plus local confirmation state |
@@ -68,8 +68,8 @@ The mounting sources are `widgets/hud/game_hud.dart`,
 | Activity log, category tabs, notification focus | `widgets/activity_log`, `widgets/hud/notifications` | Recipient event journal available; full read model/filter/focus UI open |
 | Feedback toast, turn-start banner, mode banner | `widgets/hud/feedback`, `widgets/hud/overlay`, `widgets/hud/mode_banner` | Command/turn presentation exists; reference comparison open |
 | First-turn coachmarks and next-action guidance | `widgets/hud/overlay/hud_first_turn_coachmarks_slot.dart` | Rust pending queue navigation present; coachmark composition open |
-| Private Hotseat handoff | `widgets/multiplayer/hot_seat_handoff_overlay.dart` | Existing local control plan and authoritative actor handoff |
-| Outcome and finished-match overlay | `widgets/hud` | Projected terminal outcome; complete presentation comparison open |
+| Private Hotseat handoff | `widgets/multiplayer/hot_seat_handoff_overlay.dart` | Canonical identity/turn, opaque privacy barrier and isolated pointer, keyboard and gamepad input; `hotseat-handoff.md` |
+| Outcome and finished-match overlay | `widgets/hud` | Authoritative winner/metrics, four outcome tones and menu exit; four reviewed goldens, recipient privacy and input regression coverage in `match-outcome.md` |
 | Options/help, minimized popup restore, resign confirmation | `widgets/options` | Existing preferences/input/resign flows; help/restore audit open |
 | Reconnect/resync/errors and replay controls | Target session overlays | Required by current transport; shared renderer, recipient-scoped replay and visible failure state |
 

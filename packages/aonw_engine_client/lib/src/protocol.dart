@@ -33,6 +33,7 @@ export 'protocol_player_victory.dart';
 export 'protocol_player_view.dart';
 export 'protocol_query.dart';
 export 'protocol_research_values.dart';
+export 'protocol_resource_inventory.dart';
 export 'protocol_response.dart';
 export 'protocol_values.dart';
 

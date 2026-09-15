@@ -186,8 +186,11 @@ AonwPlayerEconomyView _economy({
   int warWeariness = 0,
   int stabilityNet = 0,
   bool withOutput = false,
+  AonwStrategicResourceInventory? inventory,
   AonwEconomyForecast? forecast,
 }) => AonwPlayerEconomyView(
+  strategicResourceInventory:
+      inventory ?? _inventory(shortages: shortages, withOutput: withOutput),
   strategicResourceShortages: shortages,
   gold: gold,
   warWeariness: warWeariness,
@@ -280,4 +283,51 @@ AonwPlayerResearchView _research({
       ),
     ],
   ),
+);
+
+AonwStrategicResourceInventory _inventory({
+  required List<AonwResourceType> shortages,
+  required bool withOutput,
+}) => AonwStrategicResourceInventory(
+  availableTypeCount: 1,
+  shortageTypeCount: shortages.length,
+  attentionCount: shortages.length,
+  expiringTradeIds: const [],
+  allocations: const [],
+  deposits: [
+    if (withOutput)
+      const AonwStrategicResourceDeposit(
+        cityId: 'city-a',
+        coordinate: AonwCoordinate(col: 1, row: 1),
+        resource: AonwResourceType.oil,
+        improvement: AonwFieldImprovementKind.oilWell,
+        amountPerTurn: 1,
+      ),
+  ],
+  balances: [
+    for (final empty in AonwStrategicResourceInventory.empty().balances)
+      AonwStrategicResourceBalance(
+        resource: empty.resource,
+        stockpiled: empty.stockpiled,
+        controlledDeposits: withOutput && empty.resource == AonwResourceType.oil
+            ? 1
+            : 0,
+        available: empty.resource == AonwResourceType.oil ? 2 : 0,
+        allocated: 0,
+        storedTotal: empty.resource == AonwResourceType.oil ? 2 : 0,
+        domesticProduction: withOutput && empty.resource == AonwResourceType.oil
+            ? 1
+            : 0,
+        imports: 0,
+        exports: 0,
+        netPerTurn: withOutput && empty.resource == AonwResourceType.oil
+            ? 1
+            : 0,
+        sourceCount: withOutput && empty.resource == AonwResourceType.oil
+            ? 1
+            : 0,
+        shortage: shortages.contains(empty.resource),
+        noFreeStock: false,
+      ),
+  ],
 );

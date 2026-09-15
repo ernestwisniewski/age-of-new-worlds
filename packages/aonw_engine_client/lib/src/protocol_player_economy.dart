@@ -2,6 +2,7 @@ import 'package:aonw_engine_client/src/protocol_coordinate.dart';
 import 'package:aonw_engine_client/src/protocol_economy_forecast.dart';
 import 'package:aonw_engine_client/src/protocol_json.dart';
 import 'package:aonw_engine_client/src/protocol_pending_action.dart';
+import 'package:aonw_engine_client/src/protocol_resource_inventory.dart';
 import 'package:aonw_engine_client/src/protocol_values.dart';
 
 final class AonwPlayerStrategicResourceAmount {
@@ -65,6 +66,7 @@ final class AonwPlayerStrategicResourceSource {
 
 final class AonwPlayerEconomyView {
   AonwPlayerEconomyView({
+    required this.strategicResourceInventory,
     required this.gold,
     required List<AonwResourceType> strategicResourceShortages,
     required this.warWeariness,
@@ -83,6 +85,7 @@ final class AonwPlayerEconomyView {
        strategicResourceSources = List.unmodifiable(strategicResourceSources);
 
   factory AonwPlayerEconomyView.empty() => AonwPlayerEconomyView(
+    strategicResourceInventory: AonwStrategicResourceInventory.empty(),
     gold: 0,
     strategicResourceShortages: const [],
     warWeariness: 0,
@@ -97,6 +100,7 @@ final class AonwPlayerEconomyView {
     final value = readObject(source, 'player economy view');
     requireKeys(value, const {
       'gold',
+      'strategicResourceInventory',
       'strategicResourceShortages',
       'warWeariness',
       'stabilityNet',
@@ -106,6 +110,9 @@ final class AonwPlayerEconomyView {
       'forecast',
     }, 'player economy view');
     return AonwPlayerEconomyView(
+      strategicResourceInventory: AonwStrategicResourceInventory.fromJson(
+        value['strategicResourceInventory'],
+      ),
       gold: readInt(value['gold'], 'player gold'),
       strategicResourceShortages: readList(
         value['strategicResourceShortages'],
@@ -134,6 +141,7 @@ final class AonwPlayerEconomyView {
   }
 
   final int gold;
+  final AonwStrategicResourceInventory strategicResourceInventory;
   final List<AonwResourceType> strategicResourceShortages;
   final int warWeariness;
   final int stabilityNet;

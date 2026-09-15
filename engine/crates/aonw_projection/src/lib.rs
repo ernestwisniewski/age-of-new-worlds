@@ -19,6 +19,7 @@ mod economy;
 mod infrastructure;
 mod participant;
 mod research;
+mod resource_inventory;
 mod unit;
 mod victory;
 mod view_diff;
@@ -42,6 +43,7 @@ pub(crate) use infrastructure::visible_infrastructure;
 pub use infrastructure::{PlayerFieldImprovementView, PlayerRoadView};
 pub use participant::PlayerParticipantView;
 pub use research::{PlayerResearchView, PlayerScienceYieldSourceView};
+pub use resource_inventory::PlayerStrategicResourceInventoryView;
 pub(crate) use unit::visible_units;
 pub use unit::{OwnedRouteView, OwnedUnitDetailsView, PlayerUnitView};
 pub use victory::{

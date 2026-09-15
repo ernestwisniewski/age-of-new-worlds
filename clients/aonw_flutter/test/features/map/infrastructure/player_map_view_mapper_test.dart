@@ -12,12 +12,14 @@ import '../../../support/map_test_fixture.dart';
 
 part 'player_map_view_mapper_fixture.dart';
 part 'player_economy_view_mapper_cases.dart';
+part 'resource_inventory_mapper_cases.dart';
 part 'player_victory_view_mapper_cases.dart';
 part 'stored_unit_route_mapper_cases.dart';
 
 void main() {
   const mapper = PlayerMapViewMapper();
   registerPlayerEconomyViewMapperCases(mapper);
+  registerResourceInventoryMapperCases(mapper);
   registerPlayerVictoryViewMapperCases(mapper);
   registerStoredUnitRouteCases(mapper);
 

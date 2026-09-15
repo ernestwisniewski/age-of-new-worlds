@@ -136,6 +136,7 @@ pub struct EconomyForecastDto {
 #[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PlayerEconomyViewDto {
+    pub strategic_resource_inventory: Box<super::StrategicResourceInventoryDto>,
     pub strategic_resource_shortages: Vec<ResourceTypeDto>,
     pub gold: i64,
     pub war_weariness: i64,

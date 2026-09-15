@@ -3,7 +3,7 @@
   "commands": [],
   "queries": ["cityYield", "strategicResourceProjection"],
   "turnProcessors": [],
-  "clientApiVersion": 28,
+  "clientApiVersion": 29,
   "cases": [],
   "unexpectedField": true
 }

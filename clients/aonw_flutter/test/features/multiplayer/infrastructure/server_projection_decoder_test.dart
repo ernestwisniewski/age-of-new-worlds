@@ -256,6 +256,7 @@ Map<String, Object?> _economy() => {
   'warWeariness': 0,
   'stabilityNet': 0,
   'strategicResourceShortages': <Object?>[],
+  'strategicResourceInventory': _inventory(),
   'strategicResourceStockpile': <Object?>[],
   'strategicResourceOutput': <Object?>[],
   'strategicResourceSources': <Object?>[],
@@ -338,4 +339,39 @@ Map<String, Object?> _stamp(int revision) => {
   'stateDigest': 'digest-$revision',
   'mapHash': 'map-hash',
   'rulesetHash': 'ruleset-hash',
+};
+
+Map<String, Object?> _inventory() => {
+  'availableTypeCount': 0,
+  'shortageTypeCount': 0,
+  'attentionCount': 0,
+  'expiringTradeIds': <String>[],
+  'allocations': <Object?>[],
+  'deposits': <Object?>[],
+  'balances': [
+    for (final resource in [
+      'iron',
+      'coal',
+      'oil',
+      'aluminium',
+      'uranium',
+      'horses',
+      'marble',
+    ])
+      {
+        'resource': resource,
+        'stockpiled': ['oil', 'aluminium'].contains(resource),
+        'controlledDeposits': 0,
+        'available': 0,
+        'allocated': 0,
+        'storedTotal': 0,
+        'domesticProduction': 0,
+        'imports': 0,
+        'exports': 0,
+        'netPerTurn': 0,
+        'sourceCount': 0,
+        'shortage': false,
+        'noFreeStock': false,
+      },
+  ],
 };

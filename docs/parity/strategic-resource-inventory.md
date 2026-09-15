@@ -39,5 +39,18 @@ does not allocate a temporary set for each tile.
 Core acceptance coverage includes seven-row order, foreign research isolation,
 unimproved deposits, duplicated generated/map oil, extraction ownership, stock
 versus reservations, trade quantity versus presence, alternative costs, expiration
-boundaries, repeatable reads, overflow and unknown participants. Transport and
-the complete responsive resource panel are the next stage.
+boundaries, repeatable reads, overflow and unknown participants.
+
+Client API 29 carries required `economy.strategicResourceInventory` in the shared
+snapshot/patch encoder. Its balances have a fixed seven-element wire shape;
+deposit improvement and extraction amount are required nullable fields. Rust and
+Dart reject missing/unknown fields. Flutter additionally validates ordering,
+owned-city references, territory bounds, extraction evidence, reservation totals,
+summary counts and agreement references before mapping the inventory.
+
+The native turn regression compares the entire inventory in the accepted-command
+patch with a fresh snapshot and checks that extraction changes free oil from two
+to three. Contract coverage includes 18 existing round trips and three strict
+inventory cases; the Dart package has 100 passing tests. The full responsive
+resource panel is the next stage. Canonical save/replay state and engine behavior
+identity are unchanged; API 29 performance review is tracked separately.

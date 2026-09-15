@@ -1,8 +1,10 @@
 import 'hud_status_view.dart';
 import 'map_view.dart';
 import 'pending_action_view.dart';
+import 'player_resource_inventory_view.dart';
 
 export 'hud_status_view.dart';
+export 'player_resource_inventory_view.dart';
 
 final class PlayerStrategicResourceAmountView {
   const PlayerStrategicResourceAmountView({
@@ -199,6 +201,7 @@ final class PlayerEconomyForecastView {
 
 final class PlayerEconomyView {
   PlayerEconomyView({
+    required this.strategicResourceInventory,
     required this.gold,
     required List<MapResource> strategicResourceShortages,
     required this.warWeariness,
@@ -217,6 +220,7 @@ final class PlayerEconomyView {
        strategicResourceSources = List.unmodifiable(strategicResourceSources);
 
   factory PlayerEconomyView.empty() => PlayerEconomyView(
+    strategicResourceInventory: PlayerStrategicResourceInventoryView.empty(),
     gold: 0,
     strategicResourceShortages: const [],
     warWeariness: 0,
@@ -228,6 +232,7 @@ final class PlayerEconomyView {
   );
 
   final int gold;
+  final PlayerStrategicResourceInventoryView strategicResourceInventory;
   final List<MapResource> strategicResourceShortages;
   final int warWeariness;
   final int stabilityNet;

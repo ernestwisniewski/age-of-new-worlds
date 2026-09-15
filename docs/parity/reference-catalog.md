@@ -41,14 +41,14 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 
 | Presentation | Reference location | Current recipient-safe source | Remaining work |
 | --- | --- | --- | --- |
-| Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | Rust-backed bankruptcy/shortage warnings and compact victory summary |
+| Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | API 29 inventory and API 28 warnings/priority available; complete inventory panel remains open |
 | Avatars and Online status | `hud/game_hud_chrome.dart` | Participants, own submission, known diplomacy and aggregate submissions | Final full-map visual comparison |
 | Action deck and selection | `hud/action_deck`, `selection` | Selected visible unit/city, typed action options and Rust pending-turn query | Integrated command/selection deck, expansion and detail behavior |
 | Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive catalog, tree/details and recommendations from Rust API 25 implemented; completion popup uses own accepted events; 54 atlas illustrations and six-language authored discovery descriptions implemented |
 | City and production | `city` | City inspection, founding/growth/production queries and own city projection | Full panel composition and comparative visual audit |
 | Workers and improvements | `hud/action_deck`, `selection` | Worker options and accepted command feedback | Detail layout and popup/gamepad audit |
 | Diplomacy | `diplomacy` | Known relations, own proposals/messages, typed commands | Full message/trade composition and visual audit |
-| Objectives and victory | `options`, `hud/overlay` | Map objectives and projected victory progress/outcome | Prioritized guidance needs explicit authoritative policy; full outcome comparison |
+| Objectives and victory | `options`, `hud/overlay` | Map objectives and projected victory progress/outcome | Outcome comparison/input complete in `match-outcome.md`; prioritized objective guidance remains open |
 | Empire and statistics | `empire/empire_overview_dialog.dart` | Own projected units/cities/resources and score | Aggregate readiness definitions and complete overview UI |
 | Activity log and notifications | `activity_log`, `hud/notifications` | Bounded recipient event journal and turn activities | Detailed event read model, filtering, focus targets and replay integration |
 | Hotseat handoff | `hud/game_hud_handoff.dart` | Local control plan and authoritative actor switch | Native complete-session and visual checks |

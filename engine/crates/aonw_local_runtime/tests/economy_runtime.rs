@@ -1,5 +1,8 @@
 //! Runtime and client-protocol coverage for engine-owned city yields.
 
+#[path = "economy_runtime/inventory.rs"]
+mod inventory;
+
 use std::collections::BTreeMap;
 
 use aonw_content::{

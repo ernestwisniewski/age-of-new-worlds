@@ -22,6 +22,7 @@ PlayerMapView resourcePlayerFixture({
     units: source.units,
     cities: source.cities,
     economy: PlayerEconomyView(
+      strategicResourceInventory: PlayerStrategicResourceInventoryView.empty(),
       strategicResourceShortages: shortages,
       gold: 123,
       warWeariness: 0,
