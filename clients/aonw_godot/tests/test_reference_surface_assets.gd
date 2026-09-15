@@ -16,6 +16,9 @@ func _run() -> void:
 	var library := Library.load_library()
 	assert(library["ok"], str(library.get("message", "")))
 	assert(library["prototypes"].size() == 6)
+	assert(Library.LEAF_TEXTURES[0] == "Branches1.png")
+	assert(Library.LEAF_TEXTURES[1] == "Branches2.png")
+	assert(Library.LEAF_TEXTURES[2] == "Branches1.png", "Do not use a whole bare-tree stamp as tropical foliage")
 	var candidates: Array = []
 	for species in 3:
 		for variant in 2:

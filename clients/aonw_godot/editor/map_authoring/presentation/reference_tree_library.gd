@@ -4,6 +4,9 @@ extends RefCounted
 ## The native addon owns INTERNAL children; get_children(true) is intentional.
 
 const ROOT := "res://assets/reference_materials/trees/"
+# Branches3 is an entire bare-tree stamp, not foliage. Do not repeat it on
+# tropical branch cards; broad/tropical forms share the actual leaf texture.
+const LEAF_TEXTURES := ["Branches1.png", "Branches2.png", "Branches1.png"]
 const SHADER := preload("res://editor/map_authoring/presentation/reference_tree.gdshader")
 static var _prototypes: Dictionary = {}
 
@@ -13,7 +16,7 @@ static func load_library() -> Dictionary:
 	if not ClassDB.class_exists("Tree3D"):
 		return {"ok": false, "message": "Tree3D is not loaded. Run python3 clients/aonw_godot/tool/install_reference_assets.py and restart Godot."}
 	var textures := {}
-	for file in ["bark.jpg", "bark_normal.png", "Branches1.png", "Branches2.png", "Branches3.png"]:
+	for file in ["bark.jpg", "bark_normal.png", "Branches1.png", "Branches2.png"]:
 		var path: String = ROOT + file
 		if not FileAccess.file_exists(path):
 			return {"ok": false, "message": "Missing Tree3D texture: " + file + ". Run install_reference_assets.py."}
@@ -59,7 +62,7 @@ static func _generate(species: int, variant: int, textures: Dictionary) -> Dicti
 	var leaves := ShaderMaterial.new()
 	leaves.shader = SHADER
 	leaves.set_shader_parameter("foliage", true)
-	leaves.set_shader_parameter("albedo_texture", textures["Branches%d.png" % (species + 1)])
+	leaves.set_shader_parameter("albedo_texture", textures[LEAF_TEXTURES[species]])
 	leaves.set_shader_parameter("tint", Color(0.78, 0.9, 0.72) if species == 1 else Color.WHITE)
 	tree.set("material_trunk", bark)
 	tree.set("material_twig", leaves)
