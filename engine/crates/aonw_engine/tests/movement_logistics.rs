@@ -245,8 +245,8 @@ fn detachment_preserves_army_count_and_chooses_next_free_identity() {
     assert_eq!(
         source.army(),
         [
-            ArmyTroop::new(TroopKind::Archer, 1),
-            ArmyTroop::new(TroopKind::Warrior, 1)
+            ArmyTroop::new(TroopKind::Warrior, 1),
+            ArmyTroop::new(TroopKind::Archer, 1)
         ]
     );
     let detached_id = unit_id("army-1_archer_2");
