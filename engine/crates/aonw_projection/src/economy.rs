@@ -315,7 +315,7 @@ pub struct PlayerEconomyView {
     gold: i64,
     war_weariness: i64,
     stability_net: i64,
-    strategic_resource_shortages: Box<[ResourceType]>,
+    strategic_resource_shortages: [bool; 2],
     strategic_resource_stockpile: Box<[PlayerStrategicResourceAmountView]>,
     strategic_resource_output: Box<[PlayerStrategicResourceAmountView]>,
     strategic_resource_sources: Box<[PlayerStrategicResourceSourceView]>,
@@ -326,7 +326,12 @@ impl PlayerEconomyView {
     /// Returns stockpiled resource kinds missing for recipient-unlocked units.
     #[must_use]
     pub const fn strategic_resource_shortages(&self) -> &[ResourceType] {
-        &self.strategic_resource_shortages
+        match self.strategic_resource_shortages {
+            [false, false] => &[],
+            [true, false] => &[ResourceType::Oil],
+            [false, true] => &[ResourceType::Aluminium],
+            [true, true] => &[ResourceType::Oil, ResourceType::Aluminium],
+        }
     }
 
     pub(crate) fn try_for_recipient(
@@ -396,7 +401,12 @@ impl PlayerEconomyView {
                 .copied()
                 .unwrap_or(0),
             strategic_resource_shortages: aonw_engine::strategic_resource_shortages(state, context)
-                .collect(),
+                .fold([false; 2], |previous, resource| {
+                    [
+                        previous[0] || resource == ResourceType::Oil,
+                        previous[1] || resource == ResourceType::Aluminium,
+                    ]
+                }),
             strategic_resource_stockpile,
             strategic_resource_output,
             strategic_resource_sources,
@@ -410,7 +420,7 @@ impl PlayerEconomyView {
             gold: 0,
             war_weariness: 0,
             stability_net: 0,
-            strategic_resource_shortages: Box::new([]),
+            strategic_resource_shortages: [false; 2],
             strategic_resource_stockpile: Box::new([]),
             strategic_resource_output: Box::new([]),
             strategic_resource_sources: Box::new([]),
