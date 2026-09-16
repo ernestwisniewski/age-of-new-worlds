@@ -13,7 +13,8 @@
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../../game/models/game_match.dart' as _i2;
-import 'package:aonw_server/src/generated/protocol.dart' as _i3;
+import '../../game/models/game_lobby_connection.dart' as _i3;
+import 'package:aonw_server/src/generated/protocol.dart' as _i4;
 
 abstract class GameParticipant
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -29,6 +30,7 @@ abstract class GameParticipant
     this.resignedAt,
     this.kickedAt,
     this.kickReason,
+    this.lobbyConnections,
   });
 
   factory GameParticipant({
@@ -43,6 +45,7 @@ abstract class GameParticipant
     DateTime? resignedAt,
     DateTime? kickedAt,
     String? kickReason,
+    List<_i3.GameLobbyConnection>? lobbyConnections,
   }) = _GameParticipantImpl;
 
   factory GameParticipant.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -51,7 +54,7 @@ abstract class GameParticipant
       matchId: jsonSerialization['matchId'] as int,
       match: jsonSerialization['match'] == null
           ? null
-          : _i3.Protocol().deserialize<_i2.GameMatch>(
+          : _i4.Protocol().deserialize<_i2.GameMatch>(
               jsonSerialization['match'],
             ),
       userIdentifier: jsonSerialization['userIdentifier'] as String,
@@ -72,6 +75,11 @@ abstract class GameParticipant
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['kickedAt']),
       kickReason: jsonSerialization['kickReason'] as String?,
+      lobbyConnections: jsonSerialization['lobbyConnections'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<_i3.GameLobbyConnection>>(
+              jsonSerialization['lobbyConnections'],
+            ),
     );
   }
 
@@ -102,6 +110,8 @@ abstract class GameParticipant
 
   String? kickReason;
 
+  List<_i3.GameLobbyConnection>? lobbyConnections;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -120,6 +130,7 @@ abstract class GameParticipant
     DateTime? resignedAt,
     DateTime? kickedAt,
     String? kickReason,
+    List<_i3.GameLobbyConnection>? lobbyConnections,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -136,6 +147,10 @@ abstract class GameParticipant
       if (resignedAt != null) 'resignedAt': resignedAt?.toJson(),
       if (kickedAt != null) 'kickedAt': kickedAt?.toJson(),
       if (kickReason != null) 'kickReason': kickReason,
+      if (lobbyConnections != null)
+        'lobbyConnections': lobbyConnections?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
     };
   }
 
@@ -157,8 +172,14 @@ abstract class GameParticipant
     };
   }
 
-  static GameParticipantInclude include({_i2.GameMatchInclude? match}) {
-    return GameParticipantInclude._(match: match);
+  static GameParticipantInclude include({
+    _i2.GameMatchInclude? match,
+    _i3.GameLobbyConnectionIncludeList? lobbyConnections,
+  }) {
+    return GameParticipantInclude._(
+      match: match,
+      lobbyConnections: lobbyConnections,
+    );
   }
 
   static GameParticipantIncludeList includeList({
@@ -202,6 +223,7 @@ class _GameParticipantImpl extends GameParticipant {
     DateTime? resignedAt,
     DateTime? kickedAt,
     String? kickReason,
+    List<_i3.GameLobbyConnection>? lobbyConnections,
   }) : super._(
          id: id,
          matchId: matchId,
@@ -214,6 +236,7 @@ class _GameParticipantImpl extends GameParticipant {
          resignedAt: resignedAt,
          kickedAt: kickedAt,
          kickReason: kickReason,
+         lobbyConnections: lobbyConnections,
        );
 
   /// Returns a shallow copy of this [GameParticipant]
@@ -232,6 +255,7 @@ class _GameParticipantImpl extends GameParticipant {
     Object? resignedAt = _Undefined,
     Object? kickedAt = _Undefined,
     Object? kickReason = _Undefined,
+    Object? lobbyConnections = _Undefined,
   }) {
     return GameParticipant(
       id: id is int? ? id : this.id,
@@ -245,6 +269,9 @@ class _GameParticipantImpl extends GameParticipant {
       resignedAt: resignedAt is DateTime? ? resignedAt : this.resignedAt,
       kickedAt: kickedAt is DateTime? ? kickedAt : this.kickedAt,
       kickReason: kickReason is String? ? kickReason : this.kickReason,
+      lobbyConnections: lobbyConnections is List<_i3.GameLobbyConnection>?
+          ? lobbyConnections
+          : this.lobbyConnections?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -368,6 +395,10 @@ class GameParticipantTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString kickReason;
 
+  _i3.GameLobbyConnectionTable? ___lobbyConnections;
+
+  _i1.ManyRelation<_i3.GameLobbyConnectionTable>? _lobbyConnections;
+
   _i2.GameMatchTable get match {
     if (_match != null) return _match!;
     _match = _i1.createRelationTable(
@@ -379,6 +410,38 @@ class GameParticipantTable extends _i1.Table<int?> {
           _i2.GameMatchTable(tableRelation: foreignTableRelation),
     );
     return _match!;
+  }
+
+  _i3.GameLobbyConnectionTable get __lobbyConnections {
+    if (___lobbyConnections != null) return ___lobbyConnections!;
+    ___lobbyConnections = _i1.createRelationTable(
+      relationFieldName: '__lobbyConnections',
+      field: GameParticipant.t.id,
+      foreignField: _i3.GameLobbyConnection.t.participantId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.GameLobbyConnectionTable(tableRelation: foreignTableRelation),
+    );
+    return ___lobbyConnections!;
+  }
+
+  _i1.ManyRelation<_i3.GameLobbyConnectionTable> get lobbyConnections {
+    if (_lobbyConnections != null) return _lobbyConnections!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'lobbyConnections',
+      field: GameParticipant.t.id,
+      foreignField: _i3.GameLobbyConnection.t.participantId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.GameLobbyConnectionTable(tableRelation: foreignTableRelation),
+    );
+    _lobbyConnections = _i1.ManyRelation<_i3.GameLobbyConnectionTable>(
+      tableWithRelations: relationTable,
+      table: _i3.GameLobbyConnectionTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
+    );
+    return _lobbyConnections!;
   }
 
   @override
@@ -400,19 +463,31 @@ class GameParticipantTable extends _i1.Table<int?> {
     if (relationField == 'match') {
       return match;
     }
+    if (relationField == 'lobbyConnections') {
+      return __lobbyConnections;
+    }
     return null;
   }
 }
 
 class GameParticipantInclude extends _i1.IncludeObject {
-  GameParticipantInclude._({_i2.GameMatchInclude? match}) {
+  GameParticipantInclude._({
+    _i2.GameMatchInclude? match,
+    _i3.GameLobbyConnectionIncludeList? lobbyConnections,
+  }) {
     _match = match;
+    _lobbyConnections = lobbyConnections;
   }
 
   _i2.GameMatchInclude? _match;
 
+  _i3.GameLobbyConnectionIncludeList? _lobbyConnections;
+
   @override
-  Map<String, _i1.Include?> get includes => {'match': _match};
+  Map<String, _i1.Include?> get includes => {
+    'match': _match,
+    'lobbyConnections': _lobbyConnections,
+  };
 
   @override
   _i1.Table<int?> get table => GameParticipant.t;
@@ -440,6 +515,8 @@ class GameParticipantIncludeList extends _i1.IncludeList {
 
 class GameParticipantRepository {
   const GameParticipantRepository._();
+
+  final attach = const GameParticipantAttachRepository._();
 
   final attachRow = const GameParticipantAttachRowRepository._();
 
@@ -735,6 +812,35 @@ class GameParticipantRepository {
   }
 }
 
+class GameParticipantAttachRepository {
+  const GameParticipantAttachRepository._();
+
+  /// Creates a relation between this [GameParticipant] and the given [GameLobbyConnection]s
+  /// by setting each [GameLobbyConnection]'s foreign key `participantId` to refer to this [GameParticipant].
+  Future<void> lobbyConnections(
+    _i1.DatabaseSession session,
+    GameParticipant gameParticipant,
+    List<_i3.GameLobbyConnection> gameLobbyConnection, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameLobbyConnection.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('gameLobbyConnection.id');
+    }
+    if (gameParticipant.id == null) {
+      throw ArgumentError.notNull('gameParticipant.id');
+    }
+
+    var $gameLobbyConnection = gameLobbyConnection
+        .map((e) => e.copyWith(participantId: gameParticipant.id))
+        .toList();
+    await session.db.update<_i3.GameLobbyConnection>(
+      $gameLobbyConnection,
+      columns: [_i3.GameLobbyConnection.t.participantId],
+      transaction: transaction,
+    );
+  }
+}
+
 class GameParticipantAttachRowRepository {
   const GameParticipantAttachRowRepository._();
 
@@ -757,6 +863,31 @@ class GameParticipantAttachRowRepository {
     await session.db.updateRow<GameParticipant>(
       $gameParticipant,
       columns: [GameParticipant.t.matchId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [GameParticipant] and the given [GameLobbyConnection]
+  /// by setting the [GameLobbyConnection]'s foreign key `participantId` to refer to this [GameParticipant].
+  Future<void> lobbyConnections(
+    _i1.DatabaseSession session,
+    GameParticipant gameParticipant,
+    _i3.GameLobbyConnection gameLobbyConnection, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameLobbyConnection.id == null) {
+      throw ArgumentError.notNull('gameLobbyConnection.id');
+    }
+    if (gameParticipant.id == null) {
+      throw ArgumentError.notNull('gameParticipant.id');
+    }
+
+    var $gameLobbyConnection = gameLobbyConnection.copyWith(
+      participantId: gameParticipant.id,
+    );
+    await session.db.updateRow<_i3.GameLobbyConnection>(
+      $gameLobbyConnection,
+      columns: [_i3.GameLobbyConnection.t.participantId],
       transaction: transaction,
     );
   }

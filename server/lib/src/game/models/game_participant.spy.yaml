@@ -10,6 +10,7 @@ fields:
   resignedAt: DateTime?
   kickedAt: DateTime?
   kickReason: String?
+  lobbyConnections: List<GameLobbyConnection>?, relation(name=game_participant_lobby_connections), scope=serverOnly
 indexes:
   aonw_game_participant_match_user_idx:
     fields: matchId, userIdentifier

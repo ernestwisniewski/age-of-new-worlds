@@ -104,6 +104,11 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
   Future<void> refreshMatchLobby() async {
     final current = _state;
     if (current is! MultiplayerWaitingRoom || current.busy) return;
+    if (_session is MultiplayerLobbyWatchPort &&
+        current.connection != LobbyConnectionPhase.connected) {
+      retryLobbyConnection();
+      return;
+    }
     final generation = _generation;
     _setState(current.copyWith(busy: true, clearFailure: true));
     try {
@@ -129,6 +134,7 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
   Future<void> setReady(bool ready) async {
     final current = _state;
     if (current is! MultiplayerWaitingRoom || current.busy) return;
+    if (current.connection != LobbyConnectionPhase.connected) return;
     final generation = _generation;
     _setState(current.copyWith(busy: true, clearFailure: true));
     try {
@@ -154,6 +160,7 @@ extension MultiplayerLobbyLifecycle on MultiplayerCoordinator {
   Future<void> startMatch() async {
     final current = _state;
     if (current is! MultiplayerWaitingRoom || current.busy) return;
+    if (current.connection != LobbyConnectionPhase.connected) return;
     final generation = _generation;
     _setState(current.copyWith(busy: true, clearFailure: true));
     try {

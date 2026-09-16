@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
@@ -20,12 +21,14 @@ import '../../../support/localized_test_app.dart';
 part 'account_profile_widget_cases.dart';
 part 'lobby_layout_cases.dart';
 part 'lobby_golden_cases.dart';
+part 'lobby_presence_widget_cases.dart';
 
 void main() {
   accountProfileWidgetCases();
   lobbyLayoutCases();
   onlineSetupLayoutCases();
   lobbyGoldenCases();
+  lobbyPresenceWidgetCases();
   testWidgets('configures a match and exposes an accessible turn action', (
     tester,
   ) async {
@@ -378,6 +381,7 @@ MultiplayerMatchLobbyView _matchLobby({
       kind: 'human',
       isHost: true,
       isClaimed: true,
+      isConnected: true,
       isReady: ready,
       isCurrentUser: true,
     ),
@@ -389,6 +393,7 @@ MultiplayerMatchLobbyView _matchLobby({
       kind: 'human',
       isHost: false,
       isClaimed: guestClaimed,
+      isConnected: guestClaimed,
       isReady: true,
       isCurrentUser: false,
     ),

@@ -9,6 +9,7 @@ import 'package:aonw_server/src/stats/public_game_stats_store.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:test/test.dart';
 
+import 'lobby_watch_fixture.dart';
 import 'test_tools/serverpod_test_tools.dart';
 
 part 'game_endpoint_fixture.dart';
@@ -269,6 +270,12 @@ final class _GameEndpointJourney {
       ),
     );
 
+    final ownerWatch = await watchTestLobby(
+      endpoint.watchLobby(ownerSession, created.matchId),
+    );
+    final guestWatch = await watchTestLobby(
+      endpoint.watchLobby(guestSession, created.matchId),
+    );
     final ownerReady = await endpoint.setReady(
       ownerSession,
       created.matchId,
@@ -286,6 +293,8 @@ final class _GameEndpointJourney {
     expect(started.match.state, 'running');
     expect(started.match.startedAt, isNotNull);
     expect(started.canStart, isFalse);
+    await ownerWatch.cancel();
+    await guestWatch.cancel();
 
     final startedStats = await PublicGameStatsService(
       cacheTtl: Duration.zero,

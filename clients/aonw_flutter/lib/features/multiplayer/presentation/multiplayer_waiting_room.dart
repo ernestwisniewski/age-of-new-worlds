@@ -48,7 +48,10 @@ final class _WaitingRoomContent extends StatelessWidget {
         SelectableText(l10n.matchIdentifier(state.lobby.match.matchId)),
         const SizedBox(height: AonwSpacing.lg),
         for (final participant in state.lobby.participants)
-          _LobbyParticipantTile(participant: participant),
+          _LobbyParticipantTile(
+            participant: participant,
+            connection: state.connection,
+          ),
         _WaitingRoomStatus(state: state),
         const SizedBox(height: AonwSpacing.lg),
         _WaitingRoomActions(controller: controller, state: state),
@@ -96,7 +99,9 @@ final class _WaitingRoomActions extends StatelessWidget {
         OutlinedButton.icon(
           key: const ValueKey('multiplayer-ready'),
           onPressed: context.withGameSound(
-            state.busy ? null : () => controller.setReady(!current.isReady),
+            state.busy || state.connection != LobbyConnectionPhase.connected
+                ? null
+                : () => controller.setReady(!current.isReady),
           ),
           icon: Icon(
             current.isReady ? Icons.close : Icons.check_circle_outline,
@@ -140,7 +145,11 @@ final class _HostStartAction extends StatelessWidget {
         FilledButton.icon(
           key: const ValueKey('multiplayer-start-match'),
           onPressed: context.withGameSound(
-            state.busy || !state.lobby.canStart ? null : controller.startMatch,
+            state.busy ||
+                    !state.lobby.canStart ||
+                    state.connection != LobbyConnectionPhase.connected
+                ? null
+                : controller.startMatch,
           ),
           icon: const Icon(Icons.play_arrow),
           label: Text(l10n.startGame),

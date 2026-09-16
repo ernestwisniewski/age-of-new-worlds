@@ -60,6 +60,8 @@ final class MultiplayerController extends ChangeNotifier
   Future<void> openMatch(MultiplayerMatchView match) =>
       _coordinator.openMatch(match);
 
+  void setLobbyVisible(bool visible) => _coordinator.setLobbyVisible(visible);
+
   Future<void> refreshMatchLobby() => _coordinator.refreshMatchLobby();
 
   Future<void> setReady(bool ready) => _coordinator.setReady(ready);

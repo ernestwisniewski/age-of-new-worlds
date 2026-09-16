@@ -786,6 +786,27 @@ class Endpoints extends _i1.EndpointDispatch {
                 params['matchId'],
               ),
         ),
+        'watchLobby': _i1.MethodStreamConnector(
+          name: 'watchLobby',
+          params: {
+            'matchId': _i1.ParameterDescription(
+              name: 'matchId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['game'] as _i11.GameEndpoint).watchLobby(
+                session,
+                params['matchId'],
+              ),
+        ),
       },
     );
     modules['serverpod_auth_core'] = _i19.Endpoints()

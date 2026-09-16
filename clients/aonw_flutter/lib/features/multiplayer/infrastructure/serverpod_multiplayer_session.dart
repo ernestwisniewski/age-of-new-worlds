@@ -11,18 +11,24 @@ import '../application/multiplayer_session_port.dart';
 import '../read_model/multiplayer_view.dart';
 import 'auth_token_store.dart';
 import 'server_connection_config.dart';
+import 'server_lobby_decoder.dart';
 import 'server_projection_decoder.dart';
 import 'serverpod_game_transport.dart';
 import 'serverpod_replay_transport.dart';
 
 part 'serverpod_multiplayer_lifecycle.dart';
+part 'serverpod_lobby_presence.dart';
 part 'serverpod_account_profile.dart';
 part 'serverpod_account_authentication.dart';
 part 'serverpod_match_history.dart';
 part 'serverpod_replay_session.dart';
 
 final class ServerpodMultiplayerSession
-    implements MultiplayerSessionPort, AccountProfilePort, MatchHistoryPort {
+    implements
+        MultiplayerSessionPort,
+        MultiplayerLobbyWatchPort,
+        AccountProfilePort,
+        MatchHistoryPort {
   ServerpodMultiplayerSession({
     required ServerConnectionConfig config,
     required AuthTokenStore tokenStore,
@@ -46,6 +52,10 @@ final class ServerpodMultiplayerSession
   String? _userId;
   var _serverVerified = false;
   var _closed = false;
+
+  @override
+  Stream<MultiplayerMatchLobbyView> watchLobby(String matchId) =>
+      _watchRemoteLobby(this, matchId);
 
   @override
   Future<MatchHistoryPageView> readMatchHistory({int? beforeParticipantId}) =>
@@ -133,28 +143,14 @@ final class ServerpodMultiplayerSession
   }
 
   @override
-  Future<void> reconnect() async {
-    _ensureOpen();
-    final refreshToken = _refreshToken ?? await _tokenStore.readRefreshToken();
-    if (refreshToken == null || refreshToken.isEmpty) {
-      throw const MultiplayerSessionException(
-        code: 'authentication_required',
-        message: 'The authenticated session is unavailable.',
-      );
-    }
-    try {
-      await _rotate(refreshToken);
-    } on Object catch (error, stackTrace) {
-      throw _translate(error, stackTrace);
-    }
-  }
+  Future<void> reconnect() => _reconnectAuthentication();
 
   @override
   Future<List<MultiplayerMatchView>> listMatches() async {
     _ensureAuthenticated();
     try {
       final matches = await _client.game.listMatches();
-      return [for (final match in matches) _decodeMatch(match)];
+      return [for (final match in matches) decodeServerMatch(match)];
     } on Object catch (error, stackTrace) {
       throw _translate(error, stackTrace);
     }

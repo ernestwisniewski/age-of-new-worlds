@@ -238,6 +238,20 @@ class AonwLocalizationsFr extends AonwLocalizations {
   String get multiplayerWaitingRoomTitle => 'Salle d’attente de la partie';
 
   @override
+  String multiplayerPresence(String phase) {
+    String _temp0 = intl.Intl.selectLogic(phase, {
+      'ready': 'Prêt',
+      'connected': 'Connecté',
+      'connecting': 'Connexion',
+      'reconnecting': 'Reconnexion',
+      'offline': 'Hors ligne',
+      'open': 'Place libre',
+      'other': 'Hors ligne',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get multiplayerReady => 'Prêt';
 
   @override
@@ -266,7 +280,7 @@ class AonwLocalizationsFr extends AonwLocalizations {
 
   @override
   String get waitingForPlayers =>
-      'Chaque place humaine doit être occupée par un joueur prêt avant le début de la partie.';
+      'Chaque joueur humain doit être connecté et prêt avant le début de la partie.';
 
   @override
   String get refreshMatch => 'Actualiser la partie';
@@ -376,7 +390,7 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'match_already_started': 'La partie a déjà commencé.',
       'host_required': 'Seul l’hôte peut effectuer cette action.',
       'lobby_not_ready':
-          'Tous les joueurs humains doivent rejoindre la partie et être prêts.',
+          'Chaque joueur humain doit être connecté et prêt avant le début de la partie.',
       'participant_not_claimable':
           'Les places contrôlées par l’ordinateur ne peuvent pas être occupées par un joueur.',
       'participant_not_active': 'Ce participant n’est plus actif.',

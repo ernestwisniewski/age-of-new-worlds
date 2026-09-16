@@ -78,28 +78,34 @@ final class MultiplayerInMatch extends MultiplayerState {
   );
 }
 
+enum LobbyConnectionPhase { connecting, connected, reconnecting, offline }
+
 final class MultiplayerWaitingRoom extends MultiplayerState {
   const MultiplayerWaitingRoom({
     required this.account,
     required this.lobby,
     this.busy = false,
+    this.connection = LobbyConnectionPhase.connected,
     this.failureCode,
   });
 
   final MultiplayerAccountView account;
   final MultiplayerMatchLobbyView lobby;
   final bool busy;
+  final LobbyConnectionPhase connection;
   final String? failureCode;
 
   MultiplayerWaitingRoom copyWith({
     MultiplayerMatchLobbyView? lobby,
     bool? busy,
+    LobbyConnectionPhase? connection,
     String? failureCode,
     bool clearFailure = false,
   }) => MultiplayerWaitingRoom(
     account: account,
     lobby: lobby ?? this.lobby,
     busy: busy ?? this.busy,
+    connection: connection ?? this.connection,
     failureCode: clearFailure ? null : failureCode ?? this.failureCode,
   );
 }

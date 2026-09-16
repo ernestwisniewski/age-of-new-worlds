@@ -5,6 +5,7 @@ import 'package:aonw_server/src/game/native/game_native_runtime.dart';
 import 'package:aonw_server/src/generated/protocol.dart' as game;
 import 'package:test/test.dart';
 
+import 'lobby_watch_fixture.dart';
 import 'test_tools/serverpod_test_tools.dart';
 
 void main() {
@@ -40,9 +41,17 @@ void main() {
             playerId: 'player-2',
           ),
         );
+        final ownerWatch = await watchTestLobby(
+          endpoint.watchLobby(owner, created.matchId),
+        );
+        final guestWatch = await watchTestLobby(
+          endpoint.watchLobby(guest, created.matchId),
+        );
         await endpoint.setReady(owner, created.matchId, true);
         await endpoint.setReady(guest, created.matchId, true);
         await endpoint.startMatch(owner, created.matchId);
+        await ownerWatch.cancel();
+        await guestWatch.cancel();
         final before = await game.GameMatch.db.findFirstRow(
           database,
           where: (table) => table.publicId.equals(created.matchId),

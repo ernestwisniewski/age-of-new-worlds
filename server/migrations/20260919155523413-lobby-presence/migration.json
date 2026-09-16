@@ -1,0 +1,129 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "createTable",
+      "createTable": {
+        "__className__": "serverpod.TableDefinition",
+        "name": "aonw_game_lobby_connection",
+        "dartName": "GameLobbyConnection",
+        "module": "aonw",
+        "schema": "public",
+        "columns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('aonw_game_lobby_connection_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "matchId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "participantId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "userIdentifier",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "joinedAt",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "expiresAt",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "__className__": "serverpod.ForeignKeyDefinition",
+            "constraintName": "aonw_game_lobby_connection_fk_0",
+            "columns": [
+              "matchId"
+            ],
+            "referenceTable": "aonw_game_match",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          },
+          {
+            "__className__": "serverpod.ForeignKeyDefinition",
+            "constraintName": "aonw_game_lobby_connection_fk_1",
+            "columns": [
+              "participantId"
+            ],
+            "referenceTable": "aonw_game_participant",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "__className__": "serverpod.IndexDefinition",
+            "indexName": "aonw_game_lobby_connection_pkey",
+            "elements": [
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "__className__": "serverpod.IndexDefinition",
+            "indexName": "aonw_game_lobby_connection_active_idx",
+            "elements": [
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "matchId"
+              },
+              {
+                "__className__": "serverpod.IndexElementDefinition",
+                "type": 0,
+                "definition": "expiresAt"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [],
+  "migrationApiVersion": 1
+}

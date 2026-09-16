@@ -18,5 +18,5 @@ Validation:
   both phone orientations at 200%, and four reviewed phone/tablet/desktop goldens.
 - Generated-code synchronization and unchanged architecture budgets passed.
 
-Connection presence is still separate work. A claimed seat is not evidence that
-its player currently has a live connection. The UI does not invent that status.
+Connection presence is separate from seat ownership and readiness. The live
+protocol and its validation are documented in [Lobby presence](lobby-presence.md).

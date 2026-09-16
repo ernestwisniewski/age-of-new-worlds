@@ -385,6 +385,17 @@ class EndpointGame extends _i1.EndpointRef {
         {'matchId': matchId},
       );
 
+  _i2.Stream<_i17.GameLobbyView> watchLobby(String matchId) =>
+      caller.callStreamingServerEndpoint<
+        _i2.Stream<_i17.GameLobbyView>,
+        _i17.GameLobbyView
+      >(
+        'game',
+        'watchLobby',
+        {'matchId': matchId},
+        {},
+      );
+
   _i2.Future<_i17.GameLobbyView> setReady(
     String matchId,
     bool ready,

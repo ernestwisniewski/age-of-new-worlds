@@ -118,6 +118,7 @@
     }
   },
   "multiplayerWaitingRoomTitle": "Wachtkamer van de partij",
+  "multiplayerPresence": "{phase, select, ready{Gereed} connected{Verbonden} connecting{Verbinden} reconnecting{Opnieuw verbinden} offline{Offline} open{Vrije plek} other{Offline}}",
   "multiplayerReady": "Klaar",
   "multiplayerNotReady": "Niet klaar",
   "multiplayerSeatOpen": "Vrije spelersplaats",
@@ -127,7 +128,7 @@
   "multiplayerCurrentPlayer": "Jij",
   "markReady": "Gereedheid bevestigen",
   "markNotReady": "Gereedheid intrekken",
-  "waitingForPlayers": "Alle menselijke spelersplaatsen moeten bezet en klaar zijn voordat de partij begint.",
+  "waitingForPlayers": "Elke menselijke speler moet verbonden en gereed zijn voordat de wedstrijd begint.",
   "refreshMatch": "Partij vernieuwen",
   "leaveMultiplayerMatch": "Partij verlaten",
   "multiplayerResignTitle": "Deze partij opgeven?",
@@ -200,7 +201,7 @@
   "submitTurn": "Beurt bevestigen",
   "reconnect": "Opnieuw verbinden",
   "backToLobby": "Terug naar de lobby",
-  "multiplayerFailure": "{code, select, client_update_required{Werk de client bij voordat je verbinding maakt.} authentication_required{Log opnieuw in om door te gaan.} invalid_authentication_response{Het authenticatieantwoord was ongeldig.} authentication_identity_changed{De accountidentiteit is tijdens het vernieuwen veranderd.} connection_interrupted{De verbinding is onderbroken. Verbind opnieuw om de partij te synchroniseren.} invalid_server_response{Het serverantwoord heeft de validatie niet doorstaan.} invalid_command_sequence{De opdrachtenreeks was niet aaneengesloten.} invalid_resync_sequence{De gesynchroniseerde toestand is teruggegaan.} invalid_match_lifecycle{Het antwoord over het partijverloop was tegenstrijdig.} match_not_found{De partij is niet gevonden.} match_not_started{De host heeft de partij nog niet gestart.} match_already_started{De partij is al begonnen.} host_required{Alleen de host kan deze actie uitvoeren.} lobby_not_ready{Alle menselijke spelers moeten deelnemen en klaar zijn.} participant_not_claimable{Computerbestuurde plaatsen kunnen niet worden overgenomen.} participant_not_active{Die deelnemer is niet meer actief.} invalid_kick_target{De host kan zichzelf niet verwijderen.} player_seat_taken{Die spelersplaats is al bezet.} other{Het multiplayerverzoek kon niet worden voltooid.}}",
+  "multiplayerFailure": "{code, select, client_update_required{Werk de client bij voordat je verbinding maakt.} authentication_required{Log opnieuw in om door te gaan.} invalid_authentication_response{Het authenticatieantwoord was ongeldig.} authentication_identity_changed{De accountidentiteit is tijdens het vernieuwen veranderd.} connection_interrupted{De verbinding is onderbroken. Verbind opnieuw om de partij te synchroniseren.} invalid_server_response{Het serverantwoord heeft de validatie niet doorstaan.} invalid_command_sequence{De opdrachtenreeks was niet aaneengesloten.} invalid_resync_sequence{De gesynchroniseerde toestand is teruggegaan.} invalid_match_lifecycle{Het antwoord over het partijverloop was tegenstrijdig.} match_not_found{De partij is niet gevonden.} match_not_started{De host heeft de partij nog niet gestart.} match_already_started{De partij is al begonnen.} host_required{Alleen de host kan deze actie uitvoeren.} lobby_not_ready{Elke menselijke speler moet verbonden en gereed zijn voordat de wedstrijd begint.} participant_not_claimable{Computerbestuurde plaatsen kunnen niet worden overgenomen.} participant_not_active{Die deelnemer is niet meer actief.} invalid_kick_target{De host kan zichzelf niet verwijderen.} player_seat_taken{Die spelersplaats is al bezet.} other{Het multiplayerverzoek kon niet worden voltooid.}}",
   "@multiplayerFailure": {
     "placeholders": {
       "code": {

@@ -1,0 +1,12 @@
+class: GameLobbyConnection
+serverOnly: true
+table: aonw_game_lobby_connection
+fields:
+  match: GameMatch?, relation(name=game_match_lobby_connections, onDelete=Cascade)
+  participant: GameParticipant?, relation(name=game_participant_lobby_connections, onDelete=Cascade)
+  userIdentifier: String
+  joinedAt: DateTime
+  expiresAt: DateTime
+indexes:
+  aonw_game_lobby_connection_active_idx:
+    fields: matchId, expiresAt

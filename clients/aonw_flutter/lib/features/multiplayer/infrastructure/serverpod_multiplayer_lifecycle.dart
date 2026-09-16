@@ -17,7 +17,7 @@ Future<MultiplayerMatchLobbyView> _createRemoteMatch(
         creatorPlayerId: documents.creatorPlayerId,
       ),
     );
-    final lobby = _decodeLobby(
+    final lobby = decodeServerLobby(
       await session._client.game.lobby(created.matchId),
     );
     _validateCreatedLobby(created, lobby, documents.creatorPlayerId);
@@ -37,7 +37,7 @@ Future<MultiplayerMatchLobbyView> _joinRemoteMatch(
     final joined = await session._client.game.joinMatch(
       server.GameJoinMatchRequest(matchId: matchId, playerId: playerId),
     );
-    final lobby = _decodeLobby(await session._client.game.lobby(matchId));
+    final lobby = decodeServerLobby(await session._client.game.lobby(matchId));
     _validateJoinedLobby(joined, lobby, playerId);
     return lobby;
   } on Object catch (error, stackTrace) {
@@ -70,7 +70,7 @@ Future<MultiplayerMatchLobbyView> _remoteLobbyCall(
 ) async {
   session._ensureAuthenticated();
   try {
-    return _decodeLobby(await operation());
+    return decodeServerLobby(await operation());
   } on Object catch (error, stackTrace) {
     throw _translate(error, stackTrace);
   }
@@ -98,7 +98,9 @@ Future<MultiplayerMatchView> _leaveRemoteLobby(
 ) async {
   session._ensureAuthenticated();
   try {
-    final match = _decodeMatch(await session._client.game.leaveLobby(matchId));
+    final match = decodeServerMatch(
+      await session._client.game.leaveLobby(matchId),
+    );
     if (match.matchId != matchId) {
       throw const FormatException(
         'Leaving the lobby returned an inconsistent match.',
@@ -169,149 +171,4 @@ void _validateJoinedLobby(
   throw const FormatException(
     'Joined participant and authoritative lobby do not agree.',
   );
-}
-
-MultiplayerMatchView _decodeMatch(server.GameMatchView value) {
-  final phase = _decodeMatchPhase(value.state);
-  _validateMatchIdentity(value);
-  _validateMatchLifecycle(value, phase);
-  _validateMatchOffsets(value);
-  return MultiplayerMatchView(
-    matchId: value.matchId,
-    mapId: value.mapId,
-    mapHash: value.mapHash,
-    rulesetId: value.rulesetId,
-    rulesetHash: value.rulesetHash,
-    phase: phase,
-    hostPlayerId: value.hostPlayerId,
-    startedAt: value.startedAt?.toUtc(),
-    revision: value.revision,
-    eventOffset: value.eventOffset,
-  );
-}
-
-MultiplayerMatchPhase _decodeMatchPhase(String value) => switch (value) {
-  'lobby' => MultiplayerMatchPhase.lobby,
-  'running' => MultiplayerMatchPhase.running,
-  'finished' => MultiplayerMatchPhase.finished,
-  'abandoned' => MultiplayerMatchPhase.abandoned,
-  _ => throw const FormatException('The server returned an invalid match.'),
-};
-
-void _validateMatchIdentity(server.GameMatchView value) {
-  if (value.matchId.isEmpty ||
-      value.mapId.isEmpty ||
-      value.mapHash.isEmpty ||
-      value.rulesetId.isEmpty ||
-      value.rulesetHash.isEmpty ||
-      (value.hostPlayerId?.isEmpty ?? false)) {
-    throw const FormatException('The server returned an invalid match.');
-  }
-}
-
-void _validateMatchLifecycle(
-  server.GameMatchView value,
-  MultiplayerMatchPhase phase,
-) {
-  final waiting = phase == MultiplayerMatchPhase.lobby;
-  if (waiting && (value.hostPlayerId == null || value.startedAt != null)) {
-    throw const FormatException('The server returned an invalid match.');
-  }
-  if (!waiting && value.startedAt == null) {
-    if (phase == MultiplayerMatchPhase.abandoned) return;
-    throw const FormatException('The server returned an invalid match.');
-  }
-}
-
-void _validateMatchOffsets(server.GameMatchView value) {
-  if (value.revision < 0 || value.eventOffset < 0) {
-    throw const FormatException('The server returned an invalid match.');
-  }
-}
-
-MultiplayerMatchLobbyView _decodeLobby(server.GameLobbyView value) {
-  final match = _decodeMatch(value.match);
-  final seen = <String>{};
-  final participants = [
-    for (final participant in value.participants)
-      _decodeLobbyParticipant(participant, seen),
-  ];
-  _validateLobbyRoster(match, participants);
-  _validateCanStart(match, participants, value.canStart);
-  return MultiplayerMatchLobbyView(
-    match: match,
-    participants: List.unmodifiable(participants),
-    canStart: value.canStart,
-  );
-}
-
-MultiplayerLobbyParticipantView _decodeLobbyParticipant(
-  server.GameLobbyParticipantView value,
-  Set<String> seen,
-) {
-  _validateLobbyParticipantIdentity(value);
-  if (!seen.add(value.playerId) ||
-      (value.isCurrentUser && !value.isClaimed) ||
-      (value.kind == 'ai' && !value.isReady)) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-  return MultiplayerLobbyParticipantView(
-    playerId: value.playerId,
-    name: value.name,
-    kind: value.kind,
-    country: value.country,
-    colorValue: value.colorValue,
-    isHost: value.isHost,
-    isClaimed: value.isClaimed,
-    isReady: value.isReady,
-    isCurrentUser: value.isCurrentUser,
-  );
-}
-
-void _validateLobbyParticipantIdentity(server.GameLobbyParticipantView value) {
-  if (value.playerId.isEmpty || value.name.isEmpty) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-  if (!AonwPlayerCountry.values.any(
-        (country) => country.name == value.country,
-      ) ||
-      value.colorValue < 0 ||
-      value.colorValue > 0xffffffff) {
-    throw const FormatException(
-      'The server returned an invalid lobby identity.',
-    );
-  }
-  if (value.kind != 'human' && value.kind != 'ai') {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-}
-
-void _validateLobbyRoster(
-  MultiplayerMatchView match,
-  List<MultiplayerLobbyParticipantView> participants,
-) {
-  final current = participants.where((value) => value.isCurrentUser).toList();
-  final hosts = participants.where((value) => value.isHost).toList();
-  if (participants.isEmpty || current.length != 1 || hosts.length != 1) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-  if (hosts.single.playerId != match.hostPlayerId) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
-}
-
-void _validateCanStart(
-  MultiplayerMatchView match,
-  List<MultiplayerLobbyParticipantView> participants,
-  bool canStart,
-) {
-  final current = participants.singleWhere((value) => value.isCurrentUser);
-  final humans = participants.where((value) => value.kind == 'human');
-  final expected =
-      match.phase == MultiplayerMatchPhase.lobby &&
-      current.isHost &&
-      humans.every((value) => value.isClaimed && value.isReady);
-  if (canStart != expected) {
-    throw const FormatException('The server returned an invalid lobby.');
-  }
 }

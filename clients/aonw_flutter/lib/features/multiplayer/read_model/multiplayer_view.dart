@@ -43,6 +43,7 @@ final class MultiplayerLobbyParticipantView {
     required this.colorValue,
     required this.isHost,
     required this.isClaimed,
+    required this.isConnected,
     required this.isReady,
     required this.isCurrentUser,
   });
@@ -54,6 +55,7 @@ final class MultiplayerLobbyParticipantView {
   final int colorValue;
   final bool isHost;
   final bool isClaimed;
+  final bool isConnected;
   final bool isReady;
   final bool isCurrentUser;
 }

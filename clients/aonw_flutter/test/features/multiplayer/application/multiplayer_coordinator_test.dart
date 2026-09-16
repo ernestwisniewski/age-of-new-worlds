@@ -13,8 +13,10 @@ part 'multiplayer_coordinator_fixture.dart';
 part 'multiplayer_session_fixture.dart';
 part 'account_profile_cases.dart';
 part 'match_history_cases.dart';
+part 'lobby_presence_cases.dart';
 
 void main() {
+  lobbyPresenceCases();
   accountProfileCases();
   matchHistoryCases();
   test('restores an authenticated account into its match lobby', () async {

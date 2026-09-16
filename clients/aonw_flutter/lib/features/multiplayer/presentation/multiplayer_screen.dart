@@ -32,15 +32,32 @@ final class MultiplayerScreen extends StatefulWidget {
   State<MultiplayerScreen> createState() => _MultiplayerScreenState();
 }
 
-final class _MultiplayerScreenState extends State<MultiplayerScreen> {
+final class _MultiplayerScreenState extends State<MultiplayerScreen>
+    with WidgetsBindingObserver {
   var _openingGame = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    widget.controller.setLobbyVisible(true);
     if (widget.controller.state is MultiplayerStarting) {
       widget.controller.initialize();
     }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    widget.controller.setLobbyVisible(
+      state == AppLifecycleState.resumed || state == AppLifecycleState.inactive,
+    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    widget.controller.setLobbyVisible(false);
+    super.dispose();
   }
 
   @override

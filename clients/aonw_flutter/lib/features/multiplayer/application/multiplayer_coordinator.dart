@@ -8,6 +8,7 @@ import 'multiplayer_session_port.dart';
 import 'multiplayer_state.dart';
 
 part 'multiplayer_lobby_lifecycle.dart';
+part 'multiplayer_lobby_presence.dart';
 part 'multiplayer_match_lifecycle.dart';
 part 'multiplayer_account_profile.dart';
 part 'multiplayer_match_history.dart';
@@ -35,6 +36,15 @@ final class MultiplayerCoordinator {
   MultiplayerState _state = const MultiplayerStarting();
   var _generation = 0;
   var _closed = false;
+  StreamSubscription<MultiplayerMatchLobbyView>? _lobbySubscription;
+  Timer? _lobbyRetry;
+  (String, String, String, int)? _lobbyScope;
+  var _lobbyVisible = true;
+  var _lobbyEpoch = 0;
+  var _lobbyAttempt = 0;
+  var _lobbyRetryCount = 0;
+  var _lobbyOpening = false;
+  var _lobbyConnection = LobbyConnectionPhase.offline;
 
   MultiplayerState get state => _state;
 
@@ -250,6 +260,7 @@ final class MultiplayerCoordinator {
   Future<void> signOut() async {
     if (_closed) return;
     ++_generation;
+    _stopLobbyObservation();
     try {
       await _session.signOut();
     } on Object catch (error, stackTrace) {
@@ -262,6 +273,7 @@ final class MultiplayerCoordinator {
     if (_closed) return;
     _closed = true;
     ++_generation;
+    _stopLobbyObservation();
     await _session.close();
     await _changes.close();
   }
@@ -327,6 +339,11 @@ final class MultiplayerCoordinator {
 
   void _setState(MultiplayerState state) {
     if (_closed) return;
+    _syncLobbyObservation(state);
+    if (state is MultiplayerWaitingRoom &&
+        _session is MultiplayerLobbyWatchPort) {
+      state = state.copyWith(connection: _lobbyConnection);
+    }
     _state = state;
     _changes.add(state);
   }

@@ -23,6 +23,7 @@ abstract class GameLobbyParticipantView
     required this.colorValue,
     required this.isHost,
     required this.isClaimed,
+    required this.isConnected,
     required this.isReady,
     required this.isCurrentUser,
   });
@@ -35,6 +36,7 @@ abstract class GameLobbyParticipantView
     required int colorValue,
     required bool isHost,
     required bool isClaimed,
+    required bool isConnected,
     required bool isReady,
     required bool isCurrentUser,
   }) = _GameLobbyParticipantViewImpl;
@@ -50,6 +52,9 @@ abstract class GameLobbyParticipantView
       colorValue: jsonSerialization['colorValue'] as int,
       isHost: _i1.BoolJsonExtension.fromJson(jsonSerialization['isHost']),
       isClaimed: _i1.BoolJsonExtension.fromJson(jsonSerialization['isClaimed']),
+      isConnected: _i1.BoolJsonExtension.fromJson(
+        jsonSerialization['isConnected'],
+      ),
       isReady: _i1.BoolJsonExtension.fromJson(jsonSerialization['isReady']),
       isCurrentUser: _i1.BoolJsonExtension.fromJson(
         jsonSerialization['isCurrentUser'],
@@ -71,6 +76,8 @@ abstract class GameLobbyParticipantView
 
   bool isClaimed;
 
+  bool isConnected;
+
   bool isReady;
 
   bool isCurrentUser;
@@ -86,6 +93,7 @@ abstract class GameLobbyParticipantView
     int? colorValue,
     bool? isHost,
     bool? isClaimed,
+    bool? isConnected,
     bool? isReady,
     bool? isCurrentUser,
   });
@@ -100,6 +108,7 @@ abstract class GameLobbyParticipantView
       'colorValue': colorValue,
       'isHost': isHost,
       'isClaimed': isClaimed,
+      'isConnected': isConnected,
       'isReady': isReady,
       'isCurrentUser': isCurrentUser,
     };
@@ -116,6 +125,7 @@ abstract class GameLobbyParticipantView
       'colorValue': colorValue,
       'isHost': isHost,
       'isClaimed': isClaimed,
+      'isConnected': isConnected,
       'isReady': isReady,
       'isCurrentUser': isCurrentUser,
     };
@@ -136,6 +146,7 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
     required int colorValue,
     required bool isHost,
     required bool isClaimed,
+    required bool isConnected,
     required bool isReady,
     required bool isCurrentUser,
   }) : super._(
@@ -146,6 +157,7 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
          colorValue: colorValue,
          isHost: isHost,
          isClaimed: isClaimed,
+         isConnected: isConnected,
          isReady: isReady,
          isCurrentUser: isCurrentUser,
        );
@@ -162,6 +174,7 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
     int? colorValue,
     bool? isHost,
     bool? isClaimed,
+    bool? isConnected,
     bool? isReady,
     bool? isCurrentUser,
   }) {
@@ -173,6 +186,7 @@ class _GameLobbyParticipantViewImpl extends GameLobbyParticipantView {
       colorValue: colorValue ?? this.colorValue,
       isHost: isHost ?? this.isHost,
       isClaimed: isClaimed ?? this.isClaimed,
+      isConnected: isConnected ?? this.isConnected,
       isReady: isReady ?? this.isReady,
       isCurrentUser: isCurrentUser ?? this.isCurrentUser,
     );

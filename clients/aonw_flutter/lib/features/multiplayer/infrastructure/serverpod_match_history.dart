@@ -56,7 +56,7 @@ final class MatchHistoryMapper {
 }
 
 MatchHistoryEntryView _decodeHistoryEntry(server.GameMatchHistoryEntry value) {
-  final match = _decodeMatch(value.match);
+  final match = decodeServerMatch(value.match);
   if (match.phase != MultiplayerMatchPhase.finished ||
       value.turn < 1 ||
       value.playerId.trim().isEmpty) {

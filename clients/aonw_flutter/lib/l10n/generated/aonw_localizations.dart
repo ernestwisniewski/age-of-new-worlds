@@ -502,6 +502,12 @@ abstract class AonwLocalizations {
   /// **'Match waiting room'**
   String get multiplayerWaitingRoomTitle;
 
+  /// No description provided for @multiplayerPresence.
+  ///
+  /// In en, this message translates to:
+  /// **'{phase, select, ready{Ready} connected{Connected} connecting{Connecting} reconnecting{Reconnecting} offline{Offline} open{Open seat} other{Offline}}'**
+  String multiplayerPresence(String phase);
+
   /// No description provided for @multiplayerReady.
   ///
   /// In en, this message translates to:
@@ -559,7 +565,7 @@ abstract class AonwLocalizations {
   /// No description provided for @waitingForPlayers.
   ///
   /// In en, this message translates to:
-  /// **'Every human seat must be claimed and ready before the match starts.'**
+  /// **'Every human player must be connected and ready before the match starts.'**
   String get waitingForPlayers;
 
   /// No description provided for @refreshMatch.
@@ -685,7 +691,7 @@ abstract class AonwLocalizations {
   /// No description provided for @multiplayerFailure.
   ///
   /// In en, this message translates to:
-  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} invalid_match_lifecycle{The match lifecycle response was inconsistent.} match_not_found{The match was not found.} match_not_started{The match has not been started by its host.} match_already_started{The match has already started.} host_required{Only the host can perform this action.} lobby_not_ready{Every human player must join and be ready.} participant_not_claimable{Computer-controlled seats cannot be claimed.} participant_not_active{That participant is no longer active.} invalid_kick_target{The host cannot remove itself.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
+  /// **'{code, select, client_update_required{Update the client before connecting.} authentication_required{Sign in again to continue.} invalid_authentication_response{The authentication response was invalid.} authentication_identity_changed{The account identity changed during refresh.} connection_interrupted{The connection was interrupted. Reconnect to synchronize the match.} invalid_server_response{The server response failed validation.} invalid_command_sequence{The command sequence was not contiguous.} invalid_resync_sequence{The synchronized state moved backwards.} invalid_match_lifecycle{The match lifecycle response was inconsistent.} match_not_found{The match was not found.} match_not_started{The match has not been started by its host.} match_already_started{The match has already started.} host_required{Only the host can perform this action.} lobby_not_ready{Every human player must be connected and ready before the match starts.} participant_not_claimable{Computer-controlled seats cannot be claimed.} participant_not_active{That participant is no longer active.} invalid_kick_target{The host cannot remove itself.} player_seat_taken{That player seat is already occupied.} other{The multiplayer request could not be completed.}}'**
   String multiplayerFailure(String code);
 
   /// No description provided for @helpTitle.

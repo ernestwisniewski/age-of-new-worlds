@@ -44,6 +44,9 @@ final class GameEndpoint extends Endpoint {
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _service.lobby(session, matchId);
 
+  Stream<GameLobbyView> watchLobby(Session session, String matchId) =>
+      _service.watchLobby(session, matchId);
+
   Future<GameLobbyView> setReady(Session session, String matchId, bool ready) =>
       _service.setReady(session, matchId, ready);
 

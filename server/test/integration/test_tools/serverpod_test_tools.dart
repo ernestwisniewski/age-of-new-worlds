@@ -1112,6 +1112,38 @@ class _GameEndpoint {
     });
   }
 
+  _i3.Stream<_i17.GameLobbyView> watchLobby(
+    _i1.TestSessionBuilder sessionBuilder,
+    String matchId,
+  ) {
+    var _localTestStreamManager = _i1.TestStreamManager<_i17.GameLobbyView>();
+    _i1.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'game',
+              method: 'watchLobby',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'game',
+              methodName: 'watchLobby',
+              arguments: {'matchId': matchId},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
+  }
+
   _i3.Future<_i17.GameLobbyView> setReady(
     _i1.TestSessionBuilder sessionBuilder,
     String matchId,

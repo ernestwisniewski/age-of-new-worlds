@@ -17,7 +17,8 @@ import '../../game/models/game_command_ledger.dart' as _i3;
 import '../../game/models/game_event.dart' as _i4;
 import '../../game/models/game_recipient_snapshot.dart' as _i5;
 import '../../game/models/game_replay_entry.dart' as _i6;
-import 'package:aonw_server/src/generated/protocol.dart' as _i7;
+import '../../game/models/game_lobby_connection.dart' as _i7;
+import 'package:aonw_server/src/generated/protocol.dart' as _i8;
 
 abstract class GameMatch
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -51,6 +52,7 @@ abstract class GameMatch
     this.events,
     this.recipientSnapshots,
     this.replayEntries,
+    this.lobbyConnections,
   });
 
   factory GameMatch({
@@ -83,6 +85,7 @@ abstract class GameMatch
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
     List<_i6.GameReplayEntry>? replayEntries,
+    List<_i7.GameLobbyConnection>? lobbyConnections,
   }) = _GameMatchImpl;
 
   factory GameMatch.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -126,28 +129,33 @@ abstract class GameMatch
       ),
       participants: jsonSerialization['participants'] == null
           ? null
-          : _i7.Protocol().deserialize<List<_i2.GameParticipant>>(
+          : _i8.Protocol().deserialize<List<_i2.GameParticipant>>(
               jsonSerialization['participants'],
             ),
       commands: jsonSerialization['commands'] == null
           ? null
-          : _i7.Protocol().deserialize<List<_i3.GameCommandLedger>>(
+          : _i8.Protocol().deserialize<List<_i3.GameCommandLedger>>(
               jsonSerialization['commands'],
             ),
       events: jsonSerialization['events'] == null
           ? null
-          : _i7.Protocol().deserialize<List<_i4.GameEvent>>(
+          : _i8.Protocol().deserialize<List<_i4.GameEvent>>(
               jsonSerialization['events'],
             ),
       recipientSnapshots: jsonSerialization['recipientSnapshots'] == null
           ? null
-          : _i7.Protocol().deserialize<List<_i5.GameRecipientSnapshot>>(
+          : _i8.Protocol().deserialize<List<_i5.GameRecipientSnapshot>>(
               jsonSerialization['recipientSnapshots'],
             ),
       replayEntries: jsonSerialization['replayEntries'] == null
           ? null
-          : _i7.Protocol().deserialize<List<_i6.GameReplayEntry>>(
+          : _i8.Protocol().deserialize<List<_i6.GameReplayEntry>>(
               jsonSerialization['replayEntries'],
+            ),
+      lobbyConnections: jsonSerialization['lobbyConnections'] == null
+          ? null
+          : _i8.Protocol().deserialize<List<_i7.GameLobbyConnection>>(
+              jsonSerialization['lobbyConnections'],
             ),
     );
   }
@@ -215,6 +223,8 @@ abstract class GameMatch
 
   List<_i6.GameReplayEntry>? replayEntries;
 
+  List<_i7.GameLobbyConnection>? lobbyConnections;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -251,6 +261,7 @@ abstract class GameMatch
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
     List<_i6.GameReplayEntry>? replayEntries,
+    List<_i7.GameLobbyConnection>? lobbyConnections,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -293,6 +304,10 @@ abstract class GameMatch
         ),
       if (replayEntries != null)
         'replayEntries': replayEntries?.toJson(valueToJson: (v) => v.toJson()),
+      if (lobbyConnections != null)
+        'lobbyConnections': lobbyConnections?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
     };
   }
 
@@ -326,6 +341,7 @@ abstract class GameMatch
     _i4.GameEventIncludeList? events,
     _i5.GameRecipientSnapshotIncludeList? recipientSnapshots,
     _i6.GameReplayEntryIncludeList? replayEntries,
+    _i7.GameLobbyConnectionIncludeList? lobbyConnections,
   }) {
     return GameMatchInclude._(
       participants: participants,
@@ -333,6 +349,7 @@ abstract class GameMatch
       events: events,
       recipientSnapshots: recipientSnapshots,
       replayEntries: replayEntries,
+      lobbyConnections: lobbyConnections,
     );
   }
 
@@ -395,6 +412,7 @@ class _GameMatchImpl extends GameMatch {
     List<_i4.GameEvent>? events,
     List<_i5.GameRecipientSnapshot>? recipientSnapshots,
     List<_i6.GameReplayEntry>? replayEntries,
+    List<_i7.GameLobbyConnection>? lobbyConnections,
   }) : super._(
          id: id,
          publicId: publicId,
@@ -425,6 +443,7 @@ class _GameMatchImpl extends GameMatch {
          events: events,
          recipientSnapshots: recipientSnapshots,
          replayEntries: replayEntries,
+         lobbyConnections: lobbyConnections,
        );
 
   /// Returns a shallow copy of this [GameMatch]
@@ -461,6 +480,7 @@ class _GameMatchImpl extends GameMatch {
     Object? events = _Undefined,
     Object? recipientSnapshots = _Undefined,
     Object? replayEntries = _Undefined,
+    Object? lobbyConnections = _Undefined,
   }) {
     return GameMatch(
       id: id is int? ? id : this.id,
@@ -518,6 +538,9 @@ class _GameMatchImpl extends GameMatch {
       replayEntries: replayEntries is List<_i6.GameReplayEntry>?
           ? replayEntries
           : this.replayEntries?.map((e0) => e0.copyWith()).toList(),
+      lobbyConnections: lobbyConnections is List<_i7.GameLobbyConnection>?
+          ? lobbyConnections
+          : this.lobbyConnections?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -818,6 +841,10 @@ class GameMatchTable extends _i1.Table<int?> {
 
   _i1.ManyRelation<_i6.GameReplayEntryTable>? _replayEntries;
 
+  _i7.GameLobbyConnectionTable? ___lobbyConnections;
+
+  _i1.ManyRelation<_i7.GameLobbyConnectionTable>? _lobbyConnections;
+
   _i2.GameParticipantTable get __participants {
     if (___participants != null) return ___participants!;
     ___participants = _i1.createRelationTable(
@@ -881,6 +908,19 @@ class GameMatchTable extends _i1.Table<int?> {
           _i6.GameReplayEntryTable(tableRelation: foreignTableRelation),
     );
     return ___replayEntries!;
+  }
+
+  _i7.GameLobbyConnectionTable get __lobbyConnections {
+    if (___lobbyConnections != null) return ___lobbyConnections!;
+    ___lobbyConnections = _i1.createRelationTable(
+      relationFieldName: '__lobbyConnections',
+      field: GameMatch.t.id,
+      foreignField: _i7.GameLobbyConnection.t.matchId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i7.GameLobbyConnectionTable(tableRelation: foreignTableRelation),
+    );
+    return ___lobbyConnections!;
   }
 
   _i1.ManyRelation<_i2.GameParticipantTable> get participants {
@@ -978,6 +1018,25 @@ class GameMatchTable extends _i1.Table<int?> {
     return _replayEntries!;
   }
 
+  _i1.ManyRelation<_i7.GameLobbyConnectionTable> get lobbyConnections {
+    if (_lobbyConnections != null) return _lobbyConnections!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'lobbyConnections',
+      field: GameMatch.t.id,
+      foreignField: _i7.GameLobbyConnection.t.matchId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i7.GameLobbyConnectionTable(tableRelation: foreignTableRelation),
+    );
+    _lobbyConnections = _i1.ManyRelation<_i7.GameLobbyConnectionTable>(
+      tableWithRelations: relationTable,
+      table: _i7.GameLobbyConnectionTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
+    );
+    return _lobbyConnections!;
+  }
+
   @override
   List<_i1.Column> get columns => [
     id,
@@ -1023,6 +1082,9 @@ class GameMatchTable extends _i1.Table<int?> {
     if (relationField == 'replayEntries') {
       return __replayEntries;
     }
+    if (relationField == 'lobbyConnections') {
+      return __lobbyConnections;
+    }
     return null;
   }
 }
@@ -1034,12 +1096,14 @@ class GameMatchInclude extends _i1.IncludeObject {
     _i4.GameEventIncludeList? events,
     _i5.GameRecipientSnapshotIncludeList? recipientSnapshots,
     _i6.GameReplayEntryIncludeList? replayEntries,
+    _i7.GameLobbyConnectionIncludeList? lobbyConnections,
   }) {
     _participants = participants;
     _commands = commands;
     _events = events;
     _recipientSnapshots = recipientSnapshots;
     _replayEntries = replayEntries;
+    _lobbyConnections = lobbyConnections;
   }
 
   _i2.GameParticipantIncludeList? _participants;
@@ -1052,6 +1116,8 @@ class GameMatchInclude extends _i1.IncludeObject {
 
   _i6.GameReplayEntryIncludeList? _replayEntries;
 
+  _i7.GameLobbyConnectionIncludeList? _lobbyConnections;
+
   @override
   Map<String, _i1.Include?> get includes => {
     'participants': _participants,
@@ -1059,6 +1125,7 @@ class GameMatchInclude extends _i1.IncludeObject {
     'events': _events,
     'recipientSnapshots': _recipientSnapshots,
     'replayEntries': _replayEntries,
+    'lobbyConnections': _lobbyConnections,
   };
 
   @override
@@ -1513,6 +1580,31 @@ class GameMatchAttachRepository {
       transaction: transaction,
     );
   }
+
+  /// Creates a relation between this [GameMatch] and the given [GameLobbyConnection]s
+  /// by setting each [GameLobbyConnection]'s foreign key `matchId` to refer to this [GameMatch].
+  Future<void> lobbyConnections(
+    _i1.DatabaseSession session,
+    GameMatch gameMatch,
+    List<_i7.GameLobbyConnection> gameLobbyConnection, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameLobbyConnection.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('gameLobbyConnection.id');
+    }
+    if (gameMatch.id == null) {
+      throw ArgumentError.notNull('gameMatch.id');
+    }
+
+    var $gameLobbyConnection = gameLobbyConnection
+        .map((e) => e.copyWith(matchId: gameMatch.id))
+        .toList();
+    await session.db.update<_i7.GameLobbyConnection>(
+      $gameLobbyConnection,
+      columns: [_i7.GameLobbyConnection.t.matchId],
+      transaction: transaction,
+    );
+  }
 }
 
 class GameMatchAttachRowRepository {
@@ -1631,6 +1723,31 @@ class GameMatchAttachRowRepository {
     await session.db.updateRow<_i6.GameReplayEntry>(
       $gameReplayEntry,
       columns: [_i6.GameReplayEntry.t.matchId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [GameMatch] and the given [GameLobbyConnection]
+  /// by setting the [GameLobbyConnection]'s foreign key `matchId` to refer to this [GameMatch].
+  Future<void> lobbyConnections(
+    _i1.DatabaseSession session,
+    GameMatch gameMatch,
+    _i7.GameLobbyConnection gameLobbyConnection, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (gameLobbyConnection.id == null) {
+      throw ArgumentError.notNull('gameLobbyConnection.id');
+    }
+    if (gameMatch.id == null) {
+      throw ArgumentError.notNull('gameMatch.id');
+    }
+
+    var $gameLobbyConnection = gameLobbyConnection.copyWith(
+      matchId: gameMatch.id,
+    );
+    await session.db.updateRow<_i7.GameLobbyConnection>(
+      $gameLobbyConnection,
+      columns: [_i7.GameLobbyConnection.t.matchId],
       transaction: transaction,
     );
   }

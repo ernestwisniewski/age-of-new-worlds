@@ -86,3 +86,8 @@ final class MultiplayerSessionException implements Exception {
 abstract interface class MultiplayerMatchDocumentSource {
   Future<MultiplayerMatchDocuments> load(MultiplayerMatchSetupView setup);
 }
+
+/// Live lobby presence is separate from durable membership and readiness.
+abstract interface class MultiplayerLobbyWatchPort {
+  Stream<MultiplayerMatchLobbyView> watchLobby(String matchId);
+}

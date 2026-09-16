@@ -1,16 +1,22 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:aonw_server/src/game/game_endpoint.dart';
 import 'package:aonw_server/src/game/native/game_native_runtime.dart';
 import 'package:aonw_server/src/generated/protocol.dart' as game;
+import 'package:serverpod/serverpod.dart';
 import 'package:test/test.dart';
 
+import 'lobby_watch_fixture.dart';
 import 'test_tools/serverpod_test_tools.dart';
+
+part 'game_lobby_presence_cases.dart';
 
 void main() {
   withServerpod(
     'Game lobby endpoint',
     (sessionBuilder, _) {
+      lobbyPresenceCases(sessionBuilder);
       test('rejects an AI-controlled creator seat', () async {
         addTearDown(shutdownAonwGameNativeHost);
         final owner = sessionBuilder

@@ -11,6 +11,7 @@ part 'game_match_service_creation.dart';
 part 'game_match_service_history.dart';
 part 'game_match_service_lifecycle.dart';
 part 'game_match_service_membership.dart';
+part 'game_match_service_presence.dart';
 part 'game_match_service_queries.dart';
 part 'game_match_service_replay_journal.dart';
 part 'game_match_service_replay.dart';
@@ -61,6 +62,9 @@ final class GameMatchService {
 
   Future<GameLobbyView> lobby(Session session, String matchId) =>
       _lobby(session, matchId);
+
+  Stream<GameLobbyView> watchLobby(Session session, String matchId) =>
+      _watchLobby(session, matchId);
 
   Future<GameLobbyView> setReady(Session session, String matchId, bool ready) =>
       _setReady(session, matchId, ready);

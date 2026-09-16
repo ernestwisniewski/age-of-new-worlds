@@ -118,6 +118,7 @@
     }
   },
   "multiplayerWaitingRoomTitle": "Warteraum der Partie",
+  "multiplayerPresence": "{phase, select, ready{Bereit} connected{Verbunden} connecting{Verbindung wird hergestellt} reconnecting{Verbindung wird wiederhergestellt} offline{Offline} open{Freier Platz} other{Offline}}",
   "multiplayerReady": "Bereit",
   "multiplayerNotReady": "Nicht bereit",
   "multiplayerSeatOpen": "Freier Spielerplatz",
@@ -127,7 +128,7 @@
   "multiplayerCurrentPlayer": "Du",
   "markReady": "Bereitschaft bestätigen",
   "markNotReady": "Bereitschaft zurücknehmen",
-  "waitingForPlayers": "Alle menschlichen Spielerplätze müssen belegt und bereit sein, bevor die Partie beginnt.",
+  "waitingForPlayers": "Alle menschlichen Spieler müssen verbunden und bereit sein, bevor das Spiel beginnt.",
   "refreshMatch": "Partie aktualisieren",
   "leaveMultiplayerMatch": "Partie verlassen",
   "multiplayerResignTitle": "Diese Partie aufgeben?",
@@ -200,7 +201,7 @@
   "submitTurn": "Runde bestätigen",
   "reconnect": "Erneut verbinden",
   "backToLobby": "Zurück zur Lobby",
-  "multiplayerFailure": "{code, select, client_update_required{Aktualisiere den Client, bevor du eine Verbindung herstellst.} authentication_required{Melde dich erneut an, um fortzufahren.} invalid_authentication_response{Die Anmeldeantwort war ungültig.} authentication_identity_changed{Die Kontoidentität hat sich während der Aktualisierung geändert.} connection_interrupted{Die Verbindung wurde unterbrochen. Verbinde dich erneut, um die Partie zu synchronisieren.} invalid_server_response{Die Serverantwort hat die Prüfung nicht bestanden.} invalid_command_sequence{Die Befehlsfolge war nicht lückenlos.} invalid_resync_sequence{Der synchronisierte Zustand ist auf einen älteren Stand zurückgefallen.} invalid_match_lifecycle{Die Antwort zum Verlauf der Partie war widersprüchlich.} match_not_found{Die Partie wurde nicht gefunden.} match_not_started{Der Gastgeber hat die Partie noch nicht gestartet.} match_already_started{Die Partie hat bereits begonnen.} host_required{Nur der Gastgeber kann diese Aktion ausführen.} lobby_not_ready{Alle menschlichen Spieler müssen beitreten und bereit sein.} participant_not_claimable{Computergesteuerte Plätze können nicht übernommen werden.} participant_not_active{Dieser Teilnehmer ist nicht mehr aktiv.} invalid_kick_target{Der Gastgeber kann sich nicht selbst entfernen.} player_seat_taken{Dieser Spielerplatz ist bereits belegt.} other{Die Mehrspieler-Anfrage konnte nicht abgeschlossen werden.}}",
+  "multiplayerFailure": "{code, select, client_update_required{Aktualisiere den Client, bevor du eine Verbindung herstellst.} authentication_required{Melde dich erneut an, um fortzufahren.} invalid_authentication_response{Die Anmeldeantwort war ungültig.} authentication_identity_changed{Die Kontoidentität hat sich während der Aktualisierung geändert.} connection_interrupted{Die Verbindung wurde unterbrochen. Verbinde dich erneut, um die Partie zu synchronisieren.} invalid_server_response{Die Serverantwort hat die Prüfung nicht bestanden.} invalid_command_sequence{Die Befehlsfolge war nicht lückenlos.} invalid_resync_sequence{Der synchronisierte Zustand ist auf einen älteren Stand zurückgefallen.} invalid_match_lifecycle{Die Antwort zum Verlauf der Partie war widersprüchlich.} match_not_found{Die Partie wurde nicht gefunden.} match_not_started{Der Gastgeber hat die Partie noch nicht gestartet.} match_already_started{Die Partie hat bereits begonnen.} host_required{Nur der Gastgeber kann diese Aktion ausführen.} lobby_not_ready{Alle menschlichen Spieler müssen verbunden und bereit sein, bevor das Spiel beginnt.} participant_not_claimable{Computergesteuerte Plätze können nicht übernommen werden.} participant_not_active{Dieser Teilnehmer ist nicht mehr aktiv.} invalid_kick_target{Der Gastgeber kann sich nicht selbst entfernen.} player_seat_taken{Dieser Spielerplatz ist bereits belegt.} other{Die Mehrspieler-Anfrage konnte nicht abgeschlossen werden.}}",
   "@multiplayerFailure": {
     "placeholders": {
       "code": {

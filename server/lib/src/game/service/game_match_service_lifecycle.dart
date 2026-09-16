@@ -8,7 +8,8 @@ Future<GameLobbyView> _lobby(Session session, String rawMatchId) async {
   );
   final participant = await _participant(session, match.id!, userIdentifier);
   final participants = await _matchParticipants(session, match.id!);
-  return _lobbyView(match, participant, participants);
+  final connected = await _connectedLobbyParticipants(session, match.id!);
+  return _lobbyView(match, participant, participants, connected);
 }
 
 Future<GameLobbyView> _setReady(
@@ -44,7 +45,12 @@ Future<GameLobbyView> _setReady(
       transaction: transaction,
       lock: true,
     );
-    return _lobbyView(match, updated, participants);
+    final connected = await _connectedLobbyParticipants(
+      session,
+      match.id!,
+      transaction: transaction,
+    );
+    return _lobbyView(match, updated, participants, connected);
   });
 }
 
@@ -74,11 +80,16 @@ Future<GameLobbyView> _startMatch(Session session, String rawMatchId) {
       transaction: transaction,
       lock: true,
     );
-    final lobby = _lobbyView(match, caller, participants);
+    final connected = await _connectedLobbyParticipants(
+      session,
+      match.id!,
+      transaction: transaction,
+    );
+    final lobby = _lobbyView(match, caller, participants, connected);
     if (!lobby.canStart) {
       throw _error(
         'lobby_not_ready',
-        'Every human participant must claim a seat and be ready.',
+        'Every human participant must be connected and ready.',
       );
     }
     final now = DateTime.now().toUtc();
@@ -92,7 +103,7 @@ Future<GameLobbyView> _startMatch(Session session, String rawMatchId) {
       ),
       transaction: transaction,
     );
-    return _lobbyView(started, caller, participants);
+    return _lobbyView(started, caller, participants, connected);
   });
 }
 
@@ -189,6 +200,7 @@ GameLobbyView _lobbyView(
   GameMatch match,
   GameParticipant caller,
   List<GameParticipant> claims,
+  Set<_ConnectedLobbyParticipant> connected,
 ) {
   final hostPlayerId = match.hostPlayerId;
   if (hostPlayerId == null) {
@@ -199,40 +211,20 @@ GameLobbyView _lobbyView(
     for (final claim in claims.where(_isActiveParticipant))
       claim.playerId: claim,
   };
-  final participants = <GameLobbyParticipantView>[];
-  var everyHumanReady = true;
-  for (final (index, value) in canonical.indexed) {
-    final participant = _object(
-      value,
-      r'$.state.matchIdentity.participants'
-      '[$index]',
-    );
-    final playerId = _identifier(
-      _string(participant['id'], r'$.participant.id'),
-      'playerId',
-    );
-    final kind = _string(participant['kind'], r'$.participant.kind');
-    final claim = claimsByPlayer[playerId];
-    final human = kind == 'human';
-    final ready = !human || claim?.readyAt != null;
-    if (human && (claim == null || !ready)) everyHumanReady = false;
-    participants.add(
-      GameLobbyParticipantView(
-        playerId: playerId,
-        name: _string(participant['name'], r'$.participant.name'),
-        kind: kind,
-        country: _string(participant['country'], r'$.participant.country'),
-        colorValue: _nonNegativeInt(
-          participant['colorValue'],
-          r'$.participant.colorValue',
-        ),
-        isHost: playerId == hostPlayerId,
-        isClaimed: claim != null,
-        isReady: ready,
-        isCurrentUser: claim?.userIdentifier == caller.userIdentifier,
+  final participants = [
+    for (final (index, value) in canonical.indexed)
+      _lobbyParticipantView(
+        value,
+        index,
+        claimsByPlayer,
+        hostPlayerId,
+        caller,
+        connected,
       ),
-    );
-  }
+  ];
+  final everyHumanReady = participants
+      .where((p) => p.kind == 'human')
+      .every((p) => p.isConnected && p.isReady);
   return GameLobbyView(
     match: _view(match),
     participants: participants,
@@ -240,6 +232,47 @@ GameLobbyView _lobbyView(
         match.state == _matchStateLobby &&
         caller.playerId == hostPlayerId &&
         everyHumanReady,
+  );
+}
+
+GameLobbyParticipantView _lobbyParticipantView(
+  Object? value,
+  int index,
+  Map<String, GameParticipant> claimsByPlayer,
+  String hostPlayerId,
+  GameParticipant caller,
+  Set<_ConnectedLobbyParticipant> connected,
+) {
+  final participant = _object(
+    value,
+    r'$.state.matchIdentity.participants'
+    '[$index]',
+  );
+  final playerId = _identifier(
+    _string(participant['id'], r'$.participant.id'),
+    'playerId',
+  );
+  final kind = _string(participant['kind'], r'$.participant.kind');
+  final claim = claimsByPlayer[playerId];
+  final human = kind == 'human';
+  final ready = !human || claim?.readyAt != null;
+  final isConnected =
+      claim != null &&
+      connected.contains((claim.id!, claim.userIdentifier, claim.joinedAt));
+  return GameLobbyParticipantView(
+    playerId: playerId,
+    name: _string(participant['name'], r'$.participant.name'),
+    kind: kind,
+    country: _string(participant['country'], r'$.participant.country'),
+    colorValue: _nonNegativeInt(
+      participant['colorValue'],
+      r'$.participant.colorValue',
+    ),
+    isHost: playerId == hostPlayerId,
+    isClaimed: claim != null,
+    isConnected: isConnected,
+    isReady: ready,
+    isCurrentUser: claim?.userIdentifier == caller.userIdentifier,
   );
 }
 

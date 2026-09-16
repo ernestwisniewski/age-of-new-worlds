@@ -236,6 +236,20 @@ class AonwLocalizationsNl extends AonwLocalizations {
   String get multiplayerWaitingRoomTitle => 'Wachtkamer van de partij';
 
   @override
+  String multiplayerPresence(String phase) {
+    String _temp0 = intl.Intl.selectLogic(phase, {
+      'ready': 'Gereed',
+      'connected': 'Verbonden',
+      'connecting': 'Verbinden',
+      'reconnecting': 'Opnieuw verbinden',
+      'offline': 'Offline',
+      'open': 'Vrije plek',
+      'other': 'Offline',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get multiplayerReady => 'Klaar';
 
   @override
@@ -264,7 +278,7 @@ class AonwLocalizationsNl extends AonwLocalizations {
 
   @override
   String get waitingForPlayers =>
-      'Alle menselijke spelersplaatsen moeten bezet en klaar zijn voordat de partij begint.';
+      'Elke menselijke speler moet verbonden en gereed zijn voordat de wedstrijd begint.';
 
   @override
   String get refreshMatch => 'Partij vernieuwen';
@@ -374,7 +388,7 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'match_already_started': 'De partij is al begonnen.',
       'host_required': 'Alleen de host kan deze actie uitvoeren.',
       'lobby_not_ready':
-          'Alle menselijke spelers moeten deelnemen en klaar zijn.',
+          'Elke menselijke speler moet verbonden en gereed zijn voordat de wedstrijd begint.',
       'participant_not_claimable':
           'Computerbestuurde plaatsen kunnen niet worden overgenomen.',
       'participant_not_active': 'Die deelnemer is niet meer actief.',

@@ -238,6 +238,20 @@ class AonwLocalizationsPl extends AonwLocalizations {
   String get multiplayerWaitingRoomTitle => 'Poczekalnia rozgrywki';
 
   @override
+  String multiplayerPresence(String phase) {
+    String _temp0 = intl.Intl.selectLogic(phase, {
+      'ready': 'Gotowy',
+      'connected': 'Połączony',
+      'connecting': 'Łączenie',
+      'reconnecting': 'Ponowne łączenie',
+      'offline': 'Offline',
+      'open': 'Wolne miejsce',
+      'other': 'Offline',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get multiplayerReady => 'Gotowy';
 
   @override
@@ -266,7 +280,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get waitingForPlayers =>
-      'Każde miejsce człowieka musi być zajęte, a wszyscy gracze gotowi przed startem.';
+      'Każdy gracz musi być połączony i gotowy przed rozpoczęciem meczu.';
 
   @override
   String get refreshMatch => 'Odśwież rozgrywkę';
@@ -373,7 +387,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'match_already_started': 'Rozgrywka została już rozpoczęta.',
       'host_required': 'Tylko host może wykonać tę akcję.',
       'lobby_not_ready':
-          'Każdy gracz-człowiek musi dołączyć i zgłosić gotowość.',
+          'Każdy gracz musi być połączony i gotowy przed rozpoczęciem meczu.',
       'participant_not_claimable':
           'Nie można zająć miejsca sterowanego przez komputer.',
       'participant_not_active': 'Ten uczestnik nie jest już aktywny.',

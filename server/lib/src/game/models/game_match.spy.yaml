@@ -29,6 +29,7 @@ fields:
   events: List<GameEvent>?, relation(name=game_match_events), scope=serverOnly
   recipientSnapshots: List<GameRecipientSnapshot>?, relation(name=game_match_recipient_snapshots), scope=serverOnly
   replayEntries: List<GameReplayEntry>?, relation(name=game_match_replay_entries), scope=serverOnly
+  lobbyConnections: List<GameLobbyConnection>?, relation(name=game_match_lobby_connections), scope=serverOnly
 indexes:
   aonw_game_match_public_id_idx:
     fields: publicId

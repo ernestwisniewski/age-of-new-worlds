@@ -19,3 +19,21 @@ extension _ServerpodAccountAuthentication on ServerpodMultiplayerSession {
     await _tokenStore.clear();
   }
 }
+
+extension _SessionReconnection on ServerpodMultiplayerSession {
+  Future<void> _reconnectAuthentication() async {
+    _ensureOpen();
+    final refreshToken = _refreshToken ?? await _tokenStore.readRefreshToken();
+    if (refreshToken == null || refreshToken.isEmpty) {
+      throw const MultiplayerSessionException(
+        code: 'authentication_required',
+        message: 'The authenticated session is unavailable.',
+      );
+    }
+    try {
+      await _rotate(refreshToken);
+    } on Object catch (error, stackTrace) {
+      throw _translate(error, stackTrace);
+    }
+  }
+}

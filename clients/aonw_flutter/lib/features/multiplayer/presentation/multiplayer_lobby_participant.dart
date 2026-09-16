@@ -1,15 +1,20 @@
 part of 'multiplayer_screen.dart';
 
 final class _LobbyParticipantTile extends StatelessWidget {
-  const _LobbyParticipantTile({required this.participant});
+  const _LobbyParticipantTile({
+    required this.participant,
+    required this.connection,
+  });
 
   final MultiplayerLobbyParticipantView participant;
+  final LobbyConnectionPhase connection;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.aonwL10n;
     final human = participant.kind == 'human';
     final ready = participant.isReady;
+    final statusName = _statusName(human, ready);
     final title = participant.isClaimed || !human
         ? participant.name
         : l10n.multiplayerSeatOpen;
@@ -22,8 +27,13 @@ final class _LobbyParticipantTile extends StatelessWidget {
       ].join(' · '),
     );
     final status = Chip(
-      avatar: Icon(ready ? Icons.check : Icons.hourglass_empty, size: 18),
-      label: Text(ready ? l10n.multiplayerReady : l10n.multiplayerNotReady),
+      avatar: Icon(switch (statusName) {
+        'ready' => Icons.check,
+        'connected' => Icons.wifi,
+        'offline' => Icons.wifi_off,
+        _ => Icons.hourglass_empty,
+      }, size: 18),
+      label: Text(l10n.multiplayerPresence(statusName)),
     );
     return Container(
       margin: const EdgeInsets.only(bottom: AonwSpacing.sm),
@@ -73,6 +83,17 @@ final class _LobbyParticipantTile extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _statusName(bool human, bool ready) {
+    if (!human) return 'ready';
+    if (!participant.isClaimed) return 'open';
+    if (participant.isCurrentUser &&
+        connection != LobbyConnectionPhase.connected) {
+      return connection.name;
+    }
+    if (!participant.isConnected) return 'offline';
+    return ready ? 'ready' : 'connected';
   }
 
   Widget _avatar(bool human) => CircleAvatar(

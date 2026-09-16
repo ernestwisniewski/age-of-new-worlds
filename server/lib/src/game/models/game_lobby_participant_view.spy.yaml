@@ -7,5 +7,6 @@ fields:
   colorValue: int
   isHost: bool
   isClaimed: bool
+  isConnected: bool
   isReady: bool
   isCurrentUser: bool
