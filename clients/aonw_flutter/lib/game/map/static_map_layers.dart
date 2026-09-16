@@ -252,9 +252,11 @@ final class MapReferenceLayerComponent extends Component
   void render(ui.Canvas canvas) {
     final cache = _cache;
     if (cache == null || _pages.isEmpty) return;
+    final clip = mapCanvasClipBounds(canvas);
     canvas.save();
     canvas.clipPath(cache.clipPath);
     for (final page in _pages) {
+      if (!page.destination.inflate(1).overlaps(clip)) continue;
       canvas.drawImageRect(page.image, page.source, page.destination, _paint);
     }
     canvas.restore();

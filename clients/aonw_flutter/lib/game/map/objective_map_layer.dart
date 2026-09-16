@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
+import 'map_canvas_clip.dart';
 import 'static_map_layers.dart';
 
 /// Static authored objective markers for the current map.
@@ -93,21 +94,25 @@ final class MapObjectiveComponent extends PositionComponent {
     ..style = ui.PaintingStyle.stroke
     ..strokeWidth = 2;
   static const sharedPaintCount = 5;
+  static const _visualBounds = ui.Rect.fromLTWH(0, 0, _diameter, _diameter);
+  static final _paths = {
+    for (final type in MapObjectiveType.values) type: _buildPath(type),
+  };
 
   final MapObjectiveView _objective;
+  var _paintCount = 0;
+
+  @visibleForTesting
+  int get debugPaintCount => _paintCount;
 
   @visibleForTesting
   MapObjectiveView get debugObjective => _objective;
 
   @override
   void render(ui.Canvas canvas) {
-    const center = ui.Offset(_diameter / 2, _diameter / 2);
-    final path = switch (_objective.type) {
-      MapObjectiveType.ruins => _diamond(center),
-      MapObjectiveType.strategicPass => _triangle(center),
-      MapObjectiveType.holySite => _circle(center),
-      MapObjectiveType.legendaryResource => _star(center),
-    };
+    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
+    _paintCount++;
+    final path = _paths[_objective.type]!;
     final paint = switch (_objective.type) {
       MapObjectiveType.ruins => _ruinsPaint,
       MapObjectiveType.strategicPass => _strategicPassPaint,
@@ -116,6 +121,16 @@ final class MapObjectiveComponent extends PositionComponent {
     };
     canvas.drawPath(path, paint);
     canvas.drawPath(path, _outlinePaint);
+  }
+
+  static ui.Path _buildPath(MapObjectiveType type) {
+    const center = ui.Offset(_diameter / 2, _diameter / 2);
+    return switch (type) {
+      MapObjectiveType.ruins => _diamond(center),
+      MapObjectiveType.strategicPass => _triangle(center),
+      MapObjectiveType.holySite => _circle(center),
+      MapObjectiveType.legendaryResource => _star(center),
+    };
   }
 
   static ui.Path _diamond(ui.Offset center) => ui.Path()

@@ -116,6 +116,25 @@ Tests cover cold offscreen components, camera exit/re-entry, shared ownership,
 stale async completion and scene removal. Native frame and memory measurements
 remain separate from these lifetime assertions.
 
+## Static detail culling
+
+Terrain/resource icons and height labels are filtered against the local camera
+clip before drawing. Bounds include the circular unloaded fallback and the height
+label's one-pixel outline. Camera movement does not rebuild their placements.
+Artifacts and authored objectives retain their components while offscreen and
+reuse their vector paths; objective paths are shared by the four marker types.
+Reference image pages outside the clip issue no image draw.
+
+Tests exercise camera travel between opposite map corners, return through the
+cinematic projection, fully clipped details, fallback-circle edges and height
+outlines. They verify retained component identity and unchanged placement build
+counts. Existing map goldens remain the visual regression boundary.
+
+The remaining audit includes region batching of aggregate grid, wall, road and
+fog paths, plus contextual management/threat overlays. These are not covered by
+the static detail counters. The native production-particle and camera workloads
+retain their existing frame and memory limits and require separate passing runs.
+
 ## Outstanding evidence
 
 The inventory accounts for every visual layer in the reference component factory

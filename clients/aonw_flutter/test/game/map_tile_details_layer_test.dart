@@ -10,6 +10,63 @@ import 'package:flutter_test/flutter_test.dart';
 import '../support/map_test_fixture.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('culls tile details without rebuilding their geometry', () {
+    final map = _withTileDetails(testMapScene(cols: 2, rows: 2).map);
+    final layer = MapTileDetailsLayerComponent()
+      ..applyMap(map, MapStaticRenderCache.build(map))
+      ..setOptions(
+        const MapDisplayOptions(
+          showTerrainIcons: true,
+          showResourceIcons: true,
+          showHeightBadges: true,
+        ),
+      );
+    addTearDown(layer.clearLayer);
+    _render(layer, const ui.Rect.fromLTWH(-200, -200, 1000, 1000));
+    expect(layer.debugRenderedDetails, (icons: 7, badges: 1));
+    _render(layer, const ui.Rect.fromLTWH(2000, 2000, 100, 100));
+    expect(layer.debugRenderedDetails, (icons: 0, badges: 0));
+    _render(layer, const ui.Rect.fromLTWH(-200, -200, 1000, 1000));
+    expect(layer.debugRenderedDetails, (icons: 7, badges: 1));
+    expect(layer.debugCacheUpdateCount, 1);
+  });
+
+  test('keeps fallback circles where their projected sprite is clipped', () {
+    final map = _withTileDetails(testMapScene(cols: 2, rows: 2).map);
+    final cache = MapStaticRenderCache.build(map);
+    final layer = MapTileDetailsLayerComponent()..applyMap(map, cache);
+    addTearDown(layer.clearLayer);
+    final center = cache.projection.hexTopFaceCenter((col: 0, row: 0));
+    final icon = MapTileDetailLayout.resourceIcons(
+      topCenter: ui.Offset(center.x, center.y),
+      iconCount: 2,
+    ).first;
+    final clip = ui.Rect.fromLTWH(icon.center.dx - 1, icon.top - 3, 2, 1);
+    expect(clip.overlaps(icon), isFalse);
+    _render(layer, clip);
+    expect(layer.debugRenderedDetails, (icons: 1, badges: 0));
+  });
+
+  test('retains the height outline at the camera edge', () {
+    final map = _withTileDetails(testMapScene(cols: 2, rows: 2).map);
+    final cache = MapStaticRenderCache.build(map);
+    final layer = MapTileDetailsLayerComponent()
+      ..applyMap(map, cache)
+      ..setOptions(
+        const MapDisplayOptions(
+          showResourceIcons: false,
+          showHeightBadges: true,
+        ),
+      );
+    addTearDown(layer.clearLayer);
+    final center = cache.projection.hexTopFaceCenter((col: 0, row: 0));
+    // The 18 px paragraph starts 48 px left of the hex's top-face center.
+    _render(layer, ui.Rect.fromLTWH(center.x - 49, center.y - 30, 1, 60));
+    expect(layer.debugRenderedDetails, (icons: 0, badges: 1));
+  });
+
   test('matches projected tile detail geometry', () {
     const center = ui.Offset(100, 100);
     final terrain = MapTileDetailLayout.terrainIcons(
@@ -74,6 +131,13 @@ void main() {
     layer.setOptions(const MapDisplayOptions(showResourceIcons: false));
     expect(layer.isVisible, isFalse);
   });
+}
+
+void _render(MapTileDetailsLayerComponent layer, ui.Rect clip) {
+  final recorder = ui.PictureRecorder();
+  final canvas = ui.Canvas(recorder)..clipRect(clip, doAntiAlias: false);
+  layer.render(canvas);
+  recorder.endRecording().dispose();
 }
 
 MapView _withTileDetails(MapView source) => MapView(

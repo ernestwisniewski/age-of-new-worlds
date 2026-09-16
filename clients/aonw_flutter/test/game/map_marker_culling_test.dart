@@ -1,7 +1,9 @@
 import 'dart:ui' as ui;
 
+import 'package:aonw_flutter/features/artifacts/read_model/artifact_view.dart';
 import 'package:aonw_flutter/features/map/application/map_interaction_state.dart';
 import 'package:aonw_flutter/features/map/presentation/map_render_snapshot.dart';
+import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/workers/read_model/worker_view.dart';
 import 'package:aonw_flutter/game/aonw_flame_game.dart';
@@ -23,6 +25,25 @@ void main() {
           testVisibleUnit(id: 'near'),
           testVisibleUnit(id: 'far', coordinate: (col: 39, row: 29)),
         ],
+        objectives: [
+          for (final entry in _locations.entries)
+            MapObjectiveView(
+              id: entry.key,
+              type: MapObjectiveType.legendaryResource,
+              coordinate: entry.value,
+              requiredHoldTurns: 2,
+              victoryPoints: 3,
+              goldPerTurn: 1,
+            ),
+        ],
+        artifacts: [
+          for (final entry in _locations.entries)
+            WorldArtifactView(
+              id: entry.key,
+              kind: WorldArtifactKindView.ancientImperialCrown,
+              location: MapArtifactLocationView(entry.value),
+            ),
+        ],
       );
       game.onGameResize(Vector2(640, 360));
       game.replaceScene(
@@ -36,17 +57,43 @@ void main() {
       await game.ready();
       final near = game.world.unitLayer.debugComponentForUnit('near')!;
       final far = game.world.unitLayer.debugComponentForUnit('far')!;
+      final objectives = game.world.objectiveLayer;
+      final artifacts = game.world.artifactLayer;
+      final nearObjective = objectives.debugComponentForObjective('near')!;
+      final farObjective = objectives.debugComponentForObjective('far')!;
+      final nearArtifact = artifacts.debugComponentForArtifact('near')!;
+      final farArtifact = artifacts.debugComponentForArtifact('far')!;
       _renderCamera(game);
       expect(near.debugPaintCount, 1);
       expect(far.debugPaintCount, 0);
+      expect(nearObjective.debugPaintCount, 1);
+      expect(nearArtifact.debugPaintCount, 1);
+      expect(farObjective.debugPaintCount, 0);
+      expect(farArtifact.debugPaintCount, 0);
       game.mapCamera.centerOnHex((col: 39, row: 29));
       game.onGameResize(Vector2(320, 240));
       _renderCamera(game);
       expect(near.debugPaintCount, 1);
       expect(far.debugPaintCount, 1);
+      expect(nearObjective.debugPaintCount, 1);
+      expect(nearArtifact.debugPaintCount, 1);
+      expect(farObjective.debugPaintCount, 1);
+      expect(farArtifact.debugPaintCount, 1);
       final viewport = game.camera.viewport;
       expect(viewport.containsLocalPoint(Vector2(319, 239)), isTrue);
       expect(viewport.containsLocalPoint(Vector2(321, 239)), isFalse);
+      game.setCinematicCamera(true);
+      game.mapCamera.centerOnHex(_locations['near']!);
+      _renderCamera(game);
+      expect(nearObjective.debugPaintCount, 2);
+      expect(nearArtifact.debugPaintCount, 2);
+      expect(farObjective.debugPaintCount, 1);
+      expect(farArtifact.debugPaintCount, 1);
+      expect(
+        objectives.debugComponentForObjective('near'),
+        same(nearObjective),
+      );
+      expect(artifacts.debugComponentForArtifact('near'), same(nearArtifact));
     },
   );
 
@@ -129,6 +176,8 @@ void main() {
     },
   );
 }
+
+const _locations = {'near': (col: 1, row: 0), 'far': (col: 39, row: 29)};
 
 void _renderCamera(AonwFlameGame game) {
   final recorder = ui.PictureRecorder();

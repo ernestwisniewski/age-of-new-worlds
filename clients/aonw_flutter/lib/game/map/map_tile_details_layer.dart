@@ -12,6 +12,7 @@ import '../../features/map/presentation/camera/map_viewport_projection.dart';
 import '../../features/map/presentation/geometry/odd_q_flat_top_geometry.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
+import 'map_canvas_clip.dart';
 import 'map_display_options.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_painter.dart';
@@ -185,6 +186,12 @@ final class MapTileDetailsLayerComponent extends Component
   var _framesScope = SpriteFrames.createScope();
   var _loadGeneration = 0;
   var _cacheUpdateCount = 0;
+  var _renderedIcons = 0;
+  var _renderedBadges = 0;
+
+  @visibleForTesting
+  ({int icons, int badges}) get debugRenderedDetails =>
+      (icons: _renderedIcons, badges: _renderedBadges);
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
@@ -305,20 +312,39 @@ final class MapTileDetailsLayerComponent extends Component
 
   @override
   void render(ui.Canvas canvas) {
+    _renderedIcons = 0;
+    _renderedBadges = 0;
+    final clip = mapCanvasClipBounds(canvas);
     if (_options.showHeightBadges) {
       for (final badge in _heightBadges) {
+        final bounds =
+            badge.offset &
+            ui.Size(badge.foreground.width, badge.foreground.height);
+        if (!bounds.inflate(2).overlaps(clip)) continue;
         for (final offset in _outlineOffsets) {
           canvas.drawParagraph(badge.outline, badge.offset + offset);
         }
         canvas.drawParagraph(badge.foreground, badge.offset);
+        _renderedBadges++;
       }
     }
-    if (_options.showTerrainIcons) _drawIcons(canvas, _terrainIcons);
-    if (_options.showResourceIcons) _drawIcons(canvas, _resourceIcons);
+    if (_options.showTerrainIcons) _drawIcons(canvas, _terrainIcons, clip);
+    if (_options.showResourceIcons) _drawIcons(canvas, _resourceIcons, clip);
   }
 
-  void _drawIcons(ui.Canvas canvas, List<MapTileIconPlacement> placements) {
+  void _drawIcons(
+    ui.Canvas canvas,
+    List<MapTileIconPlacement> placements,
+    ui.Rect clip,
+  ) {
     for (final placement in placements) {
+      // The unloaded fallback is circular, taller than the projected sprite.
+      final bounds = ui.Rect.fromCircle(
+        center: placement.destination.center,
+        radius: placement.destination.width / 2 + 1,
+      );
+      if (!bounds.overlaps(clip)) continue;
+      _renderedIcons++;
       final frame = _framesScope.cached(placement.frameId);
       if (frame == null) {
         canvas.drawCircle(

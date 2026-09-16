@@ -7,6 +7,7 @@ import '../../features/artifacts/read_model/artifact_view.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../presentation/flame_scene_patch.dart';
+import 'map_canvas_clip.dart';
 import 'static_map_layers.dart';
 
 final class MapArtifactLayerComponent extends Component with HasVisibility {
@@ -117,8 +118,19 @@ final class MapArtifactComponent extends PositionComponent {
     ..style = ui.PaintingStyle.stroke
     ..strokeWidth = 2;
   static const sharedPaintCount = 3;
+  static const _visualBounds = ui.Rect.fromLTWH(0, 0, _diameter, _diameter);
+  static final _path = ui.Path()
+    ..moveTo(_diameter / 2, 2)
+    ..lineTo(_diameter - 2, _diameter / 2)
+    ..lineTo(_diameter / 2, _diameter - 2)
+    ..lineTo(2, _diameter / 2)
+    ..close();
 
   WorldArtifactView _artifact;
+  var _paintCount = 0;
+
+  @visibleForTesting
+  int get debugPaintCount => _paintCount;
 
   @visibleForTesting
   WorldArtifactView get debugArtifact => _artifact;
@@ -130,15 +142,10 @@ final class MapArtifactComponent extends PositionComponent {
 
   @override
   void render(ui.Canvas canvas) {
-    const center = ui.Offset(_diameter / 2, _diameter / 2);
-    final path = ui.Path()
-      ..moveTo(center.dx, 2)
-      ..lineTo(_diameter - 2, center.dy)
-      ..lineTo(center.dx, _diameter - 2)
-      ..lineTo(2, center.dy)
-      ..close();
+    if (!mapCanvasClipBounds(canvas).overlaps(_visualBounds)) return;
+    _paintCount++;
     final excavation = _artifact.location is ExcavationArtifactLocationView;
-    canvas.drawPath(path, excavation ? _excavationPaint : _mapPaint);
-    canvas.drawPath(path, _outlinePaint);
+    canvas.drawPath(_path, excavation ? _excavationPaint : _mapPaint);
+    canvas.drawPath(_path, _outlinePaint);
   }
 }
