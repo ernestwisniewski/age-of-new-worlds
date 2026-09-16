@@ -9,8 +9,9 @@ use super::{
     AutoExploreOptionDto, CityExpansionCandidateDto, CitySpecializationOptionDto,
     CityYieldContributionDto, ClientLogisticsEvidenceDto, ClientSessionStampDto,
     DetachmentOptionDto, MerchantDestinationOptionDto, MovementStepViewDto, ProductionOptionDto,
-    StrategicResourceAmountDto, StrategicResourceSourceDto, UnitMovementExecutionDto,
-    UnitProductionOptionDto, WorkerAutomationOptionDto, WorkerImprovementOptionDto, YieldValueDto,
+    ProductionRushQuoteDto, StrategicResourceAmountDto, StrategicResourceSourceDto,
+    UnitMovementExecutionDto, UnitProductionOptionDto, WorkerAutomationOptionDto,
+    WorkerImprovementOptionDto, YieldValueDto,
 };
 use super::{ResearchOptionDto, ScienceYieldBreakdownDto};
 
@@ -246,6 +247,8 @@ pub enum ClientQueryResultDto {
         invested_production: i64,
         /// Stored overflow available to the next target.
         production_overflow: i64,
+        /// Exact price and availability of the next rush command.
+        rush_quote: ProductionRushQuoteDto,
         /// Complete building catalog in canonical order.
         buildings: Vec<ProductionOptionDto>,
         /// Complete unit catalog in canonical order.

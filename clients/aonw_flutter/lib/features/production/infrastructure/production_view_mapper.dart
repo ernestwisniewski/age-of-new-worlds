@@ -4,6 +4,8 @@ import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../read_model/production_view.dart';
 
+part 'production_metadata_mapper.dart';
+
 final class ProductionViewMapper {
   const ProductionViewMapper();
 
@@ -18,6 +20,7 @@ final class ProductionViewMapper {
     if (wire.cityId != cityId || player.controlledCityById(cityId) == null) {
       throw const FormatException('Production options mismatch request.');
     }
+    _validateProductionMetadata(wire);
     return ProductionOptionsView(
       stamp: _stamp(wire.stamp),
       cityId: cityId,
@@ -26,6 +29,11 @@ final class ProductionViewMapper {
           : _target(wire.currentTarget!),
       investedProduction: wire.investedProduction,
       productionOverflow: wire.productionOverflow,
+      rushQuote: ProductionRushQuoteView(
+        production: wire.rushQuote.production,
+        goldCost: wire.rushQuote.goldCost,
+        blocker: _optionalBlocker(wire.rushQuote.rejection),
+      ),
       buildings: [
         for (final value in wire.buildings)
           _option(value, AonwCityProductionTargetKind.building),
@@ -138,6 +146,13 @@ ProductionOptionView _option(
     target: _target(wire.target),
     cost: wire.cost,
     blocker: _optionalBlocker(wire.rejection),
+    forecast: ProductionForecastView(
+      investedProduction: wire.forecast.investedProduction,
+      productionPerTurn: wire.forecast.productionPerTurn,
+      estimatedTurns: wire.forecast.estimatedTurns,
+      projectOutput: wire.forecast.projectOutput,
+      spawnBlocked: wire.forecast.spawnBlocked,
+    ),
   );
 }
 

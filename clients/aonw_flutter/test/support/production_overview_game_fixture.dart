@@ -22,6 +22,11 @@ extension _MapProductionFixture on FakeGameSession {
             currentTarget: null,
             investedProduction: 0,
             productionOverflow: 0,
+            rushQuote: const ProductionRushQuoteView(
+              production: 0,
+              goldCost: 0,
+              blocker: ProductionRejectionCodeView.productionQueueEmpty,
+            ),
             buildings: const [],
             units: const [],
             projects: const [],

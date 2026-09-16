@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 
 use aonw_contracts::client::{
-    CitySpecializationOptionDto, ClientCommandDto, ClientEventDto, ClientQueryDto,
-    ClientQueryResultDto, ClientRequestBodyDto, ClientResponseBodyDto, ProductionOptionDto,
-    UnitProductionOptionDto,
+    CitySpecializationOptionDto, ClientCommandDto, ClientCommandRejectionCodeDto, ClientEventDto,
+    ClientQueryDto, ClientQueryResultDto, ClientRequestBodyDto, ClientResponseBodyDto,
+    ProductionForecastDto, ProductionOptionDto, ProductionRushQuoteDto, UnitProductionOptionDto,
 };
 use aonw_contracts::{
     CityBuildingTypeDto, CityProductionTargetDto, CityProjectTypeDto, CitySpecializationTypeDto,
@@ -11,6 +11,71 @@ use aonw_contracts::{
 };
 
 use super::stamp;
+
+#[test]
+fn production_metadata_matches_the_shared_dart_fixture() {
+    let document: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../fixtures/client_protocol/production_options_response.json"
+    ))
+    .expect("fixture");
+    assert_eq!(
+        document["apiVersion"],
+        aonw_contracts::client::CLIENT_API_VERSION
+    );
+    assert_eq!(
+        serde_json::to_value(response()).expect("production response"),
+        document["outcome"]["response"]
+    );
+}
+
+#[test]
+fn production_forecast_and_rush_fields_are_required_and_strict() {
+    let original = serde_json::to_value(response()).expect("production JSON");
+    for field in [
+        "investedProduction",
+        "productionPerTurn",
+        "estimatedTurns",
+        "projectOutput",
+        "spawnBlocked",
+    ] {
+        let mut missing = original.clone();
+        missing["result"]["buildings"][0]["forecast"]
+            .as_object_mut()
+            .expect("forecast")
+            .remove(field);
+        assert!(
+            serde_json::from_value::<ClientResponseBodyDto>(missing).is_err(),
+            "missing {field}"
+        );
+    }
+    for field in ["production", "goldCost", "rejection"] {
+        let mut missing = original.clone();
+        missing["result"]["rushQuote"]
+            .as_object_mut()
+            .expect("quote")
+            .remove(field);
+        assert!(
+            serde_json::from_value::<ClientResponseBodyDto>(missing).is_err(),
+            "missing {field}"
+        );
+    }
+    for pointer in ["/result/buildings/0/forecast", "/result/rushQuote"] {
+        let mut unknown = original.clone();
+        unknown
+            .pointer_mut(pointer)
+            .expect("metadata")
+            .as_object_mut()
+            .expect("object")
+            .insert("hiddenPlayerGold".to_owned(), serde_json::json!(100));
+        assert!(serde_json::from_value::<ClientResponseBodyDto>(unknown).is_err());
+    }
+    let mut missing = original;
+    missing["result"]
+        .as_object_mut()
+        .expect("result")
+        .remove("rushQuote");
+    assert!(serde_json::from_value::<ClientResponseBodyDto>(missing).is_err());
+}
 
 pub(super) fn requests() -> Vec<ClientRequestBodyDto> {
     vec![
@@ -105,11 +170,23 @@ pub(super) fn response() -> ClientResponseBodyDto {
             }),
             invested_production: 4,
             production_overflow: 1,
+            rush_quote: ProductionRushQuoteDto {
+                production: 0,
+                gold_cost: 0,
+                rejection: Some(ClientCommandRejectionCodeDto::ProjectCannotBeRushed),
+            },
             buildings: vec![ProductionOptionDto {
                 target: CityProductionTargetDto::Building {
                     building_type: CityBuildingTypeDto::Workshop,
                 },
                 cost: 15,
+                forecast: ProductionForecastDto {
+                    invested_production: 4,
+                    production_per_turn: 3,
+                    estimated_turns: Some(4),
+                    project_output: None,
+                    spawn_blocked: false,
+                },
                 rejection: None,
             }],
             units: vec![UnitProductionOptionDto {
@@ -118,6 +195,13 @@ pub(super) fn response() -> ClientResponseBodyDto {
                         unit_type: UnitKindDto::Tank,
                     },
                     cost: 32,
+                    forecast: ProductionForecastDto {
+                        invested_production: 4,
+                        production_per_turn: 3,
+                        estimated_turns: Some(10),
+                        project_output: None,
+                        spawn_blocked: false,
+                    },
                     rejection: None,
                 },
                 resource_options: vec![StrategicResourceStockpileDto(BTreeMap::from([(
@@ -131,6 +215,13 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     project_type: CityProjectTypeDto::Research,
                 },
                 cost: 0,
+                forecast: ProductionForecastDto {
+                    invested_production: 4,
+                    production_per_turn: 3,
+                    estimated_turns: None,
+                    project_output: Some(1),
+                    spawn_blocked: false,
+                },
                 rejection: None,
             }],
             wonders: vec![ProductionOptionDto {
@@ -138,6 +229,13 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     wonder_type: WonderTypeDto::GreatLibrary,
                 },
                 cost: 25,
+                forecast: ProductionForecastDto {
+                    invested_production: 4,
+                    production_per_turn: 3,
+                    estimated_turns: Some(7),
+                    project_output: None,
+                    spawn_blocked: false,
+                },
                 rejection: None,
             }],
             specializations: vec![CitySpecializationOptionDto {

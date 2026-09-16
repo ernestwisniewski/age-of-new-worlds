@@ -43,3 +43,23 @@ bonuses, project output, blocked completion, foreign ownership, stale revisions
 and overflow-safe ceiling arithmetic. All-target Clippy and architecture checks
 pass without increasing limits. Client API transport and visual acceptance are
 still pending at this stage.
+
+## Client API 30
+
+Production queries now require a `rushQuote` and a `forecast` on every target.
+The nullable estimate, project yield and rush rejection must be present on the
+wire, including explicit null values. A shared production encoder serves local
+and authenticated server queries. Dart copies the engine values into immutable
+read models and rejects missing, extra, mistyped or inconsistent metadata.
+Prices and completion estimates are never reconstructed in Flutter.
+
+The two checked-in production response fixtures are identical and verified by
+Rust and Dart. Native coverage checks the quoted final increment against actual
+gold spending, unchanged state after inspection and identical forecasts after
+save/resume. The existing production replay checks and local/server query
+equality pass. Canonical persistence and engine behavior identity stay unchanged.
+
+Focused acceptance: 20 client-contract tests, three production runtime tests,
+three server-query tests, 104 Dart protocol tests and six Flutter production
+tests. The full Flutter suite passes 1,424 tests; its remaining quality gates and
+the performance review are tracked separately while the panel is completed.

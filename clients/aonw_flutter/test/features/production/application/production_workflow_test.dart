@@ -102,8 +102,20 @@ ProductionOverviewFixture _overview({int revision = 0}) => (
         : const BuildingProductionTargetView('workshop'),
     investedProduction: 0,
     productionOverflow: 1,
+    rushQuote: const ProductionRushQuoteView(
+      production: 0,
+      goldCost: 0,
+      blocker: ProductionRejectionCodeView.productionQueueEmpty,
+    ),
     buildings: const [
       ProductionOptionView(
+        forecast: ProductionForecastView(
+          investedProduction: 0,
+          productionPerTurn: 3,
+          estimatedTurns: 5,
+          projectOutput: null,
+          spawnBlocked: false,
+        ),
         target: BuildingProductionTargetView('workshop'),
         cost: 15,
         blocker: null,

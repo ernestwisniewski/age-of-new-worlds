@@ -7,6 +7,7 @@ final class AonwProductionOptionsResult extends AonwQueryResult {
     required this.currentTarget,
     required this.investedProduction,
     required this.productionOverflow,
+    required this.rushQuote,
     required List<AonwProductionOption> buildings,
     required List<AonwUnitProductionOption> units,
     required List<AonwProductionOption> projects,
@@ -26,6 +27,7 @@ final class AonwProductionOptionsResult extends AonwQueryResult {
       'currentTarget',
       'investedProduction',
       'productionOverflow',
+      'rushQuote',
       'buildings',
       'units',
       'projects',
@@ -46,6 +48,7 @@ final class AonwProductionOptionsResult extends AonwQueryResult {
         value['productionOverflow'],
         'production overflow',
       ),
+      rushQuote: AonwProductionRushQuote.fromJson(value['rushQuote']),
       buildings: _productionOptions(value['buildings'], 'building options'),
       units: readList(
         value['units'],
@@ -67,6 +70,7 @@ final class AonwProductionOptionsResult extends AonwQueryResult {
   final AonwCityProductionTarget? currentTarget;
   final int investedProduction;
   final int productionOverflow;
+  final AonwProductionRushQuote rushQuote;
   final List<AonwProductionOption> buildings;
   final List<AonwUnitProductionOption> units;
   final List<AonwProductionOption> projects;
@@ -79,6 +83,7 @@ final class AonwProductionOption {
     required this.target,
     required this.cost,
     required this.rejection,
+    required this.forecast,
   });
 
   factory AonwProductionOption.fromJson(Object? source) {
@@ -87,10 +92,12 @@ final class AonwProductionOption {
       'target',
       'cost',
       'rejection',
+      'forecast',
     }, 'production option');
     return AonwProductionOption(
       target: AonwCityProductionTarget.fromJson(value['target']),
       cost: readInt(value['cost'], 'production cost'),
+      forecast: AonwProductionForecast.fromJson(value['forecast']),
       rejection: value['rejection'] == null
           ? null
           : AonwCommandRejectionCode.fromWire(
@@ -102,6 +109,7 @@ final class AonwProductionOption {
   final AonwCityProductionTarget target;
   final int cost;
   final AonwCommandRejectionCode? rejection;
+  final AonwProductionForecast forecast;
 }
 
 final class AonwUnitProductionOption {

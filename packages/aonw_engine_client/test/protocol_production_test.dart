@@ -86,10 +86,22 @@ void main() {
               'currentTarget': {'kind': 'project', 'projectType': 'research'},
               'investedProduction': 4,
               'productionOverflow': 1,
+              'rushQuote': {
+                'production': 0,
+                'goldCost': 0,
+                'rejection': 'project_cannot_be_rushed',
+              },
               'buildings': [
                 {
                   'target': {'kind': 'building', 'buildingType': 'workshop'},
                   'cost': 15,
+                  'forecast': {
+                    'investedProduction': 4,
+                    'productionPerTurn': 3,
+                    'estimatedTurns': 4,
+                    'projectOutput': null,
+                    'spawnBlocked': false,
+                  },
                   'rejection': null,
                 },
               ],
@@ -98,6 +110,13 @@ void main() {
                   'option': {
                     'target': {'kind': 'unit', 'unitType': 'tank'},
                     'cost': 32,
+                    'forecast': {
+                      'investedProduction': 4,
+                      'productionPerTurn': 3,
+                      'estimatedTurns': 10,
+                      'projectOutput': null,
+                      'spawnBlocked': false,
+                    },
                     'rejection': 'unit_production_missing_strategic_resource',
                   },
                   'resourceOptions': [
@@ -110,6 +129,13 @@ void main() {
                 {
                   'target': {'kind': 'project', 'projectType': 'research'},
                   'cost': 0,
+                  'forecast': {
+                    'investedProduction': 4,
+                    'productionPerTurn': 3,
+                    'estimatedTurns': null,
+                    'projectOutput': 1,
+                    'spawnBlocked': false,
+                  },
                   'rejection': null,
                 },
               ],
@@ -167,6 +193,13 @@ void main() {
       () => AonwProductionOption.fromJson({
         'target': {'kind': 'project', 'projectType': 'research'},
         'cost': 0,
+        'forecast': {
+          'investedProduction': 4,
+          'productionPerTurn': 3,
+          'estimatedTurns': null,
+          'projectOutput': 1,
+          'spawnBlocked': false,
+        },
         'rejection': null,
         'clientAvailability': true,
       }),

@@ -15,7 +15,7 @@ mod player_query;
 pub use map_values::{encode_map_resource, encode_map_terrain};
 pub use player_query::{
     encode_city_planning, encode_hex_inspection, encode_pending_turn_actions,
-    encode_research_options,
+    encode_production_options, encode_research_options,
 };
 
 pub use client_projection::{

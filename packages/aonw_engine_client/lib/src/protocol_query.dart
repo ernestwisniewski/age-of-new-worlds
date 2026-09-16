@@ -15,6 +15,7 @@ part 'protocol_city_query.dart';
 part 'protocol_hex_query.dart';
 part 'protocol_turn_actions_query.dart';
 part 'protocol_production_query.dart';
+part 'protocol_production_forecast.dart';
 part 'protocol_research_query.dart';
 part 'protocol_research_recommendation.dart';
 part 'protocol_worker_query.dart';

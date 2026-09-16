@@ -34,10 +34,40 @@ final class ProductionOptionView {
     required this.target,
     required this.cost,
     required this.blocker,
+    required this.forecast,
   });
 
   final ProductionTargetView target;
   final int cost;
+  final ProductionRejectionCodeView? blocker;
+  final ProductionForecastView forecast;
+}
+
+final class ProductionForecastView {
+  const ProductionForecastView({
+    required this.investedProduction,
+    required this.productionPerTurn,
+    required this.estimatedTurns,
+    required this.projectOutput,
+    required this.spawnBlocked,
+  });
+
+  final int investedProduction;
+  final int productionPerTurn;
+  final int? estimatedTurns;
+  final int? projectOutput;
+  final bool spawnBlocked;
+}
+
+final class ProductionRushQuoteView {
+  const ProductionRushQuoteView({
+    required this.production,
+    required this.goldCost,
+    required this.blocker,
+  });
+
+  final int production;
+  final int goldCost;
   final ProductionRejectionCodeView? blocker;
 }
 
@@ -78,6 +108,7 @@ final class ProductionOptionsView {
     required this.currentTarget,
     required this.investedProduction,
     required this.productionOverflow,
+    required this.rushQuote,
     required List<ProductionOptionView> buildings,
     required List<UnitProductionOptionView> units,
     required List<ProductionOptionView> projects,
@@ -94,6 +125,7 @@ final class ProductionOptionsView {
   final ProductionTargetView? currentTarget;
   final int investedProduction;
   final int productionOverflow;
+  final ProductionRushQuoteView rushQuote;
   final List<ProductionOptionView> buildings;
   final List<UnitProductionOptionView> units;
   final List<ProductionOptionView> projects;

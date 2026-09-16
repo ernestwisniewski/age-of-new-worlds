@@ -51,7 +51,10 @@ pub use logistics::{
     AutoExploreOptionDto, ClientLogisticsEvidenceDto, DetachmentOptionDto,
     MerchantDestinationOptionDto, MovementSearchMetricsDto, UnitMovementExecutionDto,
 };
-pub use production::{CitySpecializationOptionDto, ProductionOptionDto, UnitProductionOptionDto};
+pub use production::{
+    CitySpecializationOptionDto, ProductionForecastDto, ProductionOptionDto,
+    ProductionRushQuoteDto, UnitProductionOptionDto,
+};
 pub use query::{
     ClientEvidenceDto, ClientQueryResultDto, PendingActionViewDto, ReachableTileViewDto,
 };

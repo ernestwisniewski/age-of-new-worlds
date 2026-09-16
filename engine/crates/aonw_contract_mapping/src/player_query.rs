@@ -10,8 +10,10 @@ mod encode;
 mod hex_inspection;
 mod pending_turn_actions;
 pub use pending_turn_actions::encode_pending_turn_actions;
+mod production;
 mod research;
 pub use hex_inspection::encode_hex_inspection;
+pub use production::encode_production_options;
 pub use research::encode_research_options;
 
 /// Invalid opaque identity found while mapping one strict client query.

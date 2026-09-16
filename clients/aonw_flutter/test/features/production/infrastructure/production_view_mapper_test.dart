@@ -32,6 +32,13 @@ void main() {
     expect(options.investedProduction, 4);
     expect(options.productionOverflow, 1);
     expect(options.buildings.single.cost, 15);
+    expect(options.buildings.single.forecast.estimatedTurns, 4);
+    expect(options.projects.single.forecast.projectOutput, 1);
+    expect(options.projects.single.forecast.estimatedTurns, isNull);
+    expect(
+      options.rushQuote.blocker,
+      ProductionRejectionCodeView.projectCannotBeRushed,
+    );
     expect(options.units.single.option.target, isA<UnitProductionTargetView>());
     expect(
       (options.units.single.option.target as UnitProductionTargetView).unit,
@@ -88,22 +95,96 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('rejects incoherent project forecasts and rush availability', () {
+    final scene = testMapScene(cities: [testCityView()]);
+    for (final value in [
+      _options(
+        projectForecast: const AonwProductionForecast(
+          investedProduction: 4,
+          productionPerTurn: 3,
+          estimatedTurns: 2,
+          projectOutput: 1,
+          spawnBlocked: false,
+        ),
+      ),
+      _options(
+        projectForecast: const AonwProductionForecast(
+          investedProduction: 8,
+          productionPerTurn: 3,
+          estimatedTurns: null,
+          projectOutput: 1,
+          spawnBlocked: false,
+        ),
+      ),
+      _options(
+        projectForecast: const AonwProductionForecast(
+          investedProduction: 4,
+          productionPerTurn: 3,
+          estimatedTurns: null,
+          projectOutput: 1,
+          spawnBlocked: true,
+        ),
+      ),
+      _options(
+        rushQuote: const AonwProductionRushQuote(
+          production: 3,
+          goldCost: 6,
+          rejection: null,
+        ),
+      ),
+      _options(
+        rushQuote: const AonwProductionRushQuote(
+          production: 0,
+          goldCost: 0,
+          rejection: AonwCommandRejectionCode.workerNotFound,
+        ),
+      ),
+    ]) {
+      expect(
+        () => mapper.options(
+          value,
+          map: scene.map,
+          player: scene.player,
+          cityId: 'preview-city',
+          expectedRevision: 0,
+        ),
+        throwsFormatException,
+      );
+    }
+  });
 }
 
 AonwProductionOptionsResult _options({
   int revision = 0,
   List<int> affordableIndices = const [0],
   AonwCommandRejectionCode? buildingRejection,
+  AonwProductionForecast? projectForecast,
+  AonwProductionRushQuote? rushQuote,
 }) => AonwProductionOptionsResult(
   stamp: _stamp(revision: revision),
   cityId: 'preview-city',
   currentTarget: _target('project', 'projectType', 'research'),
   investedProduction: 4,
   productionOverflow: 1,
+  rushQuote:
+      rushQuote ??
+      const AonwProductionRushQuote(
+        production: 0,
+        goldCost: 0,
+        rejection: AonwCommandRejectionCode.projectCannotBeRushed,
+      ),
   buildings: [
     AonwProductionOption(
       target: _target('building', 'buildingType', 'workshop'),
       cost: 15,
+      forecast: const AonwProductionForecast(
+        investedProduction: 4,
+        productionPerTurn: 3,
+        estimatedTurns: 4,
+        projectOutput: null,
+        spawnBlocked: false,
+      ),
       rejection: buildingRejection,
     ),
   ],
@@ -112,6 +193,13 @@ AonwProductionOptionsResult _options({
       option: AonwProductionOption(
         target: _target('unit', 'unitType', 'tank'),
         cost: 32,
+        forecast: const AonwProductionForecast(
+          investedProduction: 4,
+          productionPerTurn: 3,
+          estimatedTurns: 10,
+          projectOutput: null,
+          spawnBlocked: false,
+        ),
         rejection: null,
       ),
       resourceOptions: const [
@@ -124,6 +212,15 @@ AonwProductionOptionsResult _options({
     AonwProductionOption(
       target: _target('project', 'projectType', 'research'),
       cost: 0,
+      forecast:
+          projectForecast ??
+          const AonwProductionForecast(
+            investedProduction: 4,
+            productionPerTurn: 3,
+            estimatedTurns: null,
+            projectOutput: 1,
+            spawnBlocked: false,
+          ),
       rejection: null,
     ),
   ],
@@ -131,6 +228,13 @@ AonwProductionOptionsResult _options({
     AonwProductionOption(
       target: _target('wonder', 'wonderType', 'greatLibrary'),
       cost: 25,
+      forecast: const AonwProductionForecast(
+        investedProduction: 4,
+        productionPerTurn: 3,
+        estimatedTurns: 7,
+        projectOutput: null,
+        spawnBlocked: false,
+      ),
       rejection: null,
     ),
   ],

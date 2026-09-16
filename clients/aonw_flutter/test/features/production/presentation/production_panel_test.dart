@@ -62,13 +62,32 @@ ProductionOptionsView _options() => ProductionOptionsView(
   currentTarget: null,
   investedProduction: 4,
   productionOverflow: 1,
+  rushQuote: const ProductionRushQuoteView(
+    production: 0,
+    goldCost: 0,
+    blocker: ProductionRejectionCodeView.productionQueueEmpty,
+  ),
   buildings: const [
     ProductionOptionView(
+      forecast: ProductionForecastView(
+        investedProduction: 0,
+        productionPerTurn: 3,
+        estimatedTurns: 5,
+        projectOutput: null,
+        spawnBlocked: false,
+      ),
       target: BuildingProductionTargetView('granary'),
       cost: 12,
       blocker: null,
     ),
     ProductionOptionView(
+      forecast: ProductionForecastView(
+        investedProduction: 0,
+        productionPerTurn: 3,
+        estimatedTurns: 5,
+        projectOutput: null,
+        spawnBlocked: false,
+      ),
       target: BuildingProductionTargetView('workshop'),
       cost: 15,
       blocker: ProductionRejectionCodeView.buildingNotAvailable,

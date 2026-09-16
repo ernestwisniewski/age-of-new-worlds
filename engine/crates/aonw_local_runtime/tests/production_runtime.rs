@@ -20,6 +20,9 @@ use aonw_domain::{
 };
 use aonw_local_runtime::{ClientProtocol, LocalRuntime, OpenSession};
 
+#[path = "production_runtime/forecasts.rs"]
+mod forecasts;
+
 #[test]
 fn production_protocol_query_commands_save_and_replay_are_exact() {
     let query = dispatch_client(

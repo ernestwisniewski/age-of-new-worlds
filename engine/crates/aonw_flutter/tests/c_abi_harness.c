@@ -5,7 +5,7 @@
 #include <string.h>
 
 static const uint8_t CAPABILITIES_REQUEST[] =
-    "{\"apiVersion\":29,\"request\":{\"type\":\"capabilities\"}}";
+    "{\"apiVersion\":30,\"request\":{\"type\":\"capabilities\"}}";
 
 static void require(int condition, const char *message) {
   if (!condition) {
