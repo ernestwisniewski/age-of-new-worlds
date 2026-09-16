@@ -2,7 +2,7 @@ use aonw_domain::{
     CityId, CityProductionTarget, CitySpecializationType, StrategicResourceStockpile, UnitKind,
 };
 
-use super::ProductionRushQuote;
+use super::{ProductionForecast, ProductionRushQuote};
 use crate::CommandRejectionCode;
 
 /// Buys one bounded production increment for a controlled city's finite queue.
@@ -230,6 +230,7 @@ pub struct ProductionOption {
     target: CityProductionTarget,
     cost: i64,
     rejection: Option<CommandRejectionCode>,
+    forecast: ProductionForecast,
 }
 
 impl ProductionOption {
@@ -237,11 +238,13 @@ impl ProductionOption {
         target: CityProductionTarget,
         cost: i64,
         rejection: Option<CommandRejectionCode>,
+        forecast: ProductionForecast,
     ) -> Self {
         Self {
             target,
             cost,
             rejection,
+            forecast,
         }
     }
     /// Returns the typed target.
@@ -253,6 +256,11 @@ impl ProductionOption {
     #[must_use]
     pub const fn cost(self) -> i64 {
         self.cost
+    }
+    /// Returns current-rate progress and output without changing the queue.
+    #[must_use]
+    pub const fn forecast(self) -> ProductionForecast {
+        self.forecast
     }
     /// Returns the first blocker, or `None` when the target is legal.
     #[must_use]

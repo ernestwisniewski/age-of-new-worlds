@@ -8,6 +8,38 @@ use crate::EngineContext;
 
 const BASIS_POINTS: i64 = 10_000;
 
+pub(super) struct ProductionRates {
+    base: i64,
+    units: i64,
+}
+
+impl ProductionRates {
+    pub(super) fn prepare(
+        state: &GameState,
+        context: EngineContext<'_>,
+        city: &City,
+    ) -> Result<Self, ProductionError> {
+        let base = crate::economy::city_turn_output(state, context, city)
+            .map_err(|error| invalid(error.to_string()))?
+            .production;
+        let units = unit_technology_production(state, context, city, base)?;
+        Ok(Self { base, units })
+    }
+
+    pub(super) fn for_target(
+        &self,
+        city: &City,
+        target: CityProductionTarget,
+    ) -> Result<i64, ProductionError> {
+        let production = if matches!(target, CityProductionTarget::Unit(_)) {
+            self.units
+        } else {
+            self.base
+        };
+        with_target_specialization(production, city.specialization(), target)
+    }
+}
+
 pub(super) fn production_per_turn(
     state: &GameState,
     context: EngineContext<'_>,

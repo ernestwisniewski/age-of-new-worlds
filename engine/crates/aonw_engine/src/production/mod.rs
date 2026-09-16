@@ -1,6 +1,8 @@
 mod commands;
 mod error;
+mod forecast;
 mod model;
+mod options;
 mod rules;
 mod rush;
 mod rush_quote;
@@ -12,6 +14,7 @@ mod wonder;
 mod yield_rules;
 
 pub use error::ProductionError;
+pub use forecast::ProductionForecast;
 pub use model::{
     CitySpecializationOption, ProductionOption, ProductionOptions, ProductionOptionsQuery,
     RushProductionCommand, SetCitySpecializationCommand, StartBuildingCommand,
@@ -23,7 +26,7 @@ pub(crate) use commands::{
     ProductionMutation, apply_set_specialization, apply_start_building, apply_start_project,
     apply_start_unit, apply_start_wonder,
 };
-pub(crate) use rules::query_options;
+pub(crate) use options::query_options;
 pub(crate) use rush::apply_rush;
 pub(crate) use turn::{
     ResearchProjectScience, advance_turn_production, selected_research_project_science,

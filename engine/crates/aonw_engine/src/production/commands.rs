@@ -204,10 +204,7 @@ fn queue_target(
     {
         return Ok(ProductionMutation::Identity);
     }
-    let investment = city.production_queue().map_or_else(
-        || rollover_investment(city.production_overflow(), cost),
-        CityProductionQueue::invested_production,
-    );
+    let investment = initial_investment(city, cost);
     let queue = CityProductionQueue::try_new(target, investment, allocation.clone())
         .map_err(|error| invalid(error.to_string()))?;
     let overflow = if city.production_queue().is_none() {
@@ -270,6 +267,13 @@ pub(super) fn production_update(
         fog_of_war: state.fog_of_war().clone(),
         diplomacy: state.diplomacy().clone(),
     }
+}
+
+pub(super) fn initial_investment(city: &City, cost: i64) -> i64 {
+    city.production_queue().map_or_else(
+        || rollover_investment(city.production_overflow(), cost),
+        CityProductionQueue::invested_production,
+    )
 }
 
 const fn rollover_investment(stored_overflow: i64, production_cost: i64) -> i64 {

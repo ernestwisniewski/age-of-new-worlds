@@ -12,29 +12,8 @@ pub(super) fn produced_unit(
     current_units: &[Unit],
     occupancy_policy: UnitOccupancyPolicy,
 ) -> Result<Option<Unit>, ProductionError> {
-    let definition = context
-        .ruleset()
-        .unit(kind)
-        .ok_or_else(|| invalid("produced unit is absent from ruleset content"))?;
-    let domain = definition.capabilities().movement_domain.domain();
-    let position = spawn_candidates(context, city).find(|candidate| {
-        let can_share_city_center = kind == UnitKind::Merchant
-            && *candidate == city.center()
-            && current_units
-                .iter()
-                .filter(|unit| unit.position() == *candidate)
-                .all(|unit| {
-                    occupancy_policy.permits(city.owner_player_id(), unit.owner_player_id())
-                });
-        let occupied = current_units
-            .iter()
-            .any(|unit| unit.position() == *candidate);
-        if occupied && !can_share_city_center {
-            return false;
-        }
-        can_spawn_at(context, *candidate, domain)
-    });
-    let Some(position) = position else {
+    let Some(position) = spawn_position(context, city, kind, current_units, occupancy_policy)?
+    else {
         return Ok(None);
     };
     let id = next_unit_id(current_units, city, kind)?;
@@ -51,6 +30,37 @@ pub(super) fn produced_unit(
     .build()
     .map(Some)
     .map_err(|error| invalid(error.to_string()))
+}
+
+pub(super) fn spawn_position(
+    context: EngineContext<'_>,
+    city: &City,
+    kind: UnitKind,
+    current_units: &[Unit],
+    occupancy_policy: UnitOccupancyPolicy,
+) -> Result<Option<aonw_domain::HexCoord>, ProductionError> {
+    let definition = context
+        .ruleset()
+        .unit(kind)
+        .ok_or_else(|| invalid("produced unit is absent from ruleset content"))?;
+    let domain = definition.capabilities().movement_domain.domain();
+    Ok(spawn_candidates(context, city).find(|candidate| {
+        let can_share_city_center = kind == UnitKind::Merchant
+            && *candidate == city.center()
+            && current_units
+                .iter()
+                .filter(|unit| unit.position() == *candidate)
+                .all(|unit| {
+                    occupancy_policy.permits(city.owner_player_id(), unit.owner_player_id())
+                });
+        let occupied = current_units
+            .iter()
+            .any(|unit| unit.position() == *candidate);
+        if occupied && !can_share_city_center {
+            return false;
+        }
+        can_spawn_at(context, *candidate, domain)
+    }))
 }
 
 fn can_spawn_at(

@@ -46,6 +46,7 @@ pub(super) fn quote(
     state: &GameState,
     context: EngineContext<'_>,
     city: &City,
+    per_turn: i64,
 ) -> Result<ProductionRushQuote, ProductionError> {
     let Some(queue) = city.production_queue() else {
         return Ok(ProductionRushQuote::unavailable(
@@ -57,7 +58,13 @@ pub(super) fn quote(
         Err(ProductionError::Rejected(code)) => return Ok(ProductionRushQuote::unavailable(code)),
         Err(error) => return Err(error),
     };
-    quote_for_cost(state, context, city, target_cost(state, context, target)?)
+    quote_for_rate(
+        state,
+        context,
+        city,
+        target_cost(state, context, target)?,
+        per_turn,
+    )
 }
 
 pub(super) fn quote_for_cost(
@@ -69,13 +76,31 @@ pub(super) fn quote_for_cost(
     let queue = city
         .production_queue()
         .ok_or(CommandRejectionCode::ProductionQueueEmpty)?;
+    if cost.saturating_sub(queue.invested_production()) <= 0 {
+        return Ok(ProductionRushQuote::unavailable(
+            CommandRejectionCode::RushProductionUnavailable,
+        ));
+    }
+    let per_turn = production_per_turn(state, context, city, queue.target())?;
+    quote_for_rate(state, context, city, cost, per_turn)
+}
+
+fn quote_for_rate(
+    state: &GameState,
+    context: EngineContext<'_>,
+    city: &City,
+    cost: i64,
+    per_turn: i64,
+) -> Result<ProductionRushQuote, ProductionError> {
+    let queue = city
+        .production_queue()
+        .ok_or(CommandRejectionCode::ProductionQueueEmpty)?;
     let remaining = cost.saturating_sub(queue.invested_production());
     if remaining <= 0 {
         return Ok(ProductionRushQuote::unavailable(
             CommandRejectionCode::RushProductionUnavailable,
         ));
     }
-    let per_turn = production_per_turn(state, context, city, queue.target())?;
     let production = remaining.min(per_turn.max(1));
     let gold_cost = production
         .checked_mul(context.ruleset().production().rush_gold_per_production())

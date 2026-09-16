@@ -21,3 +21,25 @@ and presentation are a subsequent stage. Twenty production tests, Clippy for all
 engine targets and the architecture gate pass. Coverage compares quoted prices
 and increments with accepted building, unit and wonder commands, final-point
 rounding, insufficient funds and queues that cannot be rushed.
+
+## Production forecasts
+
+Every target now includes the investment retained by its start command, its
+current production rate, nullable remaining turns, continuous-project output and
+the completed active unit's spawn-blocked status. Remaining turns are a
+current-rate estimate: subsequent growth, work assignments, technology, world
+wonder races and occupancy can change the result. Zero means the finite target
+already has enough production; a blocked completed unit has no finite estimate.
+
+Forecasts share the command's overflow cap, specialization and technology rules,
+the turn processor's project conversion and the spawn selector. The city's base
+output and unit technology rate are prepared once for the entire catalog. The
+rush quote reuses that prepared rate. No simulation or mutation occurs during
+inspection, and spawn diagnostics expose neither positions nor other units.
+
+Twenty-five production acceptance tests and seven focused unit tests pass,
+including retained versus capped investment, technology and specialization
+bonuses, project output, blocked completion, foreign ownership, stale revisions
+and overflow-safe ceiling arithmetic. All-target Clippy and architecture checks
+pass without increasing limits. Client API transport and visual acceptance are
+still pending at this stage.

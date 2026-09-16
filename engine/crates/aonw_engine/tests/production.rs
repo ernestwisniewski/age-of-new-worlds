@@ -24,6 +24,8 @@ use aonw_engine::{
 
 #[path = "production/constraints.rs"]
 mod constraints;
+#[path = "production/forecast.rs"]
+mod forecast;
 #[path = "production/rush.rs"]
 mod rush;
 

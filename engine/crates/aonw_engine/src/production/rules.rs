@@ -4,152 +4,21 @@ use aonw_content::{
     ProductionRequirement, StrategicResourceCost, TerrainType, UnitProductionDefinition,
 };
 use aonw_domain::{
-    City, CityBuildingType, CityProductionQueue, CityProductionTarget, CityProjectType,
-    CitySpecializationType, GameState, PlayerResearchState, ResourceType,
-    StrategicResourceStockpile, TechnologyId, UnitKind, WonderType,
+    City, CityBuildingType, CityProductionQueue, CityProductionTarget, CitySpecializationType,
+    GameState, PlayerResearchState, ResourceType, StrategicResourceStockpile, TechnologyId,
+    UnitKind, WonderType,
 };
 
 use super::ProductionError;
-use super::model::{
-    CitySpecializationOption, ProductionOption, ProductionOptions, ProductionOptionsQuery,
-    UnitProductionOption,
-};
 use super::supply::{UnitSupplyBudget, unit_supply_budget};
-use super::support::{
-    city_territory, controlled_city, invalid, pace, spawn_candidates, technology_for,
-    validate_revision,
-};
+use super::support::{city_territory, invalid, spawn_candidates};
 use crate::economy::rules::{domain_resource, resources_at};
 use crate::{CommandRejectionCode, EngineContext, TechnologyUnlockQuery};
 
-const SPECIALIZATIONS: [CitySpecializationType; 5] = [
-    CitySpecializationType::Growth,
-    CitySpecializationType::Industry,
-    CitySpecializationType::Commerce,
-    CitySpecializationType::Science,
-    CitySpecializationType::Military,
-];
-const PROJECTS: [CityProjectType; 2] = [CityProjectType::Wealth, CityProjectType::Research];
-
-pub(crate) fn query_options(
-    state: &GameState,
-    context: EngineContext<'_>,
-    query: ProductionOptionsQuery<'_>,
-) -> Result<ProductionOptions, ProductionError> {
-    validate_revision(state, query.expected_revision())?;
-    let city = controlled_city(state, context, query.city_id())?;
-    let technology = technology_for(state, context, city);
-    let supply = unit_supply_budget(state, context, city)?;
-    let production = context.ruleset().production();
-    let pace = pace(state);
-    let buildings = production
-        .buildings()
-        .iter()
-        .copied()
-        .map(|definition| {
-            let rejection =
-                building_rejection(state, context, city, technology, definition.building())?;
-            let cost = production
-                .building_cost(definition.base_cost(), pace)
-                .ok_or_else(|| invalid("building production cost overflow"))?;
-            Ok(ProductionOption::new(
-                CityProductionTarget::Building(definition.building()),
-                cost,
-                rejection,
-            ))
-        })
-        .collect::<Result<Vec<_>, ProductionError>>()?;
-    let units = production
-        .units()
-        .iter()
-        .copied()
-        .map(|definition| unit_option(state, context, city, technology, &supply, definition))
-        .collect::<Result<Vec<_>, ProductionError>>()?;
-    let projects = PROJECTS
-        .into_iter()
-        .map(|project| ProductionOption::new(CityProductionTarget::Project(project), 0, None))
-        .collect::<Vec<_>>();
-    let wonders = production
-        .wonders()
-        .iter()
-        .copied()
-        .map(|definition| {
-            let rejection =
-                wonder_rejection(state, context, city, technology, definition.wonder())?;
-            let cost = production
-                .building_cost(definition.base_cost(), pace)
-                .ok_or_else(|| invalid("wonder production cost overflow"))?;
-            Ok(ProductionOption::new(
-                CityProductionTarget::Wonder(definition.wonder()),
-                cost,
-                rejection,
-            ))
-        })
-        .collect::<Result<Vec<_>, ProductionError>>()?;
-    let specializations = SPECIALIZATIONS
-        .into_iter()
-        .map(|specialization| {
-            let required = production.specialization_building(specialization);
-            CitySpecializationOption::new(
-                specialization,
-                required,
-                specialization_rejection(city, technology, specialization, required),
-            )
-        })
-        .collect::<Vec<_>>();
-    let queue = city.production_queue();
-    Ok(ProductionOptions::new(
-        state.revision().get(),
-        city.id().clone(),
-        queue.map(CityProductionQueue::target),
-        queue.map_or(0, CityProductionQueue::invested_production),
-        city.production_overflow(),
-        super::rush_quote::quote(state, context, city)?,
-        buildings,
-        units,
-        projects,
-        wonders,
-        specializations,
-    ))
-}
-
-fn unit_option(
-    state: &GameState,
-    context: EngineContext<'_>,
-    city: &City,
-    technology: TechnologyUnlockQuery<'_>,
-    supply: &UnitSupplyBudget,
-    definition: UnitProductionDefinition,
-) -> Result<UnitProductionOption, ProductionError> {
-    let evaluation = evaluate_unit(
-        state,
-        context,
-        city,
-        technology,
-        Some(supply),
-        definition,
-        None,
-    )?;
-    let cost = context
-        .ruleset()
-        .production()
-        .unit_cost(definition.base_cost(), pace(state))
-        .ok_or_else(|| invalid("unit production cost overflow"))?;
-    Ok(UnitProductionOption::new(
-        ProductionOption::new(
-            CityProductionTarget::Unit(definition.unit()),
-            cost,
-            evaluation.rejection,
-        ),
-        evaluation.resource_options,
-        evaluation.affordable_indices,
-    ))
-}
-
 pub(super) struct UnitEvaluation {
     pub(super) rejection: Option<CommandRejectionCode>,
-    resource_options: Vec<StrategicResourceStockpile>,
-    affordable_indices: Vec<u32>,
+    pub(super) resource_options: Vec<StrategicResourceStockpile>,
+    pub(super) affordable_indices: Vec<u32>,
     pub(super) selected_allocation: Option<StrategicResourceStockpile>,
 }
 

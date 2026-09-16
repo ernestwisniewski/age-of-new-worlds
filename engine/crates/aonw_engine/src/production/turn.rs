@@ -290,7 +290,7 @@ fn apply_project(
     Ok(())
 }
 
-fn project_output(production: i64, divisor: i64) -> Result<i64, ProductionError> {
+pub(super) fn project_output(production: i64, divisor: i64) -> Result<i64, ProductionError> {
     if production <= 0 {
         return Ok(0);
     }
