@@ -8,6 +8,7 @@ import '../../design_system/aonw_tokens.dart';
 import '../../features/map/application/map_interaction_state.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import 'map_canvas_clip.dart';
 import 'map_interaction_geometry.dart';
 import 'static_map_layers.dart';
 
@@ -21,6 +22,18 @@ final class MapThreatOverlayLayerComponent extends Component
   String? _signature;
   var _dimmed = false;
   var _geometryBuildCount = 0;
+  var _renderedHexCount = 0;
+  final _fillPaint = ui.Paint();
+  final _glowPaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..strokeJoin = ui.StrokeJoin.round;
+  final _strokePaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..strokeCap = ui.StrokeCap.round
+    ..strokeJoin = ui.StrokeJoin.round;
+
+  @visibleForTesting
+  int get debugRenderedHexCount => _renderedHexCount;
 
   @visibleForTesting
   int get debugHexCount => _hexes.length;
@@ -103,9 +116,13 @@ final class MapThreatOverlayLayerComponent extends Component
 
   @override
   void render(ui.Canvas canvas) {
+    _renderedHexCount = 0;
     if (!isVisible) return;
+    final clip = mapCanvasClipBounds(canvas);
     for (final hex in _hexes) {
+      if (!hex.bounds.overlaps(clip)) continue;
       _renderHex(canvas, hex);
+      _renderedHexCount++;
     }
   }
 
@@ -116,25 +133,20 @@ final class MapThreatOverlayLayerComponent extends Component
     final glowAlpha = _visibleAlpha(high ? 130 : 90);
     final strokeAlpha = _visibleAlpha(high ? 220 : 180);
     if (!hex.selectedUnitTile) {
-      canvas.drawPath(hex.path, ui.Paint()..color = color.withAlpha(fillAlpha));
+      canvas.drawPath(hex.path, _fillPaint..color = color.withAlpha(fillAlpha));
     }
     canvas
       ..drawPath(
         hex.path,
-        ui.Paint()
+        _glowPaint
           ..color = color.withAlpha(glowAlpha)
-          ..style = ui.PaintingStyle.stroke
-          ..strokeWidth = hex.selectedUnitTile ? 5 : (high ? 2.8 : 2)
-          ..strokeJoin = ui.StrokeJoin.round,
+          ..strokeWidth = hex.selectedUnitTile ? 5 : (high ? 2.8 : 2),
       )
       ..drawPath(
         hex.path,
-        ui.Paint()
+        _strokePaint
           ..color = color.withAlpha(strokeAlpha)
-          ..style = ui.PaintingStyle.stroke
-          ..strokeWidth = hex.selectedUnitTile ? 2.8 : (high ? 2 : 1.5)
-          ..strokeCap = ui.StrokeCap.round
-          ..strokeJoin = ui.StrokeJoin.round,
+          ..strokeWidth = hex.selectedUnitTile ? 2.8 : (high ? 2 : 1.5),
       );
   }
 
@@ -142,15 +154,16 @@ final class MapThreatOverlayLayerComponent extends Component
 }
 
 final class _ThreatHexGeometry {
-  const _ThreatHexGeometry({
+  _ThreatHexGeometry({
     required this.coordinate,
     required this.path,
     required this.count,
     required this.selectedUnitTile,
-  });
+  }) : bounds = path.getBounds().inflate(4);
 
   final MapHexCoordinate coordinate;
   final ui.Path path;
+  final ui.Rect bounds;
   final int count;
   final bool selectedUnitTile;
 }

@@ -34,6 +34,17 @@ void main() {
       expect(layer.debugThreatCounts, [1, 3]);
       expect(layer.children, isEmpty);
       final builds = layer.debugGeometryBuildCount;
+      final recorder = ui.PictureRecorder();
+      final canvas = ui.Canvas(recorder);
+      canvas.save();
+      canvas.clipRect(const ui.Rect.fromLTWH(10000, 10000, 100, 100));
+      layer.render(canvas);
+      expect(layer.debugRenderedHexCount, 0);
+      canvas.restore();
+      layer.render(canvas);
+      expect(layer.debugRenderedHexCount, 2);
+      recorder.endRecording().dispose();
+      expect(layer.debugGeometryBuildCount, builds);
       game.replaceCursor((col: 2, row: 0));
       game.replaceScene(_snapshot(scene, interaction: selected));
       expect(layer.debugGeometryBuildCount, builds);

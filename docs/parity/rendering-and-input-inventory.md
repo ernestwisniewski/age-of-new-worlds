@@ -123,7 +123,9 @@ clip before drawing. Bounds include the circular unloaded fallback and the heigh
 label's one-pixel outline. Camera movement does not rebuild their placements.
 Artifacts and authored objectives retain their components while offscreen and
 reuse their vector paths; objective paths are shared by the four marker types.
-Reference image pages outside the clip issue no image draw.
+Reference image pages outside the clip issue no image draw. Threat outlines also
+cull using cached bounds including their widest stroke, and reuse three paints
+instead of allocating paints per visible hex on every frame.
 
 Tests exercise camera travel between opposite map corners, return through the
 cinematic projection, fully clipped details, fallback-circle edges and height
@@ -131,7 +133,7 @@ outlines. They verify retained component identity and unchanged placement build
 counts. Existing map goldens remain the visual regression boundary.
 
 The remaining audit includes region batching of aggregate grid, wall, road and
-fog paths, plus contextual management/threat overlays. These are not covered by
+fog paths, plus contextual management overlays. These are not covered by
 the static detail counters. The native production-particle and camera workloads
 retain their existing frame and memory limits and require separate passing runs.
 
