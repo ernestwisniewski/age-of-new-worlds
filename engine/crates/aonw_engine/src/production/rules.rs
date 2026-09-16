@@ -104,6 +104,7 @@ pub(crate) fn query_options(
         queue.map(CityProductionQueue::target),
         queue.map_or(0, CityProductionQueue::invested_production),
         city.production_overflow(),
+        super::rush_quote::quote(state, context, city)?,
         buildings,
         units,
         projects,

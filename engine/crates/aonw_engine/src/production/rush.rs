@@ -6,12 +6,12 @@ use aonw_domain::{
 use super::ProductionError;
 use super::commands::ProductionMutation;
 use super::model::RushProductionCommand;
+use super::rush_quote::quote_for_cost;
 use super::spawn::produced_unit;
 use super::support::{
     controlled_city, invalid, next_revision, pace, replace_city, validate_revision,
 };
 use super::wonder::resolve_completed_for_player;
-use super::yield_rules::production_per_turn;
 use crate::{
     CityBuiltBuildingEvent, CityProducedUnitEvent, CommandRejectionCode, DomainEvent, EngineContext,
 };
@@ -28,24 +28,12 @@ pub(crate) fn apply_rush(
         .ok_or(CommandRejectionCode::ProductionQueueEmpty)?;
     let target = finite_target(queue.target())?;
     let cost = target_cost(state, context, target)?;
-    let remaining = cost.saturating_sub(queue.invested_production());
-    if remaining <= 0 {
-        return Err(CommandRejectionCode::RushProductionUnavailable.into());
+    let quote = quote_for_cost(state, context, city, cost)?;
+    if let Some(rejection) = quote.rejection() {
+        return Err(rejection.into());
     }
-    let per_turn = production_per_turn(state, context, city, queue.target())?;
-    let rushed = remaining.min(per_turn.max(1));
-    let price = rushed
-        .checked_mul(context.ruleset().production().rush_gold_per_production())
-        .ok_or_else(|| invalid("rush gold cost overflow"))?;
-    let available = state
-        .economy()
-        .player_gold()
-        .get(city.owner_player_id())
-        .copied()
-        .unwrap_or(0);
-    if rushed <= 0 || price <= 0 || available < price {
-        return Err(CommandRejectionCode::RushProductionUnavailable.into());
-    }
+    let rushed = quote.production();
+    let price = quote.gold_cost();
 
     let economy = state
         .economy()
@@ -217,7 +205,7 @@ fn complete_target(
     Ok(resolution)
 }
 
-fn target_cost(
+pub(super) fn target_cost(
     state: &GameState,
     context: EngineContext<'_>,
     target: FiniteProductionTarget,
@@ -237,7 +225,9 @@ fn target_cost(
     .ok_or_else(|| invalid("queued production target is absent or its cost overflowed"))
 }
 
-fn finite_target(target: CityProductionTarget) -> Result<FiniteProductionTarget, ProductionError> {
+pub(super) fn finite_target(
+    target: CityProductionTarget,
+) -> Result<FiniteProductionTarget, ProductionError> {
     match target {
         CityProductionTarget::Building(building) => Ok(FiniteProductionTarget::Building(building)),
         CityProductionTarget::Unit(unit) => Ok(FiniteProductionTarget::Unit(unit)),
@@ -247,7 +237,7 @@ fn finite_target(target: CityProductionTarget) -> Result<FiniteProductionTarget,
 }
 
 #[derive(Clone, Copy)]
-enum FiniteProductionTarget {
+pub(super) enum FiniteProductionTarget {
     Building(aonw_domain::CityBuildingType),
     Unit(aonw_domain::UnitKind),
     Wonder(aonw_domain::WonderType),

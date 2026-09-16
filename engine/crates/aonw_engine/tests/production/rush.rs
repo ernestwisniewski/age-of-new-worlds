@@ -13,6 +13,9 @@ use aonw_engine::{
 
 use super::{map, player, state_with};
 
+#[path = "rush_quote.rs"]
+mod quote;
+
 #[test]
 fn rush_completes_building_and_spends_only_the_bounded_quote() {
     let map = map();

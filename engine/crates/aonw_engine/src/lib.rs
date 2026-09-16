@@ -111,9 +111,9 @@ pub use pending_turn_actions::{
 };
 pub use production::{
     CitySpecializationOption, ProductionError, ProductionOption, ProductionOptions,
-    ProductionOptionsQuery, RushProductionCommand, SetCitySpecializationCommand,
-    StartBuildingCommand, StartCityProjectCommand, StartUnitProductionCommand, StartWonderCommand,
-    UnitProductionOption,
+    ProductionOptionsQuery, ProductionRushQuote, RushProductionCommand,
+    SetCitySpecializationCommand, StartBuildingCommand, StartCityProjectCommand,
+    StartUnitProductionCommand, StartWonderCommand, UnitProductionOption,
 };
 pub use research::{
     CancelResearchSelectionCommand, ResearchError, ResearchOption, ResearchOptions,

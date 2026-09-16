@@ -3,6 +3,7 @@ mod error;
 mod model;
 mod rules;
 mod rush;
+mod rush_quote;
 mod spawn;
 mod supply;
 mod support;
@@ -16,6 +17,7 @@ pub use model::{
     RushProductionCommand, SetCitySpecializationCommand, StartBuildingCommand,
     StartCityProjectCommand, StartUnitProductionCommand, StartWonderCommand, UnitProductionOption,
 };
+pub use rush_quote::ProductionRushQuote;
 
 pub(crate) use commands::{
     ProductionMutation, apply_set_specialization, apply_start_building, apply_start_project,

@@ -2,6 +2,7 @@ use aonw_domain::{
     CityId, CityProductionTarget, CitySpecializationType, StrategicResourceStockpile, UnitKind,
 };
 
+use super::ProductionRushQuote;
 use crate::CommandRejectionCode;
 
 /// Buys one bounded production increment for a controlled city's finite queue.
@@ -348,6 +349,7 @@ pub struct ProductionOptions {
     current_target: Option<CityProductionTarget>,
     invested_production: i64,
     production_overflow: i64,
+    rush_quote: ProductionRushQuote,
     buildings: Box<[ProductionOption]>,
     units: Box<[UnitProductionOption]>,
     projects: Box<[ProductionOption]>,
@@ -363,6 +365,7 @@ impl ProductionOptions {
         current_target: Option<CityProductionTarget>,
         invested_production: i64,
         production_overflow: i64,
+        rush_quote: ProductionRushQuote,
         buildings: Vec<ProductionOption>,
         units: Vec<UnitProductionOption>,
         projects: Vec<ProductionOption>,
@@ -375,6 +378,7 @@ impl ProductionOptions {
             current_target,
             invested_production,
             production_overflow,
+            rush_quote,
             buildings: buildings.into_boxed_slice(),
             units: units.into_boxed_slice(),
             projects: projects.into_boxed_slice(),
@@ -406,6 +410,11 @@ impl ProductionOptions {
     #[must_use]
     pub const fn production_overflow(&self) -> i64 {
         self.production_overflow
+    }
+    /// Returns the exact price and availability of the next rush command.
+    #[must_use]
+    pub const fn rush_quote(&self) -> ProductionRushQuote {
+        self.rush_quote
     }
     /// Returns every building in canonical content order.
     #[must_use]
