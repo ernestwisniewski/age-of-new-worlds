@@ -2888,4 +2888,99 @@ class AonwLocalizationsPl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String resourceInventoryText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'barter': 'wymiana',
+      'importDirection': 'Importujesz',
+      'exportDirection': 'Eksportujesz',
+      'title': 'Gospodarka strategiczna',
+      'healthy': 'Zaopatrzenie strategiczne jest stabilne.',
+      'resources': 'Zasoby strategiczne',
+      'alerts': 'Alerty gospodarcze',
+      'allocations': 'Przydziały produkcji',
+      'noAllocations': 'Brak przydzielonych zasobów strategicznych.',
+      'sources': 'Źródła',
+      'noSources': 'Brak aktywnych źródeł zasobów strategicznych.',
+      'agreements': 'Aktywne umowy',
+      'noAgreements': 'Brak aktywnych umów zasobowych.',
+      'partners': 'Partnerzy handlowi',
+      'noPartners': 'Brak znanej cywilizacji dostępnej do handlu zasobami.',
+      'openTrade': 'Otwórz handel',
+      'goToCity': 'Przejdź do miasta',
+      'stored': 'Zapas',
+      'allocated': 'Przydzielono',
+      'controlled': 'Kontrolowane złoża',
+      'available': 'Dostępne',
+      'production': 'Produkcja krajowa',
+      'imports': 'Import',
+      'exports': 'Eksport',
+      'net': 'Netto / turę',
+      'stockWarningDetail':
+          'Nowa produkcja wymagająca tego zasobu jest zablokowana.',
+      'tradeWarningDetail':
+          'Sprawdź umowę, zanim zmieni się przepływ zasobów strategicznych.',
+      'other': 'Gospodarka strategiczna',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problemu wymaga uwagi.',
+      many: '$count problemów wymaga uwagi.',
+      few: '$count problemy wymagają uwagi.',
+      one: '1 problem wymaga uwagi.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryNoFreeStock(String resourceName) {
+    return 'Brak wolnego zasobu: $resourceName';
+  }
+
+  @override
+  String resourceInventoryInsufficientStock(String resourceName) {
+    return 'Za mało wolnego zasobu: $resourceName';
+  }
+
+  @override
+  String resourceInventoryTradeExpiring(String resourceName, int turns) {
+    String _temp0 = intl.Intl.pluralLogic(
+      turns,
+      locale: localeName,
+      other: 'za $turns tur',
+      few: 'za $turns tury',
+      one: 'za 1 turę',
+    );
+    return 'Umowa na $resourceName wygasa $_temp0';
+  }
+
+  @override
+  String resourceInventoryTradeFlow(
+    String direction,
+    int amount,
+    String resourceName,
+    String price,
+    int remainingTurns,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remainingTurns,
+      locale: localeName,
+      other: 'pozostało $remainingTurns tur',
+      few: 'pozostały $remainingTurns tury',
+      one: 'pozostała 1 tura',
+    );
+    return '$direction: $amount $resourceName/turę · $price · $_temp0';
+  }
+
+  @override
+  String resourceInventoryTradeGold(int goldPerTurn) {
+    return '$goldPerTurn złota/turę';
+  }
 }

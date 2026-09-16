@@ -62,7 +62,7 @@ final class ResourceStrip extends StatelessWidget {
       player.economy.forecast.stability.effectiveNet,
     ),
     ResourcePopup.resources =>
-      '${player.economy.strategicResourceStockpile.where((value) => value.amount > 0).length}/${player.economy.strategicResourceStockpile.length}',
+      '${player.economy.strategicResourceInventory.availableTypeCount}/${player.economy.strategicResourceInventory.balances.length}',
     ResourcePopup.turn => '${player.turnView.number}',
     ResourcePopup.victory => victoryStatusLabel(
       player.victory.status,

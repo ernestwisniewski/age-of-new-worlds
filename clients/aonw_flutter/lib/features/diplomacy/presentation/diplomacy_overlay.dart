@@ -24,6 +24,7 @@ final class DiplomacyOverlay extends StatelessWidget {
     required this.onOpenChanged,
     required this.onAction,
     this.initialTargetPlayerId,
+    this.initialTrade = false,
     this.readOnly = false,
     super.key,
   });
@@ -36,6 +37,7 @@ final class DiplomacyOverlay extends StatelessWidget {
   final ValueChanged<bool>? onOpenChanged;
   final ValueChanged<DiplomacyActionView> onAction;
   final String? initialTargetPlayerId;
+  final bool initialTrade;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ final class DiplomacyOverlay extends StatelessWidget {
                             state: state,
                             onAction: onAction,
                             initialTargetPlayerId: initialTargetPlayerId,
+                            initialTrade: initialTrade,
                           ),
                         ),
                       ],
@@ -127,6 +130,7 @@ final class DiplomacyPanel extends StatelessWidget {
     required this.state,
     required this.onAction,
     this.initialTargetPlayerId,
+    this.initialTrade = false,
     this.readOnly = false,
     super.key,
   });
@@ -137,6 +141,7 @@ final class DiplomacyPanel extends StatelessWidget {
   final DiplomacyState state;
   final ValueChanged<DiplomacyActionView> onAction;
   final String? initialTargetPlayerId;
+  final bool initialTrade;
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +159,9 @@ final class DiplomacyPanel extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         _DiplomacyComposer(
-          key: ValueKey(initialTargetPlayerId),
+          key: ValueKey((initialTargetPlayerId, initialTrade)),
           initialTargetPlayerId: initialTargetPlayerId,
+          initialTrade: initialTrade,
           relations: view.relations,
           enabled: enabled,
           onAction: onAction,
@@ -209,6 +215,7 @@ final class _DiplomacyComposer extends StatefulWidget {
     required this.enabled,
     required this.onAction,
     this.initialTargetPlayerId,
+    this.initialTrade = false,
     super.key,
   });
 
@@ -216,6 +223,7 @@ final class _DiplomacyComposer extends StatefulWidget {
   final bool enabled;
   final ValueChanged<DiplomacyActionView> onAction;
   final String? initialTargetPlayerId;
+  final bool initialTrade;
 
   @override
   State<_DiplomacyComposer> createState() => _DiplomacyComposerState();
@@ -224,7 +232,9 @@ final class _DiplomacyComposer extends StatefulWidget {
 final class _DiplomacyComposerState extends State<_DiplomacyComposer> {
   final _amount = TextEditingController(text: '1');
   final _duration = TextEditingController(text: '5');
-  var _action = _ComposerAction.declareWar;
+  late var _action = widget.initialTrade
+      ? _ComposerAction.resourceTrade
+      : _ComposerAction.declareWar;
   var _topic = DiplomaticMessageTopicView.avoidEscalation;
   var _resource = MapResource.iron;
   var _requestedResource = MapResource.marble;

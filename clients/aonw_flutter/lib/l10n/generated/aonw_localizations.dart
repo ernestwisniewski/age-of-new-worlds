@@ -2727,6 +2727,54 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{key, select, victory{Victory} defeat{Defeat} draw{Draw} complete{Match finished} control{Map control} threshold{Required control} other{Match finished}}'**
   String outcomePresentationText(String key);
+
+  /// No description provided for @resourceInventoryText.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, barter{barter} importDirection{Importing} exportDirection{Exporting} title{Strategic economy} healthy{Strategic supply is stable.} resources{Strategic resources} alerts{Economic alerts} allocations{Production allocations} noAllocations{No strategic resources are allocated.} sources{Sources} noSources{No active strategic resource sources.} agreements{Active agreements} noAgreements{No active resource agreements.} partners{Trade partners} noPartners{No known civilization is available for resource trade.} openTrade{Open trade} goToCity{Go to city} stored{Stored} allocated{Allocated} controlled{Controlled deposits} available{Available} production{Domestic production} imports{Imports} exports{Exports} net{Net / turn} stockWarningDetail{New production that requires this resource is blocked.} tradeWarningDetail{Review the agreement before the strategic flow changes.} other{Strategic economy}}'**
+  String resourceInventoryText(String key);
+
+  /// No description provided for @resourceInventoryAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 issue requires attention.} other{{count} issues require attention.}}'**
+  String resourceInventoryAttention(int count);
+
+  /// No description provided for @resourceInventoryNoFreeStock.
+  ///
+  /// In en, this message translates to:
+  /// **'No free {resourceName}'**
+  String resourceInventoryNoFreeStock(String resourceName);
+
+  /// No description provided for @resourceInventoryInsufficientStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough free {resourceName}'**
+  String resourceInventoryInsufficientStock(String resourceName);
+
+  /// No description provided for @resourceInventoryTradeExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'{resourceName} agreement expires in {turns, plural, =1{1 turn} other{{turns} turns}}'**
+  String resourceInventoryTradeExpiring(String resourceName, int turns);
+
+  /// No description provided for @resourceInventoryTradeFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'{direction}: {amount} {resourceName}/turn · {price} · {remainingTurns, plural, =1{1 turn left} other{{remainingTurns} turns left}}'**
+  String resourceInventoryTradeFlow(
+    String direction,
+    int amount,
+    String resourceName,
+    String price,
+    int remainingTurns,
+  );
+
+  /// No description provided for @resourceInventoryTradeGold.
+  ///
+  /// In en, this message translates to:
+  /// **'{goldPerTurn} gold/turn'**
+  String resourceInventoryTradeGold(int goldPerTurn);
 }
 
 class _AonwLocalizationsDelegate

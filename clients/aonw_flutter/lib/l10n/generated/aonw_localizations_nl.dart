@@ -2964,4 +2964,96 @@ class AonwLocalizationsNl extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String resourceInventoryText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'barter': 'ruil',
+      'importDirection': 'Importeert',
+      'exportDirection': 'Exporteert',
+      'title': 'Strategische economie',
+      'healthy': 'De strategische aanvoer is stabiel.',
+      'resources': 'Strategische grondstoffen',
+      'alerts': 'Economische waarschuwingen',
+      'allocations': 'Productietoewijzingen',
+      'noAllocations': 'Er zijn geen strategische grondstoffen toegewezen.',
+      'sources': 'Bronnen',
+      'noSources': 'Geen actieve bronnen van strategische grondstoffen.',
+      'agreements': 'Actieve overeenkomsten',
+      'noAgreements': 'Geen actieve grondstoffenakkoorden.',
+      'partners': 'Handelspartners',
+      'noPartners':
+          'Er is geen bekende beschaving beschikbaar voor grondstoffenhandel.',
+      'openTrade': 'Handel openen',
+      'goToCity': 'Naar stad',
+      'stored': 'Voorraad',
+      'allocated': 'Toegewezen',
+      'controlled': 'Gecontroleerde stortingen',
+      'available': 'Beschikbaar',
+      'production': 'Binnenlandse productie',
+      'imports': 'Invoer',
+      'exports': 'Uitvoer',
+      'net': 'Netto / beurt',
+      'stockWarningDetail':
+          'Nieuwe productie die deze grondstof vereist, is geblokkeerd.',
+      'tradeWarningDetail':
+          'Controleer de overeenkomst voordat de strategische stroom verandert.',
+      'other': 'Strategische economie',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problemen vereisen aandacht.',
+      one: '1 probleem vereist aandacht.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryNoFreeStock(String resourceName) {
+    return 'Geen vrije $resourceName';
+  }
+
+  @override
+  String resourceInventoryInsufficientStock(String resourceName) {
+    return 'Niet genoeg vrije $resourceName';
+  }
+
+  @override
+  String resourceInventoryTradeExpiring(String resourceName, int turns) {
+    String _temp0 = intl.Intl.pluralLogic(
+      turns,
+      locale: localeName,
+      other: '$turns beurten',
+      one: '1 beurt',
+    );
+    return 'De overeenkomst voor $resourceName loopt af over $_temp0';
+  }
+
+  @override
+  String resourceInventoryTradeFlow(
+    String direction,
+    int amount,
+    String resourceName,
+    String price,
+    int remainingTurns,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remainingTurns,
+      locale: localeName,
+      other: '$remainingTurns beurten resterend',
+      one: '1 beurt resterend',
+    );
+    return '$direction: $amount $resourceName/beurt · $price · $_temp0';
+  }
+
+  @override
+  String resourceInventoryTradeGold(int goldPerTurn) {
+    return '$goldPerTurn goud/beurt';
+  }
 }

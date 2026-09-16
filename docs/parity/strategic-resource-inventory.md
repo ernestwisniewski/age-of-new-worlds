@@ -54,3 +54,31 @@ to three. Contract coverage includes 18 existing round trips and three strict
 inventory cases; the Dart package has 100 passing tests. The full responsive
 resource panel is the next stage. Canonical save/replay state and engine behavior
 identity are unchanged; API 29 performance review is tracked separately.
+
+## Shared HUD presentation
+
+The resource strip shows the authoritative available-type count out of seven.
+The full panel retains seven balance cards and separate alerts, reservations,
+deposits, agreements and known-partner sections. It copies all balance values
+from the inventory; grouping reservations and sorting agreements are display-only.
+One or two columns follow available width, with a single column at large text.
+The header and close action remain visible while the content scrolls.
+
+City actions select the exact projected city through the shared map controller.
+Open trade selects both the known partner and the resource-trade composer.
+Opening or inspecting the inventory sends no command. Pointer, Enter, Escape
+and the gamepad region use the existing map ownership model; down input scrolls
+the content before moving focus. Foreign undiscovered participants are excluded
+from the partner list.
+
+Coverage: 20 panel/navigation tests, including twelve six-locale phone
+portrait/landscape checks at 200%, five reviewed font-loaded goldens, exact
+recipient values, navigation IDs, gamepad scroll/cancel, keyboard activation and
+no idle frames. The broader resource/localization set passed 51 tests before the
+two shared-map navigation cases were added. Architecture budgets are unchanged.
+Native full-screen comparison remains part of the final scene gate.
+
+The final Flutter gate passed all 1,405 tests, map/bundle contracts, analyzer and
+unchanged architecture/boundary checks. Nine existing resource/player/replay
+goldens changed only the denominator glyph (71–76 pixels within y=23–33), were
+visually reviewed and retained their exact comparison tolerance.

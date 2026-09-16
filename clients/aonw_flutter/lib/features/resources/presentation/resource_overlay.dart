@@ -11,6 +11,7 @@ import '../../map/presentation/widgets/map_gamepad_region.dart';
 import '../../map/read_model/player_map_view.dart';
 import 'resource_details.dart';
 import 'resource_strip.dart';
+import 'strategic_resource_panel.dart';
 
 final class ResourceOverlay extends StatelessWidget {
   const ResourceOverlay({
@@ -18,12 +19,16 @@ final class ResourceOverlay extends StatelessWidget {
     required this.open,
     required this.onOpen,
     required this.onClose,
+    this.onCity,
+    this.onTradePartner,
     super.key,
   });
   final PlayerMapView player;
   final ResourcePopup? open;
   final ValueChanged<ResourcePopup>? onOpen;
   final VoidCallback onClose;
+  final ValueChanged<String>? onCity;
+  final ValueChanged<String>? onTradePartner;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -52,7 +57,10 @@ final class ResourceOverlay extends StatelessWidget {
           top: MediaQuery.paddingOf(context).top + 62,
           right: 12,
           bottom: MediaQuery.paddingOf(context).bottom + 12,
-          width: math.min(480, MediaQuery.sizeOf(context).width - 24),
+          width: math.min(
+            kind == ResourcePopup.resources ? 920 : 480,
+            MediaQuery.sizeOf(context).width - 24,
+          ),
           child: Align(
             alignment: Alignment.topRight,
             child: MapGamepadRegion(
@@ -60,11 +68,18 @@ final class ResourceOverlay extends StatelessWidget {
               priority: MapGamepadPriority.popup,
               onCancel: onClose,
               scrollBeforeFocus: true,
-              child: _ResourcePanel(
-                player: player,
-                kind: kind,
-                onClose: onClose,
-              ),
+              child: kind == ResourcePopup.resources
+                  ? StrategicResourcePanel(
+                      player: player,
+                      onClose: onClose,
+                      onCity: onCity,
+                      onTradePartner: onTradePartner,
+                    )
+                  : _ResourcePanel(
+                      player: player,
+                      kind: kind,
+                      onClose: onClose,
+                    ),
             ),
           ),
         ),

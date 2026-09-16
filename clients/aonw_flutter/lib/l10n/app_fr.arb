@@ -1147,5 +1147,76 @@
   "researchRecommendationReason": "{key, select, boost{Bonus de recherche} workerYields{Rendements des ouvriers} unlocks{Nouveaux déblocages} effects{Effets technologiques} nearCompletion{Presque terminé} other{Recommandations}}",
   "technologyDescription": "{technology, select, agriculture{Ouvre la voie de croissance de base. Les fermes et les fermes fluviales permettent à la population de croître plus rapidement et de stabiliser la première ville.} woodworking{Développe le côté production de l'exploitation minière. Les moulins à bois transforment les forêts en production sans aller profondément dans la métallurgie.} mining{Ouvre la voie de l'industrie et de l'infrastructure. Les mines constituent le premier saut majeur dans la production urbaine.} animalHusbandry{Renforce la croissance grâce aux ressources animales. Les pâturages construisent une économie alimentaire et préparent le chemin à l'équitation.} hunting{Ouvre la branche militaire et d'exploration. Fournit des camps et la première unité de production urbaine.} fishing{Développe des villes près de l'eau. Les bateaux de pêche aident les villes côtières à croître plus rapidement et à se préparer au port.} craftsmanship{Première amélioration de la production urbaine. L'atelier empêche les bâtiments et les unités de bloquer la file d'attente trop longtemps.} trade{La première étape de l'économie de l'or. La salle des marchands donne à une ville un avantage financier simple après avoir choisi une branche de croissance.} storage{Stabilise la croissance de la ville. Le stockage aide à maintenir le rythme des aliments et réduit le risque de décrochage.} waterEngineering{Élargit le chemin de croissance de l'eau. Le moulin à eau récompense les villes qui contrôlent les rivières.} stoneworking{Combine production et défense. Les carrières et le maçon de pierre renforcent les villes de la branche infrastructure.} militaryOrganization{Construit le premier noyau militaire d'une ville. Les casernes renforcent la production et la défense avant que des bonus militaires plus tard apparaissent.} advancedTrade{Développe l'économie après le commerce. Le marché est un bâtiment aurifère plus fort et prépare la voie à la banque.} construction{Élargit le territoire et la maturité de la ville. Le logement augmente le contrôle des tuiles et conduit à l'administration et à l'ingénierie.} navigation{Ouvre une ville pour la côte. Le port a besoin d'un accès côtier/océanique et récompense les villes riveraines avec de la nourriture et de l'or.} irrigation{Spécialise la croissance à base d'eau. L'aqueduc accorde une forte prime alimentaire et un contrôle territorial supplémentaire.} banking{Spécialisé dans le commerce. La banque transforme les marchés antérieurs en revenus urbains solides et libère l'économie plus large.} engineering{Spécialisation de la construction. La guilde des constructeurs accélère la production et augmente la limite des tuiles contrôlées.} metallurgy{Une forte rentabilité industrielle après la pierre. La forge augmente la production et prépare le chemin vers le fer et le charbon.} horsebackRiding{Une technologie qui relie croissance et guerre. L'écurie soutient les villes qui ont investi plus tôt dans les animaux et la chasse.} ironWorking{Un effet ressources industrielles. Chaque ressource de fer contrôlée augmente la production de la ville.} coalMining{Un effet sur les ressources industrielles. Le charbon contrôlé augmente la production urbaine et soutient le chemin de l'usine.} machinery{Une récupération tardive de l'infrastructure. L'usine donne une forte augmentation de la production aux villes qui sont entrées dans l'ingénierie.} administration{Liens entre l'infrastructure et l'économie. Les mairies et les monuments renforcent les villes matures et mènent à l'urbanisation.} logistics{Vitesse de production unitaire. C'est la principale technologie pour les joueurs qui veulent faire campagne les armées des villes plus souvent.} shipbuilding{Développe la sous-branche côtière/exploration. Le phare nécessite un accès à la côte et renforce les villes riveraines.} tactics{Spécialisation des villes militaires. Les terrains d'entraînement ajoutent la défense et la production pour les centres militaires.} economy{Une compensation systémique pour la banque. Augmente l'or généré par les économies urbaines.} urbanization{La dernière orientation pour la croissance des grandes villes. Augmente la limite de population une fois que le système de population commence à utiliser des plafonds durs.} fortifications{Renforce la défense de la ville. Accorde un bonus défensif à l'économie de la ville, avec son plein sens croissant après le combat et l'expansion du siège.} strategy{La dernière direction militaire. Renforce l'efficacité de l'armée en tant que compensation tardive après la logistique.} specialization{La dernière compensation civique/économie. Débloque les spécialisations de la ville, ajoute les sciences de la ville, et aide à terminer les technologies tardives dans des parties plus longs.} writing{Le premier pas vers la science, le droit et l'administration. Les archives donnent à une ville une base de recherche permanente.} mathematics{Relier la science à l'aménagement du territoire. Le bureau d'arpentage aide les villes à mieux contrôler les frontières.} medicine{Développer la santé et la croissance à long terme dans les grandes villes grâce aux apothicaires, aux bains et aux hôpitaux.} civilService{Améliore la gestion d'un grand empire et débloque les tribunaux qui stabilisent les villes.} siegecraft{Ouvre la guerre de siège. Catapultes et ateliers de siège brisent les villes forteresses.} cartography{Développer l'exploration, les cartes et la côte. Accorde la salle des cartes et les premiers vaisseaux éclaireurs.} guilds{Donne aux villes de production une étape entre l'atelier et l'industrie.} law{Introduit l'ordre, les politiques et la gouvernance civile par les tribunaux.} education{Construire la voie scientifique complète pour les villes à travers les académies et les universités.} urbanPlanning{Développer les grandes villes et le contrôle territorial par l'aménagement du territoire.} navalDoctrine{Transforme les ports en centres de flottes, de chantiers navals et de projection de force en mer.} steel{Introduit l'industrie lourde et l'infanterie lourde pour le front ultérieur.} bureaucracy{Fournit un objectif civique majeur après l'administration: bureaux, ministères, musées et parlement.} nationalism{Combine la défense frontalière, la mobilisation et l'identité de l'empire.} scientificMethod{Préparer des projets scientifiques, des laboratoires, des observatoires et des technologies.} steamPower{Ouvre le rail, la logistique plus lourde et l'industrie de la vapeur.} electricity{Introduit la puissance, l'infrastructure et la portée de l'information.} combustion{Donne de l'importance à l'huile et déverrouille les unités de première ligne modernes.} flight{Introduit l'aviation, la reconnaissance et la projection de force sur le front.} massProduction{Développer la production industrielle finale, les réservoirs et les usines de montage.} radio{Renforce la communication, la visibilité et l'influence de l'empire à travers les tours de diffusion.} nuclearPhysics{Ouvre le réacteur, l'uranium et les projets de fin de jeu.} other{}}",
   "outcomePresentationText": "{key, select, victory{Victoire} defeat{Défaite} draw{Égalité} complete{Partie terminée} control{Contrôle de la carte} threshold{Contrôle requis} other{Partie terminée}}",
-  "@outcomePresentationText": {"placeholders": {"key": {"type": "String"}}}
+  "@outcomePresentationText": {"placeholders": {"key": {"type": "String"}}},
+  "resourceInventoryText": "{key, select, barter{troc} importDirection{Importation} exportDirection{Exportations} title{Économie stratégique} healthy{L’approvisionnement stratégique est stable.} resources{Ressources stratégiques} alerts{Alertes économiques} allocations{Allocations de production} noAllocations{Aucune ressource stratégique n’est allouée.} sources{Sources} noSources{Aucune source active de ressources stratégiques.} agreements{Accords actifs} noAgreements{Pas d'accord sur les ressources actives.} partners{Partenaires commerciaux} noPartners{Aucune civilisation connue n’est disponible pour le commerce de ressources.} openTrade{Ouvrir le commerce} goToCity{Voir la ville} stored{Stock} allocated{Alloué} controlled{Dépôts contrôlés} available{Disponible} production{Production nationale} imports{Importations} exports{Exportations} net{Net / tour} stockWarningDetail{Toute nouvelle production nécessitant cette ressource est bloquée.} tradeWarningDetail{Vérifiez l’accord avant que le flux stratégique ne change.} other{Économie stratégique}}",
+  "@resourceInventoryText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "resourceInventoryAttention": "{count, plural, =1{1 problème requiert votre attention.} other{{count} problèmes requièrent votre attention.}}",
+  "@resourceInventoryAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInventoryNoFreeStock": "Aucune unité de {resourceName} libre",
+  "@resourceInventoryNoFreeStock": {
+    "placeholders": {
+      "resourceName": {
+        "type": "String"
+      }
+    }
+  },
+  "resourceInventoryInsufficientStock": "Pas assez de {resourceName} libre",
+  "@resourceInventoryInsufficientStock": {
+    "placeholders": {
+      "resourceName": {
+        "type": "String"
+      }
+    }
+  },
+  "resourceInventoryTradeExpiring": "L’accord de {resourceName} expire dans {turns, plural, =1{1 tour} other{{turns} tours}}",
+  "@resourceInventoryTradeExpiring": {
+    "placeholders": {
+      "resourceName": {
+        "type": "String"
+      },
+      "turns": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInventoryTradeFlow": "{direction} : {amount} {resourceName}/tour · {price} · {remainingTurns, plural, =1{1 tour restant} other{{remainingTurns} tours restants}}",
+  "@resourceInventoryTradeFlow": {
+    "placeholders": {
+      "direction": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "int"
+      },
+      "resourceName": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "remainingTurns": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInventoryTradeGold": "{goldPerTurn} or/tour",
+  "@resourceInventoryTradeGold": {
+    "placeholders": {
+      "goldPerTurn": {
+        "type": "int"
+      }
+    }
+  }
 }

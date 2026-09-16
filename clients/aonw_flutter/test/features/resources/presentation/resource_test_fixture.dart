@@ -1,3 +1,5 @@
+import 'package:aonw_flutter/features/cities/read_model/city_view.dart';
+import 'package:aonw_flutter/features/diplomacy/read_model/diplomacy_view.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_victory_view.dart';
@@ -8,21 +10,26 @@ PlayerMapView resourcePlayerFixture({
   TreasuryWarningView warning = TreasuryWarningView.none,
   List<MapResource> shortages = const [],
   PlayerVictoryView? victory,
+  PlayerStrategicResourceInventoryView? inventory,
+  DiplomacyView? diplomacy,
+  List<CityView>? cities,
+  List<MatchParticipantView>? participants,
 }) {
   final source = testMapScene().player;
   return PlayerMapView(
     actorPlayerId: source.actorPlayerId,
     stamp: source.stamp,
     turnMode: source.turnMode,
-    participants: source.participants,
+    participants: participants ?? source.participants,
     fog: source.fog,
     turnView: source.turnView,
-    diplomacy: source.diplomacy,
+    diplomacy: diplomacy ?? source.diplomacy,
     victory: victory ?? source.victory,
     units: source.units,
-    cities: source.cities,
+    cities: cities ?? source.cities,
     economy: PlayerEconomyView(
-      strategicResourceInventory: PlayerStrategicResourceInventoryView.empty(),
+      strategicResourceInventory:
+          inventory ?? PlayerStrategicResourceInventoryView.empty(),
       strategicResourceShortages: shortages,
       gold: 123,
       warWeariness: 0,

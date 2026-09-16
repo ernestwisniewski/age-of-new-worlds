@@ -2988,4 +2988,96 @@ class AonwLocalizationsDe extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String resourceInventoryText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'barter': 'Tausch',
+      'importDirection': 'Importiert',
+      'exportDirection': 'Exportiert',
+      'title': 'Strategische Wirtschaft',
+      'healthy': 'Die strategische Versorgung ist stabil.',
+      'resources': 'Strategische Ressourcen',
+      'alerts': 'Wirtschaftswarnungen',
+      'allocations': 'Produktionszuweisungen',
+      'noAllocations': 'Keine strategischen Ressourcen sind zugewiesen.',
+      'sources': 'Quellen',
+      'noSources': 'Keine aktiven Quellen strategischer Ressourcen.',
+      'agreements': 'Aktive Abkommen',
+      'noAgreements': 'Keine aktiven Ressourcenabkommen.',
+      'partners': 'Handelspartner',
+      'noPartners':
+          'Keine bekannte Zivilisation ist für den Ressourcenhandel verfügbar.',
+      'openTrade': 'Handel öffnen',
+      'goToCity': 'Zur Stadt',
+      'stored': 'Vorrat',
+      'allocated': 'Zugewiesen',
+      'controlled': 'Kontrollierte Vorkommen',
+      'available': 'Verfügbar',
+      'production': 'Inlandsproduktion',
+      'imports': 'Importe',
+      'exports': 'Exporte',
+      'net': 'Netto / Zug',
+      'stockWarningDetail':
+          'Neue Produktionen, die diese Ressource benötigen, sind blockiert.',
+      'tradeWarningDetail':
+          'Prüfe das Abkommen, bevor sich der strategische Fluss ändert.',
+      'other': 'Strategische Wirtschaft',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Probleme erfordern Aufmerksamkeit.',
+      one: '1 Problem erfordert Aufmerksamkeit.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String resourceInventoryNoFreeStock(String resourceName) {
+    return 'Kein freies $resourceName';
+  }
+
+  @override
+  String resourceInventoryInsufficientStock(String resourceName) {
+    return 'Nicht genug freies $resourceName';
+  }
+
+  @override
+  String resourceInventoryTradeExpiring(String resourceName, int turns) {
+    String _temp0 = intl.Intl.pluralLogic(
+      turns,
+      locale: localeName,
+      other: '$turns Zügen',
+      one: '1 Zug',
+    );
+    return 'Das $resourceName-Abkommen läuft in $_temp0 aus';
+  }
+
+  @override
+  String resourceInventoryTradeFlow(
+    String direction,
+    int amount,
+    String resourceName,
+    String price,
+    int remainingTurns,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remainingTurns,
+      locale: localeName,
+      other: '$remainingTurns Züge verbleibend',
+      one: '1 Zug verbleibend',
+    );
+    return '$direction: $amount $resourceName/Zug · $price · $_temp0';
+  }
+
+  @override
+  String resourceInventoryTradeGold(int goldPerTurn) {
+    return '$goldPerTurn Gold/Zug';
+  }
 }

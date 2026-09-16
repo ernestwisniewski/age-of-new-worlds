@@ -54,6 +54,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   _MapHudPanel? _openPanel;
   String? _selectedPlayerId;
   String? _diplomacyTargetId;
+  var _diplomacyTrade = false;
   var _workerActionsWereOpen = false;
   var _researchWasFocused = false;
 
@@ -186,6 +187,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           onOpenChanged: locked ? null : _setGeneralDiplomacy,
           onAction: widget.controller.executeDiplomacyAction,
           initialTargetPlayerId: _diplomacyTargetId,
+          initialTrade: _diplomacyTrade,
         ),
         _objectives(effectivePanel, locked),
         if (!ResourcePopup.values.any(
@@ -246,10 +248,12 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
 
   void _setGeneralDiplomacy(bool open) {
     _diplomacyTargetId = null;
+    _diplomacyTrade = false;
     _setOpen(_MapHudPanel.diplomacy, open);
   }
 
-  void _openPlayerDiplomacy(String id) {
+  void _openPlayerDiplomacy(String id, {bool trade = false}) {
+    _diplomacyTrade = trade;
     _diplomacyTargetId = id;
     _setOpen(_MapHudPanel.diplomacy, true);
   }
@@ -289,6 +293,15 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
           ? null
           : (kind) => _setResource(open == kind ? null : kind),
       onClose: () => _setResource(null),
+      onCity: locked
+          ? null
+          : (id) {
+              _setResource(null);
+              widget.controller.selectCity(id);
+            },
+      onTradePartner: locked
+          ? null
+          : (id) => _openPlayerDiplomacy(id, trade: true),
     );
   }
 

@@ -41,7 +41,7 @@ Paths below are relative to `flame_4x/lib/game/presentation/widgets` for the ref
 
 | Presentation | Reference location | Current recipient-safe source | Remaining work |
 | --- | --- | --- | --- |
-| Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | API 29 inventory and API 28 warnings/priority available; complete inventory panel remains open |
+| Top resources and details | `hud/resources` | `PlayerMapView.economy`, `research`, `victory`, `turnView` | API 29 full inventory panel, exact city/trade navigation, six languages/200% and five reviewed goldens; native full-screen comparison remains open |
 | Avatars and Online status | `hud/game_hud_chrome.dart` | Participants, own submission, known diplomacy and aggregate submissions | Final full-map visual comparison |
 | Action deck and selection | `hud/action_deck`, `selection` | Selected visible unit/city, typed action options and Rust pending-turn query | Integrated command/selection deck, expansion and detail behavior |
 | Research | `technology/technology_tree_dialog.dart` | `ResearchOptionsView`: availability, costs, progress, prerequisites, exclusions and unlocks | Responsive catalog, tree/details and recommendations from Rust API 25 implemented; completion popup uses own accepted events; 54 atlas illustrations and six-language authored discovery descriptions implemented |
