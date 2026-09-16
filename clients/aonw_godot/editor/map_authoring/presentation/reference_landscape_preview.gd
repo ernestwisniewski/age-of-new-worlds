@@ -7,6 +7,18 @@ const ForestRenderer := preload("res://editor/map_authoring/presentation/referen
 const MeshNormals := preload("res://editor/map_authoring/presentation/reference_mesh_normals.gd")
 const WaterSurface := preload("res://editor/map_authoring/presentation/reference_water_surface.gd")
 
+const CityLayout := preload("res://editor/map_authoring/infrastructure/terrain/city_hex_layout.gd")
+const CityPreview := preload("res://editor/map_authoring/presentation/city_hex_preview.gd")
+
+## Optional future city/rock/building mockup: metre-authored, Y-up, centred at origin.
+@export var city_preview_scene: PackedScene:
+	set(value):
+		city_preview_scene = value
+		_queue_forest(true)
+var _city_preview_root: Node3D
+var _city_layout: Dictionary = {}
+var _city_warning := ""
+
 ## Atlas-sized coverage: white woodland, black clearing. Exclusions still apply.
 @export var forest_guide: Texture2D
 var landscape_status := ""
@@ -118,6 +130,13 @@ func _apply_visibility() -> void:
 		_forest_root.visible = not reference_only
 	if is_instance_valid(_water_surface):
 		_water_surface.visible = not reference_only
+	if is_instance_valid(_city_preview_root):
+		_city_preview_root.visible = not reference_only
+		var guides := _city_preview_root.get_node_or_null("FootprintGuides") as Node3D
+		if guides != null:
+			guides.visible = city_marker_visible
+			if _city_marker != null:
+				_city_marker.visible = false # The draped guide replaces the flat legacy disk.
 	if _reference != null:
 		_reference.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if _surface_material != null and not reference_only else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_reference.extra_cull_margin = 30.0
@@ -140,7 +159,12 @@ func _forest_parameters() -> Dictionary:
 	var result := {"seed": values["seed"]}
 	for key in ["tree_density", "tree_spacing", "tree_height", "tree_max_slope", "tree_reference_strength", "tree_draw_distance", "tree_conifer_share"]:
 		result[key] = values[key]
-	return result
+	for field in Parameters.FIELDS:
+		if field[6] == "city":
+			result[field[0]] = values[field[0]]
+	result["city_column"] = city_marker_coordinate.x
+	result["city_row"] = city_marker_coordinate.y
+	return CityLayout.forest_parameters(artifact(), result)
 
 func _queue_forest(force_snap: bool) -> void:
 	if _surface_plan == null or not preview_ready or not is_inside_tree():
@@ -164,13 +188,24 @@ func _rebuild_forest() -> void:
 	if signature != _forest_signature:
 		_forest_candidates = _surface_plan.call("forest_candidates", values)
 		_forest_signature = signature
+	_city_layout = CityLayout.prepare(artifact(), city_marker_coordinate, values,
+		reconstruction["water_mask"], _terrain.data, _reference_inputs["document"])
+	_city_warning = str(_city_layout.get("message", ""))
+	var city_preview := CityPreview.build(_city_layout, artifact(), _terrain.data, city_preview_scene)
+	if is_instance_valid(_city_preview_root):
+		remove_child(_city_preview_root)
+		_city_preview_root.queue_free()
+	_city_preview_root = city_preview["root"]
+	add_child(_city_preview_root)
+	if not str(city_preview["warning"]).is_empty():
+		_city_warning = city_preview["warning"]
 	var result: Dictionary
 	if _forest_candidates.is_empty():
 		var empty := Node3D.new()
 		empty.name = "ReferenceForest"
 		result = {"ok": true, "root": empty, "count": 0}
 	else:
-		result = ForestRenderer.new().build(_forest_candidates, _terrain.data, artifact().sample_spacing_meters, values)
+		result = ForestRenderer.new().build(_forest_candidates, _terrain.data, artifact().sample_spacing_meters, values, _city_layout)
 	_forest_warning = ""
 	if is_instance_valid(_forest_root):
 		remove_child(_forest_root)
@@ -195,6 +230,11 @@ func _update_landscape_status() -> void:
 		landscape_status = _material_warning
 	if not _forest_warning.is_empty():
 		landscape_status += "\n" + _forest_warning
+	if not _city_warning.is_empty():
+		landscape_status += "\nCity preview: " + _city_warning
+	var scale_values := _forest_parameters()
+	if artifact() != null and scale_values["city_scale_enabled"] >= 0.5:
+		landscape_status += "\nCity hex: %.0f model m | trees %.2f map m" % [scale_values["city_hex_diameter"], scale_values["tree_height"]]
 	var help := get_node_or_null("PreviewHUD/Help") as Label
 	if help != null:
 		help.text = source_map_id.to_upper() + " | 1: reference  2: landscape  R: compare  G: grid\n" + landscape_status
@@ -202,7 +242,7 @@ func _update_landscape_status() -> void:
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := super._get_configuration_warnings()
-	for message in [_material_warning, _forest_warning]:
+	for message in [_material_warning, _forest_warning, _city_warning]:
 		if not message.is_empty():
 			warnings.append(message)
 	return warnings
@@ -219,3 +259,14 @@ func _validate_presentation_inputs(inputs: Dictionary) -> String:
 func _update_surface_normals() -> void:
 	if _reference != null and artifact() != null:
 		MeshNormals.update(_reference.mesh, artifact().width, artifact().height)
+
+func city_site_layout() -> Dictionary:
+	return _city_layout.duplicate(true)
+
+func set_city_marker_coordinate(value: Vector2i) -> void:
+	super.set_city_marker_coordinate(value)
+	_queue_forest(true)
+
+func set_city_marker_visible(value: bool) -> void:
+	super.set_city_marker_visible(value)
+	_apply_visibility()

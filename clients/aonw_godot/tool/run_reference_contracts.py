@@ -19,6 +19,7 @@ TESTS = (
     "tests/test_reference_parameter_effects.gd",
     "tests/test_reference_surface.gd",
     "tests/test_reference_features.gd",
+    "tests/test_city_hex_layout.gd",
 )
 
 

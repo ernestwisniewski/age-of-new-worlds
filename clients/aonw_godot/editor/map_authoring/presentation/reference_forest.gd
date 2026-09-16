@@ -2,9 +2,10 @@
 extends RefCounted
 ## Derived, ownerless, chunked MultiMeshes. ManualWorld and Terrain3D regions are untouched.
 const Library := preload("res://editor/map_authoring/presentation/reference_tree_library.gd")
+const CityLayout := preload("res://editor/map_authoring/infrastructure/terrain/city_hex_layout.gd")
 const CHUNK_SIZE := 128.0
 
-func build(candidates: Array, data: Object, sample_spacing: float, parameters: Dictionary) -> Dictionary:
+func build(candidates: Array, data: Object, sample_spacing: float, parameters: Dictionary, city_site: Dictionary = {}) -> Dictionary:
 	var library := Library.load_library()
 	if not library["ok"]:
 		return library
@@ -12,10 +13,19 @@ func build(candidates: Array, data: Object, sample_spacing: float, parameters: D
 	root.name = "ReferenceForest"
 	root.set_meta(&"aonw_generated", true)
 	var groups := {}
+	var crown_radii := {}
+	if bool(city_site.get("ok", false)):
+		for key in library["prototypes"]:
+			crown_radii[key] = prototype_radius(library["prototypes"][key])
 	var count := 0
 	var minimum_up := cos(deg_to_rad(float(parameters["tree_max_slope"])))
 	for candidate in candidates:
 		var local: Vector3 = candidate["position"]
+		var prototype_id := int(candidate["species"]) * 2 + int(candidate["variant"])
+		if crown_radii.has(prototype_id):
+			var height := float(parameters["tree_height"]) * float(candidate["scale"])
+			if not CityLayout.accepts_vegetation(city_site, local, float(crown_radii[prototype_id]) * height):
+				continue
 		var ground := ground_sample(data, local, sample_spacing)
 		if not ground["ok"] or float(ground["up"]) < minimum_up:
 			continue
@@ -68,3 +78,15 @@ static func ground_sample(data: Object, local: Vector3, spacing: float) -> Dicti
 			return {"ok": false}
 	var normal := Vector3(left - right, 2.0 * step, back - front).normalized()
 	return {"ok": true, "height": height, "up": normal.y}
+
+static func prototype_radius(prototype: Dictionary) -> float:
+	# Conservative circumscribed horizontal radius per unit height, including
+	# internal mesh offsets. Remains valid for every random Y rotation.
+	var radius := 0.0
+	for part in prototype["parts"]:
+		var mesh: Mesh = part["mesh"]
+		var bounds: AABB = part["transform"] * mesh.get_aabb()
+		var x := maxf(absf(bounds.position.x), absf(bounds.end.x))
+		var z := maxf(absf(bounds.position.z), absf(bounds.end.z))
+		radius = maxf(radius, Vector2(x, z).length())
+	return radius / maxf(float(prototype["height"]), 0.001)

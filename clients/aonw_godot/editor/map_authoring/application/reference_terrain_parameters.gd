@@ -41,6 +41,13 @@ const FIELDS := [
 	["sun_heading", "Sun heading (degrees)", 0.0, 360.0, 1.0, 328.0, "appearance", "Live direction of terrain shadows."],
 	["sun_energy", "Sun intensity", 0.1, 2.0, 0.05, 1.0, "appearance", "Direct illumination of the reconstruction."],
 	["ambient_energy", "Ambient light", 0.05, 1.0, 0.05, 0.45, "appearance", "Fill light for valleys; lower values reveal landform shadows."],
+	["city_scale_enabled", "Vegetation scale: legacy / city hex", 0.0, 1.0, 1.0, 1.0, "city", "City hex scales trees and spacing to the selected map radius. Legacy keeps the original metre controls."],
+	["city_hex_diameter", "Represented hex diameter (model m)", 80.0, 600.0, 10.0, 160.0, "city", "Corner-to-corner city and immediate surroundings. A presentation convention, not a change to map geometry."],
+	["city_tree_height", "Tree height (model m)", 3.0, 30.0, 0.5, 12.0, "city", "Real-model height before variation. Uses the same model-to-map scale as the future city."],
+	["city_tree_spacing", "Tree spacing (model m)", 5.0, 30.0, 0.5, 10.0, "city", "Desired model-space spacing; existing candidate/tree budgets still apply on large maps."],
+	["city_reserve_enabled", "Reserve marked city hex", 0.0, 1.0, 1.0, 0.0, "city", "Only the chosen city-marker coordinate is reserved. Off restores its original forest. No terrain is flattened."],
+	["city_core_ratio", "Building core (hex radius fraction)", 0.2, 0.6, 0.01, 0.42, "city", "Clear whole tree crowns from this core. Water and steep cores are rejected without changing the map."],
+	["city_outskirts_ratio", "Outskirts (hex radius fraction)", 0.65, 0.84, 0.01, 0.76, "city", "Gradually restore natural vegetation outside the core. The outer band fits entirely inside the hex."],
 	["camera_pitch", "Strategic camera pitch", 25.0, 80.0, 1.0, 52.0, "camera", "Perspective strategic view; inspect its live preview below."],
 	["camera_yaw", "Strategic camera heading", -180.0, 180.0, 1.0, 0.0, "camera", "Rotate around the map."],
 	["camera_zoom", "Strategic camera zoom", 0.5, 8.0, 0.05, 1.0, "camera", "Perspective dolly, not orthographic-size-only zoom."],
@@ -72,7 +79,7 @@ static func validate(values: Dictionary) -> String:
 			return "Non-finite or non-numeric terrain parameter: " + key
 		if float(value) < field[2] or float(value) > field[3]:
 			return "Terrain parameter is outside its supported range: " + key
-		if key in ["seed", "erosion_passes"] and float(value) != floorf(float(value)):
+		if key in ["seed", "erosion_passes", "city_scale_enabled", "city_reserve_enabled"] and float(value) != floorf(float(value)):
 			return "Terrain parameter must be an integer: " + key
 	return ""
 

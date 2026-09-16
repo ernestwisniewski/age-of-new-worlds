@@ -27,7 +27,7 @@ func _ready() -> void:
 			continue # The original metric-height slider remains the single control.
 		if field[6] != previous_stage:
 			var header := Label.new()
-			header.text = {"terrain": "Landscape · apply to rebuild", "appearance": "Material and light · live", "camera": "Strategic camera · live"}[field[6]]
+			header.text = {"terrain": "Landscape · apply to rebuild", "appearance": "Material and light · live", "camera": "Strategic camera · live", "city": "City hex · scale and footprint"}[field[6]]
 			add_child(HSeparator.new())
 			add_child(header)
 			previous_stage = field[6]
@@ -64,18 +64,29 @@ func show_values(values: Dictionary, enabled: bool, pending: bool) -> void:
 	for key in ranges:
 		var range_control: Range = ranges[key]
 		range_control.set_value_no_signal(values.get(key, Parameters.descriptor(key)[5]))
-		range_control.set("editable", enabled)
-		_labels[key].text = str(int(range_control.value)) if key == "seed" else "%.2f" % range_control.value
+		var city_scale := float(values.get("city_scale_enabled", 1.0)) >= 0.5
+		var mode_enabled := not city_scale if key in ["tree_height", "tree_spacing"] else true
+		if key in ["city_tree_height", "city_tree_spacing"]:
+			mode_enabled = city_scale
+		range_control.set("editable", enabled and mode_enabled)
+		_labels[key].text = _display_value(key, range_control.value)
 	_apply.disabled = not enabled
 	_discard.disabled = not enabled or not pending
 	_preset.disabled = not enabled
 	_status.text = "Pending geometry changes. Apply saves the current draft before switching recipes." if pending else "No pending numeric geometry settings. Apply also reloads image guides and source data; appearance and camera are live."
 
 func _value_changed(value: float, key: String) -> void:
-	_labels[key].text = str(int(value)) if key == "seed" else "%.2f" % value
+	_labels[key].text = _display_value(key, value)
 	parameter_changed.emit(key, value)
 
 func _choose_preset(index: int) -> void:
 	if index > 0:
 		preset_requested.emit(_preset.get_item_text(index))
 	_preset.select(0)
+
+func _display_value(key: String, value: float) -> String:
+	if key == "city_scale_enabled":
+		return "City hex" if value >= 0.5 else "Legacy metres"
+	if key == "city_reserve_enabled":
+		return "On" if value >= 0.5 else "Off"
+	return str(int(value)) if key == "seed" else "%.2f" % value
