@@ -37,11 +37,11 @@ void main() {
       expect(find.textContaining('Strategic resources: Oil 2'), findsOneWidget);
       final available = find.widgetWithText(
         OutlinedButton,
-        'Granary · cost 12',
+        'Granary · cost 12 · About 5 turns',
       );
       final blocked = find.widgetWithText(
         OutlinedButton,
-        'Workshop · cost 15 · This building is unavailable.',
+        'Workshop · cost 15 · About 5 turns · This building is unavailable.',
       );
       expect(available, findsOneWidget);
       expect(blocked, findsOneWidget);

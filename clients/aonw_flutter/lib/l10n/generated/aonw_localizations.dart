@@ -1903,7 +1903,7 @@ abstract class AonwLocalizations {
   /// No description provided for @productionText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{Production and resources} loading{Loading production options} executing{Updating city production} current{Current production} invested{Invested} overflow{Overflow} resources{Strategic resources} buildings{Buildings} units{Units} projects{Projects} wonders{Wonders} specializations{Specializations} rush{Rush production} cost{cost} requires{requires} empty{No option is currently available.} other{Production}}'**
+  /// **'{key, select, title{Production and resources} loading{Loading production options} executing{Updating city production} current{Current production} invested{Invested} overflow{Overflow} resources{Strategic resources} buildings{Buildings} units{Units} projects{Projects} wonders{Wonders} specializations{Specializations} rush{Rush production} cost{cost} requires{requires} empty{No option is currently available.} choose{Choose a production target for this city.} ready{Ready to complete} spawnBlocked{Waiting for a free tile} noEstimate{No completion estimate} continuous{Continuous project} other{Production}}'**
   String productionText(String key);
 
   /// No description provided for @productionFailure.
@@ -2781,6 +2781,48 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{goldPerTurn} gold/turn'**
   String resourceInventoryTradeGold(int goldPerTurn);
+
+  /// No description provided for @productionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{invested} / {cost} production'**
+  String productionProgress(int invested, int cost);
+
+  /// No description provided for @productionRate.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} production / turn'**
+  String productionRate(int amount);
+
+  /// No description provided for @productionRushPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Rush +{production} production · {gold} gold'**
+  String productionRushPrice(int production, int gold);
+
+  /// No description provided for @productionTreasury.
+  ///
+  /// In en, this message translates to:
+  /// **'Available gold: {gold}'**
+  String productionTreasury(int gold);
+
+  /// No description provided for @productionTurns.
+  ///
+  /// In en, this message translates to:
+  /// **'{turns, plural, =1{About 1 turn} other{About {turns} turns}}'**
+  String productionTurns(int turns);
+
+  /// No description provided for @productionGoldOutput.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} gold / turn'**
+  String productionGoldOutput(int amount);
+
+  /// No description provided for @productionScienceOutput.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} science / turn'**
+  String productionScienceOutput(int amount);
 }
 
 class _AonwLocalizationsDelegate

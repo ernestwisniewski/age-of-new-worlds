@@ -1552,6 +1552,11 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'cost': 'coût',
       'requires': 'nécessite',
       'empty': 'Aucune option n’est disponible actuellement.',
+      'choose': 'Choisissez une production pour cette ville.',
+      'ready': 'Prêt à terminer',
+      'spawnBlocked': 'En attente d’une case libre',
+      'noEstimate': 'Durée non estimable',
+      'continuous': 'Projet continu',
       'other': 'Production',
     });
     return '$_temp0';
@@ -3078,5 +3083,46 @@ class AonwLocalizationsFr extends AonwLocalizations {
   @override
   String resourceInventoryTradeGold(int goldPerTurn) {
     return '$goldPerTurn or/tour';
+  }
+
+  @override
+  String productionProgress(int invested, int cost) {
+    return '$invested / $cost de production';
+  }
+
+  @override
+  String productionRate(int amount) {
+    return '$amount de production / tour';
+  }
+
+  @override
+  String productionRushPrice(int production, int gold) {
+    return 'Accélérer de $production · $gold or';
+  }
+
+  @override
+  String productionTreasury(int gold) {
+    return 'Or disponible : $gold';
+  }
+
+  @override
+  String productionTurns(int turns) {
+    String _temp0 = intl.Intl.pluralLogic(
+      turns,
+      locale: localeName,
+      other: 'Environ $turns tours',
+      one: 'Environ 1 tour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String productionGoldOutput(int amount) {
+    return '$amount or / tour';
+  }
+
+  @override
+  String productionScienceOutput(int amount) {
+    return '$amount science / tour';
   }
 }

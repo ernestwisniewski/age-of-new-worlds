@@ -771,7 +771,7 @@
       }
     }
   },
-  "productionText": "{key, select, title{Productie en grondstoffen} loading{Productieopties worden geladen} executing{Stadsproductie wordt bijgewerkt} current{Huidige productie} invested{Geïnvesteerd} overflow{Overschot} resources{Strategische grondstoffen} buildings{Gebouwen} units{Eenheden} projects{Projecten} wonders{Wereldwonderen} specializations{Specialisaties} rush{Productie versnellen} cost{kosten} requires{vereist} empty{Er is momenteel geen optie beschikbaar.} other{Productie}}",
+  "productionText": "{key, select, title{Productie en grondstoffen} loading{Productieopties worden geladen} executing{Stadsproductie wordt bijgewerkt} current{Huidige productie} invested{Geïnvesteerd} overflow{Overschot} resources{Strategische grondstoffen} buildings{Gebouwen} units{Eenheden} projects{Projecten} wonders{Wereldwonderen} specializations{Specialisaties} rush{Productie versnellen} cost{kosten} requires{vereist} empty{Er is momenteel geen optie beschikbaar.} choose{Kies een productiedoel voor deze stad.} ready{Klaar voor voltooiing} spawnBlocked{Wachten op een vrij veld} noEstimate{Geen tijdschatting} continuous{Doorlopend project} other{Productie}}",
   "@productionText": {
     "placeholders": {
       "key": {
@@ -1219,5 +1219,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "productionProgress": "{invested} / {cost} productie",
+  "@productionProgress": {"placeholders": {"invested": {"type": "int"}, "cost": {"type": "int"}}},
+  "productionRate": "{amount} productie / beurt",
+  "@productionRate": {"placeholders": {"amount": {"type": "int"}}},
+  "productionRushPrice": "Versnel met {production} · {gold} goud",
+  "@productionRushPrice": {"placeholders": {"production": {"type": "int"}, "gold": {"type": "int"}}},
+  "productionTreasury": "Beschikbaar goud: {gold}",
+  "@productionTreasury": {"placeholders": {"gold": {"type": "int"}}},
+  "productionTurns": "{turns, plural, =1{Ongeveer 1 beurt} other{Ongeveer {turns} beurten}}",
+  "@productionTurns": {"placeholders": {"turns": {"type": "int"}}},
+  "productionGoldOutput": "{amount} goud / beurt",
+  "@productionGoldOutput": {"placeholders": {"amount": {"type": "int"}}},
+  "productionScienceOutput": "{amount} wetenschap / beurt",
+  "@productionScienceOutput": {"placeholders": {"amount": {"type": "int"}}}
 }

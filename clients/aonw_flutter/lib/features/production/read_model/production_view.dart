@@ -131,7 +131,47 @@ final class ProductionOptionsView {
   final List<ProductionOptionView> projects;
   final List<ProductionOptionView> wonders;
   final List<CitySpecializationOptionView> specializations;
+
+  ProductionOptionView? get currentOption {
+    final target = currentTarget;
+    if (target == null) return null;
+    for (final option
+        in buildings
+            .followedBy(units.map((unit) => unit.option))
+            .followedBy(projects)
+            .followedBy(wonders)) {
+      if (_sameProductionTarget(option.target, target)) return option;
+    }
+    return null;
+  }
 }
+
+bool _sameProductionTarget(
+  ProductionTargetView left,
+  ProductionTargetView right,
+) => switch ((left, right)) {
+  (
+    BuildingProductionTargetView(building: final a),
+    BuildingProductionTargetView(building: final b),
+  ) =>
+    a == b,
+  (
+    UnitProductionTargetView(unit: final a),
+    UnitProductionTargetView(unit: final b),
+  ) =>
+    a == b,
+  (
+    ProjectProductionTargetView(project: final a),
+    ProjectProductionTargetView(project: final b),
+  ) =>
+    a == b,
+  (
+    WonderProductionTargetView(wonder: final a),
+    WonderProductionTargetView(wonder: final b),
+  ) =>
+    a == b,
+  _ => false,
+};
 
 final class StrategicResourceAmountView {
   const StrategicResourceAmountView({

@@ -5,6 +5,7 @@ import '../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../map/read_model/map_view.dart';
 import '../application/production_state.dart';
 import '../read_model/production_view.dart';
+import 'production_active_banner.dart';
 import 'production_copy.dart';
 
 final class ProductionPanel extends StatelessWidget {
@@ -12,12 +13,14 @@ final class ProductionPanel extends StatelessWidget {
     required this.state,
     required this.onAction,
     this.enabled = true,
+    this.treasury,
     super.key,
   });
 
   final ProductionState state;
   final ValueChanged<ProductionActionView> onAction;
   final bool enabled;
+  final int? treasury;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,12 @@ final class ProductionPanel extends StatelessWidget {
               compact: true,
             )
           else if (state.options case final options?) ...[
-            _ProductionSummary(options: options),
+            ProductionActiveBanner(
+              options: options,
+              enabled: acceptsInput,
+              onAction: onAction,
+              treasury: treasury,
+            ),
             if (state.resources case final resources?)
               _ResourceSummary(resources: resources),
             _ProductionActions(
@@ -62,33 +70,6 @@ final class ProductionPanel extends StatelessWidget {
             ),
         ],
       ),
-    );
-  }
-}
-
-final class _ProductionSummary extends StatelessWidget {
-  const _ProductionSummary({required this.options});
-
-  final ProductionOptionsView options;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = ProductionCopy.of(context);
-    final target = options.currentTarget;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${copy.text(ProductionText.current)}: '
-          '${target == null ? '—' : copy.target(target)}',
-        ),
-        Text(
-          '${copy.text(ProductionText.invested)}: '
-          '${options.investedProduction} · '
-          '${copy.text(ProductionText.overflow)}: '
-          '${options.productionOverflow}',
-        ),
-      ],
     );
   }
 }
@@ -222,14 +203,6 @@ final class _ProductionActions extends StatelessWidget {
           blocker: option.blocker,
         ),
     ]);
-    if (options.currentTarget != null) {
-      sections.add(
-        button(
-          action: RushProductionActionView(cityId: options.cityId),
-          label: copy.text(ProductionText.rush),
-        ),
-      );
-    }
     return sections.isEmpty
         ? Text(copy.text(ProductionText.empty))
         : Column(
@@ -285,9 +258,14 @@ List<Widget> _unitButtons({
   ];
 }
 
-String _optionLabel(ProductionCopy copy, ProductionOptionView option) =>
-    '${copy.target(option.target)} · ${copy.text(ProductionText.cost)} '
-    '${option.cost}';
+String _optionLabel(ProductionCopy copy, ProductionOptionView option) {
+  final target = option.target;
+  if (target is ProjectProductionTargetView) {
+    return '${copy.target(target)} · ${copy.output(target, option.forecast.projectOutput!)}';
+  }
+  return '${copy.target(target)} · ${copy.text(ProductionText.cost)} '
+      '${option.cost} · ${copy.estimate(option.forecast)}';
+}
 
 String _stockpile(ProductionCopy copy, Map<MapResource, int> value) => value
     .entries

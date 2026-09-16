@@ -22,6 +22,11 @@ enum ProductionText {
   cost,
   requires,
   empty,
+  choose,
+  ready,
+  spawnBlocked,
+  noEstimate,
+  continuous,
 }
 
 final class ProductionCopy {
@@ -44,6 +49,31 @@ final class ProductionCopy {
   String resource(MapResource value) => _l10n.presentationName(value.name);
 
   String cityContent(String value) => _l10n.cityContentName(value);
+
+  String progress(int invested, int cost) =>
+      _l10n.productionProgress(invested, cost);
+
+  String rate(int amount) => _l10n.productionRate(amount);
+
+  String rush(int production, int gold) =>
+      _l10n.productionRushPrice(production, gold);
+
+  String treasury(int gold) => _l10n.productionTreasury(gold);
+
+  String estimate(ProductionForecastView value) {
+    if (value.spawnBlocked) return text(ProductionText.spawnBlocked);
+    if (value.projectOutput != null) return text(ProductionText.continuous);
+    return switch (value.estimatedTurns) {
+      null => text(ProductionText.noEstimate),
+      0 => text(ProductionText.ready),
+      final turns => _l10n.productionTurns(turns),
+    };
+  }
+
+  String output(ProjectProductionTargetView target, int amount) =>
+      target.project == 'wealth'
+      ? _l10n.productionGoldOutput(amount)
+      : _l10n.productionScienceOutput(amount);
 
   String target(ProductionTargetView value) => switch (value) {
     BuildingProductionTargetView(:final building) => cityContent(building),

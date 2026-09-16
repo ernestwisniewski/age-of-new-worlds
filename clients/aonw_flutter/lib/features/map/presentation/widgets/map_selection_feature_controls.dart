@@ -83,6 +83,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
     }
     return ProductionPanel(
       state: production,
+      treasury: player.economy.gold,
       enabled:
           !readOnly &&
           !(interaction.city?.commandPending ?? false) &&

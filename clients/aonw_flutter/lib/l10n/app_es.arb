@@ -771,7 +771,7 @@
       }
     }
   },
-  "productionText": "{key, select, title{Producción y recursos} loading{Cargando opciones de producción} executing{Actualizando la producción de la ciudad} current{Producción actual} invested{Invertido} overflow{Excedente} resources{Recursos estratégicos} buildings{Edificios} units{Unidades} projects{Proyectos} wonders{Maravillas} specializations{Especializaciones} rush{Acelerar producción} cost{coste} requires{requiere} empty{No hay opciones disponibles en este momento.} other{Producción}}",
+  "productionText": "{key, select, title{Producción y recursos} loading{Cargando opciones de producción} executing{Actualizando la producción de la ciudad} current{Producción actual} invested{Invertido} overflow{Excedente} resources{Recursos estratégicos} buildings{Edificios} units{Unidades} projects{Proyectos} wonders{Maravillas} specializations{Especializaciones} rush{Acelerar producción} cost{coste} requires{requiere} empty{No hay opciones disponibles en este momento.} choose{Elige una producción para esta ciudad.} ready{Listo para terminar} spawnBlocked{Esperando una casilla libre} noEstimate{Sin estimación de tiempo} continuous{Proyecto continuo} other{Producción}}",
   "@productionText": {
     "placeholders": {
       "key": {
@@ -1219,5 +1219,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "productionProgress": "{invested} / {cost} de producción",
+  "@productionProgress": {"placeholders": {"invested": {"type": "int"}, "cost": {"type": "int"}}},
+  "productionRate": "{amount} de producción / turno",
+  "@productionRate": {"placeholders": {"amount": {"type": "int"}}},
+  "productionRushPrice": "Acelerar en {production} · {gold} de oro",
+  "@productionRushPrice": {"placeholders": {"production": {"type": "int"}, "gold": {"type": "int"}}},
+  "productionTreasury": "Oro disponible: {gold}",
+  "@productionTreasury": {"placeholders": {"gold": {"type": "int"}}},
+  "productionTurns": "{turns, plural, =1{Aproximadamente 1 turno} other{Aproximadamente {turns} turnos}}",
+  "@productionTurns": {"placeholders": {"turns": {"type": "int"}}},
+  "productionGoldOutput": "{amount} de oro / turno",
+  "@productionGoldOutput": {"placeholders": {"amount": {"type": "int"}}},
+  "productionScienceOutput": "{amount} de ciencia / turno",
+  "@productionScienceOutput": {"placeholders": {"amount": {"type": "int"}}}
 }

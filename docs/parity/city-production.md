@@ -61,5 +61,28 @@ equality pass. Canonical persistence and engine behavior identity stay unchanged
 
 Focused acceptance: 20 client-contract tests, three production runtime tests,
 three server-query tests, 104 Dart protocol tests and six Flutter production
-tests. The full Flutter suite passes 1,424 tests; its remaining quality gates and
-the performance review are tracked separately while the panel is completed.
+tests. The transport-stage Flutter suite passes 1,424 tests, analysis, architecture,
+map contracts and boundary checks. Performance acceptance is recorded separately
+in `city-production-performance.md`.
+
+
+## Active production presentation
+
+The city panel now shows the authoritative investment, total cost, production
+rate and estimated completion time. Continuous projects show their gold or
+science output; a completed unit without a spawn position explains why it waits.
+The rush button displays the quoted increment and price, including unaffordable
+quotes, and sends the existing city intent once. Read-only, loading, pending and
+rejected states disable that action. The player's current treasury and stored
+production overflow remain visible.
+
+All six localizations cover the new copy. Twenty focused interaction/layout
+tests cover exact quoted values, keyboard activation, pending/read-only states,
+continuous output, blocked units and every language at 200% text scaling in phone
+portrait and landscape. Four reviewed goldens cover phone, tablet, desktop and
+large text. The complete Flutter suite passes 1,447 tests, with map contracts,
+analyzer, generated-code and architecture checks. The architecture baseline's
+existing production build method shrinks from 78 to 70 lines; no limit increases.
+
+This completes the active banner. The full production modal, catalog grouping,
+building/unit/wonder details and city/worker panels remain separate work.
