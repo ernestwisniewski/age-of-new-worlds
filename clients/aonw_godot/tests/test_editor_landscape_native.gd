@@ -1,11 +1,16 @@
-extends SceneTree
-## Run once with --editor and once without, after importing the native project.
+@tool
+extends Node
+## Run this scene with and without --editor, using -- --performance-contract.
+## Keep the normal editor main loop: --editor --script with a custom SceneTree
+## leaks editor-owned resources at shutdown even for an otherwise empty test.
 const Scene := preload("res://scenes/terrain_authoring/reference_maps/dravonia.tscn")
 
-func _initialize() -> void:
-	_run.call_deferred()
+func _ready() -> void:
+	if "--performance-contract" in OS.get_cmdline_user_args():
+		_run.call_deferred()
 
 func _run() -> void:
+	var root := get_tree().root
 	var view = Scene.instantiate()
 	view.workspace_root = "user://editor-performance-validation"
 	root.add_child(view)
@@ -49,12 +54,12 @@ func _run() -> void:
 		" generation_passes=", generation, " native_height_samples=", samples)
 	root.remove_child(view)
 	view.free()
-	await process_frame
-	quit(0)
+	await get_tree().process_frame
+	get_tree().quit(0)
 
 func _settle(view: Node) -> bool:
 	for i in 400:
-		await create_timer(0.025).timeout
+		await get_tree().create_timer(0.025).timeout
 		if bool(view.get("landscape_ready")):
 			return true
 	return false

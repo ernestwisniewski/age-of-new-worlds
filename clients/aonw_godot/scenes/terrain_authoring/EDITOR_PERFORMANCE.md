@@ -57,7 +57,8 @@ hits, local invalidation, incremental/full normal parity and idle/hidden viewpor
 refreshes. Run with a real renderer to verify GPU buffer round trips; the dummy
 headless renderer does not store uploaded GPU buffers.
 
-`test_editor_landscape_native.gd` runs with and without `--editor` on the actual
+`test_editor_landscape_native.tscn` runs with and without `--editor`, with
+`-- --performance-contract`, using the normal editor main loop on the actual
 Dravonia scene: editor/runtime separation, immediate quality switching, camera,
 light, draw-distance and city-marker changes without candidate regeneration.
 The rendered-map workflow runs both tests as well as the existing all-map tests.

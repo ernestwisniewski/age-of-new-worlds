@@ -63,8 +63,8 @@ jobs:
           set -euo pipefail
           godot="$RUNNER_TEMP/Godot_v4.7.1-stable_linux.x86_64"
           timeout 120 xvfb-run -a "$godot" --audio-driver Dummy --rendering-method gl_compatibility --rendering-driver opengl3 --path clients/aonw_godot --script res://tests/test_editor_landscape_performance.gd > reference-scene-performance.log 2>&1
-          timeout 180 "$godot" --headless --audio-driver Dummy --editor --path clients/aonw_godot --script res://tests/test_editor_landscape_native.gd > reference-scene-performance-editor.log 2>&1
-          timeout 180 "$godot" --headless --audio-driver Dummy --path clients/aonw_godot --script res://tests/test_editor_landscape_native.gd > reference-scene-performance-play.log 2>&1
+          timeout 180 "$godot" --headless --audio-driver Dummy --editor --path clients/aonw_godot res://tests/test_editor_landscape_native.tscn -- --performance-contract > reference-scene-performance-editor.log 2>&1
+          timeout 180 "$godot" --headless --audio-driver Dummy --path clients/aonw_godot res://tests/test_editor_landscape_native.tscn -- --performance-contract > reference-scene-performance-play.log 2>&1
           cat reference-scene-performance*.log
           if grep -E 'SCRIPT ERROR|Parse Error|Compile Error|ERROR:' reference-scene-performance*.log; then exit 1; fi
       - name: Validate complete natural forests and water for all bundles
