@@ -195,3 +195,28 @@ under `test/features/multiplayer/presentation/goldens/waiting_room_*` cover the
 three standard sizes and German phone text at 200%. These regressions do not
 complete reference lobby parity: participant country/connection detail, full
 setup flow comparison and native multiplayer sessions remain to be audited.
+
+
+## Populated production reference
+
+Nine additional captures use the original production panel with Warsaw, a built
+granary, a workshop under construction, two unlocked technologies and 150 gold.
+The source application's theme seed, body font and background colors are applied.
+The [manifest](reference-production/manifest.json) records the fixture, dimensions
+and image hashes; the [template](../../tool/reference/capture_production_test.dart.template)
+reproduces it. All nine widget scenarios pass and their images were inspected.
+
+| State | Phone | Tablet | Desktop |
+| --- | --- | --- | --- |
+| Active production and catalog | [Image](reference-production/phone_production.png) | [Image](reference-production/tablet_production.png) | [Image](reference-production/desktop_production.png) |
+| Workshop details | [Image](reference-production/phone_building_details.png) | [Image](reference-production/tablet_building_details.png) | [Image](reference-production/desktop_building_details.png) |
+| Warrior details | [Image](reference-production/phone_unit_details.png) | [Image](reference-production/tablet_unit_details.png) | [Image](reference-production/desktop_unit_details.png) |
+
+The portrait detail opens above the whole panel through the Navigator; landscape
+keeps the production header and overlays the scrolling catalog. Captures include
+both layers. Atlas loading is settled before capture. These are widget references,
+not native renderer measurements, and the terrain-free fixture's numeric values
+do not replace Rust rules. The source itself displays an unpaced detail cost
+alongside a paced catalog cost; the target must show the authoritative quoted
+cost consistently. [The production field map](production-field-map.md) records
+which data already exists and which authoritative policies still need projection.

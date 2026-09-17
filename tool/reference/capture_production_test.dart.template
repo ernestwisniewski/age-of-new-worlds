@@ -1,0 +1,113 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:aonw/game/presentation/widgets/city/city_production_dialog.dart';
+import 'package:aonw/game/presentation/widgets/city/city_building_details_dialog.dart';
+import 'package:aonw/game/presentation/widgets/unit/unit_details_panel.dart';
+import 'package:aonw/shared/theme/game_ui_theme.dart';
+import 'package:aonw/game/presentation/widgets/city/city_production_list.dart';
+import 'package:aonw/game/presentation/widgets/city/city_production_list_tile.dart';
+import 'package:aonw/l10n/generated/app_localizations.dart';
+import 'package:aonw_core/game/domain/city.dart';
+import 'package:aonw_core/game/domain/technology.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(() async {
+    await (FontLoader('Cinzel')..addFont(rootBundle.load('assets/fonts/Cinzel-VariableFont_wght.ttf'))).load();
+    await (FontLoader('Lato')..addFont(rootBundle.load('assets/fonts/Lato-Regular.ttf'))).load();
+    await (FontLoader('MaterialIcons')..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
+  });
+  for (final sample in [
+    (name: 'phone', size: const Size(390, 844)),
+    (name: 'tablet', size: const Size(1024, 768)),
+    (name: 'desktop', size: const Size(1440, 900)),
+  ]) {
+    for (final panel in ['production', 'building_details', 'unit_details']) {
+      testWidgets('${sample.name} $panel reference', (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = sample.size;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.binding.setSurfaceSize(sample.size);
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        await tester.pumpWidget(_app());
+        await tester.pumpAndSettle();
+        if (panel == 'building_details') {
+          final row = find.ancestor(of: find.text('Workshop'), matching: find.byType(ProductionListTile));
+          final help = find.descendant(of: row, matching: find.byTooltip('Building details'));
+          await _reveal(tester, help);
+          await tester.tap(help);
+          await tester.pumpAndSettle();
+        } else if (panel == 'unit_details') {
+          final help = find.byTooltip('Unit details').first;
+          await _reveal(tester, help);
+          await tester.tap(help);
+          await tester.pumpAndSettle();
+        }
+        if (panel == 'building_details') expect(find.byType(CityBuildingDetailsPanel), findsOneWidget);
+        if (panel == 'unit_details') expect(find.byType(UnitDetailsPanel), findsOneWidget);
+        for (var frame = 0; frame < 4; frame++) {
+          await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+          await tester.pumpAndSettle();
+        }
+        expect(tester.takeException(), isNull);
+        final boundary = tester.renderObject<RenderRepaintBoundary>(find.byKey(const Key('reference-capture')));
+        await tester.runAsync(() async {
+          final image = await boundary.toImage();
+          final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+          const output = String.fromEnvironment('AONW_REFERENCE_OUTPUT', defaultValue: '/tmp/aonw-production-reference');
+          final file = File('$output/${sample.name}_$panel.png');
+          file.parent.createSync(recursive: true);
+          file.writeAsBytesSync(bytes!.buffer.asUint8List());
+          image.dispose();
+        });
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+}
+
+Future<void> _reveal(WidgetTester tester, Finder finder) async {
+  for (var attempt = 0; attempt < 20 && finder.hitTestable().evaluate().isEmpty; attempt++) {
+    await tester.drag(find.byType(CityProductionList), const Offset(0, -160));
+    await tester.pumpAndSettle();
+  }
+  expect(finder.hitTestable(), findsOneWidget);
+}
+
+Widget _app() => MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  locale: const Locale('en'),
+  theme: ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(seedColor: GameUiTheme.gold, brightness: Brightness.dark, surface: GameUiTheme.surface),
+    fontFamily: GameUiTheme.bodyFont,
+    scaffoldBackgroundColor: GameUiTheme.bg,
+  ),
+  builder: (context, child) => RepaintBoundary(key: const Key('reference-capture'), child: child!),
+  home: Scaffold(body: Center(child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: CityProductionPanel(
+        city: GameCity(
+          id: 'city_1', ownerPlayerId: 'player_1', name: 'Warsaw',
+          center: const CityHex(col: 1, row: 1),
+          buildings: const {CityBuildingType.granary},
+          productionQueue: CityProductionQueue.building(buildingType: CityBuildingType.workshop, investedProduction: 4),
+        ),
+        cityRuleset: CityRulesets.standard,
+        research: ResearchState(players: {'player_1': PlayerResearchState(unlockedTechnologyIds: {TechnologyId.craftsmanship, TechnologyId.writing})}),
+        technologyRuleset: TechnologyRulesets.standard,
+        productionPerTurn: 3, playerGold: 150,
+        onBuild: (_) {}, onProduceUnit: (_) {}, onRushProduction: () {},
+        onStartProject: (_) {}, onBuildWonder: (_) {}, onClose: () {},
+      ),
+  ))),
+);

@@ -1,0 +1,92 @@
+{
+  "referenceRepository": "flame_4x",
+  "referenceRevision": "c6473641e57eb4337218234669c361db01c45d6e",
+  "capturedDate": "2026-09-19",
+  "flutter": "3.44.2",
+  "dart": "3.12.2",
+  "locale": "en",
+  "pixelRatio": 1,
+  "fonts": [
+    "Cinzel",
+    "Lato",
+    "MaterialIcons"
+  ],
+  "fixture": {
+    "city": "Warsaw",
+    "completedBuildings": [
+      "granary"
+    ],
+    "target": "workshop",
+    "investedProduction": 4,
+    "productionPerTurn": 3,
+    "playerGold": 150,
+    "unlockedTechnologies": [
+      "craftsmanship",
+      "writing"
+    ],
+    "map": null
+  },
+  "limitations": [
+    "Widget captures; no native-device or performance acceptance.",
+    "Theme seed, body font and scaffold colors match the reference application.",
+    "City has no terrain fixture; displayed source numeric values are not target rules.",
+    "Portrait detail uses the Navigator modal; landscape detail overlays the catalog.",
+    "Atlas loads receive four async/frame cycles before capture."
+  ],
+  "images": [
+    {
+      "file": "desktop_building_details.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "82a63049cb20eead7ebe0cc7fd6be2d8337028d75f6aab25b41eea070828758b"
+    },
+    {
+      "file": "desktop_production.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "451eb39c69a8d5e03ea055f28df2f4d787d7ab2f583b7eeb5267e292bb167946"
+    },
+    {
+      "file": "desktop_unit_details.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "7cfcfbc65e8b77dfb9f48fa6ff69106bd26f61cd7e090613528cbac7662404c9"
+    },
+    {
+      "file": "phone_building_details.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c0bfb198b9dfd4aa9aab89eaa3d990e06728b3036bb6909ef3f7251ad70ca330"
+    },
+    {
+      "file": "phone_production.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "ef4a63d0ef5707be79a5e1c038ac6f67c6d1647e606f2d1007deaa07b756f09f"
+    },
+    {
+      "file": "phone_unit_details.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "b47f90d4c71bad59852c4a2d77dcc4561f14f4296a2573ffbc017d575a9d2c26"
+    },
+    {
+      "file": "tablet_building_details.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "111ed2b38a1121ebe7308c92d7b12f659a6b583579fa78fab9ed859bf372722f"
+    },
+    {
+      "file": "tablet_production.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "6dd0f69051892cfb5e21adfe76467637e7df1f7581122ac853f1baa4c69c47b1"
+    },
+    {
+      "file": "tablet_unit_details.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "536675c41a210e12e24dc74262e0e34474d69fa87a2f029de5ae3c53e1157030"
+    }
+  ]
+}
