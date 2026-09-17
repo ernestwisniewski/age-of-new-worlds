@@ -6,9 +6,9 @@ extends "res://editor/map_authoring/infrastructure/terrain/reference_hydrology.g
 func sample_landscape(
 	source: AonwTerrainCompiledArtifact, reference: Image,
 	original: PackedFloat32Array, document: Dictionary, overrides: Dictionary,
-	has_reference: bool = true,
+	has_reference: bool = true, parameters: Dictionary = {},
 ) -> Dictionary:
-	var result := sample(source, reference, original, document, overrides)
+	var result := sample(source, reference, original, document, overrides, parameters)
 	if not result["ok"]:
 		return result
 	var tiles := {}

@@ -45,6 +45,7 @@ func _initialize() -> void:
 	var values := Parameters.defaults()
 	values["tree_density"] = 1.0
 	values["tree_reference_strength"] = 0.0
+	values["forest_distribution"] = 0.0
 	var first := plan.forest_candidates(values)
 	assert(not first.is_empty())
 	assert(first == plan.forest_candidates(values), "Rebuild must retain deterministic placement")

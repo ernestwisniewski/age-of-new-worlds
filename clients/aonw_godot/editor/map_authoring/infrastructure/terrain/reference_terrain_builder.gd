@@ -4,7 +4,7 @@ extends "res://editor/map_authoring/infrastructure/terrain/natural_relief_builde
 
 const Landscape := preload("res://editor/map_authoring/infrastructure/terrain/terrain_landscape_fields.gd")
 const Parameters := preload("res://editor/map_authoring/application/reference_terrain_parameters.gd")
-const REFERENCE_VERSION := "aonw-reference-terrain/3"
+const REFERENCE_VERSION := "aonw-reference-terrain/4"
 
 func build_reference(
 	source: AonwTerrainCompiledArtifact, reference: Image, document: Dictionary,
@@ -35,7 +35,7 @@ func build_reference(
 	for value in original:
 		if not is_finite(value) or value < 0.0:
 			return {"ok": false, "message": "Source heights must be finite and non-negative"}
-	var guides := Landscape.new().sample_landscape(source, reference, original, document, overrides, has_reference)
+	var guides := Landscape.new().sample_landscape(source, reference, original, document, overrides, has_reference, p)
 	if not guides["ok"]:
 		return guides
 	var width := source.width
@@ -100,7 +100,7 @@ func build_reference(
 			dry[index] = smoothstep(0.0, shore_width, distance[index] * spacing)
 			heights[index] = maxf(0.02, sculpted) * dry[index]
 			# Bounded shore grade makes river banks/beaches, not vertical blue walls.
-			heights[index] = minf(heights[index], distance[index] * spacing * lerpf(0.35, 1.6, mountain))
+			heights[index] = minf(heights[index], distance[index] * spacing * lerpf(float(p["water_bank_grade"]), 1.6, mountain))
 	for _pass in int(p["erosion_passes"]):
 		heights = _relax_talus(heights, dry, width, height, spacing * 1.3)
 	var minimum := PackedFloat32Array()

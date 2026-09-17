@@ -6,8 +6,9 @@ const WATER_SHADER := preload("res://editor/map_authoring/presentation/reference
 static func build(masks: Dictionary, extent: Vector2, has_reference: bool) -> MeshInstance3D:
 	var material := ShaderMaterial.new()
 	material.shader = WATER_SHADER
-	for pair in [["water_mask", "water"], ["shore_distance", "shore_distance"], ["coverage", "coverage"], ["palette", "macro"]]:
+	for pair in [["water_profile", "water_profile"], ["water_mask", "water"], ["shore_distance", "shore_distance"], ["coverage", "coverage"], ["palette", "macro"]]:
 		material.set_shader_parameter(pair[0], ImageTexture.create_from_image(masks[pair[1]]))
+	material.set_shader_parameter("sample_spacing", float(masks.get("sample_spacing", 1.0)))
 	material.set_shader_parameter("has_reference", has_reference)
 	var mesh := PlaneMesh.new()
 	mesh.size = extent
@@ -24,5 +25,5 @@ static func apply(surface: MeshInstance3D, parameters: Dictionary) -> void:
 	if surface == null:
 		return
 	var material := surface.material_override as ShaderMaterial
-	for key in ["water_depth", "water_shore_width", "water_waves", "water_reference_colour"]:
+	for key in ["water_depth", "water_bed_slope", "water_shore_width", "water_waves", "water_reference_colour"]:
 		material.set_shader_parameter(key, parameters[key])

@@ -21,8 +21,8 @@ func _run() -> void:
 	for radius in [5.0, 10.0, 40.0]:
 		source.hex_radius_meters = radius
 		var resolved := City.forest_parameters(source, p)
-		assert(is_equal_approx(resolved["tree_height"] / (2.0 * radius), 12.0 / 160.0))
-		assert(is_equal_approx(resolved["tree_spacing"] / (2.0 * radius), 10.0 / 160.0))
+		assert(is_equal_approx(resolved["tree_height"] / (2.0 * radius), 8.0 / 240.0))
+		assert(is_equal_approx(resolved["tree_spacing"] / (2.0 * radius), 6.0 / 240.0))
 	assert(p == original, "Scale must not rewrite saved recipe values")
 	p["city_scale_enabled"] = 0.0
 	assert(City.forest_parameters(source, p) == p, "Legacy numeric overrides must survive")
@@ -88,7 +88,7 @@ func _run() -> void:
 	root.add_child(view)
 	var anchor := view.get_node("CityModelAnchor") as Node3D
 	assert(anchor.get_node_or_null("FutureCity") != null)
-	assert(anchor.scale == Vector3.ONE * 0.125)
+	assert(anchor.scale == Vector3.ONE * (20.0 / 240.0))
 	assert(is_equal_approx(anchor.position.y, 2.065))
 	assert(view.owner == null and anchor.owner == null)
 	assert(view.get_node("FootprintGuides").get_child_count() == 3)

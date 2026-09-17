@@ -11,6 +11,7 @@ const WATER_TAGS := ["ocean", "sea", "lake", "river", "water", "coast"]
 func sample(
 	source: AonwTerrainCompiledArtifact, reference: Image,
 	original: PackedFloat32Array, document: Dictionary, overrides: Dictionary = {},
+	parameters: Dictionary = {},
 ) -> Dictionary:
 	var error := _document_error(document, source)
 	if not error.is_empty():
@@ -23,6 +24,7 @@ func sample(
 			return {"ok": false, "message": "Reference guides must be decoded images"}
 		if image.get_size() != reference.get_size():
 			return {"ok": false, "message": "Guide dimensions must match the reference atlas"}
+	var samples := clampi(int(parameters.get("water_sampling", 3)), 1, 3)
 	var width := source.width
 	var height := source.height
 	var count := width * height
@@ -48,11 +50,13 @@ func sample(
 	var luminance := PackedFloat32Array()
 	var ridges := PackedFloat32Array()
 	var candidates := PackedByteArray()
+	var weak_candidates := PackedByteArray()
 	var water := PackedByteArray()
 	var queue := PackedInt32Array()
 	luminance.resize(count)
 	ridges.resize(count)
 	candidates.resize(count)
+	weak_candidates.resize(count)
 	water.resize(count)
 	queue.resize(count)
 	var tail := 0
@@ -87,20 +91,36 @@ func sample(
 				wet_tile = tile_water[tile_index] != 0
 				protected_tile = protected_land[tile_index] != 0 and not wet_tile
 			var blue := is_water_color(color)
-			if not blue and wet_tile:
-				blue = _subpixel_water(reference, pixel, footprint)
+			var weak := is_possible_water_color(color)
+			if not blue and wet_tile and samples > 1:
+				blue = _water_coverage(reference, Vector2(uv) * Vector2(reference_size), footprint, samples) >= 0.25
 			var uncertain_water := (
 				wet_tile and original[index] <= 0.05 and not _clear_land(color)
 			)
 			# Connected blue snow shadows are still land, even when they touch the ocean.
 			# Explicit water/river tags or a guide can intentionally cross snowy terrain.
 			candidates[index] = int(outside or (not protected_tile and (blue or uncertain_water)))
+			weak_candidates[index] = int(not protected_tile and weak)
 			if uncertain_water and not blue and not outside:
 				ambiguous_samples += 1
-			if outside or (candidates[index] != 0 and (wet_tile or original[index] <= 0.05)):
+			if outside or (candidates[index] != 0 and (blue or uncertain_water) and (wet_tile or original[index] <= 0.05)):
 				water[index] = 1
 				queue[tail] = index
 				tail += 1
+	# Weak shore colours can bridge a one-sample antialiased gap, not propagate
+	# recursively through an entire green/blue forest. Never override artist guides.
+	if not overrides.has("water") and not sea_only:
+		var strong := candidates.duplicate()
+		for y in range(1, height - 1):
+			for x in range(1, width - 1):
+				var index := y * width + x
+				if candidates[index] != 0 or weak_candidates[index] == 0:
+					continue
+				var support := 0
+				for offset in [-width - 1, -width, -width + 1, -1, 1, width - 1, width, width + 1]:
+					support += strong[index + offset]
+				if support >= 3:
+					candidates[index] = 1
 	# Eight-connected flood preserves thin diagonal rivers. No scan-order growth
 	# into land, and no wraparound between the last and first column of a row.
 	var head := 0
@@ -129,6 +149,21 @@ func is_water_color(color: Color) -> bool:
 		color.a > 0.5 and color.b - color.r > 0.035
 		and color.b > color.g * 0.92 and color.s > 0.12
 	)
+
+func is_possible_water_color(color: Color) -> bool:
+	# Hysteresis admits teal shallows / shaded blue only when connected to seeded
+	# water. It does not seed lakes from arbitrary blue-green forest shadows.
+	return color.a > 0.5 and color.b - color.r > 0.015 and color.b >= color.g * 0.9 and color.s > 0.09
+
+func _water_coverage(image: Image, position: Vector2, footprint: Vector2, samples: int) -> float:
+	var hits := 0
+	var size := image.get_size() - Vector2i.ONE
+	for y in samples:
+		for x in samples:
+			var offset := Vector2((x + 0.5) / samples - 0.5, (y + 0.5) / samples - 0.5) * footprint
+			var pixel := Vector2i(roundi(position.x + offset.x), roundi(position.y + offset.y)).clamp(Vector2i.ZERO, size)
+			hits += int(is_water_color(image.get_pixelv(pixel)))
+	return float(hits) / (samples * samples)
 
 func _clear_land(color: Color) -> bool:
 	return (
@@ -196,14 +231,3 @@ func _coordinate(value: Variant, limit: int) -> bool:
 		(value is int or value is float) and is_finite(float(value))
 		and float(value) == floorf(float(value)) and value >= 0 and value < limit
 	)
-
-func _subpixel_water(image: Image, pixel: Vector2i, footprint: Vector2) -> bool:
-	# Preserve a thin reference river falling between raster centres, but only
-	# inside a semantic water seed. This cannot invent lakes in blue mountain shadows.
-	var evidence := 0
-	for offset in [Vector2(-0.35, 0.0), Vector2(0.35, 0.0), Vector2(0.0, -0.35), Vector2(0.0, 0.35)]:
-		var point := pixel + Vector2i((offset * footprint).round())
-		point = point.clamp(Vector2i.ZERO, image.get_size() - Vector2i.ONE)
-		if is_water_color(image.get_pixelv(point)):
-			evidence += 1
-	return evidence >= 2

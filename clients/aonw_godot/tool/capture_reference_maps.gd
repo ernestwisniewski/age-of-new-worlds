@@ -11,7 +11,10 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	var ids := OS.get_cmdline_user_args()
 	if ids.is_empty():
-		ids = PackedStringArray(["dravonia", "myranth", "terenos", "verdantia"])
+		for map_id in DirAccess.get_directories_at("res://assets/maps"):
+			if FileAccess.file_exists("res://assets/maps/" + map_id + "/map.json"):
+				ids.append(map_id)
+		ids.sort()
 	for id in ids:
 		var preview := Scene.instantiate()
 		preview.source_map_id = id
@@ -52,7 +55,7 @@ func _run() -> void:
 		var masks: Dictionary = preview.get("_masks")
 		masks["canopy"].save_png(output.path_join(id + "-canopy.png"))
 		preview.reconstruction["water_mask"].save_png(output.path_join(id + "-water.png"))
-		print("RENDERED ", id, " trees=", preview.tree_count)
+		print("RENDERED ", id, " trees=", preview.tree_count, " sampling=", preview.get("_surface_plan").forest_statistics)
 		root.remove_child(preview)
 		preview.free()
 		await process_frame

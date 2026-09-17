@@ -10,6 +10,9 @@ uniform sampler2D coverage : filter_linear, repeat_disable;
 uniform sampler2D shore_distance : filter_linear, repeat_disable;
 uniform vec4 layer_means[6];
 uniform float water_depth = 8.0;
+uniform float water_bed_slope = 0.45;
+uniform float sample_spacing = 1.0;
+uniform sampler2D water_profile : filter_linear, repeat_disable;
 uniform sampler2D water_mask : filter_linear, repeat_disable;
 uniform sampler2D reference_texture : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
 uniform sampler2D reference_macro : source_color, filter_linear, repeat_disable;
@@ -29,10 +32,11 @@ varying vec3 surface_normal;
 void vertex() {
 	local_position = VERTEX;
 	vec2 raster_uv = VERTEX.xz / max(raster_extent, vec2(0.001));
-	float wet = texture(water_mask, raster_uv).r;
-	float bank = texture(shore_distance, raster_uv).r;
+	vec2 field_size = vec2(textureSize(water_profile, 0));
+	float bank = texture(water_profile, (raster_uv * (field_size - 1.0) + 0.5) / field_size).r;
+	float wet = smoothstep(-sample_spacing * 0.02, sample_spacing * 0.5, bank);
 	float reference_mix = reference_visible && has_reference ? reference_opacity : 0.0;
-	VERTEX.y -= smoothstep(0.45, 0.95, wet) * min(water_depth, max(0.0, bank - 0.5) * 0.65 + 0.15) * (1.0 - reference_mix);
+	VERTEX.y -= wet * water_depth * (1.0 - exp(-(max(0.0, bank) * water_bed_slope + 0.12) / water_depth)) * (1.0 - reference_mix);
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	surface_normal = MODEL_NORMAL_MATRIX * NORMAL;
 }

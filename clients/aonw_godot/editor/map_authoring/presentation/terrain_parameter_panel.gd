@@ -68,6 +68,8 @@ func show_values(values: Dictionary, enabled: bool, pending: bool) -> void:
 		var mode_enabled := not city_scale if key in ["tree_height", "tree_spacing"] else true
 		if key in ["city_tree_height", "city_tree_spacing"]:
 			mode_enabled = city_scale
+		if key in ["tree_reference_strength", "tree_canopy_threshold"]:
+			mode_enabled = int(values.get("forest_distribution", 1)) == 0
 		range_control.set("editable", enabled and mode_enabled)
 		_labels[key].text = _display_value(key, range_control.value)
 	_apply.disabled = not enabled
@@ -85,6 +87,8 @@ func _choose_preset(index: int) -> void:
 	_preset.select(0)
 
 func _display_value(key: String, value: float) -> String:
+	if key == "forest_distribution":
+		return "Natural groves" if value >= 0.5 else "Reference"
 	if key == "city_scale_enabled":
 		return "City hex" if value >= 0.5 else "Legacy metres"
 	if key == "city_reserve_enabled":

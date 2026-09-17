@@ -7,6 +7,9 @@ const ForestRenderer := preload("res://editor/map_authoring/presentation/referen
 const MeshNormals := preload("res://editor/map_authoring/presentation/reference_mesh_normals.gd")
 const WaterSurface := preload("res://editor/map_authoring/presentation/reference_water_surface.gd")
 
+const ProfileMigration := preload("res://editor/map_authoring/application/landscape_profile_migration.gd")
+@export_storage var landscape_profile_revision := 0
+
 const CityLayout := preload("res://editor/map_authoring/infrastructure/terrain/city_hex_layout.gd")
 const CityPreview := preload("res://editor/map_authoring/presentation/city_hex_preview.gd")
 
@@ -37,6 +40,12 @@ var _masks: Dictionary = {}
 var _material_warning := ""
 var _forest_warning := ""
 
+func _ready() -> void:
+	if landscape_profile_revision < 1:
+		terrain_parameters = ProfileMigration.migrate(terrain_parameters)
+		landscape_profile_revision = 1
+	super._ready()
+
 func rebuild_reference() -> Dictionary:
 	# Validate an optional guide before the native session can be replaced.
 	var guide: Image
@@ -65,6 +74,7 @@ func rebuild_reference() -> Dictionary:
 
 func _refresh_materials() -> void:
 	var values := parameter_values()
+	values["seed"] = Parameters.normalized(terrain_parameters, _source_maximum)["seed"]
 	_masks = _surface_plan.call("surface_masks", values)
 	_mask_signature = _mask_key()
 	_forest_signature = ""
@@ -93,13 +103,18 @@ func _refresh_materials() -> void:
 
 func _mask_key() -> String:
 	var values := parameter_values()
-	return str(values["surface_reference_strength"]) + ":" + str(values["tree_canopy_threshold"])
+	var key := [values["surface_reference_strength"], values["tree_canopy_threshold"]]
+	for name in ["forest_distribution", "forest_patch_size", "forest_patch_coverage", "forest_edge_softness"]:
+		key.append(values[name])
+	# Pending geometry seeds must not reshuffle the applied forest before Apply.
+	key.append(Parameters.normalized(terrain_parameters, _source_maximum)["seed"])
+	return JSON.stringify(key)
 
 func _apply_presentation(update_camera: bool = true) -> void:
 	super._apply_presentation(update_camera)
 	var values := parameter_values()
 	if _surface_material != null:
-		for key in ["ground_scale", "ground_normal_strength", "ground_reference_tint", "water_depth"]:
+		for key in ["ground_scale", "ground_normal_strength", "ground_reference_tint", "water_depth", "water_bed_slope"]:
 			_surface_material.set_shader_parameter(key, values[key])
 	WaterSurface.apply(_water_surface, values)
 	if _surface_plan != null and is_inside_tree() and _mask_signature != _mask_key():
@@ -109,7 +124,11 @@ func _apply_presentation(update_camera: bool = true) -> void:
 			_mask_timer.wait_time = 0.3
 			add_child(_mask_timer)
 			_mask_timer.timeout.connect(_refresh_materials)
+		landscape_ready = false
+		if _forest_timer != null:
+			_forest_timer.stop()
 		_mask_timer.start()
+		return
 	_queue_forest(false)
 
 func refresh_overlays() -> void:
@@ -157,7 +176,7 @@ func show_oblique_view() -> void:
 func _forest_parameters() -> Dictionary:
 	var values := Parameters.normalized(terrain_parameters, _source_maximum)
 	var result := {"seed": values["seed"]}
-	for key in ["tree_density", "tree_spacing", "tree_height", "tree_max_slope", "tree_reference_strength", "tree_draw_distance", "tree_conifer_share"]:
+	for key in ["tree_density", "tree_spacing", "tree_height", "tree_max_slope", "tree_reference_strength", "tree_draw_distance", "tree_conifer_share", "forest_distribution", "forest_patch_size", "forest_patch_coverage", "forest_edge_softness", "forest_tree_budget"]:
 		result[key] = values[key]
 	for field in Parameters.FIELDS:
 		if field[6] == "city":
@@ -168,6 +187,9 @@ func _forest_parameters() -> Dictionary:
 
 func _queue_forest(force_snap: bool) -> void:
 	if _surface_plan == null or not preview_ready or not is_inside_tree():
+		return
+	if _mask_timer != null and not _mask_timer.is_stopped():
+		landscape_ready = false
 		return
 	if not force_snap and JSON.stringify(_forest_parameters()) == _forest_signature:
 		return
@@ -235,6 +257,10 @@ func _update_landscape_status() -> void:
 	var scale_values := _forest_parameters()
 	if artifact() != null and scale_values["city_scale_enabled"] >= 0.5:
 		landscape_status += "\nCity hex: %.0f model m | trees %.2f map m" % [scale_values["city_hex_diameter"], scale_values["tree_height"]]
+	if _surface_plan != null:
+		var stats: Dictionary = _surface_plan.get("forest_statistics")
+		if bool(stats.get("budget_limited", false)):
+			landscape_status += " | forest budget active"
 	var help := get_node_or_null("PreviewHUD/Help") as Label
 	if help != null:
 		help.text = source_map_id.to_upper() + " | 1: reference  2: landscape  R: compare  G: grid\n" + landscape_status

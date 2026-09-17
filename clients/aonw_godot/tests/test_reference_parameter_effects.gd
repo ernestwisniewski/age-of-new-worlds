@@ -52,8 +52,8 @@ func _run() -> void:
 	var variants := {"level_height": 120.0, "mountain_scale": 2.5, "lowland_scale": 0.9, "hill_scale": 1.5,
 		"reference_strength": 0.0, "reference_peak_strength": 0.0, "ridge_sharpness": 2.8, "smoothing": 1.2,
 		"detail_strength": 0.09, "detail_scale": 1.5, "bank_width": 0.9,
-		"erosion_passes": 0.0, "seed": 9901.0}
-	_check(variants.size() == Parameters.geometry(parameters).size(), "All geometry parameters have sensitivity tests")
+		"erosion_passes": 0.0, "seed": 9901.0, "water_bank_grade": 0.8}
+	_check(variants.size() + 1 == Parameters.geometry(parameters).size(), "All geometry parameters have sensitivity tests")
 	for key in variants:
 		var options := parameters.duplicate(true)
 		options[key] = variants[key]
@@ -69,6 +69,21 @@ func _run() -> void:
 				if mask.get_pixel(x, y).r > 0.5:
 					var pixel := Vector2i(x, y)
 					_check(artifact.base_image.get_pixelv(pixel).r == 0.0 and artifact.maximum_at(pixel) == 0.0, "Water lock: " + key)
+	# Supersampling needs sub-raster image evidence, not an explicit binary guide.
+	var stream_document := document.duplicate(true)
+	for tile in stream_document["tiles"]:
+		tile["terrainTags"] = ["river"]
+	var detailed := Image.create(source.width * 5, source.height * 5, false, Image.FORMAT_RGBA8)
+	detailed.fill(Color(0.3, 0.5, 0.15))
+	for x in range(9, detailed.get_width(), 17):
+		detailed.fill_rect(Rect2i(x, 0, 1, detailed.get_height()), Color(0.05, 0.35, 0.65))
+	var coarse_options := parameters.duplicate(true)
+	coarse_options["water_sampling"] = 1.0
+	var precise := builder.build_reference(source, detailed, stream_document, 73129, 1.65, 1.0, {}, parameters)
+	var coarse_water := builder.build_reference(source, detailed, stream_document, 73129, 1.65, 1.0, {}, coarse_options)
+	_check(precise["ok"] and coarse_water["ok"], "Supersampled stream builds")
+	_check(precise["water_mask"].get_data() != coarse_water["water_mask"].get_data(), "Sample sensitivity: water_sampling")
+	_check(precise["artifact"].base_image.get_data() != coarse_water["artifact"].base_image.get_data(), "Water sampling carves geometry, not only a hash")
 	parameters["camera_pitch"] = 70.0
 	parameters["sun_energy"] = 2.0
 	var appearance := builder.build_reference(source, reference, document, 73129, 1.65, 1.0, {"water": water}, parameters)

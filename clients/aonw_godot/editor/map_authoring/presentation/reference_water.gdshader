@@ -1,6 +1,9 @@
 shader_type spatial;
 render_mode cull_disabled;
 
+uniform sampler2D water_profile : filter_linear, repeat_disable;
+uniform float water_bed_slope = 0.45;
+uniform float sample_spacing = 1.0;
 uniform sampler2D water_mask : filter_linear, repeat_disable;
 uniform sampler2D shore_distance : filter_linear, repeat_disable;
 uniform sampler2D coverage : filter_linear, repeat_disable;
@@ -17,10 +20,13 @@ void vertex() {
 }
 
 void fragment() {
-	float wet = texture(water_mask, UV).r;
-	if (wet < 0.5 || texture(coverage, UV).r < 0.5) { discard; }
-	float distance_to_land = max(0.0, texture(shore_distance, UV).r - 0.5);
-	float depth = min(water_depth, distance_to_land * 0.65 + 0.15);
+	// Raster nodes are at the ends of the map; GPU texels are at their centres.
+	// Half-texel correction keeps the bed, water and CPU exclusions registered.
+	vec2 size = vec2(textureSize(water_profile, 0));
+	vec4 profile = texture(water_profile, (UV * (size - 1.0) + 0.5) / size);
+	if (profile.r < -0.02 * sample_spacing || texture(coverage, UV).r < 0.5) { discard; }
+	float distance_to_land = max(0.0, profile.r);
+	float depth = water_depth * (1.0 - exp(-(distance_to_land * water_bed_slope + 0.12) / water_depth));
 	float shallow = exp(-depth / max(water_shore_width * 0.18, 0.1));
 	vec3 deep_color = vec3(0.014, 0.065, 0.115);
 	vec3 shallow_color = vec3(0.06, 0.29, 0.27);
@@ -29,8 +35,11 @@ void fragment() {
 	// Reference tint is bounded: painted white foam does not turn the lake white.
 	vec3 reference_water = clamp(reference, vec3(0.008, 0.028, 0.05), vec3(0.1, 0.32, 0.48));
 	water = mix(water, reference_water, has_reference ? water_reference_colour : 0.0);
-	vec2 p = world_position.xz;
-	float amplitude = water_waves * smoothstep(0.0, 2.0, distance_to_land);
+	vec2 along_bank = profile.gb;
+	if (length(along_bank) < 0.2) { along_bank = vec2(0.8, 0.6); }
+	along_bank = normalize(along_bank);
+	vec2 p = vec2(dot(world_position.xz, along_bank), dot(world_position.xz, vec2(-along_bank.y, along_bank.x)));
+	float amplitude = water_waves * smoothstep(0.0, max(sample_spacing * 2.0, 0.1), distance_to_land);
 	vec3 n = normalize(vec3(
 		sin(p.x * 0.8 + p.y * 0.42 + TIME * 0.85) * 0.1 * amplitude,
 		1.0,

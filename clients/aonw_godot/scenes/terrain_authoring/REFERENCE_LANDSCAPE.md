@@ -1,5 +1,9 @@
 # Reference landscape and Play preview
 
+See [FORESTS_AND_WATER.md](FORESTS_AND_WATER.md) for the current all-map
+natural-grove defaults, city scale, shoreline v4, migration and budgets.
+The reference-driven vegetation described below remains available as an optional mode.
+
 The `feature/maps-terrain` authoring workflow reconstructs terrain from canonical
 JSON elevations/tags and the registered reference atlas, then presents PBR scans,
 Tree3D meshes and a separate water surface. It does not rewrite gameplay JSON,
@@ -46,7 +50,7 @@ z-fighting and unused square regions. The visible mesh follows native edits;
 height-field normals are rebuilt on full refresh and the brush fast path for
 consistent lighting and shadows. Atlas padding is clipped across all layers.
 
-The v3 reconstruction uses neutral bright rock evidence and local contrast to
+The v4 reconstruction uses neutral bright rock evidence and local contrast to
 refine crests inside JSON mountain ranges. Explicit ridge guides take precedence;
 noise is secondary. Lowland elevation and mountain relief have independent
 controls. Bank width and a bounded shore grade form valleys/beaches instead of
@@ -54,7 +58,7 @@ vertical walls beside every water sample. Conservative supersampling within
 water-tagged tiles retains thin rivers. Ocean-connected blue snow/mountain
 shadows remain land unless a water tag or explicit guide overrides protection.
 
-`aonw-reference-terrain/3` uses separate draft workspaces, preserving v2 sculpts.
+`aonw-reference-terrain/4` uses separate draft workspaces, preserving earlier sculpts.
 Appearance-only edits do not alter the geometry recipe or rebuild heights.
 
 ## Vegetation
@@ -81,7 +85,7 @@ woodland when reference/context evidence agrees. Roots and slope eligibility
 are re-evaluated against edited native heights after brush edits. Generated nodes
 have no scene owner and never replace `ManualWorld`. Dynamic gameplay roads,
 cities and untagged manual objects are not exclusion masks. Placement is capped
-at 120,000 candidates and 20,000 trees, not a device-independent frame-rate promise.
+at 240,000 candidate cells and a configurable tree count, not a device-independent frame-rate promise.
 
 ## Water
 
@@ -131,6 +135,6 @@ reproducibility and appearance/geometry isolation. The Play integration test
 uses the real entry scene, native terrain, comparison visibility, brush updates
 and invalid-guide protection. Full-map captures save perspective/top-down
 landscapes, references, canopy masks and water masks to `reference-captures/`.
-CI renders all four maps in Compatibility and Dravonia in Forward+, retaining
+CI renders all discovered maps in Compatibility and Dravonia in Forward+, retaining
 images/logs. These are visual inspection artifacts, not a photorealism or GPU
 performance benchmark.

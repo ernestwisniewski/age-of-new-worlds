@@ -33,6 +33,12 @@ static func build(masks: Dictionary, reference: Texture2D, extent: Vector2, has_
 		distance = Image.create(2, 2, false, Image.FORMAT_RF)
 	material.set_shader_parameter("shore_distance", ImageTexture.create_from_image(distance))
 	material.set_shader_parameter("raster_extent", extent)
+	var profile: Image = masks.get("water_profile")
+	if profile == null:
+		profile = Image.create(2, 2, false, Image.FORMAT_RGBAF)
+		profile.fill(Color(-1.0, 0.0, 0.0, 0.0))
+	material.set_shader_parameter("water_profile", ImageTexture.create_from_image(profile))
+	material.set_shader_parameter("sample_spacing", float(masks.get("sample_spacing", 1.0)))
 	material.set_shader_parameter("has_reference", has_reference)
 	return {"ok": true, "material": material}
 

@@ -57,6 +57,14 @@ jobs:
           timeout 120 "$godot" --headless --audio-driver Dummy --path clients/aonw_godot --script res://tests/test_landscape_play.gd > reference-scene-play.log 2>&1
           cat reference-scene-play.log
           if grep -E 'SCRIPT ERROR|Parse Error|Compile Error|ERROR:' reference-scene-import.log reference-scene-play.log; then exit 1; fi
+      - name: Validate complete natural forests and water for all bundles
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot="$RUNNER_TEMP/Godot_v4.7.1-stable_linux.x86_64"
+          timeout 300 "$godot" --headless --audio-driver Dummy --path clients/aonw_godot --script res://tests/test_natural_landscape_maps.gd > reference-scene-natural.log 2>&1
+          cat reference-scene-natural.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Compile Error|ERROR:' reference-scene-natural.log; then exit 1; fi
       - name: Check native city footprint and capture its scale
         shell: bash
         run: |
@@ -65,7 +73,7 @@ jobs:
           timeout 180 xvfb-run -a "$godot" --audio-driver Dummy --rendering-method gl_compatibility --rendering-driver opengl3 --path clients/aonw_godot --script res://tests/test_city_hex_native.gd -- --capture > reference-scene-city.log 2>&1
           cat reference-scene-city.log
           if grep -E 'SCRIPT ERROR|Parse Error|Compile Error|ERROR:' reference-scene-city.log; then exit 1; fi
-      - name: Render all four reference maps in Compatibility
+      - name: Render all discovered reference maps in Compatibility
         shell: bash
         run: |
           set -euo pipefail

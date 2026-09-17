@@ -10,8 +10,13 @@ const Hydrology := preload("res://editor/map_authoring/infrastructure/terrain/re
 const WATER := ["ocean", "sea", "lake", "river", "water", "coast"]
 const NO_TREES := ["ice", "glacier", "desert", "dunes", "road", "railroad", "city", "settlement"]
 const FOREST := ["forest", "jungle", "rainforest", "woodland", "taiga", "boreal", "pine"]
-const MAX_CANDIDATES := 120000
-const MAX_TREES := 20000
+const Patches := preload("res://editor/map_authoring/infrastructure/terrain/forest_patch_field.gd")
+const WaterProfile := preload("res://editor/map_authoring/infrastructure/terrain/water_surface_profile.gd")
+const MAX_CANDIDATES := 240000
+const MAX_TREES := 80000
+var forest_statistics: Dictionary = {}
+var _context: Image
+var _natural_canopy: Image
 
 var _source: AonwTerrainCompiledArtifact
 var _reference: Image
@@ -80,6 +85,9 @@ func surface_masks(parameters: Dictionary = {}) -> Dictionary:
 	for image in [ground, detail, context]:
 		image.resize(small.x, small.y, Image.INTERPOLATE_BILINEAR)
 		image.resize(size.x, size.y, Image.INTERPOLATE_BILINEAR)
+	_context = context
+	_natural_canopy = Patches.build(context, extent, _source.hex_radius_meters,
+		(int(parameters.get("seed", 73129)) ^ _source.map_id.hash()) & 0x7fffffff, parameters)
 	var macro: Image = _reference.duplicate()
 	macro.clear_mipmaps()
 	macro.resize(maxi(2, size.x / 4), maxi(2, size.y / 4), Image.INTERPOLATE_LANCZOS)
@@ -116,8 +124,17 @@ func surface_masks(parameters: Dictionary = {}) -> Dictionary:
 			_canopy.set_pixel(x, y, Color(float(classified["canopy"]), 0.0, 0.0))
 			_palette.set_pixel(x, y, average)
 			_coverage.set_pixel(x, y, Color.WHITE if not _has_reference or (color.a > 0.5 and color.v > 0.015) else Color.BLACK)
+	if int(parameters.get("forest_distribution", 1)) == 1:
+		for y in _natural_canopy.get_height():
+			for x in _natural_canopy.get_width():
+				var point := Vector3(float(x) / (size.x - 1) * extent.x, 0.0, float(y) / (size.y - 1) * extent.y)
+				if has_tag(_tile(point).get("terrainTags", []), NO_TREES) or not _dry_footprint(point, 0.0) or _coverage.get_pixel(x, y).r < 0.5:
+					_natural_canopy.set_pixel(x, y, Color.BLACK)
+		_canopy = _natural_canopy
+	var profile := WaterProfile.build(_water, _source.sample_spacing_meters)
 	_masks = {"ground": ground, "detail": detail, "macro": _palette, "canopy": _canopy,
-		"coverage": _coverage, "shore_distance": depth, "water": _water}
+		"coverage": _coverage, "shore_distance": depth, "water": _water,
+		"water_profile": profile, "sample_spacing": _source.sample_spacing_meters}
 	return _masks
 
 static func biome_weights(tags: Array) -> PackedFloat32Array:
@@ -139,57 +156,65 @@ static func biome_weights(tags: Array) -> PackedFloat32Array:
 
 func forest_candidates(parameters: Dictionary) -> Array:
 	var density := float(parameters["tree_density"])
+	forest_statistics = {"candidate_cells": 0, "accepted": 0, "budget_limited": false}
 	if density <= 0.0:
 		return []
+	if _canopy == null:
+		surface_masks(parameters)
+	var natural := int(parameters.get("forest_distribution", 1)) == 1
 	var extent := Vector2(_source.width - 1, _source.height - 1) * _source.sample_spacing_meters
-	var spacing := float(parameters["tree_spacing"])
-	# Bound work independently of the map size and slider range.
-	spacing = maxf(spacing, sqrt(extent.x * extent.y / float(MAX_CANDIDATES)) * 1.01)
-	var columns := ceili(extent.x / spacing)
-	var rows := ceili(extent.y / spacing)
-	while columns * rows > MAX_CANDIDATES:
-		spacing *= 1.1
-		columns = ceili(extent.x / spacing)
-		rows = ceili(extent.y / spacing)
+	var spacing := maxf(0.05, float(parameters["tree_spacing"]))
+	var blocks: Array[Rect2] = [Rect2(Vector2.ZERO, extent)]
+	if natural and _guide == null:
+		blocks = Patches.active_blocks(_natural_canopy, extent, _source.hex_radius_meters)
+	var cells := Patches.grid_cells(blocks, spacing)
+	while cells > MAX_CANDIDATES:
+		spacing *= maxf(1.02, sqrt(float(cells) / MAX_CANDIDATES))
+		cells = Patches.grid_cells(blocks, spacing)
 	var candidates: Array = []
-	for y in rows:
-		for x in columns:
-			var rng := RandomNumberGenerator.new()
-			rng.seed = (int(parameters["seed"]) ^ _source.map_id.hash() ^ (x * 73856093) ^ (y * 19349663)) & 0x7fffffff
-			# At least 60% of spacing between candidates, including across cells.
-			var local := Vector3((x + rng.randf_range(0.3, 0.7)) * spacing, 0.0, (y + rng.randf_range(0.3, 0.7)) * spacing)
-			var tile := _tile(local)
-			var tags: Array = tile.get("terrainTags", [])
-			if tile.is_empty() or has_tag(tags, NO_TREES) or not _dry_footprint(local, float(parameters["tree_height"]) * 0.3):
-				continue
-			var uv := _space.terrain_local_to_reference_uv(local, _geometry.bounds())
-			var color := _sample(_reference, uv)
-			var probability := canopy_probability(tags, color, _has_reference, float(parameters["tree_reference_strength"]))
-			if _canopy != null and _has_reference:
+	for block in blocks:
+		var start := Vector2i(ceilf(block.position.x / spacing), ceilf(block.position.y / spacing))
+		var end := Vector2i(ceilf(block.end.x / spacing), ceilf(block.end.y / spacing))
+		for y in range(start.y, end.y):
+			for x in range(start.x, end.x):
+				var rng := RandomNumberGenerator.new()
+				rng.seed = (int(parameters["seed"]) ^ _source.map_id.hash() ^ (x * 73856093) ^ (y * 19349663)) & 0x7fffffff
+				var local := Vector3((x + rng.randf_range(0.25, 0.75)) * spacing, 0.0, (y + rng.randf_range(0.25, 0.75)) * spacing)
+				if local.x > extent.x or local.z > extent.y:
+					continue
+				var tile := _tile(local)
+				var tags: Array = tile.get("terrainTags", [])
+				if tile.is_empty() or has_tag(tags, NO_TREES) or not _dry_footprint(local, float(parameters["tree_height"]) * 0.3):
+					continue
+				var uv := _space.terrain_local_to_reference_uv(local, _geometry.bounds())
 				var field_uv := Vector2(local.x / extent.x, local.z / extent.y)
-				probability = lerpf(1.0 if has_tag(tags, FOREST) else 0.0,
-					_sample(_canopy, field_uv).r, float(parameters["tree_reference_strength"]))
-			if _coverage != null and _sample(_coverage, Vector2(local.x / extent.x, local.z / extent.y)).r < 0.5:
-				continue
-			if _guide != null:
-				probability = _sample(_guide, uv).r
-			if rng.randf() >= density * probability:
-				continue
-			var species := 1 if rng.randf() < float(parameters.get("tree_conifer_share", 0.75)) else 0
-			if has_tag(tags, ["taiga", "boreal", "pine", "tundra"]):
-				species = 1
-			elif has_tag(tags, ["jungle", "rainforest"]):
-				species = 2
-			elif float(tile.get("height", 0.0)) >= 3.0 and rng.randf() < 0.65:
-				species = 1
-			candidates.append({"position": local, "species": species, "variant": rng.randi_range(0, 1),
-				"yaw": rng.randf_range(-PI, PI), "scale": rng.randf_range(0.78, 1.2),
-				"tint": _canopy_tint(color, rng),
-				"priority": rng.randf()})
-	# A deterministic global budget must not truncate one side of the map.
-	if candidates.size() > MAX_TREES:
+				var color := _sample(_reference, uv)
+				var probability := _sample(_natural_canopy, field_uv).r if natural else canopy_probability(tags, color, _has_reference, float(parameters["tree_reference_strength"]))
+				if not natural and _has_reference:
+					probability = lerpf(1.0 if has_tag(tags, FOREST) else 0.0,
+						_sample(_canopy, field_uv).r, float(parameters["tree_reference_strength"]))
+				if _coverage != null and _sample(_coverage, field_uv).r < 0.5:
+					continue
+				if _guide != null:
+					probability = _sample(_guide, uv).r
+				if rng.randf() >= density * probability:
+					continue
+				var species := 1 if rng.randf() < float(parameters.get("tree_conifer_share", 0.75)) else 0
+				if has_tag(tags, ["taiga", "boreal", "pine", "tundra"]):
+					species = 1
+				elif has_tag(tags, ["jungle", "rainforest"]):
+					species = 2
+				var tint := Color(rng.randf_range(0.78, 0.93), rng.randf_range(0.85, 1.0), 0.8, 1.0) if natural else _canopy_tint(color, rng)
+				candidates.append({"position": local, "species": species, "variant": rng.randi_range(0, 1),
+					"yaw": rng.randf_range(-PI, PI), "scale": rng.randf_range(0.72, 1.15),
+					"tint": tint, "priority": rng.randf()})
+	var budget := clampi(int(parameters.get("forest_tree_budget", 40000)), 1000, MAX_TREES)
+	forest_statistics = {"candidate_cells": cells, "accepted": candidates.size(),
+		"effective_spacing": spacing, "requested_spacing": float(parameters["tree_spacing"]),
+		"budget_limited": candidates.size() > budget or spacing > float(parameters["tree_spacing"]) * 1.001}
+	if candidates.size() > budget:
 		candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a["priority"] < b["priority"])
-		candidates.resize(MAX_TREES)
+		candidates.resize(budget)
 	return candidates
 
 static func canopy_probability(tags: Array, color: Color, has_reference: bool, influence: float) -> float:

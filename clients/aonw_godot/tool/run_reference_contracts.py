@@ -20,6 +20,7 @@ TESTS = (
     "tests/test_reference_surface.gd",
     "tests/test_reference_features.gd",
     "tests/test_city_hex_layout.gd",
+    "tests/test_forest_water_generation.gd",
 )
 
 
