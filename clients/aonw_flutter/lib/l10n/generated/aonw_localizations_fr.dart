@@ -1486,7 +1486,7 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'cancelAssignment': 'Annuler l’affectation',
       'buildRoad': 'Construire une route',
       'automate': 'Automatiser',
-      'automationEvidence': 'Détails du planificateur',
+      'plannedWork': 'Travail prévu',
       'other': 'Ouvrier',
     });
     return '$_temp0';

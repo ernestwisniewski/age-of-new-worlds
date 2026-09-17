@@ -21,7 +21,7 @@ enum WorkerText {
   cancelAssignment,
   buildRoad,
   automate,
-  automationEvidence,
+  plannedWork,
 }
 
 final class WorkerCopy {

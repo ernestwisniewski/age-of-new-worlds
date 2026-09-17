@@ -755,7 +755,7 @@
       }
     }
   },
-  "workerText": "{key, select, title{Arbeiter} loading{Arbeiteroptionen werden geladen} empty{Derzeit ist keine Arbeiteraktion verfügbar.} executing{Arbeiteraktion wird angewendet} buildCharges{Bauaktionen} progress{Fortschritt} assigned{Zugewiesenes Hexfeld} openActions{Hexfeld verbessern} closeActions{Auswahl abbrechen} selectImprovement{Auswählen} confirmImprovement{Verbesserung bestätigen} cancelJob{Bau abbrechen} assign{Hexfeld zuweisen} cancelAssignment{Zuweisung aufheben} buildRoad{Straße bauen} automate{Automatisieren} automationEvidence{Planungsgrundlagen} other{Arbeiter}}",
+  "workerText": "{key, select, title{Arbeiter} loading{Arbeiteroptionen werden geladen} empty{Derzeit ist keine Arbeiteraktion verfügbar.} executing{Arbeiteraktion wird angewendet} buildCharges{Bauaktionen} progress{Fortschritt} assigned{Zugewiesenes Hexfeld} openActions{Hexfeld verbessern} closeActions{Auswahl abbrechen} selectImprovement{Auswählen} confirmImprovement{Verbesserung bestätigen} cancelJob{Bau abbrechen} assign{Hexfeld zuweisen} cancelAssignment{Zuweisung aufheben} buildRoad{Straße bauen} automate{Automatisieren} plannedWork{Geplante Arbeit} other{Arbeiter}}",
   "@workerText": {
     "placeholders": {
       "key": {

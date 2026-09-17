@@ -755,7 +755,7 @@
       }
     }
   },
-  "workerText": "{key, select, title{Werker} loading{Werkeropties worden geladen} empty{Er is momenteel geen werkeractie beschikbaar.} executing{Werkeractie wordt toegepast} buildCharges{Bouwacties} progress{Voortgang} assigned{Toegewezen hex} openActions{Hex verbeteren} closeActions{Selectie annuleren} selectImprovement{Selecteren} confirmImprovement{Verbetering bevestigen} cancelJob{Bouw annuleren} assign{Aan hex toewijzen} cancelAssignment{Toewijzing annuleren} buildRoad{Weg aanleggen} automate{Automatiseren} automationEvidence{Planningsonderbouwing} other{Werker}}",
+  "workerText": "{key, select, title{Werker} loading{Werkeropties worden geladen} empty{Er is momenteel geen werkeractie beschikbaar.} executing{Werkeractie wordt toegepast} buildCharges{Bouwacties} progress{Voortgang} assigned{Toegewezen hex} openActions{Hex verbeteren} closeActions{Selectie annuleren} selectImprovement{Selecteren} confirmImprovement{Verbetering bevestigen} cancelJob{Bouw annuleren} assign{Aan hex toewijzen} cancelAssignment{Toewijzing annuleren} buildRoad{Weg aanleggen} automate{Automatiseren} plannedWork{Gepland werk} other{Werker}}",
   "@workerText": {
     "placeholders": {
       "key": {

@@ -88,49 +88,52 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('displays exact bounded automation evidence and dispatches it', (
-    tester,
-  ) async {
-    WorkerActionView? dispatched;
-    final unit = testVisibleUnit(kind: VisibleUnitKind.worker);
-    const option = WorkerAutomationOptionView(
-      target: (col: 1, row: 0),
-      action: ImproveWorkerAutomationActionView(
-        improvement: FieldImprovementKind.mine,
-      ),
-      movementCostUnits: 4,
-      metrics: WorkerAutomationMetricsView(
-        tilesExamined: 3,
-        legalityEvaluations: 57,
-        routesPlanned: 2,
-      ),
-    );
-    await tester.pumpWidget(
-      LocalizedTestApp(
-        home: Scaffold(
-          body: WorkerPanel(
-            state: WorkerState(
-              unitId: unit.id,
-              options: _options(unit.id, automation: option),
-              lastAutomation: const WorkerAutomationExecutionView(
-                option: option,
-                moved: false,
+  testWidgets(
+    'shows the chosen work and target while preserving command evidence',
+    (tester) async {
+      WorkerActionView? dispatched;
+      final unit = testVisibleUnit(kind: VisibleUnitKind.worker);
+      const option = WorkerAutomationOptionView(
+        target: (col: 1, row: 0),
+        action: ImproveWorkerAutomationActionView(
+          improvement: FieldImprovementKind.mine,
+        ),
+        movementCostUnits: 4,
+        metrics: WorkerAutomationMetricsView(
+          tilesExamined: 3,
+          legalityEvaluations: 57,
+          routesPlanned: 2,
+        ),
+      );
+      await tester.pumpWidget(
+        LocalizedTestApp(
+          home: Scaffold(
+            body: WorkerPanel(
+              state: WorkerState(
+                unitId: unit.id,
+                options: _options(unit.id, automation: option),
+                lastAutomation: const WorkerAutomationExecutionView(
+                  option: option,
+                  moved: false,
+                ),
               ),
+              unit: unit,
+              onOpenChanged: (_) {},
+              onPreview: (_) {},
+              onAction: (value) => dispatched = value,
             ),
-            unit: unit,
-            onOpenChanged: (_) {},
-            onPreview: (_) {},
-            onAction: (value) => dispatched = value,
           ),
         ),
-      ),
-    );
+      );
 
-    expect(find.textContaining('3 / 57 / 2'), findsOneWidget);
-    await tester.tap(find.textContaining('Automate'));
-    expect(dispatched, isA<AutomateWorkerActionView>());
-    expect((dispatched! as AutomateWorkerActionView).option, same(option));
-  });
+      expect(find.text('Planned work: Mine · 1, 0'), findsOneWidget);
+      expect(find.textContaining('3 / 57 / 2'), findsNothing);
+      expect(find.textContaining('(4)'), findsNothing);
+      await tester.tap(find.textContaining('Automate'));
+      expect(dispatched, isA<AutomateWorkerActionView>());
+      expect((dispatched! as AutomateWorkerActionView).option, same(option));
+    },
+  );
 }
 
 WorkerOptionsView _options(

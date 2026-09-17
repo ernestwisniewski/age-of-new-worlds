@@ -755,7 +755,7 @@
       }
     }
   },
-  "workerText": "{key, select, title{Ouvrier} loading{Chargement des options de l’ouvrier} empty{Aucune action d’ouvrier n’est disponible actuellement.} executing{Application de l’action de l’ouvrier} buildCharges{Charges de construction} progress{Progression} assigned{Hexagone assigné} openActions{Aménager l’hexagone} closeActions{Annuler la sélection} selectImprovement{Sélectionner} confirmImprovement{Confirmer l’aménagement} cancelJob{Annuler la construction} assign{Assigner à l’hexagone} cancelAssignment{Annuler l’affectation} buildRoad{Construire une route} automate{Automatiser} automationEvidence{Détails du planificateur} other{Ouvrier}}",
+  "workerText": "{key, select, title{Ouvrier} loading{Chargement des options de l’ouvrier} empty{Aucune action d’ouvrier n’est disponible actuellement.} executing{Application de l’action de l’ouvrier} buildCharges{Charges de construction} progress{Progression} assigned{Hexagone assigné} openActions{Aménager l’hexagone} closeActions{Annuler la sélection} selectImprovement{Sélectionner} confirmImprovement{Confirmer l’aménagement} cancelJob{Annuler la construction} assign{Assigner à l’hexagone} cancelAssignment{Annuler l’affectation} buildRoad{Construire une route} automate{Automatiser} plannedWork{Travail prévu} other{Ouvrier}}",
   "@workerText": {
     "placeholders": {
       "key": {

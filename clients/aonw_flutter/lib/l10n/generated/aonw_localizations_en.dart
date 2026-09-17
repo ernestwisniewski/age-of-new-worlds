@@ -1453,7 +1453,7 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'cancelAssignment': 'Cancel assignment',
       'buildRoad': 'Build road',
       'automate': 'Automate',
-      'automationEvidence': 'Planner evidence',
+      'plannedWork': 'Planned work',
       'other': 'Worker',
     });
     return '$_temp0';

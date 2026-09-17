@@ -1456,7 +1456,7 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'cancelAssignment': 'Anuluj przypisanie',
       'buildRoad': 'Zbuduj drogę',
       'automate': 'Automatyzuj',
-      'automationEvidence': 'Dane planera',
+      'plannedWork': 'Zaplanowana praca',
       'other': 'Robotnik',
     });
     return '$_temp0';

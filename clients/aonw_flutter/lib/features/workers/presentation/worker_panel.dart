@@ -76,7 +76,7 @@ final class WorkerPanel extends StatelessWidget {
               compact: true,
             ),
           if (state.lastAutomation case final execution?)
-            _AutomationEvidence(execution: execution),
+            _AutomationPlan(execution: execution),
           if (state.failure case final failure?)
             Text(
               copy.failure(failure),
@@ -187,8 +187,7 @@ final class _WorkerActions extends StatelessWidget {
         AutomateWorkerActionView(unitId: options.unitId, option: automation),
         '${copy.text(WorkerText.automate)} · '
         '${automation.target.col}, ${automation.target.row} · '
-        '${copy.automationAction(automation.action)} '
-        '(${automation.movementCostUnits})',
+        '${copy.automationAction(automation.action)}',
         Icons.auto_fix_high_outlined,
       );
     }
@@ -212,20 +211,20 @@ final class _WorkerActions extends StatelessWidget {
   );
 }
 
-final class _AutomationEvidence extends StatelessWidget {
-  const _AutomationEvidence({required this.execution});
+final class _AutomationPlan extends StatelessWidget {
+  const _AutomationPlan({required this.execution});
 
   final WorkerAutomationExecutionView execution;
 
   @override
   Widget build(BuildContext context) {
     final copy = WorkerCopy.of(context);
-    final metrics = execution.option.metrics;
+    final option = execution.option;
     return Text(
-      '${copy.text(WorkerText.automationEvidence)}: '
-      '${metrics.tilesExamined} / ${metrics.legalityEvaluations} / '
-      '${metrics.routesPlanned}',
-      key: const ValueKey('worker-automation-evidence'),
+      '${copy.text(WorkerText.plannedWork)}: '
+      '${copy.automationAction(option.action)} · '
+      '${option.target.col}, ${option.target.row}',
+      key: const ValueKey('worker-automation-plan'),
     );
   }
 }

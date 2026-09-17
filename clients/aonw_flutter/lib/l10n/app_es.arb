@@ -755,7 +755,7 @@
       }
     }
   },
-  "workerText": "{key, select, title{Trabajador} loading{Cargando opciones del trabajador} empty{No hay acciones de trabajador disponibles en este momento.} executing{Aplicando acción de trabajador} buildCharges{Cargas de construcción} progress{Progreso} assigned{Hexágono asignado} openActions{Mejorar hexágono} closeActions{Cancelar selección} selectImprovement{Seleccionar} confirmImprovement{Confirmar mejora} cancelJob{Cancelar construcción} assign{Asignar a un hexágono} cancelAssignment{Cancelar asignación} buildRoad{Construir camino} automate{Automatizar} automationEvidence{Criterios de planificación} other{Trabajador}}",
+  "workerText": "{key, select, title{Trabajador} loading{Cargando opciones del trabajador} empty{No hay acciones de trabajador disponibles en este momento.} executing{Aplicando acción de trabajador} buildCharges{Cargas de construcción} progress{Progreso} assigned{Hexágono asignado} openActions{Mejorar hexágono} closeActions{Cancelar selección} selectImprovement{Seleccionar} confirmImprovement{Confirmar mejora} cancelJob{Cancelar construcción} assign{Asignar a un hexágono} cancelAssignment{Cancelar asignación} buildRoad{Construir camino} automate{Automatizar} plannedWork{Trabajo previsto} other{Trabajador}}",
   "@workerText": {
     "placeholders": {
       "key": {

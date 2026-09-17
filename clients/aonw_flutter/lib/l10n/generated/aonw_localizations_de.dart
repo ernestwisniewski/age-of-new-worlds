@@ -1497,7 +1497,7 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'cancelAssignment': 'Zuweisung aufheben',
       'buildRoad': 'Straße bauen',
       'automate': 'Automatisieren',
-      'automationEvidence': 'Planungsgrundlagen',
+      'plannedWork': 'Geplante Arbeit',
       'other': 'Arbeiter',
     });
     return '$_temp0';

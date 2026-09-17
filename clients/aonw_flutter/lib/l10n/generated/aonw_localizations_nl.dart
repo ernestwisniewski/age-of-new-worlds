@@ -1480,7 +1480,7 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'cancelAssignment': 'Toewijzing annuleren',
       'buildRoad': 'Weg aanleggen',
       'automate': 'Automatiseren',
-      'automationEvidence': 'Planningsonderbouwing',
+      'plannedWork': 'Gepland werk',
       'other': 'Werker',
     });
     return '$_temp0';
