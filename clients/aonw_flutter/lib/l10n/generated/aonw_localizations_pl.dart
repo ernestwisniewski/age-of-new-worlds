@@ -1522,6 +1522,9 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'spawnBlocked': 'Oczekiwanie na wolne pole',
       'noEstimate': 'Brak szacowanego czasu',
       'continuous': 'Projekt ciągły',
+      'futureBuildings': 'Przyszłe budynki',
+      'futureBuildingsHint': 'Odblokuj te budynki dzięki badaniom.',
+      'completedBuildings': 'Ukończone budynki',
       'other': 'Produkcja',
     });
     return '$_temp0';

@@ -1520,6 +1520,9 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'spawnBlocked': 'Waiting for a free tile',
       'noEstimate': 'No completion estimate',
       'continuous': 'Continuous project',
+      'futureBuildings': 'Future buildings',
+      'futureBuildingsHint': 'Unlock these buildings through research.',
+      'completedBuildings': 'Completed buildings',
       'other': 'Production',
     });
     return '$_temp0';

@@ -771,7 +771,7 @@
       }
     }
   },
-  "productionText": "{key, select, title{Produktion und Ressourcen} loading{Produktionsoptionen werden geladen} executing{Stadtproduktion wird aktualisiert} current{Aktuelle Produktion} invested{Investiert} overflow{Überschuss} resources{Strategische Ressourcen} buildings{Gebäude} units{Einheiten} projects{Projekte} wonders{Wunder} specializations{Spezialisierungen} rush{Produktion beschleunigen} cost{Kosten} requires{benötigt} empty{Derzeit ist keine Option verfügbar.} choose{Wähle ein Produktionsziel für diese Stadt.} ready{Bereit zum Abschluss} spawnBlocked{Warten auf ein freies Feld} noEstimate{Keine Zeitabschätzung} continuous{Dauerprojekt} other{Produktion}}",
+  "productionText": "{key, select, title{Produktion und Ressourcen} loading{Produktionsoptionen werden geladen} executing{Stadtproduktion wird aktualisiert} current{Aktuelle Produktion} invested{Investiert} overflow{Überschuss} resources{Strategische Ressourcen} buildings{Gebäude} units{Einheiten} projects{Projekte} wonders{Wunder} specializations{Spezialisierungen} rush{Produktion beschleunigen} cost{Kosten} requires{benötigt} empty{Derzeit ist keine Option verfügbar.} choose{Wähle ein Produktionsziel für diese Stadt.} ready{Bereit zum Abschluss} spawnBlocked{Warten auf ein freies Feld} noEstimate{Keine Zeitabschätzung} continuous{Dauerprojekt} futureBuildings{Künftige Gebäude} futureBuildingsHint{Schalte diese Gebäude durch Forschung frei.} completedBuildings{Fertiggestellte Gebäude} other{Produktion}}",
   "@productionText": {
     "placeholders": {
       "key": {

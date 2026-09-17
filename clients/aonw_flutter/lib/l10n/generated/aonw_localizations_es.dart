@@ -1560,6 +1560,10 @@ class AonwLocalizationsEs extends AonwLocalizations {
       'spawnBlocked': 'Esperando una casilla libre',
       'noEstimate': 'Sin estimación de tiempo',
       'continuous': 'Proyecto continuo',
+      'futureBuildings': 'Edificios futuros',
+      'futureBuildingsHint':
+          'Desbloquea estos edificios mediante la investigación.',
+      'completedBuildings': 'Edificios terminados',
       'other': 'Producción',
     });
     return '$_temp0';

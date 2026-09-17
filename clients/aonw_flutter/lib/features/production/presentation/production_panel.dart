@@ -6,6 +6,7 @@ import '../../map/read_model/map_view.dart';
 import '../application/production_state.dart';
 import '../read_model/production_view.dart';
 import 'production_active_banner.dart';
+import 'production_building_choices.dart';
 import 'production_copy.dart';
 
 final class ProductionPanel extends StatelessWidget {
@@ -109,7 +110,6 @@ final class _ProductionActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final copy = ProductionCopy.of(context);
-    var order = 30.0;
     Widget button({
       required ProductionActionView action,
       required String label,
@@ -118,7 +118,7 @@ final class _ProductionActions extends StatelessWidget {
       final reason = copy.rejection(blocker);
       final semanticLabel = reason == null ? label : '$label. $reason';
       return FocusTraversalOrder(
-        order: NumericFocusOrder(order++),
+        order: const NumericFocusOrder(30),
         child: Semantics(
           label: semanticLabel,
           button: true,
@@ -147,17 +147,23 @@ final class _ProductionActions extends StatelessWidget {
       );
     }
 
-    section(copy.text(ProductionText.buildings), [
-      for (final option in options.buildings)
-        button(
-          action: StartBuildingActionView(
-            cityId: options.cityId,
-            building: (option.target as BuildingProductionTargetView).building,
+    if (options.buildings.isNotEmpty) {
+      sections.add(
+        ProductionBuildingChoices(
+          cityId: options.cityId,
+          options: options.buildings,
+          choice: (option) => button(
+            action: StartBuildingActionView(
+              cityId: options.cityId,
+              building:
+                  (option.target as BuildingProductionTargetView).building,
+            ),
+            label: _optionLabel(copy, option),
+            blocker: option.blocker,
           ),
-          label: _optionLabel(copy, option),
-          blocker: option.blocker,
         ),
-    ]);
+      );
+    }
     section(copy.text(ProductionText.units), [
       for (final option in options.units)
         ..._unitButtons(
@@ -263,8 +269,10 @@ String _optionLabel(ProductionCopy copy, ProductionOptionView option) {
   if (target is ProjectProductionTargetView) {
     return '${copy.target(target)} · ${copy.output(target, option.forecast.projectOutput!)}';
   }
+  final requirement = copy.technologyRequirement(option.availability);
   return '${copy.target(target)} · ${copy.text(ProductionText.cost)} '
-      '${option.cost} · ${copy.estimate(option.forecast)}';
+      '${option.cost} · ${copy.estimate(option.forecast)}'
+      '${requirement == null ? '' : ' · $requirement'}';
 }
 
 String _stockpile(ProductionCopy copy, Map<MapResource, int> value) => value

@@ -1557,6 +1557,9 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'spawnBlocked': 'En attente d’une case libre',
       'noEstimate': 'Durée non estimable',
       'continuous': 'Projet continu',
+      'futureBuildings': 'Bâtiments à débloquer',
+      'futureBuildingsHint': 'Débloquez ces bâtiments grâce à la recherche.',
+      'completedBuildings': 'Bâtiments achevés',
       'other': 'Production',
     });
     return '$_temp0';

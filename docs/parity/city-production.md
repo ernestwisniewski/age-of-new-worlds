@@ -84,7 +84,7 @@ large text. The complete Flutter suite passes 1,447 tests, with map contracts,
 analyzer, generated-code and architecture checks. The architecture baseline's
 existing production build method shrinks from 78 to 70 lines; no limit increases.
 
-This completes the active banner. The full production modal, catalog grouping,
+This completes the active banner. The full production modal,
 building/unit/wonder details and city/worker panels remain separate work.
 
 ## Catalog availability
@@ -114,6 +114,24 @@ save/resume, including a retained queue whose owner lacks its unlocking research
 Acceptance: 21 contract tests, 105 Dart protocol tests, three native production
 save/replay tests and three local/server query parity tests pass. All-target
 Clippy and architecture gates pass. The C ABI harness checks lifecycle, API 31
-capabilities and null arguments. Full Flutter acceptance is tracked with catalog
-presentation; its initial run encountered native-load timeouts that are being
-rechecked separately. Generated code remains in sync.
+capabilities and null arguments. The full Flutter gate passes 1,459 tests, map
+contracts, asset bundles, boundary checks, analysis and architecture checks.
+The initial native-load timeouts pass both a focused retry and the complete
+rerun; a process sample located the initial wait in macOS dyld before main.
+Generated code remains in sync.
+
+
+## Catalog presentation
+
+Buildings are grouped using the authoritative completion and research flags.
+Completed and future buildings start collapsed; an unlocked building with a site
+restriction remains in the current catalog. Missing research is named beside
+the target. Changing the city resets expansion state, and keyboard activation
+opens both disclosure groups. No rejection text or cost is used to infer a group.
+
+Eight focused tests cover identical blockers with distinct availability, city
+changes, keyboard input and all six languages at 200% text scale. Three reviewed
+goldens cover phone, tablet and desktop, including expanded sections. Existing
+production method debt shrinks from 70 to 66 lines, without increasing limits.
+These snapshots verify grouping; the reference modal, illustrated rows, sorting
+and target details still require implementation.

@@ -27,6 +27,9 @@ enum ProductionText {
   spawnBlocked,
   noEstimate,
   continuous,
+  futureBuildings,
+  futureBuildingsHint,
+  completedBuildings,
 }
 
 final class ProductionCopy {
@@ -74,6 +77,12 @@ final class ProductionCopy {
       target.project == 'wealth'
       ? _l10n.productionGoldOutput(amount)
       : _l10n.productionScienceOutput(amount);
+
+  String? technologyRequirement(ProductionAvailabilityView value) {
+    final technology = value.requiredTechnology;
+    if (value.technologyUnlocked || technology == null) return null;
+    return '${text(ProductionText.requires)} ${_l10n.technologyName(technology.name)}';
+  }
 
   String target(ProductionTargetView value) => switch (value) {
     BuildingProductionTargetView(:final building) => cityContent(building),

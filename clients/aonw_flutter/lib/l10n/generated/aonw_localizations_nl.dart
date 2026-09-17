@@ -1552,6 +1552,9 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'spawnBlocked': 'Wachten op een vrij veld',
       'noEstimate': 'Geen tijdschatting',
       'continuous': 'Doorlopend project',
+      'futureBuildings': 'Toekomstige gebouwen',
+      'futureBuildingsHint': 'Ontgrendel deze gebouwen door onderzoek.',
+      'completedBuildings': 'Voltooide gebouwen',
       'other': 'Productie',
     });
     return '$_temp0';

@@ -1903,7 +1903,7 @@ abstract class AonwLocalizations {
   /// No description provided for @productionText.
   ///
   /// In en, this message translates to:
-  /// **'{key, select, title{Production and resources} loading{Loading production options} executing{Updating city production} current{Current production} invested{Invested} overflow{Overflow} resources{Strategic resources} buildings{Buildings} units{Units} projects{Projects} wonders{Wonders} specializations{Specializations} rush{Rush production} cost{cost} requires{requires} empty{No option is currently available.} choose{Choose a production target for this city.} ready{Ready to complete} spawnBlocked{Waiting for a free tile} noEstimate{No completion estimate} continuous{Continuous project} other{Production}}'**
+  /// **'{key, select, title{Production and resources} loading{Loading production options} executing{Updating city production} current{Current production} invested{Invested} overflow{Overflow} resources{Strategic resources} buildings{Buildings} units{Units} projects{Projects} wonders{Wonders} specializations{Specializations} rush{Rush production} cost{cost} requires{requires} empty{No option is currently available.} choose{Choose a production target for this city.} ready{Ready to complete} spawnBlocked{Waiting for a free tile} noEstimate{No completion estimate} continuous{Continuous project} futureBuildings{Future buildings} futureBuildingsHint{Unlock these buildings through research.} completedBuildings{Completed buildings} other{Production}}'**
   String productionText(String key);
 
   /// No description provided for @productionFailure.

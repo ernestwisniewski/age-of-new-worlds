@@ -1570,6 +1570,9 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'spawnBlocked': 'Warten auf ein freies Feld',
       'noEstimate': 'Keine Zeitabschätzung',
       'continuous': 'Dauerprojekt',
+      'futureBuildings': 'Künftige Gebäude',
+      'futureBuildingsHint': 'Schalte diese Gebäude durch Forschung frei.',
+      'completedBuildings': 'Fertiggestellte Gebäude',
       'other': 'Produktion',
     });
     return '$_temp0';
