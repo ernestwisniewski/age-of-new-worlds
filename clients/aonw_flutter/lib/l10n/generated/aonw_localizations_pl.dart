@@ -1527,6 +1527,8 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'completedBuildings': 'Ukończone budynki',
       'produce': 'Produkuj',
       'inProgress': 'W toku',
+      'details': 'Szczegóły',
+      'completed': 'Ukończono w tym mieście',
       'other': 'Produkcja',
     });
     return '$_temp0';
@@ -3047,5 +3049,173 @@ class AonwLocalizationsPl extends AonwLocalizations {
   @override
   String productionScienceOutput(int amount) {
     return '$amount nauki / turę';
+  }
+
+  @override
+  String productionBuildingDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'academy':
+          'Wzmacnia miasta naukowe i przygotowuje drogę do wyższej edukacji.',
+      'airfield':
+          'Lotnisko wojskowe dla lotnictwa, zwiadu i nowoczesnej projekcji siły.',
+      'apothecary':
+          'Wczesne zdrowie miasta, które pomaga utrzymać stabilny wzrost.',
+      'aqueduct':
+          'Dostarcza wodę, wspierając wzrost oraz dalszą ekspansję miasta.',
+      'archive':
+          'Pierwszy budynek wiedzy, który porządkuje zapisy i wspiera badania.',
+      'armory': 'Lepsze centrum rekrutacji i wyposażenia oddziałów.',
+      'artisansGuild':
+          'Etap produkcji przed fabryką, oparty na rzemiośle i warsztatach.',
+      'assemblyPlant': 'Końcowy budynek przemysłowy dla masowej produkcji.',
+      'bank': 'Centralizuje finanse i znacząco zwiększa dochód miasta.',
+      'barracks': 'Zapewnia wojskową infrastrukturę oraz dodatkową obronę.',
+      'borderFort': 'Wzmacnia obronę i widoczność na granicach imperium.',
+      'broadcastTower': 'Wzmacnia wpływ, widoczność i komunikację imperium.',
+      'buildersGuild':
+          'Skupia fachowców budowlanych, przyspieszając produkcję i rozwój terytorium.',
+      'citadel': 'Późna obrona strategiczna dla miast przy ważnych granicach.',
+      'conscriptionOffice':
+          'Mobilizuje armię i przyspiesza przygotowanie nowych oddziałów.',
+      'court': 'Rozwija prawo, polityki miasta i cywilną kontrolę.',
+      'courthouse':
+          'Stabilizuje duże lub zdobyte miasta przez administrację prawa.',
+      'dryDock': 'Późny port wojenny dla większych okrętów.',
+      'factory':
+          'Przemysłowy budynek późniejszej gry, który daje dużą premię produkcyjną.',
+      'forge': 'Koncentruje obróbkę metalu i mocno zwiększa produkcję.',
+      'governorsOffice':
+          'Wzmacnia specjalizację miasta oraz zarządzanie terytorium.',
+      'granary':
+          'Wczesny budynek żywnościowy, który stabilizuje wzrost miasta.',
+      'harborCustoms': 'Urząd portowy wzmacniający handel i kontrolę wybrzeża.',
+      'hospital':
+          'Późna infrastruktura populacji dla długoterminowego rozwoju.',
+      'housing':
+          'Rozbudowuje przestrzeń mieszkalną i pozwala miastu kontrolować więcej pól.',
+      'laboratory':
+          'Zaplecze późnych projektów technologicznych i nowoczesnej nauki.',
+      'lighthouse':
+          'Wzmacnia nadmorską gospodarkę miasta dzięki żegludze i handlowi.',
+      'mapRoom': 'Wspiera eksplorację, widoczność i planowanie wypraw.',
+      'marketplace':
+          'Rozwija handel miejski i mocno zwiększa przychód w złocie.',
+      'masterWorkshop':
+          'Specjalistyczny warsztat dla miast nastawionych na produkcję.',
+      'merchantHall': 'Organizuje handel lokalny i zwiększa dochód miasta.',
+      'ministries':
+          'Limitowany budynek imperium wzmacniający administrację i złoto.',
+      'monument': 'Symbol prestiżu miasta, zapewniający złoto oraz obronę.',
+      'museum': 'Prestiżowy budynek imperium wzmacniający wpływ miasta.',
+      'navalAcademy':
+          'Militarna akademia morska dla wyspecjalizowanych portów.',
+      'observatory': 'Łączy geografię z nauką i wspiera zaawansowane badania.',
+      'parliament': 'Limitowany budynek cywilny dla dojrzałego państwa.',
+      'planningOffice':
+          'Rozwija miasto przez urbanistykę, produkcję i kontrolę terenu.',
+      'port': 'Otwiera miasto na handel morski i żywność z wybrzeża.',
+      'powerPlant':
+          'Późna infrastruktura energii dla mocnej produkcji przemysłowej.',
+      'publicBaths': 'Poprawiają stabilność i wzrost większych miast.',
+      'railDepot':
+          'Dworzec kolejowy usprawniający logistykę i mobilność między miastami.',
+      'reactor':
+          'Potężny budynek końcowy wymagający uranu i silnej infrastruktury.',
+      'refinery': 'Przetwarza ropę dla nowoczesnej armii i późnych projektów.',
+      'shipyard': 'Rozwija flotę i produkcję w miastach portowych.',
+      'siegeWorkshop': 'Produkuje i utrzymuje zaplecze machin oblężniczych.',
+      'stable': 'Wspiera hodowlę i logistykę, dając żywność oraz produkcję.',
+      'steelworks': 'Ciężki przemysł oparty na żelazie lub węglu.',
+      'stonemason': 'Wzmacnia zaplecze budowlane i defensywne miasta.',
+      'storehouse':
+          'Usprawnia magazynowanie plonów i zwiększa odkładaną żywność.',
+      'surveyorsOffice':
+          'Ułatwia planowanie granic i zwiększa zasięg kontroli miasta.',
+      'townHall':
+          'Administracyjne centrum miasta, wzmacniające gospodarkę i kontrolę terenu.',
+      'trainingGrounds':
+          'Rozwija wojskowe szkolenie i poprawia obronność miasta.',
+      'university':
+          'Późniejszy budynek naukowy dla dużych, rozwiniętych miast.',
+      'walls': 'Wczesna obrona miasta przeciw pierwszym atakom.',
+      'warCollege':
+          'Akademia wojskowa, która wzmacnia koordynację armii i generałów.',
+      'waterMill':
+          'Wykorzystuje kontrolowane pola rzeczne, zwiększając żywność z miasta.',
+      'workshop':
+          'Podstawowe centrum rzemiosła, które podnosi produkcję miasta.',
+      'worldFairGrounds':
+          'Pokojowy projekt prestiżu dla bogatego, rozwiniętego miasta.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionUnitDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'archer':
+          'Jednostka dystansowa, która atakuje z większego zasięgu, ale słabiej broni się w zwarciu.',
+      'catapult':
+          'Machina oblężnicza o większym zasięgu, skuteczna przeciw umocnieniom.',
+      'cavalry':
+          'Mobilna jednostka uderzeniowa, która szybko reaguje na słabe punkty frontu.',
+      'commander':
+          'Generał dowodzi armią, prowadzi rozpoznanie i może działać szybciej niż zwykłe oddziały.',
+      'fieldCannon': 'Nowoczesna artyleria polowa do ostrzału z dystansu.',
+      'heavyInfantry':
+          'Wytrzymała piechota frontowa z wysoką obroną i solidnym atakiem.',
+      'merchant':
+          'Porusza się automatycznie między własnymi miastami po trasie handlowej i może wejść do zajętego centrum przyjaznego miasta.',
+      'reconPlane':
+          'Samolot zwiadowczy o dużym zasięgu widzenia i bardzo wysokiej mobilności.',
+      'rifleman': 'Nowoczesna piechota liniowa, stabilna w ataku i obronie.',
+      'scout':
+          'Szybka jednostka rozpoznawcza do odkrywania mapy i wykrywania zagrożeń.',
+      'scoutShip':
+          'Lekki okręt do rozpoznania wybrzeży i ochrony pierwszych tras morskich.',
+      'settler':
+          'Zakłada nowe miasta i rozszerza imperium, lecz potrzebuje ochrony w drodze.',
+      'spearman':
+          'Wczesna piechota defensywna, dobra do osłony miast i powstrzymywania szarż.',
+      'tank': 'Ciężka jednostka pancerna o wysokiej sile i dużej mobilności.',
+      'warrior':
+          'Podstawowa jednostka bojowa do obrony miasta oraz walki w zwarciu.',
+      'warship': 'Silny okręt bojowy do kontroli morza i ostrzału z dystansu.',
+      'worker':
+          'Ulepsza pola wokół miast, zwiększając żywność, produkcję i złoto.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionWonderDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'centralBank':
+          'Instytucja finansowa wzmacniająca złoto imperium i dająca natychmiastową rezerwę skarbca.',
+      'grandCathedral':
+          'Obywatelski i duchowy monument, który dodaje stabilność, gdy wspiera go marmur.',
+      'grandExposition':
+          'Późna wystawa kulturowa, która zamienia globalną uwagę w złoto i stabilność.',
+      'greatLibrary':
+          'Światowe centrum wiedzy pisanej. Dodaje naukę w całym imperium i kończy aktywne badanie po ukończeniu.',
+      'greatWall':
+          'Defensywny megaprojekt wzmacniający odporność każdego miasta na ataki.',
+      'hangingGardens':
+          'Legendarny kompleks ogrodów, który zamienia miasto nad rzeką w zaplecze żywnościowe całego imperium.',
+      'imperialUniversity':
+          'Prestiżowy kampus zwiększający naukę w każdym mieście.',
+      'motherFactory':
+          'Ciężki kompleks przemysłowy zwiększający produkcję imperium i przyspieszający miasto gospodarza po ukończeniu.',
+      'nationalObservatory':
+          'Obserwatorium zwrócone ku górom, które podnosi późną naukę całego imperium.',
+      'petra':
+          'Wykuty w skale cud handlu, który czyni pustynne miasto gospodarza produktywnym i bogatym.',
+      'svalbardSeedVault':
+          'Polarne miejsce zachowania nasion, poprawiające bezpieczeństwo żywności i stabilność imperium.',
+      'other': '',
+    });
+    return '$_temp0';
   }
 }

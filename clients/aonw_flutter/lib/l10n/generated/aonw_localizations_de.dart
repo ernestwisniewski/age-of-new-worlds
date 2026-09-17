@@ -1575,6 +1575,8 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'completedBuildings': 'Fertiggestellte Gebäude',
       'produce': 'Produzieren',
       'inProgress': 'In Arbeit',
+      'details': 'Details',
+      'completed': 'In dieser Stadt fertiggestellt',
       'other': 'Produktion',
     });
     return '$_temp0';
@@ -3144,5 +3146,180 @@ class AonwLocalizationsDe extends AonwLocalizations {
   @override
   String productionScienceOutput(int amount) {
     return '$amount Wissenschaft / Runde';
+  }
+
+  @override
+  String productionBuildingDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'academy':
+          'Stärkt Wissenschaftsstädte und bereitet den Weg zu höherer Bildung.',
+      'airfield':
+          'Ein militärisches Flugfeld für Luftfahrt, Aufklärung und moderne Machtprojektion.',
+      'apothecary': 'Frühe Stadtgesundheit, die stetiges Wachstum unterstützt.',
+      'aqueduct':
+          'Leitet Wasser heran und unterstützt Wachstum sowie weitere Stadterweiterung.',
+      'archive':
+          'Das erste Wissensgebäude, das Aufzeichnungen organisiert und Forschung unterstützt.',
+      'armory':
+          'Ein besseres Rekrutierungs- und Ausrüstungszentrum für Truppen.',
+      'artisansGuild':
+          'Eine Produktionsstufe vor der Fabrik, basierend auf Handwerk und Werkstätten.',
+      'assemblyPlant': 'Ein Endspiel-Industriegebäude für Massenproduktion.',
+      'bank': 'Zentralisiert Finanzen und erhöht das Stadteinkommen deutlich.',
+      'barracks':
+          'Bietet militärische Infrastruktur und zusätzliche Verteidigung.',
+      'borderFort': 'Stärkt Verteidigung und Sicht an Imperiumsgrenzen.',
+      'broadcastTower': 'Stärkt Imperiumseinfluss, Sicht und Kommunikation.',
+      'buildersGuild':
+          'Versammelt Bauspezialisten und beschleunigt Produktion und territoriales Wachstum.',
+      'citadel':
+          'Späte strategische Verteidigung für Städte an wichtigen Grenzen.',
+      'conscriptionOffice':
+          'Mobilisiert die Armee und beschleunigt die Vorbereitung neuer Truppen.',
+      'court': 'Entwickelt Recht, Stadtpolitik und zivile Kontrolle.',
+      'courthouse':
+          'Stabilisiert große oder eroberte Städte durch Rechtsverwaltung.',
+      'dryDock': 'Ein später Marinehafen für größere Kriegsschiffe.',
+      'factory':
+          'Ein Industriegebäude für das spätere Spiel, das einen großen Produktionsbonus gewährt.',
+      'forge': 'Bündelt Metallverarbeitung und erhöht die Produktion stark.',
+      'governorsOffice': 'Stärkt Stadtspezialisierung und Gebietsverwaltung.',
+      'granary':
+          'Ein frühes Nahrungsgebäude, das das Stadtwachstum stabilisiert.',
+      'harborCustoms': 'Ein Hafenamt, das Handel und Küstenkontrolle stärkt.',
+      'hospital':
+          'Späte Bevölkerungsinfrastruktur für langfristige Entwicklung.',
+      'housing':
+          'Erweitert den Wohnraum und lässt die Stadt mehr Felder kontrollieren.',
+      'laboratory':
+          'Unterstützung für späte Technologieprojekte und moderne Wissenschaft.',
+      'lighthouse': 'Stärkt die Küstenwirtschaft durch Navigation und Handel.',
+      'mapRoom': 'Unterstützt Erkundung, Sicht und Expeditionsplanung.',
+      'marketplace':
+          'Entwickelt städtischen Handel und erhöht das Goldeinkommen stark.',
+      'masterWorkshop':
+          'Eine spezialisierte Werkstatt für produktionsorientierte Städte.',
+      'merchantHall':
+          'Organisiert lokalen Handel und erhöht das Stadteinkommen.',
+      'ministries':
+          'Ein begrenztes Imperiumsgebäude, das Verwaltung und Gold stärkt.',
+      'monument':
+          'Ein Symbol städtischen Prestiges, das Gold und Verteidigung bietet.',
+      'museum':
+          'Ein prestigeträchtiges Imperiumsgebäude, das den Stadteinfluss stärkt.',
+      'navalAcademy': 'Eine Marineakademie für spezialisierte Häfen.',
+      'observatory':
+          'Verbindet Geografie mit Wissenschaft und unterstützt fortgeschrittene Forschung.',
+      'parliament': 'Ein begrenztes Zivilgebäude für einen reifen Staat.',
+      'planningOffice':
+          'Entwickelt die Stadt durch Planung, Produktion und territoriale Kontrolle.',
+      'port': 'Öffnet die Stadt für Seehandel und Küstennahrung.',
+      'powerPlant':
+          'Späte Energieinfrastruktur für starke Industrieproduktion.',
+      'publicBaths': 'Verbessern Stabilität und Wachstum in größeren Städten.',
+      'railDepot':
+          'Ein Bahndepot, das Logistik und Mobilität zwischen Städten verbessert.',
+      'reactor':
+          'Ein mächtiges Endspielgebäude, das Uran und starke Infrastruktur erfordert.',
+      'refinery': 'Verarbeitet Öl für moderne Armeen und späte Projekte.',
+      'shipyard': 'Entwickelt Flotten und Produktion in Hafenstädten.',
+      'siegeWorkshop':
+          'Produziert und unterhält die Unterstützungsbasis für Belagerungsmaschinen.',
+      'stable':
+          'Unterstützt Zucht und Logistik und fügt Nahrung sowie Produktion hinzu.',
+      'steelworks': 'Schwerindustrie auf Grundlage von Eisen oder Kohle.',
+      'stonemason': 'Stärkt Stadtbau und Verteidigungsbasis.',
+      'storehouse':
+          'Verbessert die Lagerung der Ernte und erhöht gespeicherte Nahrung.',
+      'surveyorsOffice':
+          'Erleichtert Grenzplanung und erhöht die Kontrollreichweite der Stadt.',
+      'townHall':
+          'Das Verwaltungszentrum der Stadt stärkt Wirtschaft und territoriale Kontrolle.',
+      'trainingGrounds':
+          'Entwickelt militärische Ausbildung und verbessert die Stadtverteidigung.',
+      'university':
+          'Ein späteres Wissenschaftsgebäude für große, entwickelte Städte.',
+      'walls': 'Frühe Stadtverteidigung gegen die ersten Angriffe.',
+      'warCollege':
+          'Eine Militärakademie, die Armee und Koordination der Generäle stärkt.',
+      'waterMill':
+          'Nutzt kontrollierte Flussfelder, um die Stadtnahrung zu erhöhen.',
+      'workshop':
+          'Ein einfaches Handwerkszentrum, das die Stadtproduktion steigert.',
+      'worldFairGrounds':
+          'Ein friedliches Prestigeprojekt für eine reiche, entwickelte Stadt.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionUnitDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'archer':
+          'Eine Fernkampfeinheit, die aus größerer Entfernung angreift, sich im Nahkampf aber schlecht verteidigt.',
+      'catapult':
+          'Eine Belagerungsmaschine mit größerer Reichweite, effektiv gegen Befestigungen.',
+      'cavalry':
+          'Eine mobile Angriffseinheit, die schnell auf Schwachpunkte an der Front reagiert.',
+      'commander':
+          'Ein General befehligt eine Armee, führt Aufklärung an und kann schneller handeln als reguläre Truppen.',
+      'fieldCannon': 'Moderne Feldartillerie für Fernbeschuss.',
+      'heavyInfantry':
+          'Robuste Frontinfanterie mit hoher Verteidigung und solidem Angriff.',
+      'merchant':
+          'Reist automatisch zwischen deinen Städten auf einer Handelsroute und kann besetzte befreundete Stadtzentren betreten.',
+      'reconPlane':
+          'Ein Aufklärungsflugzeug mit großer Sichtweite und sehr hoher Mobilität.',
+      'rifleman':
+          'Eine moderne Linieninfanterie, zuverlässig in Angriff und Verteidigung.',
+      'scout':
+          'Eine schnelle Aufklärungseinheit zum Erkunden der Karte und Erkennen von Bedrohungen.',
+      'scoutShip':
+          'Ein leichtes Schiff für Küstenaufklärung und den Schutz früher Seewege.',
+      'settler':
+          'Gründet neue Städte und erweitert das Imperium, braucht unterwegs aber Schutz.',
+      'spearman':
+          'Frühe Verteidigungsinfanterie, gut zum Abdecken von Städten und Stoppen von Angriffen.',
+      'tank':
+          'Eine schwere gepanzerte Einheit mit hoher Stärke und hoher Mobilität.',
+      'warrior':
+          'Eine grundlegende Kampfeinheit für Stadtverteidigung und Nahkampf.',
+      'warship': 'Ein starkes Kampfschiff für Seekontrolle und Fernbeschuss.',
+      'worker':
+          'Verbessert Felder rund um Städte und erhöht Nahrung, Produktion und Gold.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionWonderDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'centralBank':
+          'A financial institution that boosts empire gold and grants an immediate treasury reserve.',
+      'grandCathedral':
+          'A civic and spiritual landmark that adds stability when supported by marble.',
+      'grandExposition':
+          'A late cultural showcase that turns global attention into gold and stability.',
+      'greatLibrary':
+          'A world center of written knowledge. Adds science across the empire and completes the current research when finished.',
+      'greatWall':
+          'A defensive megaproject that strengthens every city\'s ability to withstand attacks.',
+      'hangingGardens':
+          'A legendary garden complex that turns a river city into a food engine for the whole empire.',
+      'imperialUniversity':
+          'A prestigious campus that lifts science in every city.',
+      'motherFactory':
+          'A heavy industrial complex that boosts empire production and surges the host city forward when finished.',
+      'nationalObservatory':
+          'A mountain-facing observatory that advances late scientific output across the empire.',
+      'petra':
+          'A stone-carved trade wonder that makes a desert host city productive and wealthy.',
+      'svalbardSeedVault':
+          'A polar preservation site that improves food security and empire stability.',
+      'other': '',
+    });
+    return '$_temp0';
   }
 }

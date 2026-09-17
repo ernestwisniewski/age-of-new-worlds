@@ -153,6 +153,10 @@ final class ProductionOptionsView {
   ProductionOptionView? get currentOption {
     final target = currentTarget;
     if (target == null) return null;
+    return optionFor(target);
+  }
+
+  ProductionOptionView? optionFor(ProductionTargetView target) {
     for (final option
         in buildings
             .followedBy(units.map((unit) => unit.option))

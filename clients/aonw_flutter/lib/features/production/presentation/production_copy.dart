@@ -9,6 +9,8 @@ enum ProductionText {
   title,
   produce,
   inProgress,
+  details,
+  completed,
   loading,
   executing,
   current,
@@ -85,6 +87,24 @@ final class ProductionCopy {
     if (value.technologyUnlocked || technology == null) return null;
     return '${text(ProductionText.requires)} ${_l10n.technologyName(technology.name)}';
   }
+
+  String? unlockingTechnology(ProductionAvailabilityView value) {
+    final technology = value.requiredTechnology;
+    return technology == null
+        ? null
+        : '${text(ProductionText.requires)} ${_l10n.technologyName(technology.name)}';
+  }
+
+  String description(ProductionTargetView value) => switch (value) {
+    BuildingProductionTargetView(:final building) =>
+      _l10n.productionBuildingDescription(building),
+    UnitProductionTargetView(:final unit) => _l10n.productionUnitDescription(
+      unit.name,
+    ),
+    WonderProductionTargetView(:final wonder) =>
+      _l10n.productionWonderDescription(wonder),
+    ProjectProductionTargetView() => '',
+  };
 
   String target(ProductionTargetView value) => switch (value) {
     BuildingProductionTargetView(:final building) => cityContent(building),

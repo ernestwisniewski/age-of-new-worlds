@@ -19,7 +19,7 @@ The source files are `city_production_panel_view.dart`,
 | Unit strategic alternatives and affordability | Existing production unit option | Connected to exact reservation choice |
 | Current available buildings / collapsed future / completed list | Research and completion flags | Presentation grouping; completed takes precedence over research |
 | Building sort modes: recommended, speed, return, growth, industry, science, defense, economy | Needs Rust ranking policy | Source scores include yield and production calculations; do not port them into Flutter |
-| Building illustration, target title, authored description | Existing art catalog and localized content | Illustrated lazy cards connected; full descriptions/detail effects remain required |
+| Building illustration, target title, authored description | Existing art catalog and localized content | Illustrated lazy cards and all 87 authored descriptions in six languages connected; numeric effects remain required |
 | Building location requirements | Ruleset `ProductionRequirement` plus shared command checks | Needs typed detail projection; only disclose local requirement status |
 | Flat and river yield, science, territory capacity, food-deposit modifier | `BuildingProductionDefinition` | Needs detail projection; no repeated numeric tables in Dart |
 | Planned / active yield effect and city totals | Rust economy city-output rules | Needs an authoritative breakdown; current tile-yield query alone omits buildings, wonders and modifiers |
@@ -27,9 +27,9 @@ The source files are `city_production_panel_view.dart`,
 | Unit supply and base upkeep | `UnitProductionDefinition` / own supply budget | Needs detail projection; distinguish base upkeep from empire free-unit allocation |
 | Wonder host/empire yields, multipliers, stability and completion grants | `WonderProductionDefinition` | Needs detail projection; public content does not disclose another player's state |
 | Building, unit, wonder, project and specialization selection | Existing revision-bound production commands | Connected; details must remain readable when the command is unavailable |
-| Detail close / catalog return | Local presentation state | Portrait reference opens a modal; landscape overlays the catalog and preserves scroll |
+| Detail close / catalog return | Local presentation state | Current detail overlay preserves catalog scroll, resets on city changes and reads refreshed options; portrait modal presentation remains to match |
 | Pending operation | Production workflow | Connected; block duplicate commands while retaining feedback |
-| Selection, help, close and scrolling by keyboard/gamepad | Existing map input ownership and focus scopes | Modal routing connected; detail-layer routing remains required |
+| Selection, help, close and scrolling by keyboard/gamepad | Existing map input ownership and focus scopes | Modal and nested detail routing connected; Escape/B returns to the catalog without clearing city selection |
 
 The reference sorts buildings using integer scores derived from yields and ETA.
 Those rankings are a separate presentation policy in Rust, not a replacement for

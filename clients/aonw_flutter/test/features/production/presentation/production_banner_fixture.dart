@@ -1,4 +1,5 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
+import 'package:aonw_flutter/design_system/aonw_tokens.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/production/application/production_state.dart';
 import 'package:aonw_flutter/features/production/presentation/production_overlay.dart';
@@ -151,41 +152,44 @@ Widget bannerApp({
     child: Scaffold(
       body: RepaintBoundary(
         key: const ValueKey('production-banner-golden'),
-        child: modal
-            ? ProductionOverlay(
-                state: ProductionState(
-                  cityId: options.cityId,
-                  options: options,
-                  inFlightAction: pending
-                      ? RushProductionActionView(cityId: options.cityId)
-                      : null,
-                ),
-                cityName: 'Warszawa',
-                treasury: 150,
-                enabled: enabled,
-                onAction: onAction ?? (_) {},
-                onClose: () {},
-              )
-            : Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 760),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ProductionPanel(
-                      state: ProductionState(
-                        cityId: options.cityId,
-                        options: options,
-                        inFlightAction: pending
-                            ? RushProductionActionView(cityId: options.cityId)
-                            : null,
+        child: ColoredBox(
+          color: AonwColorTokens.background,
+          child: modal
+              ? ProductionOverlay(
+                  state: ProductionState(
+                    cityId: options.cityId,
+                    options: options,
+                    inFlightAction: pending
+                        ? RushProductionActionView(cityId: options.cityId)
+                        : null,
+                  ),
+                  cityName: 'Warszawa',
+                  treasury: 150,
+                  enabled: enabled,
+                  onAction: onAction ?? (_) {},
+                  onClose: () {},
+                )
+              : Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 760),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ProductionPanel(
+                        state: ProductionState(
+                          cityId: options.cityId,
+                          options: options,
+                          inFlightAction: pending
+                              ? RushProductionActionView(cityId: options.cityId)
+                              : null,
+                        ),
+                        treasury: 150,
+                        enabled: enabled,
+                        onAction: onAction ?? (_) {},
                       ),
-                      treasury: 150,
-                      enabled: enabled,
-                      onAction: onAction ?? (_) {},
                     ),
                   ),
                 ),
-              ),
+        ),
       ),
     ),
   ),

@@ -162,3 +162,30 @@ case that keeps at most twelve mounted cards and releases the scoped atlas pages
 after closing. Analysis, map/asset checks and architecture pass; the existing
 long production-method exception is removed. Building ranking and detailed effect projections
 remain subsequent work.
+
+
+## Target inspection and authored descriptions
+
+Buildings, units and wonders have a separate help action that remains available
+for blocked targets and read-only sessions. The detail layer shows the localized
+artwork, title and description, plus the existing authoritative cost, rate, ETA,
+technology and local completion/blocker. All 87 authored descriptions from the
+reference are present in all six supported languages. No numeric rules are
+duplicated in localized content or reconstructed from these descriptions.
+
+The nested input region handles Escape/B before the outer production modal.
+Catalog focus, semantics and tooltips are excluded while details are open.
+Returning preserves the catalog's scroll and disclosure state. An open target
+reads refreshed options; changing the city resets inspection. Fourteen focused
+interaction/layout tests cover these behaviors and both phone orientations at
+200% in six languages; catalog coverage verifies all 522 descriptions. Three
+new goldens cover a building, unit and wonder, alongside the seven catalog/banner
+references. The complete Flutter gate passes 1,480 tests, map/asset checks,
+analysis and unchanged architecture budgets; generated-code validation passes.
+The banner golden fixture now captures its opaque themed background
+so translucent card colors are composited as they are in the application.
+
+Numeric building effects and city impact, unit statistics, wonder effects and
+ranking still need an authoritative detail projection. The current detail layer
+occupies the catalog area; the reference's separate portrait dialog remains to
+be matched when the full detail content is connected.

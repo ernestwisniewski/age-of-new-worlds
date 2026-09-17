@@ -12,6 +12,7 @@ final class ProductionCatalog extends StatelessWidget {
     required this.options,
     required this.enabled,
     required this.onAction,
+    required this.onDetails,
     this.header,
     super.key,
   });
@@ -19,6 +20,7 @@ final class ProductionCatalog extends StatelessWidget {
   final ProductionOptionsView options;
   final bool enabled;
   final ValueChanged<ProductionActionView> onAction;
+  final ValueChanged<ProductionTargetView> onDetails;
   final Widget? header;
 
   @override
@@ -82,6 +84,9 @@ final class ProductionCatalog extends StatelessWidget {
       resourceCost,
     )),
     option: option,
+    onDetails: option.target is ProjectProductionTargetView
+        ? null
+        : () => onDetails(option.target),
     active: options.isCurrent(option.target),
     resourceCost: resourceCost,
     blocker: blocker,

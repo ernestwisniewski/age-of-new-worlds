@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
-import '../../../design_system/assets/sprite_frame_id.dart';
-import '../../../design_system/widgets/aonw_sprite_thumbnail.dart';
 import '../read_model/production_view.dart';
 import 'production_copy.dart';
+import 'production_target_artwork.dart';
 
 final class ProductionChoiceCard extends StatelessWidget {
   const ProductionChoiceCard({
     required this.option,
     required this.active,
     required this.onProduce,
+    this.onDetails,
     this.resourceCost,
     this.blocker,
     super.key,
@@ -19,6 +19,7 @@ final class ProductionChoiceCard extends StatelessWidget {
   final ProductionOptionView option;
   final bool active;
   final VoidCallback? onProduce;
+  final VoidCallback? onDetails;
   final String? resourceCost;
   final ProductionRejectionCodeView? blocker;
 
@@ -46,7 +47,7 @@ final class ProductionChoiceCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _artwork(),
+            ProductionTargetArtwork(target: option.target),
             const SizedBox(width: AonwSpacing.sm),
             Expanded(
               child: Column(
@@ -58,13 +59,13 @@ final class ProductionChoiceCard extends StatelessWidget {
                   ),
                   const SizedBox(height: AonwSpacing.xs),
                   _metadata(copy),
-                  if (!wide) _produce(copy),
+                  if (!wide) _actions(copy),
                 ],
               ),
             ),
             if (wide) ...[
               const SizedBox(width: AonwSpacing.sm),
-              _produce(copy),
+              _actions(copy),
             ],
           ],
         ),
@@ -111,26 +112,17 @@ final class ProductionChoiceCard extends StatelessWidget {
     ),
   );
 
-  Widget _artwork() {
-    final frame = switch (option.target) {
-      BuildingProductionTargetView(:final building) => SpriteFrameId(
-        'building.$building',
-      ),
-      UnitProductionTargetView(:final unit) => SpriteFrameId(
-        'unit.${unit.name}.idle.0',
-      ),
-      WonderProductionTargetView(:final wonder) => SpriteFrameId(
-        'wonder.$wonder',
-      ),
-      ProjectProductionTargetView() => null,
-    };
-    return ExcludeSemantics(
-      child: frame == null
-          ? const SizedBox.square(
-              dimension: 48,
-              child: Icon(Icons.all_inclusive, color: AonwColorTokens.brand),
-            )
-          : AonwSpriteThumbnail(key: ValueKey(frame), frame: frame, size: 48),
-    );
-  }
+  Widget _actions(ProductionCopy copy) => Wrap(
+    crossAxisAlignment: WrapCrossAlignment.center,
+    children: [
+      if (onDetails != null)
+        IconButton(
+          tooltip:
+              '${copy.text(ProductionText.details)}: ${copy.target(option.target)}',
+          onPressed: onDetails,
+          icon: const Icon(Icons.help_outline),
+        ),
+      _produce(copy),
+    ],
+  );
 }

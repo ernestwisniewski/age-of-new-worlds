@@ -1566,6 +1566,8 @@ class AonwLocalizationsEs extends AonwLocalizations {
       'completedBuildings': 'Edificios terminados',
       'produce': 'Producir',
       'inProgress': 'En curso',
+      'details': 'Detalles',
+      'completed': 'Completado en esta ciudad',
       'other': 'Producción',
     });
     return '$_temp0';
@@ -3127,5 +3129,190 @@ class AonwLocalizationsEs extends AonwLocalizations {
   @override
   String productionScienceOutput(int amount) {
     return '$amount de ciencia / turno';
+  }
+
+  @override
+  String productionBuildingDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'academy':
+          'Refuerza las ciudades científicas y prepara el camino hacia la educación superior.',
+      'airfield':
+          'Un aeródromo militar para aviación, reconocimiento y proyección de fuerza moderna.',
+      'apothecary':
+          'Salud urbana temprana que ayuda a mantener un crecimiento estable.',
+      'aqueduct':
+          'Suministra agua, apoyando el crecimiento y una mayor expansión urbana.',
+      'archive':
+          'El primer edificio de conocimiento, que organiza registros y apoya la investigación.',
+      'armory': 'Un mejor centro de reclutamiento y equipamiento para tropas.',
+      'artisansGuild':
+          'Una etapa de producción anterior a la fábrica, basada en oficios y talleres.',
+      'assemblyPlant':
+          'Un edificio industrial de final de partida para producción en masa.',
+      'bank':
+          'Centraliza las finanzas y aumenta significativamente los ingresos de la ciudad.',
+      'barracks': 'Proporciona infraestructura militar y defensa adicional.',
+      'borderFort':
+          'Refuerza la defensa y la visibilidad en las fronteras del imperio.',
+      'broadcastTower':
+          'Fortalece la influencia, la visibilidad y la comunicación del imperio.',
+      'buildersGuild':
+          'Reúne especialistas en construcción, acelerando la producción y el crecimiento territorial.',
+      'citadel':
+          'Defensa estratégica tardía para ciudades en fronteras importantes.',
+      'conscriptionOffice':
+          'Moviliza el ejército y acelera la preparación de nuevas tropas.',
+      'court': 'Desarrolla la ley, las políticas urbanas y el control civil.',
+      'courthouse':
+          'Estabiliza ciudades grandes o capturadas mediante administración legal.',
+      'dryDock': 'Un puerto naval tardío para buques de guerra mayores.',
+      'factory':
+          'Un edificio industrial de fase tardía que otorga una gran bonificación de producción.',
+      'forge': 'Concentra la metalurgia y aumenta mucho la producción.',
+      'governorsOffice':
+          'Fortalece la especialización de la ciudad y la gestión territorial.',
+      'granary':
+          'Un edificio temprano de alimento que estabiliza el crecimiento de la ciudad.',
+      'harborCustoms':
+          'Una oficina portuaria que fortalece el comercio y el control costero.',
+      'hospital':
+          'Infraestructura de población tardía para desarrollo a largo plazo.',
+      'housing':
+          'Amplía el espacio habitable y permite que la ciudad controle más casillas.',
+      'laboratory':
+          'Apoyo para proyectos tecnológicos tardíos y ciencia moderna.',
+      'lighthouse':
+          'Fortalece la economía costera mediante navegación y comercio.',
+      'mapRoom':
+          'Apoya la exploración, la visibilidad y la planificación de expediciones.',
+      'marketplace':
+          'Desarrolla el comercio urbano y aumenta mucho los ingresos de oro.',
+      'masterWorkshop':
+          'Un taller especializado para ciudades centradas en la producción.',
+      'merchantHall':
+          'Organiza el comercio local y aumenta los ingresos de la ciudad.',
+      'ministries':
+          'Un edificio de imperio limitado que fortalece la administración y el oro.',
+      'monument':
+          'Un símbolo de prestigio urbano que proporciona oro y defensa.',
+      'museum':
+          'Un prestigioso edificio imperial que fortalece la influencia de la ciudad.',
+      'navalAcademy': 'Una academia militar naval para puertos especializados.',
+      'observatory':
+          'Conecta la geografía con la ciencia y apoya la investigación avanzada.',
+      'parliament': 'Un edificio cívico limitado para un estado maduro.',
+      'planningOffice':
+          'Desarrolla la ciudad mediante planificación, producción y control territorial.',
+      'port': 'Abre la ciudad al comercio marítimo y al alimento costero.',
+      'powerPlant':
+          'Infraestructura energética tardía para una fuerte producción industrial.',
+      'publicBaths':
+          'Mejoran la estabilidad y el crecimiento en ciudades más grandes.',
+      'railDepot':
+          'Un depósito ferroviario que mejora la logística y la movilidad entre ciudades.',
+      'reactor':
+          'Un poderoso edificio de final de partida que requiere uranio e infraestructura sólida.',
+      'refinery':
+          'Procesa petróleo para ejércitos modernos y proyectos tardíos.',
+      'shipyard': 'Desarrolla flotas y producción en ciudades portuarias.',
+      'siegeWorkshop':
+          'Produce y mantiene la base de apoyo para máquinas de asedio.',
+      'stable':
+          'Apoya la cría y la logística, añadiendo alimento y producción.',
+      'steelworks': 'Industria pesada basada en hierro o carbón.',
+      'stonemason':
+          'Refuerza la construcción de la ciudad y su base defensiva.',
+      'storehouse':
+          'Mejora el almacenamiento de cosechas y aumenta el alimento almacenado.',
+      'surveyorsOffice':
+          'Facilita la planificación de fronteras y aumenta el alcance de control de la ciudad.',
+      'townHall':
+          'El centro administrativo de la ciudad, que fortalece la economía y el control territorial.',
+      'trainingGrounds':
+          'Desarrolla el entrenamiento militar y mejora la defensa de la ciudad.',
+      'university':
+          'Un edificio científico posterior para ciudades grandes y desarrolladas.',
+      'walls': 'Defensa temprana de ciudad contra los primeros ataques.',
+      'warCollege':
+          'Una academia militar que fortalece la coordinación del ejército y los generales.',
+      'waterMill':
+          'Usa casillas de río controladas para aumentar el alimento de la ciudad.',
+      'workshop':
+          'Un centro artesanal básico que eleva la producción de la ciudad.',
+      'worldFairGrounds':
+          'Un proyecto pacífico de prestigio para una ciudad rica y desarrollada.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionUnitDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'archer':
+          'Una unidad a distancia que ataca desde más lejos pero se defiende mal en combate cuerpo a cuerpo.',
+      'catapult':
+          'Una máquina de asedio de mayor alcance, efectiva contra fortificaciones.',
+      'cavalry':
+          'Una unidad de golpe móvil que responde rápidamente a puntos débiles del frente.',
+      'commander':
+          'Un general comanda un ejército, dirige el reconocimiento y puede actuar más rápido que las tropas regulares.',
+      'fieldCannon':
+          'Artillería de campaña moderna para bombardeo a distancia.',
+      'heavyInfantry':
+          'Infantería resistente de primera línea con alta defensa y ataque sólido.',
+      'merchant':
+          'Viaja automáticamente entre tus ciudades por una ruta comercial y puede entrar en centros de ciudad aliados ocupados.',
+      'reconPlane':
+          'Una aeronave de reconocimiento con gran alcance de visión y movilidad muy alta.',
+      'rifleman': 'Infantería de línea moderna, estable en ataque y defensa.',
+      'scout':
+          'Una unidad de reconocimiento rápida para explorar el mapa y detectar amenazas.',
+      'scoutShip':
+          'Un barco ligero para reconocimiento costero y protección de rutas marítimas tempranas.',
+      'settler':
+          'Funda nuevas ciudades y expande el imperio, pero necesita protección en el camino.',
+      'spearman':
+          'Infantería defensiva temprana, buena para cubrir ciudades y detener cargas.',
+      'tank': 'Una unidad blindada pesada con gran fuerza y alta movilidad.',
+      'warrior':
+          'Una unidad de combate básica para la defensa de ciudades y la lucha cuerpo a cuerpo.',
+      'warship':
+          'Un fuerte buque de combate para control marítimo y bombardeo a distancia.',
+      'worker':
+          'Mejora casillas alrededor de ciudades, aumentando alimento, producción y oro.',
+      'other': '',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String productionWonderDescription(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'centralBank':
+          'A financial institution that boosts empire gold and grants an immediate treasury reserve.',
+      'grandCathedral':
+          'A civic and spiritual landmark that adds stability when supported by marble.',
+      'grandExposition':
+          'A late cultural showcase that turns global attention into gold and stability.',
+      'greatLibrary':
+          'A world center of written knowledge. Adds science across the empire and completes the current research when finished.',
+      'greatWall':
+          'A defensive megaproject that strengthens every city\'s ability to withstand attacks.',
+      'hangingGardens':
+          'A legendary garden complex that turns a river city into a food engine for the whole empire.',
+      'imperialUniversity':
+          'A prestigious campus that lifts science in every city.',
+      'motherFactory':
+          'A heavy industrial complex that boosts empire production and surges the host city forward when finished.',
+      'nationalObservatory':
+          'A mountain-facing observatory that advances late scientific output across the empire.',
+      'petra':
+          'A stone-carved trade wonder that makes a desert host city productive and wealthy.',
+      'svalbardSeedVault':
+          'A polar preservation site that improves food security and empire stability.',
+      'other': '',
+    });
+    return '$_temp0';
   }
 }

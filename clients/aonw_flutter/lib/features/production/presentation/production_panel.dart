@@ -7,8 +7,9 @@ import '../read_model/production_view.dart';
 import 'production_active_banner.dart';
 import 'production_catalog.dart';
 import 'production_copy.dart';
+import 'production_target_details.dart';
 
-final class ProductionPanel extends StatelessWidget {
+final class ProductionPanel extends StatefulWidget {
   const ProductionPanel({
     required this.state,
     required this.onAction,
@@ -25,6 +26,25 @@ final class ProductionPanel extends StatelessWidget {
   final int? treasury;
   final String? cityName;
   final VoidCallback? onClose;
+
+  @override
+  State<ProductionPanel> createState() => _ProductionPanelState();
+}
+
+final class _ProductionPanelState extends State<ProductionPanel> {
+  ProductionTargetView? _inspectedTarget;
+  ProductionState get state => widget.state;
+  ValueChanged<ProductionActionView> get onAction => widget.onAction;
+  bool get enabled => widget.enabled;
+  int? get treasury => widget.treasury;
+  String? get cityName => widget.cityName;
+  VoidCallback? get onClose => widget.onClose;
+
+  @override
+  void didUpdateWidget(ProductionPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.state.cityId != state.cityId) _inspectedTarget = null;
+  }
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -106,15 +126,46 @@ final class ProductionPanel extends StatelessWidget {
     return [
       if (!compact) overview,
       Expanded(
-        child: ProductionCatalog(
-          key: ValueKey(options.cityId),
-          header: compact ? overview : null,
-          options: options,
-          enabled: acceptsInput,
-          onAction: onAction,
-        ),
+        child: _catalog(options, compact ? overview : null, acceptsInput),
       ),
     ];
+  }
+
+  Widget _catalog(
+    ProductionOptionsView options,
+    Widget? header,
+    bool acceptsInput,
+  ) {
+    final target = _inspectedTarget;
+    final detail = target == null ? null : options.optionFor(target);
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ExcludeFocus(
+          excluding: detail != null,
+          child: ExcludeSemantics(
+            excluding: detail != null,
+            child: TooltipVisibility(
+              visible: detail == null,
+              child: ProductionCatalog(
+                key: ValueKey(options.cityId),
+                header: header,
+                options: options,
+                enabled: acceptsInput,
+                onAction: onAction,
+                onDetails: (target) =>
+                    setState(() => _inspectedTarget = target),
+              ),
+            ),
+          ),
+        ),
+        if (detail != null)
+          ProductionTargetDetails(
+            option: detail,
+            onClose: () => setState(() => _inspectedTarget = null),
+          ),
+      ],
+    );
   }
 }
 
