@@ -22,6 +22,8 @@ use aonw_engine::{
     StartUnitProductionCommand, StartWonderCommand,
 };
 
+#[path = "production/availability.rs"]
+mod availability;
 #[path = "production/constraints.rs"]
 mod constraints;
 #[path = "production/forecast.rs"]
@@ -401,6 +403,12 @@ fn state_with(
         InitialResourceDistribution::default(),
     )
     .expect("economy");
+    let wonders = WonderRegistry::try_new(cities.iter().flat_map(|city| {
+        city.wonders()
+            .iter()
+            .map(|wonder| (*wonder, city.owner_player_id().clone()))
+    }))
+    .expect("wonder registry");
     GameState::builder(
         StateRevision::new(9),
         4,
@@ -410,7 +418,7 @@ fn state_with(
     )
     .with_cities(cities)
     .with_economy(economy)
-    .with_knowledge(KnowledgeState::new(research, WonderRegistry::default()))
+    .with_knowledge(KnowledgeState::new(research, wonders))
     .with_fog_of_war(FogOfWarState::default())
     .with_match_lifecycle(MatchLifecycle::new(identity, lifecycle))
     .try_build()

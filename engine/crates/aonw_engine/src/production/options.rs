@@ -1,10 +1,11 @@
-use aonw_content::UnitProductionDefinition;
+use aonw_content::{
+    BuildingProductionDefinition, UnitProductionDefinition, WonderProductionDefinition,
+};
 use aonw_domain::{
     City, CityProductionQueue, CityProductionTarget, CityProjectType, CitySpecializationType,
     GameState,
 };
 
-use super::ProductionError;
 use super::forecast::forecast;
 use super::model::{
     CitySpecializationOption, ProductionOption, ProductionOptions, ProductionOptionsQuery,
@@ -14,6 +15,7 @@ use super::rules::{building_rejection, evaluate_unit, specialization_rejection, 
 use super::supply::{UnitSupplyBudget, unit_supply_budget};
 use super::support::{controlled_city, invalid, pace, technology_for, validate_revision};
 use super::yield_rules::ProductionRates;
+use super::{ProductionAvailability, ProductionError};
 use crate::{EngineContext, TechnologyUnlockQuery};
 
 const SPECIALIZATIONS: [CitySpecializationType; 5] = [
@@ -36,31 +38,11 @@ pub(crate) fn query_options(
     let rates = ProductionRates::prepare(state, context, city)?;
     let supply = unit_supply_budget(state, context, city)?;
     let production = context.ruleset().production();
-    let pace = pace(state);
     let buildings = production
         .buildings()
         .iter()
         .copied()
-        .map(|definition| {
-            let rejection =
-                building_rejection(state, context, city, technology, definition.building())?;
-            let cost = production
-                .building_cost(definition.base_cost(), pace)
-                .ok_or_else(|| invalid("building production cost overflow"))?;
-            Ok(ProductionOption::new(
-                CityProductionTarget::Building(definition.building()),
-                cost,
-                rejection,
-                forecast(
-                    state,
-                    context,
-                    city,
-                    CityProductionTarget::Building(definition.building()),
-                    cost,
-                    &rates,
-                )?,
-            ))
-        })
+        .map(|definition| building_option(state, context, city, technology, definition, &rates))
         .collect::<Result<Vec<_>, ProductionError>>()?;
     let units = production
         .units()
@@ -81,6 +63,7 @@ pub(crate) fn query_options(
                 0,
                 None,
                 forecast(state, context, city, target, 0, &rates)?,
+                ProductionAvailability::for_target(city, technology, target),
             ))
         })
         .collect::<Result<Vec<_>, ProductionError>>()?;
@@ -88,26 +71,7 @@ pub(crate) fn query_options(
         .wonders()
         .iter()
         .copied()
-        .map(|definition| {
-            let rejection =
-                wonder_rejection(state, context, city, technology, definition.wonder())?;
-            let cost = production
-                .building_cost(definition.base_cost(), pace)
-                .ok_or_else(|| invalid("wonder production cost overflow"))?;
-            Ok(ProductionOption::new(
-                CityProductionTarget::Wonder(definition.wonder()),
-                cost,
-                rejection,
-                forecast(
-                    state,
-                    context,
-                    city,
-                    CityProductionTarget::Wonder(definition.wonder()),
-                    cost,
-                    &rates,
-                )?,
-            ))
-        })
+        .map(|definition| wonder_option(state, context, city, technology, definition, &rates))
         .collect::<Result<Vec<_>, ProductionError>>()?;
     let specializations = specialization_options(context, city, technology);
     let queue = city.production_queue();
@@ -188,8 +152,79 @@ fn unit_option(
                 cost,
                 rates,
             )?,
+            ProductionAvailability::for_target(
+                city,
+                technology,
+                CityProductionTarget::Unit(definition.unit()),
+            ),
         ),
         evaluation.resource_options,
         evaluation.affordable_indices,
+    ))
+}
+
+fn building_option(
+    state: &GameState,
+    context: EngineContext<'_>,
+    city: &City,
+    technology: TechnologyUnlockQuery<'_>,
+    definition: BuildingProductionDefinition,
+    rates: &ProductionRates,
+) -> Result<ProductionOption, ProductionError> {
+    let production = context.ruleset().production();
+    let rejection = building_rejection(state, context, city, technology, definition.building())?;
+    let cost = production
+        .building_cost(definition.base_cost(), pace(state))
+        .ok_or_else(|| invalid("building production cost overflow"))?;
+    Ok(ProductionOption::new(
+        CityProductionTarget::Building(definition.building()),
+        cost,
+        rejection,
+        forecast(
+            state,
+            context,
+            city,
+            CityProductionTarget::Building(definition.building()),
+            cost,
+            rates,
+        )?,
+        ProductionAvailability::for_target(
+            city,
+            technology,
+            CityProductionTarget::Building(definition.building()),
+        ),
+    ))
+}
+
+fn wonder_option(
+    state: &GameState,
+    context: EngineContext<'_>,
+    city: &City,
+    technology: TechnologyUnlockQuery<'_>,
+    definition: WonderProductionDefinition,
+    rates: &ProductionRates,
+) -> Result<ProductionOption, ProductionError> {
+    let production = context.ruleset().production();
+    let rejection = wonder_rejection(state, context, city, technology, definition.wonder())?;
+    let cost = production
+        .building_cost(definition.base_cost(), pace(state))
+        .ok_or_else(|| invalid("wonder production cost overflow"))?;
+    Ok(ProductionOption::new(
+        CityProductionTarget::Wonder(definition.wonder()),
+        cost,
+        rejection,
+        forecast(
+            state,
+            context,
+            city,
+            CityProductionTarget::Wonder(definition.wonder()),
+            cost,
+            rates,
+        )?,
+        ProductionAvailability::for_target(
+            city,
+            technology,
+            CityProductionTarget::Wonder(definition.wonder()),
+        ),
     ))
 }

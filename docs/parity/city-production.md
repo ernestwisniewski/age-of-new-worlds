@@ -86,3 +86,18 @@ existing production build method shrinks from 78 to 70 lines; no limit increases
 
 This completes the active banner. The full production modal, catalog grouping,
 building/unit/wonder details and city/worker panels remain separate work.
+
+## Catalog availability
+
+`ProductionAvailability` separates the owner's research capability, unlocking
+technology and completion in the queried city from the first command rejection.
+A built granary, a locked workshop and an inland port can share the same generic
+rejection while belonging to different catalog groups. Local wonder completion
+never identifies another owner's city or queue. Units and continuous projects
+are never classified as completed buildings.
+
+Twenty-eight production acceptance tests pass, including research-versus-command
+agreement and independent completion/research flags. The catalog assembly is
+split into target-specific helpers, with no additional architecture or Clippy
+exceptions. Canonical state, save/replay and production command behavior remain
+unchanged. The transport and presentation follow this engine stage.

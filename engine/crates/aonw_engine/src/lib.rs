@@ -110,10 +110,10 @@ pub use pending_turn_actions::{
     PendingTurnAction, PendingTurnActions, PendingTurnActionsError, PendingTurnActionsQuery,
 };
 pub use production::{
-    CitySpecializationOption, ProductionError, ProductionForecast, ProductionOption,
-    ProductionOptions, ProductionOptionsQuery, ProductionRushQuote, RushProductionCommand,
-    SetCitySpecializationCommand, StartBuildingCommand, StartCityProjectCommand,
-    StartUnitProductionCommand, StartWonderCommand, UnitProductionOption,
+    CitySpecializationOption, ProductionAvailability, ProductionError, ProductionForecast,
+    ProductionOption, ProductionOptions, ProductionOptionsQuery, ProductionRushQuote,
+    RushProductionCommand, SetCitySpecializationCommand, StartBuildingCommand,
+    StartCityProjectCommand, StartUnitProductionCommand, StartWonderCommand, UnitProductionOption,
 };
 pub use research::{
     CancelResearchSelectionCommand, ResearchError, ResearchOption, ResearchOptions,

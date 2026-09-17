@@ -1,3 +1,4 @@
+mod availability;
 mod commands;
 mod error;
 mod forecast;
@@ -13,6 +14,7 @@ mod turn;
 mod wonder;
 mod yield_rules;
 
+pub use availability::ProductionAvailability;
 pub use error::ProductionError;
 pub use forecast::ProductionForecast;
 pub use model::{
