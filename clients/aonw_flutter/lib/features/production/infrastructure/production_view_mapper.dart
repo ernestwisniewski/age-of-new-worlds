@@ -2,6 +2,7 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 
 import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
+import '../../research/read_model/research_view.dart';
 import '../read_model/production_view.dart';
 
 part 'production_metadata_mapper.dart';
@@ -146,6 +147,15 @@ ProductionOptionView _option(
     target: _target(wire.target),
     cost: wire.cost,
     blocker: _optionalBlocker(wire.rejection),
+    availability: ProductionAvailabilityView(
+      requiredTechnology: wire.availability.requiredTechnology == null
+          ? null
+          : TechnologyIdView.values.byName(
+              wire.availability.requiredTechnology!.name,
+            ),
+      technologyUnlocked: wire.availability.technologyUnlocked,
+      completedInCity: wire.availability.completedInCity,
+    ),
     forecast: ProductionForecastView(
       investedProduction: wire.forecast.investedProduction,
       productionPerTurn: wire.forecast.productionPerTurn,

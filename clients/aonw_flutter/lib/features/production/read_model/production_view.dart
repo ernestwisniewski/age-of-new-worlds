@@ -1,5 +1,6 @@
 import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
+import '../../research/read_model/research_view.dart';
 
 sealed class ProductionTargetView {
   const ProductionTargetView();
@@ -35,12 +36,26 @@ final class ProductionOptionView {
     required this.cost,
     required this.blocker,
     required this.forecast,
+    required this.availability,
   });
 
   final ProductionTargetView target;
   final int cost;
   final ProductionRejectionCodeView? blocker;
   final ProductionForecastView forecast;
+  final ProductionAvailabilityView availability;
+}
+
+final class ProductionAvailabilityView {
+  const ProductionAvailabilityView({
+    required this.requiredTechnology,
+    required this.technologyUnlocked,
+    required this.completedInCity,
+  });
+
+  final TechnologyIdView? requiredTechnology;
+  final bool technologyUnlocked;
+  final bool completedInCity;
 }
 
 final class ProductionForecastView {

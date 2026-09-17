@@ -73,3 +73,37 @@ final class AonwProductionRushQuote {
   final int goldCost;
   final AonwCommandRejectionCode? rejection;
 }
+
+final class AonwProductionAvailability {
+  const AonwProductionAvailability({
+    required this.requiredTechnology,
+    required this.technologyUnlocked,
+    required this.completedInCity,
+  });
+
+  factory AonwProductionAvailability.fromJson(Object? source) {
+    final value = readObject(source, 'production availability');
+    requireKeys(value, const {
+      'requiredTechnology',
+      'technologyUnlocked',
+      'completedInCity',
+    }, 'production availability');
+    return AonwProductionAvailability(
+      requiredTechnology: value['requiredTechnology'] == null
+          ? null
+          : AonwTechnologyId.fromJson(value['requiredTechnology']),
+      technologyUnlocked: readBool(
+        value['technologyUnlocked'],
+        'production technology unlocked',
+      ),
+      completedInCity: readBool(
+        value['completedInCity'],
+        'production completed in city',
+      ),
+    );
+  }
+
+  final AonwTechnologyId? requiredTechnology;
+  final bool technologyUnlocked;
+  final bool completedInCity;
+}

@@ -84,6 +84,7 @@ final class AonwProductionOption {
     required this.cost,
     required this.rejection,
     required this.forecast,
+    required this.availability,
   });
 
   factory AonwProductionOption.fromJson(Object? source) {
@@ -93,11 +94,13 @@ final class AonwProductionOption {
       'cost',
       'rejection',
       'forecast',
+      'availability',
     }, 'production option');
     return AonwProductionOption(
       target: AonwCityProductionTarget.fromJson(value['target']),
       cost: readInt(value['cost'], 'production cost'),
       forecast: AonwProductionForecast.fromJson(value['forecast']),
+      availability: AonwProductionAvailability.fromJson(value['availability']),
       rejection: value['rejection'] == null
           ? null
           : AonwCommandRejectionCode.fromWire(
@@ -110,6 +113,7 @@ final class AonwProductionOption {
   final int cost;
   final AonwCommandRejectionCode? rejection;
   final AonwProductionForecast forecast;
+  final AonwProductionAvailability availability;
 }
 
 final class AonwUnitProductionOption {

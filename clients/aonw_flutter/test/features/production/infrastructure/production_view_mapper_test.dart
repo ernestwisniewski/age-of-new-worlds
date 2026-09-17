@@ -33,6 +33,12 @@ void main() {
     expect(options.productionOverflow, 1);
     expect(options.buildings.single.cost, 15);
     expect(options.buildings.single.forecast.estimatedTurns, 4);
+    expect(
+      options.buildings.single.availability.requiredTechnology?.name,
+      'craftsmanship',
+    );
+    expect(options.buildings.single.availability.technologyUnlocked, isTrue);
+    expect(options.buildings.single.availability.completedInCity, isFalse);
     expect(options.projects.single.forecast.projectOutput, 1);
     expect(options.projects.single.forecast.estimatedTurns, isNull);
     expect(
@@ -50,6 +56,36 @@ void main() {
     expect(resources.sources.single.coordinate, city.center);
     expect(resources.sources.single.improvement, 'mine');
   });
+
+  test(
+    'rejects unlocked or completed status that contradicts command availability',
+    () {
+      final scene = testMapScene(cities: [testCityView()]);
+      for (final value in [
+        const AonwProductionAvailability(
+          requiredTechnology: AonwTechnologyId.craftsmanship,
+          technologyUnlocked: false,
+          completedInCity: false,
+        ),
+        const AonwProductionAvailability(
+          requiredTechnology: null,
+          technologyUnlocked: true,
+          completedInCity: true,
+        ),
+      ]) {
+        expect(
+          () => mapper.options(
+            _options(availability: value),
+            map: scene.map,
+            player: scene.player,
+            cityId: 'preview-city',
+            expectedRevision: 0,
+          ),
+          throwsFormatException,
+        );
+      }
+    },
+  );
 
   test('fails closed on stale, malformed, or unrelated engine choices', () {
     final city = testCityView();
@@ -160,6 +196,7 @@ AonwProductionOptionsResult _options({
   List<int> affordableIndices = const [0],
   AonwCommandRejectionCode? buildingRejection,
   AonwProductionForecast? projectForecast,
+  AonwProductionAvailability? availability,
   AonwProductionRushQuote? rushQuote,
 }) => AonwProductionOptionsResult(
   stamp: _stamp(revision: revision),
@@ -176,6 +213,13 @@ AonwProductionOptionsResult _options({
       ),
   buildings: [
     AonwProductionOption(
+      availability:
+          availability ??
+          const AonwProductionAvailability(
+            requiredTechnology: AonwTechnologyId.craftsmanship,
+            technologyUnlocked: true,
+            completedInCity: false,
+          ),
       target: _target('building', 'buildingType', 'workshop'),
       cost: 15,
       forecast: const AonwProductionForecast(
@@ -191,6 +235,11 @@ AonwProductionOptionsResult _options({
   units: [
     AonwUnitProductionOption(
       option: AonwProductionOption(
+        availability: AonwProductionAvailability(
+          requiredTechnology: null,
+          technologyUnlocked: true,
+          completedInCity: false,
+        ),
         target: _target('unit', 'unitType', 'tank'),
         cost: 32,
         forecast: const AonwProductionForecast(
@@ -210,6 +259,11 @@ AonwProductionOptionsResult _options({
   ],
   projects: [
     AonwProductionOption(
+      availability: AonwProductionAvailability(
+        requiredTechnology: null,
+        technologyUnlocked: true,
+        completedInCity: false,
+      ),
       target: _target('project', 'projectType', 'research'),
       cost: 0,
       forecast:
@@ -226,6 +280,11 @@ AonwProductionOptionsResult _options({
   ],
   wonders: [
     AonwProductionOption(
+      availability: AonwProductionAvailability(
+        requiredTechnology: null,
+        technologyUnlocked: true,
+        completedInCity: false,
+      ),
       target: _target('wonder', 'wonderType', 'greatLibrary'),
       cost: 25,
       forecast: const AonwProductionForecast(

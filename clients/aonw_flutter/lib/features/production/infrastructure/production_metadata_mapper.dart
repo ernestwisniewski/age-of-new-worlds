@@ -28,6 +28,7 @@ AonwProductionOption? _validateProductionCatalog(
         wire.currentTarget != null &&
         key == _productionTargetKey(wire.currentTarget!);
     if (isCurrent) current = option;
+    _validateAvailability(option);
     _validateForecastValues(option.forecast);
     _validateForecastKind(option);
     _validateSpawnStatus(option, isCurrent: isCurrent);
@@ -128,5 +129,27 @@ void _validateRushBlocker(
     throw const FormatException(
       'Finite production has a mismatched rush blocker.',
     );
+  }
+}
+
+void _validateAvailability(AonwProductionOption option) {
+  final value = option.availability;
+  final kind = option.target.kind;
+  if (option.rejection == null &&
+      (!value.technologyUnlocked || value.completedInCity)) {
+    throw const FormatException(
+      'Production availability contradicts its blocker.',
+    );
+  }
+  if (value.completedInCity &&
+      kind != AonwCityProductionTargetKind.building &&
+      kind != AonwCityProductionTargetKind.wonder) {
+    throw const FormatException(
+      'Only buildings and wonders can be completed in a city.',
+    );
+  }
+  if (kind == AonwCityProductionTargetKind.project &&
+      (value.requiredTechnology != null || !value.technologyUnlocked)) {
+    throw const FormatException('Continuous projects cannot require research.');
   }
 }

@@ -3,14 +3,48 @@ use std::collections::BTreeMap;
 use aonw_contracts::client::{
     CitySpecializationOptionDto, ClientCommandDto, ClientCommandRejectionCodeDto, ClientEventDto,
     ClientQueryDto, ClientQueryResultDto, ClientRequestBodyDto, ClientResponseBodyDto,
-    ProductionForecastDto, ProductionOptionDto, ProductionRushQuoteDto, UnitProductionOptionDto,
+    ProductionAvailabilityDto, ProductionForecastDto, ProductionOptionDto, ProductionRushQuoteDto,
+    UnitProductionOptionDto,
 };
 use aonw_contracts::{
     CityBuildingTypeDto, CityProductionTargetDto, CityProjectTypeDto, CitySpecializationTypeDto,
-    ResourceTypeDto, StrategicResourceStockpileDto, UnitKindDto, WonderTypeDto,
+    ResourceTypeDto, StrategicResourceStockpileDto, TechnologyIdDto, UnitKindDto, WonderTypeDto,
 };
 
 use super::stamp;
+
+#[test]
+fn production_availability_requires_explicit_null_technology_and_strict_status() {
+    let original = serde_json::to_value(response()).expect("response");
+    for field in [
+        "requiredTechnology",
+        "technologyUnlocked",
+        "completedInCity",
+    ] {
+        let mut missing = original.clone();
+        missing["result"]["buildings"][0]["availability"]
+            .as_object_mut()
+            .expect("availability")
+            .remove(field);
+        assert!(
+            serde_json::from_value::<ClientResponseBodyDto>(missing).is_err(),
+            "{field}"
+        );
+    }
+    for field in [
+        "opponentCity",
+        "technologyUnlocked",
+        "completedInCity",
+        "requiredTechnology",
+    ] {
+        let mut invalid = original.clone();
+        invalid["result"]["buildings"][0]["availability"][field] = serde_json::json!("private");
+        assert!(
+            serde_json::from_value::<ClientResponseBodyDto>(invalid).is_err(),
+            "{field}"
+        );
+    }
+}
 
 #[test]
 fn production_metadata_matches_the_shared_dart_fixture() {
@@ -180,6 +214,7 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     building_type: CityBuildingTypeDto::Workshop,
                 },
                 cost: 15,
+                availability: availability(Some(TechnologyIdDto::Craftsmanship)),
                 forecast: ProductionForecastDto {
                     invested_production: 4,
                     production_per_turn: 3,
@@ -195,6 +230,7 @@ pub(super) fn response() -> ClientResponseBodyDto {
                         unit_type: UnitKindDto::Tank,
                     },
                     cost: 32,
+                    availability: availability(Some(TechnologyIdDto::Combustion)),
                     forecast: ProductionForecastDto {
                         invested_production: 4,
                         production_per_turn: 3,
@@ -215,6 +251,7 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     project_type: CityProjectTypeDto::Research,
                 },
                 cost: 0,
+                availability: availability(None),
                 forecast: ProductionForecastDto {
                     invested_production: 4,
                     production_per_turn: 3,
@@ -229,6 +266,7 @@ pub(super) fn response() -> ClientResponseBodyDto {
                     wonder_type: WonderTypeDto::GreatLibrary,
                 },
                 cost: 25,
+                availability: availability(Some(TechnologyIdDto::Writing)),
                 forecast: ProductionForecastDto {
                     invested_production: 4,
                     production_per_turn: 3,
@@ -249,4 +287,12 @@ pub(super) fn response() -> ClientResponseBodyDto {
 
 fn dispatch(command: ClientCommandDto) -> ClientRequestBodyDto {
     ClientRequestBodyDto::Dispatch { command }
+}
+
+fn availability(required_technology: Option<TechnologyIdDto>) -> ProductionAvailabilityDto {
+    ProductionAvailabilityDto {
+        required_technology,
+        technology_unlocked: true,
+        completed_in_city: false,
+    }
 }

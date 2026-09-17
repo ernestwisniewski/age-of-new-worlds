@@ -109,6 +109,11 @@ ProductionOverviewFixture _overview({int revision = 0}) => (
     ),
     buildings: const [
       ProductionOptionView(
+        availability: ProductionAvailabilityView(
+          requiredTechnology: null,
+          technologyUnlocked: true,
+          completedInCity: false,
+        ),
         forecast: ProductionForecastView(
           investedProduction: 0,
           productionPerTurn: 3,

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     CityBuildingTypeDto, CityProductionTargetDto, CitySpecializationTypeDto,
-    StrategicResourceStockpileDto,
+    StrategicResourceStockpileDto, TechnologyIdDto,
 };
 
 use super::ClientCommandRejectionCodeDto;
@@ -16,6 +16,18 @@ pub struct ProductionOptionDto {
     pub cost: i64,
     pub rejection: Option<ClientCommandRejectionCodeDto>,
     pub forecast: ProductionForecastDto,
+    pub availability: ProductionAvailabilityDto,
+}
+
+/// Owner research and local completion, independently of other blockers.
+#[allow(missing_docs)]
+#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ProductionAvailabilityDto {
+    #[serde(deserialize_with = "Option::deserialize")]
+    pub required_technology: Option<TechnologyIdDto>,
+    pub technology_unlocked: bool,
+    pub completed_in_city: bool,
 }
 
 /// Current-rate progress and output for one production target.

@@ -1,10 +1,11 @@
 use crate::{
     encode_city_building, encode_city_project, encode_city_specialization, encode_city_wonder,
-    encode_client_stamp, encode_command_rejection, encode_resource, encode_unit_kind,
+    encode_client_stamp, encode_command_rejection, encode_resource, encode_technology,
+    encode_unit_kind,
 };
 use aonw_contracts::client::{
-    CitySpecializationOptionDto, ClientQueryResultDto, ProductionForecastDto, ProductionOptionDto,
-    ProductionRushQuoteDto, UnitProductionOptionDto,
+    CitySpecializationOptionDto, ClientQueryResultDto, ProductionAvailabilityDto,
+    ProductionForecastDto, ProductionOptionDto, ProductionRushQuoteDto, UnitProductionOptionDto,
 };
 use aonw_contracts::{CityProductionTargetDto, StrategicResourceStockpileDto};
 use aonw_domain::{CityProductionTarget, StrategicResourceStockpile};
@@ -74,6 +75,14 @@ fn production_option(value: ProductionOption) -> ProductionOptionDto {
         target: production_target(value.target()),
         cost: value.cost(),
         rejection: value.rejection().map(encode_command_rejection),
+        availability: ProductionAvailabilityDto {
+            required_technology: value
+                .availability()
+                .required_technology()
+                .map(encode_technology),
+            technology_unlocked: value.availability().technology_unlocked(),
+            completed_in_city: value.availability().completed_in_city(),
+        },
         forecast: ProductionForecastDto {
             invested_production: value.forecast().invested_production(),
             production_per_turn: value.forecast().production_per_turn(),

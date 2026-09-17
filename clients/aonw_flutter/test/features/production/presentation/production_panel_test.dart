@@ -69,6 +69,11 @@ ProductionOptionsView _options() => ProductionOptionsView(
   ),
   buildings: const [
     ProductionOptionView(
+      availability: ProductionAvailabilityView(
+        requiredTechnology: null,
+        technologyUnlocked: true,
+        completedInCity: false,
+      ),
       forecast: ProductionForecastView(
         investedProduction: 0,
         productionPerTurn: 3,
@@ -81,6 +86,11 @@ ProductionOptionsView _options() => ProductionOptionsView(
       blocker: null,
     ),
     ProductionOptionView(
+      availability: ProductionAvailabilityView(
+        requiredTechnology: null,
+        technologyUnlocked: true,
+        completedInCity: false,
+      ),
       forecast: ProductionForecastView(
         investedProduction: 0,
         productionPerTurn: 3,

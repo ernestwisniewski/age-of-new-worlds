@@ -16,6 +16,11 @@ ProductionOptionsView bannerOptions({
   if (project) return _projectOptions();
   if (blocked) return _blockedOptions();
   const option = ProductionOptionView(
+    availability: ProductionAvailabilityView(
+      requiredTechnology: null,
+      technologyUnlocked: true,
+      completedInCity: false,
+    ),
     target: BuildingProductionTargetView('workshop'),
     cost: 100,
     blocker: null,
@@ -42,6 +47,11 @@ ProductionOptionsView bannerOptions({
 
 ProductionOptionsView _projectOptions() {
   const option = ProductionOptionView(
+    availability: ProductionAvailabilityView(
+      requiredTechnology: null,
+      technologyUnlocked: true,
+      completedInCity: false,
+    ),
     target: ProjectProductionTargetView('research'),
     cost: 0,
     blocker: null,
@@ -66,6 +76,11 @@ ProductionOptionsView _projectOptions() {
 
 ProductionOptionsView _blockedOptions() {
   const option = ProductionOptionView(
+    availability: ProductionAvailabilityView(
+      requiredTechnology: null,
+      technologyUnlocked: true,
+      completedInCity: false,
+    ),
     target: UnitProductionTargetView(VisibleUnitKind.warrior),
     cost: 100,
     blocker: null,

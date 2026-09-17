@@ -14,6 +14,12 @@ void main() {
             ).require<AonwQueryResponse>().result
             as AonwProductionOptionsResult;
     expect(response.buildings.single.forecast.estimatedTurns, 4);
+    expect(
+      response.buildings.single.availability.requiredTechnology,
+      AonwTechnologyId.craftsmanship,
+    );
+    expect(response.buildings.single.availability.technologyUnlocked, isTrue);
+    expect(response.buildings.single.availability.completedInCity, isFalse);
     expect(response.units.single.option.forecast.productionPerTurn, 3);
     expect(response.projects.single.forecast.projectOutput, 1);
     expect(response.projects.single.forecast.estimatedTurns, isNull);
@@ -29,6 +35,7 @@ void main() {
       for (final (data, parse) in [
         (_forecast, AonwProductionForecast.fromJson),
         (_quote, AonwProductionRushQuote.fromJson),
+        (_availability, AonwProductionAvailability.fromJson),
       ]) {
         for (final field in data.keys) {
           final missing = {...data}..remove(field);
@@ -73,6 +80,27 @@ void main() {
     },
   );
 
+  test('availability rejects unknown research and non-boolean status', () {
+    for (final field in ['technologyUnlocked', 'completedInCity']) {
+      for (final invalid in [null, 1, 'true']) {
+        expect(
+          () => AonwProductionAvailability.fromJson({
+            ..._availability,
+            field: invalid,
+          }),
+          throwsFormatException,
+        );
+      }
+    }
+    expect(
+      () => AonwProductionAvailability.fromJson({
+        ..._availability,
+        'requiredTechnology': 'unknown',
+      }),
+      throwsFormatException,
+    );
+  });
+
   test(
     'unaffordable quotes preserve exact amounts without deriving a price',
     () {
@@ -102,4 +130,10 @@ const _quote = <String, Object?>{
   'production': 3,
   'goldCost': 6,
   'rejection': null,
+};
+
+const _availability = <String, Object?>{
+  'requiredTechnology': null,
+  'technologyUnlocked': true,
+  'completedInCity': false,
 };

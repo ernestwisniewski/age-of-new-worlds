@@ -52,8 +52,8 @@ pub use logistics::{
     MerchantDestinationOptionDto, MovementSearchMetricsDto, UnitMovementExecutionDto,
 };
 pub use production::{
-    CitySpecializationOptionDto, ProductionForecastDto, ProductionOptionDto,
-    ProductionRushQuoteDto, UnitProductionOptionDto,
+    CitySpecializationOptionDto, ProductionAvailabilityDto, ProductionForecastDto,
+    ProductionOptionDto, ProductionRushQuoteDto, UnitProductionOptionDto,
 };
 pub use query::{
     ClientEvidenceDto, ClientQueryResultDto, PendingActionViewDto, ReachableTileViewDto,

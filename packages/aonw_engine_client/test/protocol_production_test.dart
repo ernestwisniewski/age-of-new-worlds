@@ -95,6 +95,7 @@ void main() {
                 {
                   'target': {'kind': 'building', 'buildingType': 'workshop'},
                   'cost': 15,
+                  'availability': _availability,
                   'forecast': {
                     'investedProduction': 4,
                     'productionPerTurn': 3,
@@ -110,6 +111,7 @@ void main() {
                   'option': {
                     'target': {'kind': 'unit', 'unitType': 'tank'},
                     'cost': 32,
+                    'availability': _availability,
                     'forecast': {
                       'investedProduction': 4,
                       'productionPerTurn': 3,
@@ -129,6 +131,7 @@ void main() {
                 {
                   'target': {'kind': 'project', 'projectType': 'research'},
                   'cost': 0,
+                  'availability': _availability,
                   'forecast': {
                     'investedProduction': 4,
                     'productionPerTurn': 3,
@@ -193,6 +196,7 @@ void main() {
       () => AonwProductionOption.fromJson({
         'target': {'kind': 'project', 'projectType': 'research'},
         'cost': 0,
+        'availability': _availability,
         'forecast': {
           'investedProduction': 4,
           'productionPerTurn': 3,
@@ -250,4 +254,10 @@ const _stamp = <String, Object?>{
   'mapHash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   'rulesetHash':
       'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
+};
+
+const _availability = {
+  'requiredTechnology': null,
+  'technologyUnlocked': true,
+  'completedInCity': false,
 };

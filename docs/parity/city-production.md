@@ -101,3 +101,19 @@ agreement and independent completion/research flags. The catalog assembly is
 split into target-specific helpers, with no additional architecture or Clippy
 exceptions. Canonical state, save/replay and production command behavior remain
 unchanged. The transport and presentation follow this engine stage.
+
+## Client API 31
+
+Every production option requires `availability`: an explicitly nullable
+technology identity plus boolean research and local-completion flags. Rust and
+Dart verify the same response fixture. The shared local/server encoder preserves
+these flags, and the Flutter mapper rejects contradictory availability or
+completion on units/projects. Queries remain read-only and identical after
+save/resume, including a retained queue whose owner lacks its unlocking research.
+
+Acceptance: 21 contract tests, 105 Dart protocol tests, three native production
+save/replay tests and three local/server query parity tests pass. All-target
+Clippy and architecture gates pass. The C ABI harness checks lifecycle, API 31
+capabilities and null arguments. Full Flutter acceptance is tracked with catalog
+presentation; its initial run encountered native-load timeouts that are being
+rechecked separately. Generated code remains in sync.

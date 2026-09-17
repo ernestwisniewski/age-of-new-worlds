@@ -29,6 +29,13 @@ fn quoted_final_increment_matches_the_command_and_survives_save_resume() {
     assert_eq!(housing.forecast.invested_production, housing.cost - 1);
     assert_eq!(housing.forecast.estimated_turns, Some(1));
     assert_eq!(housing.forecast.project_output, None);
+    // The fixture carries a queue without its owner having Construction.
+    assert!(!housing.availability.technology_unlocked);
+    assert!(!housing.availability.completed_in_city);
+    assert_eq!(
+        housing.availability.required_technology,
+        Some(aonw_contracts::TechnologyIdDto::Construction)
+    );
     assert_eq!(rush_quote.production, 1);
     assert_eq!(rush_quote.gold_cost, 2);
     assert_eq!(rush_quote.rejection, None);

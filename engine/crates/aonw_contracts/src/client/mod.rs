@@ -33,21 +33,21 @@ pub use response::{
     PlayerDiplomaticRelationViewDto, PlayerEconomyViewDto, PlayerFogViewDto,
     PlayerParticipantViewDto, PlayerResearchViewDto, PlayerResourceTradeAgreementViewDto,
     PlayerTurnLifecycleViewDto, PlayerUnitViewDto, PlayerVictoryViewDto, PlayerViewPatchDto,
-    PlayerViewSnapshotDto, ProductionForecastDto, ProductionOptionDto, ProductionRushQuoteDto,
-    QueuedRouteViewDto, ReachableTileViewDto, ResearchOptionDto, ResearchRecommendationDto,
-    ResearchRecommendationReasonDto, RoadViewDto, ScienceYieldBreakdownDto, ScienceYieldSourceDto,
-    ScienceYieldSourceKindDto, StabilityBreakdownDto, StrategicResourceAllocationDto,
-    StrategicResourceAmountDto, StrategicResourceBalanceDto, StrategicResourceDepositDto,
-    StrategicResourceInventoryDto, StrategicResourceSourceDto, TechnologyAvailabilityDto,
-    TechnologyEraDto, TechnologyUnlockDto, TreasuryWarningDto, UnitMovementExecutionDto,
-    UnitProductionOptionDto, UnitUpkeepBreakdownDto, UnitUpkeepSourceDto, VictoryStatusDto,
-    VictoryStatusKindDto, WorkerAutomationActionDto, WorkerAutomationMetricsDto,
-    WorkerAutomationOptionDto, WorkerImprovementOptionDto, WorkerJobCompletionDto,
-    WorkerJobViewDto, YieldValueDto,
+    PlayerViewSnapshotDto, ProductionAvailabilityDto, ProductionForecastDto, ProductionOptionDto,
+    ProductionRushQuoteDto, QueuedRouteViewDto, ReachableTileViewDto, ResearchOptionDto,
+    ResearchRecommendationDto, ResearchRecommendationReasonDto, RoadViewDto,
+    ScienceYieldBreakdownDto, ScienceYieldSourceDto, ScienceYieldSourceKindDto,
+    StabilityBreakdownDto, StrategicResourceAllocationDto, StrategicResourceAmountDto,
+    StrategicResourceBalanceDto, StrategicResourceDepositDto, StrategicResourceInventoryDto,
+    StrategicResourceSourceDto, TechnologyAvailabilityDto, TechnologyEraDto, TechnologyUnlockDto,
+    TreasuryWarningDto, UnitMovementExecutionDto, UnitProductionOptionDto, UnitUpkeepBreakdownDto,
+    UnitUpkeepSourceDto, VictoryStatusDto, VictoryStatusKindDto, WorkerAutomationActionDto,
+    WorkerAutomationMetricsDto, WorkerAutomationOptionDto, WorkerImprovementOptionDto,
+    WorkerJobCompletionDto, WorkerJobViewDto, YieldValueDto,
 };
 
 /// The only client protocol version accepted by this build.
-pub const CLIENT_API_VERSION: u16 = 30;
+pub const CLIENT_API_VERSION: u16 = 31;
 
 /// Largest command series carried by one observed AI response.
 pub const MAX_CLIENT_OBSERVED_COMMANDS: usize = 1_024;
