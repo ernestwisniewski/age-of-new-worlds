@@ -7,6 +7,28 @@ const ForestRenderer := preload("res://editor/map_authoring/presentation/referen
 const MeshNormals := preload("res://editor/map_authoring/presentation/reference_mesh_normals.gd")
 const WaterSurface := preload("res://editor/map_authoring/presentation/reference_water_surface.gd")
 
+const ReferenceOverlay := preload("res://editor/map_authoring/presentation/reference_overlay_mesh_builder.gd")
+const EditorQuality := preload("res://editor/map_authoring/presentation/editor_landscape_quality.gd")
+
+## Editor-only draw settings. Play and captures always use the complete forest.
+@export var editor_fast_preview := true:
+	set(value):
+		editor_fast_preview = value
+		if is_node_ready():
+			_apply_editor_quality()
+@export_range(1000, 20000, 1000) var editor_tree_budget := 6000:
+	set(value):
+		editor_tree_budget = clampi(value, 1000, 20000)
+		if is_node_ready():
+			_apply_editor_quality()
+var editor_visible_tree_count := 0
+var _forest_renderer := ForestRenderer.new()
+var _candidate_signature := ""
+var _ground_reset := true
+var _ground_changes := Rect2i()
+var _draw_distance := -1.0
+var forest_generation_count := 0
+
 const ProfileMigration := preload("res://editor/map_authoring/application/landscape_profile_migration.gd")
 @export_storage var landscape_profile_revision := 0
 
@@ -41,6 +63,7 @@ var _material_warning := ""
 var _forest_warning := ""
 
 func _ready() -> void:
+	_overlay_builder = ReferenceOverlay.new()
 	if landscape_profile_revision < 1:
 		terrain_parameters = ProfileMigration.migrate(terrain_parameters)
 		landscape_profile_revision = 1
@@ -66,8 +89,9 @@ func rebuild_reference() -> Dictionary:
 	if not configured["ok"]:
 		return _report_failure(str(configured["message"]))
 	_surface_plan = plan
+	# The base rebuild already refreshed the height mesh and normals. Do not
+	# reconstruct the same raster/grid a second time just to change materials.
 	_refresh_materials()
-	refresh_overlays()
 	_update_landscape_status()
 	result["warning"] = _material_warning
 	return result
@@ -78,6 +102,7 @@ func _refresh_materials() -> void:
 	_masks = _surface_plan.call("surface_masks", values)
 	_mask_signature = _mask_key()
 	_forest_signature = ""
+	_candidate_signature = ""
 	var value := artifact()
 	var extent := Vector2(value.width - 1, value.height - 1) * value.sample_spacing_meters
 	var material := SurfaceMaterial.build(_masks, _reference_texture, extent, _has_reference)
@@ -93,6 +118,7 @@ func _refresh_materials() -> void:
 		_relief_material = _surface_material
 		_water_surface = WaterSurface.build(_masks, extent, _has_reference)
 		add_child(_water_surface)
+		EditorQuality.apply_water(_water_surface, Engine.is_editor_hint() and editor_fast_preview)
 	else:
 		_material_warning = str(material["message"])
 		push_warning(_material_warning)
@@ -117,6 +143,7 @@ func _apply_presentation(update_camera: bool = true) -> void:
 		for key in ["ground_scale", "ground_normal_strength", "ground_reference_tint", "water_depth", "water_bed_slope"]:
 			_surface_material.set_shader_parameter(key, values[key])
 	WaterSurface.apply(_water_surface, values)
+	_apply_forest_distance(float(values["tree_draw_distance"]))
 	if _surface_plan != null and is_inside_tree() and _mask_signature != _mask_key():
 		if _mask_timer == null:
 			_mask_timer = Timer.new()
@@ -134,12 +161,18 @@ func _apply_presentation(update_camera: bool = true) -> void:
 func refresh_overlays() -> void:
 	super.refresh_overlays()
 	_update_surface_normals()
+	_ground_reset = true
 	_queue_forest(true)
 
 func _refresh_overlays_deferred() -> void:
+	var changed := _pending_changed_pixels
 	super._refresh_overlays_deferred()
-	_update_surface_normals()
-	# The native brush updates mesh vertices directly, bypassing refresh_overlays().
+	if not changed.has_area():
+		return
+	# Accumulate brush strokes, but only resample affected tree roots after debounce.
+	_ground_changes = _ground_changes.merge(changed) if _ground_changes.has_area() else changed
+	var normal_area := changed if artifact().reference_transform().is_equal_approx(Transform3D.IDENTITY) else Rect2i()
+	_update_surface_normals(normal_area)
 	_queue_forest(true)
 
 func _apply_visibility() -> void:
@@ -191,7 +224,7 @@ func _queue_forest(force_snap: bool) -> void:
 	if _mask_timer != null and not _mask_timer.is_stopped():
 		landscape_ready = false
 		return
-	if not force_snap and JSON.stringify(_forest_parameters()) == _forest_signature:
+	if not force_snap and _forest_key(_forest_parameters()) == _forest_signature:
 		return
 	landscape_ready = false
 	if _forest_timer == null:
@@ -200,16 +233,25 @@ func _queue_forest(force_snap: bool) -> void:
 		_forest_timer.wait_time = 0.25
 		add_child(_forest_timer)
 		_forest_timer.timeout.connect(_rebuild_forest)
-	_forest_timer.start()
+	_forest_timer.start(0.65 if Engine.is_editor_hint() else 0.25)
 
 func _rebuild_forest() -> void:
 	if _surface_plan == null or not preview_ready:
 		return
 	var values := _forest_parameters()
-	var signature := JSON.stringify(values)
-	if signature != _forest_signature:
+	var candidate_key := _candidate_key(values)
+	if candidate_key != _candidate_signature:
 		_forest_candidates = _surface_plan.call("forest_candidates", values)
-		_forest_signature = signature
+		_candidate_signature = candidate_key
+		_ground_reset = true
+		forest_generation_count += 1
+	_forest_signature = _forest_key(values)
+	if _ground_reset:
+		_forest_renderer.clear_ground_cache()
+	else:
+		_forest_renderer.invalidate_ground(_ground_changes, artifact().sample_spacing_meters)
+	_ground_reset = false
+	_ground_changes = Rect2i()
 	_city_layout = CityLayout.prepare(artifact(), city_marker_coordinate, values,
 		reconstruction["water_mask"], _terrain.data, _reference_inputs["document"])
 	_city_warning = str(_city_layout.get("message", ""))
@@ -227,7 +269,7 @@ func _rebuild_forest() -> void:
 		empty.name = "ReferenceForest"
 		result = {"ok": true, "root": empty, "count": 0}
 	else:
-		result = ForestRenderer.new().build(_forest_candidates, _terrain.data, artifact().sample_spacing_meters, values, _city_layout)
+		result = _forest_renderer.build(_forest_candidates, _terrain.data, artifact().sample_spacing_meters, values, _city_layout)
 	_forest_warning = ""
 	if is_instance_valid(_forest_root):
 		remove_child(_forest_root)
@@ -241,6 +283,7 @@ func _rebuild_forest() -> void:
 	else:
 		_forest_warning = str(result["message"])
 		push_warning(_forest_warning)
+	editor_visible_tree_count = EditorQuality.apply_forest(_forest_root, Engine.is_editor_hint() and editor_fast_preview, editor_tree_budget)
 	landscape_ready = _surface_material != null and _forest_warning.is_empty()
 	_apply_visibility()
 	_update_landscape_status()
@@ -248,6 +291,8 @@ func _rebuild_forest() -> void:
 
 func _update_landscape_status() -> void:
 	landscape_status = "PBR landscape | Tree3D: %d | shoreline water" % tree_count
+	if Engine.is_editor_hint() and editor_fast_preview:
+		landscape_status += " | editor: %d visible, full forest in Play" % editor_visible_tree_count
 	if not _material_warning.is_empty():
 		landscape_status = _material_warning
 	if not _forest_warning.is_empty():
@@ -282,9 +327,9 @@ func _validate_presentation_inputs(inputs: Dictionary) -> String:
 		return "Forest guide dimensions must match the reference atlas; the current terrain was not replaced."
 	return ""
 
-func _update_surface_normals() -> void:
+func _update_surface_normals(changed: Rect2i = Rect2i()) -> void:
 	if _reference != null and artifact() != null:
-		MeshNormals.update(_reference.mesh, artifact().width, artifact().height)
+		MeshNormals.update(_reference.mesh, artifact().width, artifact().height, changed)
 
 func city_site_layout() -> Dictionary:
 	return _city_layout.duplicate(true)
@@ -296,3 +341,38 @@ func set_city_marker_coordinate(value: Vector2i) -> void:
 func set_city_marker_visible(value: bool) -> void:
 	super.set_city_marker_visible(value)
 	_apply_visibility()
+
+func set_editor_fast_preview(value: bool) -> void:
+	editor_fast_preview = value
+
+func _apply_editor_quality() -> void:
+	var responsive := Engine.is_editor_hint() and editor_fast_preview
+	editor_visible_tree_count = EditorQuality.apply_forest(_forest_root, responsive, editor_tree_budget)
+	EditorQuality.apply_water(_water_surface, responsive)
+	if preview_ready:
+		_update_landscape_status()
+	preview_state_changed.emit()
+
+func _apply_forest_distance(value: float) -> void:
+	if is_equal_approx(value, _draw_distance):
+		return
+	_draw_distance = value
+	if not is_instance_valid(_forest_root):
+		return
+	for batch in _forest_root.get_children():
+		if batch is MultiMeshInstance3D:
+			batch.visibility_range_end = value
+
+static func _forest_key(values: Dictionary) -> String:
+	var key := values.duplicate()
+	key.erase("tree_draw_distance") # GPU visibility change, not a placement change.
+	return JSON.stringify(key)
+
+static func _candidate_key(values: Dictionary) -> String:
+	var key := {}
+	for name in ["seed", "tree_density", "tree_spacing", "tree_height",
+		"tree_reference_strength", "tree_conifer_share", "forest_tree_budget"]:
+		key[name] = values[name]
+	# Biome/patch changes invalidate this key in _refresh_materials(). City and
+	# slope filters run later, so neither needs a new global candidate stream.
+	return JSON.stringify(key)

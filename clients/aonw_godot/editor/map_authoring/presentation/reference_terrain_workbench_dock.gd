@@ -11,6 +11,7 @@ var _strategic_preview := StrategicPreview.new()
 var _watched_surface: Node
 var _sync_queued := false
 var _view_buttons: Array[Button] = []
+var _full_quality := CheckButton.new()
 
 func _build_interface() -> void:
 	super._build_interface()
@@ -32,6 +33,10 @@ func _build_interface() -> void:
 		actions.add_child(button)
 		_view_buttons.append(button)
 	content.add_child(actions)
+	_full_quality.text = "Full-quality editor preview"
+	_full_quality.tooltip_text = "Off: responsive editor with a limited tree draw budget and static foliage/water. Play always uses full quality."
+	_full_quality.toggled.connect(_editor_quality_changed)
+	content.add_child(_full_quality)
 	_sections.current_tab = 2
 
 func _connect_interface() -> void:
@@ -92,6 +97,10 @@ func _sync_reference_controls() -> void:
 	_strategic_preview.bind_surface(surface if reference and surface.is_session_open() else null)
 	for button in _view_buttons:
 		button.disabled = not ready
+	_full_quality.visible = reference and surface.has_method("set_editor_fast_preview")
+	_full_quality.disabled = not ready
+	if _full_quality.visible:
+		_full_quality.set_pressed_no_signal(not bool(surface.get("editor_fast_preview")))
 	_publish_button.visible = not reference
 	_reload_base_button.text = "Rebuild reference landscape" if reference else "Reload compiled base / constraints"
 	_reload_base_button.tooltip_text = "Saves the old draft, then opens a versioned recipe; resets this scene's undo history." if reference else "Keeps the manually sculpted final terrain"
@@ -223,3 +232,9 @@ func _view_requested(method: String) -> void:
 			return
 		surface.call(method)
 		EditorInterface.mark_scene_as_unsaved()
+
+func _editor_quality_changed(full: bool) -> void:
+	var surface := _current_surface()
+	if _is_reference(surface) and surface.has_method("set_editor_fast_preview") and not _busy:
+		_commit_change("Change editor preview quality", &"set_editor_fast_preview",
+			not full, bool(surface.get("editor_fast_preview")), UndoRedo.MERGE_DISABLE)
