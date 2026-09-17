@@ -79,6 +79,7 @@ func _run() -> void:
 	channel.fill_rect(Rect2i(4,0,1,9),Color.WHITE)
 	var before := channel.get_data()
 	var profile := Profile.build(channel, 2.0)
+	assert(profile.get_format() == Image.FORMAT_RGBAH, "Filterable half-float profile for Metal and lower texture memory")
 	assert(profile.get_pixel(4,4).r == 1.0 and profile.get_pixel(3,4).r == -1.0)
 	assert(profile.get_pixel(4,4).a == 1.0)
 	assert(channel.get_data() == before)
@@ -90,5 +91,8 @@ func _run() -> void:
 		for x in 9:
 			var pixel := profile.get_pixel(x,y)
 			assert(is_finite(pixel.r) and is_finite(pixel.g) and is_finite(pixel.b) and is_finite(pixel.a))
+	var far := Profile.build(channel, 100000.0)
+	assert(far.get_pixel(0, 0).r > 0.0 and is_finite(far.get_pixel(0, 0).r))
+	assert(far.get_pixel(4, 4).r < 0.0 and is_finite(far.get_pixel(4, 4).r))
 	print("Forest/water generation: PASS (migration, procedural clusters, active budgets, image independence, metric shore profiles)")
 	quit(0)

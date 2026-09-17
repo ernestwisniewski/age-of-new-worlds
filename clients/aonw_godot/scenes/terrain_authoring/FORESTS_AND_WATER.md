@@ -44,7 +44,10 @@ No-reference maps still use canonical semantic water tags.
 A shared signed-distance profile drives both the visible bed and the separate
 water surface. Distances are in map metres, including the half-cell shoreline
 correction. GPU sampling is aligned to CPU raster nodes rather than shifted by
-half a texel. Single-cell channels and dry islands are retained; the profile
+half a texel. The filtered GPU profile uses RGBA16F, not RGBA32F: half the
+texture memory and no reliance on optional Metal float32 filtering support.
+Far-field distances saturate at 60,000 m to avoid half-float overflow; native
+water masks and near-shore distances are retained. Single-cell channels and dry islands are retained; the profile
 does not run an island-removing blur. A tiny 0.02-cell rendering tolerance joins
 diagonal river contacts without changing the native water mask. Narrow water
 remains shallow; wider basins deepen smoothly. **Water-bed grade** controls this
@@ -86,3 +89,5 @@ heights. City native tests still check reservation/removal/restoration.
 map bundle and checks defaults, masks, budgets and native zero-height water.
 The capture tool discovers all bundles rather than a hardcoded four-map list.
 Render captures are visual evidence, not a photorealism or performance score.
+
+Metal format support: https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf

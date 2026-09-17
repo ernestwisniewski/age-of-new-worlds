@@ -34,8 +34,13 @@ static func build(mask: Image, spacing: float) -> Image:
 			var along := Vector2(-dz, dx).normalized()
 			if along.x < 0.0 or (is_zero_approx(along.x) and along.y < 0.0):
 				along = -along
-			pixels[i * 4] = signed_distance[i]
+			pixels[i * 4] = clampf(signed_distance[i], -60000.0, 60000.0)
 			pixels[i * 4 + 1] = along.x
 			pixels[i * 4 + 2] = along.y
-			pixels[i * 4 + 3] = maxf(0.0, signed_distance[i])
-	return Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, pixels.to_byte_array())
+			pixels[i * 4 + 3] = clampf(signed_distance[i], 0.0, 60000.0)
+	# Half-float is filterable across Apple GPU families and halves texture memory.
+	# Far-field saturation avoids half-float infinity; shoreline samples retain
+	# precision well below the native raster spacing. CPU masks stay unchanged.
+	var image := Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, pixels.to_byte_array())
+	image.convert(Image.FORMAT_RGBAH)
+	return image
