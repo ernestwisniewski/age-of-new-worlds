@@ -26,3 +26,18 @@ signature, allocation, payload, work-counter, sample-count, workload-census and
 schema regressions. This CPU/allocation acceptance does not replace the pending
 native renderer and resident-memory gate, which requires an unlocked Mac and an
 active application window.
+
+
+## API 31 availability review
+
+Two subsequent reports again agree in all 222 structural results. Required
+research and local completion metadata add exactly 9,074 serialized bytes to each
+of the twelve production responses. Their payload ceilings increase by that
+reviewed amount, to 31,167–31,371 bytes. The response still contains the same 89
+targets: 59 buildings, 17 units, two projects and eleven wonders. This is the
+bounded typed metadata used for catalog grouping, not hidden player state.
+
+All allocation, reallocation, allocated-byte and work limits remain unchanged,
+as do iteration counts and the other 210 payload limits. Thirty-four JSON
+signatures change (22 existing envelope cases plus twelve production cases);
+the remaining 188 stay identical. Both reports pass the revised baseline.
