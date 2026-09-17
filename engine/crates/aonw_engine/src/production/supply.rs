@@ -13,6 +13,13 @@ pub(super) struct UnitSupplyBudget {
 }
 
 impl UnitSupplyBudget {
+    pub(super) const fn capacity(&self) -> i64 {
+        self.capacity
+    }
+    pub(super) const fn used(&self) -> i64 {
+        self.used
+    }
+
     pub(super) fn permits(
         &self,
         requested: UnitProductionDefinition,

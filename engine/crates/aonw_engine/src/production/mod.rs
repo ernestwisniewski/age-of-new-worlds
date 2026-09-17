@@ -1,9 +1,19 @@
 mod availability;
 mod commands;
+mod details;
+mod details_model;
 mod error;
+pub use details_model::{
+    BuildingProductionDetails, ProductionCityOutput, ProductionDetails, ProductionDetailsQuery,
+    ProductionRequirementStatus, ProductionTargetEffects, UnitProductionDetails,
+    WonderProductionDetails,
+};
 mod forecast;
 mod model;
 mod options;
+mod ranking;
+mod ranking_model;
+pub use ranking_model::{ProductionBuildingRank, ProductionBuildingRanks, ProductionBuildingSort};
 mod rules;
 mod rush;
 mod rush_quote;

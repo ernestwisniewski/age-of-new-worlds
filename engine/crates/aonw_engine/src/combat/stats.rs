@@ -2,7 +2,7 @@ mod base;
 pub(super) use base::for_unit as base_for_unit;
 
 use aonw_content::{RulesetDefinition, TerrainType};
-use aonw_domain::{City, GameState, TroopKind, Unit, UnitKind, WorldArtifactLocation};
+use aonw_domain::{City, GameState, PlayerId, TroopKind, Unit, UnitKind, WorldArtifactLocation};
 
 use crate::{
     TechnologyCombatStat, TechnologyUnlockQuery,
@@ -49,7 +49,8 @@ pub(super) fn for_unit(
     technology_modifiers(
         state,
         ruleset,
-        unit,
+        unit.owner_player_id(),
+        unit.kind(),
         base_attack,
         situation.defended_city.is_some(),
         &mut modifiers,
@@ -110,18 +111,46 @@ pub(super) fn for_city(
     ))
 }
 
+pub(crate) fn new_unit_stats(
+    state: &GameState,
+    ruleset: &RulesetDefinition,
+    owner: &PlayerId,
+    kind: UnitKind,
+) -> Option<EffectiveCombatStats> {
+    let base = ruleset.unit(kind)?.combat();
+    let mut modifiers = Vec::new();
+    technology_modifiers(
+        state,
+        ruleset,
+        owner,
+        kind,
+        base.attack(),
+        false,
+        &mut modifiers,
+    )?;
+    Some(apply(
+        base.attack(),
+        base.defense(),
+        base.hit_points(),
+        base.range(),
+        base.mobility(),
+        modifiers,
+    ))
+}
+
 fn technology_modifiers(
     state: &GameState,
     ruleset: &RulesetDefinition,
-    unit: &Unit,
+    owner: &PlayerId,
+    kind: UnitKind,
     base_attack: i32,
     defended_city: bool,
     modifiers: &mut Vec<CombatModifier>,
 ) -> Option<()> {
-    let Some(research) = state.research().players().get(unit.owner_player_id()) else {
+    let Some(research) = state.research().players().get(owner) else {
         return Some(());
     };
-    let army_unit = ruleset.unit(unit.kind())?.capabilities().military();
+    let army_unit = ruleset.unit(kind)?.capabilities().military();
     for modifier in TechnologyUnlockQuery::new(ruleset, research)
         .combat_modifiers(base_attack, army_unit, defended_city)
         .ok()?

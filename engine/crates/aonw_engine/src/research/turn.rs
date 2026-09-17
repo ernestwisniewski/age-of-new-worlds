@@ -133,6 +133,21 @@ pub(super) fn science_yield(
     ))
 }
 
+pub(crate) fn passive_city_science(
+    state: &GameState,
+    context: EngineContext<'_>,
+    city: &City,
+) -> Result<i64, ResearchError> {
+    let player = city.owner_player_id();
+    let effects = TechnologyUnlockQuery::new(context.ruleset(), player_research(state, player))
+        .effect_summary()?;
+    checked_sum([
+        base_city_science(context, city, i64::from(effects.city_science_bonus))?,
+        artifact_science_for_city(state, city.id())?,
+        wonder_science_per_city(state, context, player)?,
+    ])
+}
+
 fn base_city_science(
     context: EngineContext<'_>,
     city: &City,

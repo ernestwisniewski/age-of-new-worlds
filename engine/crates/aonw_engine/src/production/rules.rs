@@ -165,7 +165,7 @@ pub(super) fn specialization_rejection(
     }
 }
 
-fn requirement_met(
+pub(super) fn requirement_met(
     state: &GameState,
     context: EngineContext<'_>,
     city: &City,
@@ -209,7 +209,7 @@ fn requirement_met(
     }
 }
 
-fn presence_resource_available(
+pub(super) fn presence_resource_available(
     state: &GameState,
     context: EngineContext<'_>,
     player: &aonw_domain::PlayerId,
@@ -239,7 +239,11 @@ fn presence_resource_available(
         })
 }
 
-fn unit_has_required_coast(context: EngineContext<'_>, city: &City, unit: UnitKind) -> bool {
+pub(super) fn unit_has_required_coast(
+    context: EngineContext<'_>,
+    city: &City,
+    unit: UnitKind,
+) -> bool {
     let Some(definition) = context.ruleset().unit(unit) else {
         return false;
     };

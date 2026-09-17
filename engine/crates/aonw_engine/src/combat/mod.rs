@@ -24,6 +24,7 @@ use crate::{CommandRejectionCode, DiplomacyPolicyQuery, DomainEvent, EngineConte
 
 use resolution::{refresh_batch_visibility, resolve, resolve_intended};
 
+pub(crate) use stats::new_unit_stats;
 pub(crate) use unit_profile::unit_base_attack;
 pub use unit_profile::unit_max_hit_points;
 

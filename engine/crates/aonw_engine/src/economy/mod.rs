@@ -31,6 +31,6 @@ pub(crate) use forecast_rules::query_economy_forecast;
 pub(crate) use rules::{query_city_yield, query_strategic_resource_projection};
 pub(crate) use turn::{
     CombatEconomyOwnerIndex, PreparedEconomyTurn, WarWearinessEventCounts, advance_turn_stability,
-    city_turn_output, current_stability_breakdown, prepare_turn_economy,
-    settle_turn_income_and_upkeep, unit_upkeep_breakdown,
+    building_yield_for, city_river_hex_count, city_turn_output, current_stability_breakdown,
+    prepare_turn_economy, settle_turn_income_and_upkeep, unit_upkeep_breakdown,
 };

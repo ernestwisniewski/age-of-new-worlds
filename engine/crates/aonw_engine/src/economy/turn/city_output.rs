@@ -8,6 +8,7 @@ const BASIS_POINTS: i64 = 10_000;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct CityTurnOutput {
+    pub(crate) gross_yield: YieldValue,
     pub(crate) food_deposit: i64,
     pub(crate) growth_cost: i64,
     pub(crate) gold: i64,
@@ -76,6 +77,7 @@ pub(crate) fn city_turn_output(
         .paced_growth_cost(city.population(), city.territory_hex_count(), pace)
         .ok_or_else(|| error("city growth cost overflow"))?;
     Ok(CityTurnOutput {
+        gross_yield: gross,
         food_deposit,
         growth_cost,
         gold,
@@ -83,15 +85,19 @@ pub(crate) fn city_turn_output(
     })
 }
 
-fn building_yield(context: EngineContext<'_>, city: &City) -> Result<YieldValue, EconomyTurnError> {
-    let river_count = territory(city)
+pub(crate) fn city_river_hex_count(context: EngineContext<'_>, city: &City) -> usize {
+    territory(city)
         .filter(|coordinate| {
             context.map().tile_at(*coordinate).is_some_and(|tile| {
                 tile.terrain_tags()
                     .contains(&aonw_content::TerrainType::River)
             })
         })
-        .count();
+        .count()
+}
+
+fn building_yield(context: EngineContext<'_>, city: &City) -> Result<YieldValue, EconomyTurnError> {
+    let river_count = city_river_hex_count(context, city);
     city.buildings()
         .iter()
         .try_fold(YieldValue::default(), |total, building| {
@@ -100,14 +106,20 @@ fn building_yield(context: EngineContext<'_>, city: &City) -> Result<YieldValue,
                 .production()
                 .building(*building)
                 .ok_or_else(|| error("completed building is absent from production content"))?;
-            let applications = river_count.min(definition.max_river_applications() as usize);
-            let river = scale_whole(
-                from_content(definition.river_yield_per_hex()),
-                i64::try_from(applications).map_err(error)?,
-            )?;
-            checked_add(total, from_content(definition.yield_delta()))
-                .and_then(|value| checked_add(value, river))
+            checked_add(total, building_yield_for(definition, river_count)?)
         })
+}
+
+pub(crate) fn building_yield_for(
+    definition: aonw_content::BuildingProductionDefinition,
+    river_count: usize,
+) -> Result<YieldValue, EconomyTurnError> {
+    let applications = river_count.min(definition.max_river_applications() as usize);
+    let river = scale_whole(
+        from_content(definition.river_yield_per_hex()),
+        i64::try_from(applications).map_err(error)?,
+    )?;
+    checked_add(from_content(definition.yield_delta()), river)
 }
 
 fn wonder_yield(

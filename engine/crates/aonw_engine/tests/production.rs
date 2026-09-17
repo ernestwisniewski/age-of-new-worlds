@@ -26,8 +26,12 @@ use aonw_engine::{
 mod availability;
 #[path = "production/constraints.rs"]
 mod constraints;
+#[path = "production/details.rs"]
+mod details;
 #[path = "production/forecast.rs"]
 mod forecast;
+#[path = "production/ranking.rs"]
+mod ranking;
 #[path = "production/rush.rs"]
 mod rush;
 

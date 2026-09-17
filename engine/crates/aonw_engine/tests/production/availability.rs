@@ -108,7 +108,7 @@ fn unit_project_and_wonder_availability_uses_only_owner_capabilities_and_local_c
     }
 }
 
-fn query(
+pub(super) fn query(
     state: &GameState,
     context: EngineContext<'_>,
     id: &CityId,

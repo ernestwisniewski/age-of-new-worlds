@@ -13,7 +13,7 @@ use crate::{CityClaimedHexEvent, DomainEvent, EngineContext};
 
 use super::{UnitUpkeepBreakdown, UnitUpkeepSource};
 
-pub(crate) use city_output::city_turn_output;
+pub(crate) use city_output::{building_yield_for, city_river_hex_count, city_turn_output};
 pub(crate) use stability::{
     CombatEconomyOwnerIndex, WarWearinessEventCounts, advance_turn_stability,
     current_stability_breakdown,

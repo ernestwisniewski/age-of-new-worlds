@@ -116,7 +116,7 @@ fn specialization_options(
         .collect()
 }
 
-fn unit_option(
+pub(super) fn unit_option(
     state: &GameState,
     context: EngineContext<'_>,
     city: &City,
@@ -163,7 +163,7 @@ fn unit_option(
     ))
 }
 
-fn building_option(
+pub(super) fn building_option(
     state: &GameState,
     context: EngineContext<'_>,
     city: &City,
@@ -196,7 +196,7 @@ fn building_option(
     ))
 }
 
-fn wonder_option(
+pub(super) fn wonder_option(
     state: &GameState,
     context: EngineContext<'_>,
     city: &City,

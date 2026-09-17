@@ -10,10 +10,7 @@ use super::model::{
     CityFoundingOptionsQuery, CityWorkedHexOptions, CityWorkedHexOptionsQuery, FoundCityCommand,
     SelectCityExpansionHexCommand, ToggleWorkedHexCommand,
 };
-use crate::{
-    CommandRejectionCode, EconomyQueryError, EngineContext, TechnologyQueryError,
-    TechnologyUnlockQuery,
-};
+use crate::{CommandRejectionCode, EconomyQueryError, EngineContext, TechnologyQueryError};
 
 mod founding;
 mod scoring;
@@ -366,16 +363,7 @@ fn expansion_candidates(
     city: &City,
     cities: &[City],
 ) -> Result<Vec<CityExpansionCandidate>, CityRuleError> {
-    let technology_bonus = match state.research().players().get(city.owner_player_id()) {
-        Some(research) => {
-            TechnologyUnlockQuery::new(context.ruleset(), research)
-                .effect_summary()
-                .map_err(CityRuleError::Technology)?
-                .max_controlled_hexes_bonus
-        }
-        None => 0,
-    };
-    let maximum = city.max_hexes().saturating_add(i64::from(technology_bonus));
+    let maximum = super::capacity::territory_capacity(state, context, city)?;
     if i64::try_from(city.territory_hex_count()).unwrap_or(i64::MAX) >= maximum {
         return Ok(Vec::new());
     }

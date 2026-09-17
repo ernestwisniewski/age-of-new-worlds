@@ -28,11 +28,11 @@ pub use model::{
     TerrainProfile, TileDefinition,
 };
 pub use ruleset::{
-    BuildingProductionDefinition, CityBalance, CityNameSet, DiplomacyBalance, EconomyBalance,
-    EconomyYield, OutcomeBalance, ProductionBalance, ProductionRequirement, RulesetDefinition,
-    StabilityModifierDefinition, StabilityValues, StrategicResourceCost, UnitCapabilities,
-    UnitDefinition, UnitMovementDomainValue, UnitProductionDefinition, WonderProductionDefinition,
-    WorkerBalance, WorkerImprovementDefinition, WorkerYield,
+    BuildingProductionDefinition, CityBalance, CityNameSet, CombatStats, DiplomacyBalance,
+    EconomyBalance, EconomyYield, OutcomeBalance, ProductionBalance, ProductionRequirement,
+    RulesetDefinition, StabilityModifierDefinition, StabilityValues, StrategicResourceCost,
+    UnitCapabilities, UnitDefinition, UnitMovementDomainValue, UnitProductionDefinition,
+    WonderProductionDefinition, WorkerBalance, WorkerImprovementDefinition, WorkerYield,
 };
 pub use scenario::{
     ScenarioBootstrapError, ScenarioDefinition, ScenarioLoadError, ScenarioUnitDefinition,

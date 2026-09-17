@@ -1,3 +1,5 @@
+mod capacity;
+pub(crate) use capacity::territory_capacity;
 mod model;
 mod rules;
 mod site;
