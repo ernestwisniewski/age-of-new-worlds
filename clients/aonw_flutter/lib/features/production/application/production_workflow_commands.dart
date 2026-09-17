@@ -97,7 +97,10 @@ GameSessionReady _acceptedProduction(
   return synchronized.withInteraction(
     synchronized.interaction.copyWith(
       selected: city.center,
-      production: ProductionState.loading(cityId),
+      production: ProductionState.loading(
+        cityId,
+        catalogOpen: current.interaction.production!.catalogOpen,
+      ),
     ),
   );
 }

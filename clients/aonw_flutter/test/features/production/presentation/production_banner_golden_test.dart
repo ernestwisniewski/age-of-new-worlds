@@ -1,3 +1,5 @@
+import 'package:aonw_flutter/design_system/assets/sprite_frame_id.dart';
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,7 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'production_banner_fixture.dart';
 
 void main() {
+  final frames = SpriteFrames.createScope();
+  tearDownAll(frames.dispose);
   setUpAll(() async {
+    await frames.preload([
+      const SpriteFrameId('building.workshop'),
+      const SpriteFrameId('unit.warrior.idle.0'),
+    ]);
     await (FontLoader('Cinzel')..addFont(
           rootBundle.load('assets/fonts/Cinzel-VariableFont_wght.ttf'),
         ))

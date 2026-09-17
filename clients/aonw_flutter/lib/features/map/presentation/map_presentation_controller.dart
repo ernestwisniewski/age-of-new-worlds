@@ -213,6 +213,9 @@ final class MapPresentationController extends ChangeNotifier {
   void executeWorkerAction(WorkerActionView action) =>
       _coordinator.executeWorkerAction(action);
 
+  void setProductionCatalogOpen(bool open) =>
+      _coordinator.setProductionCatalogOpen(open);
+
   void executeProductionAction(ProductionActionView action) =>
       _coordinator.executeProductionAction(action);
 

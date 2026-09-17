@@ -46,7 +46,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(bannerApp(options: bannerOptions(project: true)));
       expect(find.text('Continuous project'), findsOneWidget);
-      expect(find.text('4 science / turn'), findsOneWidget);
+      expect(find.text('4 science / turn'), findsNWidgets(2));
       expect(find.byType(LinearProgressIndicator), findsNothing);
       expect(find.byKey(const ValueKey('production-rush')), findsNothing);
     },
@@ -122,6 +122,7 @@ void main() {
           bannerApp(
             options: bannerOptions(),
             locale: language,
+            modal: true,
             scale: 2,
             size: size,
           ),

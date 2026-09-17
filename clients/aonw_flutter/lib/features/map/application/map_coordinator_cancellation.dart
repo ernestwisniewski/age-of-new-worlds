@@ -15,6 +15,10 @@ extension MapCoordinatorCancellation on MapCoordinator {
     if (!_inspectionActive()) return;
     if (_cancellationBlocked(current)) return;
     final interaction = current.interaction;
+    if (interaction.production?.catalogOpen == true) {
+      setProductionCatalogOpen(false);
+      return;
+    }
     if (interaction.city?.founderUnitId != null) {
       cancelCityFounding();
       return;

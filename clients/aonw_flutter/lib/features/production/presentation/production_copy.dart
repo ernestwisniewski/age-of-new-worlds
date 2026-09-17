@@ -7,6 +7,8 @@ import '../read_model/production_view.dart';
 
 enum ProductionText {
   title,
+  produce,
+  inProgress,
   loading,
   executing,
   current,

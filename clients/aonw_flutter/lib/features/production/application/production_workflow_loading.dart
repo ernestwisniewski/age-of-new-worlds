@@ -27,6 +27,7 @@ extension ProductionWorkflowLoading on ProductionWorkflow {
           ready.interaction.copyWith(
             production: ProductionState(
               cityId: cityId,
+              catalogOpen: ready.interaction.production!.catalogOpen,
               options: overview.options,
               resources: overview.resources,
             ),
@@ -54,6 +55,7 @@ GameSessionReady _productionLoadFailure(
   current.interaction.copyWith(
     production: ProductionState(
       cityId: current.interaction.production!.cityId,
+      catalogOpen: current.interaction.production!.catalogOpen,
       failure: ProductionFailureView(_productionFailureCode(error.code)),
     ),
   ),
@@ -64,6 +66,7 @@ GameSessionReady _unexpectedProductionLoadFailure(GameSessionReady current) =>
       current.interaction.copyWith(
         production: ProductionState(
           cityId: current.interaction.production!.cityId,
+          catalogOpen: current.interaction.production!.catalogOpen,
           failure: const ProductionFailureView(
             ProductionFailureCode.requestFailed,
           ),

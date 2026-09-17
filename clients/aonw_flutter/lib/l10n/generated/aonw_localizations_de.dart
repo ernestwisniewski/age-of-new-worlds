@@ -1573,6 +1573,8 @@ class AonwLocalizationsDe extends AonwLocalizations {
       'futureBuildings': 'Künftige Gebäude',
       'futureBuildingsHint': 'Schalte diese Gebäude durch Forschung frei.',
       'completedBuildings': 'Fertiggestellte Gebäude',
+      'produce': 'Produzieren',
+      'inProgress': 'In Arbeit',
       'other': 'Produktion',
     });
     return '$_temp0';

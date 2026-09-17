@@ -56,10 +56,17 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   String? _diplomacyTargetId;
   var _diplomacyTrade = false;
   var _workerActionsWereOpen = false;
+  var _productionWasOpen = false;
   var _researchWasFocused = false;
 
   bool get _researchFocused => switch (widget.controller.state) {
     GameSessionReady(:final interaction) => interaction.researchFocused,
+    _ => false,
+  };
+
+  bool get _productionOpen => switch (widget.controller.state) {
+    GameSessionReady(:final interaction) =>
+      interaction.production?.catalogOpen ?? false,
     _ => false,
   };
 
@@ -72,6 +79,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
   @override
   void initState() {
     super.initState();
+    _productionWasOpen = _productionOpen;
     _workerActionsWereOpen = _workerActionsOpen;
     _researchWasFocused = _researchFocused;
     widget.controller.addListener(_observeWorkerActions);
@@ -133,6 +141,7 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
     if (identical(previous, widget.controller)) return;
     previous.removeListener(_observeWorkerActions);
     widget.controller.addListener(_observeWorkerActions);
+    _productionWasOpen = _productionOpen;
     _workerActionsWereOpen = _workerActionsOpen;
     _researchWasFocused = _researchFocused;
     _openPanel = null;
@@ -146,7 +155,10 @@ final class _MapHudPanelsState extends State<MapHudPanels> {
       }
       if (_researchFocused) context.playGameSound(GameSoundCue.technology);
     }
-    final becameOpen = !_workerActionsWereOpen && _workerActionsOpen;
+    final becameOpen =
+        (!_workerActionsWereOpen && _workerActionsOpen) ||
+        (!_productionWasOpen && _productionOpen);
+    _productionWasOpen = _productionOpen;
     _workerActionsWereOpen = _workerActionsOpen;
     if (!becameOpen || _openPanel == null) return;
     setState(() => _openPanel = null);

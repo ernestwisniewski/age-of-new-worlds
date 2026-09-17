@@ -1525,6 +1525,8 @@ class AonwLocalizationsPl extends AonwLocalizations {
       'futureBuildings': 'Przyszłe budynki',
       'futureBuildingsHint': 'Odblokuj te budynki dzięki badaniom.',
       'completedBuildings': 'Ukończone budynki',
+      'produce': 'Produkuj',
+      'inProgress': 'W toku',
       'other': 'Produkcja',
     });
     return '$_temp0';

@@ -147,6 +147,9 @@ final class ProductionOptionsView {
   final List<ProductionOptionView> wonders;
   final List<CitySpecializationOptionView> specializations;
 
+  bool isCurrent(ProductionTargetView target) =>
+      currentTarget != null && _sameProductionTarget(currentTarget!, target);
+
   ProductionOptionView? get currentOption {
     final target = currentTarget;
     if (target == null) return null;

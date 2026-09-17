@@ -56,19 +56,41 @@ final class _ReadyMap extends StatelessWidget {
 
   bool get _blocksGameplay => localHandoff.blocksGameplay || _terminal;
 
+  bool get _productionOpen =>
+      interactionEnabled &&
+      !_blocksGameplay &&
+      !controller.networkConnection.blocksGameplay &&
+      interaction.production?.catalogOpen == true &&
+      scene.player.controlledCityById(interaction.production!.cityId) != null;
+
   @override
   Widget build(BuildContext context) => Stack(
     children: [
       ExcludeFocus(
-        excluding: _blocksGameplay,
+        excluding: _blocksGameplay || _productionOpen,
         child: ExcludeSemantics(
-          excluding: _blocksGameplay,
+          excluding: _blocksGameplay || _productionOpen,
           child: TooltipVisibility(
-            visible: !_blocksGameplay,
+            visible: !_blocksGameplay && !_productionOpen,
             child: _gameplay(context),
           ),
         ),
       ),
+      if (_productionOpen)
+        Positioned.fill(
+          child: ProductionOverlay(
+            state: interaction.production!,
+            cityName: scene.player
+                .controlledCityById(interaction.production!.cityId)!
+                .name,
+            treasury: scene.player.economy.gold,
+            enabled:
+                !controller.readOnly &&
+                !(interaction.city?.commandPending ?? false),
+            onAction: controller.executeProductionAction,
+            onClose: () => controller.setProductionCatalogOpen(false),
+          ),
+        ),
       Positioned.fill(
         child: LocalHandoffOverlay(
           state: localHandoff,

@@ -15,6 +15,7 @@ import '../../../local_game/application/local_ai_turn_state.dart';
 import '../../../local_game/application/local_handoff_state.dart';
 import '../../../local_game/presentation/local_handoff_overlay.dart';
 import '../../../objectives/presentation/match_outcome_overlay.dart';
+import '../../../production/presentation/production_overlay.dart';
 import '../../../research/application/research_state.dart';
 import '../../../save_game/application/local_save_state.dart';
 import '../../../settings/application/client_gamepad_settings.dart';

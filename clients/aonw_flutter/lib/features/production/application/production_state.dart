@@ -21,6 +21,7 @@ final class ProductionState {
   const ProductionState({
     required this.cityId,
     this.loading = false,
+    this.catalogOpen = false,
     this.correlationId = 0,
     this.options,
     this.resources,
@@ -28,11 +29,12 @@ final class ProductionState {
     this.failure,
   });
 
-  const ProductionState.loading(String cityId)
-    : this(cityId: cityId, loading: true);
+  const ProductionState.loading(String cityId, {bool catalogOpen = false})
+    : this(cityId: cityId, loading: true, catalogOpen: catalogOpen);
 
   final String cityId;
   final bool loading;
+  final bool catalogOpen;
   final int correlationId;
   final ProductionOptionsView? options;
   final StrategicResourceProjectionView? resources;
@@ -43,6 +45,7 @@ final class ProductionState {
 
   ProductionState copyWith({
     bool? loading,
+    bool? catalogOpen,
     int? correlationId,
     ProductionOptionsView? options,
     StrategicResourceProjectionView? resources,
@@ -53,6 +56,7 @@ final class ProductionState {
   }) => ProductionState(
     cityId: cityId,
     loading: loading ?? this.loading,
+    catalogOpen: catalogOpen ?? this.catalogOpen,
     correlationId: correlationId ?? this.correlationId,
     options: options ?? this.options,
     resources: resources ?? this.resources,

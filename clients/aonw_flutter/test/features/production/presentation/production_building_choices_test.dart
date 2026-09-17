@@ -71,18 +71,20 @@ Widget _app({String cityId = 'city', String locale = 'en', double scale = 1}) =>
       home: Scaffold(
         body: MediaQuery(
           data: MediaQueryData(textScaler: TextScaler.linear(scale)),
-          child: SingleChildScrollView(
-            child: ProductionBuildingChoices(
-              cityId: cityId,
-              options: [
-                _option('port', unlocked: true),
-                _option('workshop', unlocked: false),
-                _option('granary', unlocked: true, completed: true),
-              ],
-              choice: (option) => Text(
-                (option.target as BuildingProductionTargetView).building,
+          child: CustomScrollView(
+            slivers: [
+              ProductionBuildingChoices(
+                cityId: cityId,
+                options: [
+                  _option('port', unlocked: true),
+                  _option('workshop', unlocked: false),
+                  _option('granary', unlocked: true, completed: true),
+                ],
+                choice: (option) => Text(
+                  (option.target as BuildingProductionTargetView).building,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

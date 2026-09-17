@@ -6,6 +6,7 @@ import '../../../../design_system/widgets/aonw_progress_indicator.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../artifacts/presentation/artifact_panel.dart';
 import '../../../artifacts/read_model/artifact_view.dart';
+import '../../../audio/presentation/game_audio_actions.dart';
 import '../../../cities/application/city_state.dart';
 import '../../../cities/presentation/city_copy.dart';
 import '../../../cities/presentation/city_panel.dart';
@@ -13,8 +14,7 @@ import '../../../cities/read_model/city_view.dart';
 import '../../../combat/presentation/combat_panel.dart';
 import '../../../combat/read_model/combat_view.dart';
 import '../../../logistics/read_model/unit_logistics_view.dart';
-import '../../../production/presentation/production_panel.dart';
-import '../../../production/read_model/production_view.dart';
+import '../../../production/presentation/production_copy.dart';
 import '../../../unit_actions/presentation/unit_action_deck.dart';
 import '../../../unit_actions/read_model/unit_action_view.dart';
 import '../../../workers/presentation/worker_panel.dart';
@@ -87,7 +87,10 @@ final class MapSelectionOverlay extends StatelessWidget {
               onCancelCityFounding: controller.cancelCityFounding,
               onStartCityManagement: controller.startCityManagement,
               onCancelCityManagement: controller.cancelCityManagement,
-              onProductionAction: controller.executeProductionAction,
+              onOpenProduction: () {
+                context.playGameSound(GameSoundCue.uiPanelOpen);
+                controller.setProductionCatalogOpen(true);
+              },
               onArtifactAction: controller.executeArtifactAction,
             ),
           ),
@@ -120,7 +123,7 @@ final class _MapSelectionPanel extends StatelessWidget {
     required this.onCancelCityFounding,
     required this.onStartCityManagement,
     required this.onCancelCityManagement,
-    required this.onProductionAction,
+    required this.onOpenProduction,
     required this.onArtifactAction,
   });
 
@@ -145,7 +148,7 @@ final class _MapSelectionPanel extends StatelessWidget {
   final VoidCallback onCancelCityFounding;
   final ValueChanged<CityManagementMode> onStartCityManagement;
   final VoidCallback onCancelCityManagement;
-  final ValueChanged<ProductionActionView> onProductionAction;
+  final VoidCallback onOpenProduction;
   final ValueChanged<ArtifactActionView> onArtifactAction;
 
   @override
@@ -197,7 +200,7 @@ final class _MapSelectionPanel extends StatelessWidget {
                 onCancelCityFounding: onCancelCityFounding,
                 onStartCityManagement: onStartCityManagement,
                 onCancelCityManagement: onCancelCityManagement,
-                onProductionAction: onProductionAction,
+                onOpenProduction: onOpenProduction,
                 onArtifactAction: onArtifactAction,
               ),
             ],

@@ -1560,6 +1560,8 @@ class AonwLocalizationsFr extends AonwLocalizations {
       'futureBuildings': 'Bâtiments à débloquer',
       'futureBuildingsHint': 'Débloquez ces bâtiments grâce à la recherche.',
       'completedBuildings': 'Bâtiments achevés',
+      'produce': 'Produire',
+      'inProgress': 'En cours',
       'other': 'Production',
     });
     return '$_temp0';

@@ -1555,6 +1555,8 @@ class AonwLocalizationsNl extends AonwLocalizations {
       'futureBuildings': 'Toekomstige gebouwen',
       'futureBuildingsHint': 'Ontgrendel deze gebouwen door onderzoek.',
       'completedBuildings': 'Voltooide gebouwen',
+      'produce': 'Produceren',
+      'inProgress': 'Bezig',
       'other': 'Productie',
     });
     return '$_temp0';

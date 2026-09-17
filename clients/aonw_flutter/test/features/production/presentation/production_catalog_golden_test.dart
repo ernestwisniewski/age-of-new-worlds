@@ -1,3 +1,5 @@
+import 'package:aonw_flutter/design_system/assets/sprite_frame_id.dart';
+import 'package:aonw_flutter/design_system/assets/sprite_frames.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,7 +8,16 @@ import 'production_banner_fixture.dart';
 import 'production_catalog_fixture.dart';
 
 void main() {
+  final frames = SpriteFrames.createScope();
+  tearDownAll(frames.dispose);
   setUpAll(() async {
+    await frames.preload([
+      const SpriteFrameId('building.granary'),
+      const SpriteFrameId('building.port'),
+      const SpriteFrameId('building.workshop'),
+      const SpriteFrameId('building.university'),
+      const SpriteFrameId('building.housing'),
+    ]);
     await (FontLoader('Cinzel')..addFont(
           rootBundle.load('assets/fonts/Cinzel-VariableFont_wght.ttf'),
         ))
@@ -38,6 +49,7 @@ void main() {
         await tester.pumpWidget(
           bannerApp(
             options: catalogOptions(),
+            modal: true,
             locale: sample.locale,
             size: sample.size,
           ),

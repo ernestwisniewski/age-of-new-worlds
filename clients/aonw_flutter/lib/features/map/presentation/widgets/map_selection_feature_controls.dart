@@ -15,7 +15,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
     required this.onCancelCityFounding,
     required this.onStartCityManagement,
     required this.onCancelCityManagement,
-    required this.onProductionAction,
+    required this.onOpenProduction,
     required this.onArtifactAction,
   });
 
@@ -32,7 +32,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
   final VoidCallback onCancelCityFounding;
   final ValueChanged<CityManagementMode> onStartCityManagement;
   final VoidCallback onCancelCityManagement;
-  final ValueChanged<ProductionActionView> onProductionAction;
+  final VoidCallback onOpenProduction;
   final ValueChanged<ArtifactActionView> onArtifactAction;
 
   @override
@@ -42,7 +42,7 @@ final class _SelectionFeatureControls extends StatelessWidget {
     children: [
       _combatPanel(),
       _cityPanel(),
-      _productionPanel(),
+      _productionPanel(context),
       _artifactPanel(),
       _MovementFeedback(interaction: interaction),
     ],
@@ -76,20 +76,16 @@ final class _SelectionFeatureControls extends StatelessWidget {
     );
   }
 
-  Widget _productionPanel() {
+  Widget _productionPanel(BuildContext context) {
     final production = interaction.production;
     if (production == null || interaction.city?.managementMode != null) {
       return const SizedBox.shrink();
     }
-    return ProductionPanel(
-      state: production,
-      treasury: player.economy.gold,
-      enabled:
-          !readOnly &&
-          !(interaction.city?.commandPending ?? false) &&
-          !interaction.movementPending &&
-          !(interaction.artifact?.commandPending ?? false),
-      onAction: onProductionAction,
+    return FilledButton.icon(
+      key: const ValueKey('open-production'),
+      onPressed: production.commandPending ? null : onOpenProduction,
+      icon: const Icon(Icons.construction),
+      label: Text(ProductionCopy.of(context).text(ProductionText.title)),
     );
   }
 

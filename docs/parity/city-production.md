@@ -133,5 +133,32 @@ Eight focused tests cover identical blockers with distinct availability, city
 changes, keyboard input and all six languages at 200% text scale. Three reviewed
 goldens cover phone, tablet and desktop, including expanded sections. Existing
 production method debt shrinks from 70 to 66 lines, without increasing limits.
-These snapshots verify grouping; the reference modal, illustrated rows, sorting
-and target details still require implementation.
+These snapshots originally verified grouping; the modal and illustrated rows
+are described below. Sorting and target details remain subsequent work.
+
+
+## Production modal and illustrated catalog
+
+The selected city's production action opens a dedicated modal, capped at 760 px
+and 82% of the screen height. The header names the city. The current production
+overview stays above the independently scrolling catalog on larger screens; on
+short screens and at large text scale it joins the scrollable content. Rows use
+existing building, unit and wonder atlas artwork and separate production actions.
+Research/completion groups remain independent of generic command rejections.
+
+Catalog disclosure state and lazy rows live in one scroll viewport. Artwork uses
+scoped, shared atlas pages and releases ownership as rows leave the tree. The
+production workflow preserves the modal through command completion and query
+refresh, while a city selection change creates a closed state. Closing a pending
+command is blocked; normal close and Escape/B retain the selected city.
+
+The modal owns the map input region. Background focus, semantics and tooltips are
+excluded, and opening production dismisses an existing HUD panel. Replay can
+inspect the same catalog with production commands disabled. The new interaction
+tests cover input isolation and city retention; responsive tests cover six
+languages in both phone orientations at 200%. Three reviewed modal goldens cover
+phone, tablet and desktop. The final Flutter suite passes 1,462 tests, including a 59-building lifecycle
+case that keeps at most twelve mounted cards and releases the scoped atlas pages
+after closing. Analysis, map/asset checks and architecture pass; the existing
+long production-method exception is removed. Building ranking and detailed effect projections
+remain subsequent work.

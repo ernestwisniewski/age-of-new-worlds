@@ -1564,6 +1564,8 @@ class AonwLocalizationsEs extends AonwLocalizations {
       'futureBuildingsHint':
           'Desbloquea estos edificios mediante la investigación.',
       'completedBuildings': 'Edificios terminados',
+      'produce': 'Producir',
+      'inProgress': 'En curso',
       'other': 'Producción',
     });
     return '$_temp0';

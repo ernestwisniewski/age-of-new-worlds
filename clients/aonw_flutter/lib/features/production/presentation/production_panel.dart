@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
 import '../../../design_system/widgets/aonw_progress_indicator.dart';
-import '../../map/read_model/map_view.dart';
 import '../application/production_state.dart';
 import '../read_model/production_view.dart';
 import 'production_active_banner.dart';
-import 'production_building_choices.dart';
+import 'production_catalog.dart';
 import 'production_copy.dart';
 
 final class ProductionPanel extends StatelessWidget {
@@ -15,6 +14,8 @@ final class ProductionPanel extends StatelessWidget {
     required this.onAction,
     this.enabled = true,
     this.treasury,
+    this.cityName,
+    this.onClose,
     super.key,
   });
 
@@ -22,56 +23,98 @@ final class ProductionPanel extends StatelessWidget {
   final ValueChanged<ProductionActionView> onAction;
   final bool enabled;
   final int? treasury;
+  final String? cityName;
+  final VoidCallback? onClose;
 
   @override
-  Widget build(BuildContext context) {
-    final copy = ProductionCopy.of(context);
-    final acceptsInput = enabled && !state.loading && !state.commandPending;
-    return FocusTraversalGroup(
-      policy: OrderedTraversalPolicy(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: AonwSpacing.md),
-          Text(
-            copy.text(ProductionText.title),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          if (state.loading)
-            AonwProgressIndicator(
-              semanticLabel: copy.text(ProductionText.loading),
-              compact: true,
-            )
-          else if (state.options case final options?) ...[
-            ProductionActiveBanner(
-              options: options,
-              enabled: acceptsInput,
-              onAction: onAction,
-              treasury: treasury,
-            ),
-            if (state.resources case final resources?)
-              _ResourceSummary(resources: resources),
-            _ProductionActions(
-              options: options,
-              enabled: acceptsInput,
-              onAction: onAction,
-            ),
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final copy = ProductionCopy.of(context);
+      final compact =
+          constraints.maxHeight < 600 ||
+          MediaQuery.textScalerOf(context).scale(14) > 20;
+      return FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _header(context, copy),
+            if (state.loading)
+              AonwProgressIndicator(
+                semanticLabel: copy.text(ProductionText.loading),
+                compact: true,
+              )
+            else if (state.options case final options?)
+              ..._content(options, compact),
+            if (state.commandPending)
+              AonwProgressIndicator(
+                semanticLabel: copy.text(ProductionText.executing),
+                compact: true,
+              ),
+            if (state.failure case final failure?)
+              Text(
+                copy.failure(failure),
+                key: const ValueKey('production-error'),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
           ],
-          if (state.commandPending)
-            AonwProgressIndicator(
-              semanticLabel: copy.text(ProductionText.executing),
-              compact: true,
-            ),
-          if (state.failure case final failure?)
+        ),
+      );
+    },
+  );
+
+  Widget _header(BuildContext context, ProductionCopy copy) => Row(
+    children: [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
-              copy.failure(failure),
-              key: const ValueKey('production-error'),
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              copy.text(ProductionText.title),
+              style: AonwTextStyles.screenTitle,
             ),
-        ],
+            if (cityName case final name?)
+              Text(name, style: AonwTextStyles.cardTitle),
+          ],
+        ),
       ),
+      if (onClose != null)
+        IconButton(
+          key: const ValueKey('close-production'),
+          tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+          onPressed: state.commandPending ? null : onClose,
+          icon: const Icon(Icons.close),
+        ),
+    ],
+  );
+
+  List<Widget> _content(ProductionOptionsView options, bool compact) {
+    final acceptsInput = enabled && !state.commandPending;
+    final overview = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ProductionActiveBanner(
+          options: options,
+          enabled: acceptsInput,
+          onAction: onAction,
+          treasury: treasury,
+        ),
+        if (state.resources case final resources?)
+          _ResourceSummary(resources: resources),
+      ],
     );
+    return [
+      if (!compact) overview,
+      Expanded(
+        child: ProductionCatalog(
+          key: ValueKey(options.cityId),
+          header: compact ? overview : null,
+          options: options,
+          enabled: acceptsInput,
+          onAction: onAction,
+        ),
+      ),
+    ];
   }
 }
 
@@ -95,187 +138,3 @@ final class _ResourceSummary extends StatelessWidget {
     );
   }
 }
-
-final class _ProductionActions extends StatelessWidget {
-  const _ProductionActions({
-    required this.options,
-    required this.enabled,
-    required this.onAction,
-  });
-
-  final ProductionOptionsView options;
-  final bool enabled;
-  final ValueChanged<ProductionActionView> onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final copy = ProductionCopy.of(context);
-    Widget button({
-      required ProductionActionView action,
-      required String label,
-      ProductionRejectionCodeView? blocker,
-    }) {
-      final reason = copy.rejection(blocker);
-      final semanticLabel = reason == null ? label : '$label. $reason';
-      return FocusTraversalOrder(
-        order: const NumericFocusOrder(30),
-        child: Semantics(
-          label: semanticLabel,
-          button: true,
-          enabled: enabled && blocker == null,
-          child: OutlinedButton(
-            key: ValueKey(('production-action', action.runtimeType, label)),
-            onPressed: enabled && blocker == null
-                ? () => onAction(action)
-                : null,
-            child: Text(reason == null ? label : '$label · $reason'),
-          ),
-        ),
-      );
-    }
-
-    final sections = <Widget>[];
-    void section(String title, List<Widget> children) {
-      if (children.isEmpty) return;
-      sections.add(Text(title, style: Theme.of(context).textTheme.labelMedium));
-      sections.add(
-        Wrap(
-          spacing: AonwSpacing.xs,
-          runSpacing: AonwSpacing.xs,
-          children: children,
-        ),
-      );
-    }
-
-    if (options.buildings.isNotEmpty) {
-      sections.add(
-        ProductionBuildingChoices(
-          cityId: options.cityId,
-          options: options.buildings,
-          choice: (option) => button(
-            action: StartBuildingActionView(
-              cityId: options.cityId,
-              building:
-                  (option.target as BuildingProductionTargetView).building,
-            ),
-            label: _optionLabel(copy, option),
-            blocker: option.blocker,
-          ),
-        ),
-      );
-    }
-    section(copy.text(ProductionText.units), [
-      for (final option in options.units)
-        ..._unitButtons(
-          copy: copy,
-          cityId: options.cityId,
-          option: option,
-          button: button,
-        ),
-    ]);
-    section(copy.text(ProductionText.projects), [
-      for (final option in options.projects)
-        button(
-          action: StartCityProjectActionView(
-            cityId: options.cityId,
-            project: (option.target as ProjectProductionTargetView).project,
-          ),
-          label: _optionLabel(copy, option),
-          blocker: option.blocker,
-        ),
-    ]);
-    section(copy.text(ProductionText.wonders), [
-      for (final option in options.wonders)
-        button(
-          action: StartWonderActionView(
-            cityId: options.cityId,
-            wonder: (option.target as WonderProductionTargetView).wonder,
-          ),
-          label: _optionLabel(copy, option),
-          blocker: option.blocker,
-        ),
-    ]);
-    section(copy.text(ProductionText.specializations), [
-      for (final option in options.specializations)
-        button(
-          action: SetCitySpecializationActionView(
-            cityId: options.cityId,
-            specialization: option.specialization,
-          ),
-          label:
-              '${copy.cityContent(option.specialization)} · '
-              '${copy.text(ProductionText.requires)} '
-              '${copy.cityContent(option.requiredBuilding)}',
-          blocker: option.blocker,
-        ),
-    ]);
-    return sections.isEmpty
-        ? Text(copy.text(ProductionText.empty))
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: sections,
-          );
-  }
-}
-
-List<Widget> _unitButtons({
-  required ProductionCopy copy,
-  required String cityId,
-  required UnitProductionOptionView option,
-  required Widget Function({
-    required ProductionActionView action,
-    required String label,
-    ProductionRejectionCodeView? blocker,
-  })
-  button,
-}) {
-  final target = option.option.target as UnitProductionTargetView;
-  if (option.resourceOptions.isEmpty) {
-    return [
-      button(
-        action: StartUnitProductionActionView(
-          cityId: cityId,
-          unit: target.unit,
-          resourceOptionIndex: null,
-        ),
-        label: _optionLabel(copy, option.option),
-        blocker: option.option.blocker,
-      ),
-    ];
-  }
-  return [
-    for (var index = 0; index < option.resourceOptions.length; index++)
-      button(
-        action: StartUnitProductionActionView(
-          cityId: cityId,
-          unit: target.unit,
-          resourceOptionIndex: index,
-        ),
-        label:
-            '${_optionLabel(copy, option.option)} · '
-            '${_stockpile(copy, option.resourceOptions[index])}',
-        blocker:
-            option.option.blocker ??
-            (option.affordableResourceOptionIndices.contains(index)
-                ? null
-                : ProductionRejectionCodeView
-                      .unitProductionMissingStrategicResource),
-      ),
-  ];
-}
-
-String _optionLabel(ProductionCopy copy, ProductionOptionView option) {
-  final target = option.target;
-  if (target is ProjectProductionTargetView) {
-    return '${copy.target(target)} · ${copy.output(target, option.forecast.projectOutput!)}';
-  }
-  final requirement = copy.technologyRequirement(option.availability);
-  return '${copy.target(target)} · ${copy.text(ProductionText.cost)} '
-      '${option.cost} · ${copy.estimate(option.forecast)}'
-      '${requirement == null ? '' : ' · $requirement'}';
-}
-
-String _stockpile(ProductionCopy copy, Map<MapResource, int> value) => value
-    .entries
-    .map((entry) => '${copy.resource(entry.key)} ${entry.value}')
-    .join(' + ');

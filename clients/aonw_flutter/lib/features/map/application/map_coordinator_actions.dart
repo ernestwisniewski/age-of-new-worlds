@@ -141,6 +141,26 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
+  void setProductionCatalogOpen(bool open) {
+    final current = _availableSelectionState();
+    final production = current?.interaction.production;
+    if (current == null ||
+        production == null ||
+        current.interaction.city?.managementMode != null ||
+        current.interaction.city?.cityId != production.cityId ||
+        current.recipient.controlledCityById(production.cityId) == null ||
+        production.catalogOpen == open) {
+      return;
+    }
+    _setState(
+      current.withInteraction(
+        current.interaction.copyWith(
+          production: production.copyWith(catalogOpen: open),
+        ),
+      ),
+    );
+  }
+
   void executeProductionAction(ProductionActionView action) {
     if (!_gameplayActive()) return;
     _production.execute(

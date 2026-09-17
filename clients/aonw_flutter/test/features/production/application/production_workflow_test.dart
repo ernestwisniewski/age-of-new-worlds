@@ -42,7 +42,16 @@ void main() {
       cityId: 'preview-city',
       building: 'workshop',
     );
+    controller.setProductionCatalogOpen(true);
     controller.executeProductionAction(action);
+    controller.setProductionCatalogOpen(false);
+    expect(
+      (controller.state as GameSessionReady)
+          .interaction
+          .production
+          ?.catalogOpen,
+      isTrue,
+    );
     controller.executeProductionAction(action);
     await pumpEventQueue();
 
@@ -53,6 +62,11 @@ void main() {
     final ready = controller.state as GameSessionReady;
     expect(ready.recipient.stamp.revision, 1);
     expect(ready.interaction.production?.options?.stamp.revision, 1);
+    expect(ready.interaction.production?.catalogOpen, isTrue);
+    controller.cancelInteraction();
+    final closed = controller.state as GameSessionReady;
+    expect(closed.interaction.production?.catalogOpen, isFalse);
+    expect(closed.interaction.city?.cityId, city.id);
   });
 
   test('keeps a production rejection typed without client fallback', () async {

@@ -1523,6 +1523,8 @@ class AonwLocalizationsEn extends AonwLocalizations {
       'futureBuildings': 'Future buildings',
       'futureBuildingsHint': 'Unlock these buildings through research.',
       'completedBuildings': 'Completed buildings',
+      'produce': 'Produce',
+      'inProgress': 'In progress',
       'other': 'Production',
     });
     return '$_temp0';
