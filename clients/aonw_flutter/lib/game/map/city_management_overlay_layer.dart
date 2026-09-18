@@ -8,6 +8,7 @@ import '../../features/cities/application/city_state.dart';
 import '../../features/cities/read_model/city_view.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import 'map_canvas_clip.dart';
 import 'map_interaction_geometry.dart';
 import 'static_map_layers.dart';
 
@@ -31,6 +32,14 @@ final class MapCityManagementOverlayLayerComponent extends Component
   bool _dimmed = false;
   String? _signature;
   var _geometryBuildCount = 0;
+  var _renderedHexCount = 0;
+  var _disposedPictureCount = 0;
+
+  @visibleForTesting
+  int get debugRenderedHexCount => _renderedHexCount;
+
+  @visibleForTesting
+  int get debugDisposedPictureCount => _disposedPictureCount;
 
   @visibleForTesting
   int get debugHexCount => _hexes.length;
@@ -67,6 +76,7 @@ final class MapCityManagementOverlayLayerComponent extends Component
     if (_signature == signature) return;
     _signature = signature;
     _dimmed = input.dimmed;
+    _disposePictures();
     _hexes = List.unmodifiable([
       for (final hex in input.hexes)
         _CityManagementHexGeometry(
@@ -79,19 +89,40 @@ final class MapCityManagementOverlayLayerComponent extends Component
           actionable: hex.actionable,
         ),
     ]);
+    for (final hex in _hexes) {
+      final recorder = ui.PictureRecorder();
+      _paintManagementHex(ui.Canvas(recorder), hex);
+      hex.picture = recorder.endRecording();
+    }
     _geometryBuildCount += 1;
     isVisible = true;
   }
 
   void clearLayer() {
+    _disposePictures();
+    _renderedHexCount = 0;
     _hexes = const [];
     _dimmed = false;
     _signature = null;
     isVisible = false;
   }
 
+  void _disposePictures() {
+    for (final hex in _hexes) {
+      hex.picture.dispose();
+      _disposedPictureCount += 1;
+    }
+  }
+
+  @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
   @override
   void render(ui.Canvas canvas) {
+    _renderedHexCount = 0;
     if (!isVisible) return;
     _renderCityManagement(canvas);
   }
@@ -121,7 +152,7 @@ final class _CityManagementHexInput {
 }
 
 final class _CityManagementHexGeometry {
-  const _CityManagementHexGeometry({
+  _CityManagementHexGeometry({
     required this.coordinate,
     required this.path,
     required this.center,
@@ -134,6 +165,9 @@ final class _CityManagementHexGeometry {
   final MapHexCoordinate coordinate;
   final ui.Path path;
   final ui.Offset center;
+  late final ui.Picture picture;
+  // Expanded while recording labels and badges, including long yield values.
+  late ui.Rect bounds = path.getBounds().inflate(4);
   final MapCityManagementHexKind kind;
   final String label;
   final YieldValueView? tileYield;

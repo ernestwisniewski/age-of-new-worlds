@@ -13,35 +13,40 @@ final class _YieldBadge {
 extension _MapCityManagementOverlayRendering
     on MapCityManagementOverlayLayerComponent {
   void _renderCityManagement(ui.Canvas canvas) {
+    final clip = mapCanvasClipBounds(canvas);
     for (final hex in _hexes) {
-      final color = _managementColor(hex.kind);
-      final detailAlpha = hex.actionable ? 255 : 130;
-      canvas
-        ..drawPath(
-          hex.path,
-          ui.Paint()
-            ..color = color.withAlpha(
-              _visibleAlpha(_managementFillAlpha(hex.kind)) *
-                  detailAlpha ~/
-                  255,
-            ),
-        )
-        ..drawPath(
-          hex.path,
-          ui.Paint()
-            ..color = color.withAlpha(_visibleAlpha(245) * detailAlpha ~/ 255)
-            ..style = ui.PaintingStyle.stroke
-            ..strokeWidth = _managementStrokeWidth(hex.kind)
-            ..strokeCap = ui.StrokeCap.round
-            ..strokeJoin = ui.StrokeJoin.round,
-        );
-      if (_dimmed) continue;
-      final tileYield = hex.tileYield;
-      if (tileYield == null) {
-        _drawManagementLabel(canvas, hex, color);
-      } else {
-        _drawYieldBadges(canvas, hex.center, tileYield, color);
-      }
+      if (!clip.overlaps(hex.bounds)) continue;
+      canvas.drawPicture(hex.picture);
+      _renderedHexCount += 1;
+    }
+  }
+
+  void _paintManagementHex(ui.Canvas canvas, _CityManagementHexGeometry hex) {
+    final color = _managementColor(hex.kind);
+    final detailAlpha = hex.actionable ? 255 : 130;
+    canvas
+      ..drawPath(
+        hex.path,
+        ui.Paint()
+          ..color = color.withAlpha(
+            _visibleAlpha(_managementFillAlpha(hex.kind)) * detailAlpha ~/ 255,
+          ),
+      )
+      ..drawPath(
+        hex.path,
+        ui.Paint()
+          ..color = color.withAlpha(_visibleAlpha(245) * detailAlpha ~/ 255)
+          ..style = ui.PaintingStyle.stroke
+          ..strokeWidth = _managementStrokeWidth(hex.kind)
+          ..strokeCap = ui.StrokeCap.round
+          ..strokeJoin = ui.StrokeJoin.round,
+      );
+    if (_dimmed) return;
+    final tileYield = hex.tileYield;
+    if (tileYield == null) {
+      _drawManagementLabel(canvas, hex, color);
+    } else {
+      _drawYieldBadges(canvas, hex, tileYield, color);
     }
   }
 
@@ -86,6 +91,7 @@ extension _MapCityManagementOverlayRendering
       ),
       const ui.Radius.circular(6),
     );
+    hex.bounds = hex.bounds.expandToInclude(rect.outerRect.inflate(1));
     canvas
       ..drawRRect(
         rect,
@@ -102,14 +108,16 @@ extension _MapCityManagementOverlayRendering
         paragraph,
         ui.Offset(rect.left + paddingX, rect.top + paddingY),
       );
+    paragraph.dispose();
   }
 
   void _drawYieldBadges(
     ui.Canvas canvas,
-    ui.Offset center,
+    _CityManagementHexGeometry hex,
     YieldValueView value,
     ui.Color outlineColor,
   ) {
+    final center = hex.center;
     final badges = _yieldBadges(value);
     final rows = badges.length <= 2
         ? [badges]
@@ -129,12 +137,9 @@ extension _MapCityManagementOverlayRendering
       var left = center.dx - rowWidths[rowIndex] / 2;
       for (final badge in row) {
         final width = _badgeWidth(badge);
-        _drawYieldBadge(
-          canvas,
-          ui.Rect.fromLTWH(left, top, width, badgeHeight),
-          badge,
-          outlineColor,
-        );
+        final rect = ui.Rect.fromLTWH(left, top, width, badgeHeight);
+        hex.bounds = hex.bounds.expandToInclude(rect.inflate(1));
+        _drawYieldBadge(canvas, rect, badge, outlineColor);
         left += width + gap;
       }
       top += badgeHeight + rowGap;
@@ -179,7 +184,11 @@ extension _MapCityManagementOverlayRendering
         : badges;
   }
 
-  double _badgeWidth(_YieldBadge badge) => badge.value.length > 1 ? 29 : 24;
+  double _badgeWidth(_YieldBadge badge) => switch (badge.value.length) {
+    1 => 24,
+    2 => 29,
+    final length => 20 + length * 8.8,
+  };
 
   void _drawYieldBadge(
     ui.Canvas canvas,
@@ -207,7 +216,11 @@ extension _MapCityManagementOverlayRendering
       rect.centerLeft + const ui.Offset(8.2, 0.1),
       AonwColorTokens.brandLight,
     );
-    final paragraph = _paragraph(badge.value, fontSize: 8.8, width: 14);
+    final paragraph = _paragraph(
+      badge.value,
+      fontSize: 8.8,
+      width: badge.value.length > 2 ? badge.value.length * 8.8 : 14,
+    );
     canvas.drawParagraph(
       paragraph,
       ui.Offset(
@@ -215,6 +228,7 @@ extension _MapCityManagementOverlayRendering
         rect.top + (rect.height - paragraph.height) / 2 - 0.5,
       ),
     );
+    paragraph.dispose();
   }
 
   void _drawYieldGlyph(
@@ -281,7 +295,7 @@ extension _MapCityManagementOverlayRendering
         fontSize: fontSize,
         fontWeight: ui.FontWeight.w900,
         maxLines: 1,
-        textAlign: ui.TextAlign.center,
+        textAlign: ui.TextAlign.left,
       ),
     )..pushStyle(ui.TextStyle(color: AonwColorTokens.textBright));
     final paragraph = (builder..addText(text)).build()

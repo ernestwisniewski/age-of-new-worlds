@@ -7,6 +7,7 @@ import '../../design_system/aonw_tokens.dart';
 import '../../features/cities/application/city_state.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import 'map_canvas_clip.dart';
 import 'map_interaction_geometry.dart';
 import 'static_map_layers.dart';
 
@@ -25,6 +26,13 @@ final class MapCityFoundingPreviewLayerComponent extends Component
 
   ui.Path? _centerPath;
   ui.Offset? _center;
+  ui.Rect? _centerBounds;
+  ui.Paragraph? _countParagraph;
+  final _fillPaint = ui.Paint();
+  final _strokePaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..strokeCap = ui.StrokeCap.round
+    ..strokeJoin = ui.StrokeJoin.round;
   List<_FoundingHexGeometry> _selected = const [];
   List<_FoundingHexGeometry> _candidates = const [];
   ui.Color _cityColor = AonwColorTokens.brand;
@@ -32,6 +40,10 @@ final class MapCityFoundingPreviewLayerComponent extends Component
   String? _signature;
   double _dashPhase = 0;
   var _geometryBuildCount = 0;
+  var _renderedHexCount = 0;
+
+  @visibleForTesting
+  int get debugRenderedHexCount => _renderedHexCount;
 
   @visibleForTesting
   int get debugSelectedCount => _selected.length;
@@ -76,6 +88,7 @@ final class MapCityFoundingPreviewLayerComponent extends Component
       input.selection,
       input.candidates,
       input.recommendedCount,
+      input.requiredCount,
       input.colorValue,
     );
     if (_signature == signature) return;
@@ -110,11 +123,21 @@ final class MapCityFoundingPreviewLayerComponent extends Component
         ),
     ]);
     _label = '${input.selection.length}/${input.requiredCount}';
+    _countParagraph?.dispose();
+    _countParagraph = _buildCountParagraph();
+    _centerBounds = _centerPath!
+        .getBounds()
+        .inflate(3)
+        .expandToInclude(_countLabelRect(_center!).outerRect);
     _geometryBuildCount += 1;
     isVisible = true;
   }
 
   void clearLayer() {
+    _countParagraph?.dispose();
+    _countParagraph = null;
+    _centerBounds = null;
+    _renderedHexCount = 0;
     _centerPath = null;
     _center = null;
     _selected = const [];
@@ -133,7 +156,14 @@ final class MapCityFoundingPreviewLayerComponent extends Component
   }
 
   @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
+  @override
   void render(ui.Canvas canvas) {
+    _renderedHexCount = 0;
     if (!isVisible) return;
     _renderFoundingPreview(canvas);
   }
@@ -158,7 +188,7 @@ final class _FoundingPreviewInput {
 }
 
 final class _FoundingHexGeometry {
-  const _FoundingHexGeometry({
+  _FoundingHexGeometry({
     required this.coordinate,
     required this.path,
     required this.center,
@@ -169,6 +199,13 @@ final class _FoundingHexGeometry {
   final ui.Path path;
   final ui.Offset center;
   final bool recommended;
+  late final metrics = path.computeMetrics().toList(growable: false);
+  late final bounds = path
+      .getBounds()
+      .inflate(3)
+      .expandToInclude(
+        ui.Rect.fromCircle(center: center + const ui.Offset(0, -3), radius: 24),
+      );
 }
 
 _FoundingPreviewInput? _foundingPreviewInput(
@@ -220,6 +257,7 @@ String _foundingSignature(
   List<MapHexCoordinate> selected,
   List<MapHexCoordinate> candidates,
   int recommendedCount,
+  int requiredCount,
   int? colorValue,
 ) {
   final buffer = StringBuffer()
@@ -232,6 +270,8 @@ String _foundingSignature(
     ..write(colorValue)
     ..write('|')
     ..write(recommendedCount)
+    ..write('|')
+    ..write(requiredCount)
     ..write('|selected:');
   for (final coordinate in selected) {
     buffer

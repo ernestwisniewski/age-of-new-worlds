@@ -50,6 +50,7 @@ void main() {
       expect(layer.debugTileYields.single?.food, 2);
       expect(layer.debugTileYields.single?.production, 1);
       expect(layer.debugGeometryBuildCount, 2);
+      expect(layer.debugDisposedPictureCount, 1);
 
       final pendingState = expansionState.copyWith(
         inFlightAction: const SelectCityExpansionActionView(
@@ -59,6 +60,7 @@ void main() {
       );
       game.replaceScene(_snapshot(scene, pendingState));
       expect(layer.debugDimmed, isTrue);
+      expect(layer.debugDisposedPictureCount, 2);
 
       final hiddenPlayer = _withFog(
         scene.player,
@@ -71,6 +73,7 @@ void main() {
       game.replaceScene(_snapshot(scene, expansionState, player: hiddenPlayer));
       expect(layer.isVisible, isFalse);
       expect(layer.debugHexCount, 0);
+      expect(layer.debugDisposedPictureCount, 3);
     },
   );
 }

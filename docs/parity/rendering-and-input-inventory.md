@@ -133,8 +133,7 @@ outlines. They verify retained component identity and unchanged placement build
 counts. Existing map goldens remain the visual regression boundary.
 
 The remaining audit includes region batching of aggregate grid, wall, road and
-fog paths, plus contextual management overlays. These are not covered by
-the static detail counters. The native production-particle and camera workloads
+fog paths. These are not covered by the static detail counters. The native production-particle and camera workloads
 retain their existing frame and memory limits and require separate passing runs.
 
 ## Outstanding evidence
@@ -153,3 +152,27 @@ This lets an incoming scope retain the existing image when the outgoing scope
 is released in the same event turn. A regression verifies image identity and one
 page decode; separate cancellation cases reject a result after either its scope
 or repository closes. Last-owner disposal still releases the atlas immediately.
+
+
+## Contextual city overlays
+
+Worked/expansion overlays cache one recorded picture per disclosed hex and test
+its visual bounds before drawing. Labels and yield badges enlarge those bounds,
+including long numeric values. Refresh, fog removal, clear and component removal
+release the old pictures. Label alignment now matches the badge origin; values of
+three or more digits receive sufficient width rather than the fixed two-digit box.
+
+Founding previews cull selected/candidate hexes before dash extraction, retain
+path metrics and the count paragraph, and reuse fill/stroke paints. Bounds include
+the recommended glow and the offset count label. Geometry and the label refresh
+only when the disclosed input changes, including the required founding count.
+
+The pre-optimization overlay golden passed unchanged before the label correction.
+The final five-state golden uses Lato and was visually reviewed. Pixel comparisons
+against the complete overlay are exact across eight clips and three zoom levels
+for every state, including long yield values. Separate tests assert zero draws
+outside the viewport, retained geometry and disposal on refresh or hiding.
+
+The full Flutter gate passes: 1535 tests, analysis, geometry/assets, dependency
+boundaries and unchanged architecture budgets
+(`/tmp/aonw-city-context-flutter-final.log`, exit 0).
