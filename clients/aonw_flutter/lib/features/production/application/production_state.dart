@@ -31,8 +31,16 @@ final class ProductionState {
     this.inspection,
   });
 
-  const ProductionState.loading(String cityId, {bool catalogOpen = false})
-    : this(cityId: cityId, loading: true, catalogOpen: catalogOpen);
+  const ProductionState.loading(
+    String cityId, {
+    bool catalogOpen = false,
+    ProductionInspectionState? inspection,
+  }) : this(
+         cityId: cityId,
+         loading: true,
+         catalogOpen: catalogOpen,
+         inspection: inspection,
+       );
 
   final String cityId;
   final bool loading;
@@ -45,6 +53,19 @@ final class ProductionState {
   final ProductionInspectionState? inspection;
 
   bool get commandPending => inFlightAction != null;
+
+  ProductionState invalidateInspection({bool clear = false}) {
+    final selected = inspection;
+    return copyWith(
+      clearInspection: clear,
+      inspection: selected == null || clear
+          ? null
+          : ProductionInspectionState(
+              target: selected.target,
+              correlationId: selected.correlationId,
+            ),
+    );
+  }
 
   ProductionState copyWith({
     bool? loading,

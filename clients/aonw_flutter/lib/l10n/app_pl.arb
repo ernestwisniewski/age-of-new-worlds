@@ -631,5 +631,206 @@
   "cityBuildingSortIndustry": "Przemysł",
   "cityBuildingSortScience": "Nauka",
   "cityBuildingSortDefenseMilitary": "Obrona / wojsko",
-  "cityBuildingSortEconomy": "Ekonomia"
+  "cityBuildingSortEconomy": "Ekonomia",
+  "technologyDetailsStatus": "Status",
+  "technologyDetailsCost": "Koszt",
+  "technologyDetailsProgress": "Postęp",
+  "technologyDetailsPrerequisites": "Wymagania",
+  "technologyDetailsEffects": "Efekty",
+  "technologyDetailsNoEffects": "Brak efektów pasywnych",
+  "commonListOr": "{first} lub {last}",
+  "@commonListOr": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoRequirements": "Brak",
+  "buildingDetailsYieldImpact": "Wpływ na miasto",
+  "buildingDetailsRequirementTechnology": "Technologia: {technology}",
+  "@buildingDetailsRequirementTechnology": {
+    "placeholders": {
+      "technology": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRequirementCoastalAccess": "Dostęp do wybrzeża",
+  "buildingDetailsRequirementResources": "Zasób: {resources}",
+  "@buildingDetailsRequirementResources": {
+    "placeholders": {
+      "resources": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsFlatYieldEffect": "{yield} do wyniku miasta",
+  "@buildingDetailsFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRiverHexYieldEffectWithMax": "{yield} za kontrolowane pole z rzeką (maks. {maxApplications})",
+  "@buildingDetailsRiverHexYieldEffectWithMax": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      },
+      "maxApplications": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsMaxControlledHexesEffect": "+{amount} limitu kontrolowanych pól miasta",
+  "@buildingDetailsMaxControlledHexesEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsFoodDepositMultiplierEffect": "+{percent}% odkładanej żywności po turze",
+  "@buildingDetailsFoodDepositMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldFood": "{value} żywności",
+  "@buildingDetailsYieldFood": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldProduction": "{value} produkcji",
+  "@buildingDetailsYieldProduction": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldGold": "{value} złota",
+  "@buildingDetailsYieldGold": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldDefense": "{value} obrony",
+  "@buildingDetailsYieldDefense": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldScience": "{value} nauki",
+  "@buildingDetailsYieldScience": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoYieldChange": "Brak zmiany zasobów",
+  "wonderDetailsStandingEffects": "Efekty stałe",
+  "wonderDetailsCompletionEffects": "Efekty ukończenia",
+  "wonderDetailsNoStandingEffects": "Brak efektów stałych",
+  "wonderDetailsNoCompletionEffects": "Brak efektów ukończenia",
+  "wonderDetailsRequirementAdjacentRiver": "Sąsiedztwo rzeki",
+  "wonderDetailsRequirementAdjacentMountain": "Sąsiedztwo góry",
+  "wonderDetailsRequirementTerrain": "Teren: {terrain}",
+  "@wonderDetailsRequirementTerrain": {
+    "placeholders": {
+      "terrain": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireFlatYieldEffect": "{yield} w każdym mieście",
+  "@wonderDetailsEmpireFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsHostCityFlatYieldEffect": "{yield} w mieście gospodarzu",
+  "@wonderDetailsHostCityFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireScienceEffect": "{amount} nauki w każdym mieście",
+  "@wonderDetailsEmpireScienceEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireGoldMultiplierEffect": "{percent} złota imperium",
+  "@wonderDetailsEmpireGoldMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireProductionMultiplierEffect": "{percent} produkcji imperium",
+  "@wonderDetailsEmpireProductionMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsStabilityEffect": "{amount} stabilności",
+  "@wonderDetailsStabilityEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsGrantFreeTechnology": "Kończy aktywne badanie",
+  "wonderDetailsProductionBurst": "+{amount} nadwyżki produkcji w mieście gospodarzu",
+  "@wonderDetailsProductionBurst": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "wonderDetailsGrantGold": "+{amount} złota",
+  "@wonderDetailsGrantGold": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "unitDetailsMovement": "Ruch",
+  "unitDetailsCombat": "Walka",
+  "unitDetailsPace": "Tempo",
+  "visualCurrentLabel": "Teraz",
+  "visualAfterLabel": "Po zmianie",
+  "eventCombatStatAttack": "atak",
+  "eventCombatStatDefense": "obrona",
+  "eventCombatStatHp": "HP",
+  "eventCombatStatRange": "zasięg",
+  "productionDetailText": "{key, select, storedFood{Magazynowana żywność} tileLimit{Limit kontrolowanych pól} base{Bazowe} effective{Z technologią} upkeep{Bazowe utrzymanie / turę} supplyUsed{Wykorzystane zaopatrzenie (bez tej kolejki)} supplyCost{Koszt zaopatrzenia} resourceOptions{Warianty zasobów strategicznych} riverApplications{Uwzględnione pola rzeczne} movement{Punkty ruchu / turę} other{Bazowe}}"
 }

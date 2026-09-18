@@ -8,6 +8,7 @@ import 'package:aonw_flutter/features/production/read_model/production_view.dart
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/map_test_fixture.dart';
+import '../presentation/production_details_effects_fixture.dart';
 
 void main() {
   test('loads exact options and correlates one production command', () async {
@@ -68,6 +69,53 @@ void main() {
     expect(closed.interaction.production?.catalogOpen, isFalse);
     expect(closed.interaction.city?.cityId, city.id);
   });
+
+  test(
+    'details refresh after a command and cancel returns to the catalog',
+    () async {
+      final city = testCityView();
+      final session = FakeGameSession.success(
+        testMapScene(cities: [city]),
+        cityInspection: testCityInspectionView(),
+        productionOverviewResults: [_overview(), _overview(revision: 1)],
+        productionResult: ProductionCommandResultView.accepted(
+          player: _player(revision: 1, city: city),
+        ),
+      );
+      final revisions = <int>[];
+      session.productionDetailsHandler = (revision, cityId, target) async {
+        revisions.add(revision);
+        return detailFixture(_overview(revision: revision).options, target);
+      };
+      final controller = _controller(session);
+      addTearDown(controller.dispose);
+      await controller.load();
+      controller.select(city.center);
+      await pumpEventQueue();
+      controller.setProductionCatalogOpen(true);
+      controller.inspectProduction(
+        const BuildingProductionTargetView('workshop'),
+      );
+      await pumpEventQueue();
+      expect(revisions, [0]);
+      controller.executeProductionAction(
+        const StartBuildingActionView(
+          cityId: 'preview-city',
+          building: 'workshop',
+        ),
+      );
+      await pumpEventQueue();
+      final production =
+          (controller.state as GameSessionReady).interaction.production!;
+      expect(production.inspection!.details!.stamp.revision, 1);
+      expect(revisions, [0, 1]);
+      controller.cancelInteraction();
+      final closed =
+          (controller.state as GameSessionReady).interaction.production!;
+      expect(closed.inspection, isNull);
+      expect(closed.catalogOpen, isTrue);
+    },
+  );
 
   test('keeps a production rejection typed without client fallback', () async {
     final city = testCityView();

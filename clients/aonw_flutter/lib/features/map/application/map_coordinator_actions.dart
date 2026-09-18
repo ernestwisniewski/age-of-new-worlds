@@ -164,16 +164,6 @@ extension MapCoordinatorActions on MapCoordinator {
     );
   }
 
-  void inspectProduction(ProductionTargetView? target) {
-    if (_availableSelectionState() == null) return;
-    _production.inspect(
-      target: target,
-      readState: () => _state,
-      publish: _setState,
-      isDisposed: () => _disposed,
-    );
-  }
-
   void executeProductionAction(ProductionActionView action) {
     if (!_gameplayActive()) return;
     _production.execute(

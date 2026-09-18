@@ -837,5 +837,213 @@
   "cityBuildingSortIndustry": "Industry",
   "cityBuildingSortScience": "Science",
   "cityBuildingSortDefenseMilitary": "Defense / military",
-  "cityBuildingSortEconomy": "Economy"
+  "cityBuildingSortEconomy": "Economy",
+  "technologyDetailsStatus": "Status",
+  "technologyDetailsCost": "Cost",
+  "technologyDetailsProgress": "Progress",
+  "technologyDetailsPrerequisites": "Requirements",
+  "technologyDetailsEffects": "Effects",
+  "technologyDetailsNoEffects": "No passive effects",
+  "commonListOr": "{first} or {last}",
+  "@commonListOr": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoRequirements": "None",
+  "buildingDetailsYieldImpact": "City impact",
+  "buildingDetailsRequirementTechnology": "Technology: {technology}",
+  "@buildingDetailsRequirementTechnology": {
+    "placeholders": {
+      "technology": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRequirementCoastalAccess": "Coastal access",
+  "buildingDetailsRequirementResources": "Resource: {resources}",
+  "@buildingDetailsRequirementResources": {
+    "placeholders": {
+      "resources": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsFlatYieldEffect": "{yield} to city yield",
+  "@buildingDetailsFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRiverHexYieldEffectWithMax": "{yield} per controlled river tile (max {maxApplications})",
+  "@buildingDetailsRiverHexYieldEffectWithMax": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      },
+      "maxApplications": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsMaxControlledHexesEffect": "+{amount} city controlled tile limit",
+  "@buildingDetailsMaxControlledHexesEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsFoodDepositMultiplierEffect": "+{percent}% food stored after turn",
+  "@buildingDetailsFoodDepositMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldFood": "{value} food",
+  "@buildingDetailsYieldFood": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldProduction": "{value} production",
+  "@buildingDetailsYieldProduction": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldGold": "{value} gold",
+  "@buildingDetailsYieldGold": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldDefense": "{value} defense",
+  "@buildingDetailsYieldDefense": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldScience": "{value} science",
+  "@buildingDetailsYieldScience": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoYieldChange": "No resource change",
+  "wonderDetailsStandingEffects": "Standing effects",
+  "wonderDetailsCompletionEffects": "Completion effects",
+  "wonderDetailsNoStandingEffects": "No standing effects",
+  "wonderDetailsNoCompletionEffects": "No completion effects",
+  "wonderDetailsRequirementAdjacentRiver": "Adjacent river",
+  "wonderDetailsRequirementAdjacentMountain": "Adjacent mountain",
+  "wonderDetailsRequirementTerrain": "Terrain: {terrain}",
+  "@wonderDetailsRequirementTerrain": {
+    "placeholders": {
+      "terrain": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireFlatYieldEffect": "{yield} in every city",
+  "@wonderDetailsEmpireFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsHostCityFlatYieldEffect": "{yield} in the host city",
+  "@wonderDetailsHostCityFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireScienceEffect": "{amount} science in every city",
+  "@wonderDetailsEmpireScienceEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireGoldMultiplierEffect": "{percent} empire gold",
+  "@wonderDetailsEmpireGoldMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireProductionMultiplierEffect": "{percent} empire production",
+  "@wonderDetailsEmpireProductionMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsStabilityEffect": "{amount} stability",
+  "@wonderDetailsStabilityEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsGrantFreeTechnology": "Completes the active research",
+  "wonderDetailsProductionBurst": "+{amount} production overflow in the host city",
+  "@wonderDetailsProductionBurst": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "wonderDetailsGrantGold": "+{amount} gold",
+  "@wonderDetailsGrantGold": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "unitDetailsMovement": "Movement",
+  "unitDetailsCombat": "Combat",
+  "unitDetailsPace": "Pace",
+  "visualCurrentLabel": "Now",
+  "visualAfterLabel": "After change",
+  "eventCombatStatAttack": "attack",
+  "eventCombatStatDefense": "defense",
+  "eventCombatStatHp": "HP",
+  "eventCombatStatRange": "range",
+  "productionDetailText": "{key, select, storedFood{Stored food} tileLimit{Controlled tile limit} base{Base} effective{With technology} upkeep{Base upkeep / turn} supplyUsed{Supply in use (excluding this queue)} supplyCost{Supply cost} resourceOptions{Strategic resource alternatives} riverApplications{Applied river tiles} movement{Movement points / turn} other{Base}}",
+  "@productionDetailText": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  }
 }

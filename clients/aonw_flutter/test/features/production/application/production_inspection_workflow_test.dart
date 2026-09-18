@@ -111,6 +111,35 @@ void main() {
     },
   );
 
+  test('published details clear immediately when identity changes', () async {
+    final h = _Harness();
+    h.inspect('granary');
+    h.session.complete(0);
+    await pumpEventQueue();
+    final loaded = h.state;
+    final inspection = loaded.interaction.production!.inspection!;
+    expect(inspection.details, isNotNull);
+    PlayerMapView player(String actor, int revision) => PlayerMapView.preview(
+      actorPlayerId: actor,
+      stamp: testSessionStamp(revision: revision),
+      turn: 1,
+      pendingAction: null,
+      units: [],
+      cities: [testCityView()],
+    );
+    final unchanged = loaded.withRecipient(player('preview-player', 0));
+    expect(unchanged.interaction.production!.inspection, same(inspection));
+    final changed = loaded.withRecipient(player('preview-player', 1));
+    expect(changed.interaction.production!.inspection!.details, isNull);
+    expect(changed.interaction.production!.inspection!.loading, isTrue);
+    expect(
+      changed.interaction.production!.inspection!.target,
+      inspection.target,
+    );
+    final foreign = loaded.withRecipient(player('another-player', 0));
+    expect(foreign.interaction.production!.inspection, isNull);
+  });
+
   test(
     'overview failure at an old revision does not replace refreshed options',
     () async {

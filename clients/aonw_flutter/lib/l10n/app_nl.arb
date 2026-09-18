@@ -1245,5 +1245,206 @@
   "cityBuildingSortIndustry": "Industrie",
   "cityBuildingSortScience": "Wetenschap",
   "cityBuildingSortDefenseMilitary": "Defensie/militair",
-  "cityBuildingSortEconomy": "Economie"
+  "cityBuildingSortEconomy": "Economie",
+  "technologyDetailsStatus": "Status",
+  "technologyDetailsCost": "Kosten",
+  "technologyDetailsProgress": "Voortgang",
+  "technologyDetailsPrerequisites": "Vereisten",
+  "technologyDetailsEffects": "Effecten",
+  "technologyDetailsNoEffects": "Geen passieve effecten",
+  "commonListOr": "{first} of {last}",
+  "@commonListOr": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoRequirements": "Geen",
+  "buildingDetailsYieldImpact": "Impact van de stad",
+  "buildingDetailsRequirementTechnology": "Technologie: {technology}",
+  "@buildingDetailsRequirementTechnology": {
+    "placeholders": {
+      "technology": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRequirementCoastalAccess": "Toegang tot de kust",
+  "buildingDetailsRequirementResources": "Bron: {resources}",
+  "@buildingDetailsRequirementResources": {
+    "placeholders": {
+      "resources": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsFlatYieldEffect": "{yield} naar stadsrendement",
+  "@buildingDetailsFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRiverHexYieldEffectWithMax": "{yield} per gecontroleerde riviertegel (max {maxApplications})",
+  "@buildingDetailsRiverHexYieldEffectWithMax": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      },
+      "maxApplications": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsMaxControlledHexesEffect": "+{amount} door de stad gecontroleerde tegellimiet",
+  "@buildingDetailsMaxControlledHexesEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsFoodDepositMultiplierEffect": "+{percent}% voedsel dat na de beurt wordt bewaard",
+  "@buildingDetailsFoodDepositMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldFood": "{value} eten",
+  "@buildingDetailsYieldFood": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldProduction": "{value}-productie",
+  "@buildingDetailsYieldProduction": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldGold": "{value} goud",
+  "@buildingDetailsYieldGold": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldDefense": "{value}-verdediging",
+  "@buildingDetailsYieldDefense": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldScience": "{value} wetenschap",
+  "@buildingDetailsYieldScience": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoYieldChange": "Geen wijziging van de middelen",
+  "wonderDetailsStandingEffects": "Standing effects",
+  "wonderDetailsCompletionEffects": "Completion effects",
+  "wonderDetailsNoStandingEffects": "No standing effects",
+  "wonderDetailsNoCompletionEffects": "No completion effects",
+  "wonderDetailsRequirementAdjacentRiver": "Adjacent river",
+  "wonderDetailsRequirementAdjacentMountain": "Adjacent mountain",
+  "wonderDetailsRequirementTerrain": "Terrain: {terrain}",
+  "@wonderDetailsRequirementTerrain": {
+    "placeholders": {
+      "terrain": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireFlatYieldEffect": "{yield} in every city",
+  "@wonderDetailsEmpireFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsHostCityFlatYieldEffect": "{yield} in the host city",
+  "@wonderDetailsHostCityFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireScienceEffect": "{amount} science in every city",
+  "@wonderDetailsEmpireScienceEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireGoldMultiplierEffect": "{percent} empire gold",
+  "@wonderDetailsEmpireGoldMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireProductionMultiplierEffect": "{percent} empire production",
+  "@wonderDetailsEmpireProductionMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsStabilityEffect": "{amount} stability",
+  "@wonderDetailsStabilityEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsGrantFreeTechnology": "Completes the active research",
+  "wonderDetailsProductionBurst": "+{amount} production overflow in the host city",
+  "@wonderDetailsProductionBurst": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "wonderDetailsGrantGold": "+{amount} gold",
+  "@wonderDetailsGrantGold": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "unitDetailsMovement": "Beweging",
+  "unitDetailsCombat": "Gevecht",
+  "unitDetailsPace": "Tempo",
+  "visualCurrentLabel": "Nu",
+  "visualAfterLabel": "Na verandering",
+  "eventCombatStatAttack": "aanval",
+  "eventCombatStatDefense": "verdediging",
+  "eventCombatStatHp": "PK",
+  "eventCombatStatRange": "bereik",
+  "productionDetailText": "{key, select, storedFood{Opgeslagen voedsel} tileLimit{Limiet gecontroleerde tegels} base{Basis} effective{Met technologie} upkeep{Basisonderhoud / beurt} supplyUsed{Gebruikte bevoorrading (zonder deze wachtrij)} supplyCost{Bevoorradingskosten} resourceOptions{Alternatieven voor strategische grondstoffen} riverApplications{Meegetelde riviertegels} movement{Bewegingspunten / beurt} other{Basis}}"
 }

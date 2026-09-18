@@ -28,6 +28,7 @@ void main() {
                     resources: _resources(),
                   ),
                   onAction: (value) => dispatched = value,
+                  onInspect: (_) {},
                 ),
               ),
             ),

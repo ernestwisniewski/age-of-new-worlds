@@ -3245,4 +3245,208 @@ class AonwLocalizationsPl extends AonwLocalizations {
 
   @override
   String get cityBuildingSortEconomy => 'Ekonomia';
+
+  @override
+  String get technologyDetailsStatus => 'Status';
+
+  @override
+  String get technologyDetailsCost => 'Koszt';
+
+  @override
+  String get technologyDetailsProgress => 'Postęp';
+
+  @override
+  String get technologyDetailsPrerequisites => 'Wymagania';
+
+  @override
+  String get technologyDetailsEffects => 'Efekty';
+
+  @override
+  String get technologyDetailsNoEffects => 'Brak efektów pasywnych';
+
+  @override
+  String commonListOr(String first, String last) {
+    return '$first lub $last';
+  }
+
+  @override
+  String get buildingDetailsNoRequirements => 'Brak';
+
+  @override
+  String get buildingDetailsYieldImpact => 'Wpływ na miasto';
+
+  @override
+  String buildingDetailsRequirementTechnology(String technology) {
+    return 'Technologia: $technology';
+  }
+
+  @override
+  String get buildingDetailsRequirementCoastalAccess => 'Dostęp do wybrzeża';
+
+  @override
+  String buildingDetailsRequirementResources(String resources) {
+    return 'Zasób: $resources';
+  }
+
+  @override
+  String buildingDetailsFlatYieldEffect(String yield) {
+    return '$yield do wyniku miasta';
+  }
+
+  @override
+  String buildingDetailsRiverHexYieldEffectWithMax(
+    String yield,
+    int maxApplications,
+  ) {
+    return '$yield za kontrolowane pole z rzeką (maks. $maxApplications)';
+  }
+
+  @override
+  String buildingDetailsMaxControlledHexesEffect(int amount) {
+    return '+$amount limitu kontrolowanych pól miasta';
+  }
+
+  @override
+  String buildingDetailsFoodDepositMultiplierEffect(String percent) {
+    return '+$percent% odkładanej żywności po turze';
+  }
+
+  @override
+  String buildingDetailsYieldFood(String value) {
+    return '$value żywności';
+  }
+
+  @override
+  String buildingDetailsYieldProduction(String value) {
+    return '$value produkcji';
+  }
+
+  @override
+  String buildingDetailsYieldGold(String value) {
+    return '$value złota';
+  }
+
+  @override
+  String buildingDetailsYieldDefense(String value) {
+    return '$value obrony';
+  }
+
+  @override
+  String buildingDetailsYieldScience(String value) {
+    return '$value nauki';
+  }
+
+  @override
+  String get buildingDetailsNoYieldChange => 'Brak zmiany zasobów';
+
+  @override
+  String get wonderDetailsStandingEffects => 'Efekty stałe';
+
+  @override
+  String get wonderDetailsCompletionEffects => 'Efekty ukończenia';
+
+  @override
+  String get wonderDetailsNoStandingEffects => 'Brak efektów stałych';
+
+  @override
+  String get wonderDetailsNoCompletionEffects => 'Brak efektów ukończenia';
+
+  @override
+  String get wonderDetailsRequirementAdjacentRiver => 'Sąsiedztwo rzeki';
+
+  @override
+  String get wonderDetailsRequirementAdjacentMountain => 'Sąsiedztwo góry';
+
+  @override
+  String wonderDetailsRequirementTerrain(String terrain) {
+    return 'Teren: $terrain';
+  }
+
+  @override
+  String wonderDetailsEmpireFlatYieldEffect(String yield) {
+    return '$yield w każdym mieście';
+  }
+
+  @override
+  String wonderDetailsHostCityFlatYieldEffect(String yield) {
+    return '$yield w mieście gospodarzu';
+  }
+
+  @override
+  String wonderDetailsEmpireScienceEffect(String amount) {
+    return '$amount nauki w każdym mieście';
+  }
+
+  @override
+  String wonderDetailsEmpireGoldMultiplierEffect(String percent) {
+    return '$percent złota imperium';
+  }
+
+  @override
+  String wonderDetailsEmpireProductionMultiplierEffect(String percent) {
+    return '$percent produkcji imperium';
+  }
+
+  @override
+  String wonderDetailsStabilityEffect(String amount) {
+    return '$amount stabilności';
+  }
+
+  @override
+  String get wonderDetailsGrantFreeTechnology => 'Kończy aktywne badanie';
+
+  @override
+  String wonderDetailsProductionBurst(int amount) {
+    return '+$amount nadwyżki produkcji w mieście gospodarzu';
+  }
+
+  @override
+  String wonderDetailsGrantGold(int amount) {
+    return '+$amount złota';
+  }
+
+  @override
+  String get unitDetailsMovement => 'Ruch';
+
+  @override
+  String get unitDetailsCombat => 'Walka';
+
+  @override
+  String get unitDetailsPace => 'Tempo';
+
+  @override
+  String get visualCurrentLabel => 'Teraz';
+
+  @override
+  String get visualAfterLabel => 'Po zmianie';
+
+  @override
+  String get eventCombatStatAttack => 'atak';
+
+  @override
+  String get eventCombatStatDefense => 'obrona';
+
+  @override
+  String get eventCombatStatHp => 'HP';
+
+  @override
+  String get eventCombatStatRange => 'zasięg';
+
+  @override
+  String productionDetailText(String key) {
+    String _temp0 = intl.Intl.selectLogic(key, {
+      'storedFood': 'Magazynowana żywność',
+      'tileLimit': 'Limit kontrolowanych pól',
+      'base': 'Bazowe',
+      'effective': 'Z technologią',
+      'upkeep': 'Bazowe utrzymanie / turę',
+      'supplyUsed': 'Wykorzystane zaopatrzenie (bez tej kolejki)',
+      'supplyCost': 'Koszt zaopatrzenia',
+      'resourceOptions': 'Warianty zasobów strategicznych',
+      'riverApplications': 'Uwzględnione pola rzeczne',
+      'movement': 'Punkty ruchu / turę',
+      'other': 'Bazowe',
+    });
+    return '$_temp0';
+  }
 }

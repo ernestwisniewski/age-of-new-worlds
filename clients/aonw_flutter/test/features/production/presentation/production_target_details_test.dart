@@ -1,6 +1,7 @@
 import 'package:aonw_flutter/features/map/presentation/input/map_gamepad_navigation.dart';
 import 'package:aonw_flutter/features/map/presentation/input/map_input.dart';
 import 'package:aonw_flutter/features/map/presentation/widgets/map_gamepad_region.dart';
+import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,7 @@ void main() {
       expect(
         find.descendant(
           of: details,
-          matching: find.text('requires Navigation'),
+          matching: find.text('Technology: Navigation'),
         ),
         findsOneWidget,
       );
@@ -107,49 +108,58 @@ void main() {
 
   for (final language in ['en', 'pl', 'de', 'fr', 'es', 'nl']) {
     for (final size in [const Size(390, 844), const Size(844, 390)]) {
-      testWidgets('$language details fit $size at 200 percent', (tester) async {
-        await tester.binding.setSurfaceSize(size);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-        await tester.pumpWidget(
-          bannerApp(
-            options: bannerOptions(),
-            modal: true,
-            locale: language,
-            size: size,
-            scale: 2,
-          ),
+      for (final target in const [
+        BuildingProductionTargetView('workshop'),
+        UnitProductionTargetView(VisibleUnitKind.warrior),
+        WonderProductionTargetView('greatLibrary'),
+      ]) {
+        testWidgets(
+          '$language ${target.runtimeType} details fit $size at 200 percent',
+          (tester) async {
+            await tester.binding.setSurfaceSize(size);
+            addTearDown(() => tester.binding.setSurfaceSize(null));
+            await tester.pumpWidget(
+              bannerApp(
+                options: detailsOptions(target),
+                modal: true,
+                locale: language,
+                size: size,
+                scale: 2,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final help = find.byIcon(Icons.help_outline);
+            await tester.scrollUntilVisible(
+              help,
+              250,
+              scrollable: find.byType(Scrollable).first,
+            );
+            await tester.pumpAndSettle();
+            final catalogPosition = tester
+                .state<ScrollableState>(find.byType(Scrollable).first)
+                .position;
+            final catalogOffset = catalogPosition.pixels;
+            await tester.tap(help);
+            await tester.pumpAndSettle();
+            expect(
+              find.byKey(const ValueKey('production-target-details')),
+              findsOneWidget,
+            );
+            expect(tester.takeException(), isNull);
+            expect(catalogPosition.pixels, catalogOffset);
+            expect(tester.hasRunningAnimations, isFalse);
+            await tester.tap(
+              find.byKey(const ValueKey('close-production-details')),
+            );
+            await tester.pumpAndSettle();
+            expect(
+              find.byKey(const ValueKey('production-target-details')),
+              findsNothing,
+            );
+            expect(tester.takeException(), isNull);
+          },
         );
-        await tester.pumpAndSettle();
-        final help = find.byIcon(Icons.help_outline);
-        await tester.scrollUntilVisible(
-          help,
-          250,
-          scrollable: find.byType(Scrollable).first,
-        );
-        await tester.pumpAndSettle();
-        final catalogPosition = tester
-            .state<ScrollableState>(find.byType(Scrollable).first)
-            .position;
-        final catalogOffset = catalogPosition.pixels;
-        await tester.tap(help);
-        await tester.pumpAndSettle();
-        expect(
-          find.byKey(const ValueKey('production-target-details')),
-          findsOneWidget,
-        );
-        expect(tester.takeException(), isNull);
-        expect(catalogPosition.pixels, catalogOffset);
-        expect(tester.hasRunningAnimations, isFalse);
-        await tester.tap(
-          find.byKey(const ValueKey('close-production-details')),
-        );
-        await tester.pumpAndSettle();
-        expect(
-          find.byKey(const ValueKey('production-target-details')),
-          findsNothing,
-        );
-        expect(tester.takeException(), isNull);
-      });
+      }
     }
   }
 }

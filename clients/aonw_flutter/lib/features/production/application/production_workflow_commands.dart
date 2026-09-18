@@ -100,6 +100,7 @@ GameSessionReady _acceptedProduction(
       production: ProductionState.loading(
         cityId,
         catalogOpen: current.interaction.production!.catalogOpen,
+        inspection: synchronized.interaction.production?.inspection,
       ),
     ),
   );

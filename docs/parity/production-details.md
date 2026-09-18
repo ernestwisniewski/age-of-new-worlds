@@ -8,8 +8,7 @@ Relevant reference files are `city_building_details_content.dart`,
 The engine exposes `GameEngine::production_details` and
 `GameEngine::production_building_ranks` as revision-bound, read-only queries of a
 controlled city. Client API 32 exposes `productionDetails` and
-`productionBuildingRanks` through the common local/server mapping. Complete
-presentation follows separately. Canonical state, command behavior and save/replay
+`productionBuildingRanks` through the common local/server mapping. The shared Flutter presentation consumes both queries. Canonical state, command behavior and save/replay
 identity do not change.
 
 ## Target details
@@ -119,8 +118,7 @@ shape and complete, unique building ranks before constructing immutable read mod
 Inspection requests carry a correlation identifier. Closing/reopening, changing
 target/city/recipient/state or disposing the session prevents an older response
 or failure from replacing the current selection. Catalog refresh preserves the
-open state and re-requests selected details. The visible detail layout is completed
-in the next presentation stage.
+open state and re-requests selected details. The visible detail layout is described below.
 
 Eight focused mapper/workflow tests and the complete Flutter gate pass: 1488 tests,
 analysis, geometry/assets, dependency boundaries and architecture checks. The
@@ -138,3 +136,29 @@ All 69 production presentation tests and analysis pass. The final responsive
 header initially exceeded the build method complexity budget; extracting the
 existing group partition restores unchanged architecture budgets. Three catalog goldens were regenerated and visually reviewed on phone, tablet
 and desktop.
+
+## Selected detail presentation
+
+A separate modal above the whole catalog owns focus, semantics, pointer input and
+Escape/B. Its illustrated header stays visible while long content scrolls within
+the viewport. Closing restores the catalog position. Pending/error views expose no
+old numerical data; failed requests can be retried. A recipient change clears the
+selection, and a new state identity clears effects immediately before re-querying.
+
+Building comparisons use exact before/completed city output, with displayed deltas
+and proportional bars. Nominal effects remain a separate section, including river
+limits and current applications. Unit statistics distinguish base from persistent
+technology effects and include movement points, base upkeep, supply and strategic
+alternatives. Wonder effects distinguish passive benefits from completion grants.
+Requirements show individually confirmed flags rather than deriving them from a
+generic command rejection. All copy is localized in six languages.
+
+Three detail goldens were regenerated and visually reviewed. Focused regressions
+cover all three detail families in six locales at 200% in both phone orientations,
+fractional basis-point percentages, localized terrain, retry, nested cancellation,
+command refresh and immediate removal of obsolete data. Golden effect values are
+explicit presentation fixtures; native FFI tests separately verify engine mapping.
+
+The complete Flutter gate passes with 1532 tests, static analysis, shared geometry,
+packaged assets, dependency boundary negative controls and unchanged architecture
+budgets (`/tmp/aonw-production-numeric-flutter-final2.log`, exit 0).

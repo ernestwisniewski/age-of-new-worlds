@@ -1,6 +1,7 @@
 import 'package:aonw_flutter/design_system/aonw_theme.dart';
 import 'package:aonw_flutter/design_system/aonw_tokens.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
+import 'package:aonw_flutter/features/production/application/production_inspection_state.dart';
 import 'package:aonw_flutter/features/production/application/production_state.dart';
 import 'package:aonw_flutter/features/production/presentation/production_overlay.dart';
 import 'package:aonw_flutter/features/production/presentation/production_panel.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../../../support/localized_test_app.dart';
 import '../../../support/map_test_fixture.dart';
+import 'production_details_effects_fixture.dart';
 
 ProductionOptionsView bannerOptions({
   bool project = false,
@@ -154,43 +156,91 @@ Widget bannerApp({
         key: const ValueKey('production-banner-golden'),
         child: ColoredBox(
           color: AonwColorTokens.background,
-          child: modal
-              ? ProductionOverlay(
-                  state: ProductionState(
-                    cityId: options.cityId,
-                    options: options,
-                    inFlightAction: pending
-                        ? RushProductionActionView(cityId: options.cityId)
-                        : null,
-                  ),
-                  cityName: 'Warszawa',
-                  treasury: 150,
-                  enabled: enabled,
-                  onAction: onAction ?? (_) {},
-                  onClose: () {},
-                )
-              : Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 760),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: ProductionPanel(
-                        state: ProductionState(
-                          cityId: options.cityId,
-                          options: options,
-                          inFlightAction: pending
-                              ? RushProductionActionView(cityId: options.cityId)
-                              : null,
-                        ),
-                        treasury: 150,
-                        enabled: enabled,
-                        onAction: onAction ?? (_) {},
-                      ),
-                    ),
-                  ),
-                ),
+          child: _BannerContent(
+            options: options,
+            modal: modal,
+            pending: pending,
+            enabled: enabled,
+            onAction: onAction ?? (_) {},
+          ),
         ),
       ),
     ),
   ),
 );
+
+final class _BannerContent extends StatefulWidget {
+  const _BannerContent({
+    required this.options,
+    required this.modal,
+    required this.pending,
+    required this.enabled,
+    required this.onAction,
+  });
+  final ProductionOptionsView options;
+  final bool modal;
+  final bool pending;
+  final bool enabled;
+  final ValueChanged<ProductionActionView> onAction;
+
+  @override
+  State<_BannerContent> createState() => _BannerContentState();
+}
+
+final class _BannerContentState extends State<_BannerContent> {
+  ProductionTargetView? target;
+
+  @override
+  void didUpdateWidget(_BannerContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.options.cityId != widget.options.cityId) target = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final options = widget.options;
+    final selected = target;
+    final state = ProductionState(
+      cityId: options.cityId,
+      options: options,
+      inFlightAction: widget.pending
+          ? RushProductionActionView(cityId: options.cityId)
+          : null,
+      inspection: selected == null
+          ? null
+          : ProductionInspectionState(
+              target: selected,
+              correlationId: 1,
+              loading: false,
+              details: detailFixture(options, selected),
+            ),
+    );
+    void inspect(ProductionTargetView? value) => setState(() => target = value);
+    if (widget.modal) {
+      return ProductionOverlay(
+        state: state,
+        cityName: 'Warszawa',
+        treasury: 150,
+        enabled: widget.enabled,
+        onAction: widget.onAction,
+        onClose: () {},
+        onInspect: inspect,
+      );
+    }
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ProductionPanel(
+            state: state,
+            treasury: 150,
+            enabled: widget.enabled,
+            onAction: widget.onAction,
+            onInspect: inspect,
+          ),
+        ),
+      ),
+    );
+  }
+}

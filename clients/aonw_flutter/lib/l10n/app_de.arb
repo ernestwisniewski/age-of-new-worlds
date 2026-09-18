@@ -1245,5 +1245,206 @@
   "cityBuildingSortIndustry": "Industrie",
   "cityBuildingSortScience": "Wissenschaft",
   "cityBuildingSortDefenseMilitary": "Verteidigung / Militär",
-  "cityBuildingSortEconomy": "Wirtschaft"
+  "cityBuildingSortEconomy": "Wirtschaft",
+  "technologyDetailsStatus": "Status",
+  "technologyDetailsCost": "Kosten",
+  "technologyDetailsProgress": "Fortschritt",
+  "technologyDetailsPrerequisites": "Voraussetzungen",
+  "technologyDetailsEffects": "Effekte",
+  "technologyDetailsNoEffects": "Keine passiven Effekte",
+  "commonListOr": "{first} oder {last}",
+  "@commonListOr": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoRequirements": "Keine",
+  "buildingDetailsYieldImpact": "Stadtauswirkung",
+  "buildingDetailsRequirementTechnology": "Technologie: {technology}",
+  "@buildingDetailsRequirementTechnology": {
+    "placeholders": {
+      "technology": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRequirementCoastalAccess": "Küstenzugang",
+  "buildingDetailsRequirementResources": "Ressource: {resources}",
+  "@buildingDetailsRequirementResources": {
+    "placeholders": {
+      "resources": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsFlatYieldEffect": "{yield} zum Stadtertrag",
+  "@buildingDetailsFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsRiverHexYieldEffectWithMax": "{yield} pro kontrolliertem Flussfeld (max. {maxApplications})",
+  "@buildingDetailsRiverHexYieldEffectWithMax": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      },
+      "maxApplications": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsMaxControlledHexesEffect": "+{amount} Limit kontrollierter Stadtfelder",
+  "@buildingDetailsMaxControlledHexesEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "buildingDetailsFoodDepositMultiplierEffect": "+{percent}% Nahrung nach dem Zug gespeichert",
+  "@buildingDetailsFoodDepositMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldFood": "{value} Nahrung",
+  "@buildingDetailsYieldFood": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldProduction": "{value} Produktion",
+  "@buildingDetailsYieldProduction": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldGold": "{value} Gold",
+  "@buildingDetailsYieldGold": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldDefense": "{value} Verteidigung",
+  "@buildingDetailsYieldDefense": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsYieldScience": "{value} Wissenschaft",
+  "@buildingDetailsYieldScience": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "buildingDetailsNoYieldChange": "Keine Ressourcenänderung",
+  "wonderDetailsStandingEffects": "Standing effects",
+  "wonderDetailsCompletionEffects": "Completion effects",
+  "wonderDetailsNoStandingEffects": "No standing effects",
+  "wonderDetailsNoCompletionEffects": "No completion effects",
+  "wonderDetailsRequirementAdjacentRiver": "Adjacent river",
+  "wonderDetailsRequirementAdjacentMountain": "Adjacent mountain",
+  "wonderDetailsRequirementTerrain": "Terrain: {terrain}",
+  "@wonderDetailsRequirementTerrain": {
+    "placeholders": {
+      "terrain": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireFlatYieldEffect": "{yield} in every city",
+  "@wonderDetailsEmpireFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsHostCityFlatYieldEffect": "{yield} in the host city",
+  "@wonderDetailsHostCityFlatYieldEffect": {
+    "placeholders": {
+      "yield": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireScienceEffect": "{amount} science in every city",
+  "@wonderDetailsEmpireScienceEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireGoldMultiplierEffect": "{percent} empire gold",
+  "@wonderDetailsEmpireGoldMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsEmpireProductionMultiplierEffect": "{percent} empire production",
+  "@wonderDetailsEmpireProductionMultiplierEffect": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsStabilityEffect": "{amount} stability",
+  "@wonderDetailsStabilityEffect": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wonderDetailsGrantFreeTechnology": "Completes the active research",
+  "wonderDetailsProductionBurst": "+{amount} production overflow in the host city",
+  "@wonderDetailsProductionBurst": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "wonderDetailsGrantGold": "+{amount} gold",
+  "@wonderDetailsGrantGold": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "unitDetailsMovement": "Bewegung",
+  "unitDetailsCombat": "Kampf",
+  "unitDetailsPace": "Tempo",
+  "visualCurrentLabel": "Jetzt",
+  "visualAfterLabel": "Nach Änderung",
+  "eventCombatStatAttack": "Angriff",
+  "eventCombatStatDefense": "Verteidigung",
+  "eventCombatStatHp": "LP",
+  "eventCombatStatRange": "Reichweite",
+  "productionDetailText": "{key, select, storedFood{Gelagerte Nahrung} tileLimit{Limit kontrollierter Felder} base{Basis} effective{Mit Technologie} upkeep{Grundunterhalt / Runde} supplyUsed{Genutzte Versorgung (ohne diese Warteschlange)} supplyCost{Versorgungskosten} resourceOptions{Strategische Ressourcenalternativen} riverApplications{Berücksichtigte Flussfelder} movement{Bewegungspunkte / Runde} other{Basis}}"
 }

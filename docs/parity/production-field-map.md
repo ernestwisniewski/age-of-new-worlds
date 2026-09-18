@@ -18,16 +18,16 @@ The source files are `city_production_panel_view.dart`,
 | Completed building/wonder in this city | `ProductionAvailability` | API 31; no other city's wonder location or construction progress |
 | Unit strategic alternatives and affordability | Existing production unit option | Connected to exact reservation choice |
 | Current available buildings / collapsed future / completed list | Research and completion flags | Presentation grouping; completed takes precedence over research |
-| Building sort modes: recommended, speed, return, growth, industry, science, defense, economy | Rust core and API 32 transport implemented | Eight checked Rust priorities reuse city yields and forecasts; API 32 transport complete; presentation pending |
-| Building illustration, target title, authored description | Existing art catalog and localized content | Illustrated lazy cards and all 87 authored descriptions in six languages connected; numeric effects remain required |
-| Building location requirements | Ruleset `ProductionRequirement` plus shared command checks | Rust typed detail core uses command predicates; API 32 transport complete; presentation pending |
-| Flat and river yield, science, territory capacity, food-deposit modifier | `BuildingProductionDefinition` | Rust typed detail core implemented; API 32 transport complete; presentation pending |
-| Planned / active yield effect and city totals | Rust economy city-output rules | Rust current/completed output uses settlement and science rules; API 32 transport complete; presentation pending |
-| Unit movement and combat statistics | Unit ruleset plus existing technology modifiers | Rust fresh-unit base/effective statistics share combat rules; API 32 transport complete; presentation pending |
-| Unit supply and base upkeep | `UnitProductionDefinition` / own supply budget | Rust base upkeep and current supply allocation implemented; API 32 transport complete; presentation pending |
-| Wonder host/empire yields, multipliers, stability and completion grants | `WonderProductionDefinition` | Rust public effects and local requirements implemented; API 32 transport complete; presentation pending |
+| Building sort modes: recommended, speed, return, growth, industry, science, defense, economy | Rust core and API 32 transport implemented | Eight checked Rust priorities, independent groups and localized tie-breaking connected |
+| Building illustration, target title, authored description | Existing art catalog and localized content | Illustrated lazy cards and all 87 authored descriptions in six languages connected; numeric effects connected below |
+| Building location requirements | Ruleset `ProductionRequirement` plus shared command checks | Rust typed detail core uses command predicates; API 32 transport and selected detail presentation connected |
+| Flat and river yield, science, territory capacity, food-deposit modifier | `BuildingProductionDefinition` | Rust typed detail core implemented; API 32 transport and selected detail presentation connected |
+| Planned / active yield effect and city totals | Rust economy city-output rules | Rust current/completed output uses settlement and science rules; API 32 transport and selected detail presentation connected |
+| Unit movement and combat statistics | Unit ruleset plus existing technology modifiers | Rust fresh-unit base/effective statistics share combat rules; API 32 transport and selected detail presentation connected |
+| Unit supply and base upkeep | `UnitProductionDefinition` / own supply budget | Rust base upkeep and current supply allocation implemented; API 32 transport and selected detail presentation connected |
+| Wonder host/empire yields, multipliers, stability and completion grants | `WonderProductionDefinition` | Rust public effects and local requirements implemented; API 32 transport and selected detail presentation connected |
 | Building, unit, wonder, project and specialization selection | Existing revision-bound production commands | Connected; details must remain readable when the command is unavailable |
-| Detail close / catalog return | Local presentation state | Current detail overlay preserves catalog scroll, resets on city changes and reads refreshed options; portrait modal presentation remains to match |
+| Detail close / catalog return | Local presentation state | Separate modal up to 560 px, fixed illustrated header, scrolling content, preserved catalog position; refresh/correlation and recipient invalidation connected |
 | Pending operation | Production workflow | Connected; block duplicate commands while retaining feedback |
 | Selection, help, close and scrolling by keyboard/gamepad | Existing map input ownership and focus scopes | Modal and nested detail routing connected; Escape/B returns to the catalog without clearing city selection |
 

@@ -88,6 +88,7 @@ final class _ReadyMap extends StatelessWidget {
                 !controller.readOnly &&
                 !(interaction.city?.commandPending ?? false),
             onAction: controller.executeProductionAction,
+            onInspect: controller.inspectProduction,
             onClose: () => controller.setProductionCatalogOpen(false),
           ),
         ),

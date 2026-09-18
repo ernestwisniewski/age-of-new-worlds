@@ -117,6 +117,12 @@ final class GameSessionReady extends GameSessionState {
       scene: scene.withPlayer(value),
       interaction: identityChanged
           ? interaction.copyWith(
+              production: interaction.production?.invalidateInspection(
+                clear:
+                    recipient.actorPlayerId != value.actorPlayerId ||
+                    value.controlledCityById(interaction.production!.cityId) ==
+                        null,
+              ),
               moveTargeting: false,
               researchFocused: false,
               worker: interaction.worker?.copyWith(

@@ -15,10 +15,7 @@ extension MapCoordinatorCancellation on MapCoordinator {
     if (!_inspectionActive()) return;
     if (_cancellationBlocked(current)) return;
     final interaction = current.interaction;
-    if (interaction.production?.catalogOpen == true) {
-      setProductionCatalogOpen(false);
-      return;
-    }
+    if (_cancelProductionOverlay(interaction)) return;
     if (interaction.city?.founderUnitId != null) {
       cancelCityFounding();
       return;
@@ -39,6 +36,18 @@ extension MapCoordinatorCancellation on MapCoordinator {
     _interactionGeneration += 1;
     hover(null);
     _clearSelection(current);
+  }
+
+  bool _cancelProductionOverlay(MapInteractionState interaction) {
+    if (interaction.production?.inspection != null) {
+      inspectProduction(null);
+      return true;
+    }
+    if (interaction.production?.catalogOpen == true) {
+      setProductionCatalogOpen(false);
+      return true;
+    }
+    return false;
   }
 
   void _cancelUnitPreview(GameSessionReady current) {

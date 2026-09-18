@@ -2895,6 +2895,297 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'Economy'**
   String get cityBuildingSortEconomy;
+
+  /// No description provided for @technologyDetailsStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get technologyDetailsStatus;
+
+  /// No description provided for @technologyDetailsCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost'**
+  String get technologyDetailsCost;
+
+  /// No description provided for @technologyDetailsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get technologyDetailsProgress;
+
+  /// No description provided for @technologyDetailsPrerequisites.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirements'**
+  String get technologyDetailsPrerequisites;
+
+  /// No description provided for @technologyDetailsEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Effects'**
+  String get technologyDetailsEffects;
+
+  /// No description provided for @technologyDetailsNoEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'No passive effects'**
+  String get technologyDetailsNoEffects;
+
+  /// No description provided for @commonListOr.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} or {last}'**
+  String commonListOr(String first, String last);
+
+  /// No description provided for @buildingDetailsNoRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get buildingDetailsNoRequirements;
+
+  /// No description provided for @buildingDetailsYieldImpact.
+  ///
+  /// In en, this message translates to:
+  /// **'City impact'**
+  String get buildingDetailsYieldImpact;
+
+  /// No description provided for @buildingDetailsRequirementTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology: {technology}'**
+  String buildingDetailsRequirementTechnology(String technology);
+
+  /// No description provided for @buildingDetailsRequirementCoastalAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Coastal access'**
+  String get buildingDetailsRequirementCoastalAccess;
+
+  /// No description provided for @buildingDetailsRequirementResources.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource: {resources}'**
+  String buildingDetailsRequirementResources(String resources);
+
+  /// No description provided for @buildingDetailsFlatYieldEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{yield} to city yield'**
+  String buildingDetailsFlatYieldEffect(String yield);
+
+  /// No description provided for @buildingDetailsRiverHexYieldEffectWithMax.
+  ///
+  /// In en, this message translates to:
+  /// **'{yield} per controlled river tile (max {maxApplications})'**
+  String buildingDetailsRiverHexYieldEffectWithMax(
+    String yield,
+    int maxApplications,
+  );
+
+  /// No description provided for @buildingDetailsMaxControlledHexesEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'+{amount} city controlled tile limit'**
+  String buildingDetailsMaxControlledHexesEffect(int amount);
+
+  /// No description provided for @buildingDetailsFoodDepositMultiplierEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'+{percent}% food stored after turn'**
+  String buildingDetailsFoodDepositMultiplierEffect(String percent);
+
+  /// No description provided for @buildingDetailsYieldFood.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} food'**
+  String buildingDetailsYieldFood(String value);
+
+  /// No description provided for @buildingDetailsYieldProduction.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} production'**
+  String buildingDetailsYieldProduction(String value);
+
+  /// No description provided for @buildingDetailsYieldGold.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} gold'**
+  String buildingDetailsYieldGold(String value);
+
+  /// No description provided for @buildingDetailsYieldDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} defense'**
+  String buildingDetailsYieldDefense(String value);
+
+  /// No description provided for @buildingDetailsYieldScience.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} science'**
+  String buildingDetailsYieldScience(String value);
+
+  /// No description provided for @buildingDetailsNoYieldChange.
+  ///
+  /// In en, this message translates to:
+  /// **'No resource change'**
+  String get buildingDetailsNoYieldChange;
+
+  /// No description provided for @wonderDetailsStandingEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Standing effects'**
+  String get wonderDetailsStandingEffects;
+
+  /// No description provided for @wonderDetailsCompletionEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion effects'**
+  String get wonderDetailsCompletionEffects;
+
+  /// No description provided for @wonderDetailsNoStandingEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'No standing effects'**
+  String get wonderDetailsNoStandingEffects;
+
+  /// No description provided for @wonderDetailsNoCompletionEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'No completion effects'**
+  String get wonderDetailsNoCompletionEffects;
+
+  /// No description provided for @wonderDetailsRequirementAdjacentRiver.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjacent river'**
+  String get wonderDetailsRequirementAdjacentRiver;
+
+  /// No description provided for @wonderDetailsRequirementAdjacentMountain.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjacent mountain'**
+  String get wonderDetailsRequirementAdjacentMountain;
+
+  /// No description provided for @wonderDetailsRequirementTerrain.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrain: {terrain}'**
+  String wonderDetailsRequirementTerrain(String terrain);
+
+  /// No description provided for @wonderDetailsEmpireFlatYieldEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{yield} in every city'**
+  String wonderDetailsEmpireFlatYieldEffect(String yield);
+
+  /// No description provided for @wonderDetailsHostCityFlatYieldEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{yield} in the host city'**
+  String wonderDetailsHostCityFlatYieldEffect(String yield);
+
+  /// No description provided for @wonderDetailsEmpireScienceEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} science in every city'**
+  String wonderDetailsEmpireScienceEffect(String amount);
+
+  /// No description provided for @wonderDetailsEmpireGoldMultiplierEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} empire gold'**
+  String wonderDetailsEmpireGoldMultiplierEffect(String percent);
+
+  /// No description provided for @wonderDetailsEmpireProductionMultiplierEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} empire production'**
+  String wonderDetailsEmpireProductionMultiplierEffect(String percent);
+
+  /// No description provided for @wonderDetailsStabilityEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} stability'**
+  String wonderDetailsStabilityEffect(String amount);
+
+  /// No description provided for @wonderDetailsGrantFreeTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Completes the active research'**
+  String get wonderDetailsGrantFreeTechnology;
+
+  /// No description provided for @wonderDetailsProductionBurst.
+  ///
+  /// In en, this message translates to:
+  /// **'+{amount} production overflow in the host city'**
+  String wonderDetailsProductionBurst(int amount);
+
+  /// No description provided for @wonderDetailsGrantGold.
+  ///
+  /// In en, this message translates to:
+  /// **'+{amount} gold'**
+  String wonderDetailsGrantGold(int amount);
+
+  /// No description provided for @unitDetailsMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement'**
+  String get unitDetailsMovement;
+
+  /// No description provided for @unitDetailsCombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat'**
+  String get unitDetailsCombat;
+
+  /// No description provided for @unitDetailsPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace'**
+  String get unitDetailsPace;
+
+  /// No description provided for @visualCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get visualCurrentLabel;
+
+  /// No description provided for @visualAfterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'After change'**
+  String get visualAfterLabel;
+
+  /// No description provided for @eventCombatStatAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'attack'**
+  String get eventCombatStatAttack;
+
+  /// No description provided for @eventCombatStatDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'defense'**
+  String get eventCombatStatDefense;
+
+  /// No description provided for @eventCombatStatHp.
+  ///
+  /// In en, this message translates to:
+  /// **'HP'**
+  String get eventCombatStatHp;
+
+  /// No description provided for @eventCombatStatRange.
+  ///
+  /// In en, this message translates to:
+  /// **'range'**
+  String get eventCombatStatRange;
+
+  /// No description provided for @productionDetailText.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, storedFood{Stored food} tileLimit{Controlled tile limit} base{Base} effective{With technology} upkeep{Base upkeep / turn} supplyUsed{Supply in use (excluding this queue)} supplyCost{Supply cost} resourceOptions{Strategic resource alternatives} riverApplications{Applied river tiles} movement{Movement points / turn} other{Base}}'**
+  String productionDetailText(String key);
 }
 
 class _AonwLocalizationsDelegate

@@ -62,6 +62,7 @@ import 'unit_action_workflow.dart';
 part 'map_coordinator_view_mode.dart';
 part 'map_coordinator_viewer.dart';
 part 'map_coordinator_actions.dart';
+part 'map_coordinator_production_inspection.dart';
 part 'map_coordinator_cancellation.dart';
 part 'map_coordinator_local_save.dart';
 part 'map_coordinator_autosave.dart';
@@ -367,6 +368,7 @@ final class MapCoordinator {
     final previous = _state;
     _state = value;
     _changes.add(value);
+    _refreshProductionInspection(previous, value);
     if (_shouldLoadResearch(previous, value)) {
       scheduleMicrotask(() {
         if (_disposed) return;
