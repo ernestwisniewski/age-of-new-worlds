@@ -1,0 +1,97 @@
+{
+  "apiVersion": 32,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "productionDetails",
+        "stamp": {
+          "revision": 8,
+          "stateDigest": "digest-8",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "cityId": "city-1",
+        "option": {
+          "target": {
+            "kind": "wonder",
+            "wonderType": "greatLibrary"
+          },
+          "cost": 25,
+          "rejection": null,
+          "forecast": {
+            "investedProduction": 4,
+            "productionPerTurn": 3,
+            "estimatedTurns": 7,
+            "projectOutput": null,
+            "spawnBlocked": false
+          },
+          "availability": {
+            "requiredTechnology": "writing",
+            "technologyUnlocked": true,
+            "completedInCity": false
+          }
+        },
+        "effects": {
+          "kind": "wonder",
+          "details": {
+            "requirements": [
+              {
+                "requirement": {
+                  "kind": "resourceAny",
+                  "resources": [
+                    "marble",
+                    "iron"
+                  ]
+                },
+                "met": false
+              },
+              {
+                "requirement": {
+                  "kind": "hostTerrainAny",
+                  "terrains": [
+                    "grassland",
+                    "plains"
+                  ]
+                },
+                "met": true
+              },
+              {
+                "requirement": {
+                  "kind": "coastalAccess"
+                },
+                "met": false
+              },
+              {
+                "requirement": {
+                  "kind": "adjacentMountain"
+                },
+                "met": true
+              }
+            ],
+            "hostYield": {
+              "food": 0,
+              "production": 0,
+              "gold": 0,
+              "defense": 0
+            },
+            "empireYieldPerCity": {
+              "food": 0,
+              "production": 0,
+              "gold": 0,
+              "defense": 0
+            },
+            "empireSciencePerCity": 1,
+            "empireGoldBasisPoints": 10000,
+            "empireProductionBasisPoints": 10000,
+            "stabilityDelta": 0,
+            "grantsFreeActiveTechnology": true,
+            "productionBurst": 0,
+            "grantGold": 0
+          }
+        }
+      }
+    }
+  }
+}

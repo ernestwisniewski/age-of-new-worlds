@@ -21,6 +21,12 @@ pub use hex_inspection::{
 mod logistics;
 mod observation;
 mod production;
+mod production_details;
+pub use production_details::{
+    BuildingProductionDetailsDto, ProductionBuildingRankDto, ProductionCityOutputDto,
+    ProductionRequirementDto, ProductionRequirementStatusDto, ProductionTargetEffectsDto,
+    UnitProductionDetailsDto, WonderProductionDetailsDto,
+};
 mod query;
 mod rejection;
 mod research;

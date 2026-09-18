@@ -2,6 +2,32 @@ part of 'protocol.dart';
 
 /// Production-specific request constructors for the strict client protocol.
 abstract final class AonwProductionRequest {
+  static AonwClientRequest details({
+    required int expectedRevision,
+    required String cityId,
+    required AonwCityProductionTarget target,
+  }) => AonwClientRequest._({
+    'type': 'query',
+    'query': {
+      'type': 'productionDetails',
+      'expectedRevision': expectedRevision,
+      'cityId': cityId,
+      'target': target.toJson(),
+    },
+  });
+
+  static AonwClientRequest buildingRanks({
+    required int expectedRevision,
+    required String cityId,
+  }) => AonwClientRequest._({
+    'type': 'query',
+    'query': {
+      'type': 'productionBuildingRanks',
+      'expectedRevision': expectedRevision,
+      'cityId': cityId,
+    },
+  });
+
   static AonwClientRequest options({
     required int expectedRevision,
     required String cityId,

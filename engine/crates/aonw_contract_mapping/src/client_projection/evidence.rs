@@ -310,8 +310,8 @@ pub fn encode_combat_preview(value: &CombatPreview) -> CombatPreviewDto {
         attacker_unit_id: value.attacker_unit_id.as_str().to_owned(),
         target: combat_target(&value.target),
         distance: value.distance,
-        attacker: combat_stats(&value.attacker),
-        defender: combat_stats(&value.defender),
+        attacker: encode_combat_stats(&value.attacker),
+        defender: encode_combat_stats(&value.defender),
         outgoing_damage_min: value.outgoing_damage.0,
         outgoing_damage_max: value.outgoing_damage.1,
         retaliation_damage_min: value.retaliation_damage.map(|bounds| bounds.0),
@@ -351,7 +351,7 @@ fn combat_target(value: &CombatTarget) -> CombatTargetDto {
     }
 }
 
-fn combat_stats(value: &EffectiveCombatStats) -> CombatStatsDto {
+pub(crate) fn encode_combat_stats(value: &EffectiveCombatStats) -> CombatStatsDto {
     CombatStatsDto {
         attack: value.attack,
         defense: value.defense,

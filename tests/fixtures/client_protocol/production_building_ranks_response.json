@@ -1,0 +1,32 @@
+{
+  "apiVersion": 32,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "productionBuildingRanks",
+        "stamp": {
+          "revision": 8,
+          "stateDigest": "digest-8",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "cityId": "city-1",
+        "buildings": [
+          {
+            "building": "workshop",
+            "turnsForScore": 5,
+            "recommended": 10040,
+            "bestReturn": 4800,
+            "growth": 0,
+            "industry": 260,
+            "science": 0,
+            "defenseMilitary": 60,
+            "economy": 30
+          }
+        ]
+      }
+    }
+  }
+}

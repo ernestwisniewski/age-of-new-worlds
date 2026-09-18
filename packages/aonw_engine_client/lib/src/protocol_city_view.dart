@@ -135,6 +135,34 @@ enum AonwCityBuildingType {
 enum AonwCityProductionTargetKind { building, unit, project, wonder }
 
 final class AonwCityProductionTarget {
+  const AonwCityProductionTarget.building(AonwCityBuildingType value)
+    : this._(kind: AonwCityProductionTargetKind.building, buildingType: value);
+  const AonwCityProductionTarget.unit(AonwUnitKind value)
+    : this._(kind: AonwCityProductionTargetKind.unit, unitType: value);
+  const AonwCityProductionTarget.project(AonwCityProjectType value)
+    : this._(kind: AonwCityProductionTargetKind.project, projectType: value);
+  const AonwCityProductionTarget.wonder(AonwWonderType value)
+    : this._(kind: AonwCityProductionTargetKind.wonder, wonderType: value);
+
+  Map<String, Object?> toJson() => switch (kind) {
+    AonwCityProductionTargetKind.building => {
+      'kind': kind.name,
+      'buildingType': buildingType!.name,
+    },
+    AonwCityProductionTargetKind.unit => {
+      'kind': kind.name,
+      'unitType': unitType!.name,
+    },
+    AonwCityProductionTargetKind.project => {
+      'kind': kind.name,
+      'projectType': projectType!.name,
+    },
+    AonwCityProductionTargetKind.wonder => {
+      'kind': kind.name,
+      'wonderType': wonderType!.name,
+    },
+  };
+
   const AonwCityProductionTarget._({
     required this.kind,
     this.buildingType,

@@ -59,6 +59,12 @@ pub(crate) fn query_result(value: &RuntimeQueryResult) -> ClientQueryResultDto {
             stamp: value_stamp,
             options,
         } => encode_production_options(*value_stamp, options),
+        RuntimeQueryResult::ProductionDetails { stamp, details } => {
+            aonw_contract_mapping::encode_production_details(*stamp, details)
+        }
+        RuntimeQueryResult::ProductionBuildingRanks { stamp, ranks } => {
+            aonw_contract_mapping::encode_production_building_ranks(*stamp, ranks)
+        }
         RuntimeQueryResult::CombatPreview {
             stamp: value_stamp,
             preview,

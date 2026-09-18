@@ -11,6 +11,8 @@ mod hex_inspection;
 mod pending_turn_actions;
 pub use pending_turn_actions::encode_pending_turn_actions;
 mod production;
+mod production_details;
+pub use production_details::{encode_production_building_ranks, encode_production_details};
 mod research;
 pub use hex_inspection::encode_hex_inspection;
 pub use production::encode_production_options;
@@ -85,7 +87,9 @@ pub fn decode_client_player_query<R>(
         | ClientQueryDto::CityExpansionOptions { .. }
         | ClientQueryDto::CityYield { .. }) => decode::city(query, execute),
         query @ (ClientQueryDto::StrategicResourceProjection { .. }
-        | ClientQueryDto::ProductionOptions { .. }) => decode::economy(query, execute),
+        | ClientQueryDto::ProductionOptions { .. }
+        | ClientQueryDto::ProductionDetails { .. }
+        | ClientQueryDto::ProductionBuildingRanks { .. }) => decode::economy(query, execute),
         query @ (ClientQueryDto::WorkerOptions { .. }
         | ClientQueryDto::CombatPreview { .. }
         | ClientQueryDto::Reachable { .. }

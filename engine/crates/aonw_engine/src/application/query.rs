@@ -34,6 +34,10 @@ pub enum GameQuery<'query> {
     StrategicResourceProjection(StrategicResourceProjectionQuery),
     /// Returns complete production and specialization availability for one city.
     ProductionOptions(ProductionOptionsQuery<'query>),
+    /// Selected production target effects for a controlled city.
+    ProductionDetails(crate::ProductionDetailsQuery<'query>),
+    /// Authoritative building priorities for a controlled city.
+    ProductionBuildingRanks(ProductionOptionsQuery<'query>),
     /// Recipient-safe combat preview without seed or rolls.
     CombatPreview(CombatPreviewQuery<'query>),
     /// Route preview for one target.
@@ -71,6 +75,10 @@ pub enum QueryResult {
     StrategicResourceProjection(StrategicResourceProjection),
     /// Complete city production choices and blockers.
     ProductionOptions(ProductionOptions),
+    /// Selected target effects and conditional output.
+    ProductionDetails(crate::ProductionDetails),
+    /// Building priorities in canonical catalog order.
+    ProductionBuildingRanks(crate::ProductionBuildingRanks),
     /// Effective combat statistics and damage bounds.
     CombatPreview(CombatPreview),
     /// Planned route.
@@ -232,6 +240,14 @@ impl GameEngine {
             GameQuery::ProductionOptions(query) => {
                 crate::production::query_options(state, context, query)
                     .map(QueryResult::ProductionOptions)
+                    .map_err(CanonicalQueryError::Production)
+            }
+            GameQuery::ProductionDetails(query) => Self::production_details(state, context, query)
+                .map(QueryResult::ProductionDetails)
+                .map_err(CanonicalQueryError::Production),
+            GameQuery::ProductionBuildingRanks(query) => {
+                Self::production_building_ranks(state, context, query)
+                    .map(QueryResult::ProductionBuildingRanks)
                     .map_err(CanonicalQueryError::Production)
             }
             GameQuery::CombatPreview(query) => crate::combat::preview(state, context, query)

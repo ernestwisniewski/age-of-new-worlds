@@ -32,6 +32,8 @@ mod observation_contract;
 mod player_view_fixture;
 #[path = "client_contract/production.rs"]
 mod production_contract;
+#[path = "client_contract/production_details.rs"]
+mod production_details_contract;
 #[path = "client_contract/research.rs"]
 mod research_contract;
 #[path = "client_contract/strictness.rs"]

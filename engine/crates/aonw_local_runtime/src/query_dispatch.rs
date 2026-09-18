@@ -1,12 +1,15 @@
 use aonw_domain::{CityId, HexCoord, MovementUnits, TroopKind, UnitId};
 use aonw_engine::{
-    CityExpansionOptions, CityExpansionOptionsQuery, CityFoundingOptions, CityFoundingOptionsQuery,
-    CityWorkedHexOptions, CityWorkedHexOptionsQuery, CityYieldBreakdown, CombatPreview, GameEngine,
-    GameQuery, MovementSearchMetrics, MovementSearchWorkspace, ProductionOptions, QueryResult,
-    ReachableMovementQuery, ResearchOptions, ResearchOptionsQuery, StrategicResourceProjection,
-    TerrainMovementQuery, WorkerOptions,
+    CityExpansionOptions, CityFoundingOptions, CityWorkedHexOptions, CityYieldBreakdown,
+    CombatPreview, GameEngine, GameQuery, MovementSearchMetrics, MovementSearchWorkspace,
+    ProductionOptions, QueryResult, ReachableMovementQuery, ResearchOptions, ResearchOptionsQuery,
+    StrategicResourceProjection, TerrainMovementQuery, WorkerOptions,
 };
 
+mod city;
+use city::{
+    dispatch_city_expansion_query, dispatch_city_founding_query, dispatch_city_worked_query,
+};
 mod city_planning;
 pub use city_planning::CityPlanningRequest;
 mod pending_turn_actions;
@@ -16,7 +19,9 @@ pub use hex_inspection::HexInspectionRequest;
 use hex_inspection::dispatch_hex_inspection;
 mod logistics;
 mod movement;
+mod production;
 mod read_models;
+pub use production::ProductionDetailsRequest;
 mod worker;
 
 use logistics::dispatch_logistics_query;
@@ -129,6 +134,10 @@ pub enum RuntimeQuery {
     StrategicResourceProjection(StrategicResourceProjectionRequest),
     /// Complete city-production options and blockers.
     ProductionOptions(ProductionOptionsRequest),
+    /// Effects of a selected production target.
+    ProductionDetails(ProductionDetailsRequest),
+    /// Authoritative building priorities.
+    ProductionBuildingRanks(ProductionOptionsRequest),
     /// Improvement, assignment, road, and automation options.
     WorkerOptions(WorkerOptionsRequest),
     /// Effective combat stats and damage bounds without RNG evidence.
@@ -260,6 +269,20 @@ pub enum RuntimeQueryResult {
         /// Engine-owned query result.
         options: ProductionOptions,
     },
+    /// Engine-owned selected target details.
+    ProductionDetails {
+        /// Version and authoritative identity metadata.
+        stamp: SessionStamp,
+        /// Selected target effects.
+        details: aonw_engine::ProductionDetails,
+    },
+    /// Engine-owned building priorities.
+    ProductionBuildingRanks {
+        /// Version and authoritative identity metadata.
+        stamp: SessionStamp,
+        /// Complete building priorities.
+        ranks: aonw_engine::ProductionBuildingRanks,
+    },
     /// Engine-owned worker options.
     WorkerOptions {
         /// Version and authoritative identity metadata.
@@ -313,6 +336,12 @@ pub(crate) fn dispatch_query(
         }
         RuntimeQuery::ProductionOptions(request) => {
             dispatch_production_options_query(session, &request, workspace)
+        }
+        RuntimeQuery::ProductionDetails(request) => {
+            production::dispatch_details(session, &request, workspace)
+        }
+        RuntimeQuery::ProductionBuildingRanks(request) => {
+            production::dispatch_ranks(session, &request, workspace)
         }
         RuntimeQuery::WorkerOptions(request) => dispatch_worker_query(session, &request, workspace),
         RuntimeQuery::CombatPreview(request) => {
@@ -378,78 +407,6 @@ fn dispatch_research_query(
         unreachable!("research query returns research options")
     };
     Ok(RuntimeQueryResult::ResearchOptions {
-        stamp: session.stamp(),
-        options,
-    })
-}
-
-fn dispatch_city_founding_query(
-    session: &Session,
-    request: &CityFoundingOptionsRequest,
-    workspace: &mut MovementSearchWorkspace,
-) -> Result<RuntimeQueryResult, RuntimeError> {
-    let result = GameEngine::query_with_workspace(
-        session.state(),
-        session.context(),
-        GameQuery::CityFoundingOptions(CityFoundingOptionsQuery::new(
-            request.expected_revision,
-            &request.founder_unit_id,
-        )),
-        workspace,
-    )
-    .map_err(RuntimeError::Query)?;
-    let QueryResult::CityFoundingOptions(options) = result else {
-        unreachable!("city founding query returns founding options")
-    };
-    Ok(RuntimeQueryResult::CityFoundingOptions {
-        stamp: session.stamp(),
-        options,
-    })
-}
-
-fn dispatch_city_worked_query(
-    session: &Session,
-    request: &CityWorkedHexOptionsRequest,
-    workspace: &mut MovementSearchWorkspace,
-) -> Result<RuntimeQueryResult, RuntimeError> {
-    let result = GameEngine::query_with_workspace(
-        session.state(),
-        session.context(),
-        GameQuery::CityWorkedHexOptions(CityWorkedHexOptionsQuery::new(
-            request.expected_revision,
-            &request.city_id,
-        )),
-        workspace,
-    )
-    .map_err(RuntimeError::Query)?;
-    let QueryResult::CityWorkedHexOptions(options) = result else {
-        unreachable!("city worked query returns worked options")
-    };
-    Ok(RuntimeQueryResult::CityWorkedHexOptions {
-        stamp: session.stamp(),
-        options,
-    })
-}
-
-fn dispatch_city_expansion_query(
-    session: &Session,
-    request: &CityExpansionOptionsRequest,
-    workspace: &mut MovementSearchWorkspace,
-) -> Result<RuntimeQueryResult, RuntimeError> {
-    let result = GameEngine::query_with_workspace(
-        session.state(),
-        session.context(),
-        GameQuery::CityExpansionOptions(CityExpansionOptionsQuery::new(
-            request.expected_revision,
-            &request.city_id,
-        )),
-        workspace,
-    )
-    .map_err(RuntimeError::Query)?;
-    let QueryResult::CityExpansionOptions(options) = result else {
-        unreachable!("city expansion query returns expansion options")
-    };
-    Ok(RuntimeQueryResult::CityExpansionOptions {
         stamp: session.stamp(),
         options,
     })

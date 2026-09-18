@@ -15,7 +15,8 @@ mod player_query;
 pub use map_values::{encode_map_resource, encode_map_terrain};
 pub use player_query::{
     encode_city_planning, encode_hex_inspection, encode_pending_turn_actions,
-    encode_production_options, encode_research_options,
+    encode_production_building_ranks, encode_production_details, encode_production_options,
+    encode_research_options,
 };
 
 pub use client_projection::{
@@ -30,9 +31,10 @@ pub use player_query::{
 };
 
 pub use game_state_mapping::{
-    GameStateMappingError, canonicalize_game_state, decode_city_building, decode_city_project,
-    decode_city_specialization, decode_city_wonder, decode_game_state, decode_improvement,
-    decode_match_identity, decode_resource, decode_technology, decode_troop, encode_city_building,
+    GameStateMappingError, canonicalize_game_state, decode_city_building,
+    decode_city_production_target, decode_city_project, decode_city_specialization,
+    decode_city_wonder, decode_game_state, decode_improvement, decode_match_identity,
+    decode_resource, decode_technology, decode_troop, encode_city_building,
     encode_city_production_queue, encode_city_project, encode_city_specialization,
     encode_city_wonder, encode_game_outcome, encode_game_state, encode_improvement,
     encode_merchant_trade_route, encode_resource, encode_technology, encode_troop,

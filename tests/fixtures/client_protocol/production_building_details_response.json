@@ -1,0 +1,95 @@
+{
+  "apiVersion": 32,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "productionDetails",
+        "stamp": {
+          "revision": 8,
+          "stateDigest": "digest-8",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "cityId": "city-1",
+        "option": {
+          "target": {
+            "kind": "building",
+            "buildingType": "workshop"
+          },
+          "cost": 15,
+          "rejection": null,
+          "forecast": {
+            "investedProduction": 4,
+            "productionPerTurn": 3,
+            "estimatedTurns": 4,
+            "projectOutput": null,
+            "spawnBlocked": false
+          },
+          "availability": {
+            "requiredTechnology": "craftsmanship",
+            "technologyUnlocked": true,
+            "completedInCity": false
+          }
+        },
+        "effects": {
+          "kind": "building",
+          "details": {
+            "requirements": [
+              {
+                "requirement": {
+                  "kind": "adjacentRiver"
+                },
+                "met": true
+              }
+            ],
+            "flatYield": {
+              "food": 0,
+              "production": 2,
+              "gold": 0,
+              "defense": 0
+            },
+            "riverYieldPerHex": {
+              "food": 1,
+              "production": 0,
+              "gold": 0,
+              "defense": 0
+            },
+            "maxRiverApplications": 3,
+            "riverApplications": 2,
+            "sciencePerTurn": 0,
+            "maxControlledHexesDelta": 0,
+            "foodDepositBasisPoints": 10000,
+            "current": {
+              "grossYield": {
+                "food": 4,
+                "production": 3,
+                "gold": 2,
+                "defense": 1
+              },
+              "foodDeposit": 4,
+              "production": 3,
+              "gold": 2,
+              "science": 1,
+              "maxControlledHexes": 4
+            },
+            "completed": {
+              "grossYield": {
+                "food": 6,
+                "production": 5,
+                "gold": 2,
+                "defense": 1
+              },
+              "foodDeposit": 6,
+              "production": 5,
+              "gold": 2,
+              "science": 1,
+              "maxControlledHexes": 4
+            }
+          }
+        }
+      }
+    }
+  }
+}

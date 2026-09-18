@@ -1,1 +1,1 @@
-{"apiVersion":31,"request":{"type":"advanceAiTurn","actorPlayerId":"player-2","commandBudget":64,"runtimeProfile":"batterySaver"}}
+{"apiVersion":32,"request":{"type":"advanceAiTurn","actorPlayerId":"player-2","commandBudget":64,"runtimeProfile":"batterySaver"}}

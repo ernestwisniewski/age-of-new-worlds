@@ -15,6 +15,10 @@ part 'protocol_city_query.dart';
 part 'protocol_hex_query.dart';
 part 'protocol_turn_actions_query.dart';
 part 'protocol_production_query.dart';
+part 'protocol_production_details_query.dart';
+part 'protocol_production_details_effects.dart';
+part 'protocol_production_details_unit.dart';
+part 'protocol_production_ranking.dart';
 part 'protocol_production_forecast.dart';
 part 'protocol_research_query.dart';
 part 'protocol_research_recommendation.dart';
@@ -51,6 +55,8 @@ final Map<String, _QueryResultParser> _queryResultParsers = {
   'cityYield': AonwCityYieldResult.fromJson,
   'strategicResourceProjection': AonwStrategicResourceProjectionResult.fromJson,
   'productionOptions': AonwProductionOptionsResult.fromJson,
+  'productionDetails': AonwProductionDetailsResult.fromJson,
+  'productionBuildingRanks': AonwProductionBuildingRanksResult.fromJson,
   'researchOptions': AonwResearchOptionsResult.fromJson,
   'workerOptions': AonwWorkerOptionsResult.fromJson,
 };

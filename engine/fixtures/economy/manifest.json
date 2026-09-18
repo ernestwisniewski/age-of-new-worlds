@@ -6,7 +6,7 @@
     "strategicResourceProjection"
   ],
   "turnProcessors": [],
-  "clientApiVersion": 31,
+  "clientApiVersion": 32,
   "cases": [
     "account-transition-atomicity",
     "account-transition-overflow",

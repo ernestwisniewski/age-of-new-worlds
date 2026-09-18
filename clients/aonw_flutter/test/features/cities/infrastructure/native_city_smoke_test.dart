@@ -6,6 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../support/match_identity_test_fixture.dart';
 
+part 'native_production_details_smoke.dart';
+
 void main() {
   test(
     'keeps native city queries commands secrecy and replay exact',
@@ -212,6 +214,7 @@ Future<AonwSessionStamp> _configureProduction(
   final building = options.buildings.firstWhere(
     (option) => option.rejection == null,
   );
+  await _inspectProductionDetails(session, cityId, revision, building);
   final buildingType = building.target.buildingType;
   expect(buildingType, isNotNull);
   final started = (await session.send(
@@ -280,6 +283,11 @@ Future<void> _assertForeignRecipient(
   );
   expect(privateProduction.isSuccess, isFalse);
   expect(privateProduction.error?.code, 'city_not_controlled');
+  await _assertForeignProductionDetails(
+    session,
+    cityId,
+    snapshot.stamp.revision,
+  );
 }
 
 Future<void> _assertPersistence(

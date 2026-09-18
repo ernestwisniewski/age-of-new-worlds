@@ -38,6 +38,10 @@ pub(super) fn query_result(stamp: SessionStamp, value: &QueryResult) -> ClientQu
             strategic_resource_projection(stamp, projection)
         }
         QueryResult::ProductionOptions(options) => encode_production_options(stamp, options),
+        QueryResult::ProductionDetails(value) => super::encode_production_details(stamp, value),
+        QueryResult::ProductionBuildingRanks(value) => {
+            super::encode_production_building_ranks(stamp, value)
+        }
         QueryResult::CombatPreview(preview) => ClientQueryResultDto::CombatPreview {
             stamp: encode_client_stamp(stamp),
             preview: encode_combat_preview(preview),

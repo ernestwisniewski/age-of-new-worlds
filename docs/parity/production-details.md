@@ -7,10 +7,10 @@ Relevant reference files are `city_building_details_content.dart`,
 
 The engine exposes `GameEngine::production_details` and
 `GameEngine::production_building_ranks` as revision-bound, read-only queries of a
-controlled city. This stage supplies the Rust core. Client API transport,
-revision/recipient guards in the adapters and the complete presentation follow
-separately. Canonical state, command behavior and save/replay identity do not
-change.
+controlled city. Client API 32 exposes `productionDetails` and
+`productionBuildingRanks` through the common local/server mapping. Complete
+presentation follows separately. Canonical state, command behavior and save/replay
+identity do not change.
 
 ## Target details
 
@@ -85,5 +85,26 @@ catalog target, read-only inspection, stale/foreign rejection, local requirement
 completed-city economy/research/production equality, river effects, technology
 territory capacity, science diminishing returns and repeatable ranking.
 All-target Clippy, unchanged architecture budgets and workspace doctests pass.
-The documentation build and release adapter smoke build are being completed
-before the Client API is extended.
+The core documentation build and release adapter smoke build also passed.
+
+## Client API 32 transport
+
+Both queries require `expectedRevision` and `cityId`. Selected details additionally
+require a closed `CityProductionTargetDto`; actor identity comes from the session.
+Responses carry the complete session stamp, city, target option/effect family or
+canonical building priorities. Public requirements use empty struct variants so
+Serde rejects additional fields even for predicates with no payload. Production
+options require an explicit nullable rejection, consistently with the Dart parser.
+
+The local query cache includes the selected target as well as city and state
+identity. Mapping and encoding are shared with the authenticated server adapter.
+Dart exposes immutable typed effects, strict field parsing and request constructors
+for all four target kinds. Five paired contract fixtures cover the wire shapes;
+their illustrative values are not complete gameplay scenarios.
+
+Validation covers 24 Rust contract tests, five production runtime/save/replay tests,
+five local/server query tests, 109 Dart protocol tests and native Flutter city
+inspection through FFI. The native test inspects building/unit/wonder effects and
+all 59 ranks, verifies unchanged state, then rejects queries from another player.
+Workspace all-target Clippy passes. Full workspace and performance gates are
+recorded separately when completed; the API version changes JSON signatures.

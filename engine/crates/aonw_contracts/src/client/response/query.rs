@@ -260,6 +260,26 @@ pub enum ClientQueryResultDto {
         /// City specializations and blockers.
         specializations: Vec<CitySpecializationOptionDto>,
     },
+    /// Effects for the selected production target.
+    ProductionDetails {
+        /// Identity of the queried state.
+        stamp: ClientSessionStampDto,
+        /// Controlled city.
+        city_id: String,
+        /// Current target availability and forecast.
+        option: ProductionOptionDto,
+        /// Authoritative effects and requirements.
+        effects: super::ProductionTargetEffectsDto,
+    },
+    /// Building priorities for the controlled city.
+    ProductionBuildingRanks {
+        /// Identity of the queried state.
+        stamp: ClientSessionStampDto,
+        /// Controlled city.
+        city_id: String,
+        /// Complete canonical building catalog.
+        buildings: Vec<super::ProductionBuildingRankDto>,
+    },
     /// Recipient-safe combat preview.
     CombatPreview {
         /// Identity of the queried state.

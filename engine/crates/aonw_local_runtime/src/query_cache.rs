@@ -18,6 +18,8 @@ enum QueryKind {
     CityYield,
     StrategicResourceProjection,
     ProductionOptions,
+    ProductionDetails(aonw_domain::CityProductionTarget),
+    ProductionBuildingRanks,
     CombatPreview(HexCoord),
     Reachable,
     RoutePlan(HexCoord),
@@ -95,6 +97,16 @@ impl QueryCacheKey {
                 request.expected_revision,
                 QuerySubject::City(request.city_id.clone()),
                 QueryKind::ProductionOptions,
+            ),
+            RuntimeQuery::ProductionDetails(request) => (
+                request.expected_revision,
+                QuerySubject::City(request.city_id.clone()),
+                QueryKind::ProductionDetails(request.target),
+            ),
+            RuntimeQuery::ProductionBuildingRanks(request) => (
+                request.expected_revision,
+                QuerySubject::City(request.city_id.clone()),
+                QueryKind::ProductionBuildingRanks,
             ),
             RuntimeQuery::CombatPreview(request) => (
                 request.expected_revision,

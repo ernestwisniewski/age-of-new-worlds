@@ -1,6 +1,7 @@
 mod artifact;
 mod diplomacy;
 mod evidence;
+pub(crate) use evidence::encode_combat_stats;
 mod hud_status;
 mod presentation;
 mod resource_inventory;

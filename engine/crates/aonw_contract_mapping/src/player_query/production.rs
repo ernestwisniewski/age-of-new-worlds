@@ -70,7 +70,7 @@ pub fn encode_production_options(
     }
 }
 
-fn production_option(value: ProductionOption) -> ProductionOptionDto {
+pub(super) fn production_option(value: ProductionOption) -> ProductionOptionDto {
     ProductionOptionDto {
         target: production_target(value.target()),
         cost: value.cost(),
@@ -110,7 +110,7 @@ fn production_target(value: CityProductionTarget) -> CityProductionTargetDto {
     }
 }
 
-fn stockpile(value: &StrategicResourceStockpile) -> StrategicResourceStockpileDto {
+pub(super) fn stockpile(value: &StrategicResourceStockpile) -> StrategicResourceStockpileDto {
     StrategicResourceStockpileDto(
         value
             .amounts()

@@ -20,6 +20,8 @@ use aonw_domain::{
 };
 use aonw_local_runtime::{ClientProtocol, LocalRuntime, OpenSession};
 
+#[path = "production_runtime/details.rs"]
+mod details;
 #[path = "production_runtime/forecasts.rs"]
 mod forecasts;
 

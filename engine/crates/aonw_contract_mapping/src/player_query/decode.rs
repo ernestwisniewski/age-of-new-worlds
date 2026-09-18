@@ -74,6 +74,29 @@ pub(super) fn economy<R>(
                 ProductionOptionsQuery::new(expected_revision, &city),
             )))
         }
+        ClientQueryDto::ProductionDetails {
+            expected_revision,
+            city_id: value,
+            target,
+        } => {
+            let city = city_id(value)?;
+            Ok(execute(GameQuery::ProductionDetails(
+                aonw_engine::ProductionDetailsQuery::new(
+                    expected_revision,
+                    &city,
+                    crate::decode_city_production_target(target),
+                ),
+            )))
+        }
+        ClientQueryDto::ProductionBuildingRanks {
+            expected_revision,
+            city_id: value,
+        } => {
+            let city = city_id(value)?;
+            Ok(execute(GameQuery::ProductionBuildingRanks(
+                ProductionOptionsQuery::new(expected_revision, &city),
+            )))
+        }
         _ => unreachable!("economy query dispatcher received another family"),
     }
 }

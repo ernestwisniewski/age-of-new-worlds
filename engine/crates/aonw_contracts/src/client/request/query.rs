@@ -60,6 +60,17 @@ pub enum ClientQueryDto {
         expected_revision: u64,
         city_id: String,
     },
+    /// Returns effects of a selected target for a controlled city.
+    ProductionDetails {
+        expected_revision: u64,
+        city_id: String,
+        target: crate::CityProductionTargetDto,
+    },
+    /// Returns authoritative priorities for every building.
+    ProductionBuildingRanks {
+        expected_revision: u64,
+        city_id: String,
+    },
     /// Returns current worker actions and an engine-selected automation target.
     WorkerOptions {
         expected_revision: u64,

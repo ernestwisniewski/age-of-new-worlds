@@ -38,15 +38,9 @@ pub(crate) fn query(query: ClientQueryDto) -> Result<RuntimeQuery, ClientDecodeE
                 StrategicResourceProjectionRequest { expected_revision },
             ))
         }
-        ClientQueryDto::ProductionOptions {
-            expected_revision,
-            city_id,
-        } => Ok(RuntimeQuery::ProductionOptions(
-            crate::ProductionOptionsRequest {
-                expected_revision,
-                city_id: decode_city_id(city_id)?,
-            },
-        )),
+        query @ (ClientQueryDto::ProductionOptions { .. }
+        | ClientQueryDto::ProductionDetails { .. }
+        | ClientQueryDto::ProductionBuildingRanks { .. }) => production(query),
         ClientQueryDto::WorkerOptions {
             expected_revision,
             unit_id,
@@ -128,5 +122,40 @@ fn city_query(query: ClientQueryDto) -> Result<RuntimeQuery, ClientDecodeError> 
             city_id: decode_city_id(city_id)?,
         })),
         _ => unreachable!("city query dispatcher received another family"),
+    }
+}
+
+fn production(query: ClientQueryDto) -> Result<RuntimeQuery, ClientDecodeError> {
+    match query {
+        ClientQueryDto::ProductionOptions {
+            expected_revision,
+            city_id,
+        } => Ok(RuntimeQuery::ProductionOptions(
+            crate::ProductionOptionsRequest {
+                expected_revision,
+                city_id: decode_city_id(city_id)?,
+            },
+        )),
+        ClientQueryDto::ProductionDetails {
+            expected_revision,
+            city_id,
+            target,
+        } => Ok(RuntimeQuery::ProductionDetails(
+            crate::ProductionDetailsRequest {
+                expected_revision,
+                city_id: decode_city_id(city_id)?,
+                target: aonw_contract_mapping::decode_city_production_target(target),
+            },
+        )),
+        ClientQueryDto::ProductionBuildingRanks {
+            expected_revision,
+            city_id,
+        } => Ok(RuntimeQuery::ProductionBuildingRanks(
+            crate::ProductionOptionsRequest {
+                expected_revision,
+                city_id: decode_city_id(city_id)?,
+            },
+        )),
+        _ => unreachable!("production query dispatcher received another family"),
     }
 }

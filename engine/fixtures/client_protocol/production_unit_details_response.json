@@ -1,0 +1,78 @@
+{
+  "apiVersion": 32,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "productionDetails",
+        "stamp": {
+          "revision": 8,
+          "stateDigest": "digest-8",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "cityId": "city-1",
+        "option": {
+          "target": {
+            "kind": "unit",
+            "unitType": "tank"
+          },
+          "cost": 32,
+          "rejection": null,
+          "forecast": {
+            "investedProduction": 4,
+            "productionPerTurn": 3,
+            "estimatedTurns": 10,
+            "projectOutput": null,
+            "spawnBlocked": false
+          },
+          "availability": {
+            "requiredTechnology": "combustion",
+            "technologyUnlocked": true,
+            "completedInCity": false
+          }
+        },
+        "effects": {
+          "kind": "unit",
+          "details": {
+            "baseCombat": {
+              "attack": 4,
+              "defense": 3,
+              "hitPoints": 10,
+              "range": 1,
+              "mobility": 2,
+              "modifiers": []
+            },
+            "effectiveCombat": {
+              "attack": 4,
+              "defense": 3,
+              "hitPoints": 10,
+              "range": 1,
+              "mobility": 2,
+              "modifiers": []
+            },
+            "maximumMovementUnits": 4,
+            "baseUpkeep": 2,
+            "supplyCost": 1,
+            "supplyCapacity": 10,
+            "supplyUsedWithoutCityQueue": 3,
+            "presenceResources": [
+              "iron"
+            ],
+            "presenceResourcesMet": true,
+            "coastMet": true,
+            "resourceOptions": [
+              {
+                "oil": 2
+              }
+            ],
+            "affordableResourceOptionIndices": [
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

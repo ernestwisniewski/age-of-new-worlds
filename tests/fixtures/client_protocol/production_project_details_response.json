@@ -1,0 +1,42 @@
+{
+  "apiVersion": 32,
+  "outcome": {
+    "status": "success",
+    "response": {
+      "type": "query",
+      "result": {
+        "type": "productionDetails",
+        "stamp": {
+          "revision": 8,
+          "stateDigest": "digest-8",
+          "mapHash": "map-hash",
+          "rulesetHash": "ruleset-hash"
+        },
+        "cityId": "city-1",
+        "option": {
+          "target": {
+            "kind": "project",
+            "projectType": "research"
+          },
+          "cost": 0,
+          "rejection": null,
+          "forecast": {
+            "investedProduction": 4,
+            "productionPerTurn": 3,
+            "estimatedTurns": null,
+            "projectOutput": 1,
+            "spawnBlocked": false
+          },
+          "availability": {
+            "requiredTechnology": null,
+            "technologyUnlocked": true,
+            "completedInCity": false
+          }
+        },
+        "effects": {
+          "kind": "project"
+        }
+      }
+    }
+  }
+}

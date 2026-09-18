@@ -134,7 +134,7 @@ fn decode_queue(
     path: &str,
 ) -> Result<CityProductionQueue, GameStateMappingError> {
     CityProductionQueue::try_new(
-        decode_target(dto.target),
+        decode_city_production_target(dto.target),
         dto.invested_production,
         decode_stockpile(
             dto.resource_allocation,
@@ -160,7 +160,9 @@ pub fn encode_city_production_queue(value: &CityProductionQueue) -> CityProducti
     encode_queue(value)
 }
 
-const fn decode_target(value: CityProductionTargetDto) -> CityProductionTarget {
+/// Decodes a public production target without state-dependent rules.
+#[must_use]
+pub const fn decode_city_production_target(value: CityProductionTargetDto) -> CityProductionTarget {
     match value {
         CityProductionTargetDto::Building { building_type } => {
             CityProductionTarget::Building(decode_building(building_type))

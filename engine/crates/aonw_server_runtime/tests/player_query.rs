@@ -159,6 +159,9 @@ fn unauthenticated_participant_fails_at_the_host_boundary() {
     );
 }
 
+#[path = "player_query/production.rs"]
+mod production;
+
 fn request(
     fixture: &support::Fixture,
     actor: &str,

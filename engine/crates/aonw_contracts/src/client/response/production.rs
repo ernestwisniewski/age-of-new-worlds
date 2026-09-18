@@ -14,6 +14,7 @@ use super::ClientCommandRejectionCodeDto;
 pub struct ProductionOptionDto {
     pub target: CityProductionTargetDto,
     pub cost: i64,
+    #[serde(deserialize_with = "Option::deserialize")]
     pub rejection: Option<ClientCommandRejectionCodeDto>,
     pub forecast: ProductionForecastDto,
     pub availability: ProductionAvailabilityDto,
