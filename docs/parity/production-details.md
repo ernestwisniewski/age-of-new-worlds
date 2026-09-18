@@ -162,3 +162,10 @@ explicit presentation fixtures; native FFI tests separately verify engine mappin
 The complete Flutter gate passes with 1532 tests, static analysis, shared geometry,
 packaged assets, dependency boundary negative controls and unchanged architecture
 budgets (`/tmp/aonw-production-numeric-flutter-final2.log`, exit 0).
+
+
+The API 32 complete engine gate passes, including workspace tests/doctests,
+documentation, release adapters and architecture policy. The subsequent indirect
+runtime detail storage preserves all existing performance ceilings; 24 new
+workloads and two identical 246-case reports are documented in
+`city-production-performance.md`.

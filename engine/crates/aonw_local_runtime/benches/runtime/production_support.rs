@@ -71,7 +71,7 @@ fn validate_fixture(mut runtime: LocalRuntime, request: &str, unit_count: usize,
     }
 }
 
-fn opened(unit_count: usize, target: Option<CityProductionTarget>) -> LocalRuntime {
+pub(super) fn opened(unit_count: usize, target: Option<CityProductionTarget>) -> LocalRuntime {
     let map = map();
     let ruleset = RulesetDefinition::standard();
     let actor = PlayerId::new("player-1").expect("player");

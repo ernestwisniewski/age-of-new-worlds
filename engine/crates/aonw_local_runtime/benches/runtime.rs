@@ -27,6 +27,8 @@ static GLOBAL: &StatsAlloc<System> = &INSTRUMENTED_SYSTEM;
 mod combat_support;
 #[path = "runtime/hidden_support.rs"]
 mod hidden_support;
+#[path = "runtime/production_details_support.rs"]
+mod production_details_support;
 #[path = "runtime/production_support.rs"]
 mod production_support;
 #[path = "runtime/selection_support.rs"]
@@ -47,6 +49,7 @@ fn main() {
         benchmark_turn_kernel(unit_count);
         combat_support::benchmark(unit_count);
         production_support::benchmark(unit_count);
+        production_details_support::benchmark(unit_count);
     }
 }
 

@@ -39,7 +39,7 @@ pub(super) fn dispatch_details(
     };
     Ok(RuntimeQueryResult::ProductionDetails {
         stamp: session.stamp(),
-        details,
+        details: Box::new(details),
     })
 }
 

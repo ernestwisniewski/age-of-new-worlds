@@ -273,8 +273,8 @@ pub enum RuntimeQueryResult {
     ProductionDetails {
         /// Version and authoritative identity metadata.
         stamp: SessionStamp,
-        /// Selected target effects.
-        details: aonw_engine::ProductionDetails,
+        /// Selected target effects, kept indirect to bound every cache entry.
+        details: Box<aonw_engine::ProductionDetails>,
     },
     /// Engine-owned building priorities.
     ProductionBuildingRanks {

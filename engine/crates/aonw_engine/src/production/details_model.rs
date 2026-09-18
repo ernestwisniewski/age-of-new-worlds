@@ -152,7 +152,7 @@ pub struct WonderProductionDetails {
     pub stability_delta: i64,
     /// Whether completion grants the active technology.
     pub grants_free_active_technology: bool,
-    /// Production granted to other owned city queues on completion.
+    /// Production granted to the host city's overflow on completion.
     pub production_burst: i64,
     /// Treasury grant on completion.
     pub grant_gold: i64,
