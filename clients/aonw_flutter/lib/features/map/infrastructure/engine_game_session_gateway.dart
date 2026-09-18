@@ -20,6 +20,7 @@ import '../../logistics/infrastructure/engine_unit_logistics_gateway.dart';
 import '../../logistics/read_model/unit_logistics_view.dart';
 import '../../production/application/production_session_port.dart';
 import '../../production/infrastructure/engine_production_gateway.dart';
+import '../../production/read_model/production_details_view.dart';
 import '../../production/read_model/production_view.dart';
 import '../../replay/application/replay_session_port.dart';
 import '../../replay/read_model/replay_frame_view.dart';

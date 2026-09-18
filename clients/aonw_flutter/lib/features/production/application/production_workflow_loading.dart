@@ -16,12 +16,9 @@ extension ProductionWorkflowLoading on ProductionWorkflow {
         cityId: cityId,
       );
       if (isDisposed()) return;
-      final ready = _selectedProductionAtRevision(
-        readState(),
-        cityId,
-        revision,
-      );
+      final ready = _selectedProductionForRequest(readState(), current);
       if (ready == null) return;
+      final inspected = ready.interaction.production!.inspection?.target;
       publish(
         ready.withInteraction(
           ready.interaction.copyWith(
@@ -34,15 +31,16 @@ extension ProductionWorkflowLoading on ProductionWorkflow {
           ),
         ),
       );
+      _refreshInspection(inspected, readState, publish, isDisposed);
     } on ProductionSessionException catch (error, stackTrace) {
       if (isDisposed()) return;
       _report(error, stackTrace);
-      final ready = _selectedProduction(readState(), cityId);
+      final ready = _selectedProductionForRequest(readState(), current);
       if (ready != null) publish(_productionLoadFailure(ready, error));
     } on Object catch (error, stackTrace) {
       if (isDisposed()) return;
       _diagnosticReporter('unexpected_production_failure', error, stackTrace);
-      final ready = _selectedProduction(readState(), cityId);
+      final ready = _selectedProductionForRequest(readState(), current);
       if (ready != null) publish(_unexpectedProductionLoadFailure(ready));
     }
   }

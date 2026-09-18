@@ -23,6 +23,7 @@ import 'package:aonw_flutter/features/map/read_model/map_scene.dart';
 import 'package:aonw_flutter/features/map/read_model/map_view.dart';
 import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
 import 'package:aonw_flutter/features/production/application/production_session_port.dart';
+import 'package:aonw_flutter/features/production/read_model/production_details_view.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
 import 'package:aonw_flutter/features/research/application/research_session_port.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
@@ -383,6 +384,13 @@ final class _LifecycleGameSession
   >
   productionOverview({required int expectedRevision, required String cityId}) =>
       throw UnimplementedError();
+
+  @override
+  Future<ProductionDetailsView> productionDetails({
+    required int expectedRevision,
+    required String cityId,
+    required ProductionTargetView target,
+  }) => throw UnimplementedError();
 
   @override
   Future<ProductionCommandResultView> executeProductionAction({

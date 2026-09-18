@@ -3,8 +3,11 @@ import 'package:aonw_engine_client/aonw_engine_client.dart';
 import '../../map/infrastructure/engine_game_session_context.dart';
 import '../../map/infrastructure/engine_game_session_operations.dart';
 import '../application/production_session_port.dart';
+import '../read_model/production_details_view.dart';
 import '../read_model/production_view.dart';
 import 'production_view_mapper.dart';
+
+part 'engine_production_inspection.dart';
 
 final class EngineProductionGateway {
   const EngineProductionGateway({
@@ -27,24 +30,16 @@ final class EngineProductionGateway {
       if (context.player.controlledCityById(cityId) == null) {
         throw const FormatException('Production city is not controlled.');
       }
-      final options = await _query<AonwProductionOptionsResult>(
+      final (options, resources, ranks) = await _overviewQueries(
         context,
-        AonwProductionRequest.options(
-          expectedRevision: expectedRevision,
-          cityId: cityId,
-        ),
-        send,
-      );
-      final resources = await _query<AonwStrategicResourceProjectionResult>(
-        context,
-        AonwProductionRequest.strategicResources(
-          expectedRevision: expectedRevision,
-        ),
+        expectedRevision,
+        cityId,
         send,
       );
       return (
         options: _mapper.options(
           options,
+          ranks: ranks,
           map: context.map,
           player: context.player,
           cityId: cityId,

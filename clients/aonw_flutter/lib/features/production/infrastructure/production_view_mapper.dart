@@ -1,17 +1,24 @@
 import 'package:aonw_engine_client/aonw_engine_client.dart';
 
+import '../../cities/read_model/city_view.dart';
+import '../../combat/read_model/combat_view.dart';
 import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../../research/read_model/research_view.dart';
+import '../read_model/production_details_view.dart';
+import '../read_model/production_ranking_view.dart';
 import '../read_model/production_view.dart';
 
 part 'production_metadata_mapper.dart';
+part 'production_details_mapper.dart';
+part 'production_effects_mapper.dart';
 
 final class ProductionViewMapper {
   const ProductionViewMapper();
 
   ProductionOptionsView options(
     AonwProductionOptionsResult wire, {
+    AonwProductionBuildingRanksResult? ranks,
     required MapView map,
     required PlayerMapView player,
     required String cityId,
@@ -22,41 +29,23 @@ final class ProductionViewMapper {
       throw const FormatException('Production options mismatch request.');
     }
     _validateProductionMetadata(wire);
-    return ProductionOptionsView(
-      stamp: _stamp(wire.stamp),
-      cityId: cityId,
-      currentTarget: wire.currentTarget == null
-          ? null
-          : _target(wire.currentTarget!),
-      investedProduction: wire.investedProduction,
-      productionOverflow: wire.productionOverflow,
-      rushQuote: ProductionRushQuoteView(
-        production: wire.rushQuote.production,
-        goldCost: wire.rushQuote.goldCost,
-        blocker: _optionalBlocker(wire.rushQuote.rejection),
-      ),
-      buildings: [
-        for (final value in wire.buildings)
-          _option(value, AonwCityProductionTargetKind.building),
-      ],
-      units: [for (final value in wire.units) _unitOption(value)],
-      projects: [
-        for (final value in wire.projects)
-          _option(value, AonwCityProductionTargetKind.project),
-      ],
-      wonders: [
-        for (final value in wire.wonders)
-          _option(value, AonwCityProductionTargetKind.wonder),
-      ],
-      specializations: [
-        for (final value in wire.specializations)
-          CitySpecializationOptionView(
-            specialization: value.specialization.name,
-            requiredBuilding: value.requiredBuilding.name,
-            blocker: _optionalBlocker(value.rejection),
-          ),
-      ],
-    );
+    final priorities = ranks == null
+        ? null
+        : buildingRanks(
+            ranks,
+            map: map,
+            player: player,
+            cityId: cityId,
+            expectedRevision: expectedRevision,
+          );
+    if (priorities != null &&
+        (wire.stamp.stateDigest != priorities.stamp.stateDigest ||
+            wire.stamp.rulesetHash != priorities.stamp.rulesetHash)) {
+      throw const FormatException(
+        'Production overview has mixed state identities.',
+      );
+    }
+    return _options(wire, priorities);
   }
 
   StrategicResourceProjectionView resources(
@@ -285,3 +274,45 @@ const _rejections = <AonwCommandRejectionCode, ProductionRejectionCodeView>{
   AonwCommandRejectionCode.stateRevisionOverflow:
       ProductionRejectionCodeView.stateRevisionOverflow,
 };
+
+ProductionOptionsView _options(
+  AonwProductionOptionsResult wire,
+  ProductionBuildingRanksView? priorities,
+) {
+  return ProductionOptionsView(
+    stamp: _stamp(wire.stamp),
+    cityId: wire.cityId,
+    buildingRanks: priorities?.buildings ?? const [],
+    currentTarget: wire.currentTarget == null
+        ? null
+        : _target(wire.currentTarget!),
+    investedProduction: wire.investedProduction,
+    productionOverflow: wire.productionOverflow,
+    rushQuote: ProductionRushQuoteView(
+      production: wire.rushQuote.production,
+      goldCost: wire.rushQuote.goldCost,
+      blocker: _optionalBlocker(wire.rushQuote.rejection),
+    ),
+    buildings: [
+      for (final value in wire.buildings)
+        _option(value, AonwCityProductionTargetKind.building),
+    ],
+    units: [for (final value in wire.units) _unitOption(value)],
+    projects: [
+      for (final value in wire.projects)
+        _option(value, AonwCityProductionTargetKind.project),
+    ],
+    wonders: [
+      for (final value in wire.wonders)
+        _option(value, AonwCityProductionTargetKind.wonder),
+    ],
+    specializations: [
+      for (final value in wire.specializations)
+        CitySpecializationOptionView(
+          specialization: value.specialization.name,
+          requiredBuilding: value.requiredBuilding.name,
+          blocker: _optionalBlocker(value.rejection),
+        ),
+    ],
+  );
+}

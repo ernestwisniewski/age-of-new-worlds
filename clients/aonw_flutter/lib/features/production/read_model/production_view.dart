@@ -1,6 +1,7 @@
 import '../../map/read_model/map_view.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../../research/read_model/research_view.dart';
+import 'production_ranking_view.dart';
 
 sealed class ProductionTargetView {
   const ProductionTargetView();
@@ -129,11 +130,13 @@ final class ProductionOptionsView {
     required List<ProductionOptionView> projects,
     required List<ProductionOptionView> wonders,
     required List<CitySpecializationOptionView> specializations,
+    List<ProductionBuildingRankView> buildingRanks = const [],
   }) : buildings = List.unmodifiable(buildings),
        units = List.unmodifiable(units),
        projects = List.unmodifiable(projects),
        wonders = List.unmodifiable(wonders),
-       specializations = List.unmodifiable(specializations);
+       specializations = List.unmodifiable(specializations),
+       buildingRanks = List.unmodifiable(buildingRanks);
 
   final SessionStampView stamp;
   final String cityId;
@@ -146,9 +149,10 @@ final class ProductionOptionsView {
   final List<ProductionOptionView> projects;
   final List<ProductionOptionView> wonders;
   final List<CitySpecializationOptionView> specializations;
+  final List<ProductionBuildingRankView> buildingRanks;
 
   bool isCurrent(ProductionTargetView target) =>
-      currentTarget != null && _sameProductionTarget(currentTarget!, target);
+      currentTarget != null && sameProductionTarget(currentTarget!, target);
 
   ProductionOptionView? get currentOption {
     final target = currentTarget;
@@ -162,13 +166,13 @@ final class ProductionOptionsView {
             .followedBy(units.map((unit) => unit.option))
             .followedBy(projects)
             .followedBy(wonders)) {
-      if (_sameProductionTarget(option.target, target)) return option;
+      if (sameProductionTarget(option.target, target)) return option;
     }
     return null;
   }
 }
 
-bool _sameProductionTarget(
+bool sameProductionTarget(
   ProductionTargetView left,
   ProductionTargetView right,
 ) => switch ((left, right)) {

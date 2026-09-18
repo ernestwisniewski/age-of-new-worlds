@@ -1,6 +1,51 @@
 part of 'map_test_fixture.dart';
 
-extension _MapProductionFixture on FakeGameSession {
+mixin FakeProductionSessionFixture implements ProductionSessionPort {
+  ProductionSessionException? get productionFailure;
+  ProductionOverviewFixture? get productionOverviewResult;
+  List<ProductionOverviewFixture> get productionOverviewResults;
+  ProductionCommandResultView? get productionResult;
+  MapScene? get scene;
+  var productionOverviewCalls = 0;
+  var productionCommandCalls = 0;
+  ProductionActionView? lastProductionAction;
+  int? lastProductionExpectedRevision;
+
+  Future<ProductionDetailsView> Function(
+    int revision,
+    String cityId,
+    ProductionTargetView target,
+  )?
+  productionDetailsHandler;
+  @override
+  Future<ProductionOverviewFixture> productionOverview({
+    required int expectedRevision,
+    required String cityId,
+  }) async => _productionOverview(expectedRevision, cityId);
+
+  @override
+  Future<ProductionDetailsView> productionDetails({
+    required int expectedRevision,
+    required String cityId,
+    required ProductionTargetView target,
+  }) =>
+      productionDetailsHandler?.call(expectedRevision, cityId, target) ??
+      (throw StateError("No production details fixture."));
+
+  @override
+  Future<ProductionCommandResultView> executeProductionAction({
+    required int expectedRevision,
+    required ProductionActionView action,
+  }) async {
+    productionCommandCalls += 1;
+    lastProductionExpectedRevision = expectedRevision;
+    lastProductionAction = action;
+    final error = productionFailure;
+    if (error != null) throw error;
+    return productionResult ??
+        (throw StateError('No production result fixture.'));
+  }
+
   ProductionOverviewFixture _productionOverview(
     int expectedRevision,
     String cityId,

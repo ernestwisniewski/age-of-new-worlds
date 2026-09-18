@@ -155,9 +155,22 @@ extension MapCoordinatorActions on MapCoordinator {
     _setState(
       current.withInteraction(
         current.interaction.copyWith(
-          production: production.copyWith(catalogOpen: open),
+          production: production.copyWith(
+            catalogOpen: open,
+            clearInspection: !open,
+          ),
         ),
       ),
+    );
+  }
+
+  void inspectProduction(ProductionTargetView? target) {
+    if (_availableSelectionState() == null) return;
+    _production.inspect(
+      target: target,
+      readState: () => _state,
+      publish: _setState,
+      isDisposed: () => _disposed,
     );
   }
 

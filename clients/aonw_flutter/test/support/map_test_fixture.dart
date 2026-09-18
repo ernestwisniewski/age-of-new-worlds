@@ -21,6 +21,7 @@ import 'package:aonw_flutter/features/map/read_model/movement_view.dart';
 import 'package:aonw_flutter/features/map/read_model/pending_action_view.dart';
 import 'package:aonw_flutter/features/map/read_model/player_map_view.dart';
 import 'package:aonw_flutter/features/production/application/production_session_port.dart';
+import 'package:aonw_flutter/features/production/read_model/production_details_view.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
 import 'package:aonw_flutter/features/research/application/research_session_port.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
@@ -61,6 +62,7 @@ final class FakeGameSession
     with
         FakeLocalGameSessionFixture,
         FakePendingTurnActionsSession,
+        FakeProductionSessionFixture,
         FakeResearchSessionFixture
     implements
         MapSessionPort,
@@ -172,13 +174,17 @@ final class FakeGameSession
   final WorkerOptionsView? workerOptionsResult;
   final WorkerCommandResultView? workerResult;
   final WorkerSessionException? workerFailure;
+  @override
   final ({
     ProductionOptionsView options,
     StrategicResourceProjectionView resources,
   })?
   productionOverviewResult;
+  @override
   final List<ProductionOverviewFixture> productionOverviewResults;
+  @override
   final ProductionCommandResultView? productionResult;
+  @override
   final ProductionSessionException? productionFailure;
   final ArtifactCommandResultView? artifactResult;
   final ArtifactSessionException? artifactFailure;
@@ -217,10 +223,6 @@ final class FakeGameSession
   var workerCommandCalls = 0;
   int? lastWorkerExpectedRevision;
   WorkerActionView? lastWorkerAction;
-  var productionOverviewCalls = 0;
-  var productionCommandCalls = 0;
-  ProductionActionView? lastProductionAction;
-  int? lastProductionExpectedRevision;
   var artifactCommandCalls = 0;
   ArtifactActionView? lastArtifactAction;
   int? lastArtifactExpectedRevision;
@@ -433,26 +435,6 @@ final class FakeGameSession
     final error = workerFailure;
     if (error != null) throw error;
     return workerResult ?? (throw StateError('No worker result fixture.'));
-  }
-
-  @override
-  Future<ProductionOverviewFixture> productionOverview({
-    required int expectedRevision,
-    required String cityId,
-  }) async => _productionOverview(expectedRevision, cityId);
-
-  @override
-  Future<ProductionCommandResultView> executeProductionAction({
-    required int expectedRevision,
-    required ProductionActionView action,
-  }) async {
-    productionCommandCalls += 1;
-    lastProductionExpectedRevision = expectedRevision;
-    lastProductionAction = action;
-    final error = productionFailure;
-    if (error != null) throw error;
-    return productionResult ??
-        (throw StateError('No production result fixture.'));
   }
 
   @override

@@ -91,6 +91,13 @@ final class _CompletingGameSession
       throw UnimplementedError();
 
   @override
+  Future<ProductionDetailsView> productionDetails({
+    required int expectedRevision,
+    required String cityId,
+    required ProductionTargetView target,
+  }) => throw UnimplementedError();
+
+  @override
   Future<ProductionCommandResultView> executeProductionAction({
     required int expectedRevision,
     required ProductionActionView action,

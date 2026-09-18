@@ -108,3 +108,20 @@ inspection through FFI. The native test inspects building/unit/wonder effects an
 all 59 ranks, verifies unchanged state, then rejects queries from another player.
 Workspace all-target Clippy passes. Full workspace and performance gates are
 recorded separately when completed; the API version changes JSON signatures.
+
+## Flutter query integration
+
+The production gateway loads complete building priorities with the catalog and
+provides a serialized detail query for the selected target. Mapping validates
+city control, the complete recipient stamp, target/effect agreement, requirement
+shape and complete, unique building ranks before constructing immutable read models.
+
+Inspection requests carry a correlation identifier. Closing/reopening, changing
+target/city/recipient/state or disposing the session prevents an older response
+or failure from replacing the current selection. Catalog refresh preserves the
+open state and re-requests selected details. The visible detail layout is completed
+in the next presentation stage.
+
+Eight focused mapper/workflow tests and the complete Flutter gate pass: 1488 tests,
+analysis, geometry/assets, dependency boundaries and architecture checks. The
+existing fake-session size debt decreases from 428 to 409 lines; no budget rises.

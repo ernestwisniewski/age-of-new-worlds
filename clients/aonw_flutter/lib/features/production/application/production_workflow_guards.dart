@@ -7,13 +7,17 @@ GameSessionReady? _selectedProduction(GameSessionState state, String cityId) =>
     ? state
     : null;
 
-GameSessionReady? _selectedProductionAtRevision(
+GameSessionReady? _selectedProductionForRequest(
   GameSessionState state,
-  String cityId,
-  int revision,
+  GameSessionReady requested,
 ) {
-  final ready = _selectedProduction(state, cityId);
-  return ready?.recipient.stamp.revision == revision ? ready : null;
+  final ready = _selectedProduction(
+    state,
+    requested.interaction.production!.cityId,
+  );
+  return ready != null && _sameProductionRecipient(requested, ready)
+      ? ready
+      : null;
 }
 
 GameSessionReady? _executableProduction(

@@ -1,4 +1,5 @@
 import '../../map/read_model/player_map_view.dart';
+import '../read_model/production_details_view.dart';
 import '../read_model/production_view.dart';
 
 abstract interface class ProductionSessionPort {
@@ -6,6 +7,12 @@ abstract interface class ProductionSessionPort {
     ({ProductionOptionsView options, StrategicResourceProjectionView resources})
   >
   productionOverview({required int expectedRevision, required String cityId});
+
+  Future<ProductionDetailsView> productionDetails({
+    required int expectedRevision,
+    required String cityId,
+    required ProductionTargetView target,
+  });
 
   Future<ProductionCommandResultView> executeProductionAction({
     required int expectedRevision,

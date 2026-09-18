@@ -20,6 +20,21 @@ final class _EngineGameProductionSession implements ProductionSessionPort {
       );
 
   @override
+  Future<ProductionDetailsView> productionDetails({
+    required int expectedRevision,
+    required String cityId,
+    required ProductionTargetView target,
+  }) => _owner._serialize(
+    () => _owner._productionGateway.details(
+      readContext: _owner._context,
+      expectedRevision: expectedRevision,
+      cityId: cityId,
+      target: target,
+      send: _owner._send,
+    ),
+  );
+
+  @override
   Future<ProductionCommandResultView> executeProductionAction({
     required int expectedRevision,
     required ProductionActionView action,

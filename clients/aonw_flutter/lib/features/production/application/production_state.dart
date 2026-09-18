@@ -1,4 +1,5 @@
 import '../read_model/production_view.dart';
+import 'production_inspection_state.dart';
 
 enum ProductionFailureCode {
   requestFailed,
@@ -27,6 +28,7 @@ final class ProductionState {
     this.resources,
     this.inFlightAction,
     this.failure,
+    this.inspection,
   });
 
   const ProductionState.loading(String cityId, {bool catalogOpen = false})
@@ -40,6 +42,7 @@ final class ProductionState {
   final StrategicResourceProjectionView? resources;
   final ProductionActionView? inFlightAction;
   final ProductionFailureView? failure;
+  final ProductionInspectionState? inspection;
 
   bool get commandPending => inFlightAction != null;
 
@@ -53,6 +56,8 @@ final class ProductionState {
     bool clearInFlightAction = false,
     ProductionFailureView? failure,
     bool clearFailure = false,
+    ProductionInspectionState? inspection,
+    bool clearInspection = false,
   }) => ProductionState(
     cityId: cityId,
     loading: loading ?? this.loading,
@@ -64,5 +69,6 @@ final class ProductionState {
         ? null
         : inFlightAction ?? this.inFlightAction,
     failure: clearFailure ? null : failure ?? this.failure,
+    inspection: clearInspection ? null : inspection ?? this.inspection,
   );
 }

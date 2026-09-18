@@ -3,12 +3,14 @@ import 'dart:async';
 import '../../map/application/game_session_state.dart';
 import '../../map/read_model/player_map_view.dart';
 import '../read_model/production_view.dart';
+import 'production_inspection_state.dart';
 import 'production_session_port.dart';
 import 'production_state.dart';
 
 part 'production_workflow_commands.dart';
 part 'production_workflow_guards.dart';
 part 'production_workflow_loading.dart';
+part 'production_workflow_inspection.dart';
 
 typedef ProductionStateReader = GameSessionState Function();
 typedef ProductionStatePublisher = void Function(GameSessionReady value);
@@ -26,6 +28,7 @@ final class ProductionWorkflow {
   final ProductionSessionPort _session;
   final ProductionDiagnosticReporter _diagnosticReporter;
   var _correlationId = 0;
+  var _inspectionCorrelationId = 0;
 
   void load({
     required String cityId,
