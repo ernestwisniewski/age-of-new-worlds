@@ -46,22 +46,9 @@ final class _ProductionBuildingChoicesState
   @override
   Widget build(BuildContext context) {
     final copy = ProductionCopy.of(context);
-    final current = <ProductionOptionView>[];
-    final future = <ProductionOptionView>[];
-    final completed = <ProductionOptionView>[];
-    for (final option in _sort.order(
-      widget.options,
-      widget.ranks,
-      copy.target,
-    )) {
-      if (option.availability.completedInCity) {
-        completed.add(option);
-      } else if (option.availability.technologyUnlocked) {
-        current.add(option);
-      } else {
-        future.add(option);
-      }
-    }
+    final (current, future, completed) = _buildingGroups(
+      _sort.order(widget.options, widget.ranks, copy.target),
+    );
     return SliverMainAxisGroup(
       slivers: [
         if (widget.options.isNotEmpty)
@@ -116,4 +103,25 @@ final class _ProductionBuildingChoicesState
     itemCount: values.length,
     itemBuilder: (context, index) => widget.choice(values[index]),
   );
+}
+
+(
+  List<ProductionOptionView>,
+  List<ProductionOptionView>,
+  List<ProductionOptionView>,
+)
+_buildingGroups(List<ProductionOptionView> options) {
+  final current = <ProductionOptionView>[];
+  final future = <ProductionOptionView>[];
+  final completed = <ProductionOptionView>[];
+  for (final option in options) {
+    if (option.availability.completedInCity) {
+      completed.add(option);
+    } else if (option.availability.technologyUnlocked) {
+      current.add(option);
+    } else {
+      future.add(option);
+    }
+  }
+  return (current, future, completed);
 }

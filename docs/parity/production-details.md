@@ -134,6 +134,7 @@ names; it computes no domain score or ETA. Each research/completion group preser
 that ordering, and mode selection survives refresh but resets for another city.
 The responsive selector remains operable in six locales at 200% text.
 
-All 69 production presentation tests, analysis and unchanged architecture budgets
-pass. Three catalog goldens were regenerated and visually reviewed on phone, tablet
+All 69 production presentation tests and analysis pass. The final responsive
+header initially exceeded the build method complexity budget; extracting the
+existing group partition restores unchanged architecture budgets. Three catalog goldens were regenerated and visually reviewed on phone, tablet
 and desktop.
