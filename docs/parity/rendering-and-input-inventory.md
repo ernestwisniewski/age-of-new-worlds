@@ -132,8 +132,8 @@ cinematic projection, fully clipped details, fallback-circle edges and height
 outlines. They verify retained component identity and unchanged placement build
 counts. Existing map goldens remain the visual regression boundary.
 
-The remaining audit includes region batching of aggregate grid, wall, road and
-fog paths. These are not covered by the static detail counters. The native production-particle and camera workloads
+Aggregate grid, wall, road and fog paths now use the camera batches described
+below. The native production-particle and camera workloads
 retain their existing frame and memory limits and require separate passing runs.
 
 ## Outstanding evidence
@@ -176,3 +176,27 @@ outside the viewport, retained geometry and disposal on refresh or hiding.
 The full Flutter gate passes: 1535 tests, analysis, geometry/assets, dependency
 boundaries and unchanged architecture budgets
 (`/tmp/aonw-city-context-flutter-final.log`, exit 0).
+
+
+## Aggregate path culling
+
+Grid, elevation walls, roads and fog index complete primitive paths in 512-world-
+pixel regions. A camera crossing a region boundary refreshes one ordered batch
+per paint kind. A primitive shared by neighboring regions appears only once.
+Frames within the same set of regions reuse that batch; a completely offscreen
+layer emits no path draw. Roads keep edge/asphalt/marking order, and fog retains
+both recipient visibility groups with the full blur margin. Field-improvement
+surfaces also reuse their fixed hex path.
+
+Clipping and painting individual regions introduced coverage differences at the
+joins, so the final implementation draws the selected complete paths in a single
+batch. Pixel comparison against the previous aggregate paths covers four layers,
+three camera positions and five zoom levels. Maximum channel difference is one,
+with mean difference below 0.0001; grid and roads match exactly. A separate case
+checks deduplication at a four-region intersection, retention within those regions,
+travel to another region, offscreen release and return.
+
+All 236 game tests pass, including existing goldens, fog/privacy, cinematic camera,
+input/idle and component lifetime tests. Static analysis and unchanged architecture
+budgets pass. Native frame time and resident-memory acceptance are still separate;
+this test result does not establish their limits on device.

@@ -13,6 +13,7 @@ import '../../features/map/read_model/map_reference_bundle.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/map_view_mode.dart';
 import 'map_canvas_clip.dart';
+import 'map_path_regions.dart';
 
 part 'map_terrain_regions.dart';
 
@@ -32,9 +33,11 @@ final class MapStaticRenderCache {
     required this.projection,
     required this.tilePaths,
     required this.elevationWallPaths,
+    required this.elevationWallRegions,
     required this.terrainPaths,
     required this.terrainRegions,
     required this.gridPath,
+    required this.gridRegions,
     required this.clipPath,
     required this.size,
   });
@@ -49,7 +52,13 @@ final class MapStaticRenderCache {
     final projection = MapViewportProjection(geometry);
     final terrainPaths = <MapTerrain, ui.Path>{};
     final tilePaths = <MapHexCoordinate, ui.Path>{};
-    final elevationWallPaths = _buildElevationWallPaths(map, projection);
+    final wallRegions = MapPathRegionBuilder<int>();
+    final elevationWallPaths = _buildElevationWallPaths(
+      map,
+      projection,
+      wallRegions,
+    );
+    final gridRegions = MapPathRegionBuilder<int>();
     final gridPath = ui.Path();
     for (final tile in map.tiles) {
       final hex = aonwProjectedHexPath(projection, tile.coordinate);
@@ -58,6 +67,7 @@ final class MapStaticRenderCache {
           .putIfAbsent(tile.displayTerrain, ui.Path.new)
           .addPath(hex, ui.Offset.zero);
       gridPath.addPath(hex, ui.Offset.zero);
+      gridRegions.add(0, hex);
     }
     return MapStaticRenderCache._(
       identity: (
@@ -70,9 +80,11 @@ final class MapStaticRenderCache {
       projection: projection,
       tilePaths: Map.unmodifiable(tilePaths),
       elevationWallPaths: elevationWallPaths,
+      elevationWallRegions: wallRegions.build(),
       terrainPaths: Map.unmodifiable(terrainPaths),
       terrainRegions: _buildTerrainRegions(map, tilePaths),
       gridPath: gridPath,
+      gridRegions: gridRegions.build(),
       clipPath: aonwProjectedMapClipPath(map, projection),
       size: ui.Size(
         bounds.width,
@@ -86,9 +98,11 @@ final class MapStaticRenderCache {
   final MapViewportProjection projection;
   final Map<MapHexCoordinate, ui.Path> tilePaths;
   final MapElevationWallPaths elevationWallPaths;
+  final MapPathRegions<int> elevationWallRegions;
   final Map<MapTerrain, ui.Path> terrainPaths;
   final List<MapTerrainRegion> terrainRegions;
   final ui.Path gridPath;
+  final MapPathRegions<int> gridRegions;
   final ui.Path clipPath;
   final ui.Size size;
 }
@@ -102,17 +116,20 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
     for (final terrain in MapTerrain.values)
       terrain: ui.Paint()..color = MapPalette.terrain(terrain),
   };
-  final _elevationWallRightPaint = ui.Paint()
-    ..color = MapPalette.elevationWallRight;
-  final _elevationWallBottomPaint = ui.Paint()
-    ..color = MapPalette.elevationWallBottom;
-  final _elevationWallLeftPaint = ui.Paint()
-    ..color = MapPalette.elevationWallLeft;
+  final _wallPasses = [
+    (0, ui.Paint()..color = MapPalette.elevationWallRight),
+    (1, ui.Paint()..color = MapPalette.elevationWallBottom),
+    (2, ui.Paint()..color = MapPalette.elevationWallLeft),
+  ];
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
   var _elevationWallsVisible = false;
   var _viewMode = MapViewMode.graphic;
   var _renderedRegionCount = 0;
+  var _renderedWallRegionCount = 0;
+
+  @visibleForTesting
+  int get debugRenderedWallRegionCount => _renderedWallRegionCount;
 
   @visibleForTesting
   int get debugRenderedRegionCount => _renderedRegionCount;
@@ -161,15 +178,15 @@ final class MapTerrainLayerComponent extends Component with HasVisibility {
   @override
   void render(ui.Canvas canvas) {
     _renderedRegionCount = 0;
+    _renderedWallRegionCount = 0;
     final cache = _cache;
     if (cache == null) return;
     if (_elevationWallsVisible) {
-      canvas.drawPath(cache.elevationWallPaths.right, _elevationWallRightPaint);
-      canvas.drawPath(
-        cache.elevationWallPaths.bottom,
-        _elevationWallBottomPaint,
+      _renderedWallRegionCount = renderMapPathRegions(
+        canvas,
+        cache.elevationWallRegions,
+        _wallPasses,
       );
-      canvas.drawPath(cache.elevationWallPaths.left, _elevationWallLeftPaint);
     }
     final clip = mapCanvasClipBounds(canvas);
     for (final region in cache.terrainRegions) {
@@ -336,6 +353,11 @@ final class MapGridLayerComponent extends Component with HasVisibility {
   MapStaticRenderCache? _cache;
   var _cacheUpdateCount = 0;
   var _gridVisible = false;
+  var _renderedRegionCount = 0;
+  late final _passes = [(0, _paint)];
+
+  @visibleForTesting
+  int get debugRenderedRegionCount => _renderedRegionCount;
 
   @visibleForTesting
   int get debugCacheUpdateCount => _cacheUpdateCount;
@@ -371,9 +393,14 @@ final class MapGridLayerComponent extends Component with HasVisibility {
 
   @override
   void render(ui.Canvas canvas) {
+    _renderedRegionCount = 0;
     final cache = _cache;
     if (cache == null) return;
-    canvas.drawPath(cache.gridPath, _paint);
+    _renderedRegionCount = renderMapPathRegions(
+      canvas,
+      cache.gridRegions,
+      _passes,
+    );
   }
 }
 
@@ -396,6 +423,7 @@ Future<ui.Image> _decodeImage(Uint8List bytes) async {
 MapElevationWallPaths _buildElevationWallPaths(
   MapView map,
   MapViewportProjection projection,
+  MapPathRegionBuilder<int> regions,
 ) {
   final paths = (right: ui.Path(), bottom: ui.Path(), left: ui.Path());
   final heights = {for (final tile in map.tiles) tile.coordinate: tile.height};
@@ -414,18 +442,24 @@ MapElevationWallPaths _buildElevationWallPaths(
     ];
     _addElevationWall(
       paths.right,
+      regions,
+      0,
       from: corners[0],
       to: corners[1],
       heightDelta: tile.height - (heights[bottomRight] ?? 0),
     );
     _addElevationWall(
       paths.bottom,
+      regions,
+      1,
       from: corners[1],
       to: corners[2],
       heightDelta: tile.height - (heights[bottom] ?? 0),
     );
     _addElevationWall(
       paths.left,
+      regions,
+      2,
       from: corners[2],
       to: corners[3],
       heightDelta: tile.height - (heights[bottomLeft] ?? 0),
@@ -435,17 +469,21 @@ MapElevationWallPaths _buildElevationWallPaths(
 }
 
 void _addElevationWall(
-  ui.Path target, {
+  ui.Path target,
+  MapPathRegionBuilder<int> regions,
+  int face, {
   required AonwPoint from,
   required AonwPoint to,
   required int heightDelta,
 }) {
   if (heightDelta <= 0) return;
   final depth = (3 + heightDelta * 2) * MapViewportProjection.perspectiveY;
-  target
+  final wall = ui.Path()
     ..moveTo(from.x, from.y)
     ..lineTo(to.x, to.y)
     ..lineTo(to.x, to.y + depth)
     ..lineTo(from.x, from.y + depth)
     ..close();
+  target.addPath(wall, ui.Offset.zero);
+  regions.add(face, wall);
 }

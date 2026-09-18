@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../features/map/presentation/map_palette.dart';
 import '../../features/map/read_model/map_view.dart';
 import '../../features/map/read_model/player_map_view.dart';
+import 'map_path_regions.dart';
 import 'static_map_layers.dart';
 
 /// Recipient-safe fog rendered between map infrastructure and interaction
@@ -31,6 +32,12 @@ final class MapFogLayerComponent extends Component with HasVisibility {
   var _hiddenHexCount = 0;
   var _discoveredHexCount = 0;
   var _pathBuildCount = 0;
+  MapPathRegions<int> _regions = MapPathRegions<int>.empty();
+  var _renderedRegionCount = 0;
+  late final _passes = [(0, _hiddenPaint), (1, _discoveredPaint)];
+
+  @visibleForTesting
+  int get debugRenderedRegionCount => _renderedRegionCount;
 
   @visibleForTesting
   int get debugHiddenHexCount => _hiddenHexCount;
@@ -58,6 +65,8 @@ final class MapFogLayerComponent extends Component with HasVisibility {
       return;
     }
 
+    // Include the complete blur kernel on both sides of a regional clip.
+    final regions = MapPathRegionBuilder<int>(padding: 20);
     final hiddenPath = ui.Path();
     final discoveredPath = ui.Path();
     var hiddenHexCount = 0;
@@ -66,14 +75,17 @@ final class MapFogLayerComponent extends Component with HasVisibility {
       switch (fog.visibilityAt(entry.key)) {
         case MapFogVisibilityView.hidden:
           hiddenPath.addPath(entry.value, ui.Offset.zero);
+          regions.add(0, entry.value);
           hiddenHexCount += 1;
         case MapFogVisibilityView.discovered:
           discoveredPath.addPath(entry.value, ui.Offset.zero);
+          regions.add(1, entry.value);
           discoveredHexCount += 1;
         case MapFogVisibilityView.visible:
           break;
       }
     }
+    _regions = regions.build();
     _hiddenPath = hiddenPath;
     _discoveredPath = discoveredPath;
     _hiddenHexCount = hiddenHexCount;
@@ -88,7 +100,15 @@ final class MapFogLayerComponent extends Component with HasVisibility {
     _clearPaths();
   }
 
+  @override
+  void onRemove() {
+    clearLayer();
+    super.onRemove();
+  }
+
   void _clearPaths() {
+    _regions = MapPathRegions<int>.empty();
+    _renderedRegionCount = 0;
     _hiddenPath = null;
     _discoveredPath = null;
     _hiddenHexCount = 0;
@@ -98,14 +118,7 @@ final class MapFogLayerComponent extends Component with HasVisibility {
 
   @override
   void render(ui.Canvas canvas) {
-    final hiddenPath = _hiddenPath;
-    if (hiddenPath != null && _hiddenHexCount > 0) {
-      canvas.drawPath(hiddenPath, _hiddenPaint);
-    }
-    final discoveredPath = _discoveredPath;
-    if (discoveredPath != null && _discoveredHexCount > 0) {
-      canvas.drawPath(discoveredPath, _discoveredPaint);
-    }
+    _renderedRegionCount = renderMapPathRegions(canvas, _regions, _passes);
   }
 }
 

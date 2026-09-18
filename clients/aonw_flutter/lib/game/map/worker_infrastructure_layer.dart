@@ -11,6 +11,7 @@ import '../../features/map/read_model/map_view.dart';
 import '../../features/workers/read_model/worker_view.dart';
 import '../presentation/flame_scene_patch.dart';
 import 'map_canvas_clip.dart';
+import 'map_path_regions.dart';
 import 'map_sprite_catalog.dart';
 import 'map_sprite_frame_binding.dart';
 import 'map_sprite_painter.dart';
@@ -28,6 +29,8 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   MapHexCoordinate? _selectedCoordinate;
   ui.Path _roadPath = ui.Path();
   ui.Path _markingPath = ui.Path();
+  MapPathRegions<int> _roadRegions = MapPathRegions<int>.empty();
+  var _renderedRoadRegionCount = 0;
   var _operationalRoadCount = 0;
   var _roadGeometryBuildCount = 0;
   var _createdCount = 0;
@@ -52,6 +55,21 @@ final class MapWorkerInfrastructureLayerComponent extends Component
     ..strokeCap = ui.StrokeCap.round
     ..style = ui.PaintingStyle.stroke
     ..isAntiAlias = true;
+
+  static final _roadPasses = [
+    (0, _roadEdgePaint),
+    (0, _roadAsphaltPaint),
+    (1, _roadMarkingPaint),
+  ];
+
+  @visibleForTesting
+  int get debugRenderedRoadRegionCount => _renderedRoadRegionCount;
+
+  @visibleForTesting
+  ui.Path get debugRoadPath => _roadPath;
+
+  @visibleForTesting
+  ui.Path get debugMarkingPath => _markingPath;
 
   @visibleForTesting
   int get debugImprovementCount => _improvements.length;
@@ -180,21 +198,24 @@ final class MapWorkerInfrastructureLayerComponent extends Component
     _selectedCoordinate = null;
     _roadPath = ui.Path();
     _markingPath = ui.Path();
+    _roadRegions = MapPathRegions<int>.empty();
+    _renderedRoadRegionCount = 0;
     _operationalRoadCount = 0;
     isVisible = false;
   }
 
   @override
   void render(ui.Canvas canvas) {
-    if (_operationalRoadCount == 0) return;
-    canvas
-      ..drawPath(_roadPath, _roadEdgePaint)
-      ..drawPath(_roadPath, _roadAsphaltPaint)
-      ..drawPath(_markingPath, _roadMarkingPaint);
+    _renderedRoadRegionCount = renderMapPathRegions(
+      canvas,
+      _roadRegions,
+      _roadPasses,
+    );
   }
 
   void _rebuildRoadGeometry(MapStaticRenderCache cache) {
     _roadGeometryBuildCount += 1;
+    final regions = MapPathRegionBuilder<int>(padding: 10);
     final roadPath = ui.Path();
     final markingPath = ui.Path();
     final operational = {
@@ -214,6 +235,7 @@ final class MapWorkerInfrastructureLayerComponent extends Component
         _addRoadSegment(
           roadPath,
           markingPath,
+          regions,
           center,
           _center(cache, neighbor),
         );
@@ -222,11 +244,13 @@ final class MapWorkerInfrastructureLayerComponent extends Component
         _addRoadSegment(
           roadPath,
           markingPath,
+          regions,
           ui.Offset(center.dx - 8, center.dy),
           ui.Offset(center.dx + 8, center.dy),
         );
       }
     }
+    _roadRegions = regions.build();
     _roadPath = roadPath;
     _markingPath = markingPath;
     _operationalRoadCount = operational.length;
@@ -267,13 +291,19 @@ final class MapWorkerInfrastructureLayerComponent extends Component
   static void _addRoadSegment(
     ui.Path roadPath,
     ui.Path markingPath,
+    MapPathRegionBuilder<int> regions,
     ui.Offset start,
     ui.Offset end,
   ) {
-    roadPath
+    final road = ui.Path()
       ..moveTo(start.dx, start.dy)
       ..lineTo(end.dx, end.dy);
-    _addDashedLine(markingPath, start, end);
+    final marking = ui.Path();
+    _addDashedLine(marking, start, end);
+    roadPath.addPath(road, ui.Offset.zero);
+    markingPath.addPath(marking, ui.Offset.zero);
+    regions.add(0, road);
+    regions.add(1, marking);
   }
 
   static void _addDashedLine(ui.Path path, ui.Offset start, ui.Offset end) {
@@ -344,12 +374,9 @@ final class MapFieldImprovementComponent extends PositionComponent
     onLoaded: _refreshGameWidget,
   );
 
-  static final _visualBounds = ui.Rect.fromLTWH(
-    0,
-    0,
-    _width,
-    _height,
-  ).inflate(20);
+  static final _bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
+  static final _visualBounds = _bounds.inflate(20);
+  static final _path = MapSpritePainter.flatTopHexPath(_bounds);
   var _paintCount = 0;
 
   @visibleForTesting
@@ -399,8 +426,8 @@ final class MapFieldImprovementComponent extends PositionComponent
     _sprite.setVisible(clip.overlaps(_visualBounds.inflate(128)));
     if (!clip.overlaps(_visualBounds)) return;
     _paintCount++;
-    final bounds = ui.Rect.fromLTWH(0, 0, _width, _height);
-    final path = MapSpritePainter.flatTopHexPath(bounds);
+    final bounds = _bounds;
+    final path = _path;
     final frame = _sprite.frame;
     canvas.drawPath(path, _spriteSurfacePaint);
     if (frame != null) {
