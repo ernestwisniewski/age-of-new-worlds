@@ -33,6 +33,7 @@ final class ProductionCatalog extends StatelessWidget {
         ProductionBuildingChoices(
           cityId: options.cityId,
           options: options.buildings,
+          ranks: options.buildingRanks,
           choice: (option) => _choice(
             option,
             StartBuildingActionView(

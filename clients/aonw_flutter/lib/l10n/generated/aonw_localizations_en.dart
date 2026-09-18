@@ -3203,4 +3203,31 @@ class AonwLocalizationsEn extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get cityProductionSortLabel => 'Sort';
+
+  @override
+  String get cityBuildingSortRecommended => 'Recommended';
+
+  @override
+  String get cityBuildingSortFastestImpact => 'Fastest impact';
+
+  @override
+  String get cityBuildingSortBestReturn => 'Best return';
+
+  @override
+  String get cityBuildingSortGrowth => 'Growth';
+
+  @override
+  String get cityBuildingSortIndustry => 'Industry';
+
+  @override
+  String get cityBuildingSortScience => 'Science';
+
+  @override
+  String get cityBuildingSortDefenseMilitary => 'Defense / military';
+
+  @override
+  String get cityBuildingSortEconomy => 'Economy';
 }

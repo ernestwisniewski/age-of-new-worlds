@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../design_system/aonw_tokens.dart';
+import '../read_model/production_ranking_view.dart';
 import '../read_model/production_view.dart';
+import 'production_building_sort.dart';
+import 'production_building_sort_control.dart';
 import 'production_copy.dart';
 
 /// Lazy building groups inside the production catalog's single viewport.
@@ -10,10 +13,12 @@ final class ProductionBuildingChoices extends StatefulWidget {
     required this.cityId,
     required this.options,
     required this.choice,
+    this.ranks = const [],
     super.key,
   });
 
   final String cityId;
+  final List<ProductionBuildingRankView> ranks;
   final List<ProductionOptionView> options;
   final Widget Function(ProductionOptionView) choice;
 
@@ -24,6 +29,7 @@ final class ProductionBuildingChoices extends StatefulWidget {
 
 final class _ProductionBuildingChoicesState
     extends State<ProductionBuildingChoices> {
+  ProductionBuildingSort _sort = ProductionBuildingSort.recommended;
   bool _futureOpen = false;
   bool _completedOpen = false;
 
@@ -33,6 +39,7 @@ final class _ProductionBuildingChoicesState
     if (oldWidget.cityId != widget.cityId) {
       _futureOpen = false;
       _completedOpen = false;
+      _sort = ProductionBuildingSort.recommended;
     }
   }
 
@@ -42,7 +49,11 @@ final class _ProductionBuildingChoicesState
     final current = <ProductionOptionView>[];
     final future = <ProductionOptionView>[];
     final completed = <ProductionOptionView>[];
-    for (final option in widget.options) {
+    for (final option in _sort.order(
+      widget.options,
+      widget.ranks,
+      copy.target,
+    )) {
       if (option.availability.completedInCity) {
         completed.add(option);
       } else if (option.availability.technologyUnlocked) {
@@ -53,18 +64,15 @@ final class _ProductionBuildingChoicesState
     }
     return SliverMainAxisGroup(
       slivers: [
-        if (current.isNotEmpty) ...[
+        if (widget.options.isNotEmpty)
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: AonwSpacing.sm),
-              child: Text(
-                copy.text(ProductionText.buildings),
-                style: AonwTextStyles.sectionHeader,
-              ),
+            child: ProductionBuildingHeader(
+              title: copy.text(ProductionText.buildings),
+              sort: widget.ranks.isEmpty ? null : _sort,
+              onChanged: (mode) => setState(() => _sort = mode),
             ),
           ),
-          _choices(current),
-        ],
+        if (current.isNotEmpty) _choices(current),
         if (future.isNotEmpty) ...[
           _disclosure(
             'production-future-buildings',

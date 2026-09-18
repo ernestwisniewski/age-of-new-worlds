@@ -125,3 +125,15 @@ in the next presentation stage.
 Eight focused mapper/workflow tests and the complete Flutter gate pass: 1488 tests,
 analysis, geometry/assets, dependency boundaries and architecture checks. The
 existing fake-session size debt decreases from 428 to 409 lines; no budget rises.
+
+## Catalog sorting
+
+The catalog exposes all eight localized reference modes. It compares the selected
+Rust priority (or authoritative turns for fastest impact), then turns and localized
+names; it computes no domain score or ETA. Each research/completion group preserves
+that ordering, and mode selection survives refresh but resets for another city.
+The responsive selector remains operable in six locales at 200% text.
+
+All 69 production presentation tests, analysis and unchanged architecture budgets
+pass. Three catalog goldens were regenerated and visually reviewed on phone, tablet
+and desktop.

@@ -828,5 +828,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "cityProductionSortLabel": "Sort",
+  "cityBuildingSortRecommended": "Recommended",
+  "cityBuildingSortFastestImpact": "Fastest impact",
+  "cityBuildingSortBestReturn": "Best return",
+  "cityBuildingSortGrowth": "Growth",
+  "cityBuildingSortIndustry": "Industry",
+  "cityBuildingSortScience": "Science",
+  "cityBuildingSortDefenseMilitary": "Defense / military",
+  "cityBuildingSortEconomy": "Economy"
 }

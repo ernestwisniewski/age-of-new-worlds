@@ -2841,6 +2841,60 @@ abstract class AonwLocalizations {
   /// In en, this message translates to:
   /// **'{key, select, centralBank{A financial institution that boosts empire gold and grants an immediate treasury reserve.} grandCathedral{A civic and spiritual landmark that adds stability when supported by marble.} grandExposition{A late cultural showcase that turns global attention into gold and stability.} greatLibrary{A world center of written knowledge. Adds science across the empire and completes the current research when finished.} greatWall{A defensive megaproject that strengthens every city\'s ability to withstand attacks.} hangingGardens{A legendary garden complex that turns a river city into a food engine for the whole empire.} imperialUniversity{A prestigious campus that lifts science in every city.} motherFactory{A heavy industrial complex that boosts empire production and surges the host city forward when finished.} nationalObservatory{A mountain-facing observatory that advances late scientific output across the empire.} petra{A stone-carved trade wonder that makes a desert host city productive and wealthy.} svalbardSeedVault{A polar preservation site that improves food security and empire stability.} other{}}'**
   String productionWonderDescription(String key);
+
+  /// No description provided for @cityProductionSortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get cityProductionSortLabel;
+
+  /// No description provided for @cityBuildingSortRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get cityBuildingSortRecommended;
+
+  /// No description provided for @cityBuildingSortFastestImpact.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest impact'**
+  String get cityBuildingSortFastestImpact;
+
+  /// No description provided for @cityBuildingSortBestReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Best return'**
+  String get cityBuildingSortBestReturn;
+
+  /// No description provided for @cityBuildingSortGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Growth'**
+  String get cityBuildingSortGrowth;
+
+  /// No description provided for @cityBuildingSortIndustry.
+  ///
+  /// In en, this message translates to:
+  /// **'Industry'**
+  String get cityBuildingSortIndustry;
+
+  /// No description provided for @cityBuildingSortScience.
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get cityBuildingSortScience;
+
+  /// No description provided for @cityBuildingSortDefenseMilitary.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense / military'**
+  String get cityBuildingSortDefenseMilitary;
+
+  /// No description provided for @cityBuildingSortEconomy.
+  ///
+  /// In en, this message translates to:
+  /// **'Economy'**
+  String get cityBuildingSortEconomy;
 }
 
 class _AonwLocalizationsDelegate

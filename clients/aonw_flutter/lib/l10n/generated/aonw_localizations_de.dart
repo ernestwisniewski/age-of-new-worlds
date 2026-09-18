@@ -3322,4 +3322,31 @@ class AonwLocalizationsDe extends AonwLocalizations {
     });
     return '$_temp0';
   }
+
+  @override
+  String get cityProductionSortLabel => 'Sortieren';
+
+  @override
+  String get cityBuildingSortRecommended => 'Empfohlen';
+
+  @override
+  String get cityBuildingSortFastestImpact => 'Schnellste Wirkung';
+
+  @override
+  String get cityBuildingSortBestReturn => 'Beste Rendite';
+
+  @override
+  String get cityBuildingSortGrowth => 'Wachstum';
+
+  @override
+  String get cityBuildingSortIndustry => 'Industrie';
+
+  @override
+  String get cityBuildingSortScience => 'Wissenschaft';
+
+  @override
+  String get cityBuildingSortDefenseMilitary => 'Verteidigung / Militär';
+
+  @override
+  String get cityBuildingSortEconomy => 'Wirtschaft';
 }

@@ -1,3 +1,4 @@
+import 'package:aonw_flutter/features/production/read_model/production_ranking_view.dart';
 import 'package:aonw_flutter/features/production/read_model/production_view.dart';
 import 'package:aonw_flutter/features/research/read_model/research_view.dart';
 
@@ -59,6 +60,26 @@ ProductionOptionsView catalogOptions() => ProductionOptionsView(
       ),
       blocked: true,
     ),
+  ],
+  buildingRanks: [
+    for (final building in [
+      'granary',
+      'port',
+      'workshop',
+      'university',
+      'housing',
+    ])
+      ProductionBuildingRankView(
+        building: building,
+        turnsForScore: 6,
+        recommended: 100,
+        bestReturn: 50,
+        growth: 20,
+        industry: 30,
+        science: 40,
+        defenseMilitary: 10,
+        economy: 15,
+      ),
   ],
   units: [],
   projects: [],
